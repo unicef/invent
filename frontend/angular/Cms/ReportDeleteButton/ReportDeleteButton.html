@@ -1,0 +1,31 @@
+<div class="button-wrapper" ng-class="vm.status">
+  <md-button class="flag-button" md-no-ink ng-click="vm.open()" ng-if="!vm.isDelete">
+    <md-icon>flag</md-icon>
+    <span class="report-text">
+      <translate>Report</translate>
+    </span>
+  </md-button>
+  <md-button class="flag-button" md-no-ink ng-click="vm.open()" ng-if="vm.isDelete">
+    <md-icon>clear</md-icon>
+    <span class="delete-text">
+      <translate>Delete</translate>
+    </span>
+  </md-button>
+  <div class="warning-zone">
+    <div layout="row">
+      <div class="warning-text" flex>
+        <translate>Are you sure?</translate>
+      </div>
+      <div class="warning-actions" flex>
+        <md-button md-no-ink ng-click="vm.close()">
+          <md-icon>undo</md-icon>
+          <translate>No</translate>
+        </md-button>
+        <md-button md-no-ink ng-click="vm.doAction()">
+          <md-icon>check</md-icon>
+          <translate>Yes</translate>
+        </md-button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<template>
+  <div class="DashboardListView">
+    <el-row>
+      <table-top-actions />
+    </el-row>
+    <el-row>
+      <main-table />
+    </el-row>
+  </div>
+</template>
+
+<script>
+import MainTable from '../../../components/dashboard/MainTable';
+import TableTopActions from '../../../components/dashboard/TableTopActions';
+import { mapGetters, mapActions } from 'vuex';
+
+export default {
+  components: {
+    MainTable,
+    TableTopActions
+  },
+  async fetch ({ store, query, error }) {
+    store.dispatch('dashboard/setDashboardSection', 'list');
+    await Promise.all([
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('countries/loadMapData')
+    ]);
+    await store.dispatch('dashboard/setSearchOptions', query);
+    try {
+      await store.dispatch('dashboard/loadProjectList');
+    } catch (e) {
+      console.log(e);
+      error({
+        statusCode: 404,
+        message: 'Unable to process the search with the current parameters'
+      });
+    }
+  },
+  computed: {
+    ...mapGetters({
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection'
+    })
+  },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler (query) {
+        if (this.dashboardSection === 'list') {
+          this.$router.replace({ ...this.$route, query });
+          this.load();
+        }
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      loadProjectList: 'dashboard/loadProjectList'
+    }),
+    async load () {
+      this.$nuxt.$loading.start();
+      await this.loadProjectList();
+      this.$nuxt.$loading.finish();
+    }
+  }
+};
+</script>
+
+<style>
+
+</style>

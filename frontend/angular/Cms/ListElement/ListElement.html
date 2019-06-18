@@ -1,0 +1,51 @@
+<md-card ng-if="vm.item.type !== 3" class="cms-list-element md-card-nomargin md-card-rounded" layout="row" layout-align="start stretch">
+  <div class="cover-img">
+    <span class="no-cover" ng-class="vm.typeClass(vm.item)" ng-hide="vm.item.cover"></span>
+    <img ng-show="vm.item.cover" ng-src="{{vm.item.cover}}" alt="cover">
+  </div>
+  <div class="excerpt">
+    <h3 class="md-title">{{vm.item.name}}</h3>
+    <h6 ng-show="vm.item.type === 1">
+      <translate>Resources</translate>
+    </h6>
+    <h6 ng-show="vm.item.type === 2">
+      <translate>Tips & Considerations</translate>
+    </h6>
+    <div class="md-body-1" ng-bind-html="vm.postProcessHtml(vm.item.body)"></div>
+    <div class="metadata" layout="column">
+      <span class="author">
+        <i class="material-icons">account_box</i>
+        <translate>by {{vm.item.author_name}} at {{vm.prettifyDate(vm.item)}}</translate>
+      </span>
+      <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
+        <translate>in {{vm.showAxisAndDomain()}}</translate>
+      </span>
+    </div>
+    <cms-detail-element item="vm.item"></cms-detail-element>
+  </div>
+</md-card>
+
+
+<!-- EXPERIENCES -->
+<md-card ng-if="vm.item.type === 3" class="cms-list-element experience md-card-nomargin" layout="row" layout-align="start stretch">
+  <div class="avatar-img">
+    <span class="no-cover"></span>
+  </div>
+  <div class="excerpt">
+    <h3 class="md-title">{{vm.item.name}}</h3>
+    <h6>
+      <translate>Experiences</translate>
+    </h6>
+    <div class="md-body-1" ng-bind-html="vm.postProcessHtml(vm.item.body)"></div>
+    <div class="metadata" layout="column">
+      <span class="author">
+        <i class="material-icons">account_box</i>
+        <translate>by {{vm.item.author_name}} at {{vm.prettifyDate(vm.item)}}</translate>
+      </span>
+      <span class="axis-domain" ng-class="vm.axisAndDomainClass()">
+        <translate>in {{vm.showAxisAndDomain()}}</translate>
+      </span>
+    </div>
+    <cms-detail-element item="vm.item"></cms-detail-element>
+  </div>
+</md-card>

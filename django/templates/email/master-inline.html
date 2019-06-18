@@ -1,0 +1,664 @@
+<!-- {% load utils %}
+{% load staticfiles %}
+{% load i18n %} -->
+
+<!doctype html>
+<html style="margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="{{ language }}">
+    <meta name="viewport" content="width=device-width" />
+    <title>Email templates</title>
+
+    <style>
+
+      img {
+        border: none;
+        -ms-interpolation-mode: bicubic;
+        max-width: 100%; }
+
+        html {
+          margin: 0;
+          padding: 0;
+        }
+
+      body {
+        background-color: #F2F2F2;
+        font-family: arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%; }
+
+      table {
+        border-collapse: separate;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+        width: 100%; }
+        table td {
+          font-family: arial, sans-serif;
+          font-size: 14px;
+          vertical-align: top; }
+
+
+      .body {
+        background-color: #F2F2F2;
+        width: 100%; }
+
+
+      .container {
+        display: block;
+        margin: 0 auto !important;
+
+        max-width: 580px;
+        padding: 10px;
+        width: 580px;
+        color: #474747; }
+
+
+      .content {
+        box-sizing: border-box;
+        display: block;
+        margin: 0 auto;
+        max-width: 580px;
+        padding: 20px; }
+
+
+      .main {
+        width: 100%;
+
+        background: #FFFFFF;
+        border-radius: 3px; }
+
+      .wrapper {
+        box-sizing: border-box;
+        padding: 20px; }
+
+      .content-block {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      .header {
+        height: 80px; }
+        .header .align-right {
+          padding-top: 5px; }
+        .visit-link {
+          font-size: 12px; }
+
+      .footer {
+        clear: both;
+        margin-top: 10px;
+        text-align: center;
+        width: 100%; }
+        .footer td,
+        .footer p,
+        .footer span,
+        .footer a {
+          color: #9B9B9B;
+          font-size: 12px;
+          text-align: center; }
+        .footer .disclaimer {
+          font-size: 11px; }
+        .footer-links a + span {
+          color: #B9B9B9; }
+
+      .project-list {}
+        .list-header td {
+          padding: 5px 10px;
+          background-color: #9B9B9B;
+          font-size: 12px;
+          color: #FFFFFF; }
+        .list-header td b {
+          text-transform: uppercase; }
+        .list-content td {
+          padding-top: 20px; }
+
+
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: arial, sans-serif;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0;
+        margin-top: 10px;
+        margin-bottom: 20px; }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 700; }
+
+      h2 {
+        font-size: 16px; }
+
+      p,
+      ul,
+      ol {
+        font-family: arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        margin: 0;
+        margin-bottom: 20px;
+        padding: 0; }
+        p li,
+        ul li,
+        ol li {
+          list-style-position: inside;
+          margin-left: 10px;
+          margin-bottom: 10px; }
+
+      a {
+        color: #008DC9;
+        text-decoration: underline; }
+
+
+      .btn {
+        box-sizing: border-box;
+        width: 100%; }
+        .btn > tbody > tr > td {
+          padding-top: 10px;
+          padding-bottom: 20px; }
+        .btn table {
+          width: auto; }
+        .btn table td {
+          background-color: #FFFFFF;
+          text-align: center; }
+        .btn a {
+          background-color: #FFFFFF;
+          border: solid 1px #008DC9;
+          box-sizing: border-box;
+          color: #008DC9;
+          cursor: pointer;
+          display: inline-block;
+          font-size: 14px;
+          font-weight: bold;
+          margin: 0;
+          padding: 10px 20px;
+          text-decoration: none; }
+
+      .btn-primary table td {
+        background-color: #008DC9; }
+
+      .btn-primary a {
+        background-color: #008DC9;
+        border-color: #008DC9;
+        color: #FFFFFF; }
+
+
+      .last {
+        margin-bottom: 0; }
+
+      .first {
+        margin-top: 0; }
+
+      .align-center {
+        text-align: center; }
+
+      .align-right {
+        text-align: right; }
+
+      .align-left {
+        text-align: left; }
+
+      .clear {
+        clear: both; }
+
+      .mt0 {
+        margin-top: 0; }
+
+      .mb0 {
+        margin-bottom: 0; }
+
+      .nowrap {
+        white-space: nowrap; }
+
+      .preheader {
+        color: transparent;
+        display: none;
+        height: 0;
+        max-height: 0;
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        mso-hide: all;
+        visibility: hidden;
+        width: 0; }
+
+      hr {
+        border: 0;
+        border-bottom: 1px solid #D6D6D6;
+        margin: 20px 0; }
+
+
+      @media only screen and (max-width: 620px) {
+
+        table[class=body] .wrapper,
+        table[class=body] .article {
+          padding: 15px !important; }
+        table[class=body] .content {
+          padding: 0 !important; }
+        table[class=body] .container {
+          padding: 0 !important;
+          width: 100% !important; }
+        table[class=body] .main {
+          border-left-width: 0 !important;
+          border-radius: 0 !important;
+          border-right-width: 0 !important; }
+        table[class=body] .btn table {
+          width: 100% !important; }
+        table[class=body] .btn a {
+          width: 100% !important; }
+        table[class=body] .img-responsive {
+          height: auto !important;
+          max-width: 100% !important;
+          width: auto !important; }
+        .footer > table {
+          padding: 0 15px 15px; }
+        }
+
+
+      @media all {
+        .ExternalClass {
+          width: 100%; }
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+          line-height: 100%; }
+        .apple-link a {
+          color: inherit !important;
+          font-family: inherit !important;
+          font-size: inherit !important;
+          font-weight: inherit !important;
+          line-height: inherit !important;
+          text-decoration: none !important; }
+        .btn-primary table td:hover {
+          background-color: #008DC9 !important; }
+        .btn-primary a:hover {
+          background-color: #008DC9 !important;
+          border-color: #008DC9 !important; }
+        }
+    </style>
+  </head>
+
+
+  <body style="background-color:#F2F2F2;font-family:arial, sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;" >
+    <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;background-color:#F2F2F2;width:100%;" >
+      <tr>
+        <td class="container" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;display:block;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:580px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:580px;color:#474747;" >
+          <div class="content" style="box-sizing:border-box;display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:580px;padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;" >
+
+
+            <table class="main" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;background-color:#FFFFFF;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;border-radius:3px;" >
+
+              <!-- START MAIN CONTENT AREA -->
+              <tr>
+                <td class="wrapper" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;" >
+                  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                    <tr class="header" style="height:80px;" >
+                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;" >
+                        <img src="{% site_url %}/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo" style="border-style:none;-ms-interpolation-mode:bicubic;max-width:100%;" >
+                      </td>
+                      <td class="align-right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:right;padding-top:5px;" >
+                        <a href="{% site_url %}" class="visit-link nowrap" style="color:#008DC9;text-decoration:underline;font-size:12px;white-space:nowrap;" >{% trans "Visit website" %}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;" >
+
+
+
+                        <!-- TEMPLATES -->
+
+
+
+                        <!-- TEMPLATE: NEW MEMBER -->
+                        {% if type == "new_member" %}
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ user_name }},</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}You have been added to the <b>{{ project_name }}</b> within the Digital Health Atlas as a <b>{{ role }}</b>. Use the link below to begin updating the project information.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to my project" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: NEW MEMBER -->
+
+
+                        <!-- TEMPLATE: COUNTRY ADMIN -->
+                        {% elif type == "country_admin" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Country admin" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ full_name }},</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ country_name }}</b>. Use the link below to begin updating your country information.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to country admin" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: COUNTRY ADMIN -->
+
+
+                        <!-- TEMPLATE: ADMIN REQUEST -->
+                        {% elif type == "admin_request" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Admin request notification" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ full_name }},</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}{{ requester }} has requested to be a {{ requester_type }}. Please go to the admin interface's user management section to review this request.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/admin/{{ admin_type }}" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to admin interface" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: ADMIN REQUEST-->
+
+
+                        <!-- TEMPLATE: DONOR ADMIN -->
+                        {% elif type == "donor_admin" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Investor admin" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{full_name }} </h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ donor_name }}</b>. Use the link below to begin updating your organization information.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/admin/donor" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to investor admin" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: DONOR ADMIN -->
+
+                        <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
+                        {% elif type == "email_confirmation_signup_message" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Welcome to the Digital Health Atlas." %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Confirm your email address below to finalize your registration." %}</h2>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                            <tbody>
+                              <tr>
+                                <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                    <tbody>
+                                      <tr>
+                                        <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{{ activate_url }}" target="_blank " style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{{ activate_url }}</a> </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                              </tbody>
+                          </table>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                            {% trans "Let us show you around." %}
+                        </p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                            <a href="{% site_url %}/en/-/projects/create" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% trans "Register your project in the DHA" %}</a>
+                        </p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                            <a href="{% site_url %}/en/-/projects" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% trans "Your projects inbox" %}</a>
+                        </p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                            <a href="{% site_url %}/en/-/cms#all" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% trans "Global Digital Health Resources" %}</a>
+                        </p>
+                        <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
+
+
+                        <!-- TEMPLATE: FLAG CONTENT -->
+                        {% elif type == "flag_content" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Reported content!" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Notification" %}</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}{{ change_url }}" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to see content" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: FLAG CONTENT -->
+
+
+                        <!-- TEMPLATE: PASSWORD RESET -->
+                        {% elif type == "password_reset" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Password Reset" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "A password reset has been requested for the Digital Health Atlas account linked to your email address" %} {{ email }}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "To reset your password, click the link below:" %}</b></p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank" style="color:#008DC9;text-decoration:underline;" >{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        </p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you did not request this password reset, please ignore this message." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                          {% trans "Please do not reply to this email. For support or additional questions, email" %}
+                          <a href="mailto:digitalhealthatlas@gmail.com" style="color:#008DC9;text-decoration:underline;" >digitalhealthatlas@gmail.com</a>
+                        </p>
+                        <!-- /TEMPLATE: PASSWORD RESET -->
+
+
+                        <!-- TEMPLATE: TOOLKIT DIGEST -->
+                        {% elif type == "toolkit_digest" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
+                        </p>
+                        <!-- /TEMPLATE: TOOLKIT DIGEST -->
+
+
+                        <!-- TEMPLATE: STATUS REPORT -->
+                        {% elif type == "status_report" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Status report" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ country_name }} {% trans "Admin," %}</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The projects listed below re complete and waiting for your approval" %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                <b style="text-transform:uppercase;" >{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to Project Approval Dashboard" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: STATUS REPORT -->
+
+
+                        <!-- TEMPLATE: PROJECT IMPORT LIST -->
+                        {% elif type == "project_import_notify_admins" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Country project update" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear DHA Admin" %}</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The projects listed below have been imported." %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                <b style="text-transform:uppercase;" >{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                {% trans "Date of import" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                  <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                              </td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                  {{ project.created }}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go" %} {{country_name}} {% trans "Dashboard" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: PROJECT IMPORT LIST -->
+
+
+                        <!-- TEMPLATE: IMPORT PROJECTS -->
+                        {% elif type == "project_import_notify_owner" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Project access notification" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "You were added to the following projects as a: Project Admin" %} </h2>
+                            <ul style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                              {% for project in data.projects %}
+                                <li style="list-style-position:inside;margin-left:10px;margin-bottom:10px;" ><a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a></li>
+                              {% endfor %}
+                            </ul>
+                            {% if data.password %}
+                            <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                              <b>Your login credentials are:</b><br>
+                              <em>Username: {{ email }}</em><br>
+                              <em>Password: {{ data.password }}</em>
+                            </p>
+
+                            <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                                <tbody>
+                                  <tr>
+                                    <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                      <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                        <tbody>
+                                          <tr>
+                                            <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/projects/" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to Project Inbox" %}</a> </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            {% endif %}
+                        {% endif %}
+                        <!-- /TEMPLATE: IMPORT PROJECTS -->
+
+
+
+                      <!-- END TEMPLATES -->
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+            <!-- END MAIN CONTENT AREA -->
+            </table>
+
+
+            <!-- START FOOTER -->
+            <div class="footer" style="clear:both;margin-top:10px;text-align:center;width:100%;" >
+              <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                <tr>
+                  <tr>
+                    <td class="content-block footer-links" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
+                      <a href="{% site_url %}" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Go to the Digital Health Atals" %}</a>
+                      <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="{% site_url %}/{{ language }}/-/terms" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Terms of use" %}</a>
+                      <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="mailto:digitalhealthatlas@gmail.com" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Contact us" %}</a>
+                    </td>
+                  </tr>
+                  <td class="content-block" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
+                    <span class="disclaimer" style="color:#9B9B9B;text-align:center;font-size:11px;" >
+                      {% trans "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use." %}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!-- END FOOTER -->
+
+          <!-- END CENTERED WHITE CONTAINER -->
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

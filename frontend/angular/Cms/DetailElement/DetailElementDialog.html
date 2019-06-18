@@ -1,0 +1,133 @@
+<md-dialog aria-label="detail-dialog" class="detail-dialog">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h3 class="md-title">{{vm.itemType(vm.content)}}</h3>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="vm.cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content" ng-class="vm.content.type">
+      <div class="content">
+
+        <!-- Lessons & tips / Resources -->
+        <div class="cms-content-wrapper" ng-if="vm.content.type !== 3" layout="column">
+          <div class="content-header">
+            <div class="name md-display-1">
+              {{vm.content.name}}
+            </div>
+
+            <div class="created">
+
+              <strong><translate>by {{vm.content.author_name}} at {{vm.prettifyDate(vm.content)}}</translate></strong>
+
+              <!-- visible if user is able to edit -->
+              <span ng-show="vm.isAuthor()">
+                <span class="sep"></span>
+                <cms-add-new-content to-edit="vm.content"></cms-add-new-content>
+                <cms-report-delete-button type="delete" item="vm.content"></cms-report-delete-button>
+              </span>
+              <!-- / -->
+              <span ng-if="vm.content.type === 1" ng-hide="vm.isAuthor()">
+                <span class="sep"></span>
+                <cms-report-delete-button type="report"  item="vm.content"></cms-report-delete-button>
+              </span>
+            </div>
+          </div>
+
+          <div layout="row">
+            <div class="cover">
+              <a href="{{vm.content.cover}}" target="_blank">
+                <img ng-src="{{vm.content.cover}}"  ng-if="vm.content.cover" />
+              </a>
+              <span class="no-cover" ng-if="!vm.content.cover"></span>
+            </div>
+
+            <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.postProcessHtml(vm.content.body)"></div>
+            <div class="body edit-mode" ng-if="vm.editMode">
+              <trix-component placeholder="{{'Start typing here...' | translate }}" valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
+              <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+                <md-icon>done</md-icon>
+                <translate>Save</translate>
+              </md-button>
+              <md-button ng-click="vm.edit()">
+                <md-icon>undo</md-icon>
+                <translate>Cancel</translate>
+              </md-button>
+            </div>
+          </div>
+        </div>
+        <!-- /end -->
+
+        <!-- Experiences -->
+        <div class="cms-content-wrapper experiences" ng-if="vm.content.type === 3" layout="column">
+          <div class="content-header">
+            <div class="name md-display-1">
+              {{vm.content.name}}
+            </div>
+
+            <div class="created">
+              <translate>by {{vm.content.author_name}} at {{vm.prettifyDate(vm.content)}}</translate>
+
+              <span class="sep"></span>
+              <!-- visible if user is able to edit -->
+              <span ng-show="vm.isAuthor()">
+                <md-button class="md-small edit-button" md-no-ink ng-click="vm.edit()">
+                  <md-icon>create</md-icon>
+                  <translate>Edit</translate>
+                </md-button>
+                <cms-report-delete-button type="delete" item="vm.content"></cms-report-delete-button>
+                <span ng-hide="vm.isAuthor()" class="sep"></span>
+              </span>
+              <!-- / -->
+              <cms-report-delete-button ng-hide="vm.isAuthor()" type="report" item="vm.content"></cms-report-delete-button>
+            </div>
+
+          </div>
+
+          <div class="body" ng-if="!vm.editMode" ng-bind-html="vm.postProcessHtml(vm.content.body)"></div>
+
+          <div class="body edit-mode" ng-if="vm.editMode">
+            <trix-component placeholder="{{'Start typing here...' | translate }}" valid="vm.modified.valid" value="vm.modified.body" char-limit="2500"></trix-component>
+            <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+              <md-icon>done</md-icon>
+              <translate>Save</translate>
+            </md-button>
+            <md-button ng-click="vm.edit()" >
+              <md-icon>undo</md-icon>
+              <translate>Cancel</translate>
+            </md-button>
+          </div>
+        </div>
+        <!-- /end -->
+
+      </div>
+
+      <div class="comment-wrapper" ng-show="vm.content.comments.length > 0">
+        <h3 class="md-title">
+          <translate>Comments ({{vm.content.comments.length}})</translate>
+        </h3>
+
+        <a ng-click="vm.scrollToAddNewComment()" class="goto-comment">
+          <md-icon aria-label="Go to Add comment">comment</md-icon>
+          <translate>Add comment</translate>
+        </a>
+
+        <cms-comment-widget comment="comment" type="vm.content.type" ng-repeat="comment in vm.content.comments"></cms-comment-widget>
+      </div>
+
+      <div class="add-new-comment" id="add-new-comment">
+        <h3 class="md-title">
+          <translate>Add new comment</translate>
+        </h3>
+        <trix-component placeholder="{{'Start typing here...' | translate }}" valid="vm.newComment.valid" value="vm.newComment.text" char-limit="2500"></trix-component>
+        <md-button ng-click="vm.addComment()" ng-disabled="!vm.newComment.valid" class="md-primary md-raised add-comment">
+          <translate>Add comment</translate>
+        </md-button>
+      </div>
+    </div>
+  </md-dialog-content>
+</md-dialog>

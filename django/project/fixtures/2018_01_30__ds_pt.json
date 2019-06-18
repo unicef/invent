@@ -1,0 +1,1874 @@
+[
+  {
+    "model": "project.digitalstrategy",
+    "pk": 112,
+    "fields": {
+      "created": "2017-12-01T14:26:50.107Z",
+      "modified": "2018-01-22T09:49:26.661Z",
+      "is_active": true,
+      "name": "Targeted client communication",
+      "name_en": "Targeted client communication",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Comunica\u00e7\u00e3o do cliente segmentado",
+      "group": "Client",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 113,
+    "fields": {
+      "created": "2017-12-01T14:26:50.108Z",
+      "modified": "2018-01-22T09:48:22.145Z",
+      "is_active": true,
+      "name": "Transmit health event alerts to specific population group(s)",
+      "name_en": "Transmit health event alerts to specific population group(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar alertas de eventos de sa\u00fade para grupos de popula\u00e7\u00e3o espec\u00edficos",
+      "group": "Client",
+      "parent": 112
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 114,
+    "fields": {
+      "created": "2017-12-01T14:26:50.109Z",
+      "modified": "2018-01-22T09:36:35.946Z",
+      "is_active": true,
+      "name": "Transmit targeted health information to client based on health status or demographics",
+      "name_en": "Transmit targeted health information to client based on health status or demographics",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar informa\u00e7\u00f5es de sa\u00fade direcionadas ao cliente com base no status de sa\u00fade ou demografia",
+      "group": "Client",
+      "parent": 112
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 115,
+    "fields": {
+      "created": "2017-12-01T14:26:50.109Z",
+      "modified": "2018-01-22T09:31:10.792Z",
+      "is_active": true,
+      "name": "Transmit targeted alerts and reminders to client(s)",
+      "name_en": "Transmit targeted alerts and reminders to client(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar alertas e lembretes espec\u00edficos para cliente (s)",
+      "group": "Client",
+      "parent": 112
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 116,
+    "fields": {
+      "created": "2017-12-01T14:26:50.110Z",
+      "modified": "2018-01-22T09:26:52.234Z",
+      "is_active": true,
+      "name": "Transmit diagnostics result, or availability of result, to clients",
+      "name_en": "Transmit diagnostics result, or availability of result, to clients",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar resultado de diagn\u00f3stico, ou a disponibilidade de resultado, para os clientes",
+      "group": "Client",
+      "parent": 112
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 117,
+    "fields": {
+      "created": "2017-12-01T14:26:50.111Z",
+      "modified": "2018-01-22T09:02:24.439Z",
+      "is_active": true,
+      "name": "Untargeted client communication",
+      "name_en": "Untargeted client communication",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Comunica\u00e7\u00e3o de clientes n\u00e3o segmentados",
+      "group": "Client",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 118,
+    "fields": {
+      "created": "2017-12-01T14:26:50.112Z",
+      "modified": "2018-01-22T08:58:42.783Z",
+      "is_active": true,
+      "name": "Transmit untargeted health information to an undefined population",
+      "name_en": "Transmit untargeted health information to an undefined population",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar informa\u00e7\u00f5es de sa\u00fade n\u00e3o direcionadas para uma popula\u00e7\u00e3o indefinida",
+      "group": "Client",
+      "parent": 117
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 119,
+    "fields": {
+      "created": "2017-12-01T14:26:50.113Z",
+      "modified": "2018-01-22T08:43:09.999Z",
+      "is_active": true,
+      "name": "Transmit untargeted health event alerts to undefined group.",
+      "name_en": "Transmit untargeted health event alerts to undefined group.",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar alertas de eventos de sa\u00fade n\u00e3o direcionados para grupos indefinidos.",
+      "group": "Client",
+      "parent": 117
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 120,
+    "fields": {
+      "created": "2017-12-01T14:26:50.113Z",
+      "modified": "2018-01-22T08:39:50.636Z",
+      "is_active": true,
+      "name": "Client to client communication",
+      "name_en": "Client to client communication",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Comunica\u00e7\u00e3o de cliente para cliente",
+      "group": "Client",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 121,
+    "fields": {
+      "created": "2017-12-01T14:26:50.115Z",
+      "modified": "2018-01-22T08:38:07.057Z",
+      "is_active": true,
+      "name": "Peer group for clients",
+      "name_en": "Peer group for clients",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Grupo de pares para clientes",
+      "group": "Client",
+      "parent": 120
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 122,
+    "fields": {
+      "created": "2017-12-01T14:26:50.116Z",
+      "modified": "2018-01-22T08:25:25.731Z",
+      "is_active": true,
+      "name": "Personal health tracking",
+      "name_en": "Personal health tracking",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Acompanhamento  pessoal de sa\u00fade",
+      "group": "Client",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 123,
+    "fields": {
+      "created": "2017-12-01T14:26:50.117Z",
+      "modified": "2018-01-22T08:12:07.345Z",
+      "is_active": true,
+      "name": "Access by client to own medical records",
+      "name_en": "Access by client to own medical records",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Acesso por cliente a registros m\u00e9dicos pr\u00f3prios",
+      "group": "Client",
+      "parent": 122
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 124,
+    "fields": {
+      "created": "2017-12-01T14:26:50.119Z",
+      "modified": "2018-01-22T07:59:37.813Z",
+      "is_active": true,
+      "name": "Self monitoring of health or diagnostic data by client",
+      "name_en": "Self monitoring of health or diagnostic data by client",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Auto monitoramento  de dados de sa\u00fade ou dados de diagn\u00f3stico por cliente",
+      "group": "Client",
+      "parent": 122
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 125,
+    "fields": {
+      "created": "2017-12-01T14:26:50.120Z",
+      "modified": "2018-01-22T07:52:29.851Z",
+      "is_active": true,
+      "name": "Active data capture/documentation by client",
+      "name_en": "Active data capture/documentation by client",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Dados activos capturados/documenta\u00e7\u00e3o por cliente",
+      "group": "Client",
+      "parent": 122
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 126,
+    "fields": {
+      "created": "2017-12-01T14:26:50.121Z",
+      "modified": "2018-01-22T07:40:16.672Z",
+      "is_active": true,
+      "name": "Citizen based reporting",
+      "name_en": "Citizen based reporting",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Relat\u00f3rios baseados no cidad\u00e3o",
+      "group": "Client",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 127,
+    "fields": {
+      "created": "2017-12-01T14:26:50.123Z",
+      "modified": "2018-01-22T07:38:31.936Z",
+      "is_active": true,
+      "name": "Reporting of health system feedback by clients",
+      "name_en": "Reporting of health system feedback by clients",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Relat\u00f3rio de coment\u00e1rios do sistema de sa\u00fade por parte dos clientes",
+      "group": "Client",
+      "parent": 126
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 128,
+    "fields": {
+      "created": "2017-12-01T14:26:50.124Z",
+      "modified": "2018-01-22T07:24:02.609Z",
+      "is_active": true,
+      "name": "Reporting of public health events by clients",
+      "name_en": "Reporting of public health events by clients",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Relat\u00f3rios de eventos de sa\u00fade p\u00fablica por clientes",
+      "group": "Client",
+      "parent": 126
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 129,
+    "fields": {
+      "created": "2017-12-01T14:26:50.125Z",
+      "modified": "2018-01-19T14:21:31.451Z",
+      "is_active": true,
+      "name": "On demand information services to clients",
+      "name_en": "On demand information services to clients",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Servi\u00e7os de informa\u00e7\u00e3o sob demanda aos clientes",
+      "group": "Client",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 130,
+    "fields": {
+      "created": "2017-12-01T14:26:50.127Z",
+      "modified": "2018-01-19T13:15:15.352Z",
+      "is_active": true,
+      "name": "Client look-up of health information",
+      "name_en": "Client look-up of health information",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Consulta do cliente da informa\u00e7\u00e3o sobre sa\u00fade",
+      "group": "Client",
+      "parent": 129
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 131,
+    "fields": {
+      "created": "2017-12-01T14:26:50.128Z",
+      "modified": "2018-01-19T12:48:36.281Z",
+      "is_active": true,
+      "name": "Client financial transactions",
+      "name_en": "Client financial transactions",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Transa\u00e7\u00f5es financeiras do cliente",
+      "group": "Client",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 132,
+    "fields": {
+      "created": "2017-12-01T14:26:50.128Z",
+      "modified": "2018-01-19T12:43:15.714Z",
+      "is_active": true,
+      "name": "Transmit or manage out of pocket payments by client",
+      "name_en": "Transmit or manage out of pocket payments by client",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar ou administrar pagamentos fora do bolso efectuados pelo cliente",
+      "group": "Client",
+      "parent": 131
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 133,
+    "fields": {
+      "created": "2017-12-01T14:26:50.129Z",
+      "modified": "2018-01-19T12:30:20.705Z",
+      "is_active": true,
+      "name": "Transmit or manage vouchers to client for health services",
+      "name_en": "Transmit or manage vouchers to client for health services",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar ou administrar  cup\u00f5es  ao cliente para servi\u00e7os de sa\u00fade",
+      "group": "Client",
+      "parent": 131
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 134,
+    "fields": {
+      "created": "2017-12-01T14:26:50.130Z",
+      "modified": "2018-01-19T12:27:45.762Z",
+      "is_active": true,
+      "name": "Transmit or manage incentives to clients for health services",
+      "name_en": "Transmit or manage incentives to clients for health services",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar ou administrar incentivos aos clientes para servi\u00e7os de sa\u00fade",
+      "group": "Client",
+      "parent": 131
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 135,
+    "fields": {
+      "created": "2017-12-01T14:26:50.131Z",
+      "modified": "2018-01-19T12:23:31.450Z",
+      "is_active": true,
+      "name": "Client identification and registration",
+      "name_en": "Client identification and registration",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Identifica\u00e7\u00e3o e registro do cliente",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 136,
+    "fields": {
+      "created": "2017-12-01T14:26:50.132Z",
+      "modified": "2018-01-19T12:22:00.607Z",
+      "is_active": true,
+      "name": "Verify client unique identity",
+      "name_en": "Verify client unique identity",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Verificar a identidade \u00fanica do cliente",
+      "group": "Provider",
+      "parent": 135
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 137,
+    "fields": {
+      "created": "2017-12-01T14:26:50.133Z",
+      "modified": "2018-01-19T12:20:35.771Z",
+      "is_active": true,
+      "name": "Enrol client for health services/clinical care plan",
+      "name_en": "Enrol client for health services/clinical care plan",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Inscrever cliente para servi\u00e7os de sa\u00fade / plano de cuidados cl\u00ednicos",
+      "group": "Provider",
+      "parent": 135
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 138,
+    "fields": {
+      "created": "2017-12-01T14:26:50.134Z",
+      "modified": "2018-01-19T12:16:56.051Z",
+      "is_active": true,
+      "name": "Client health records",
+      "name_en": "Client health records",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registros de sa\u00fade do cliente",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 139,
+    "fields": {
+      "created": "2017-12-01T14:26:50.135Z",
+      "modified": "2018-01-19T12:13:07.817Z",
+      "is_active": true,
+      "name": "Longitudinal tracking of client's health status and services received",
+      "name_en": "Longitudinal tracking of client's health status and services received",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Acompanhamento longitudinal do estado de sa\u00fade do cliente e servi\u00e7os recebidos",
+      "group": "Provider",
+      "parent": 138
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 140,
+    "fields": {
+      "created": "2017-12-01T14:26:50.135Z",
+      "modified": "2018-01-18T15:03:37.878Z",
+      "is_active": true,
+      "name": "Manage client's structured clinical records",
+      "name_en": "Manage client's structured clinical records",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Administrar registros cl\u00ednicos estruturados do cliente",
+      "group": "Provider",
+      "parent": 138
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 141,
+    "fields": {
+      "created": "2017-12-01T14:26:50.136Z",
+      "modified": "2018-01-18T15:01:16.399Z",
+      "is_active": true,
+      "name": "Manage client's unstructured clinical records (e.g. notes, images, documents)",
+      "name_en": "Manage client's unstructured clinical records (e.g. notes, images, documents)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Administar os registros cl\u00ednicos n\u00e3o estruturados do cliente (por exemplo, notas, imagens, documentos)",
+      "group": "Provider",
+      "parent": 138
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 142,
+    "fields": {
+      "created": "2017-12-01T14:26:50.137Z",
+      "modified": "2018-01-18T14:59:21.870Z",
+      "is_active": true,
+      "name": "Routine health indicator data collection and management",
+      "name_en": "Routine health indicator data collection and management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Coleta e gest\u00e3o de dados de indicadores de sa\u00fade de rotina",
+      "group": "Provider",
+      "parent": 138
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 143,
+    "fields": {
+      "created": "2017-12-01T14:26:50.139Z",
+      "modified": "2018-01-18T14:50:39.883Z",
+      "is_active": true,
+      "name": "Healthcare provider decision support",
+      "name_en": "Healthcare provider decision support",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "suporte \u00e0 decis\u00e3o do provedor de sa\u00fade",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 144,
+    "fields": {
+      "created": "2017-12-01T14:26:50.140Z",
+      "modified": "2018-01-18T14:20:13.002Z",
+      "is_active": true,
+      "name": "Provide prompts and alerts based according to protocol",
+      "name_en": "Provide prompts and alerts based according to protocol",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fornecer instru\u00e7\u00f5es e alertas baseados de acordo com o protocolo",
+      "group": "Provider",
+      "parent": 143
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 145,
+    "fields": {
+      "created": "2017-12-01T14:26:50.141Z",
+      "modified": "2018-01-18T13:47:03.456Z",
+      "is_active": true,
+      "name": "Provide checklist according to protocol",
+      "name_en": "Provide checklist according to protocol",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fornecer lista de verifica\u00e7\u00e3o de acordo com o protocolo",
+      "group": "Provider",
+      "parent": 143
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 146,
+    "fields": {
+      "created": "2017-12-01T14:26:50.141Z",
+      "modified": "2018-01-18T13:35:37.987Z",
+      "is_active": true,
+      "name": "Screen clients by risk or other health status",
+      "name_en": "Screen clients by risk or other health status",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Examinar clientes por risco ou outro estado de sa\u00fade",
+      "group": "Provider",
+      "parent": 143
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 147,
+    "fields": {
+      "created": "2017-12-01T14:26:50.142Z",
+      "modified": "2018-01-18T13:21:52.548Z",
+      "is_active": true,
+      "name": "Telemedicine",
+      "name_en": "Telemedicine",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Telemedicina",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 148,
+    "fields": {
+      "created": "2017-12-01T14:26:50.143Z",
+      "modified": "2018-01-18T13:18:24.946Z",
+      "is_active": true,
+      "name": "Consultations between remote client and healthcare provider",
+      "name_en": "Consultations between remote client and healthcare provider",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Consultas entre clientes remotos e provedores de cuidados de sa\u00fade",
+      "group": "Provider",
+      "parent": 147
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 149,
+    "fields": {
+      "created": "2017-12-01T14:26:50.144Z",
+      "modified": "2018-01-18T12:57:52.148Z",
+      "is_active": true,
+      "name": "Remote monitoring of client health or diagnostic data by provider",
+      "name_en": "Remote monitoring of client health or diagnostic data by provider",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Monitoramento remoto da sa\u00fade do cliente ou dados de diagn\u00f3stico pelo provedor",
+      "group": "Provider",
+      "parent": 147
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 150,
+    "fields": {
+      "created": "2017-12-01T14:26:50.145Z",
+      "modified": "2018-01-18T12:52:42.646Z",
+      "is_active": true,
+      "name": "Transmission of medical data (e.g. images, notes, and videos) to healtcare provider",
+      "name_en": "Transmission of medical data (e.g. images, notes, and videos) to healtcare provider",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Transmiss\u00e3o de dados m\u00e9dicos (por exemplo, imagens, notas e v\u00eddeos) para o profissional de sa\u00fade",
+      "group": "Provider",
+      "parent": 147
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 151,
+    "fields": {
+      "created": "2017-12-01T14:26:50.147Z",
+      "modified": "2018-01-18T12:43:43.103Z",
+      "is_active": true,
+      "name": "Consultations for case management between healthcare providers",
+      "name_en": "Consultations for case management between healthcare providers",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Consultas para gest\u00e3o de casos entre profissionais de sa\u00fade",
+      "group": "Provider",
+      "parent": 147
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 152,
+    "fields": {
+      "created": "2017-12-01T14:26:50.147Z",
+      "modified": "2018-01-18T12:31:38.069Z",
+      "is_active": true,
+      "name": "Healthcare provider communication",
+      "name_en": "Healthcare provider communication",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Comunica\u00e7\u00e3o do provedor de sa\u00fade",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 153,
+    "fields": {
+      "created": "2017-12-01T14:26:50.148Z",
+      "modified": "2018-01-18T12:20:01.189Z",
+      "is_active": true,
+      "name": "Communication from healthcare provider to supervisor",
+      "name_en": "Communication from healthcare provider to supervisor",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Comunica\u00e7\u00e3o do profissional de sa\u00fade ao supervisor",
+      "group": "Provider",
+      "parent": 152
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 154,
+    "fields": {
+      "created": "2017-12-01T14:26:50.149Z",
+      "modified": "2018-01-17T13:11:21.971Z",
+      "is_active": true,
+      "name": "Communication and performance feedback to healthcare provider",
+      "name_en": "Communication and performance feedback to healthcare provider",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Comunica\u00e7\u00e3o e feedback de desempenho para o profissional de sa\u00fade",
+      "group": "Provider",
+      "parent": 152
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 155,
+    "fields": {
+      "created": "2017-12-01T14:26:50.150Z",
+      "modified": "2018-01-17T13:02:23.705Z",
+      "is_active": true,
+      "name": "Transmit routine news and workflow notifications to healthcare provider (s)",
+      "name_en": "Transmit routine news and workflow notifications to healthcare provider (s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar not\u00edcias de rotina e notifica\u00e7\u00f5es de fluxo de trabalho para o (s) provedor (es) de sa\u00fade",
+      "group": "Provider",
+      "parent": 152
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 156,
+    "fields": {
+      "created": "2017-12-01T14:26:50.151Z",
+      "modified": "2018-01-17T12:51:52.352Z",
+      "is_active": true,
+      "name": "Transmit non-routine health event alerts to healthcare providers",
+      "name_en": "Transmit non-routine health event alerts to healthcare providers",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar  notifica\u00e7\u00f5es de eventos de sa\u00fade n\u00e3o rotineiras para provedores de cuidados de sa\u00fade",
+      "group": "Provider",
+      "parent": 152
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 157,
+    "fields": {
+      "created": "2017-12-01T14:26:50.152Z",
+      "modified": "2018-01-17T12:21:25.144Z",
+      "is_active": true,
+      "name": "Peer group for healthcare providers",
+      "name_en": "Peer group for healthcare providers",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Grupo de pares para profissionais de sa\u00fade",
+      "group": "Provider",
+      "parent": 152
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 158,
+    "fields": {
+      "created": "2017-12-01T14:26:50.153Z",
+      "modified": "2018-01-17T11:26:26.789Z",
+      "is_active": true,
+      "name": "Referral coordination",
+      "name_en": "Referral coordination",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Coordena\u00e7\u00e3o de refer\u00eancia",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 159,
+    "fields": {
+      "created": "2017-12-01T14:26:50.154Z",
+      "modified": "2018-01-17T11:02:29.639Z",
+      "is_active": true,
+      "name": "Coordinate emergency response and transport",
+      "name_en": "Coordinate emergency response and transport",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Coordenar resposta de emerg\u00eancia e transporte",
+      "group": "Provider",
+      "parent": 158
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 160,
+    "fields": {
+      "created": "2017-12-01T14:26:50.154Z",
+      "modified": "2018-01-17T11:00:59.727Z",
+      "is_active": true,
+      "name": "Manage referrals between points of service within health sector",
+      "name_en": "Manage referrals between points of service within health sector",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Administrar refer\u00eancias entre pontos de atua\u00e7\u00e3o dentro do setor de sa\u00fade",
+      "group": "Provider",
+      "parent": 158
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 161,
+    "fields": {
+      "created": "2017-12-01T14:26:50.155Z",
+      "modified": "2018-01-17T10:51:04.099Z",
+      "is_active": true,
+      "name": "Manage referrals between health and other sectors (social services, police, justice, economic support schemes)",
+      "name_en": "Manage referrals between health and other sectors (social services, police, justice, economic support schemes)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Administrar refer\u00eancias entre sa\u00fade e outros setores (servi\u00e7os sociais, pol\u00edcia, justi\u00e7a, esquemas de apoio econ\u00f4mico)",
+      "group": "Provider",
+      "parent": 158
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 162,
+    "fields": {
+      "created": "2017-12-01T14:26:50.156Z",
+      "modified": "2018-01-17T10:48:14.002Z",
+      "is_active": true,
+      "name": "Scheduling and activity planning for healthcare providers",
+      "name_en": "Scheduling and activity planning for healthcare providers",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Agendamento e planeamento de atividades para profissionais de sa\u00fade",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 163,
+    "fields": {
+      "created": "2017-12-01T14:26:50.157Z",
+      "modified": "2018-01-17T10:23:21.975Z",
+      "is_active": true,
+      "name": "Schedule client appointments based on clinical care plan",
+      "name_en": "Schedule client appointments based on clinical care plan",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Agende as consultas dos clientes com base no plano de cuidados cl\u00ednicos",
+      "group": "Provider",
+      "parent": 162
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 164,
+    "fields": {
+      "created": "2017-12-01T14:26:50.158Z",
+      "modified": "2018-01-17T10:20:57.893Z",
+      "is_active": true,
+      "name": "Schedule healthcare provider's activities",
+      "name_en": "Schedule healthcare provider's activities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Agenda de atividades do profissional de sa\u00fade",
+      "group": "Provider",
+      "parent": 162
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 165,
+    "fields": {
+      "created": "2017-12-01T14:26:50.159Z",
+      "modified": "2018-01-17T10:17:29.192Z",
+      "is_active": true,
+      "name": "Healthcare provider training",
+      "name_en": "Healthcare provider training",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Forma\u00e7\u00e3o de profissional de sa\u00fade",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 166,
+    "fields": {
+      "created": "2017-12-01T14:26:50.159Z",
+      "modified": "2018-01-17T10:13:40.241Z",
+      "is_active": true,
+      "name": "Provide training content and reference material to healthcare provider(s)",
+      "name_en": "Provide training content and reference material to healthcare provider(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fornecer conte\u00fado de treinamento e material de refer\u00eancia para o (s) provedor (es) de sa\u00fade",
+      "group": "Provider",
+      "parent": 165
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 167,
+    "fields": {
+      "created": "2017-12-01T14:26:50.160Z",
+      "modified": "2018-01-17T09:12:24.562Z",
+      "is_active": true,
+      "name": "Assess capacity of healthcare provider",
+      "name_en": "Assess capacity of healthcare provider",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Avaliar a capacidade do profissional de sa\u00fade",
+      "group": "Provider",
+      "parent": 165
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 168,
+    "fields": {
+      "created": "2017-12-01T14:26:50.161Z",
+      "modified": "2018-01-17T09:06:19.617Z",
+      "is_active": true,
+      "name": "Prescription and medication management",
+      "name_en": "Prescription and medication management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Prescri\u00e7\u00e3o e  gest\u00e3o de medicamentos",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 169,
+    "fields": {
+      "created": "2017-12-01T14:26:50.162Z",
+      "modified": "2018-01-17T08:58:16.785Z",
+      "is_active": true,
+      "name": "Transmit or track prescription orders",
+      "name_en": "Transmit or track prescription orders",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar ou rastrear ordens de prescri\u00e7\u00e3o",
+      "group": "Provider",
+      "parent": 168
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 170,
+    "fields": {
+      "created": "2017-12-01T14:26:50.163Z",
+      "modified": "2018-01-17T08:55:47.084Z",
+      "is_active": true,
+      "name": "Track client's medication consumption",
+      "name_en": "Track client's medication consumption",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Acompanhe o consumo de medica\u00e7\u00e3o do cliente",
+      "group": "Provider",
+      "parent": 168
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 171,
+    "fields": {
+      "created": "2017-12-01T14:26:50.164Z",
+      "modified": "2018-01-16T13:25:37.656Z",
+      "is_active": true,
+      "name": "Report adverse drug effects",
+      "name_en": "Report adverse drug effects",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Reportar efeitos adversos de medicamentos",
+      "group": "Provider",
+      "parent": 168
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 172,
+    "fields": {
+      "created": "2017-12-01T14:26:50.165Z",
+      "modified": "2018-01-26T10:06:55.471Z",
+      "is_active": true,
+      "name": "Laboratory and diagnostics imaging management",
+      "name_en": "Laboratory and diagnostics imaging management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o de imagens e diagn\u00f3sticos laboratoriais",
+      "group": "Provider",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 173,
+    "fields": {
+      "created": "2017-12-01T14:26:50.166Z",
+      "modified": "2018-01-16T12:49:53.184Z",
+      "is_active": true,
+      "name": "Transmit client diagnostic result to healthcare provider",
+      "name_en": "Transmit client diagnostic result to healthcare provider",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar resultado do diagn\u00f3stico do cliente para o profissional de sa\u00fade",
+      "group": "Provider",
+      "parent": 172
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 174,
+    "fields": {
+      "created": "2017-12-01T14:26:50.167Z",
+      "modified": "2018-01-16T12:47:20.094Z",
+      "is_active": true,
+      "name": "Transmit and track diagnostic orders",
+      "name_en": "Transmit and track diagnostic orders",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Enviar e rastrear diagnosticos pedidos",
+      "group": "Provider",
+      "parent": 172
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 175,
+    "fields": {
+      "created": "2017-12-01T14:26:50.167Z",
+      "modified": "2018-01-16T12:42:05.380Z",
+      "is_active": true,
+      "name": "Capture diagnostic results from digital devices",
+      "name_en": "Capture diagnostic results from digital devices",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Captura de diagnosticos de dispositivos digitais",
+      "group": "Provider",
+      "parent": 172
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 176,
+    "fields": {
+      "created": "2017-12-01T14:26:50.168Z",
+      "modified": "2018-01-16T12:27:09.776Z",
+      "is_active": true,
+      "name": "Track biological specimens",
+      "name_en": "Track biological specimens",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Rastrear amostras biol\u00f3gicas",
+      "group": "Provider",
+      "parent": 172
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 177,
+    "fields": {
+      "created": "2017-12-01T14:26:50.169Z",
+      "modified": "2018-01-16T11:45:30.949Z",
+      "is_active": true,
+      "name": "Human resource management",
+      "name_en": "Human resource management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o de Recursos Humanos",
+      "group": "System",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 178,
+    "fields": {
+      "created": "2017-12-01T14:26:50.170Z",
+      "modified": "2018-01-16T11:27:38.491Z",
+      "is_active": true,
+      "name": "List health workforce cadres and related identification information",
+      "name_en": "List health workforce cadres and related identification information",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Lista de quadros do pessoal de sa\u00fade e informa\u00e7\u00f5es de identifica\u00e7\u00e3o relacionadas",
+      "group": "System",
+      "parent": 177
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 179,
+    "fields": {
+      "created": "2017-12-01T14:26:50.171Z",
+      "modified": "2018-01-16T10:35:05.875Z",
+      "is_active": true,
+      "name": "Monitor performance of healthcare provider(s)",
+      "name_en": "Monitor performance of healthcare provider(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Monitorar desempenho do (s) provedor (es) de sa\u00fade",
+      "group": "System",
+      "parent": 177
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 180,
+    "fields": {
+      "created": "2017-12-01T14:26:50.171Z",
+      "modified": "2018-01-16T10:19:52.916Z",
+      "is_active": true,
+      "name": "Manage registration/certification of healthcare provider(s)",
+      "name_en": "Manage registration/certification of healthcare provider(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gerir registro / certifica\u00e7\u00e3o do (s) provedor (es) de sa\u00fade",
+      "group": "System",
+      "parent": 177
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 181,
+    "fields": {
+      "created": "2017-12-01T14:26:50.172Z",
+      "modified": "2018-01-26T10:05:15.126Z",
+      "is_active": true,
+      "name": "Record training information on healthcare provider(s)",
+      "name_en": "Record training information on healthcare provider(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registe informa\u00e7\u00f5es de treinamento sobre o (s) provedor (es) de sa\u00fade",
+      "group": "System",
+      "parent": 177
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 182,
+    "fields": {
+      "created": "2017-12-01T14:26:50.173Z",
+      "modified": "2018-01-16T09:42:22.727Z",
+      "is_active": true,
+      "name": "Supply chain management",
+      "name_en": "Supply chain management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o  da cadeia de suprimentos",
+      "group": "System",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 183,
+    "fields": {
+      "created": "2017-12-01T14:26:50.174Z",
+      "modified": "2018-01-16T09:34:54.433Z",
+      "is_active": true,
+      "name": "Manage inventory and distribution of health commodities",
+      "name_en": "Manage inventory and distribution of health commodities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gestor de invent\u00e1rio e distribui\u00e7\u00e3o de produtos de sa\u00fade",
+      "group": "System",
+      "parent": 182
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 184,
+    "fields": {
+      "created": "2017-12-01T14:26:50.175Z",
+      "modified": "2018-01-16T09:28:56.605Z",
+      "is_active": true,
+      "name": "Notify stock levels of health commodities",
+      "name_en": "Notify stock levels of health commodities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Notificar n\u00edveis de estoque de produtos de sa\u00fade",
+      "group": "System",
+      "parent": 182
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 185,
+    "fields": {
+      "created": "2017-12-01T14:26:50.176Z",
+      "modified": "2018-01-26T10:04:27.082Z",
+      "is_active": true,
+      "name": "Monitor cold-chain sensitive commodities",
+      "name_en": "Monitor cold-chain sensitive commodities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Monitorar materiais sens\u00edveis \u00e0 cadeia de frio",
+      "group": "System",
+      "parent": 182
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 186,
+    "fields": {
+      "created": "2017-12-01T14:26:50.177Z",
+      "modified": "2018-01-16T09:10:19.658Z",
+      "is_active": true,
+      "name": "Register licensed drugs and health commodities",
+      "name_en": "Register licensed drugs and health commodities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registrar medicamentos licenciados e produtos de sa\u00fade",
+      "group": "System",
+      "parent": 182
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 187,
+    "fields": {
+      "created": "2017-12-01T14:26:50.178Z",
+      "modified": "2018-01-16T09:08:34.050Z",
+      "is_active": true,
+      "name": "Manage procurement of commodities",
+      "name_en": "Manage procurement of commodities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gestor de aquisi\u00e7\u00e3o de bens",
+      "group": "System",
+      "parent": 182
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 188,
+    "fields": {
+      "created": "2017-12-01T14:26:50.179Z",
+      "modified": "2018-01-16T07:29:07.727Z",
+      "is_active": true,
+      "name": "Report counterfeit or substandard drugs by clients",
+      "name_en": "Report counterfeit or substandard drugs by clients",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Reportar medicamentos falsificados ou de baixa qualidade por parte dos clientes",
+      "group": "System",
+      "parent": 182
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 189,
+    "fields": {
+      "created": "2017-12-01T14:26:50.180Z",
+      "modified": "2018-01-16T07:13:31.002Z",
+      "is_active": true,
+      "name": "Public health event notification",
+      "name_en": "Public health event notification",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Notifica\u00e7\u00e3o de eventos da sa\u00fade p\u00fablica",
+      "group": "System",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 190,
+    "fields": {
+      "created": "2017-12-01T14:26:50.180Z",
+      "modified": "2018-01-16T07:10:39.536Z",
+      "is_active": true,
+      "name": "Notification of public health events from point of diagnosis",
+      "name_en": "Notification of public health events from point of diagnosis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Notifica\u00e7\u00e3o de eventos de sa\u00fade p\u00fablica a partir do ponto de diagn\u00f3stico",
+      "group": "System",
+      "parent": 189
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 191,
+    "fields": {
+      "created": "2017-12-01T14:26:50.181Z",
+      "modified": "2018-01-16T07:08:26.340Z",
+      "is_active": true,
+      "name": "Civil Registration and Vital Statistics (CRVS)",
+      "name_en": "Civil Registration and Vital Statistics (CRVS)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registro civil e estat\u00edsticas vitais (CRVS)",
+      "group": "System",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 192,
+    "fields": {
+      "created": "2017-12-01T14:26:50.182Z",
+      "modified": "2018-01-16T07:01:26.773Z",
+      "is_active": true,
+      "name": "Notify birth event",
+      "name_en": "Notify birth event",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Notificar  evento de nascimento",
+      "group": "System",
+      "parent": 191
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 193,
+    "fields": {
+      "created": "2017-12-01T14:26:50.183Z",
+      "modified": "2018-01-16T07:00:22.436Z",
+      "is_active": true,
+      "name": "Register birth event",
+      "name_en": "Register birth event",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registrar evento de nascimento",
+      "group": "System",
+      "parent": 191
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 194,
+    "fields": {
+      "created": "2017-12-01T14:26:50.184Z",
+      "modified": "2018-01-16T06:54:50.493Z",
+      "is_active": true,
+      "name": "Certify birth event",
+      "name_en": "Certify birth event",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Certificar evento de nascimento",
+      "group": "System",
+      "parent": 191
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 195,
+    "fields": {
+      "created": "2017-12-01T14:26:50.185Z",
+      "modified": "2018-01-16T06:36:11.703Z",
+      "is_active": true,
+      "name": "Notify death event",
+      "name_en": "Notify death event",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Notificar o evento de morte",
+      "group": "System",
+      "parent": 191
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 196,
+    "fields": {
+      "created": "2017-12-01T14:26:50.185Z",
+      "modified": "2018-01-16T06:25:08.704Z",
+      "is_active": true,
+      "name": "Register death event",
+      "name_en": "Register death event",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registrar evento de morte",
+      "group": "System",
+      "parent": 191
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 197,
+    "fields": {
+      "created": "2017-12-01T14:26:50.187Z",
+      "modified": "2018-01-16T06:55:22.452Z",
+      "is_active": true,
+      "name": "Certify death event",
+      "name_en": "Certify death event",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Certificar evento da morte",
+      "group": "System",
+      "parent": 191
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 198,
+    "fields": {
+      "created": "2017-12-01T14:26:50.188Z",
+      "modified": "2018-01-26T10:03:05.056Z",
+      "is_active": true,
+      "name": "Health financing",
+      "name_en": "Health financing",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Financiamento da sa\u00fade",
+      "group": "System",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 199,
+    "fields": {
+      "created": "2017-12-01T14:26:50.189Z",
+      "modified": "2018-01-26T10:02:11.551Z",
+      "is_active": true,
+      "name": "Register and verify client insurance membership",
+      "name_en": "Register and verify client insurance membership",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registe e verifique a assinatura do seguro do cliente",
+      "group": "System",
+      "parent": 198
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 200,
+    "fields": {
+      "created": "2017-12-01T14:26:50.189Z",
+      "modified": "2018-01-26T10:01:04.641Z",
+      "is_active": true,
+      "name": "Track insurance billing and claims submission",
+      "name_en": "Track insurance billing and claims submission",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Rastrear cobran\u00e7a de seguro e apresenta\u00e7\u00e3o de reivindica\u00e7\u00f5es",
+      "group": "System",
+      "parent": 198
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 201,
+    "fields": {
+      "created": "2017-12-01T14:26:50.190Z",
+      "modified": "2018-01-16T06:07:00.883Z",
+      "is_active": true,
+      "name": "Track and manage insurance reimbursement",
+      "name_en": "Track and manage insurance reimbursement",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Rastrear e gerir o reembolso de seguro",
+      "group": "System",
+      "parent": 198
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 202,
+    "fields": {
+      "created": "2017-12-01T14:26:50.191Z",
+      "modified": "2018-01-16T04:44:17.845Z",
+      "is_active": true,
+      "name": "Transmit or manage routine payroll payment to healthcare provider(s)",
+      "name_en": "Transmit or manage routine payroll payment to healthcare provider(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Transmitir e gerir a folha de pagamento de salarios de rotina ao(s) providor(es) de saude",
+      "group": "System",
+      "parent": 198
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 203,
+    "fields": {
+      "created": "2017-12-01T14:26:50.192Z",
+      "modified": "2018-01-15T12:51:00.787Z",
+      "is_active": true,
+      "name": "Transmit or manage incentives to healthcare provider (s)",
+      "name_en": "Transmit or manage incentives to healthcare provider (s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Transmitir ou gerir incentivos para os profissionais de sa\u00fade",
+      "group": "System",
+      "parent": 198
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 204,
+    "fields": {
+      "created": "2017-12-01T14:26:50.193Z",
+      "modified": "2018-01-15T12:39:36.232Z",
+      "is_active": true,
+      "name": "Manage budget and expenditures",
+      "name_en": "Manage budget and expenditures",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Administrar or\u00e7amento e despesas",
+      "group": "System",
+      "parent": 198
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 205,
+    "fields": {
+      "created": "2017-12-01T14:26:50.194Z",
+      "modified": "2018-01-15T12:28:55.373Z",
+      "is_active": true,
+      "name": "Equipment and asset management",
+      "name_en": "Equipment and asset management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Equipamentos e gest\u00e3o de activos",
+      "group": "System",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 206,
+    "fields": {
+      "created": "2017-12-01T14:26:50.194Z",
+      "modified": "2018-01-15T12:21:07.252Z",
+      "is_active": true,
+      "name": "Monitor status and maintenance of health equipment",
+      "name_en": "Monitor status and maintenance of health equipment",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Monitorar estado e manuten\u00e7\u00e3o de equipamentos de sa\u00fade",
+      "group": "System",
+      "parent": 205
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 207,
+    "fields": {
+      "created": "2017-12-01T14:26:50.195Z",
+      "modified": "2018-01-15T11:58:59.780Z",
+      "is_active": true,
+      "name": "Track regulation and licensing of medical equipment",
+      "name_en": "Track regulation and licensing of medical equipment",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Controle de regulamenta\u00e7\u00e3o e licenciamento de equipamentos m\u00e9dicos",
+      "group": "System",
+      "parent": 205
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 208,
+    "fields": {
+      "created": "2017-12-01T14:26:50.196Z",
+      "modified": "2018-01-15T11:36:56.503Z",
+      "is_active": true,
+      "name": "Facility management",
+      "name_en": "Facility management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o de unidades sanit\u00e1rias",
+      "group": "System",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 209,
+    "fields": {
+      "created": "2017-12-01T14:26:50.197Z",
+      "modified": "2018-01-15T11:32:38.512Z",
+      "is_active": true,
+      "name": "List health facilities and related information",
+      "name_en": "List health facilities and related information",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Lista de unidades sanit\u00e1rias  e informa\u00e7\u00f5es relacionadas",
+      "group": "System",
+      "parent": 208
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 210,
+    "fields": {
+      "created": "2017-12-01T14:26:50.198Z",
+      "modified": "2018-01-15T11:13:10.811Z",
+      "is_active": true,
+      "name": "Assess health facilities",
+      "name_en": "Assess health facilities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Avaliar unidades sanit\u00e1rias",
+      "group": "System",
+      "parent": 208
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 211,
+    "fields": {
+      "created": "2017-12-01T14:26:50.199Z",
+      "modified": "2018-01-15T11:06:06.692Z",
+      "is_active": true,
+      "name": "Data collection, management, and use",
+      "name_en": "Data collection, management, and use",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Coleta, gest\u00e3o e uso de dados",
+      "group": "Data service",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 212,
+    "fields": {
+      "created": "2017-12-01T14:26:50.199Z",
+      "modified": "2018-01-15T11:02:14.528Z",
+      "is_active": true,
+      "name": "Non routine data collection and management",
+      "name_en": "Non routine data collection and management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Coleta e gest\u00e3o n\u00e3o-rotineira de dados",
+      "group": "Data service",
+      "parent": 211
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 213,
+    "fields": {
+      "created": "2017-12-01T14:26:50.200Z",
+      "modified": "2018-01-15T10:57:51.949Z",
+      "is_active": true,
+      "name": "Data storage and aggregation",
+      "name_en": "Data storage and aggregation",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Armazenamento e agrega\u00e7\u00e3o de dados",
+      "group": "Data service",
+      "parent": 211
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 214,
+    "fields": {
+      "created": "2017-12-01T14:26:50.201Z",
+      "modified": "2018-01-15T10:30:29.149Z",
+      "is_active": true,
+      "name": "Data synthesis and visualizations",
+      "name_en": "Data synthesis and visualizations",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "S\u00edntese e visualiza\u00e7\u00f5es de dados",
+      "group": "Data service",
+      "parent": 211
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 215,
+    "fields": {
+      "created": "2017-12-01T14:26:50.202Z",
+      "modified": "2018-01-15T10:16:12.382Z",
+      "is_active": true,
+      "name": "Automated analysis of data to generate new information or predictions on future events",
+      "name_en": "Automated analysis of data to generate new information or predictions on future events",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "An\u00e1lise automatizada de dados para gerar novas informa\u00e7\u00f5es ou previs\u00f5es sobre eventos futuros",
+      "group": "Data service",
+      "parent": 211
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 216,
+    "fields": {
+      "created": "2017-12-01T14:26:50.203Z",
+      "modified": "2018-01-15T09:36:13.533Z",
+      "is_active": true,
+      "name": "Data coding",
+      "name_en": "Data coding",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Codifica\u00e7\u00e3o de dados",
+      "group": "Data service",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 217,
+    "fields": {
+      "created": "2017-12-01T14:26:50.204Z",
+      "modified": "2018-01-15T09:22:13.508Z",
+      "is_active": true,
+      "name": "Parse unstructured data into structured data",
+      "name_en": "Parse unstructured data into structured data",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Analisar os dados n\u00e3o estruturados em dados estruturados",
+      "group": "Data service",
+      "parent": 216
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 218,
+    "fields": {
+      "created": "2017-12-01T14:26:50.205Z",
+      "modified": "2018-01-26T09:58:40.724Z",
+      "is_active": true,
+      "name": "Merge, de-duplicate and curate coded datasets or terminologies",
+      "name_en": "Merge, de-duplicate and curate coded datasets or terminologies",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Unir, eliminar duplica\u00e7\u00e3o e organizar conjuntos de dados ou terminologias codificados",
+      "group": "Data service",
+      "parent": 216
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 219,
+    "fields": {
+      "created": "2017-12-01T14:26:50.205Z",
+      "modified": "2018-01-15T09:01:56.137Z",
+      "is_active": true,
+      "name": "Classify disease codes",
+      "name_en": "Classify disease codes",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Classifique c\u00f3digos de doen\u00e7as",
+      "group": "Data service",
+      "parent": 216
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 220,
+    "fields": {
+      "created": "2017-12-01T14:26:50.207Z",
+      "modified": "2018-01-15T08:49:14.626Z",
+      "is_active": true,
+      "name": "Location mapping",
+      "name_en": "Location mapping",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mapeamento de localiza\u00e7\u00e3o",
+      "group": "Data service",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 221,
+    "fields": {
+      "created": "2017-12-01T14:26:50.207Z",
+      "modified": "2018-01-15T08:41:20.048Z",
+      "is_active": true,
+      "name": "Map location of health facilities/structures",
+      "name_en": "Map location of health facilities/structures",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mapa de localiza\u00e7\u00e3o das unidades sanit\u00e1rias / estruturas de sa\u00fade",
+      "group": "Data service",
+      "parent": 220
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 222,
+    "fields": {
+      "created": "2017-12-01T14:26:50.208Z",
+      "modified": "2018-01-15T08:31:25.762Z",
+      "is_active": true,
+      "name": "Map location of health event",
+      "name_en": "Map location of health event",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mapa de localiza\u00e7\u00e3o do evento de sa\u00fade",
+      "group": "Data service",
+      "parent": 220
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 223,
+    "fields": {
+      "created": "2017-12-01T14:26:50.209Z",
+      "modified": "2018-01-15T08:19:03.289Z",
+      "is_active": true,
+      "name": "Map location of clients and households",
+      "name_en": "Map location of clients and households",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mapa de localiza\u00e7\u00e3o de clientes e fam\u00edlias",
+      "group": "Data service",
+      "parent": 220
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 224,
+    "fields": {
+      "created": "2017-12-01T14:26:50.210Z",
+      "modified": "2018-01-26T22:04:22.937Z",
+      "is_active": true,
+      "name": "Map location of healthcare provider(s)",
+      "name_en": "Map location of healthcare provider(s)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mapa de localiza\u00e7\u00e3o de profissionais de sa\u00fade",
+      "group": "Data service",
+      "parent": 220
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 225,
+    "fields": {
+      "created": "2017-12-01T14:26:50.211Z",
+      "modified": "2018-01-15T08:04:44.232Z",
+      "is_active": true,
+      "name": "Data exchange and interoperability",
+      "name_en": "Data exchange and interoperability",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Interc\u00e2mbio de dados e interoperabilidade",
+      "group": "Data service",
+      "parent": null
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 226,
+    "fields": {
+      "created": "2017-12-01T14:26:50.212Z",
+      "modified": "2018-01-15T07:59:20.977Z",
+      "is_active": true,
+      "name": "Date exchange across systems",
+      "name_en": "Date exchange across systems",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Troca de data entre os sistemas",
+      "group": "Data service",
+      "parent": 225
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 227,
+    "fields": {
+      "created": "2017-12-01T14:44:17.346Z",
+      "modified": "2018-01-15T07:44:26.255Z",
+      "is_active": true,
+      "name": "New Digital Intervention",
+      "name_en": "New Digital Intervention",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Nova interven\u00e7\u00e3o digital",
+      "group": "Data service",
+      "parent": 211
+    }
+  },
+  {
+    "model": "project.digitalstrategy",
+    "pk": 228,
+    "fields": {
+      "created": "2017-12-12T13:08:12.922Z",
+      "modified": "2018-01-15T07:43:18.031Z",
+      "is_active": true,
+      "name": "A new digital strategy",
+      "name_en": "A new digital strategy",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Uma nova estrat\u00e9gia digital",
+      "group": "Provider",
+      "parent": 147
+    }
+  }
+]

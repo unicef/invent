@@ -1,0 +1,13 @@
+<div>
+  <div class="trix-wrapper">
+    <trix-editor ng-blur="vm.blur()"></trix-editor>
+  </div>
+
+  <div class="counter-wrapper" ng-class="{'has-error' : vm.showError}">
+    <span class="error-message" ng-show="vm.required && vm.charCounter === 0"><translate>This is required</translate></span>
+    <span class="error-message" ng-show="vm.charCounter > vm.charLimit"><translate>Maximum amount of character reached</translate></span>
+    <span class="char-counter">{{vm.charCounter}}</span>
+    <span class="char-separator"> | </span>
+    <span class="char-limit">{{vm.charLimit}}</span>
+  </div>
+</div>

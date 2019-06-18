@@ -1,0 +1,669 @@
+<!-- To make css inline use this tool: https://inliner.cm/ -->
+
+<!-- {% load utils %}
+{% load staticfiles %}
+{% load i18n %} -->
+
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="{{ language }}">
+    <meta name="viewport" content="width=device-width" />
+    <title>Email templates</title>
+
+    <style>
+      /* -------------------------------------
+          GLOBAL RESETS
+      ------------------------------------- */
+      img {
+        border: none;
+        -ms-interpolation-mode: bicubic;
+        max-width: 100%; }
+
+        html {
+          margin: 0;
+          padding: 0;
+        }
+
+      body {
+        background-color: #F2F2F2;
+        font-family: arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%; }
+
+      table {
+        border-collapse: separate;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+        width: 100%; }
+        table td {
+          font-family: arial, sans-serif;
+          font-size: 14px;
+          vertical-align: top; }
+
+      /* -------------------------------------
+          BODY & CONTAINER
+      ------------------------------------- */
+      .body {
+        background-color: #F2F2F2;
+        width: 100%; }
+
+      /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+      .container {
+        display: block;
+        margin: 0 auto !important;
+        /* makes it centered */
+        max-width: 580px;
+        padding: 10px;
+        width: 580px;
+        color: #474747; }
+
+      /* This should also be a block element, so that it will fill 100% of the .container */
+      .content {
+        box-sizing: border-box;
+        display: block;
+        margin: 0 auto;
+        max-width: 580px;
+        padding: 20px; }
+
+      /* -------------------------------------
+          HEADER, FOOTER, MAIN
+      ------------------------------------- */
+      .main {
+        width: 100%;
+        /* border: 1px solid #D6D6D6; */
+        background: #FFFFFF;
+        border-radius: 3px; }
+
+      .wrapper {
+        box-sizing: border-box;
+        padding: 20px; }
+
+      .content-block {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      .header {
+        height: 80px; }
+        .header .align-right {
+          padding-top: 5px; }
+        .visit-link {
+          font-size: 12px; }
+
+      .footer {
+        clear: both;
+        margin-top: 10px;
+        text-align: center;
+        width: 100%; }
+        .footer td,
+        .footer p,
+        .footer span,
+        .footer a {
+          color: #9B9B9B;
+          font-size: 12px;
+          text-align: center; }
+        .footer .disclaimer {
+          font-size: 11px; }
+        .footer-links a + span {
+          color: #B9B9B9; }
+
+      .project-list {}
+        .list-header td {
+          padding: 5px 10px;
+          background-color: #9B9B9B;
+          font-size: 12px;
+          color: #FFFFFF; }
+        .list-header td b {
+          text-transform: uppercase; }
+        .list-content td {
+          padding-top: 20px; }
+
+
+      /* -------------------------------------
+          TYPOGRAPHY
+      ------------------------------------- */
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: arial, sans-serif;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0;
+        margin-top: 10px;
+        margin-bottom: 20px; }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 700; }
+
+      h2 {
+        font-size: 16px; }
+
+      p,
+      ul,
+      ol {
+        font-family: arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        margin: 0;
+        margin-bottom: 20px;
+        padding: 0; }
+        p li,
+        ul li,
+        ol li {
+          list-style-position: inside;
+          margin-left: 10px;
+          margin-bottom: 10px; }
+
+      a {
+        color: #008DC9;
+        text-decoration: underline; }
+
+      /* -------------------------------------
+          BUTTONS
+      ------------------------------------- */
+      .btn {
+        box-sizing: border-box;
+        width: 100%; }
+        .btn > tbody > tr > td {
+          padding-top: 10px;
+          padding-bottom: 20px; }
+        .btn table {
+          width: auto; }
+        .btn table td {
+          background-color: #FFFFFF;
+          text-align: center; }
+        .btn a {
+          background-color: #FFFFFF;
+          border: solid 1px #008DC9;
+          box-sizing: border-box;
+          color: #008DC9;
+          cursor: pointer;
+          display: inline-block;
+          font-size: 14px;
+          font-weight: bold;
+          margin: 0;
+          padding: 10px 20px;
+          text-decoration: none; }
+
+      .btn-primary table td {
+        background-color: #008DC9; }
+
+      .btn-primary a {
+        background-color: #008DC9;
+        border-color: #008DC9;
+        color: #FFFFFF; }
+
+      /* -------------------------------------
+          OTHER STYLES THAT MIGHT BE USEFUL
+      ------------------------------------- */
+      .last {
+        margin-bottom: 0; }
+
+      .first {
+        margin-top: 0; }
+
+      .align-center {
+        text-align: center; }
+
+      .align-right {
+        text-align: right; }
+
+      .align-left {
+        text-align: left; }
+
+      .clear {
+        clear: both; }
+
+      .mt0 {
+        margin-top: 0; }
+
+      .mb0 {
+        margin-bottom: 0; }
+
+      .nowrap {
+        white-space: nowrap; }
+
+      .preheader {
+        color: transparent;
+        display: none;
+        height: 0;
+        max-height: 0;
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        mso-hide: all;
+        visibility: hidden;
+        width: 0; }
+
+      hr {
+        border: 0;
+        border-bottom: 1px solid #D6D6D6;
+        margin: 20px 0; }
+
+      /* -------------------------------------
+          RESPONSIVE AND MOBILE FRIENDLY STYLES
+      ------------------------------------- */
+      @media only screen and (max-width: 620px) {
+        /* table[class=main] h1 {
+          font-size: 24px !important;
+          margin-bottom: 10px !important; }
+        table[class=main] p,
+        table[class=main] ul,
+        table[class=main] ol,
+        table[class=main] td,
+        table[class=main] span,
+        table[class=main] a {
+          font-size: 16px !important; } */
+        table[class=body] .wrapper,
+        table[class=body] .article {
+          padding: 15px !important; }
+        table[class=body] .content {
+          padding: 0 !important; }
+        table[class=body] .container {
+          padding: 0 !important;
+          width: 100% !important; }
+        table[class=body] .main {
+          border-left-width: 0 !important;
+          border-radius: 0 !important;
+          border-right-width: 0 !important; }
+        table[class=body] .btn table {
+          width: 100% !important; }
+        table[class=body] .btn a {
+          width: 100% !important; }
+        table[class=body] .img-responsive {
+          height: auto !important;
+          max-width: 100% !important;
+          width: auto !important; }
+        .footer > table {
+          padding: 0 15px 15px; }
+        }
+
+      /* -------------------------------------
+          PRESERVE THESE STYLES IN THE HEAD
+      ------------------------------------- */
+      @media all {
+        .ExternalClass {
+          width: 100%; }
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+          line-height: 100%; }
+        .apple-link a {
+          color: inherit !important;
+          font-family: inherit !important;
+          font-size: inherit !important;
+          font-weight: inherit !important;
+          line-height: inherit !important;
+          text-decoration: none !important; }
+        .btn-primary table td:hover {
+          background-color: #008DC9 !important; }
+        .btn-primary a:hover {
+          background-color: #008DC9 !important;
+          border-color: #008DC9 !important; }
+        }
+    </style>
+  </head>
+
+
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" class="body">
+      <tr>
+        <td class="container">
+          <div class="content">
+
+            <!-- START CENTERED WHITE CONTAINER -->
+            <!-- <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span> -->
+            <table class="main">
+
+              <!-- START MAIN CONTENT AREA -->
+              <tr>
+                <td class="wrapper">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr class="header">
+                      <td>
+                        <img src="{% site_url %}/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo">
+                      </td>
+                      <td class="align-right">
+                        <a href="{% site_url %}" class="visit-link nowrap">{% trans "Visit website" %}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+
+
+
+                        <!-- TEMPLATES -->
+
+
+
+                        <!-- TEMPLATE: NEW MEMBER -->
+                        {% if type == "new_member" %}
+                        <h2>{% trans "Dear" %} {{ user_name }},</h2>
+                        <p>{% blocktrans %}You have been added to the <b>{{ project_name }}</b> within the Digital Health Atlas as a <b>{{ role }}</b>. Use the link below to begin updating the project information.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/" target="_blank">{% trans "Go to my project" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: NEW MEMBER -->
+
+
+                        <!-- TEMPLATE: COUNTRY ADMIN -->
+                        {% elif type == "country_admin" %}
+                        <h1>{% trans "Country admin" %}</h1>
+                        <h2>{% trans "Dear" %} {{ full_name }},</h2>
+                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ country_name }}</b>. Use the link below to begin updating your country information.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: COUNTRY ADMIN -->
+
+
+                        <!-- TEMPLATE: DONOR ADMIN -->
+                        {% elif type == "donor_admin" %}
+                        <h1>{% trans "Investor admin" %}</h1>
+                        <h2>{% trans "Dear" %} {{full_name }} </h2>
+                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ donor_name }}</b>. Use the link below to begin updating your organization information.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/donor" target="_blank">{% trans "Go to investor admin" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: DONOR ADMIN -->
+
+                        <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
+                        {% elif type == "email_confirmation_signup_message" %}
+                        <h1>{% trans "Welcome to the Digital Health Atlas." %}</h1>
+                        <h2>{% trans "Confirm your email address below to finalize your registration." %}</h2>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                            <tbody>
+                              <tr>
+                                <td align="left">
+                                  <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                      <tr>
+                                        <td> <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a> </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                              </tbody>
+                          </table>
+                        <p>
+                            {% trans "Let us show you around." %}
+                        </p>
+                        <p>
+                            <a href="{% site_url %}/en/-/projects/create" target="_blank">{% trans "Register your project in the DHA" %}</a>
+                        </p>
+                        <p>
+                            <a href="{% site_url %}/en/-/projects" target="_blank">{% trans "Your projects inbox" %}</a>
+                        </p>
+                        <p>
+                            <a href="{% site_url %}/en/-/cms#all" target="_blank">{% trans "Global Digital Health Resources" %}</a>
+                        </p>
+                        <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
+
+
+                        <!-- TEMPLATE: FLAG CONTENT -->
+                        {% elif type == "flag_content" %}
+                        <h1>{% trans "Reported content!" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to see content" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: FLAG CONTENT -->
+
+
+                        <!-- TEMPLATE: PASSWORD RESET -->
+                        {% elif type == "password_reset" %}
+                        <h1>{% trans "Password Reset" %}</h1>
+                        <p>{% trans "A password reset has been requested for the Digital Health Atlas account linked to your email address" %} {{ email }}</p>
+                        <p><b>{% trans "To reset your password, click the link below:" %}</b></p>
+                        <p>
+                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        </p>
+                        <p>{% trans "If you did not request this password reset, please ignore this message." %}</p>
+                        <p>
+                          {% trans "Please do not reply to this email. For support or additional questions, email" %}
+                          <a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
+                        </p>
+                        <!-- /TEMPLATE: PASSWORD RESET -->
+
+
+                        <!-- TEMPLATE: TOOLKIT DIGEST -->
+                        {% elif type == "toolkit_digest" %}
+                        <h1>{% trans "Notification" %}</h1>
+                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
+                        <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
+                        <p>
+                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
+                        </p>
+                        <!-- /TEMPLATE: TOOLKIT DIGEST -->
+
+
+                        <!-- TEMPLATE: STATUS REPORT -->
+                        {% elif type == "status_report" %}
+                        <h1>{% trans "Status report" %}</h1>
+                        <h2>{% trans "Dear" %} {{ country_name }} {% trans "Admin," %}</h2>
+                        <p>{% trans "The projects listed below re complete and waiting for your approval" %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to Project Approval Dashboard" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: STATUS REPORT -->
+
+
+                        <!-- TEMPLATE: PROJECT IMPORT LIST -->
+                        {% elif type == "project_import_notify_admins" %}
+                        <h1>{% trans "Country project update" %}</h1>
+                        <h2>{% trans "Dear DHA Admin" %}</h2>
+                        <p>{% trans "The projects listed below have been imported." %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of import" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td>
+                                  <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td>
+                                  {{ project.created }}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go" %} {{country_name}} {% trans "Dashboard" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: PROJECT IMPORT LIST -->
+
+
+                        <!-- TEMPLATE: IMPORT PROJECTS -->
+                        {% elif type == "project_import_notify_owner" %}
+                        <h1>{% trans "Project access notification" %}</h1>
+                        <h2>{% trans "You were added to the following projects as a: Project Admin" %} </h2>
+                            <ul>
+                              {% for project in data.projects %}
+                                <li><a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
+                              {% endfor %}
+                            </ul>
+                            {% if data.password %}
+                            <p>
+                              <b>Your login credentials are:</b><br>
+                              <em>Username: {{ email }}</em><br>
+                              <em>Password: {{ data.password }}</em>
+                            </p>
+
+                            <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                <tbody>
+                                  <tr>
+                                    <td align="left">
+                                      <table border="0" cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                          <tr>
+                                            <td> <a href="{% site_url %}/{{ language }}/-/projects/" target="_blank">{% trans "Go to Project Inbox" %}</a> </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            {% endif %}
+                        {% endif %}
+                        <!-- /TEMPLATE: IMPORT PROJECTS -->
+
+
+
+                      <!-- END TEMPLATES -->
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+            <!-- END MAIN CONTENT AREA -->
+            </table>
+
+
+            <!-- START FOOTER -->
+            <div class="footer">
+              <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <tr>
+                    <td class="content-block footer-links">
+                      <a href="{% site_url %}">{% trans "Go to the Digital Health Atals" %}</a>
+                      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="{% site_url %}/{{ language }}/-/terms">{% trans "Terms of use" %}</a>
+                      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="mailto:digitalhealthatlas@gmail.com">{% trans "Contact us" %}</a>
+                    </td>
+                  </tr>
+                  <td class="content-block">
+                    <span class="disclaimer">
+                      {% trans "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use." %}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!-- END FOOTER -->
+
+          <!-- END CENTERED WHITE CONTAINER -->
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

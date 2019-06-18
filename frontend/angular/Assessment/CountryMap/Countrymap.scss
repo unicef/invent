@@ -1,0 +1,302 @@
+@import '../../variables';
+
+.relative {
+  position: relative;
+  height: 100%;
+
+  .countrychart-tooltip {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: $text-primary;
+    font-size: 12px;
+    line-height: 16px;
+    white-space: nowrap;
+    min-width: 160px;
+    background-color: $color-white;
+    box-shadow: 0 6px 12px 0 rgba(0,0,0,0.2);
+    border-radius: 2px;
+    opacity: .9;
+
+    .colorednr {
+      color: white;
+      // min-width: 42px;
+      padding: 0 5px;
+      margin-left: 8px !important;
+      font-weight: 700;
+      text-align: center;
+      border-radius: 3px;
+    }
+
+    .color0 { background-color: #7CB342; }
+    .color1 { background-color: #039BE5; }
+    .color2 { background-color: #FB8C00; }
+    .color3 { background-color: #EF5350; }
+    .color4 { background-color: #AB47BC; }
+    .color5 { background-color: #7E57C2; }
+    .color6 { background-color: #2196F3; }
+    .color7 { background-color: #009688; }
+    .color8 { background-color: #C0CA33; }
+
+    .countrychart-tooltip-header {
+      padding: 10px;
+      background-color: $color-white;
+      border-bottom: 1px solid $color-gray-lighter;
+      font-weight: 700;
+
+      p {
+        margin: 0;
+      }
+
+      .tooltip-flag {
+        height: 16px;
+        width: auto;
+        float: right;
+        margin-left: 10px;
+      }
+    }
+
+    md-ink-bar {
+      display: none;
+    }
+
+    md-tabs {
+      border-radius: 0;
+    }
+
+    md-tabs-wrapper {
+      border: none;
+      height: 34px;
+    }
+
+    md-tab-item {
+      height: 34px;
+      background-color: #E0E0E0;
+      border-bottom: 1px solid $color-gray-lighter;
+      padding: 0;
+      padding-bottom: 4px !important;
+      padding-top: 4px !important;
+
+      span {
+        color: $color-gray;
+        text-transform: none;
+        font-weight: 700;
+        font-size: 12px;
+      }
+
+      &.md-active {
+        background-color: $color-white;
+        border: none;
+
+        span {
+          color: $color-primary;
+        }
+      }
+    }
+
+    md-tab-content {
+			background-color: #FFFFFF;
+			opacity: 0.9;
+    }
+
+    .countrychart-tooltip-main {
+      padding: 5px 12px;
+
+      &.mainbig {
+        padding: 0;
+
+        .projectname, .projectorg {
+          padding-left: 12px;
+        }
+      }
+
+      &.main2 {
+        border-top: 1px solid $color-gray-lighter;
+      }
+
+      .activename {
+        font-weight: 700;
+        color: $color-primary;
+      }
+
+      .lh {
+        margin: 4px 0;
+        line-height: 20px;
+
+        &.no-projects {
+          margin: 10px;
+          color: $text-secondary;
+        }
+      }
+
+      .projectcont {
+        // height: 60px;
+        padding: 12px 0;
+        border-top: 1px solid $color-gray-lighter;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding-right: 40px;
+        cursor: pointer;
+
+        .projectname {
+          color: $color-primary;
+          font-size: 14px;
+          font-weight: 700;
+        }
+
+        .projectorg {
+          color: $text-secondary;
+          font-size: 14px;
+          margin-top: 8px;
+        }
+
+        .country-approved {
+          margin-top: 8px;
+          padding-left: 12px;
+          font-size: 12px;
+          font-weight: 500;
+          color: $color-approved;
+
+          i {
+            font-size: 14px;
+            transform: translate(0, 2px);
+          }
+        }
+
+        .my-eye,
+        .my-star {
+          position: absolute;
+          top: -6px;
+          right: -17px;
+          background-color: #CD9924;
+          display: block;
+          width: 55px;
+          height: 25px;
+          box-shadow: inset 0 -1px 9px 1px rgba(0,0,0,.12);
+          transform: rotate(40deg);
+
+          md-icon {
+            position: absolute;
+            top: 4px;
+            left: 24px;
+            font-size: 13px;
+            color: $color-white;
+            transform: rotate(-40deg);
+          }
+        }
+        .my-eye {
+          background-color: #53A0CE;
+        }
+      }
+    }
+
+    .cap {
+      text-transform: capitalize;
+    }
+  }
+
+  .zoomhandlers {
+    position: absolute;
+    left: 15px;
+    top: 340px;
+
+    > div {
+      display: block;
+      margin: 3px;
+      width: 24px;
+      height: 24px;
+      background-color: $color-gray-lightest;
+      border-radius: 24px;
+    }
+
+    md-icon {
+      position: relative;
+      color: $color-gray-light;
+      cursor: pointer;
+      outline: none;
+      padding: 5px;
+      top: -5px;
+      left: -5px;
+      transition: $swift-ease-out;
+
+      &:hover {
+        color: $color-gray;
+      }
+    }
+  }
+
+  .zoomhandlers2 {
+    left: auto;
+    right: 20px;
+
+    > div {
+      display: block;
+      margin: 8px;
+      width: 30px;
+      height: 30px;
+      background-color: $color-gray-lightest;
+      border-radius: 30px;
+    }
+
+    md-icon {
+      font-size: 30px;
+      color: $color-gray-light;
+      padding: 5px;
+      top: -5px;
+      left: -5px;
+      transition: $swift-ease-out;
+
+      &:hover {
+        color: $color-gray;
+      }
+    }
+  }
+
+  .spinner {
+    position: relative;
+    width: 100%;
+    background-color: transparent;
+    min-height: 60px;
+
+    span {
+      color: $text-primary;
+      font-size: 14px;
+      text-align: right;
+    }
+  }
+
+}
+
+.countrymapcontainer {
+  overflow: hidden;
+
+  .countrymap {
+    shape-rendering: optimizeSpeed;
+
+    .d3district {
+      fill: $color-map-light;
+      stroke: #9B9DA8;
+      stroke-width: 5px;
+      pointer-events: all;
+      cursor: pointer;
+
+      &.d3district-data {
+        fill: $color-map-dark;
+        transition: $swift-ease-out;
+
+        &:hover {
+          fill: $color-primary;
+        }
+      }
+
+      &:hover {
+        fill: $color-map-hoverempty;
+      }
+
+      &.global {
+        fill: $color-primary!important;
+      }
+    }
+  }
+}

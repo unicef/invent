@@ -1,0 +1,437 @@
+[
+  {
+    "model": "project.hscchallenge",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-01T14:26:50.046Z",
+      "modified": "2018-01-17T12:03:51.678Z",
+      "is_active": true,
+      "name": "Lack of population denominator",
+      "name_en": "Lack of population denominator",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Falta do denominador popula\u00e7\u00e3o",
+      "group": 4
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-01T14:26:50.047Z",
+      "modified": "2018-01-17T10:13:51.383Z",
+      "is_active": true,
+      "name": "Delayed reporting of events",
+      "name_en": "Delayed reporting of events",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Atraso na provis\u00e3o de cuidados",
+      "group": 4
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-01T14:26:50.047Z",
+      "modified": "2018-01-17T12:05:09.933Z",
+      "is_active": true,
+      "name": "Lack of quality/reliable data",
+      "name_en": "Lack of quality/reliable data",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Falta de dados  de qualidade/fi\u00e1veis",
+      "group": 4
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-01T14:26:50.048Z",
+      "modified": "2018-01-17T10:03:02.435Z",
+      "is_active": true,
+      "name": "Communication roadblocks",
+      "name_en": "Communication roadblocks",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Bloqueios de comunica\u00e7\u00e3o",
+      "group": 4
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-01T14:26:50.049Z",
+      "modified": "2018-01-17T10:35:26.036Z",
+      "is_active": true,
+      "name": "Lack of access to information or data",
+      "name_en": "Lack of access to information or data",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Falta de acesso a informa\u00e7\u00e3o e dados",
+      "group": 4
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-01T14:26:50.050Z",
+      "modified": "2018-01-17T10:34:53.595Z",
+      "is_active": true,
+      "name": "Insufficient utilization of data and information",
+      "name_en": "Insufficient utilization of data and information",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Inadequada utiliza\u00e7\u00e3o de dados e informa\u00e7\u00e3o",
+      "group": 4
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 7,
+    "fields": {
+      "created": "2017-12-01T14:26:50.050Z",
+      "modified": "2018-01-17T12:07:08.249Z",
+      "is_active": true,
+      "name": "Lack of unique identifiers",
+      "name_en": "Lack of unique identifiers",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Falta de identificadores \u00fanicos",
+      "group": 4
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 8,
+    "fields": {
+      "created": "2017-12-01T14:26:50.051Z",
+      "modified": "2018-01-17T10:29:05.857Z",
+      "is_active": true,
+      "name": "Insufficient supply of commodities",
+      "name_en": "Insufficient supply of commodities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fornecimento insuficiente de bens",
+      "group": 2
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 9,
+    "fields": {
+      "created": "2017-12-01T14:26:50.052Z",
+      "modified": "2018-01-17T10:31:59.491Z",
+      "is_active": true,
+      "name": "Insufficient supply of services",
+      "name_en": "Insufficient supply of services",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fornecimento inadequado de servi\u00e7os",
+      "group": 2
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 10,
+    "fields": {
+      "created": "2017-12-01T14:26:50.052Z",
+      "modified": "2018-01-17T10:29:42.012Z",
+      "is_active": true,
+      "name": "Insufficient supply of equipment",
+      "name_en": "Insufficient supply of equipment",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fonecimento insuficiente de equipamento",
+      "group": 2
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 11,
+    "fields": {
+      "created": "2017-12-01T14:26:50.053Z",
+      "modified": "2018-01-17T10:31:09.209Z",
+      "is_active": true,
+      "name": "Insufficient supply of qualified health workers",
+      "name_en": "Insufficient supply of qualified health workers",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Insuficiente disponibilidade de pessoal de sa\u00fade qualificado",
+      "group": 2
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 12,
+    "fields": {
+      "created": "2017-12-01T14:26:50.054Z",
+      "modified": "2018-01-17T12:20:08.638Z",
+      "is_active": true,
+      "name": "Poor patient experience",
+      "name_en": "Poor patient experience",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fraca experi\u00eancia do paciente",
+      "group": 5
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 13,
+    "fields": {
+      "created": "2017-12-01T14:26:50.055Z",
+      "modified": "2018-01-17T10:28:03.497Z",
+      "is_active": true,
+      "name": "Insufficient health worker competence",
+      "name_en": "Insufficient health worker competence",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Compet\u00eancia insuficiente do trabalhador de sa\u00fade",
+      "group": 5
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 14,
+    "fields": {
+      "created": "2017-12-01T14:26:50.056Z",
+      "modified": "2018-01-17T12:13:17.407Z",
+      "is_active": true,
+      "name": "Low quality of health commodities",
+      "name_en": "Low quality of health commodities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Baixa qualidade de bens de sa\u00fade",
+      "group": 5
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 15,
+    "fields": {
+      "created": "2017-12-01T14:26:50.056Z",
+      "modified": "2018-01-17T10:25:48.746Z",
+      "is_active": true,
+      "name": "Insufficient continuity of care",
+      "name_en": "Insufficient continuity of care",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Insuficiente continuidade de tratamento",
+      "group": 5
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 16,
+    "fields": {
+      "created": "2017-12-01T14:26:50.057Z",
+      "modified": "2018-01-17T10:34:18.717Z",
+      "is_active": true,
+      "name": "Insufficient supportive supervision",
+      "name_en": "Insufficient supportive supervision",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Inadequada supervis\u00e3o e suporte",
+      "group": 5
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 17,
+    "fields": {
+      "created": "2017-12-01T14:26:50.057Z",
+      "modified": "2018-01-17T12:18:54.384Z",
+      "is_active": true,
+      "name": "Poor adherence to guidelines",
+      "name_en": "Poor adherence to guidelines",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fraca ades\u00e3o as orienta\u00e7\u00f5es",
+      "group": 5
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 18,
+    "fields": {
+      "created": "2017-12-01T14:26:50.058Z",
+      "modified": "2018-01-17T10:36:31.382Z",
+      "is_active": true,
+      "name": "Lack of alignment with local norms",
+      "name_en": "Lack of alignment with local norms",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Falta de alinhamento com as normas locais",
+      "group": 1
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 19,
+    "fields": {
+      "created": "2017-12-01T14:26:50.059Z",
+      "modified": "2018-01-17T12:16:41.539Z",
+      "is_active": true,
+      "name": "Not addressing individual beliefs and practices",
+      "name_en": "Not addressing individual beliefs and practices",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "N\u00e3o contando cren\u00e7as e pr\u00e1ticas dos indiv\u00edduos",
+      "group": 1
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 20,
+    "fields": {
+      "created": "2017-12-01T14:26:50.060Z",
+      "modified": "2018-01-17T12:11:36.351Z",
+      "is_active": true,
+      "name": "Low demand for services",
+      "name_en": "Low demand for services",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Baixa procura de servi\u00e7os",
+      "group": 6
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 21,
+    "fields": {
+      "created": "2017-12-01T14:26:50.061Z",
+      "modified": "2018-01-17T10:09:39.850Z",
+      "is_active": true,
+      "name": "Geographic inaccessibility",
+      "name_en": "Geographic inaccessibility",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Inacessibilidade geogr\u00e1fica",
+      "group": 6
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 22,
+    "fields": {
+      "created": "2017-12-01T14:26:50.061Z",
+      "modified": "2018-01-17T12:09:32.804Z",
+      "is_active": true,
+      "name": "Low adherence to treatments",
+      "name_en": "Low adherence to treatments",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Baixa ades\u00e3o aos tratamentos",
+      "group": 6
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 23,
+    "fields": {
+      "created": "2017-12-01T14:26:50.062Z",
+      "modified": "2018-01-17T12:08:09.043Z",
+      "is_active": true,
+      "name": "Loss to follow-up",
+      "name_en": "Loss to follow-up",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Perda de seguimento",
+      "group": 6
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 24,
+    "fields": {
+      "created": "2017-12-01T14:26:50.063Z",
+      "modified": "2018-01-17T10:22:49.297Z",
+      "is_active": true,
+      "name": "Inadequate workflow management",
+      "name_en": "Inadequate workflow management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o inadequada de processos",
+      "group": 3
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 25,
+    "fields": {
+      "created": "2017-12-01T14:26:50.063Z",
+      "modified": "2017-12-21T13:39:17.836Z",
+      "is_active": true,
+      "name": "Lack of inappropriate referrals",
+      "name_en": "Lack of inappropriate referrals",
+      "name_fr": null,
+      "name_es": null,
+      "name_pt": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 26,
+    "fields": {
+      "created": "2017-12-01T14:26:50.064Z",
+      "modified": "2018-01-17T12:20:51.887Z",
+      "is_active": true,
+      "name": "Poor planning and coordination",
+      "name_en": "Poor planning and coordination",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Fraca planifica\u00e7\u00e3o e coordena\u00e7\u00e3o",
+      "group": 3
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 27,
+    "fields": {
+      "created": "2017-12-01T14:26:50.065Z",
+      "modified": "2018-01-17T10:06:49.932Z",
+      "is_active": true,
+      "name": "Delayed provision of care",
+      "name_en": "Delayed provision of care",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Atraso na provis\u00e3o de cuidados",
+      "group": 3
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 28,
+    "fields": {
+      "created": "2017-12-01T14:26:50.070Z",
+      "modified": "2018-01-17T10:14:34.434Z",
+      "is_active": true,
+      "name": "Inadequate access to transportation",
+      "name_en": "Inadequate access to transportation",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Acesso inadequado ao transporte",
+      "group": 3
+    }
+  },
+  {
+    "model": "project.hscchallenge",
+    "pk": 29,
+    "fields": {
+      "created": "2017-12-01T14:26:50.071Z",
+      "modified": "2018-01-17T10:16:26.136Z",
+      "is_active": true,
+      "name": "Inadequate prioritization of clients",
+      "name_en": "Inadequate prioritization of clients",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Inadequada prioriza\u00e7\u00e3o de clientes",
+      "group": 3
+    }
+  }
+]

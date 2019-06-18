@@ -1,0 +1,25 @@
+<!-- copied form original submit_row.html -->
+
+{% load i18n admin_urls %}
+
+<div class="submit-row">
+<!-- No need for save button
+{% if show_save %}<input type="submit" value="{% trans 'Save' %}" class="default" name="_save" />{% endif %}
+-->
+{% if show_delete_link %}
+    {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
+    <p class="deletelink-box"><a href="{% add_preserved_filters delete_url %}" class="deletelink">{% trans "Delete" %}</a></p>
+{% endif %}
+
+<!-- custom part -->
+{% if show_save_and_continue %}
+    {% if not original.pk %}
+        <input type="submit" value="{% trans 'Upload CSV' %}" name="_continue" />
+    {% endif %}
+    {% if original.headers and original.status == None %}
+        <input type="submit" value="{% trans 'Import projects' %}" name="_continue" />
+    {% endif %}
+{% endif %}
+<!-- end of custom part -->
+
+</div>

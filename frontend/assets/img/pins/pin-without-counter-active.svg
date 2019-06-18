@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="27px" height="46px" viewBox="0 0 27 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>pin</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-54.9%" y="-216.5%" width="209.8%" height="533.1%" filterUnits="objectBoundingBox" id="filter-1">
+            <feGaussianBlur stdDeviation="2.82054228" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <ellipse id="path-2" cx="12" cy="12.1744186" rx="5" ry="5.07267442"></ellipse>
+        <filter x="-10.0%" y="-9.9%" width="120.0%" height="119.7%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.839215686   0 0 0 0 0.839215686   0 0 0 0 0.839215686  0 0 0 1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="08---Profile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1---C---Country-admin" transform="translate(-438.000000, -2316.000000)">
+            <g id="Fieldset" transform="translate(272.000000, 2000.000000)">
+                <g id="Group-8" transform="translate(1.000000, 71.017442)">
+                    <g id="Group-9" transform="translate(0.000000, 54.784884)">
+                        <g id="pin" transform="translate(166.000000, 190.732558)">
+                            <g id="Group-6">
+                                <ellipse id="Oval-2" fill-opacity="0.5" fill="#000000" filter="url(#filter-1)" cx="12.7037037" cy="36.953919" rx="7.7037037" ry="1.95391904"></ellipse>
+                                <path d="M12.2646393,36.05993 C12.3349712,35.9224183 12.4098713,35.7766638 12.489305,35.622832 C13.0256237,34.5841937 13.6578831,33.391141 14.3824102,32.061231 C16.4516959,28.2629411 18.8458938,24.1280992 21.5356869,19.7971174 C27.4709754,10.2403874 22.8378808,0.768136969 12.2846182,0.768136969 C1.73306611,0.768136969 -2.75803914,9.53116294 2.54141204,19.793481 C5.28119945,24.1216168 7.77688161,28.2537363 9.97953832,32.0493836 C10.7506518,33.3781765 11.4301288,34.5701296 12.0118485,35.6076804 C12.1012866,35.7672015 12.1855717,35.9180133 12.2646393,36.05993 Z" id="Oval-1" stroke="#8C4216" fill="#D86422"></path>
+                            </g>
+                            <g id="Oval">
+                                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-2"></use>
+                                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

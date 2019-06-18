@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Project Bulk Upload</title>
+    </head>
+
+    <body>
+        <h1>Project Bulk Upload</h1>
+        {% if failed %}
+            <h3>Failed</h3>
+            <ul>
+                {% for project in failed %}
+                    <li>{{ project }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if imported %}
+            <h3>Imported</h3>
+            <ul>
+                {% for project in imported %}
+                    <li>{{ project }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if errors %}
+            <h3>Errors</h3>
+            <ul>
+                {% for message in errors %}
+                    <li>{{ message }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <form action="{% url "project-bulk" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file">
+            <p><input type="submit" value="Upload"/></p>
+        </form>
+    </body>
+
+</html>

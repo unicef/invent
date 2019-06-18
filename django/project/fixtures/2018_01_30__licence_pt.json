@@ -1,0 +1,86 @@
+[
+  {
+    "model": "project.licence",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-01T14:26:49.992Z",
+      "modified": "2018-01-22T10:21:07.855Z",
+      "is_active": true,
+      "name": "Public domain",
+      "name_en": "Public domain",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Dom\u00ednio p\u00fablico"
+    }
+  },
+  {
+    "model": "project.licence",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-01T14:26:49.994Z",
+      "modified": "2018-01-22T10:15:19.663Z",
+      "is_active": true,
+      "name": "Non protective free and open source software (e.g. Apache)",
+      "name_en": "Non protective free and open source software (e.g. Apache)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Software n\u00e3o protegido de c\u00f3digo aberto e livre (por exemplo, Apache)"
+    }
+  },
+  {
+    "model": "project.licence",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-01T14:26:49.995Z",
+      "modified": "2018-01-22T10:20:43.532Z",
+      "is_active": true,
+      "name": "Protective free and open source software",
+      "name_en": "Protective free and open source software",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Software de prote\u00e7\u00e3o livre e de c\u00f3digo aberto"
+    }
+  },
+  {
+    "model": "project.licence",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-01T14:26:49.996Z",
+      "modified": "2018-01-22T10:13:41.741Z",
+      "is_active": true,
+      "name": "Freemium",
+      "name_en": "Freemium",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Freemium"
+    }
+  },
+  {
+    "model": "project.licence",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-01T14:26:49.997Z",
+      "modified": "2018-01-22T10:16:57.747Z",
+      "is_active": true,
+      "name": "Proprietary",
+      "name_en": "Proprietary",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Propriet\u00e1rio"
+    }
+  },
+  {
+    "model": "project.licence",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-01T14:26:59.811Z",
+      "modified": "2018-01-22T10:21:35.550Z",
+      "is_active": false,
+      "name": "WHO server",
+      "name_en": "WHO server",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Servidor da OMS"
+    }
+  }
+]

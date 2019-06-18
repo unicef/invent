@@ -1,0 +1,154 @@
+[
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-01T14:26:49.127Z",
+      "modified": "2018-01-23T01:03:24.592Z",
+      "is_active": true,
+      "name": "Client Registry",
+      "name_en": "Client Registry",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registo de clientes",
+      "pre": "Yes, links to a",
+      "pre_en": "Yes, links to a",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar ao"
+    }
+  },
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-01T14:26:49.128Z",
+      "modified": "2018-01-23T00:57:18.675Z",
+      "is_active": true,
+      "name": "Health Management Information System (HMIS)",
+      "name_en": "Health Management Information System (HMIS)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Informa\u00e7\u00e3o de Gest\u00e3o de Sa\u00fade",
+      "pre": "Yes, links to",
+      "pre_en": "Yes, links to",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar ao"
+    }
+  },
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-01T14:26:49.129Z",
+      "modified": "2018-01-23T00:58:28.276Z",
+      "is_active": true,
+      "name": "Health Worker Registry",
+      "name_en": "Health Worker Registry",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registo de Pessoal de Sa\u00fade",
+      "pre": "Yes, links to a",
+      "pre_en": "Yes, links to a",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar ao"
+    }
+  },
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-01T14:26:49.131Z",
+      "modified": "2018-01-23T01:00:34.584Z",
+      "is_active": true,
+      "name": "Logistics Management and Supply Chain Information System (LMIS)",
+      "name_en": "Logistics Management and Supply Chain Information System (LMIS)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o de Log\u00edstica e Sistema de Informa\u00e7\u00e3o da Cadeia de Suprimentos (LMIS)",
+      "pre": "Yes, links to",
+      "pre_en": "Yes, links to",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar a"
+    }
+  },
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-01T14:26:49.132Z",
+      "modified": "2018-01-23T00:59:16.679Z",
+      "is_active": true,
+      "name": "Laboratory Information System",
+      "name_en": "Laboratory Information System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Informa\u00e7\u00e3o de Laborat\u00f3rio",
+      "pre": "Yes, links to",
+      "pre_en": "Yes, links to",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar ao"
+    }
+  },
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-01T14:26:49.132Z",
+      "modified": "2018-01-23T01:05:05.134Z",
+      "is_active": true,
+      "name": "Facility Registry",
+      "name_en": "Facility Registry",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Cadastro do estabelecimento",
+      "pre": "Yes, links to a",
+      "pre_en": "Yes, links to a",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar ao"
+    }
+  },
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 7,
+    "fields": {
+      "created": "2017-12-01T14:26:49.133Z",
+      "modified": "2018-01-23T01:02:03.500Z",
+      "is_active": true,
+      "name": "Shared Health Record",
+      "name_en": "Shared Health Record",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registo partilhado de Sa\u00fade",
+      "pre": "Yes, links to a",
+      "pre_en": "Yes, links to a",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar ao"
+    }
+  },
+  {
+    "model": "project.interoperabilitylink",
+    "pk": 8,
+    "fields": {
+      "created": "2017-12-01T14:26:49.134Z",
+      "modified": "2018-01-23T01:03:04.743Z",
+      "is_active": true,
+      "name": "Terminology Service",
+      "name_en": "Terminology Service",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Servi\u00e7o de Terminologia",
+      "pre": "Yes, links to a",
+      "pre_en": "Yes, links to a",
+      "pre_fr": "",
+      "pre_es": "",
+      "pre_pt": "Sim, ligar ao"
+    }
+  }
+]

@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+    django:
+        environment:
+            - SITE_ID=4
+        # Current DO instance has 2 cores so (2 Workers * CPU Cores) + 1 = 5
+        command: /usr/local/bin/gunicorn tip.wsgi:application -w 5 -b :8000 --timeout 120
+        volumes:
+            - ./django:/src
+            - ./nginx/site/static:/usr/share/django/static:rw
+            - ./django/media:/usr/share/django/media:rw
+            - log_data:/var/log/django
+            - media_data:/src/media
+            - ssh_data:/root/.ssh
+
+    celery:
+        environment:
+            - SITE_ID=4
+        volumes:
+            - ./django:/src
+            - log_data:/var/log/django
+            - ssh_data:/root/.ssh
+    nginx:
+        volumes:
+        - ./nginx/site:/usr/share/nginx/html:rw
+        - ./nginx/conf.d_secure:/etc/nginx/conf.d:ro
+        - ./nginx/ssl:/etc/nginx/ssl:ro
+        - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./django/media:/usr/share/nginx/html/media:rw
+        - ./nginx/certs:/etc/letsencrypt:rw
+        - ./nginx/certs-data:/data/letsencrypt:rw
+
+volumes:
+  postgres_data:
+  log_data:
+  media_data:
+  ssh_data:

@@ -1,0 +1,94 @@
+<md-dialog
+  flex-offset="10"
+  flex="80"
+  aria-label="Thematic overview (help) dialog"
+  class="thematic-overview">
+
+  <md-dialog-content layout="row">
+
+    <md-content class="left">
+
+      <div class="headline">
+        <h6><translate>MAPS Toolkit</translate></h6>
+        <p><translate>This section provides definitions and descriptions of key concepts, and highlights their relevance to scaling up and sustainability. It also includes diagrams to illustrate the conceptual framework underlying the Toolkit.</translate></p>
+      </div>
+
+      <div class="axes" ng-repeat="(axisId, axis) in vm.data track by $index">
+
+        <div class="axis" layout="row">
+
+          <div flex layout="row">
+            <div
+              class="iconcontainer"
+              layout="column"
+              layout-align="center center"
+              ng-click="vm.axisClick(axis, axisId);"
+              ng-class="(+vm.axis + 2) == $index ? 'active-axis' + (+vm.axis + 1) : ''">
+
+              <img ng-src="{{vm.icons[$index]}}" ng-click="vm.axisClick(axis, axisId);">
+
+            </div>
+
+            <div
+              class="titles"
+              layout="column"
+              ng-class="(+vm.axis + 2) == $index ? 'active' : ''">
+
+              <span ng-if="$index > 1" flex ng-click="vm.axisClick(axis, axisId);">
+                <translate>AXIS {{($index - 1)}}.</translate>
+                  <br>
+              </span>
+              <span flex ng-click="vm.axisClick(axis, axisId);">{{axis.name}}</span>
+
+              <div class="expander">
+                <md-icon ng-if="!axis.expand" ng-click="axis.expand = true">expand_more</md-icon>
+                <md-icon ng-if="axis.expand" ng-click="axis.expand = false">expand_less</md-icon>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="domain"
+          ng-hide="!axis.expand"
+          ng-repeat="(domainId, domain) in axis.domains"
+          ng-click="vm.changeSpot(+axisId - 2, +domainId)"
+          ng-class="{'active-domain': domain.active}">
+
+          <span ng-if="axisId > 1"><translate>Domain {{domain.id}} : {{domain.name}} </translate></span>
+          <span ng-if="axisId < 2">{{domain.name}}</span>
+
+        </div>
+      </div>
+    </md-content>
+
+    <div class="right" layout="column" flex md-whiteframe="24">
+
+      <div class="right-header" ng-class="'axis' + (+vm.axis + 1)">
+        <md-icon class="md-icons back-icon" ng-click="vm.hideDialog()">close</md-icon>
+        <div class="right-title">
+
+          <img ng-src="{{vm.icons[+vm.axis + 2]}}">
+
+          <span ng-if="vm.axis > -1"><translate>AXIS</translate> {{+vm.axis + 1}}. - {{vm.data[+vm.axis + 2].domains[+vm.domain].name}}
+          </span>
+
+          <span ng-if="vm.axis < 0">{{vm.data[+vm.axis + 2].domains[+vm.domain].name}}</span>
+
+        </div>
+      </div>
+
+      <md-content class="right-content" ng-class="'axis' + (vm.axis + 1)">
+
+        <div id="help-anchor"></div>
+        <div class="axis-html" ng-html-compile="vm.templates[(vm.axis + 1) + '.html']"></div>
+        <div class="content-html" ng-html-compile="vm.templates[(vm.axis + 1) + '-' + vm.domain + '.html']"></div>
+
+      </md-content>
+
+    </div>
+
+  </md-dialog-content>
+
+</md-dialog>

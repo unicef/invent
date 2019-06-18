@@ -1,0 +1,260 @@
+@import '../app.scss';
+
+maps-toolkit {
+  flex: 1 0 auto !important;
+  height:auto !important;
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+// Crossbrowser fixes
+.domain-questions {
+  .browser-ie.version-11 & {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+.question-header {
+  flex: 1 0 auto !important;
+  padding-bottom: 10px;
+  min-height: 73px;
+  background: #EEEEEE;
+  box-shadow: 0px 1px 0px 0px $text-disabled;
+  font-size: 11px;
+  line-height: 15px;
+  font-weight: 700;
+  color: $text-primary;
+  text-transform: uppercase;
+  text-align: center;
+
+  .question-text {
+    display: block;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-left: 60px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    text-transform: none;
+    text-align: left;
+  }
+}
+
+.md-subheader {
+  z-index: 100;
+}
+
+.md-subheader .md-subheader-inner {
+  padding: 0;
+}
+
+.md-sticky-clone {
+  max-width: calc( 100% - 60px ) !important;
+}
+
+.maps-toolkit {
+  padding-top:10px;
+  padding-left:40px;
+  padding-right:40px;
+  flex: 1 0 auto !important;
+  display: block;
+
+  .domain-header {
+    padding-top: 40px;
+    padding-left: 60px;
+    color: $text-primary;
+
+    .left {
+      h4 {
+        padding-bottom:24px;
+        font-weight: normal;
+        font-size:32px;
+        margin: 0;
+      }
+      p {
+        padding-bottom:40px;
+        font-style:italic;
+        font-size:14px;
+        margin: 0;
+      }
+    }
+
+    thematic {
+      margin-right: 40px;
+    }
+
+  }
+
+  .axis-row {
+    height: 52px;
+    margin: 10px 0 20px !important;
+    background-color: $color-white;
+
+    md-card {
+      margin: 0 0 ;
+      box-shadow: none;
+    }
+  }
+  .domain-questions {
+    background-color: $color-white;
+  }
+
+  md-content {
+    width:100%;
+  }
+
+  md-checkbox {
+    margin-bottom:0;
+    width: 20px;
+  }
+
+  .answer {
+    color: $text-primary;
+    border-bottom: 1px solid $color-gray-lighter;
+
+    .first-box,
+    .box {
+      border-right: 1px solid $color-gray-lighter;
+    }
+  }
+
+  .answer-wrapper {
+    padding-top: 24px;
+    padding-right: 100px;
+    padding-bottom: 24px;
+    padding-left: 60px;
+    color: $text-primary;
+    font-size: 14px;
+    line-height: 20px;
+
+    li {
+      margin-left: 20px;
+    }
+  }
+
+  .domain-score {
+    margin-bottom: 40px;
+    width: 100%;
+    height: 76px;
+    min-height: 76px; // fix for FF
+    line-height: 76px;
+    background: $color-lightblue;
+    font-size: 18px;
+    font-weight: 700;
+    color: $text-primary;
+
+    .total-point {
+      padding-left: 60px;
+    }
+
+    .vm-score {
+      text-align: center;
+    }
+  }
+
+  .domain-button {
+    margin-bottom:50px;
+    padding-right:50px;
+    padding-left:50px;
+    width: 100%;
+    min-height: 0; // fix for FF
+    overflow: hidden;
+
+    .domain-action-left {
+      .md-button {
+        float: left;
+        margin-right: 22px;
+      }
+    }
+
+    .domain-action-right {
+      .md-button {
+        float: right;
+        margin-left: 22px;
+      }
+    }
+
+    .md-button {
+      padding-right:20px;
+      padding-left:20px;
+    }
+  }
+
+  md-checkbox[checked="checked"]{
+    .md-icon {
+      background-color: $color-primary !important;
+    }
+  }
+}
+
+// IE Edge fix
+.browser-microsoft_edge {
+
+  .md-sticky-clone {}
+}
+
+[dir="rtl"] {
+  .question-header {
+    .question-text {
+      padding-left: 0px;
+      padding-right: 60px;
+    }
+  }
+
+  .maps-toolkit {
+
+    .domain-header {
+      padding-left: 0px;
+      padding-right: 60px;
+
+      thematic {
+        margin-left: 40px;
+        margin-right: 0px;
+      }
+    }
+
+    .answer-wrapper {
+      padding-left: 100px;
+      padding-right: 60px;
+
+      li {
+        margin-left: 0px;
+        margin-right: 20px;
+      }
+    }
+
+    .domain-score {
+      .total-point {
+        padding-left: 0px;
+        padding-right: 60px;
+      }
+    }
+
+    .domain-button {
+      .domain-action-left {
+        .md-button {
+          float: right; //?
+          margin-left: 22px;
+          margin-right: 0px;
+          md-icon {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
+      .domain-action-right {
+        .md-button {
+          float: left; //?
+          margin-left: 0px;
+          margin-right: 22px;
+          md-icon {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+}

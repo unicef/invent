@@ -1,0 +1,229 @@
+@import '../../variables';
+@import '../../mixins';
+
+.comment {
+  margin: 0 0 18px;
+  padding: 20px;
+  color: $text-primary;
+
+  .avatar-img {
+    margin-right: 15px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+    }
+
+    .no-avatar {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      border-radius: 50px;
+      background-color: $text-disabled;
+
+      &::before {
+        content: "person";
+        @include md-icon($font-size: 24px);
+        color: $color-white;
+        z-index: 1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .excerpt {
+    width: 100%;
+
+    .md-title {
+      font-size: 14px;
+      color: $text-primary;
+      margin: 5px 0 8px;
+    }
+
+    .comment-info {
+      display: block;
+      margin: 0 0 10px;
+
+      .time {
+        position: relative;
+        display: block;
+        color: $text-secondary;
+
+        .sep {
+          position: relative;
+          display: inline-block;
+          width: 25px;
+          height: 10px;
+
+
+          &:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: inline-block;
+            width: 1px;
+            height: 20px;
+            background-color: $color-gray-lighter;
+          }
+        }
+
+        .edit-button {
+          position: relative;
+          top: -1px;
+          left: -6px;
+          min-width: auto;
+          width: auto;
+          min-height: 24px;
+          max-height: 24px;
+          margin: 0;
+          padding: 0;
+          font-size: 12px;
+          line-height: 24px;
+          color: $text-disabled;
+          background-color: transparent !important;
+          transition: $swift-ease-out;
+
+          md-icon {
+            float: left;
+            margin: 0;
+            font-size: 16px;
+            line-height: 24px;
+            color: $text-disabled;
+            transition: $swift-ease-out;
+          }
+
+          &:hover,
+          &:hover md-icon {
+            color: $color-gray;
+          }
+        }
+
+        .flag-button {
+          position: relative;
+          top: -1px;
+          min-height: 24px;
+          max-height: 24px;
+
+          md-icon {
+            font-size: 16px;
+            line-height: 24px;
+          }
+
+          .report-text {
+            font-size: 12px;
+            line-height: 24px;
+          }
+
+          .delete-text {
+            font-size: 12px;
+            line-height: 24px;
+          }
+        }
+      }
+
+      .active {
+        .warning-zone {
+          height: 24px;
+          padding: 0 8px;
+
+          .warning-text {
+            line-height: 24px;
+          }
+
+          .warning-actions {
+            .md-button {
+              float: right;
+              margin: 0;
+              padding: 0;
+              min-width: auto;
+              width: auto;
+              min-height: 24px;
+              max-height: 24px;
+              margin: 0 5px 0 10px;
+              font-size: 12px;
+              line-height: 26px;
+
+              md-icon {
+                position: relative;
+                top: 2px;
+                left: 2px;
+                font-size: 16px;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .comment-text {
+      font-size: 14px;
+      line-height: 20px;
+      margin-right: 40px;
+
+      .comment-text-wrapper {
+        // display: inline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-height: 20px;
+        height: auto;
+        max-height: 60px;
+
+        > div {
+          word-break: break-all;
+
+          a {
+            color: $color-primary;
+          }
+        }
+      }
+
+      .read-more {
+        float: left;
+        display: inline-block;
+        margin-top: 20px;
+        cursor: pointer;
+        color: $color-primary;
+        outline: none;
+        font-size: 12px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &.expanded .comment-text-wrapper {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    // margin-bottom: 15px;
+  }
+
+  .trix-wrapper {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .comment-text {
+    .md-button {
+      margin: 0 20px 10px 0;
+      padding: 0 12px;
+      min-width: 120px;
+
+      &:first-of-type {
+        padding-left: 6px;
+      }
+    }
+  }
+}

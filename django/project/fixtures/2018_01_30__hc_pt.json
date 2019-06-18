@@ -1,0 +1,268 @@
+[
+  {
+    "model": "project.healthcategory",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-01T14:26:49.323Z",
+      "modified": "2018-01-16T08:50:47.942Z",
+      "is_active": true,
+      "name": "Sexual and reproductive health",
+      "name_en": "Sexual and reproductive health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade sexual e reprodutiva"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-01T14:26:49.336Z",
+      "modified": "2018-01-16T08:27:56.243Z",
+      "is_active": true,
+      "name": "Maternal health",
+      "name_en": "Maternal health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade Materna"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-01T14:26:49.342Z",
+      "modified": "2018-01-16T08:37:28.313Z",
+      "is_active": true,
+      "name": "Newborn and Child Health",
+      "name_en": "Newborn and Child Health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade Neonatal e Infantil"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-01T14:26:49.345Z",
+      "modified": "2018-01-16T07:59:09.786Z",
+      "is_active": true,
+      "name": "Elimination of Mother to Child Transmission (eMTCT) of HIV/AIDs and Syphilis (EMTCT/PMTCT)",
+      "name_en": "Elimination of Mother to Child Transmission (eMTCT) of HIV/AIDs and Syphilis (EMTCT/PMTCT)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Elimina\u00e7\u00e3o da Transmiss\u00e3o de M\u00e3e para a Filho (PTV) de HIV/SIDA e S\u00edfilis"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-01T14:26:49.351Z",
+      "modified": "2018-01-16T07:37:38.560Z",
+      "is_active": true,
+      "name": "Adolescent and Youth Health",
+      "name_en": "Adolescent and Youth Health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Saude de Adolescentes e Jovens"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-01T14:26:49.361Z",
+      "modified": "2018-01-16T07:38:26.431Z",
+      "is_active": true,
+      "name": "Civil registration and vital statistics",
+      "name_en": "Civil registration and vital statistics",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registo civil e estatisticas vitais"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 7,
+    "fields": {
+      "created": "2017-12-01T14:26:49.365Z",
+      "modified": "2018-01-16T08:25:49.084Z",
+      "is_active": true,
+      "name": "Infectious diseases (non-vector borne)",
+      "name_en": "Infectious diseases (non-vector borne)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as infecciosas (n\u00e3o transmitidas por vetores)"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 8,
+    "fields": {
+      "created": "2017-12-01T14:26:49.374Z",
+      "modified": "2018-01-16T08:47:34.558Z",
+      "is_active": true,
+      "name": "Non-communicable diseases",
+      "name_en": "Non-communicable diseases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as n\u00e3o transmiss\u00edveis"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 9,
+    "fields": {
+      "created": "2017-12-01T14:26:49.383Z",
+      "modified": "2018-01-16T08:53:41.085Z",
+      "is_active": true,
+      "name": "Vector-borne diseases (not listed under Neglected Tropical Diseases (NTDs)",
+      "name_en": "Vector-borne diseases (not listed under Neglected Tropical Diseases (NTDs)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as transmitidas por vetores (n\u00e3o listadas em Doen\u00e7as Tropicais Negligenciadas (DTN)"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 10,
+    "fields": {
+      "created": "2017-12-01T14:26:49.392Z",
+      "modified": "2018-01-16T08:31:58.150Z",
+      "is_active": true,
+      "name": "Neglected Tropical Diseases (NTDs)",
+      "name_en": "Neglected Tropical Diseases (NTDs)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as Tropicais Negligenciadas (DTN)"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 11,
+    "fields": {
+      "created": "2017-12-01T14:26:49.407Z",
+      "modified": "2018-01-16T08:48:33.182Z",
+      "is_active": true,
+      "name": "Nutrition and metabolic disorders",
+      "name_en": "Nutrition and metabolic disorders",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Nutri\u00e7\u00e3o e dist\u00farbios metab\u00f3licos"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 12,
+    "fields": {
+      "created": "2017-12-01T14:26:49.415Z",
+      "modified": "2018-01-16T08:49:23.123Z",
+      "is_active": true,
+      "name": "Other chronic conditions and disabilities",
+      "name_en": "Other chronic conditions and disabilities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras condi\u00e7\u00f5es cr\u00f4nicas e defici\u00eancias"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 13,
+    "fields": {
+      "created": "2017-12-01T14:26:49.427Z",
+      "modified": "2018-01-16T08:18:28.756Z",
+      "is_active": true,
+      "name": "Humanitarian health",
+      "name_en": "Humanitarian health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade humanit\u00e1ria"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 14,
+    "fields": {
+      "created": "2017-12-01T14:26:49.433Z",
+      "modified": "2018-01-16T08:54:17.653Z",
+      "is_active": true,
+      "name": "Violence",
+      "name_en": "Violence",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Viol\u00eancia"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 15,
+    "fields": {
+      "created": "2017-12-01T14:26:49.439Z",
+      "modified": "2018-01-16T08:26:58.949Z",
+      "is_active": true,
+      "name": "Injury prevention and management",
+      "name_en": "Injury prevention and management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Preven\u00e7\u00e3o e gest\u00e3o de feridos"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 16,
+    "fields": {
+      "created": "2017-12-01T14:26:49.450Z",
+      "modified": "2018-01-17T09:51:20.176Z",
+      "is_active": true,
+      "name": "Water Sanitation and Hygiene (WASH)",
+      "name_en": "Water Sanitation and Hygiene (WASH)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "\u00c1gua, Saneamento e Higiene (WASH)"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 17,
+    "fields": {
+      "created": "2017-12-01T14:26:49.457Z",
+      "modified": "2018-01-16T08:01:05.879Z",
+      "is_active": true,
+      "name": "Environmental Health",
+      "name_en": "Environmental Health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade Ambiental"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 18,
+    "fields": {
+      "created": "2017-12-01T14:26:49.467Z",
+      "modified": "2018-01-17T09:52:28.891Z",
+      "is_active": true,
+      "name": "Wellness and Mental Health",
+      "name_en": "Wellness and Mental Health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Bem estar e Sa\u00fade Mental"
+    }
+  },
+  {
+    "model": "project.healthcategory",
+    "pk": 19,
+    "fields": {
+      "created": "2017-12-01T14:26:49.474Z",
+      "modified": "2018-01-16T07:39:57.055Z",
+      "is_active": true,
+      "name": "Cross Cutting",
+      "name_en": "Cross Cutting",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Transversais"
+    }
+  }
+]

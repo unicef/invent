@@ -1,0 +1,249 @@
+@import '../../variables';
+@import '../../mixins';
+
+scorecard {
+    margin-top:20px;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+    display:block;
+
+    disclaimer footer {
+      padding: 50px 50px 80px;
+    }
+
+    .axis1 {
+        background-color: $color-axis1;
+    }
+
+    .axis2 {
+        background-color: $color-axis2;
+    }
+    .axis3 {
+        background-color: $color-axis3;
+    }
+    .axis4 {
+        background-color: $color-axis4;
+    }
+    .axis5 {
+        background-color: $color-axis5;
+    }
+    .axis6 {
+        background-color: $color-axis6;
+    }
+
+    .wrapper {
+        background: $color-white;
+        flex: 1 0 auto !important;
+        min-height: auto !important;
+    }
+
+    .inner-wrapper {
+        padding-left: 40px;
+        padding-right: 40px;
+        flex: 1 0 auto !important;
+        min-height:0;
+        height:auto;
+    }
+
+    .axis-header {
+        height:75px;
+        color: $color-white;
+        font-size: 20px;
+        font-weight: 700;
+        padding-left: 60px;
+        padding-right: 60px;
+        margin-bottom: 40px;
+
+        img {
+            margin-right:15px;
+            width:45px;
+            height: 25px;
+        }
+    }
+
+    .domain {
+        margin-bottom: 40px;
+
+        h4 {
+          font-size: 16px;
+        }
+    }
+
+    .domain-header {
+        background-color: $color-gray-lightest;
+        padding-left: 20px;
+        padding-right: 15px;
+        height: 55px;
+        border-bottom: 1px solid $text-disabled;
+        color: $text-primary;
+    }
+
+    .question {
+        border-bottom: 1px solid $color-gray-lighter;
+        font-size: 14px;
+        color: $text-primary;
+        height:50px;
+        padding-left: 50px;
+        padding-right: 30px;
+
+        strong {
+            margin-right: 5px;        }
+    }
+
+    .domain-total {
+        height:50px;
+        font-size: 14px;
+        border-bottom: 1px solid $color-gray-lighter;
+        padding-left: 20px;
+        padding-right: 30px;
+        color: $text-primary;
+
+        strong {
+            margin-right: 10px;
+        }
+    }
+
+    .domain-percentage {
+        height:50px;
+        font-size: 14px;
+        background: $color-lightblue;
+        padding-left: 20px;
+        padding-right: 30px;
+        color: $text-primary;
+    }
+
+    .axis-buttons {
+        padding-left:50px;
+        padding-right:50px;
+        margin-bottom:55px;
+
+        &.top {
+            margin-bottom:30px;
+            margin-top:30px;
+        }
+        .md-button {
+          padding-right:20px;
+          padding-left:20px;
+        }
+    }
+
+    .axes-scorecard {
+        // flex: 1 0 auto !important;
+        min-height: 0;
+
+        .inner-wrapper {
+            padding-top: 40px;
+        }
+
+        .axis-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: $color-white;
+            padding-left: 11px;
+            padding-right:20px;
+            margin-bottom:0;
+            height:55px;
+        }
+
+        .domain {
+            margin-bottom:0;
+            border-bottom:1px solid $color-gray-lighter;
+            font-size:16px;
+            font-weight:700;
+            height:50px;
+            padding-right:20px;
+
+            .md-button {
+              color: $color-gray-light;
+              height: 15px;
+              width: auto;
+            }
+
+            h4 {
+              font-weight: 700;
+            }
+
+            .percentage {
+              text-align: right;
+            }
+        }
+
+
+        .scorecard-buttons {
+          padding: 60px;
+
+          .md-button {
+            padding-right:20px;
+            padding-left:20px;
+          }
+        }
+
+    }
+
+    .md-primary {
+        color: $color-primary!important;
+        md-icon {
+            color: $color-primary!important;
+        }
+        &.md-raised {
+            background-color: $color-primary!important;
+            color: white!important;
+            md-icon {
+                color: white!important;
+            }
+        }
+    }
+}
+
+[dir="rtl"] {
+
+  .axis-header {
+    img {
+      margin-right: 0;
+      margin-left: 15px;
+    }
+  }
+
+  .domain-header {
+    padding-left: 15px;
+    padding-right: 20px;
+  }
+
+  .question {
+    padding-left: 30px;
+    padding-right: 50px;
+
+    strong {
+      margin-left: 5px;
+      margin-right: 0px;
+    }
+  }
+
+  .domain-total {
+    padding-left: 30px;
+    padding-right: 20px;
+
+    strong {
+      margin-left: 10px;
+      margin-right: 0px;
+    }
+  }
+
+  .domain-percentage {
+    padding-left: 30px;
+    padding-right: 20px;
+  }
+
+  .axes-scorecard {
+
+    .axis-header {
+      padding-left: 20px;
+      padding-right: 11px;
+    }
+
+    .domain {
+      padding-left: 20px;
+      padding-right: 0px;
+    }
+  }
+}

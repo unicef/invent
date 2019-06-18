@@ -1,0 +1,332 @@
+@import '../app';
+
+.PlanningAndGuidance {
+  display: block;
+  margin: 0 auto 60px;
+  padding: 0 30px;
+  max-width: $page-max-width;
+  min-width: $page-min-width;
+
+  .cms-tabs {
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      box-shadow: inset 0 -1px 0 $color-gray-lighter;
+    }
+
+    li {
+      display: inline-block;
+      padding: 0 10px;
+      margin: 0 10px;
+      line-height: 40px;
+      font-size: 14px;
+      font-weight: 700;
+      color: $text-secondary;
+      cursor: pointer;
+      outline:none;
+      transition: $swift-ease-out;
+
+      // Multi-lang
+      @include button-ml($width: 220px);
+      //
+
+      &:hover {
+        color: $text-primary;
+        // box-shadow: inset 0 -3px 0 darken($color-gray-lighter, 10%);
+      }
+
+      &.active {
+        color: $color-primary;
+        cursor: default;
+        box-shadow: inset 0 -3px 0 $color-primary;
+      }
+    }
+  }
+
+  .wrapper {
+    width: 100%;
+    background-color: $color-white;
+
+    .wrapper-inner {
+      width: 100%;
+    }
+
+    .cms-list {
+      padding: 0 30px 30px;
+      text-align: center;
+
+      &.all {
+        padding-top: 12px;
+      }
+
+      &.lessons .intro-lessons,
+      &.resources .intro-resources,
+      &.experiences .intro-experiences {
+        display: flex;
+      }
+
+      .cms-intro {
+        position: relative;
+        top: 20px;
+        display: block;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: left;
+        color: $text-secondary;
+
+        > div {
+          display: none;
+          padding-left: 40px;
+
+          > div {
+            position: relative;
+            &:last-child {
+              height: 180px;
+              background-repeat: no-repeat;
+            }
+
+            p {
+              position: relative;
+              top: -10px;
+              margin: 0;
+            }
+          }
+        }
+
+        .intro-lessons {
+          > div:last-child {
+            background-image: url('./images/illustration-1.svg');
+            background-size: 249px 201px;
+            background-position: 60% 10px;
+          }
+        }
+
+        .intro-resources {
+          > div:last-child {
+            background-image: url('./images/illustration-2.svg');
+            background-size: 375px 196px;
+            background-position: 60% 18px;
+          }
+        }
+
+        .intro-experiences {
+          > div:last-child {
+            background-image: url('./images/illustration-3.svg');
+            background-size: 329px 182px;
+            background-position: 60% 14px;
+          }
+        }
+      }
+
+      cms-list-element {
+        display: block;
+        margin-top: 18px;
+        text-align: left;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .empty-card {
+        margin-top: 20px;
+        padding: 30px;
+        text-align: left;
+        color: $text-disabled;
+
+        .material-icons {
+          font-size: 48px;
+        }
+
+        > span:last-child {
+          padding: 0 20px;
+        }
+      }
+
+      .show-more {
+        margin: 30px auto 0;
+      }
+    }
+
+    .cms-aside {
+      min-width: 300px;
+      padding: 30px;
+      background-color: $color-lightblue;
+      border-left: 1px solid $color-gray-lighter;
+
+      .add-new-content {
+        .md-button.add-new {
+          width: 240px;
+          margin: 0;
+
+          // Multi-lang
+          @include button-ml($width: 240px);
+          //
+        }
+      }
+
+      .search-content {
+        display: block;
+        padding: 40px 0 0;
+
+        .cms-search {
+          position: relative;
+
+          md-icon {
+            top: 5px;
+          }
+
+          .md-input {
+            padding-left: 36px;
+          }
+        }
+
+        .clear-search {
+          position: absolute;
+          top: 4px;
+          right: 0;
+          margin: 0;
+          padding: 0;
+          width: 24px !important;
+          min-height: 24px !important;
+          height: 24px !important;
+
+          md-icon {
+            font-size: 20px;
+            line-height: 24px;
+          }
+        }
+      }
+
+      .filter-content {
+        h6 {
+          margin: 16px 0;
+          color: $text-primary;
+        }
+
+        .filter-list {
+          .group-title {
+            font-weight: 700;
+          }
+
+          dt {
+            i {
+              position: relative;
+              top: 4px;
+              float: left;
+              margin-right: 10px;
+              position: relative;
+              cursor: pointer;
+              color: $color-gray;
+              outline: none;
+              transform: rotate(-90deg);
+              transition: $swift-ease-out;
+
+              &:hover {
+                color: $text-primary;
+              }
+
+              &.toggled {
+                color: $text-primary;
+                transform: rotate(0deg);
+              }
+            }
+          }
+
+          dd {
+            margin-left: 60px;
+          }
+
+          .domains {
+            overflow: hidden;
+            display: block;
+            height: 0;
+
+            &.show {
+              height: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+[dir="rtl"] {
+
+  .PlanningAndGuidance {
+    .wrapper {
+      .cms-list {
+        .cms-intro {
+          text-align: right;
+
+          > div {
+            padding-left: 0px;
+            padding-right: 40px;
+          }
+        }
+
+        cms-list-element {
+          text-align: right;
+        }
+
+        .empty-card {
+          text-align: right;
+        }
+      }
+
+      .cms-aside {
+        border-left: none;
+        border-right: 1px solid $color-gray-lighter;
+
+        .search-content {
+          .cms-search {
+            padding-right: 0;
+            .md-input {
+              padding-left: 0;
+              padding-right: 36px;
+            }
+          }
+
+          .clear-search {
+            left: 0;
+            right: auto;
+          }
+        }
+
+        .filter-content {
+          .filter-list {
+            dt {
+              &::after {
+                content: "";
+                clear: both;
+                display: table;
+              }
+              i {
+                float: right;
+                margin-left: 10px;
+                margin-right: 0px;
+                transform: rotate(90deg);
+
+                &.toggled {
+                  transform: rotate(0deg);
+                }
+              }
+              .md-label {
+                margin-left: 0 !important;
+              }
+            }
+
+            dd {
+              margin-left: 0px;
+              margin-right: 60px;
+            }
+
+          }
+        }
+      }
+    }
+  }
+}

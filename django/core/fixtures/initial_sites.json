@@ -1,0 +1,34 @@
+[
+  {
+    "model": "sites.site",
+    "pk": 1,
+    "fields": {
+      "domain": "localhost",
+      "name": "localhost"
+    }
+  },
+  {
+    "model": "sites.site",
+    "pk": 2,
+    "fields": {
+      "domain": "dev.whomaps.pulilab.com",
+      "name": "dev"
+    }
+  },
+  {
+    "model": "sites.site",
+    "pk": 3,
+    "fields": {
+      "domain": "digitalhealthatlas.org",
+      "name": "production"
+    }
+  },
+  {
+    "model": "sites.site",
+    "pk": 4,
+    "fields": {
+      "domain": "qa.whomaps.pulilab.com",
+      "name": "staging"
+    }
+  }
+]

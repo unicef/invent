@@ -1,0 +1,261 @@
+@import '../../variables';
+@import '../../mixins';
+
+cms-detail-element {
+  md-card-actions {
+    margin: 0 !important;
+  }
+}
+
+[dir="rtl"] {
+  cms-detail-element {
+    md-card-actions {
+      float: left;
+    }
+  }
+}
+
+.detail-dialog {
+  min-width: 720px;
+  max-width: 720px;
+  color: $text-primary;
+
+  .md-toolbar-tools {
+    padding: 0 30px;
+    background-color: $color-primary;
+
+    .md-title {
+      color: $color-white;
+    }
+
+    md-icon {
+      color: $color-white;
+    }
+  }
+
+  .md-dialog-content {
+    padding: 0;
+    border-radius: 0;
+
+    .content {
+      padding: 30px 30px 50px;
+
+      .cms-content-wrapper {
+
+        .content-header {
+          margin: 0 0 20px;
+        }
+
+        .created {
+          position: relative;
+          display: block;
+          margin: 0;
+          padding: 0;
+          font-size: 14px;
+          color: $text-secondary;
+
+          .sep {
+            position: relative;
+            display: inline-block;
+            width: 25px;
+            height: 10px;
+
+
+            &:after {
+              content: "";
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              display: inline-block;
+              width: 1px;
+              height: 24px;
+              background-color: $color-gray-lighter;
+            }
+          }
+
+          .edit-button {
+            position: relative;
+            left: -6px;
+            min-width: auto;
+            width: auto;
+            min-height: 24px;
+            max-height: 24px;
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+            line-height: 24px;
+            color: $text-disabled;
+            background-color: transparent !important;
+            transition: $swift-ease-out;
+
+            md-icon {
+              float: left;
+              margin: 0;
+              font-size: 16px;
+              line-height: 24px;
+              color: $text-disabled;
+              transition: $swift-ease-out;
+            }
+
+            &:hover,
+            &:hover md-icon {
+              color: $color-gray;
+            }
+          }
+        }
+
+        .name {
+          margin: 10px 0 20px;
+          color: $color-primary;
+          // word-break: break-all;
+          hyphens: auto;
+        }
+
+        .cover {
+          // margin-right: 30px;
+          // padding-top: 5px;
+
+          img {
+            float: left;
+            display: inline-block;
+            margin: 5px 30px 0 0;
+            width: 120px;
+            height: auto;
+          }
+
+          .no-cover {
+          //   position: relative;
+          //   display: inline-block;
+          //   width: 120px;
+          //   height: 170px;
+          //   background-color: $color-gray-lightest;
+          //
+          //   &::after {
+          //     content: "insert_photo";
+          //     @include md-icon($font-size: 48px);
+          //     color: #BDBDBD;
+          //     position: absolute;
+          //     top: 50%;
+          //     left: 50%;
+          //     transform: translate(-50%, -50%);
+          //   }
+          }
+        }
+
+        .body {
+          font-size: 16px;
+          line-height: 24px;
+          padding-right: 20px;
+
+          p {
+            margin-bottom: 24px;
+          }
+
+          ul {
+            padding-left: 0;
+            margin-left: 0;
+            margin-bottom: 24px;
+            list-style: none;
+
+            li {
+              position: relative;
+              padding-left: 30px;
+              margin: 0 40px 10px 30px;
+              font-size: 14px;
+              line-height: 20px;
+
+              &::before {
+                content: "";
+                display: block;
+                width: 10px;
+                height: 10px;
+                background-color: $color-primary;
+                position: absolute;
+                top: 6px;
+                left: 0;
+              }
+            }
+          }
+
+          ol {
+            padding-left: 0;
+            margin-left: 0;
+            margin-bottom: 24px;
+
+            li {
+              position: relative;
+              padding-left: 15px;
+              margin: 0 40px 10px 45px;
+              font-size: 14px;
+              line-height: 20px;
+            }
+          }
+
+          a {
+            color: $color-primary;
+            text-decoration: underline;
+          }
+
+          &.edit-mode {
+            width: 100%;
+            margin-top: 15px;
+
+            .md-button {
+              margin: 0 20px 0 0;
+              padding: 0 12px;
+              min-width: 120px;
+
+              &:first-of-type {
+                padding-left: 6px;
+              }
+            }
+          }
+        }
+
+        &.experiences {}
+      }
+    }
+
+    .comment-wrapper {
+      padding: 30px;
+      border-top: 1px $color-gray-lighter solid;
+      background-color: $color-gray-lightest;
+
+      > h3.md-title {
+        display: inline-block;
+        margin: 0 0 30px;
+        color: $text-primary;
+      }
+
+      a.goto-comment {
+        float: right;
+        margin: 2px 0 0;
+        color: $color-primary;
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+
+        md-icon {
+          margin-right: 5px;
+          color: $color-primary;
+        }
+      }
+    }
+
+    .add-new-comment {
+      padding: 30px 30px 60px;
+      border-top: 1px $color-gray-lighter solid;
+
+      > h3.md-title {
+        margin: 0 0 30px;
+        color: $text-primary;
+      }
+
+      .md-button.add-comment {
+        margin: 0;
+      }
+    }
+  }
+}

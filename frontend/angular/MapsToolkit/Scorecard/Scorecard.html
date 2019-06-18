@@ -1,0 +1,218 @@
+<div layout="row" layout-sm="column" layout-align="space-around" ng-show="!vm.dataLoaded">
+  <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+</div>
+
+<md-card class="wrapper md-card-nomargin" layout="column" ng-if="vm.dataLoaded && !vm.summary">
+  <div layout="row" class="axis-buttons top">
+    <div layout="row" flex="auto" layout-align="start">
+      <md-button class="md-primary" ng-click="vm.goToAxis()">
+        <md-icon>
+          replay
+        </md-icon>
+        <translate>Start axis again</translate>
+      </md-button>
+    </div>
+    <div layout="row" flex="auto" layout-align="end">
+      <md-button class="md-raised md-primary" ng-click="vm.goToNextAxis()" ng-hide="vm.isLastAxis()">
+        <translate>Go to next axis</translate>
+        <md-icon>
+          arrow_forward
+        </md-icon>
+      </md-button>
+      <md-button class="md-primary md-raised" ng-show="vm.isLastAxis()" ng-click="vm.goToSummary()">
+        <translate>Show summary score</translate>
+        <md-icon>insert_chart</md-icon>
+      </md-button>
+    </div>
+  </div>
+
+  <div layout="row" class="axis-header" ng-class="vm.data.axisClass">
+    <div layout="row" flex="auto" layout-align="start center">
+      <img ng-src="{{vm.data.axisPicture}}" />
+      <span>
+        <translate>{{vm.data.name}} (Scorecard)</translate>
+      </span>
+    </div>
+  </div>
+
+  <div layout="column" class="inner-wrapper">
+    <div ng-repeat="domain in vm.data.domains track by $index" layout="column" class="domain">
+      <div layout="row" class="domain-header">
+        <div layout="row" flex="auto" layout-align="start center">
+          <h4>
+            <translate>{{domain.name}} ({{domain.domain_max}} points)</translate>
+          </h4>
+        </div>
+        <div layout="row" flex="auto" layout-align="end center">
+          <md-button class="md-primary" ng-click="vm.updateScore(domain)">
+            <md-icon>playlist_add_check</md-icon>
+            <translate>Update score</translate>
+          </md-button>
+          <thematic
+            axis="vm.state.params.axisId"
+            buttonclass="'md-primary'"
+            domain="$index"
+            buttontext="{{'Show help' | translate }}">
+          </thematic>
+        </div>
+      </div>
+
+      <div ng-repeat="question in domain.questions" layout="row" class="question">
+        <div flex="auto" layout="row" layout-align="start center">
+          <strong>
+            <translate>SAQ {{question.id}}</translate>
+          </strong>
+          <span> {{ question.text }} </span>
+        </div>
+        <div flex="auto" layout="row" layout-align="end center">
+          <translate>
+            <strong>{{question.question_sum}}</strong> / {{question.question_max}} points
+          </translate>
+        </div>
+      </div>
+
+      <div class="domain-total" layout="row">
+                <span flex="auto" layout="column" layout-align="center start">
+                    <strong>
+                      <translate>Domain {{domian.id}} total</translate>
+                    </strong>
+                </span>
+        <span flex="auto" layout="row" layout-align="end center">
+          <translate>
+            <strong>{{domain.domain_sum}} </strong> / {{domain.domain_max}} points
+          </translate>
+        </span>
+      </div>
+      <div class="domain-percentage" layout="row" layout-align="start center">
+        <span flex="auto">
+          <translate>
+            <strong>Domain {{domian.id}} percentage </strong> (Domain total divided by {{domain.domain_max}}, then multiplied by 100)
+          </translate>
+        </span>
+        <span flex="auto" layout="column" layout-align="center end">
+          <strong>
+            {{domain.domain_percentage | number : 0}}%
+          </strong>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div layout="row" class="axis-header" ng-class="vm.data.axisClass">
+    <div layout="row" flex="auto" layout-align="start center">
+      <img ng-src="{{vm.data.axisPicture}}" />
+      <translate>
+        <span> {{vm.data.name}} score</span>
+      </translate>
+    </div>
+    <div layout="row" flex="auto" layout-align="end center">
+      <span>{{vm.data.axis_score | number : 0}}%</span>
+    </div>
+  </div>
+
+  <div layout="row" class="axis-buttons">
+    <div layout="row" flex="auto" layout-align="start">
+      <md-button class="md-primary" ng-click="vm.goToAxis()">
+        <md-icon>
+          replay
+        </md-icon>
+        <translate>Start axis again</translate>
+      </md-button>
+    </div>
+    <div layout="row" flex="auto" layout-align="end">
+      <md-button class="md-raised md-primary" ng-click="vm.goToNextAxis()" ng-hide="vm.isLastAxis()">
+        <translate>Go to next axis</translate>
+        <md-icon>
+          arrow_forward
+        </md-icon>
+      </md-button>
+      <md-button class="md-primary md-raised" ng-show="vm.isLastAxis()" ng-click="vm.goToSummary()">
+        <translate>Show summary score</translate>
+        <md-icon>insert_chart</md-icon>
+      </md-button>
+    </div>
+  </div>
+</md-card>
+
+<axis-footer ng-if="vm.dataLoaded && !vm.summary" axes="vm.rawData"></axis-footer>
+
+<div ng-if="vm.dataLoaded && vm.summary" layout="column" class="axes-scorecard">
+  <div class="page-title">
+    <h1 class="md-display-1 text-center">
+      <translate>Summary scorecard</translate>
+    </h1>
+    <h6  class="md-subhead text-center">
+      <translate>
+        After completing each axis scorecard, transfer the results for the axis percentages and domain percentages to
+        this sheet. This will allow you to compare your progress across the six axes, and to identify the domains
+        that require greater attention and efforts.
+      </translate>
+    </h6>
+  </div>
+  <div class="wrapper layout-padding-xl" layout="column" md-whiteframe="2">
+    <div layout="column" flex="100" class="inner-wrapper">
+      <div ng-repeat="(axIndex, axis) in vm.data" layout="column" class="axis">
+        <div layout="row" class="axis-header" ng-class="axis.axisClass">
+          <div layout="row" flex="auto" layout-align="start center">
+            <img ng-src="{{ axis.axisPicture }}"/>
+            <span>{{ axis.name }}</span>
+          </div>
+          <div layout="row" flex="auto" layout-align="end center">
+            <span>{{ axis.axis_score | number: 0 }}%</span>
+          </div>
+
+        </div>
+        <div layout="row" ng-repeat="(domIndex, domain) in axis.domains" class="domain">
+          <div layout="row" flex="60" layout-align="start center">
+            <h4>
+              <translate>
+                {{domain.name}} ({{domain.domain_max}} points)
+              </translate>
+            </h4>
+          </div>
+          <div layout="row" flex="40" layout-align="end center">
+            <div layout="row" layout-align="end center" flex="auto">
+              <md-button ng-click="vm.updateScore(domain, axis)">
+                <md-icon>playlist_add_check</md-icon>
+                <translate>Update score</translate>
+              </md-button>
+              <!-- "'show help'" button and the modal on click -->
+              <thematic
+                axis="axIndex"
+                domain="domIndex"
+                buttontext="{{'Show help' | translate}}">
+              </thematic>
+            </div>
+            <div layout="row" layout-align="end center" flex="20">
+              <span class="percentage">
+                  {{ domain.domain_percentage | number: 0 }}%
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div layout="row" class="scorecard-buttons">
+      <div layout="row" flex="auto" layout-align="start">
+        <md-button class="md-primary" ng-click="vm.goToDashboard()">
+          <md-icon>
+            arrow_back
+          </md-icon>
+          <translate>Go to dashboard</translate>
+        </md-button>
+      </div>
+      <div layout="row" flex="auto" layout-align="end">
+        <md-button class="md-raised md-primary" ng-click="vm.updateScore(0, 0)">
+          <translate>Improve project</translate>
+          <md-icon>
+            trending_up
+          </md-icon>
+        </md-button>
+      </div>
+    </div>
+
+  </div>
+
+  <disclaimer></disclaimer>
+</div>

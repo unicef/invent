@@ -1,0 +1,99 @@
+@import '../../variables';
+@import '../../mixins';
+
+$footer-height: 52px;
+
+axis-footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 200;
+    height: $footer-height;
+
+    .number {
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 0;
+        opacity: 0;
+        color: $color-white;
+        transition: $swift-ease-out;
+    }
+
+    strong {
+      display: block;
+      margin-top: 16px;
+    }
+
+    .axis {
+        position: relative;
+        height: $footer-height;
+        outline: none;
+        border-right: 1px solid $color-white;
+        background: $color-gray-light;
+        color: rgba(255,255,255,.85);
+        font-size: 11px;
+        line-height: 16px;
+        cursor: pointer;
+        transition: $swift-ease-out;
+        transform: translateY(24px);
+
+        &:last-of-type {
+          border: 0;
+        }
+
+        > div {
+          position: relative;
+          display: block;
+          width: 100%;
+          text-align: center;
+          transition: $swift-ease-out;
+          transform: translateY(-20px);
+        }
+
+        &.active {
+          cursor: default !important;
+        }
+
+        &.active,
+        &:hover {
+          color: rgba(255,255,255,1);
+          transform: translateY(0);
+
+            > div {
+              transform: translateY(0);
+            }
+
+            .number {
+              height: 16px;
+              opacity: 1;
+            }
+
+            &.axis_1 {
+                background: $color-axis1;
+            }
+            &.axis_2 {
+                background: $color-axis2;
+            }
+            &.axis_3 {
+                background: $color-axis3;
+            }
+            &.axis_4 {
+                background: $color-axis4;
+            }
+            &.axis_5 {
+                background: $color-axis5;
+            }
+            &.axis_6 {
+                background: $color-axis6;
+            }
+
+
+        }
+    }
+
+
+}

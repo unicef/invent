@@ -1,0 +1,86 @@
+[
+  {
+    "model": "project.hscgroup",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-21T13:39:17.803Z",
+      "modified": "2018-01-17T09:58:38.682Z",
+      "is_active": true,
+      "name": "Acceptability",
+      "name_en": "Acceptability",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Aceitabilidade"
+    }
+  },
+  {
+    "model": "project.hscgroup",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-21T13:39:17.812Z",
+      "modified": "2018-01-17T09:55:45.956Z",
+      "is_active": true,
+      "name": "Availability",
+      "name_en": "Availability",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Disponibilidade"
+    }
+  },
+  {
+    "model": "project.hscgroup",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-21T13:39:17.824Z",
+      "modified": "2018-01-17T09:54:27.030Z",
+      "is_active": true,
+      "name": "Efficiency",
+      "name_en": "Efficiency",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Efici\u00eancia"
+    }
+  },
+  {
+    "model": "project.hscgroup",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-21T13:39:17.841Z",
+      "modified": "2018-01-17T09:53:47.564Z",
+      "is_active": true,
+      "name": "Information",
+      "name_en": "Information",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Informa\u00e7\u00e3o"
+    }
+  },
+  {
+    "model": "project.hscgroup",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-21T13:39:17.861Z",
+      "modified": "2018-01-17T09:53:29.167Z",
+      "is_active": true,
+      "name": "Quality",
+      "name_en": "Quality",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Qualidade"
+    }
+  },
+  {
+    "model": "project.hscgroup",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-21T13:39:17.877Z",
+      "modified": "2018-01-17T09:53:11.980Z",
+      "is_active": true,
+      "name": "Utilization",
+      "name_en": "Utilization",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Utiliza\u00e7\u00e3o"
+    }
+  }
+]

@@ -1,0 +1,116 @@
+<div class="relative">
+
+  <!-- for DASH -->
+  <div class="countrychart-tooltip" ng-if="!vm.big" ng-hide="vm.showPlaceholder">
+
+    <div class="countrychart-tooltip-header bold" layout="row" layout-align="space-between">
+      <p flex>{{vm.countryName}}</p>
+      <img class="tooltip-flag" ng-src="{{vm.flagUrl}}">
+    </div>
+
+    <md-tabs md-no-pagination md-dynamic-height md-stretch-tabs="always">
+      <md-tab label="{{'Total'|translate}}">
+
+        <div class="countrychart-tooltip-main" layout="column">
+
+          <div flex layout="row" class="coverage-data" >
+            <div flex class="cap lh">
+              <translate>Clients: </translate>
+            </div>
+            <div class="bold lh colorednr color0">{{vm.boundNrs.clients || 0}}</div>
+          </div>
+          <div flex layout="row" class="coverage-data">
+            <div flex class="cap lh">
+              <translate>Health Workers: </translate>
+            </div>
+            <div class="bold lh colorednr color1">{{vm.boundNrs.health_workers || 0}}</div>
+          </div>
+          <div flex layout="row" class="coverage-data">
+            <div flex class="cap lh">
+              <translate>Facilities: </translate>
+            </div>
+            <div class="bold lh colorednr color2">{{vm.boundNrs.facilities || 0}}</div>
+          </div>
+
+        </div>
+
+        <div class="countrychart-tooltip-main main2" ng-show="vm.activeDistrict.name" >
+
+          <div flex class="activename bold lh">
+            {{vm.activeDistrict.name}}
+          </div>
+
+          <div ng-show="vm.activeDistrict.data">
+            <div flex
+                 class="coverage-data"
+                 layout="row">
+              <div flex class="cap lh">
+                <translate>Clients: </translate>
+              </div>
+              <div class="bold lh colorednr color0">{{vm.activeDistrict.data.clients}}</div>
+            </div>
+            <div flex
+                 class="coverage-data"
+                 layout="row">
+              <div flex class="cap lh">
+                <translate>Health Workers: </translate>
+              </div>
+              <div class="bold lh colorednr color1">{{vm.activeDistrict.data.health_workers}}</div>
+            </div>
+            <div flex
+                 class="coverage-data"
+                 layout="row">
+              <div flex class="cap lh">
+                <translate>Facilities: </translate>
+              </div>
+              <div class="bold lh colorednr color2">{{vm.activeDistrict.data.facilities}}</div>
+            </div>
+          </div>
+          <div class="bold lh" ng-show="!vm.activeDistrict.data" translate>No coverage data</div>
+
+        </div>
+
+      </md-tab>
+      <md-tab label="{{'Global'|translate}}" md-on-select="vm.setGlobal()" md-on-deselect="vm.setTotal()">
+
+        <div class="countrychart-tooltip-main">
+
+          <div ng-show="vm.nationalLevelCoverage">
+            <div flex class="coverage-data" layout="row">
+              <div flex class="cap lh">
+                <translate>Clients: </translate>
+              </div>
+              <div class="bold lh colorednr color0">{{vm.nationalLevelCoverage.clients}}</div>
+            </div>
+
+            <div flex class="coverage-data" layout="row">
+              <div flex class="cap lh">
+                <translate>Health Workers: </translate>
+              </div>
+              <div class="bold lh colorednr color1">{{vm.nationalLevelCoverage.health_workers}}</div>
+            </div>
+
+            <div flex class="coverage-data"layout="row">
+              <div flex class="cap lh">
+                <translate>Facilities: </translate>
+              </div>
+              <div class="bold lh colorednr color2">{{vm.nationalLevelCoverage.facilities}}</div>
+            </div>
+
+          </div>
+
+          <div class="bold lh" ng-show="!vm.nationalLevelCoverage" translate>No national coverage</div>
+
+        </div>
+
+      </md-tab>
+    </md-tabs>
+  </div>
+
+  <!-- Placeholder spinner -->
+  <div class="spinner" layout="row" layout-align="center center" ng-show="vm.showPlaceholder">
+    <span flex>Loading map</span>
+    <md-progress-circular flex md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+  </div>
+
+</div>

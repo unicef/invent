@@ -1,0 +1,390 @@
+<template>
+  <el-row
+    type="flex"
+    justify="space-between"
+    align="middle"
+    class="TableTopActions"
+  >
+    <el-col class="TableExportOptions">
+      <el-row type="flex">
+        <el-button
+          size="small"
+          @click="toggleSelectAll"
+        >
+          <translate
+            v-show="!allSelected"
+            :parameters="{total}"
+          >
+            Select all {total} projects
+          </translate>
+          <translate
+            v-show="allSelected"
+            :parameters="{total}"
+          >
+            Deselect all {total} projects
+          </translate>
+        </el-button>
+
+        <div class="Separator" />
+
+        <el-button
+          :disabled="selectedRows.length === 0"
+          type="primary"
+          size="small"
+          class="IconLeft"
+          @click="exportRows"
+        >
+          <fa icon="download" />
+          <span v-show="selectedRows.length === 0">
+            <translate>Export selected</translate>
+          </span>
+          <span v-show="selected">
+            <translate :parameters="{selected}">
+              Export {selected} selected
+            </translate>
+          </span>
+        </el-button>
+        <el-select
+          v-model="exportType"
+          size="small"
+        >
+          <el-option
+            label="CSV"
+            value="CSV"
+          />
+          <el-option
+            label="PDF"
+            value="PDF"
+          />
+        </el-select>
+
+        <template v-if="showEmailButton">
+          <div class="Separator" />
+          <el-button
+            :disabled="selectedRows.length === 0"
+            type="primary"
+            size="small"
+            class="IconLeft"
+            @click="openMailDialog"
+          >
+            <fa icon="envelope" />
+            <translate v-show="selected === 0">
+              Contact selected
+            </translate>
+            <translate
+              v-show="selected > 0"
+              :parameters="{selected}"
+            >
+              Contact {selected} selected
+            </translate>
+          </el-button>
+          <pdf-export ref="pdfExport" />
+        </template>
+      </el-row>
+    </el-col>
+
+    <el-col class="TableLegend">
+      <el-row
+        type="flex"
+        align="middle"
+      >
+        <project-legend
+          :compact-mode="viewportSize < 1440"
+          force-star
+          force-eye
+          force-handshake
+          force-globe
+          show-label
+        />
+
+        <div class="Separator" />
+
+        <el-popover
+          v-model="columnSelectorOpen"
+          :title="settingsTitle"
+          placement="bottom-end"
+          width="220"
+          trigger="click"
+          popper-class="CustomPopover TableSettingsDropdown"
+          @show="popperOpenHandler"
+        >
+          <el-button
+            slot="reference"
+            type="text"
+            size="small"
+            class="TableSettingsButton IconLeft"
+          >
+            <fa icon="cog" />
+            <translate>Settings</translate>
+          </el-button>
+
+          <div class="CustomPopoverList Small ColumnSelector">
+            <ul class="ColumnList">
+              <li
+                v-for="c in selectedColumns"
+                :key="c.id"
+                :class="['Item', {'Selected': c.selected}]"
+                @click="c.selected = !c.selected"
+              >
+                <fa icon="check" />
+                {{ c.label }}
+              </li>
+            </ul>
+            <div class="CustomPopoverActions">
+              <el-row
+                type="flex"
+                align="middle"
+              >
+                <el-col>
+                  <el-button
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="columnSelectorOpen = false"
+                  >
+                    <translate>Cancel</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    type="text"
+                    size="small"
+                    class="PrimaryButton"
+                    @click="updateColumns"
+                  >
+                    <translate>Update</translate>
+                  </el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-popover>
+      </el-row>
+    </el-col>
+  </el-row>
+</template>
+
+<script>
+import ProjectLegend from '../common/ProjectLegend';
+import PdfExport from './PdfExport';
+import { blobDownloader } from '@/utilities/dom';
+
+import { mapGetters, mapActions } from 'vuex';
+
+export default {
+  components: {
+    ProjectLegend,
+    PdfExport
+  },
+  data () {
+    return {
+      exportType: 'CSV',
+      columnSelectorOpen: false,
+      selectedColumns: [],
+      viewportSize: 2000
+    };
+  },
+  computed: {
+    ...mapGetters({
+      columns: 'dashboard/getAvailableColumns',
+      selectedCol: 'dashboard/getSelectedColumns',
+      selectedRows: 'dashboard/getSelectedRows',
+      allSelected: 'dashboard/getSelectAll',
+      total: 'dashboard/getTotal',
+      user: 'user/getProfile',
+      projects: 'dashboard/getProjectsBucket',
+      dashboardId: 'dashboard/getDashboardId',
+      dashboardType: 'dashboard/getDashboardType'
+    }),
+    settingsTitle () {
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
+    },
+    selected () {
+      return this.allSelected ? this.total : this.selectedRows.length;
+    },
+    rowToExport () {
+      return this.allSelected ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+    },
+    showEmailButton () {
+      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
+      if (this.user) {
+        return allowed.includes(this.user.account_type) || this.user.is_superuser;
+      }
+      return false;
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.setViewport();
+      window.addEventListener('resize', this.setViewport);
+    });
+  },
+  beforeDestroy () {
+    if (process.client) {
+      window.removeEventListener('resize', this.setViewport);
+    }
+  },
+  methods: {
+    ...mapActions({
+      setSelectedColumns: 'dashboard/setSelectedColumns',
+      setSelectAll: 'dashboard/setSelectAll',
+      setSendEmailDialogState: 'layout/setSendEmailDialogState',
+      loadProjectsBucket: 'dashboard/loadProjectsBucket',
+      setSelectedRows: 'dashboard/setSelectedRows'
+    }),
+    setViewport () {
+      if (process.client && window) {
+        this.viewportSize = window.innerWidth;
+      }
+    },
+    popperOpenHandler () {
+      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
+    },
+    updateColumns () {
+      this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
+      this.columnSelectorOpen = false;
+    },
+    async toggleSelectAll () {
+      if (!this.allSelected) {
+        await this.loadProjectsBucket();
+        this.setSelectAll(true);
+      } else {
+        this.setSelectAll(false);
+        this.setSelectedRows([]);
+      }
+    },
+    exportRows () {
+      this.$nuxt.$loading.start('pdf');
+      window.setTimeout(async () => {
+        if (this.exportType === 'PDF') {
+          this.$refs.pdfExport.printPdf();
+        } else if (this.exportType === 'CSV') {
+          const ids = this.rowToExport.map(p => p.id);
+          const payload = {
+            ids,
+            donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
+            country: this.dashboardType === 'country' ? this.dashboardId : undefined
+          };
+          const { data } = await this.$axios.post('/api/projects/csv-export/', payload, { responseType: 'blob' });
+          blobDownloader(data, 'project-export.csv');
+        }
+        this.$nuxt.$loading.finish('pdf');
+      }, 500);
+    },
+    async openMailDialog () {
+      if (this.allSelected) {
+        await this.loadProjectsBucket();
+      }
+      this.setSendEmailDialogState(true);
+    }
+  }
+};
+</script>
+
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .TableTopActions {
+    width: calc(100vw - @advancedSearchWidth);
+    min-width: @appWidthMinLimit - @advancedSearchWidth;
+    max-width: @appWidthMaxLimit - @advancedSearchWidth;
+    height: @tableTopActionsHeight;
+    padding: 0 40px;
+
+    .Separator {
+      .SeparatorStyle();
+      height: 32px;
+      margin: 0 20px;
+    }
+
+    .TableExportOptions {
+      width: 100%;
+
+      .el-button {
+        &.is-disabled {
+          + .el-select {
+            display: none;
+          }
+        }
+      }
+
+      .el-select {
+        width: 100px;
+        margin-left: 10px;
+      }
+    }
+
+    .TableLegend {
+      width: auto;
+      height: 32px;
+
+      .ProjectLegend {
+        font-size: @fontSizeSmall;
+        color: @colorTextSecondary;
+        white-space: nowrap;
+
+        .svg-inline--fa {
+          position: relative;
+          vertical-align: middle;
+          height: 14px;
+          margin-left: 20px;
+          margin-right: 6px;
+          color: @colorTextSecondary;
+          font-size: 12px;
+
+          &.fa-star {
+            top: -1px;
+            font-size: 11px;
+          }
+        }
+      }
+
+      .ShowLegendButton {
+        color: @colorTextSecondary;
+
+        .svg-inline--fa {
+          height: 12px;
+          margin-left: 0;
+          color: @colorTextSecondary;
+        }
+      }
+
+      .TableSettingsButton {}
+    }
+  }
+
+  .TableSettingsDropdown {
+    transform: translate(10px, -30px);
+  }
+
+  .TableLegendDropdown {
+    transform: translate(10px, -30px);
+
+    .ProjectLegendContent {
+      padding: 8px 12px 12px;
+
+      > span {
+        position: relative;
+        display: block;
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 3px;
+          left: 0;
+          height: 14px;
+          margin-right: 6px;
+
+          &.fa-handshake {
+            left: -1px;
+          }
+        }
+
+        > span {
+          margin-left: 20px;
+          font-size: @fontSizeSmall
+        }
+      }
+    }
+  }
+</style>

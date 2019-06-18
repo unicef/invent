@@ -1,0 +1,8 @@
+<footer layout="row" >
+    <div flex ng-repeat="axis in vm.processedAxis" ng-click="vm.changeAxis(axis)" ng-class="vm.classGenerator(axis)" class="axis" layout="column" layout-align="center center">
+        <div>
+          <span class="number">{{axis.axisId}}.</span>
+          <strong>{{axis.name}}</strong>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="34px" height="23px" viewBox="0 0 34 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-axis3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Flex---2---Project-Details" transform="translate(-20.000000, -229.000000)" fill="#FEFEFE">
+            <g id="Overview">
+                <g transform="translate(10.000000, 87.000000)">
+                    <g id="icon-axis3" transform="translate(10.000000, 142.000000)">
+                        <polygon id="Fill-3" points="11.4561 17.347 1.8121 12.525 0.5771 13.064 11.4561 18.503 33.2141 7.624 32.0181 7.084"></polygon>
+                        <polygon id="Fill-4" points="11.4561 19.2738 1.8121 14.4518 0.5771 14.9918 11.4561 20.4308 33.2141 9.5518 32.0181 9.0128"></polygon>
+                        <polygon id="Fill-5" points="11.4561 21.2015 1.8121 16.3795 0.5771 16.9195 11.4561 22.3575 33.2141 11.4785 32.0181 10.9385"></polygon>
+                        <path d="M22.3354,0.2582 L0.5774,11.1372 L11.4564,16.5762 L33.2144,5.6982 L22.3354,0.2582 Z M19.6144,9.7792 C18.1134,10.5292 15.6784,10.5292 14.1764,9.7792 C12.6734,9.0272 12.6734,7.8082 14.1764,7.0572 C15.6774,6.3072 18.1124,6.3072 19.6144,7.0572 C21.1174,7.8082 21.1174,9.0272 19.6144,9.7792 L19.6144,9.7792 Z" id="Fill-6"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

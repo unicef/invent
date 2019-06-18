@@ -1,0 +1,122 @@
+@import '../../variables';
+@import '../../mixins';
+
+// cms-static-info-widget {}
+
+.cms-static-info-wrapper {
+  margin: 20px 0;
+  padding: 0 60px;
+  background-color: $color-white;
+  color: $text-primary;
+
+  > div {
+    padding: 40px 0;
+
+    &:first-child {
+      padding-right: 60px;
+      border-right: 1px solid $color-gray-lighter;
+    }
+
+    &:last-child {
+      padding-left: 20px;
+      padding-right: 300px;
+      background-repeat: no-repeat;
+      background-image: url('./images/illustration.svg');
+      background-size: auto 100%;
+      background-position: 98% 20px;
+    }
+  }
+
+  h3.md-title {
+    color: $color-primary;
+    margin: 20px 0 40px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .md-button {
+    margin: 20px 0 0;
+    min-width: 140px;
+  }
+
+  ul {
+    margin: 0;
+    list-style: none;
+
+    li {
+      position: relative;
+      font-size: 14px;
+      line-height: 20px;
+      margin: 12px 0;
+      padding-left: 30px;
+      color: $text-primary;
+
+      &::before {
+        content: "check";
+        @include md-icon($font-size: 20px);
+        color: $color-green;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  }
+}
+
+[dir="rtl"] {
+  .cms-static-info-wrapper {
+
+    > div {
+      padding: 40px 0;
+
+      &:first-child {
+        padding-left: 60px;
+        padding-right: 0px;
+        border-left: 1px solid $color-gray-lighter;
+        border-right: none;
+      }
+
+      &:last-child {
+        padding-left: 300px;
+        padding-right: 20px;
+        background: none;
+        position: relative;
+
+        &:after {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background-repeat: no-repeat;
+          background-image: url('./images/illustration.svg');
+          background-size: auto 100%;
+          background-position: 100% 20px;
+          transform: scaleX(-1);
+        }
+      }
+    }
+
+    ul {
+
+      li {
+        padding-left: 0px;
+        padding-right: 30px;
+
+        &::before {
+          content: "check";
+          @include md-icon($font-size: 20px);
+          color: $color-green;
+          position: absolute;
+          left: auto;
+          right: 0;
+          top: 0;
+        }
+      }
+    }
+  }
+}

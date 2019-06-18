@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="27px" height="45px" viewBox="0 0 27 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>pin</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-54.9%" y="-219.7%" width="209.8%" height="539.4%" filterUnits="objectBoundingBox" id="filter-1">
+            <feGaussianBlur stdDeviation="2.82054228" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+    </defs>
+    <g id="01---Landing-page-v4-(WHO)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3---D---Landing-page-(Project-details)" transform="translate(-476.000000, -455.000000)">
+            <g id="Interactive-map" transform="translate(0.000000, 178.000000)">
+                <g id="pins" transform="translate(450.000000, 160.000000)">
+                    <g id="pin" transform="translate(27.000000, 117.000000)">
+                        <g id="Group-6">
+                            <ellipse id="Oval-2" fill-opacity="0.5" fill="#000000" filter="url(#filter-1)" cx="12.7037037" cy="36.9259259" rx="7.7037037" ry="1.92592593"></ellipse>
+                            <path d="M12.2647319,35.77978 C12.3319116,35.6465695 12.4032803,35.5056937 12.4788074,35.3573016 C13.0074339,34.31868 13.6306266,33.1256437 14.344765,31.7957497 C16.3843874,27.9974923 18.7442673,23.8626804 21.3955091,19.5317241 C27.2468975,9.97314384 22.6797489,0.5 12.2847542,0.5 C1.89137996,0.5 -2.53569935,9.26365258 2.68891776,19.5280962 C5.38944423,23.8562176 7.84936196,27.9883209 10.0204521,31.7839508 C10.7805134,33.1127356 11.4502511,34.3046802 12.0236319,35.3422225 C12.1087531,35.4962508 12.189139,35.6421591 12.2647319,35.77978 Z" id="Oval-1" stroke="#1C5F89" fill="#008DC9"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

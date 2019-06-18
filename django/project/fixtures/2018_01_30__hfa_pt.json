@@ -1,0 +1,2132 @@
+[
+  {
+    "model": "project.healthfocusarea",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-01T14:26:49.325Z",
+      "modified": "2018-01-23T00:19:27.856Z",
+      "is_active": true,
+      "name": "Comprehensive sexuality education",
+      "name_en": "Comprehensive sexuality education",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Educa\u00e7\u00e3o integral para a sexualidade",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-01T14:26:49.327Z",
+      "modified": "2018-01-23T00:21:04.627Z",
+      "is_active": true,
+      "name": "Contraception/family planning",
+      "name_en": "Contraception/family planning",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Contracep\u00e7\u00e3o/ planeamento familiar",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-01T14:26:49.328Z",
+      "modified": "2018-01-23T00:27:32.255Z",
+      "is_active": true,
+      "name": "Safe abortion care",
+      "name_en": "Safe abortion care",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Cuidados de aborto seguros",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-01T14:26:49.328Z",
+      "modified": "2018-01-23T00:24:54.981Z",
+      "is_active": true,
+      "name": "Infertility",
+      "name_en": "Infertility",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Infertilidade",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-01T14:26:49.330Z",
+      "modified": "2018-01-23T00:21:34.896Z",
+      "is_active": true,
+      "name": "Female genital mutilation",
+      "name_en": "Female genital mutilation",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mutila\u00e7\u00e3o genital feminina",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-01T14:26:49.331Z",
+      "modified": "2018-01-23T00:28:06.704Z",
+      "is_active": true,
+      "name": "Sexually Transmitted Infections (STIs)",
+      "name_en": "Sexually Transmitted Infections (STIs)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Infec\u00e7\u00f5es de Transmiss\u00e3o Sexual (ITS)",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 7,
+    "fields": {
+      "created": "2017-12-01T14:26:49.332Z",
+      "modified": "2018-01-23T00:22:17.655Z",
+      "is_active": true,
+      "name": "HIV/AIDS",
+      "name_en": "HIV/AIDS",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "HIV/SIDA",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 8,
+    "fields": {
+      "created": "2017-12-01T14:26:49.333Z",
+      "modified": "2018-01-23T00:24:32.565Z",
+      "is_active": true,
+      "name": "Human papillomavirus (HPV) and cervical cancer",
+      "name_en": "Human papillomavirus (HPV) and cervical cancer",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "V\u00edrus de Papiloma Humano (VPH) e c\u00e2ncro cervical",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 9,
+    "fields": {
+      "created": "2017-12-01T14:26:49.335Z",
+      "modified": "2018-01-23T00:26:04.045Z",
+      "is_active": true,
+      "name": "Other sexual and reproductive health",
+      "name_en": "Other sexual and reproductive health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outra quest\u00e3o de sa\u00fade sexual e reprodutiva",
+      "health_category": 1
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 10,
+    "fields": {
+      "created": "2017-12-01T14:26:49.336Z",
+      "modified": "2018-01-22T19:56:42.822Z",
+      "is_active": true,
+      "name": "Pregnancy/antenatal care",
+      "name_en": "Pregnancy/antenatal care",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Cuidados na gravidez/ pr\u00e9-natais",
+      "health_category": 2
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 11,
+    "fields": {
+      "created": "2017-12-01T14:26:49.337Z",
+      "modified": "2018-01-22T12:13:43.251Z",
+      "is_active": true,
+      "name": "Birth preparedness",
+      "name_en": "Birth preparedness",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Prontid\u00e3o para o nascimento",
+      "health_category": 2
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 12,
+    "fields": {
+      "created": "2017-12-01T14:26:49.338Z",
+      "modified": "2018-01-22T12:17:02.202Z",
+      "is_active": true,
+      "name": "Intrapartum care (labor and delivery)",
+      "name_en": "Intrapartum care (labor and delivery)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Cuidados intraparto (trabalho e parto)",
+      "health_category": 2
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 13,
+    "fields": {
+      "created": "2017-12-01T14:26:49.339Z",
+      "modified": "2018-01-22T19:53:26.435Z",
+      "is_active": true,
+      "name": "Postpartum care",
+      "name_en": "Postpartum care",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Cuidados p\u00f3s-parto",
+      "health_category": 2
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 14,
+    "fields": {
+      "created": "2017-12-01T14:26:49.339Z",
+      "modified": "2018-01-22T12:15:34.123Z",
+      "is_active": true,
+      "name": "Elimination of Mother to Child Transmission (eMTCT) of HIV/AIDs and Syphilis  (EMTCT/PMTCT)",
+      "name_en": "Elimination of Mother to Child Transmission (eMTCT) of HIV/AIDs and Syphilis  (EMTCT/PMTCT)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Elimina\u00e7\u00e3o da Transmiss\u00e3o de M\u00e3e para Crian\u00e7a de HIV / SIDA e S\u00edfilis",
+      "health_category": 2
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 15,
+    "fields": {
+      "created": "2017-12-01T14:26:49.340Z",
+      "modified": "2018-01-22T12:17:42.460Z",
+      "is_active": true,
+      "name": "Maternal Vaccination / Immunization",
+      "name_en": "Maternal Vaccination / Immunization",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Vacina\u00e7\u00e3o materna / vacina\u00e7\u00e3o",
+      "health_category": 2
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 16,
+    "fields": {
+      "created": "2017-12-01T14:26:49.341Z",
+      "modified": "2018-01-22T12:18:38.317Z",
+      "is_active": true,
+      "name": "Other maternal health",
+      "name_en": "Other maternal health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outro aspecto de sa\u00fade materna",
+      "health_category": 2
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 17,
+    "fields": {
+      "created": "2017-12-01T14:26:49.343Z",
+      "modified": "2018-01-22T23:50:37.575Z",
+      "is_active": true,
+      "name": "Postnatal/newborn care",
+      "name_en": "Postnatal/newborn care",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Cuidados p\u00f3s-natal / rec\u00e9m-nascido",
+      "health_category": 3
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 18,
+    "fields": {
+      "created": "2017-12-01T14:26:49.343Z",
+      "modified": "2018-01-22T23:48:33.604Z",
+      "is_active": true,
+      "name": "Childhood vaccinations / immunization",
+      "name_en": "Childhood vaccinations / immunization",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Vacina\u00e7\u00e3o infantil / imuniza\u00e7\u00e3o",
+      "health_category": 3
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 19,
+    "fields": {
+      "created": "2017-12-01T14:26:49.344Z",
+      "modified": "2018-01-22T23:47:15.413Z",
+      "is_active": true,
+      "name": "Breastfeeding",
+      "name_en": "Breastfeeding",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Amamenta\u00e7\u00e3o",
+      "health_category": 3
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 20,
+    "fields": {
+      "created": "2017-12-01T14:26:49.346Z",
+      "modified": "2018-01-22T10:50:43.975Z",
+      "is_active": true,
+      "name": "Integrated Management of Newborn and Childhood Infections (IMNCI)",
+      "name_en": "Integrated Management of Newborn and Childhood Infections (IMNCI)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o Integrada de Infec\u00e7\u00f5es do Rec\u00e9m-nascido e da Inf\u00e2ncia",
+      "health_category": 4
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 21,
+    "fields": {
+      "created": "2017-12-01T14:26:49.347Z",
+      "modified": "2018-01-22T10:51:36.969Z",
+      "is_active": true,
+      "name": "Malformations/birth defects",
+      "name_en": "Malformations/birth defects",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Malforma\u00e7\u00f5es / defeitos cong\u00eanitos",
+      "health_category": 4
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 22,
+    "fields": {
+      "created": "2017-12-01T14:26:49.348Z",
+      "modified": "2018-01-17T15:26:58.017Z",
+      "is_active": true,
+      "name": "Child growth and development",
+      "name_en": "Child growth and development",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Crescimento e desenvolvimento da crian\u00e7a",
+      "health_category": 4
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 23,
+    "fields": {
+      "created": "2017-12-01T14:26:49.349Z",
+      "modified": "2018-01-17T15:10:03.547Z",
+      "is_active": true,
+      "name": "Child abuse",
+      "name_en": "Child abuse",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Abuso de menores",
+      "health_category": 4
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 24,
+    "fields": {
+      "created": "2017-12-01T14:26:49.350Z",
+      "modified": "2018-01-22T10:49:18.849Z",
+      "is_active": true,
+      "name": "Infant/child nutrition and micronutrient deficiency",
+      "name_en": "Infant/child nutrition and micronutrient deficiency",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Nutri\u00e7\u00e3o infantil/ da crian\u00e7a e defici\u00eancia de micronutrientes",
+      "health_category": 4
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 25,
+    "fields": {
+      "created": "2017-12-01T14:26:49.350Z",
+      "modified": "2018-01-22T10:57:14.793Z",
+      "is_active": true,
+      "name": "Other newborn and child health",
+      "name_en": "Other newborn and child health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outros aspectos  de sa\u00fade infantil e de r\u00e9cem-nascido",
+      "health_category": 4
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 26,
+    "fields": {
+      "created": "2017-12-01T14:26:49.352Z",
+      "modified": "2018-01-17T12:33:01.065Z",
+      "is_active": true,
+      "name": "School-based health programs",
+      "name_en": "School-based health programs",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Programas de sa\u00fade baseados na escola",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 27,
+    "fields": {
+      "created": "2017-12-01T14:26:49.353Z",
+      "modified": "2018-01-17T12:28:27.621Z",
+      "is_active": true,
+      "name": "Child marriage",
+      "name_en": "Child marriage",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Casamento prematuro",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 28,
+    "fields": {
+      "created": "2017-12-01T14:26:49.353Z",
+      "modified": "2018-01-17T12:33:37.744Z",
+      "is_active": true,
+      "name": "Youth friendly services",
+      "name_en": "Youth friendly services",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Servi\u00e7os amig\u00e1veis para jovens",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 29,
+    "fields": {
+      "created": "2017-12-01T14:26:49.355Z",
+      "modified": "2018-01-17T12:29:38.723Z",
+      "is_active": true,
+      "name": "Life-skills training",
+      "name_en": "Life-skills training",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Forma\u00e7\u00e3o para a vida",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 30,
+    "fields": {
+      "created": "2017-12-01T14:26:49.355Z",
+      "modified": "2018-01-17T12:26:03.323Z",
+      "is_active": true,
+      "name": "Adolescents and sexual and reproductive health",
+      "name_en": "Adolescents and sexual and reproductive health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Adolescentes, sa\u00fade sexual e reprodutiva",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 31,
+    "fields": {
+      "created": "2017-12-01T14:26:49.356Z",
+      "modified": "2018-01-17T12:22:46.498Z",
+      "is_active": true,
+      "name": "Adolescents and communicable diseases",
+      "name_en": "Adolescents and communicable diseases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Adolescentes e doen\u00e7as transmiss\u00edveis",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 32,
+    "fields": {
+      "created": "2017-12-01T14:26:49.357Z",
+      "modified": "2018-01-17T12:24:01.021Z",
+      "is_active": true,
+      "name": "Adolescents and non-communicable diseases",
+      "name_en": "Adolescents and non-communicable diseases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Adolescentes e doen\u00e7as n\u00e3o transmiss\u00edveis",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 33,
+    "fields": {
+      "created": "2017-12-01T14:26:49.358Z",
+      "modified": "2018-01-17T12:23:19.843Z",
+      "is_active": true,
+      "name": "Adolescents and mental health",
+      "name_en": "Adolescents and mental health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Adolescentes e sa\u00fade mental",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 34,
+    "fields": {
+      "created": "2017-12-01T14:26:49.359Z",
+      "modified": "2018-01-17T12:26:38.451Z",
+      "is_active": true,
+      "name": "Adolescents and violence",
+      "name_en": "Adolescents and violence",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Adolescentes e viol\u00eancia",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 35,
+    "fields": {
+      "created": "2017-12-01T14:26:49.360Z",
+      "modified": "2018-01-17T12:32:08.405Z",
+      "is_active": true,
+      "name": "Other adolescent and youth health",
+      "name_en": "Other adolescent and youth health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade para outros adolescentes e jovens",
+      "health_category": 5
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 36,
+    "fields": {
+      "created": "2017-12-01T14:26:49.361Z",
+      "modified": "2018-01-17T12:36:09.222Z",
+      "is_active": true,
+      "name": "Birth events",
+      "name_en": "Birth events",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Eventos de nascimento",
+      "health_category": 6
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 37,
+    "fields": {
+      "created": "2017-12-01T14:26:49.362Z",
+      "modified": "2018-01-17T13:15:39.271Z",
+      "is_active": true,
+      "name": "Death events",
+      "name_en": "Death events",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Eventos de morte",
+      "health_category": 6
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 38,
+    "fields": {
+      "created": "2017-12-01T14:26:49.363Z",
+      "modified": "2018-01-17T13:18:12.282Z",
+      "is_active": true,
+      "name": "Registration of clients and demographic information",
+      "name_en": "Registration of clients and demographic information",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registo de clientes e informa\u00e7\u00e3o demogr\u00e1fica",
+      "health_category": 6
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 39,
+    "fields": {
+      "created": "2017-12-01T14:26:49.364Z",
+      "modified": "2018-01-17T13:17:17.105Z",
+      "is_active": true,
+      "name": "Other civil registration and vital statistics",
+      "name_en": "Other civil registration and vital statistics",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outro registo civil e estat\u00edsticas vitais",
+      "health_category": 6
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 40,
+    "fields": {
+      "created": "2017-12-01T14:26:49.365Z",
+      "modified": "2018-01-22T12:07:40.489Z",
+      "is_active": true,
+      "name": "Tuberculosis",
+      "name_en": "Tuberculosis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Tuberculose",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 41,
+    "fields": {
+      "created": "2017-12-01T14:26:49.366Z",
+      "modified": "2018-01-22T11:18:19.534Z",
+      "is_active": true,
+      "name": "Hepatitis",
+      "name_en": "Hepatitis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Hepatite",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 42,
+    "fields": {
+      "created": "2017-12-01T14:26:49.367Z",
+      "modified": "2018-01-22T11:19:57.117Z",
+      "is_active": true,
+      "name": "Meningitis",
+      "name_en": "Meningitis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Meningite",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 43,
+    "fields": {
+      "created": "2017-12-01T14:26:49.368Z",
+      "modified": "2018-01-22T11:19:27.856Z",
+      "is_active": true,
+      "name": "Measles",
+      "name_en": "Measles",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sarampo",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 44,
+    "fields": {
+      "created": "2017-12-01T14:26:49.368Z",
+      "modified": "2018-01-22T11:18:59.505Z",
+      "is_active": true,
+      "name": "Influenza",
+      "name_en": "Influenza",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gripe",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 45,
+    "fields": {
+      "created": "2017-12-01T14:26:49.369Z",
+      "modified": "2018-01-22T12:07:21.603Z",
+      "is_active": true,
+      "name": "Polio",
+      "name_en": "Polio",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "P\u00f3lio",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 46,
+    "fields": {
+      "created": "2017-12-01T14:26:49.371Z",
+      "modified": "2018-01-22T12:06:58.066Z",
+      "is_active": true,
+      "name": "Pneumonia",
+      "name_en": "Pneumonia",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Pneumonia",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 47,
+    "fields": {
+      "created": "2017-12-01T14:26:49.372Z",
+      "modified": "2018-01-22T11:17:46.255Z",
+      "is_active": true,
+      "name": "Ebola Viral Disease (EVD)",
+      "name_en": "Ebola Viral Disease (EVD)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7a viral de \u00c9bola",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 48,
+    "fields": {
+      "created": "2017-12-01T14:26:49.372Z",
+      "modified": "2018-01-22T11:21:24.994Z",
+      "is_active": true,
+      "name": "Other hemorrhagic fever (e.g. Lassa fever)",
+      "name_en": "Other hemorrhagic fever (e.g. Lassa fever)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras febre hemorr\u00e1gica (por exemplo, febre de Lassa)",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 49,
+    "fields": {
+      "created": "2017-12-01T14:26:49.373Z",
+      "modified": "2018-01-22T12:06:24.076Z",
+      "is_active": true,
+      "name": "Other infectious diseases (non-vector borne)",
+      "name_en": "Other infectious diseases (non-vector borne)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras doen\u00e7as infecciosas (n\u00e3o transmitidas por vetores)",
+      "health_category": 7
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 50,
+    "fields": {
+      "created": "2017-12-01T14:26:49.375Z",
+      "modified": "2018-01-22T23:51:28.416Z",
+      "is_active": true,
+      "name": "Cancer",
+      "name_en": "Cancer",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Cancro",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 51,
+    "fields": {
+      "created": "2017-12-01T14:26:49.376Z",
+      "modified": "2018-01-22T23:52:37.654Z",
+      "is_active": true,
+      "name": "Diabetes",
+      "name_en": "Diabetes",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Diabetes",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 52,
+    "fields": {
+      "created": "2017-12-01T14:26:49.376Z",
+      "modified": "2018-01-22T23:53:09.969Z",
+      "is_active": true,
+      "name": "Hypertension",
+      "name_en": "Hypertension",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Hipertens\u00e3o",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 53,
+    "fields": {
+      "created": "2017-12-01T14:26:49.377Z",
+      "modified": "2018-01-22T23:52:16.157Z",
+      "is_active": true,
+      "name": "Cardiovascular disease",
+      "name_en": "Cardiovascular disease",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7a cardiovascular",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 54,
+    "fields": {
+      "created": "2017-12-01T14:26:49.378Z",
+      "modified": "2018-01-22T23:55:46.295Z",
+      "is_active": true,
+      "name": "Tobacco use",
+      "name_en": "Tobacco use",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Uso do tabaco",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 55,
+    "fields": {
+      "created": "2017-12-01T14:26:49.379Z",
+      "modified": "2018-01-23T00:05:11.917Z",
+      "is_active": true,
+      "name": "Alcohol use",
+      "name_en": "Alcohol use",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Uso de \u00e1lcool",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 56,
+    "fields": {
+      "created": "2017-12-01T14:26:49.380Z",
+      "modified": "2018-01-22T23:54:37.167Z",
+      "is_active": true,
+      "name": "Substance abuse",
+      "name_en": "Substance abuse",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Abuso de subst\u00e2ncia",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 57,
+    "fields": {
+      "created": "2017-12-01T14:26:49.381Z",
+      "modified": "2018-01-22T23:53:31.522Z",
+      "is_active": true,
+      "name": "Oral health",
+      "name_en": "Oral health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade oral",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 58,
+    "fields": {
+      "created": "2017-12-01T14:26:49.381Z",
+      "modified": "2018-01-22T23:54:00.683Z",
+      "is_active": true,
+      "name": "Other non-communicable diseases",
+      "name_en": "Other non-communicable diseases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras doen\u00e7as n\u00e3o transmiss\u00edveis",
+      "health_category": 8
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 59,
+    "fields": {
+      "created": "2017-12-01T14:26:49.384Z",
+      "modified": "2018-01-23T00:30:26.892Z",
+      "is_active": true,
+      "name": "Chikungunya",
+      "name_en": "Chikungunya",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Chikungunya",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 60,
+    "fields": {
+      "created": "2017-12-01T14:26:49.384Z",
+      "modified": "2018-01-23T00:31:56.876Z",
+      "is_active": true,
+      "name": "Malaria",
+      "name_en": "Malaria",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mal\u00e1ria",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 61,
+    "fields": {
+      "created": "2017-12-01T14:26:49.385Z",
+      "modified": "2018-01-23T00:34:24.014Z",
+      "is_active": true,
+      "name": "Rift Valley fever",
+      "name_en": "Rift Valley fever",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Febre do Vale do Rift",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 62,
+    "fields": {
+      "created": "2017-12-01T14:26:49.387Z",
+      "modified": "2018-01-23T00:38:47.362Z",
+      "is_active": true,
+      "name": "Yellow fever",
+      "name_en": "Yellow fever",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Febre amarela",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 63,
+    "fields": {
+      "created": "2017-12-01T14:26:49.387Z",
+      "modified": "2018-01-23T00:31:32.018Z",
+      "is_active": true,
+      "name": "Japanese encephalitis",
+      "name_en": "Japanese encephalitis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Encefalite japonesa",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 64,
+    "fields": {
+      "created": "2017-12-01T14:26:49.388Z",
+      "modified": "2018-01-23T00:38:24.728Z",
+      "is_active": true,
+      "name": "West Nile fever",
+      "name_en": "West Nile fever",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Febre do Vale do Nilo",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 65,
+    "fields": {
+      "created": "2017-12-01T14:26:49.389Z",
+      "modified": "2018-01-23T00:37:19.025Z",
+      "is_active": true,
+      "name": "Sandfly fever (phlebotomus fever)",
+      "name_en": "Sandfly fever (phlebotomus fever)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Febre do mosquito (febre flebotomia)",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 66,
+    "fields": {
+      "created": "2017-12-01T14:26:49.390Z",
+      "modified": "2018-01-23T00:33:55.413Z",
+      "is_active": true,
+      "name": "Rickettsiosis",
+      "name_en": "Rickettsiosis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Rickettsiose",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 67,
+    "fields": {
+      "created": "2017-12-01T14:26:49.390Z",
+      "modified": "2018-01-23T00:39:37.530Z",
+      "is_active": true,
+      "name": "Zika",
+      "name_en": "Zika",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Zika",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 68,
+    "fields": {
+      "created": "2017-12-01T14:26:49.391Z",
+      "modified": "2018-01-23T00:33:05.009Z",
+      "is_active": true,
+      "name": "Other vector borne",
+      "name_en": "Other vector borne",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras transmitidas por vetores",
+      "health_category": 9
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 69,
+    "fields": {
+      "created": "2017-12-01T14:26:49.393Z",
+      "modified": "2018-01-22T20:12:38.156Z",
+      "is_active": true,
+      "name": "Dengue",
+      "name_en": "Dengue",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Dengue",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 70,
+    "fields": {
+      "created": "2017-12-01T14:26:49.393Z",
+      "modified": "2018-01-22T23:43:29.845Z",
+      "is_active": true,
+      "name": "Rabies",
+      "name_en": "Rabies",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Raiva",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 71,
+    "fields": {
+      "created": "2017-12-01T14:26:49.394Z",
+      "modified": "2018-01-22T23:46:43.823Z",
+      "is_active": true,
+      "name": "Trachoma",
+      "name_en": "Trachoma",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Tracoma",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 72,
+    "fields": {
+      "created": "2017-12-01T14:26:49.395Z",
+      "modified": "2018-01-22T20:42:19.413Z",
+      "is_active": true,
+      "name": "Leprosy",
+      "name_en": "Leprosy",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Lepra",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 73,
+    "fields": {
+      "created": "2017-12-01T14:26:49.396Z",
+      "modified": "2018-01-22T19:59:30.390Z",
+      "is_active": true,
+      "name": "Chagas",
+      "name_en": "Chagas",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Chagas",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 74,
+    "fields": {
+      "created": "2017-12-01T14:26:49.397Z",
+      "modified": "2018-01-22T20:40:43.164Z",
+      "is_active": true,
+      "name": "Human African trypanosomiasis (sleeping sickness)",
+      "name_en": "Human African trypanosomiasis (sleeping sickness)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Tripanossom\u00edase humana africana (doen\u00e7a do sono)",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 75,
+    "fields": {
+      "created": "2017-12-01T14:26:49.398Z",
+      "modified": "2018-01-22T20:41:40.497Z",
+      "is_active": true,
+      "name": "Leishmaniases",
+      "name_en": "Leishmaniases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Leishmaniases",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 76,
+    "fields": {
+      "created": "2017-12-01T14:26:49.399Z",
+      "modified": "2018-01-22T20:11:45.062Z",
+      "is_active": true,
+      "name": "Dracunculiasis (guinea-worm disease)",
+      "name_en": "Dracunculiasis (guinea-worm disease)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Dracunculose (doen\u00e7a do verme da Guin\u00e9)",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 77,
+    "fields": {
+      "created": "2017-12-01T14:26:49.400Z",
+      "modified": "2018-01-22T20:13:56.722Z",
+      "is_active": true,
+      "name": "Echinococcosis",
+      "name_en": "Echinococcosis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Equinococose",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 78,
+    "fields": {
+      "created": "2017-12-01T14:26:49.400Z",
+      "modified": "2018-01-22T20:39:37.270Z",
+      "is_active": true,
+      "name": "Foodborne trematodiases",
+      "name_en": "Foodborne trematodiases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Trematodias alimentares",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 79,
+    "fields": {
+      "created": "2017-12-01T14:26:49.401Z",
+      "modified": "2018-01-22T20:42:56.192Z",
+      "is_active": true,
+      "name": "Lymphatic filariasis",
+      "name_en": "Lymphatic filariasis",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Filariose linf\u00e1tica",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 80,
+    "fields": {
+      "created": "2017-12-01T14:26:49.402Z",
+      "modified": "2018-01-22T23:36:20.570Z",
+      "is_active": true,
+      "name": "Onchocerciasis (river blindness)",
+      "name_en": "Onchocerciasis (river blindness)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Oncocercose (cegueira do rio)",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 81,
+    "fields": {
+      "created": "2017-12-01T14:26:49.403Z",
+      "modified": "2018-01-22T23:46:15.663Z",
+      "is_active": true,
+      "name": "Soil-transmitted helminthiasis (e.g. whipworm, hookworms, roundworms)",
+      "name_en": "Soil-transmitted helminthiasis (e.g. whipworm, hookworms, roundworms)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Helmintiase transmitida por solo (por exemplo, chicote, ancilostom\u00edase, lombrigas)",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 82,
+    "fields": {
+      "created": "2017-12-01T14:26:49.403Z",
+      "modified": "2017-12-01T14:26:49.403Z",
+      "is_active": true,
+      "name": "Mycetoma",
+      "name_en": "Mycetoma",
+      "name_fr": null,
+      "name_es": null,
+      "name_pt": null,
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 83,
+    "fields": {
+      "created": "2017-12-01T14:26:49.404Z",
+      "modified": "2018-01-22T23:44:53.463Z",
+      "is_active": true,
+      "name": "Schistosomiasis (bilharziasis)",
+      "name_en": "Schistosomiasis (bilharziasis)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Esquistossomose (bilharz\u00edase)",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 84,
+    "fields": {
+      "created": "2017-12-01T14:26:49.405Z",
+      "modified": "2018-01-22T23:44:21.956Z",
+      "is_active": true,
+      "name": "Residual spraying",
+      "name_en": "Residual spraying",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Pulveriza\u00e7\u00e3o residual",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 85,
+    "fields": {
+      "created": "2017-12-01T14:26:49.406Z",
+      "modified": "2018-01-22T23:42:56.122Z",
+      "is_active": true,
+      "name": "Other neglected tropical diseases",
+      "name_en": "Other neglected tropical diseases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras doen\u00e7as tropicais negligenciadas",
+      "health_category": 10
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 86,
+    "fields": {
+      "created": "2017-12-01T14:26:49.408Z",
+      "modified": "2018-01-22T23:56:38.028Z",
+      "is_active": true,
+      "name": "Malnutrition",
+      "name_en": "Malnutrition",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Desnutri\u00e7\u00e3o",
+      "health_category": 11
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 87,
+    "fields": {
+      "created": "2017-12-01T14:26:49.409Z",
+      "modified": "2018-01-22T23:57:38.487Z",
+      "is_active": true,
+      "name": "Micronutrient deficiency",
+      "name_en": "Micronutrient deficiency",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Defici\u00eancia de micronutrientes",
+      "health_category": 11
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 88,
+    "fields": {
+      "created": "2017-12-01T14:26:49.410Z",
+      "modified": "2018-01-22T23:57:56.556Z",
+      "is_active": true,
+      "name": "Obesity",
+      "name_en": "Obesity",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Obesidade",
+      "health_category": 11
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 89,
+    "fields": {
+      "created": "2017-12-01T14:26:49.411Z",
+      "modified": "2018-01-22T23:57:08.557Z",
+      "is_active": true,
+      "name": "Metabolic and endocrine disorders",
+      "name_en": "Metabolic and endocrine disorders",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as metab\u00f3licas e end\u00f3crinas",
+      "health_category": 11
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 90,
+    "fields": {
+      "created": "2017-12-01T14:26:49.412Z",
+      "modified": "2018-01-22T23:56:02.675Z",
+      "is_active": true,
+      "name": "Diet",
+      "name_en": "Diet",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Dieta",
+      "health_category": 11
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 91,
+    "fields": {
+      "created": "2017-12-01T14:26:49.413Z",
+      "modified": "2018-01-22T23:58:41.749Z",
+      "is_active": true,
+      "name": "Other nutrition and metabolic disorders",
+      "name_en": "Other nutrition and metabolic disorders",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras doen\u00e7as nutricionais e metab\u00f3licas",
+      "health_category": 11
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 92,
+    "fields": {
+      "created": "2017-12-01T14:26:49.416Z",
+      "modified": "2018-01-22T23:59:20.406Z",
+      "is_active": true,
+      "name": "Diseases of the digestive system",
+      "name_en": "Diseases of the digestive system",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as do sistema digestivo",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 93,
+    "fields": {
+      "created": "2017-12-01T14:26:49.417Z",
+      "modified": "2018-01-23T00:16:09.550Z",
+      "is_active": true,
+      "name": "Diseases of the respiratory system  (e.g. asthma, COPD)",
+      "name_en": "Diseases of the respiratory system  (e.g. asthma, COPD)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as do sistema respirat\u00f3rio (por exemplo, asma, DPOC)",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 94,
+    "fields": {
+      "created": "2017-12-01T14:26:49.418Z",
+      "modified": "2018-01-23T00:16:44.963Z",
+      "is_active": true,
+      "name": "Diseases of the skin and subcutaneous tissue (e.g. dermatitis, hair loss)",
+      "name_en": "Diseases of the skin and subcutaneous tissue (e.g. dermatitis, hair loss)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as da pele e tecido subcut\u00e2neo (por exemplo, dermatite, perda de cabelo)",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 95,
+    "fields": {
+      "created": "2017-12-01T14:26:49.419Z",
+      "modified": "2018-01-23T00:12:22.107Z",
+      "is_active": true,
+      "name": "Diseases of the musculoskeletal system and connective tissue",
+      "name_en": "Diseases of the musculoskeletal system and connective tissue",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as do sistema m\u00fasculo-esquel\u00e9tico e tecido conjuntivo",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 96,
+    "fields": {
+      "created": "2017-12-01T14:26:49.420Z",
+      "modified": "2018-01-23T00:13:39.728Z",
+      "is_active": true,
+      "name": "Diseases of the nervous system (e.g. epilepsy, cerebral palsy)",
+      "name_en": "Diseases of the nervous system (e.g. epilepsy, cerebral palsy)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as do sistema nervoso (por exemplo, epilepsia, paralisia cerebral)",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 97,
+    "fields": {
+      "created": "2017-12-01T14:26:49.422Z",
+      "modified": "2018-01-23T00:10:15.639Z",
+      "is_active": true,
+      "name": "Diseases of the kidney and the urinary system",
+      "name_en": "Diseases of the kidney and the urinary system",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as do rim e do sistema urin\u00e1rio",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 98,
+    "fields": {
+      "created": "2017-12-01T14:26:49.423Z",
+      "modified": "2018-01-23T00:09:35.661Z",
+      "is_active": true,
+      "name": "Diseases of the eye and vision loss (e.g. cataracts, vision loss)",
+      "name_en": "Diseases of the eye and vision loss (e.g. cataracts, vision loss)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as da vista e perda de vis\u00e3o (por exemplo, catarata, cegueira)",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 99,
+    "fields": {
+      "created": "2017-12-01T14:26:49.424Z",
+      "modified": "2018-01-23T00:08:12.536Z",
+      "is_active": true,
+      "name": "Diseases of the ear and hearing loss",
+      "name_en": "Diseases of the ear and hearing loss",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as do ouvido e perda de audi\u00e7\u00e3o",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 100,
+    "fields": {
+      "created": "2017-12-01T14:26:49.425Z",
+      "modified": "2018-01-23T00:17:51.564Z",
+      "is_active": true,
+      "name": "Learning and Developmental Disabilities",
+      "name_en": "Learning and Developmental Disabilities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Defici\u00eancias de Aprendizagem e de desenvolvimento",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 101,
+    "fields": {
+      "created": "2017-12-01T14:26:49.426Z",
+      "modified": "2018-01-23T00:18:40.992Z",
+      "is_active": true,
+      "name": "Other chronic conditions and disabilities",
+      "name_en": "Other chronic conditions and disabilities",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras condi\u00e7\u00f5es cr\u00f4nicas e defici\u00eancias",
+      "health_category": 12
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 102,
+    "fields": {
+      "created": "2017-12-01T14:26:49.428Z",
+      "modified": "2018-01-22T11:14:46.257Z",
+      "is_active": true,
+      "name": "Migrant populations",
+      "name_en": "Migrant populations",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Popula\u00e7\u00f5es migrat\u00f3rias",
+      "health_category": 13
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 103,
+    "fields": {
+      "created": "2017-12-01T14:26:49.429Z",
+      "modified": "2018-01-22T11:14:04.711Z",
+      "is_active": true,
+      "name": "Communicable diseases in humanitarian settings",
+      "name_en": "Communicable diseases in humanitarian settings",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Doen\u00e7as transmiss\u00edveis em contextos humanit\u00e1rios",
+      "health_category": 13
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 104,
+    "fields": {
+      "created": "2017-12-01T14:26:49.431Z",
+      "modified": "2018-01-22T11:16:16.947Z",
+      "is_active": true,
+      "name": "Sexual and Reproductive health in humanitarian settings",
+      "name_en": "Sexual and Reproductive health in humanitarian settings",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade sexual e reprodutiva em contextos humanit\u00e1rios",
+      "health_category": 13
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 105,
+    "fields": {
+      "created": "2017-12-01T14:26:49.432Z",
+      "modified": "2018-01-22T11:15:42.200Z",
+      "is_active": true,
+      "name": "Other humanitarian health",
+      "name_en": "Other humanitarian health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outro aspecto de sa\u00fade humanit\u00e1ria",
+      "health_category": 13
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 106,
+    "fields": {
+      "created": "2017-12-01T14:26:49.435Z",
+      "modified": "2018-01-23T00:41:39.303Z",
+      "is_active": true,
+      "name": "Sexual violence",
+      "name_en": "Sexual violence",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Viol\u00eancia sexual",
+      "health_category": 14
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 107,
+    "fields": {
+      "created": "2017-12-01T14:26:49.436Z",
+      "modified": "2018-01-23T00:41:13.715Z",
+      "is_active": true,
+      "name": "Physical violence",
+      "name_en": "Physical violence",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Viol\u00eancia f\u00edsica",
+      "health_category": 14
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 108,
+    "fields": {
+      "created": "2017-12-01T14:26:49.437Z",
+      "modified": "2018-01-23T00:40:07.087Z",
+      "is_active": true,
+      "name": "Emotional violence",
+      "name_en": "Emotional violence",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Viol\u00eancia emocional",
+      "health_category": 14
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 109,
+    "fields": {
+      "created": "2017-12-01T14:26:49.438Z",
+      "modified": "2018-01-23T00:40:46.458Z",
+      "is_active": true,
+      "name": "Other violence",
+      "name_en": "Other violence",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras viol\u00eancias",
+      "health_category": 14
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 110,
+    "fields": {
+      "created": "2017-12-01T14:26:49.440Z",
+      "modified": "2018-01-22T12:11:48.300Z",
+      "is_active": true,
+      "name": "Road traffic injuries",
+      "name_en": "Road traffic injuries",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Les\u00f5es de tr\u00e2nsito",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 111,
+    "fields": {
+      "created": "2017-12-01T14:26:49.441Z",
+      "modified": "2018-01-22T12:11:09.750Z",
+      "is_active": true,
+      "name": "Poisonings",
+      "name_en": "Poisonings",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Envenenamentos",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 112,
+    "fields": {
+      "created": "2017-12-01T14:26:49.443Z",
+      "modified": "2018-01-22T12:09:04.353Z",
+      "is_active": true,
+      "name": "Falls",
+      "name_en": "Falls",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Quedas",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 113,
+    "fields": {
+      "created": "2017-12-01T14:26:49.444Z",
+      "modified": "2018-01-22T12:08:08.671Z",
+      "is_active": true,
+      "name": "Burns",
+      "name_en": "Burns",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Queimaduras",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 114,
+    "fields": {
+      "created": "2017-12-01T14:26:49.445Z",
+      "modified": "2018-01-22T12:08:33.315Z",
+      "is_active": true,
+      "name": "Drowning",
+      "name_en": "Drowning",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Afogamento",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 115,
+    "fields": {
+      "created": "2017-12-01T14:26:49.447Z",
+      "modified": "2018-01-22T12:12:24.376Z",
+      "is_active": true,
+      "name": "Suicide",
+      "name_en": "Suicide",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Suic\u00eddio",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 116,
+    "fields": {
+      "created": "2017-12-01T14:26:49.448Z",
+      "modified": "2018-01-22T12:09:40.997Z",
+      "is_active": true,
+      "name": "Occupational health",
+      "name_en": "Occupational health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade Ocupacional",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 117,
+    "fields": {
+      "created": "2017-12-01T14:26:49.449Z",
+      "modified": "2018-01-22T12:10:40.065Z",
+      "is_active": true,
+      "name": "Other injury prevention and management",
+      "name_en": "Other injury prevention and management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outra preven\u00e7\u00e3o e gest\u00e3o de les\u00f5es",
+      "health_category": 15
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 118,
+    "fields": {
+      "created": "2017-12-01T14:26:49.451Z",
+      "modified": "2018-01-23T00:43:44.484Z",
+      "is_active": true,
+      "name": "Management of diarrheal diseases",
+      "name_en": "Management of diarrheal diseases",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o de doen\u00e7as diarr\u00e9icas",
+      "health_category": 16
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 119,
+    "fields": {
+      "created": "2017-12-01T14:26:49.452Z",
+      "modified": "2018-01-23T00:42:05.077Z",
+      "is_active": true,
+      "name": "Handwashing",
+      "name_en": "Handwashing",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Lavar as m\u00e3os",
+      "health_category": 16
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 120,
+    "fields": {
+      "created": "2017-12-01T14:26:49.453Z",
+      "modified": "2018-01-23T00:42:28.011Z",
+      "is_active": true,
+      "name": "Hygiene education",
+      "name_en": "Hygiene education",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Educa\u00e7\u00e3o em higiene",
+      "health_category": 16
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 121,
+    "fields": {
+      "created": "2017-12-01T14:26:49.455Z",
+      "modified": "2018-01-23T00:45:06.084Z",
+      "is_active": true,
+      "name": "Water treatment",
+      "name_en": "Water treatment",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Tratamento de \u00e1gua",
+      "health_category": 16
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 122,
+    "fields": {
+      "created": "2017-12-01T14:26:49.456Z",
+      "modified": "2018-01-23T00:44:26.603Z",
+      "is_active": true,
+      "name": "Other WASH",
+      "name_en": "Other WASH",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outros WASH",
+      "health_category": 16
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 123,
+    "fields": {
+      "created": "2017-12-01T14:26:49.458Z",
+      "modified": "2018-01-22T11:12:14.008Z",
+      "is_active": true,
+      "name": "Outdoor air pollution",
+      "name_en": "Outdoor air pollution",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Polui\u00e7\u00e3o do ar ao ar livre",
+      "health_category": 17
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 124,
+    "fields": {
+      "created": "2017-12-01T14:26:49.459Z",
+      "modified": "2018-01-22T10:59:26.755Z",
+      "is_active": true,
+      "name": "Indoor air pollution",
+      "name_en": "Indoor air pollution",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Polui\u00e7\u00e3o do ar interior",
+      "health_category": 17
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 125,
+    "fields": {
+      "created": "2017-12-01T14:26:49.460Z",
+      "modified": "2018-01-22T10:57:58.001Z",
+      "is_active": true,
+      "name": "Chemical safety",
+      "name_en": "Chemical safety",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Seguran\u00e7a qu\u00edmica",
+      "health_category": 17
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 126,
+    "fields": {
+      "created": "2017-12-01T14:26:49.461Z",
+      "modified": "2018-01-22T10:58:37.690Z",
+      "is_active": true,
+      "name": "Climate change impact on health",
+      "name_en": "Climate change impact on health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Impacto das altera\u00e7\u00f5es clim\u00e1ticas na sa\u00fade",
+      "health_category": 17
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 127,
+    "fields": {
+      "created": "2017-12-01T14:26:49.463Z",
+      "modified": "2018-01-22T11:11:21.358Z",
+      "is_active": true,
+      "name": "Water treatment (see also under Water Sanitation and Hygiene (WASH)",
+      "name_en": "Water treatment (see also under Water Sanitation and Hygiene (WASH)",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Tratamento de \u00e1gua (ver tamb\u00e9m sob \u00c1gua, Higiene e Saneamento (WASH)",
+      "health_category": 17
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 128,
+    "fields": {
+      "created": "2017-12-01T14:26:49.464Z",
+      "modified": "2018-01-22T11:00:07.595Z",
+      "is_active": true,
+      "name": "Natural disaster risk mitigation and response",
+      "name_en": "Natural disaster risk mitigation and response",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Mitiga\u00e7\u00e3o e resposta ao risco de desastres naturais",
+      "health_category": 17
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 129,
+    "fields": {
+      "created": "2017-12-01T14:26:49.466Z",
+      "modified": "2018-01-22T11:09:28.941Z",
+      "is_active": true,
+      "name": "Other Environmental",
+      "name_en": "Other Environmental",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outro ambiental",
+      "health_category": 17
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 130,
+    "fields": {
+      "created": "2017-12-01T14:26:49.468Z",
+      "modified": "2018-01-23T00:47:25.437Z",
+      "is_active": true,
+      "name": "Physical Activity",
+      "name_en": "Physical Activity",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Actividade F\u00edsica",
+      "health_category": 18
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 131,
+    "fields": {
+      "created": "2017-12-01T14:26:49.469Z",
+      "modified": "2018-01-23T00:48:30.764Z",
+      "is_active": true,
+      "name": "Substance abuse",
+      "name_en": "Substance abuse",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Abuso de subst\u00e2ncia",
+      "health_category": 18
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 132,
+    "fields": {
+      "created": "2017-12-01T14:26:49.471Z",
+      "modified": "2018-01-23T00:46:04.232Z",
+      "is_active": true,
+      "name": "Mental health",
+      "name_en": "Mental health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade mental",
+      "health_category": 18
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 133,
+    "fields": {
+      "created": "2017-12-01T14:26:49.472Z",
+      "modified": "2018-01-23T00:45:35.927Z",
+      "is_active": true,
+      "name": "Ageing",
+      "name_en": "Ageing",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Envelhecimento",
+      "health_category": 18
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 134,
+    "fields": {
+      "created": "2017-12-01T14:26:49.473Z",
+      "modified": "2018-01-23T00:46:47.366Z",
+      "is_active": true,
+      "name": "Other wellness and mental health",
+      "name_en": "Other wellness and mental health",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outro aspecto de bem-estar e sa\u00fade mental",
+      "health_category": 18
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 135,
+    "fields": {
+      "created": "2017-12-01T14:26:49.475Z",
+      "modified": "2018-01-17T13:24:31.659Z",
+      "is_active": true,
+      "name": "Infection Prevention Control",
+      "name_en": "Infection Prevention Control",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Controle de Preven\u00e7\u00e3o de Infec\u00e7\u00f5es",
+      "health_category": 19
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 136,
+    "fields": {
+      "created": "2017-12-01T14:26:49.476Z",
+      "modified": "2018-01-17T13:19:24.501Z",
+      "is_active": true,
+      "name": "Blood Safety",
+      "name_en": "Blood Safety",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Seguran\u00e7a do sangue",
+      "health_category": 19
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 137,
+    "fields": {
+      "created": "2017-12-01T14:26:49.478Z",
+      "modified": "2018-01-17T13:23:31.787Z",
+      "is_active": true,
+      "name": "Immunizations",
+      "name_en": "Immunizations",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Vacina\u00e7\u00f5es",
+      "health_category": 19
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 138,
+    "fields": {
+      "created": "2017-12-01T14:26:49.480Z",
+      "modified": "2018-01-17T13:22:32.601Z",
+      "is_active": true,
+      "name": "Health Promotion",
+      "name_en": "Health Promotion",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Promo\u00e7\u00e3o de sa\u00fade",
+      "health_category": 19
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 139,
+    "fields": {
+      "created": "2017-12-01T14:26:49.481Z",
+      "modified": "2018-01-17T13:21:45.999Z",
+      "is_active": true,
+      "name": "Emergency Medical Services",
+      "name_en": "Emergency Medical Services",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Servi\u00e7os de Emerg\u00eancia M\u00e9dica",
+      "health_category": 19
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 140,
+    "fields": {
+      "created": "2017-12-01T14:26:49.482Z",
+      "modified": "2018-01-17T13:40:56.287Z",
+      "is_active": true,
+      "name": "Preparedness",
+      "name_en": "Preparedness",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Prontid\u00e3o",
+      "health_category": 19
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 141,
+    "fields": {
+      "created": "2017-12-01T14:26:49.483Z",
+      "modified": "2018-01-17T13:43:50.443Z",
+      "is_active": true,
+      "name": "Surveillance",
+      "name_en": "Surveillance",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Vigil\u00e2ncia",
+      "health_category": 19
+    }
+  },
+  {
+    "model": "project.healthfocusarea",
+    "pk": 142,
+    "fields": {
+      "created": "2017-12-01T14:26:49.484Z",
+      "modified": "2018-01-17T13:29:02.149Z",
+      "is_active": true,
+      "name": "Other cross cutting",
+      "name_en": "Other cross cutting",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Outras abordagens",
+      "health_category": 19
+    }
+  }
+]

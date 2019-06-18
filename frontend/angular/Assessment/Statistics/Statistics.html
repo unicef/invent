@@ -1,0 +1,51 @@
+
+<div class="dash-subhead" ng-show="vm.projectData.isMember || vm.projectData.isViewer">
+  <translate>STATISTICS</translate>
+</div>
+
+<div flex layout="column" class="dash-stat-column" layout="column" layout-align="start">
+
+  <md-card class="dash-stat-card"
+           ng-show="vm.projectData.isMember || vm.projectData.isViewer"
+           ng-class="vm.projectData.isMember ? 'longer' : 'shorter'">
+
+    <md-icon ng-show="vm.projectData.isPublished" class="dash-trendicon rotate">rotate_right</md-icon>
+    <md-icon ng-hide="vm.projectData.isPublished" class="dash-trendicon rotate">assignment</md-icon>
+    <span class="dash-stat-nr dash-stat-nr-version" ng-show="vm.projectData.isPublished">{{vm.currentVersion}}.</span>
+    <span class="dash-stat-nr draft-version" ng-hide="vm.projectData.isPublished">
+      <translate>Draft</translate>
+    </span>
+    <span class="dash-stat-label">
+      <translate>Version</translate>
+    </span>
+
+    <div class="gray" ng-show="vm.projectData.isMember && vm.projectData.isPublished" layout="column" layout-align="space-around stretch">
+      <span class="desc">
+        <translate>Push to save your current stats as a new version:</translate>
+      </span>
+      <md-button class="snapshot-button md-whiteframe-1dp" ng-click="vm.snapShot()">
+        <span class="text plus">
+          +
+        </span>
+        <span class="text">
+          <translate>Snapshot</translate>
+        </span>
+      </md-button>
+    </div>
+    <div class="gray" ng-show="vm.projectData.isMember && !vm.projectData.isPublished" layout="column" layout-align="space-around stretch">
+      <span class="desc">
+        <translate>Go to the edit project page to review and publish your project</translate>
+      </span>
+      <md-button class="snapshot-button draft md-whiteframe-1dp" ng-click="vm.goToEditProject()">
+        <span class="text">
+          <translate>Review &amp;<br> Publish</translate>
+        </span>
+      </md-button>
+    </div>
+
+  </md-card>
+
+
+  <donors class="hten" number="vm.projectData.donors.length"></donors>
+
+</div>

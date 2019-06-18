@@ -1,0 +1,61 @@
+.textTruncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noTextTruncate() {
+  overflow: visible;
+  text-overflow: inherit;
+  white-space: normal;
+}
+
+.clearfix() {
+  &::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.limitPageWidth() {
+  box-sizing: border-box;
+  min-width: @appWidthMinLimit;
+  max-width: @appWidthMaxLimit;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.SeparatorStyle() {
+  width: 1px;
+  height: 24px;
+  background-color: @colorGrayLight;
+}
+
+.SeparatorStyleHorizontal() {
+  width: 100%;
+  height: 1px;
+  background-color: @colorGrayLight;
+
+  &.Or {
+    position: relative;
+
+    > span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-block;
+      padding: 2px 8px;
+      background-color: @colorWhite;
+      font-size: @fontSizeSmall;
+      font-weight: 700;
+      color: darken(@colorGrayLight, 10%);
+      text-transform: uppercase;
+    }
+  }
+}
