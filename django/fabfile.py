@@ -3,16 +3,16 @@ from fabric.api import local, run, cd, env
 from fabric.context_managers import warn_only
 
 # ENVIRONMENTS #
-PROD_HOST_STRING = 'tip@207.154.215.126'
+PROD_HOST_STRING = 'tiip@207.154.215.126'
 
 
 def dev():
     """Configure dev"""
-    env.host_string = 'tip@dev.tip.pulilab.com'
+    env.host_string = 'tiip@dev.tiip.pulilab.com'
     env.name = 'dev'
     env.port = 22
     env.branch = "development"
-    env.project_root = '/home/tip/tip'
+    env.project_root = '/home/tiip/tiip'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
@@ -24,7 +24,7 @@ def production():
     env.name = 'production'
     env.port = 22
     env.branch = "tags/3.5.24"
-    env.project_root = '/home/tip/tip'
+    env.project_root = '/home/tiip/tiip'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = '-live'
@@ -32,11 +32,11 @@ def production():
 
 def staging():
     """Configure staging"""
-    env.host_string = 'tip@139.59.148.238'
+    env.host_string = 'tiip@139.59.148.238'
     env.name = 'staging'
     env.port = 22
     env.branch = "master"
-    env.project_root = '/home/tip/tip'
+    env.project_root = '/home/tiip/tiip'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
@@ -99,7 +99,7 @@ def deploy():
         run('git fetch')
         if env.name == 'production':
             with warn_only():
-                run('rm ~/tip/nginx/conf.d/production.conf')
+                run('rm ~/tiip/nginx/conf.d/production.conf')
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
         time.sleep(10)
@@ -273,7 +273,7 @@ def send_test_email(type, email, **kwargs):
     for key, value in kwargs.items():
         params += '--{} {} '.format(key, value)
     local("docker-compose exec django python manage.py send_html_email {} {} {}".format(type, email, params) +
-          "--settings=tip.settings_email_test")
+          "--settings=tiip.settings_email_test")
 
 
 def dump_model_translations():

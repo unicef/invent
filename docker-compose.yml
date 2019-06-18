@@ -16,7 +16,7 @@ services:
       - ./django/media:/usr/share/django/media:rw
       - log_data:/var/log/django
       - media_data:/src/media
-    command: /usr/local/bin/gunicorn tip.wsgi:application -w 2 -b :8000 --reload --timeout 120
+    command: /usr/local/bin/gunicorn tiip.wsgi:application -w 2 -b :8000 --reload --timeout 120
     # command: python manage.py runserver 0.0.0.0:8000  # FOR DEBUG
 
   celery:

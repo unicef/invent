@@ -5,7 +5,7 @@ services:
         environment:
             - SITE_ID=4
         # Current DO instance has 2 cores so (2 Workers * CPU Cores) + 1 = 5
-        command: /usr/local/bin/gunicorn tip.wsgi:application -w 5 -b :8000 --timeout 120
+        command: /usr/local/bin/gunicorn tiip.wsgi:application -w 5 -b :8000 --timeout 120
         volumes:
             - ./django:/src
             - ./nginx/site/static:/usr/share/django/static:rw
