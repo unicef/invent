@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: pulilab/tip-circleci
+      - image: pulilab/who-maps-circleci
         environment:
             REDIS_URL: 127.0.0.1
             DATABASE_URL: ''
@@ -87,7 +87,7 @@ jobs:
 
   deploy:
     docker:
-      - image: pulilab/tip-circleci
+      - image: pulilab/who-maps-circleci
     working_directory: ~/tip
     steps:
       - checkout
@@ -109,9 +109,9 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: development
+      # - deploy:
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only: development
