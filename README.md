@@ -33,7 +33,7 @@ http://localhost/admin -- backend admin
 
 On production, install a cron for the user (`crontab -e`) to autobackup the DB
 
-```0 4 * * * cd /home/whomaps/tip/django && fab backup_prod```
+```0 4 * * * cd /home/whomaps/tiip/django && fab backup_prod```
 
 
 ## SSL
@@ -47,27 +47,27 @@ On production, install a cron for the user (`crontab -e`) to autobackup the DB
  docker pull certbot/certbot
 
 # Obtain wildcard  certificate
-docker run -it --rm -v /home/$(whoami)/tip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tip/nginx/certs-data:/data/letsencrypt:rw  certbot/dns-digitalocean  certonly --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory -d "*.$DOMAIN" -d $DOMAIN
+docker run -it --rm -v /home/$(whoami)/tiip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tiip/nginx/certs-data:/data/letsencrypt:rw  certbot/dns-digitalocean  certonly --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory -d "*.$DOMAIN" -d $DOMAIN
 
 # Obtain normal certificate
-docker run -it --rm -v /home/$(whoami)/tip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tip/nginx/certs-data:/data/letsencrypt:rw -v /home/$(whoami)/tip/nginx/certs-log://var/log/letsencrypt:rw -v /home/$(whoami)/tip/nginx/certs-data:/data/letsencrypt:rw  certbot/certbot  certonly --webroot --webroot-path=/data/letsencrypt -d $DOMAIN
+docker run -it --rm -v /home/$(whoami)/tiip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tiip/nginx/certs-data:/data/letsencrypt:rw -v /home/$(whoami)/tiip/nginx/certs-log://var/log/letsencrypt:rw -v /home/$(whoami)/tiip/nginx/certs-data:/data/letsencrypt:rw  certbot/certbot  certonly --webroot --webroot-path=/data/letsencrypt -d $DOMAIN
 
 # Copy certificates to right folder
 
-sudo cp /home/$(whoami)/tip/nginx/certs/live/$DOMAIN/privkey.pem /home/$(whoami)/tip/nginx/certs/key.pem
-sudo cp /home/$(whoami)/tip/nginx/certs/live/$DOMAIN/fullchain.pem /home/$(whoami)/tip/nginx/certs/chain.pem
-sudo cp /home/$(whoami)/tip/nginx/certs/live/$DOMAIN/cert.pem /home/$(whoami)/tip/nginx/certs/cert.pem
+sudo cp /home/$(whoami)/tiip/nginx/certs/live/$DOMAIN/privkey.pem /home/$(whoami)/tiip/nginx/certs/key.pem
+sudo cp /home/$(whoami)/tiip/nginx/certs/live/$DOMAIN/fullchain.pem /home/$(whoami)/tiip/nginx/certs/chain.pem
+sudo cp /home/$(whoami)/tiip/nginx/certs/live/$DOMAIN/cert.pem /home/$(whoami)/tiip/nginx/certs/cert.pem
 
 # Set permission of certificates to default user
-sudo chown $(whoami):$(whoami) /home/$(whoami)/tip/nginx/certs/key.pem
-sudo chown $(whoami):$(whoami) /home/$(whoami)/tip/nginx/certs/chain.pem
-sudo chown $(whoami):$(whoami) /home/$(whoami)/tip/nginx/certs/cert.pem
+sudo chown $(whoami):$(whoami) /home/$(whoami)/tiip/nginx/certs/key.pem
+sudo chown $(whoami):$(whoami) /home/$(whoami)/tiip/nginx/certs/chain.pem
+sudo chown $(whoami):$(whoami) /home/$(whoami)/tiip/nginx/certs/cert.pem
 
 # Refresh normal certificate validity
-docker run -it --rm -v /home/$(whoami)/tip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tip/nginx/certs-data:/data/letsencrypt:rw  certbot/certbot renew --webroot --webroot-path=/data/letsencrypt -d $DOMAIN
+docker run -it --rm -v /home/$(whoami)/tiip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tiip/nginx/certs-data:/data/letsencrypt:rw  certbot/certbot renew --webroot --webroot-path=/data/letsencrypt -d $DOMAIN
 
 # Refresh widlcard certificate validty
-docker run -it --rm -v /home/$(whoami)/tip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tip/nginx/certs-data:/data/letsencrypt:rw  certbot/dns-digitalocean  renew --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory -d "*.$DOMAIN" -d $DOMAIN
+docker run -it --rm -v /home/$(whoami)/tiip/nginx/certs:/etc/letsencrypt:rw -v /home/$(whoami)/tiip/nginx/certs-data:/data/letsencrypt:rw  certbot/dns-digitalocean  renew --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory -d "*.$DOMAIN" -d $DOMAIN
 
 # List of subdomain
 
