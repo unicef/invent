@@ -1,0 +1,50 @@
+<md-card class="comment md-card-rounded" ng-class="{'expanded': vm.expanded}" layout="row" layout-align="start start">
+  <div class="avatar-img">
+    <span ng-hide="vm.item.avatar" class="no-avatar"></span>
+    <img ng-show="vm.item.avatar" ng-src="{{vm.item.avatar}}" alt="avatar">
+  </div>
+  <div class="excerpt">
+    <h3 class="md-title">{{vm.getUsername()}}</h3>
+    <div class="comment-info">
+      <small class="time">
+        {{vm.prettifyDate(vm.comment)}}
+        <span class="sep"></span>
+        <!-- visible if user is able to edit -->
+        <span ng-show="vm.isAuthor()">
+          <md-button class="edit-button" md-no-ink ng-click="vm.edit()">
+            <md-icon>create</md-icon>
+            <span class="edit-text">
+              <translate>Edit</translate>
+            </span>
+          </md-button>
+          <cms-report-delete-button type="delete" item="vm.comment"></cms-report-delete-button>
+          <span ng-hide="vm.isAuthor()" class="sep">|</span>
+        </span>
+        <!-- / -->
+        <cms-report-delete-button ng-hide="vm.isAuthor()" item="vm.comment"></cms-report-delete-button>
+      </small>
+    </div>
+    <div class="comment-text" ng-if="!vm.editMode">
+      <div class="comment-text-wrapper" ng-bind-html="vm.postProcessHtml(vm.comment.text)"></div>
+      <span ng-click="vm.readMore()" ng-show="vm.comment.text.length > 200" class="read-more">
+        <span ng-hide="vm.expanded">
+          <translate>Read more...</translate>
+        </span>
+        <span ng-show="vm.expanded">
+          <translate>...Read less</translate>
+        </span>
+      </span>
+    </div>
+    <div class="comment-text" ng-if="vm.editMode">
+      <trix-component placeholder="{{'Start typing here...' | translate }}" valid="vm.modified.valid" value="vm.modified.text" char-limit="2500"></trix-component>
+      <md-button class="md-primary md-raised" ng-click="vm.update()" ng-disabled="!vm.modified.valid">
+        <md-icon>done</md-icon>
+        <translate>Save</translate>
+      </md-button>
+      <md-button ng-click="vm.edit()">
+        <md-icon>undo</md-icon>
+        <translate>Cancel</translate>
+      </md-button>
+    </div>
+  </div>
+</md-card>

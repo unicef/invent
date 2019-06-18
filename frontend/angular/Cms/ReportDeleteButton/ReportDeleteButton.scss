@@ -1,0 +1,129 @@
+@import '../../variables';
+@import '../../mixins';
+
+// available (mutually exclusive) statuses : close - active - reported
+
+cms-report-delete-button {
+  display: inline-block;
+
+  .button-wrapper {
+
+    .flag-button {
+      min-width: auto;
+      width: auto;
+      margin: 0;
+      padding: 0;
+      font-size: 12px;
+      line-height: 24px;
+      background-color: transparent !important;
+
+      md-icon {
+        float: left;
+        margin: 0;
+        font-size: 16px;
+        line-height: 24px;
+        color: $text-disabled;
+        transition: $swift-ease-out;
+      }
+
+      .report-text {
+        width: 0;
+        overflow: hidden;
+        color: $text-disabled;
+        line-height: 24px;
+        opacity: 0;
+        transition: $swift-ease-out;
+      }
+
+      .delete-text {
+        font-size: 12px;
+        line-height: 24px;
+        color: $text-disabled;
+        transition: $swift-ease-out;
+      }
+
+      &:hover {
+        md-icon {
+          color: $color-gray;
+        }
+        .report-text {
+          width: auto;
+          opacity: 1;
+          color: $color-gray;
+        }
+        .delete-text {
+          color: $color-gray;
+        }
+      }
+    }
+  }
+
+  .close {
+    .warning-zone {
+      display: none;
+    }
+  }
+
+  .active {
+    .warning-zone {
+      z-index: 100;
+      position: absolute;
+      top: -1px;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0 12px;
+      background-color: $color-red;
+      border-radius: 2px;
+      box-sizing: border-box;
+
+      .warning-text {
+        @include text-truncate();
+        font-weight: 700;
+        line-height: 42px;
+        color: $color-white;
+      }
+
+      .warning-actions {
+        .md-button {
+          float: right;
+          margin: 0;
+          padding: 0;
+          min-width: auto;
+          width: auto;
+          margin: 0 0 0 15px;
+          padding: 0 4px;
+          font-size: 14px;
+          color: #fff;
+          background-color: transparent !important;
+
+          md-icon {
+            font-size: 20px;
+            color: $color-white;
+          }
+        }
+      }
+    }
+  }
+
+  .reported {
+    pointer-events: none;
+
+    .flag-button {
+
+      md-icon {
+        color: $color-red;
+      }
+
+      .report-text::after {
+        width: auto;
+        opacity: 1;
+        color: $color-red;
+      }
+    }
+    .warning-zone {
+      display: none;
+    }
+  }
+}

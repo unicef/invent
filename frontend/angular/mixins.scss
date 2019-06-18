@@ -1,0 +1,144 @@
+// Angular Material's mixins
+@import "../node_modules/angular-material/src/core/style/mixins";
+
+// WHO MAPS specific mixins
+
+// Text truncate
+// Requires inline-block or block for proper styling
+@mixin text-truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-truncate {
+  @include text-truncate();
+}
+
+.bold {
+  font-weight: 500;
+}
+
+.unselectable {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
+// CSS image replacement
+@mixin text-hide() {
+  border: 0;
+  background-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  font: "0/0" a;
+}
+
+.text-hide {
+  @include text-hide();
+}
+
+.text-nowrap         { white-space: nowrap !important; }
+.text-truncate       { @include text-truncate; }
+
+.text-center         { text-align: center; }
+.text-left           { text-align: left !important; }
+.text-right          { text-align: right !important; }
+.text-justify        { text-align: justify !important; }
+
+.text-lowercase      { text-transform: lowercase !important; }
+.text-uppercase      { text-transform: uppercase !important; }
+.text-capitalize     { text-transform: capitalize !important; }
+
+// MD icon inline
+@mixin md-icon($font-size: 24px) {
+  display: inline-block;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  font-size: $font-size;
+  font-family: 'Material Icons';
+  line-height: 1;
+  direction: ltr;
+
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.clickable {
+  cursor: pointer !important;
+}
+
+// Z-index for continuum
+.zindex-100 { z-index: 100 }
+.zindex-90  { z-index: 90 }
+.zindex-80  { z-index: 80 }
+.zindex-70  { z-index: 70 }
+.zindex-60  { z-index: 60 }
+.zindex-50  { z-index: 50 }
+.zindex-40  { z-index: 40 }
+.zindex-30  { z-index: 30 }
+.zindex-20  { z-index: 20 }
+.zindex-10  { z-index: 10 }
+
+// Center-align a block level element
+@mixin center-block() {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.center-block {
+  @include center-block();
+}
+
+// Sizing shortcuts
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin clearfix() {
+  &::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+}
+
+.clearfix {
+  @include clearfix();
+}
+
+// Multi-lang
+
+@mixin button-ml($width: 180px) {
+  translate {
+    max-width: $width;
+    display: inline-flex;
+    // text-align: left;
+
+    span {
+      display: block;
+      @include text-truncate();
+    }
+  }
+}
+
+/*
+// Multi-lang
+@include button-ml($width: 180px);
+//
+*/

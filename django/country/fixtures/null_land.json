@@ -1,0 +1,71 @@
+[
+{
+    "model": "country.country",
+    "pk": 333,
+    "fields": {
+        "created": "2017-06-27T14:39:24.042Z",
+        "modified": "2018-02-02T10:14:33.103Z",
+        "name": "Null Land",
+        "name_en": "Null Land",
+        "name_fr": null,
+        "name_es": null,
+        "name_pt": null,
+        "code": "NULL",
+        "logo": "",
+        "cover": "",
+        "cover_text": null,
+        "footer_title": null,
+        "footer_text": null,
+        "project_approval": false,
+        "map_data": {
+            "facilities": [],
+            "first_sub_level": {
+                "name": "district",
+                "admin_level": 4,
+                "elements": [
+                    {
+                        "name": "Banjul"
+                    },
+                    {
+                        "name": "Kanifing"
+                    },
+                    {
+                        "name": "Kerewan"
+                    },
+                    {
+                        "name": "Basse"
+                    },
+                    {
+                        "name": "Janjanbureh"
+                    },
+                    {
+                        "name": "Mansakonko"
+                    },
+                    {
+                        "name": "Kuntaur"
+                    },
+                    {
+                        "name": "Brikama"
+                    }
+                ]
+            },
+            "second_sub_level": {
+                "name": "",
+                "elements": []
+            }
+        },
+        "map_activated_on": null,
+        "users": []
+    }
+},
+{
+    "model": "country.mapfile",
+    "pk": 7,
+    "fields": {
+        "created": "2018-03-09T16:13:33.077Z",
+        "modified": "2018-03-12T11:00:53.303Z",
+        "country": 333,
+        "map_file": "test_maps/test.json"
+    }
+}
+]

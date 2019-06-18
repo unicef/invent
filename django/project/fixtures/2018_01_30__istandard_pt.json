@@ -1,0 +1,408 @@
+[
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-01T14:26:50.007Z",
+      "modified": "2018-01-23T01:07:49.934Z",
+      "is_active": true,
+      "name": "ADX - Aggregate Data Exchange",
+      "name_en": "ADX - Aggregate Data Exchange",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "TDA - Troca de Dados Agregados"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-01T14:26:50.008Z",
+      "modified": "2018-01-23T01:11:01.147Z",
+      "is_active": true,
+      "name": "ATNA - Audit Trail and Node Authentication",
+      "name_en": "ATNA - Audit Trail and Node Authentication",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registo de Auditoria e N\u00f3dulo de Autentica\u00e7\u00e3o"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-01T14:26:50.008Z",
+      "modified": "2018-01-23T01:14:46.633Z",
+      "is_active": true,
+      "name": "BPPC - Basic Patient Privacy Consents",
+      "name_en": "BPPC - Basic Patient Privacy Consents",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Consentimento Privado B\u00e1sico do Paciente"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-01T14:26:50.009Z",
+      "modified": "2018-01-23T01:16:28.752Z",
+      "is_active": true,
+      "name": "CDA - Clinical Document Architecture",
+      "name_en": "CDA - Clinical Document Architecture",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Arquitectura de Documentos Cl\u00ednicos"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-01T14:26:50.010Z",
+      "modified": "2018-01-23T01:18:12.207Z",
+      "is_active": true,
+      "name": "CSD - Care Services Discovery",
+      "name_en": "CSD - Care Services Discovery",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Descoberta de servi\u00e7os de assist\u00eancia"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-01T14:26:50.010Z",
+      "modified": "2018-01-23T01:37:09.353Z",
+      "is_active": true,
+      "name": "DICOM",
+      "name_en": "DICOM",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "DICOM"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 7,
+    "fields": {
+      "created": "2017-12-01T14:26:50.011Z",
+      "modified": "2018-01-23T01:36:54.114Z",
+      "is_active": true,
+      "name": "GS1",
+      "name_en": "GS1",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "GS1"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 8,
+    "fields": {
+      "created": "2017-12-01T14:26:50.012Z",
+      "modified": "2018-01-23T01:36:19.994Z",
+      "is_active": true,
+      "name": "HL7 v2",
+      "name_en": "HL7 v2",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "HL7 v2"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 9,
+    "fields": {
+      "created": "2017-12-01T14:26:50.012Z",
+      "modified": "2018-01-23T01:36:04.623Z",
+      "is_active": true,
+      "name": "HL7 v3",
+      "name_en": "HL7 v3",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "HL7 v3"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 10,
+    "fields": {
+      "created": "2017-12-01T14:26:50.013Z",
+      "modified": "2018-01-23T01:34:06.990Z",
+      "is_active": true,
+      "name": "mACM - Mobile Alert Communication Management",
+      "name_en": "mACM - Mobile Alert Communication Management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o de Alertas de Comunica\u00e7\u00e3o M\u00f3vel"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 11,
+    "fields": {
+      "created": "2017-12-01T14:26:50.014Z",
+      "modified": "2018-01-23T01:24:05.908Z",
+      "is_active": true,
+      "name": "MHD - Mobile Access to Health Documents",
+      "name_en": "MHD - Mobile Access to Health Documents",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Acesso M\u00f3vel aos Documentos de Sa\u00fade"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 12,
+    "fields": {
+      "created": "2017-12-01T14:26:50.014Z",
+      "modified": "2018-01-23T01:28:13.377Z",
+      "is_active": true,
+      "name": "PIX or PIXm - (Mobile) Patient Identifier Cross Reference",
+      "name_en": "PIX or PIXm - (Mobile) Patient Identifier Cross Reference",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Refer\u00eancia Cruzada (M\u00f3vel) do Identificador do Paciente"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 13,
+    "fields": {
+      "created": "2017-12-01T14:26:50.015Z",
+      "modified": "2018-01-23T01:25:32.206Z",
+      "is_active": true,
+      "name": "PDQ or PDQm - (Mobile) Patient Demographics Query",
+      "name_en": "PDQ or PDQm - (Mobile) Patient Demographics Query",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Consulta (M\u00f3vel) Demogr\u00e1fica do Paciente"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 14,
+    "fields": {
+      "created": "2017-12-01T14:26:50.016Z",
+      "modified": "2018-01-23T01:29:05.441Z",
+      "is_active": true,
+      "name": "SDMX - Statistical Data and Metadata Exchange",
+      "name_en": "SDMX - Statistical Data and Metadata Exchange",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Dados Estat\u00edsticos e Troca de Metadados"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 15,
+    "fields": {
+      "created": "2017-12-01T14:26:50.016Z",
+      "modified": "2018-01-23T01:31:43.120Z",
+      "is_active": true,
+      "name": "XDS - Cross-Enterprise Document Sharing",
+      "name_en": "XDS - Cross-Enterprise Document Sharing",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Partilha de Documentos entre empresas"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 16,
+    "fields": {
+      "created": "2017-12-01T14:26:50.017Z",
+      "modified": "2018-01-23T01:30:56.325Z",
+      "is_active": true,
+      "name": "XUA - Cross-Enterprise User Assertion",
+      "name_en": "XUA - Cross-Enterprise User Assertion",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Asser\u00e7\u00e3o de usu\u00e1rio entre empresas"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 17,
+    "fields": {
+      "created": "2017-12-01T14:26:50.018Z",
+      "modified": "2018-01-23T01:36:35.884Z",
+      "is_active": true,
+      "name": "HL7 FHIR",
+      "name_en": "HL7 FHIR",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "HL7 FHIR"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 18,
+    "fields": {
+      "created": "2017-12-01T14:26:50.019Z",
+      "modified": "2018-01-23T01:29:47.012Z",
+      "is_active": true,
+      "name": "SVS - Sharing Value Sets",
+      "name_en": "SVS - Sharing Value Sets",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Conjunto de Valores Partilhados"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 19,
+    "fields": {
+      "created": "2017-12-01T14:26:50.020Z",
+      "modified": "2018-01-23T01:19:20.153Z",
+      "is_active": true,
+      "name": "GML Geography Markup Language",
+      "name_en": "GML Geography Markup Language",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "GML Linguagem de Marca\u00e7\u00e3o Geogr\u00e1fica"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 20,
+    "fields": {
+      "created": "2017-12-01T14:26:50.021Z",
+      "modified": "2018-01-23T01:37:30.743Z",
+      "is_active": true,
+      "name": "XForms",
+      "name_en": "XForms",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "XForms"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 21,
+    "fields": {
+      "created": "2017-12-01T14:26:50.021Z",
+      "modified": "2018-01-23T01:32:57.098Z",
+      "is_active": true,
+      "name": "SNOMED",
+      "name_en": "SNOMED",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "SNOMED"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 22,
+    "fields": {
+      "created": "2017-12-01T14:26:50.022Z",
+      "modified": "2018-01-23T01:35:46.979Z",
+      "is_active": true,
+      "name": "ICD-10",
+      "name_en": "ICD-10",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "ICD-10"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 23,
+    "fields": {
+      "created": "2017-12-01T14:26:50.023Z",
+      "modified": "2018-01-23T01:34:55.439Z",
+      "is_active": true,
+      "name": "ISO 3166",
+      "name_en": "ISO 3166",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "ISO 3166"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 24,
+    "fields": {
+      "created": "2017-12-01T14:26:50.024Z",
+      "modified": "2018-01-23T01:35:31.175Z",
+      "is_active": true,
+      "name": "ISCO 08",
+      "name_en": "ISCO 08",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "ISCO 08"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 25,
+    "fields": {
+      "created": "2017-12-01T14:26:50.024Z",
+      "modified": "2018-01-23T01:35:13.976Z",
+      "is_active": true,
+      "name": "ISCO 88",
+      "name_en": "ISCO 88",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "ISCO 88"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 26,
+    "fields": {
+      "created": "2017-12-01T14:26:50.025Z",
+      "modified": "2018-01-23T01:34:26.354Z",
+      "is_active": true,
+      "name": "LOINC",
+      "name_en": "LOINC",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "LOINC"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 27,
+    "fields": {
+      "created": "2017-12-01T14:26:50.025Z",
+      "modified": "2018-01-23T01:33:26.472Z",
+      "is_active": true,
+      "name": "RxNORM",
+      "name_en": "RxNORM",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "RxNORM"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 28,
+    "fields": {
+      "created": "2017-12-01T14:26:50.026Z",
+      "modified": "2018-01-23T01:16:51.204Z",
+      "is_active": true,
+      "name": "CIEL",
+      "name_en": "CIEL",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "CIEL"
+    }
+  },
+  {
+    "model": "project.interoperabilitystandard",
+    "pk": 29,
+    "fields": {
+      "created": "2017-12-01T14:26:59.805Z",
+      "modified": "2018-01-23T01:34:40.971Z",
+      "is_active": true,
+      "name": "JSON",
+      "name_en": "JSON",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "JSON"
+    }
+  }
+]

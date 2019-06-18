@@ -1,0 +1,4 @@
+# Ignore everything in this directory
+../translations/pt/LC_MESSAGES/djangojs.po
+# Except this file
+!.gitignore

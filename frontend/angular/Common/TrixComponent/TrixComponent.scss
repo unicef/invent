@@ -1,0 +1,70 @@
+@import '../../variables';
+@import '../../mixins';
+@import '../../../node_modules/trix/dist/trix.css';
+
+
+trix-toolbar {
+  .button_row {
+    justify-content: flex-start;
+
+    .button_group {
+      margin-right: 10px;
+    }
+
+    button.strike {
+      display: none;
+    }
+
+    button.icon::before {
+      background-size: auto 90%;
+    }
+  }
+}
+
+trix-editor {
+  // set max height
+  // 20 rows
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.block_tools {
+
+  .heading-1 {
+    display: none;
+  }
+  .quote {
+    display: none;
+  }
+  .code {
+    display: none;
+  }
+
+  .nesting-level {
+    display: none;
+  }
+
+}
+
+.counter-wrapper {
+  margin: 10px 0;
+  font-size: 12px;
+  color: $text-disabled;
+  text-align: right;
+
+  .error-message {
+    opacity: 0;
+    float: left;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2)
+  }
+
+  &.has-error {
+    .error-message {
+      opacity: 1;
+    }
+  }
+}
+
+.has-error {
+  color: $color-red;
+}

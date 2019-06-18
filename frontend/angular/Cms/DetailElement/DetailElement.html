@@ -1,0 +1,11 @@
+<md-card-actions layout="row" layout-align="end center">
+  <md-button ng-click="vm.showDetailDialog($event, true)" class="md-primary md-small">
+    <md-icon class="material-icons">comment</md-icon>
+    <translate>Add comment ({{vm.item.comments.length}})</translate>
+  </md-button>
+
+  <md-button ng-click="vm.showDetailDialog($event)" class="md-primary md-small">
+    <md-icon class="material-icons">launch</md-icon>
+    <translate>Read more</translate>
+  </md-button>
+</md-card-actions>

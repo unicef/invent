@@ -1,0 +1,109 @@
+<md-dialog aria-label="add-new-content" class="detail-dialog new-content-dialog">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h3 class="md-title" ng-hide="vm.newContent.id">
+        <translate>Add new</translate>
+        <span>
+          <translate>content</translate>
+        </span>
+      </h3>
+      <h3 class="md-title" ng-show="vm.newContent.id">Edit content</h3>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="vm.cancel()">
+        <md-icon  aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="vm.form" ng-submit="vm.submit($event)" novalidate>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+
+        <div class="content">
+          <div layout="column">
+            <md-input-container >
+              <label>
+                <translate>Select a type</translate>
+              </label>
+              <md-select ng-model="vm.newContent.type" required name="type" >
+                <md-option ng-value="1">
+                  <translate>Resources</translate>
+                </md-option>
+                <md-option ng-value="2" ng-if="vm.isSuperUser" >
+                  <translate>Tips &amp; Considerations</translate>
+                </md-option>
+                <md-option ng-value="3" >
+                  <translate>Experiences</translate>
+                </md-option>
+              </md-select>
+              <div ng-messages="vm.form.type.$error">
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
+              </div>
+            </md-input-container>
+            <md-input-container>
+              <label>
+                <translate>Select a domain</translate>
+              </label>
+              <md-select aria-label="domain-selector" name="domain" ng-model="vm.newContent.domain" required class="">
+                <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
+                  <md-option ng-value="domain.id" ng-repeat="domain in axis.domains track by domain.id">{{domain.name}}</md-option>
+                </md-optgroup>
+              </md-select>
+              <div ng-messages="vm.form.domain.$error">
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
+              </div>
+            </md-input-container>
+
+            <md-input-container>
+              <label>
+                <translate>Add a title</translate>
+              </label>
+              <input type="text" ng-model="vm.newContent.name"  name="name" required md-maxlength="120" />
+              <div ng-messages="vm.form.name.$error">
+                <div ng-message="required">
+                  <translate>This is required.</translate>
+                </div>
+                <div ng-message="md-maxlength">
+                  <translate>The name has to be less than 120 characters long.</translate>
+                </div>
+              </div>
+            </md-input-container>
+          </div>
+
+          <trix-component value="vm.newContent.body" show-error="vm.showTrixError" valid="vm.newContent.textValid" placeholder="{{'Add content' | translate}}" char-limit="2500" required></trix-component>
+
+          <div class="file-upload" layout="row" layout-align="start center" ng-if="vm.newContent.type !== 3">
+            <div class="selected-file-thumbnail">
+              <img ngf-thumbnail="vm.newContent.cover" ngf-size="{width: auto, height: 36, quality: 0.9}">
+            </div>
+            <div class="md-button md-small" ngf-select ng-model="vm.newContent.cover" ngf-pattern="'image/*'"
+                 ngf-accept="'image/*'" ngf-max-size="10MB" ngf-min-height="100" ngf-before-model-change="vm.beforeImageSelect()" ng-change="vm.imageSelected()">
+              <md-icon>insert_photo</md-icon>
+              <translate>Add cover image</translate>
+            </div>
+            <div>
+              <small>
+                <translate>Maximum file size: 10MB</translate>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button class="md-cancel" ng-click="vm.cancel()">
+        <translate>Cancel</translate>
+      </md-button>
+      <span flex></span>
+      <md-button class="md-primary md-raised" ng-disabled="vm.disableSubmit" type="submit">
+        <translate>Submit</translate>
+      </md-button>
+    </md-dialog-actions>
+  </form>
+
+</md-dialog>

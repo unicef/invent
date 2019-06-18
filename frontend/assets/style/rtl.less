@@ -1,0 +1,621 @@
+[dir="rtl"] {
+
+  .el-select {
+    .el-select__tags {
+      padding-right: 15px;
+      .el-tag__close {
+        right: 2px;
+      }
+    }
+    .el-input__inner {
+      padding-right: 15px;
+    }
+  }
+
+  .el-input__prefix {
+    left: auto;
+    right: 5px;
+  }
+
+  .el-input__suffix {
+    right: auto;
+    left: -4px;
+    .el-select__caret:not(.el-icon-) {
+      border-right: 1px solid @colorGray;
+    }
+  }
+
+  .el-input-group__prepend {
+    border-left: none;
+    border-right: 1px solid @colorGray;
+  }
+
+  .el-checkbox__label,
+  .el-radio__label {
+    padding-right: 10px;
+    padding-left: 0;
+  }
+
+  .el-message__icon {
+    margin-left: 10px;
+    margin-right: 0;
+  }
+
+  .el-form-item__error {
+    left: auto;
+    right: 0;
+  }
+
+  .LoginComponent {
+    .el-input__suffix {
+      left: 4px;
+    }
+  }
+  .IconRole {
+    right: auto !important;
+    left: 0px;
+  }
+
+  .DashboardFiltersHeader {
+    transform: translateX(-40px);
+    .ProjectToShow {
+      padding-right: 20px;
+      padding-left: auto;
+    }
+  }
+
+  .el-button.IconRight .svg-inline--fa {
+    margin-left: auto;
+    margin-right: 6px;
+  }
+  .el-button.IconLeft .svg-inline--fa {
+    margin-left: 6px;
+    margin-right: auto;
+  }
+
+  .FilterSwitch .SwitchComponent .SwitchHandler {
+    padding-right: 0;
+    padding-left: 10px;
+  }
+
+  .SearchOptionsHeader {
+    .MutedButton {
+      float: right;
+    }
+  }
+
+  .AdvancedSearch {
+    .el-tooltip {
+      margin-left: auto;
+      margin-right: 10px;
+      transform: translateY(-2px);
+    }
+  }
+
+  .el-dialog {
+    .el-dialog__headerbtn {
+      right: auto;
+      left: 30px;
+    }
+
+    .el-dialog__footer {
+      .PrimaryButtons button {
+        float: left;
+      }
+      .SecondaryButtons button {
+        float: right;
+      }
+    }
+  }
+
+  .el-form--label-left .el-form-item {
+    display: flex;
+    flex-direction: row;
+    .el-form-item__label {
+      padding-right: 0;
+      padding-left: 12px;
+    }
+    .el-form-item__content {
+      margin-left: 0px !important;
+    }
+  }
+
+  .el-popover.CustomPopover .CustomPopoverList ul li {
+    padding: 0 12px 0 52px;
+  }
+
+  .el-popover.CustomPopover .CustomPopoverList ul li .fa-check {
+    right: auto;
+    left: 12px;
+  }
+
+  .el-popover.CustomPopover .CustomPopoverList ul li .DeleteButton {
+    right: auto;
+    left: 32px;
+  }
+
+  .el-popover.CustomPopover .CustomPopoverActions .PrimaryButton {
+    float: left;
+  }
+
+  .FilterDialog .fa-chevron-right {
+    transform: rotate(180deg) translateX(10px);
+  }
+
+  .MainTable .Pagination .el-pagination {
+    .el-pagination__sizes {
+      float: right;
+      .el-input__suffix {
+        right: auto;
+        left: -4px;
+      }
+      .el-input__inner {
+        padding-left: 35px;
+        padding-right: 8px;
+      }
+    }
+    .btn-prev,
+    .PageCounter,
+    .btn-next {
+      float: left;
+      i.el-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .el-table__fixed {
+    right: 0;
+  }
+
+  // .el-table__fixed-body-wrapper,
+  // .el-table__fixed-header-wrapper {
+  //   left: is dynamically calculated by JS in MainTable.vue / alignFixedWidthForRTL method
+  // }
+
+  .MainTable .el-table td > .cell,
+  .MainTable .el-table th > .cell {
+    text-align: right;
+    .caret-wrapper {
+      right: auto;
+      left: 4px;
+    }
+    .el-checkbox__inner {
+      transform: translateX(4px);
+    }
+  }
+
+  .ExtendedProjectCard {
+    .FirstRow {
+      padding-left: 50px;
+      padding-right: 30px;
+
+      .CountryName {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+
+      .OrganisationItem::before {
+        right: -10px;
+      }
+
+      .ProjectMeta {
+
+        border-left: none !important;
+        border-right: 1px solid rgb(214, 214, 214);
+
+        .ProjectLegend {
+          right: auto !important;
+          left: 26px;
+        }
+      }
+    }
+
+    .SecondRow {
+      .ProjectCardActions .NuxtLink {
+        margin-left: auto;
+        margin-right: 40px;
+        svg {
+          margin-left: 6px;
+          margin-right: auto;
+          &.fa-arrow-right,
+          &.fa-arrow {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+
+  .TopBar {
+    .AuthLinks > div {
+      float: right;
+    }
+    .fa-plus-circle,
+    .fa-user-circle {
+      margin-left: 6px;
+      margin-right: auto;
+    }
+    .ButtonPopper .svg-inline--fa.fa-caret-down {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+  }
+
+  .DropdownContent {
+
+    .UserInfoSection {
+      .CountryName {
+        margin-left: auto;
+        margin-right: 8px;
+      }
+    }
+    .MenuIcon {
+      text-align: right !important;
+      .fa-user-edit {
+        transform: scale(-1, 1);
+      }
+    }
+  }
+
+  .SearchPopper {
+    right: auto;
+    left: 40px;
+    .fa-arrow-right {
+      transform: scale(-1, 1);
+    }
+    .fa-search {
+      float: left !important;
+    }
+    .fa-angle-right {
+      margin-left: auto;
+      margin-right: 8px;
+      transform: scale(-1, 1);
+    }
+    .ProjectName {
+      padding-left: 12px;
+      padding-right: 0px;
+    }
+    .Country {
+      padding-left: 21px;
+      padding-right: 0px !important;
+      .CountryName {
+        margin-left: 0px !important;
+        margin-right: 6px;
+      }
+      &::after {
+        right: auto !important;
+        left: 10px;
+      }
+    }
+    .FoundIn > div > * {
+      float: right !important;
+      &.fa-search {
+        margin-left: 4px;
+        margin-right: 0;
+        transform: translate(0, 3px);
+      }
+    }
+  }
+
+  .ActionBar .Sep {
+    transform: rotate(180deg) !important;
+  }
+
+  .ProjectLegendContent {
+    .svg-inline--fa {
+      margin-left: 6px !important;
+      margin-right: 20px !important;
+    }
+  }
+
+  .SwitchViewWrapper {
+    .el-switch__label--left {
+      margin-left: 10px;
+      margin-right: 0px;
+    }
+    .el-switch__label--right {
+      margin-left: 0px;
+      margin-right: 10px;
+    }
+
+    .el-switch__core {
+      transform: scale(-1, 1);
+    }
+  }
+
+  .WorldZoomButton {
+    right: auto !important;
+    left: 40px;
+  }
+
+  .leaflet-bottom.leaflet-right {
+    left: 40px;
+    right: auto;
+  }
+
+  .MapProjectBox {
+    .CloseBox {
+      right: auto;
+      left: 8px;
+    }
+    .CountryName {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+    .el-tabs__nav.is-top {
+      float: right;
+      display: flex;
+      flex-direction: row-reverse;
+    }
+
+    .ProjectName {
+      padding-left: 12px;
+      padding-right: 0 !important;
+    }
+
+    .fa-arrow-right {
+      transform: scale(-1, 1) translateY(-7px);
+    }
+
+    .fa-info-circle {
+      margin-right: 0 !important;
+      margin-left: 6px;
+    }
+  }
+
+  .WelcomeBox {
+    left: auto;
+    right: 40px;
+
+    .CloseWelcomeBox {
+      right: auto !important;
+      left: 16px;
+    }
+  }
+
+  .CentralBoxWrapper {
+    margin-left: 30px;
+    margin-right: auto !important;
+  }
+
+  .InfoBoxWrapper {
+    margin-right: 40px !important;
+  }
+
+  .AboutSectionLeft {
+    margin-left: 30px;
+    margin-right: auto !important;
+  }
+
+  .SupporterLogos {
+    .Partner {
+      float: right !important;
+      margin-right: 0 !important;
+      margin-left: 80px !important;
+    }
+  }
+
+  .vue-django-feedback {
+    .char-count,
+    .error-info {
+      padding-left: 0 !important;
+      padding-right: 40px;
+    }
+  }
+
+  .NewProjectForm form > .el-row > .el-col-18 {
+    margin-left: 20px;
+    margin-right: 0 !important;
+  }
+
+  .ProjectNavigation {
+    .Stepper ul {
+      &::after {
+        left: auto;
+        right: 45px;
+      }
+      > li {
+        > button {
+          padding-left: 20px;
+          padding-right: 70px;
+          .Step {
+            left: auto;
+            right: 30px;
+            svg {
+              transform: translate(-50%, -50%) scale(-1, 1) !important;
+            }
+          }
+        }
+      }
+    }
+    .DraftButton,
+    .PublishedButton {
+      float: right;
+    }
+  }
+
+  .CollapsibleCard {
+    .el-card__header {
+      padding-left: 20px !important;
+      padding-right: 40px !important;
+    }
+    .CollapsibleHeader {
+      .CardTitle {
+        float: right;
+      }
+      .CollapseToggle {
+        float: left;
+      }
+    }
+  }
+
+  .ContentContainer {
+    padding-left: 80px;
+    padding-right: 40px;
+
+    .Hint {
+      padding-left: 40px;
+      padding-right: 0 !important;
+      svg {
+        margin-left: 5px !important;
+        margin-right: 0 !important;
+      }
+    }
+
+    .ItemIndent {
+      border-right: 5px solid rgb(214, 214, 214);
+      border-left-width: 0px !important;
+      padding: 0 30px 10px 0 !important;
+      .el-col {
+        float: right;
+      }
+    }
+
+    .CoverageArea {
+      label.el-radio {
+        margin-left: 30px;
+        margin-right: 0px;
+      }
+    }
+
+    .CoverageSubtitle {
+      padding: 10px 20px 0 0 !important;
+      svg {
+        left: auto;
+        right: 0px;
+        transform: scale(-1, 1);
+      }
+    }
+
+    .ImplementingPartners {
+      .el-col {
+        float: right !important;
+      }
+      .AddRmButtons {
+        padding: 0 30px 0 0 !important;
+      }
+    }
+
+    .LinkField {
+      direction: ltr;
+    }
+
+    .CheckboxAndLink {
+      .el-col {
+        float: right;
+      }
+      .el-input {
+        direction: ltr;
+      }
+      .el-checkbox__label {
+        padding: 0 10px 0 30px !important;
+      }
+    }
+    .ThreePerRow {
+      .el-checkbox__label {
+        padding: 0 10px 0 30px !important;
+      }
+    }
+  }
+
+  .ProjectBar {
+    .ProjectName {
+      > div {
+        padding: 0 0 0 50px !important;
+        .ProjectLegend {
+          left: -25px;
+          right: auto !important;
+        }
+      }
+    }
+
+    .InfoSection {
+      border-left-width: 0px !important;
+      border-right: 1px solid rgb(214, 214, 214);
+      a > svg {
+        margin: 0 6px 0 0 !important;
+      }
+    }
+  }
+
+  .el-message-box__wrapper {
+    .el-message-box {
+      .el-message-box__header {
+
+        .el-message-box__title {
+          text-align: right;
+        }
+
+        .el-message-box__headerbtn {
+          top: 18px;
+          left: 20px;
+          right: auto;
+        }
+      }
+
+      .el-message-box__content {
+        .el-message-box__message {
+          padding-left: 12px;
+          padding-right: 36px;
+        }
+        .el-message-box__status {
+          right: 20px;
+        }
+      }
+
+      .el-message-box__btns {
+        padding: 10px 20px 20px;
+        text-align: left;
+
+        .el-button {
+          margin-left: 0px;
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+
+  .CountryAdmin {
+    .CollapsibleCard {
+      .el-form-item__label {
+        text-align: right;
+      }
+      .el-form-item__content {
+        width: 100%;
+      }
+
+      .el-upload.el-upload--picture {
+        float: right;
+      }
+    }
+  }
+
+  .el-transfer-panel__header {
+    padding-left: 0;
+    padding-right: 15px;
+    .el-checkbox__label > span {
+      right: auto !important;
+      left: 15px;
+    }
+  }
+
+  .el-transfer-panel__body {
+    .el-input__inner {
+      padding-left: 10px;
+      padding-right: 30px;
+    }
+    .el-checkbox-group {
+      label {
+        margin-left: 30px;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 15px;
+        .el-checkbox__label {
+          padding-left: 10px;
+          padding-right: 24px;
+        }
+      }
+    }
+  }
+}

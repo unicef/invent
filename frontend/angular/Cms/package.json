@@ -1,0 +1,6 @@
+{
+  "name": "CmsModule",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./cmsModule.js"
+}

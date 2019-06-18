@@ -1,0 +1,44 @@
+<md-card class="cms-experience-list md-card-nomargin" layout="row" layout-align="start stretch">
+  <div class="experiences-list" flex="40">
+    <h3 class="md-title">
+      <translate>Learn from others' experiences</translate>
+    </h3>
+    <p class="empty-card" ng-show="vm.experiences.length === 0">
+      <translate>No experience has been added yet...</translate>
+    </p>
+    <cms-list-element item="item" ng-repeat="item in vm.experiences | orderBy:'id':true | limitTo:2"></cms-list-element>
+    <md-button ui-sref="cms({'#': 'experiences'})" class="md-primary md-raised">
+      <translate>Show more</translate>
+    </md-button>
+  </div>
+
+  <div class="add-experience" flex="60">
+    <h3 class="md-title">
+      <translate>Share your own experience</translate>
+    </h3>
+    <form name="vm.form">
+      <div layout="row">
+
+        <md-input-container>
+          <label>
+            <translate>What is your experience about (title)</translate>
+          </label>
+          <input type="text" ng-model="vm.newExperience.name"  name="name" required md-maxlength="120" />
+          <div ng-messages="vm.form.name.$error">
+            <div ng-message="required">
+              <translate>This is required.</translate>
+            </div>
+            <div ng-message="md-maxlength">
+              <translate>The name has to be less than 120 characters long.</translate>
+            </div>
+          </div>
+        </md-input-container>
+
+      </div>
+    </form>
+    <trix-component placeholder="{{'Add new experience' | translate }}" value="vm.newExperience.body" valid="vm.newExperience.valid" char-limit="2500"></trix-component>
+    <md-button class="md-primary md-raised" ng-disabled="vm.disableAddButton(vm.newExperience)" ng-click="vm.saveExperience()">
+      <translate>Add experience</translate>
+    </md-button>
+  </div>
+</md-card>

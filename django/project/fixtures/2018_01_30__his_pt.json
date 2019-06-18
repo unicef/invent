@@ -1,0 +1,338 @@
+[
+  {
+    "model": "project.hisbucket",
+    "pk": 1,
+    "fields": {
+      "created": "2017-12-01T14:26:50.027Z",
+      "modified": "2018-01-22T10:44:25.559Z",
+      "is_active": true,
+      "name": "Census, population information & data warehouse",
+      "name_en": "Census, population information & data warehouse",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Censo, informa\u00e7\u00e3o populacional & armazenamento de dados"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 2,
+    "fields": {
+      "created": "2017-12-01T14:26:50.028Z",
+      "modified": "2018-01-22T10:45:59.239Z",
+      "is_active": true,
+      "name": "Civil Registration and Vital Statistics",
+      "name_en": "Civil Registration and Vital Statistics",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registo civil e estat\u00edsticas vitais"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 3,
+    "fields": {
+      "created": "2017-12-01T14:26:50.029Z",
+      "modified": "2018-01-22T11:39:56.158Z",
+      "is_active": true,
+      "name": "Client applications",
+      "name_en": "Client applications",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Aplicativos de cliente"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 4,
+    "fields": {
+      "created": "2017-12-01T14:26:50.029Z",
+      "modified": "2018-01-22T13:42:24.852Z",
+      "is_active": true,
+      "name": "Client communication system",
+      "name_en": "Client communication system",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de comunica\u00e7\u00e3o do cliente"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 5,
+    "fields": {
+      "created": "2017-12-01T14:26:50.031Z",
+      "modified": "2018-01-22T13:47:22.452Z",
+      "is_active": true,
+      "name": "Clinical terminology and classifications",
+      "name_en": "Clinical terminology and classifications",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Terminologia  e classifica\u00e7\u00f5es cl\u00ednicas"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 6,
+    "fields": {
+      "created": "2017-12-01T14:26:50.032Z",
+      "modified": "2018-01-22T13:51:00.490Z",
+      "is_active": true,
+      "name": "Community Information System",
+      "name_en": "Community Information System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Informa\u00e7\u00e3o da Comunidade"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 7,
+    "fields": {
+      "created": "2017-12-01T14:26:50.032Z",
+      "modified": "2018-01-22T14:16:06.690Z",
+      "is_active": true,
+      "name": "EHR and health information repositories",
+      "name_en": "EHR and health information repositories",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Reposit\u00f3rios de informa\u00e7\u00f5es de sa\u00fade e EHR"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 8,
+    "fields": {
+      "created": "2017-12-01T14:26:50.033Z",
+      "modified": "2018-01-22T14:19:55.711Z",
+      "is_active": true,
+      "name": "Electronic Medical Record",
+      "name_en": "Electronic Medical Record",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registro M\u00e9dico Eletr\u00f4nico"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 9,
+    "fields": {
+      "created": "2017-12-01T14:26:50.033Z",
+      "modified": "2018-01-22T14:22:59.781Z",
+      "is_active": true,
+      "name": "Emergency response system",
+      "name_en": "Emergency response system",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de resposta de emerg\u00eancia"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 10,
+    "fields": {
+      "created": "2017-12-01T14:26:50.034Z",
+      "modified": "2018-01-22T14:49:08.290Z",
+      "is_active": true,
+      "name": "Facility Management Information System",
+      "name_en": "Facility Management Information System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Informa\u00e7\u00e3o de gestao de institui\u00e7\u00e3o"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 11,
+    "fields": {
+      "created": "2017-12-01T14:26:50.035Z",
+      "modified": "2018-01-22T15:00:47.577Z",
+      "is_active": true,
+      "name": "Geographic Information Systems",
+      "name_en": "Geographic Information Systems",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistemas de Informa\u00e7\u00e3o Geogr\u00e1fica"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 12,
+    "fields": {
+      "created": "2017-12-01T14:26:50.035Z",
+      "modified": "2018-01-22T15:02:26.334Z",
+      "is_active": true,
+      "name": "Health finance and insurance",
+      "name_en": "Health finance and insurance",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Finan\u00e7as e seguros de sa\u00fade"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 13,
+    "fields": {
+      "created": "2017-12-01T14:26:50.036Z",
+      "modified": "2018-01-23T06:51:29.440Z",
+      "is_active": true,
+      "name": "Health Management Information System",
+      "name_en": "Health Management Information System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Informa\u00e7\u00e3o de Gest\u00e3o de Sa\u00fade"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 14,
+    "fields": {
+      "created": "2017-12-01T14:26:50.037Z",
+      "modified": "2018-01-23T06:52:22.390Z",
+      "is_active": true,
+      "name": "Human Resource Information System",
+      "name_en": "Human Resource Information System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Informa\u00e7\u00e3o de Recursos Humanos"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 15,
+    "fields": {
+      "created": "2017-12-01T14:26:50.038Z",
+      "modified": "2018-01-23T06:56:03.834Z",
+      "is_active": true,
+      "name": "Identification registries and directories",
+      "name_en": "Identification registries and directories",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Registros de identifica\u00e7\u00e3o e diret\u00f3rios"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 16,
+    "fields": {
+      "created": "2017-12-01T14:26:50.038Z",
+      "modified": "2018-01-23T06:56:46.415Z",
+      "is_active": true,
+      "name": "Knowledge Management",
+      "name_en": "Knowledge Management",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Gest\u00e3o do conhecimento"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 17,
+    "fields": {
+      "created": "2017-12-01T14:26:50.039Z",
+      "modified": "2018-01-23T07:08:31.236Z",
+      "is_active": true,
+      "name": "Laboratory and Diagnostic System",
+      "name_en": "Laboratory and Diagnostic System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Laborat\u00f3rio e Sistema de Diagn\u00f3stico"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 18,
+    "fields": {
+      "created": "2017-12-01T14:26:50.040Z",
+      "modified": "2018-01-23T07:25:45.996Z",
+      "is_active": true,
+      "name": "Learning and Training System",
+      "name_en": "Learning and Training System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Forma\u00e7\u00e3o e Aprendizagem"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 19,
+    "fields": {
+      "created": "2017-12-01T14:26:50.040Z",
+      "modified": "2018-01-23T07:27:59.345Z",
+      "is_active": true,
+      "name": "Logistics Management Information System",
+      "name_en": "Logistics Management Information System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de Informa\u00e7\u00e3o de Gest\u00e3o de Log\u00edstica"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 20,
+    "fields": {
+      "created": "2017-12-01T14:26:50.041Z",
+      "modified": "2018-01-23T07:33:17.309Z",
+      "is_active": true,
+      "name": "Pharmacy System",
+      "name_en": "Pharmacy System",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de farm\u00e1cia"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 21,
+    "fields": {
+      "created": "2017-12-01T14:26:50.041Z",
+      "modified": "2018-01-23T07:53:14.990Z",
+      "is_active": true,
+      "name": "Public health and disease surveillance",
+      "name_en": "Public health and disease surveillance",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sa\u00fade p\u00fablica e vigil\u00e2ncia de doen\u00e7as"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 22,
+    "fields": {
+      "created": "2017-12-01T14:26:50.043Z",
+      "modified": "2018-01-23T07:53:51.956Z",
+      "is_active": true,
+      "name": "Research information system",
+      "name_en": "Research information system",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistema de informa\u00e7\u00e3o de pesquisa"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 23,
+    "fields": {
+      "created": "2017-12-01T14:26:50.044Z",
+      "modified": "2018-01-22T14:15:05.024Z",
+      "is_active": true,
+      "name": "Data interchange interoperability and accessibility",
+      "name_en": "Data interchange interoperability and accessibility",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Interoperabilidade e acessibilidade do interc\u00e2mbio de dados"
+    }
+  },
+  {
+    "model": "project.hisbucket",
+    "pk": 24,
+    "fields": {
+      "created": "2017-12-01T14:26:50.045Z",
+      "modified": "2018-01-22T14:25:42.408Z",
+      "is_active": true,
+      "name": "Environmental monitoring systems",
+      "name_en": "Environmental monitoring systems",
+      "name_fr": "",
+      "name_es": "",
+      "name_pt": "Sistemas de monitoramento ambiental"
+    }
+  }
+]

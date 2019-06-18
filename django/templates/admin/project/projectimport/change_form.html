@@ -1,0 +1,12 @@
+{% extends "admin/change_form.html" %}
+
+{% block content_title %}
+    {% if not original.pk %}<h1>Upload CSV</h1>{% endif %}
+    {% if original.headers and original.status == None  %}<h1>Map fields to DHA, and import project</h1>{% endif %}
+    {% if original.status != None %}<h1>Import results</h1>{% endif %}
+{% endblock %}
+
+<!-- custom_submit overrides submit_row template -->
+{% load i18n admin_urls static admin_modify custom_submit %}
+
+{% block submit_buttons_bottom %}{% submit_row %}{% endblock %}

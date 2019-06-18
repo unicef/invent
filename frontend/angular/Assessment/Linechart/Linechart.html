@@ -1,0 +1,50 @@
+<div class="linechart-labels" layout="row" ng-if="!vm.showPlaceholder">
+
+  <ul flex ng-class="{'secondary-labelcolors': vm.notpercentage}">
+
+    <li ng-if="vm.showdotted"><span class="smallness">___</span>
+      <translate>closed</translate>
+    </li>
+    <li ng-if="vm.showdotted"><span class="smallness">……</span>
+      <translate>in progress</translate>
+    </li>
+
+    <li
+      ng-repeat="label in vm.chartConfig.chosenLabels track by $index"
+      ng-class="'labelhov' + ($index + 1)"
+      class="text-truncate labelhov">
+
+      <i class="material-icons" ng-class="'labelicon' + ($index + 1)">fiber_manual_record</i> {{label}}
+
+    </li>
+
+  </ul>
+
+  <div class="chosercontainer" ng-if="vm.datachooser">
+    {{vm.labels}}
+    <md-input-container>
+
+      <label>
+        <translate>Axis to show:</translate>
+      </label>
+
+      <md-select
+        aria-label="select axis to view in the chart"
+        class="axischooser"
+        ng-model="vm.chartConfig.activeAxis"
+        ng-change="vm.axisChange(vm.chartConfig.activeAxis)"
+        md-container-class="md-small">
+
+        <md-option
+          ng-repeat="label in vm.chartConfig.labels" value="{{label}}">
+
+          {{label}}
+
+        </md-option>
+
+      </md-select>
+
+    </md-input-container>
+  </div>
+
+</div>

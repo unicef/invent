@@ -1,0 +1,10 @@
+<md-button md-no-ink ng-click="vm.showAddNewContentDialog($event)" ng-hide="vm.toEdit" class="md-primary md-raised add-new">
+  <md-icon class="material-icons">add</md-icon>
+  <translate>Add new content</translate>
+</md-button>
+<md-button class="edit-button" md-no-ink ng-show="vm.toEdit" ng-click="vm.showAddNewContentDialog($event)">
+  <md-icon>create</md-icon>
+  <span class="edit-text">
+    <translate>Edit</translate>
+  </span>
+</md-button>

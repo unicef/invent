@@ -1,0 +1,273 @@
+@import '../../variables';
+@import '../../mixins';
+
+.cms-list-element {
+  position: relative;
+  background-color: $color-white;
+
+  .cover-img,
+  .avatar-img {
+    padding: 15px;
+    min-width: 120px;
+    max-width: 120px;
+    border-right: 1px solid $color-gray-lighter;
+
+    img {
+      float: left;
+      display: inline-block;
+      margin: 0;
+      width: 120px;
+      height: auto;
+    }
+
+    .no-cover {
+      position: relative;
+      display: inline-block;
+      width: 120px;
+      height: 120px;
+      background-color: $color-lightblue;
+
+      &::after {
+        content: "info";
+        @include md-icon($font-size: 64px);
+        color: $color-primary;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      &.type-1::after {
+        content: "lightbulb_outline";
+      }
+      &.type-2::after {
+        content: "insert_drive_file";
+      }
+    }
+  }
+
+  .excerpt {
+    position: relative;
+    width: 100%;
+    padding: 30px;
+
+    h3 {
+      margin: 0 0 20px;
+      padding-right: 180px;
+      font-size: 20px;
+      line-height: 28px;
+      color: $text-primary;
+      word-break: normal;
+      hyphens: auto;
+      //word-break: break-all;
+    }
+
+    h6 {
+      position: absolute;
+      top: 10px;
+      right: 30px;
+      padding: 5px 7px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background-color: $color-gray-lightest;
+      color: $text-secondary;
+      white-space: nowrap;
+      border-radius: 2px;
+    }
+
+    .metadata {
+      padding: 12px 0;
+      // border-top: 1px solid $color-gray-lighter;
+    }
+
+    .author {
+      position: relative;
+      font-size: 12px;
+      color: $text-secondary;
+
+      i {
+        position: relative;
+        top: -7px;
+        left: -3px;
+        float: left;
+        margin-right: 2px;
+        font-size: 26px;
+        color: $color-gray-light;
+      }
+    }
+
+    .axis-domain {
+      position: relative;
+      font-size: 12px;
+      color: $text-secondary;
+
+      &:before {
+        content: "";
+        position: relative;
+        top: -4px;
+        float: left;
+        display: block;
+        margin-right: 8px;
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-size: 80% 80%;
+        background-position: center center;
+        border-radius: 3px;
+      }
+
+      // Axis colour
+      &.axis-groundwork::before {
+        background-color: $color-axis1;
+      }
+      &.axis-partnership::before {
+        background-color: $color-axis2;
+      }
+      &.axis-financial-health::before {
+        background-color: $color-axis3;
+      }
+      &.axis-technology-and-architecture::before {
+        background-color: $color-axis4;
+      }
+      &.axis-operations::before {
+        background-color: $color-axis5;
+      }
+      &.axis-monitoring-and-evaluation::before {
+        background-color: $color-axis6;
+      }
+
+      // Domain icon
+      &.domain-parameters-of-scale::before {
+        background-image: url('./images/icon-domain-1.svg');
+      }
+      &.domain-contextual-environment::before {
+        background-image: url('./images/icon-domain-2.svg');
+      }
+      &.domain-scientific-basis::before {
+        background-image: url('./images/icon-domain-3.svg');
+      }
+      &.domain-strategic-engagement::before {
+        background-image: url('./images/icon-domain-4.svg');
+      }
+      &.domain-partnership-sustainability::before {
+        background-image: url('./images/icon-domain-5.svg');
+      }
+      &.domain-financial-management::before {
+        background-image: url('./images/icon-domain-6.svg');
+      }
+      &.domain-financial-model::before {
+        background-image: url('./images/icon-domain-7.svg');
+      }
+      &.domain-data::before {
+        background-image: url('./images/icon-domain-8.svg');
+      }
+      &.domain-interoperability::before {
+        background-image: url('./images/icon-domain-9.svg');
+      }
+      &.domain-adaptability::before {
+        background-image: url('./images/icon-domain-10.svg');
+      }
+      &.domain-personnel::before {
+        background-image: url('./images/icon-domain-11.svg');
+      }
+      &.domain-training-and-support::before {
+        background-image: url('./images/icon-domain-12.svg');
+      }
+      &.domain-outreach-and-sensitization::before {
+        background-image: url('./images/icon-domain-13.svg');
+      }
+      &.domain-contingency-planning::before {
+        background-image: url('./images/icon-domain-14.svg');
+      }
+      &.domain-process-monitoring::before {
+        background-image: url('./images/icon-domain-15.svg');
+      }
+      &.domain-evaluation-research::before {
+        background-image: url('./images/icon-domain-16.svg');
+      }
+    }
+
+     .md-body-1 {
+      color: $text-primary;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      height: auto;
+      max-height: 40px;
+      margin: 16px 0;
+    }
+
+    ul, ol {
+      padding-left: 20px;
+    }
+  }
+
+  &.experience {
+    .avatar-img {
+      .no-cover {
+        &::after {
+          content: "explore";
+        }
+      }
+    }
+    .excerpt {}
+  }
+
+}
+
+[dir="rtl"] {
+  .cms-list-element {
+    position: relative;
+    background-color: $color-white;
+
+    .cover-img,
+    .avatar-img {
+      border-left: 1px solid $color-gray-lighter;
+      border-right: none;
+
+      img {
+        float: right;
+      }
+
+      .no-cover {
+      }
+    }
+
+    .excerpt {
+      h3 {
+        padding-left: 180px;
+        padding-right: 0px;
+      }
+
+      h6 {
+        left: 30px;
+        right: auto;
+      }
+
+      .author {
+        i {
+          left: auto;
+          float: right;
+          margin-left: 2px;
+          margin-right: 0px;
+        }
+      }
+
+      .axis-domain {
+        &:before {
+          float: right;
+          margin-left: 8px;
+          margin-right: 3px;
+        }
+      }
+
+      ul, ol {
+        padding-left: 0px;
+        padding-right: 20px;
+      }
+    }
+  }
+}
