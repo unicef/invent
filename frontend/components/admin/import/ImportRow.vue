@@ -102,7 +102,7 @@ export default {
       }, projectFields());
       const subLevel = this.$children.find(sc => sc.column === 'sub_level');
       const sublLevelValue = subLevel ? subLevel.apiValue() : null;
-      if (sublLevelValue.toLowerCase() === 'national level') {
+      if (sublLevelValue && sublLevelValue.toLowerCase() === 'national level') {
         result.national_level_deployment = {
           clients: +result.clients || result.national_level_deployment.clients,
           facilities: +result.facilities || result.national_level_deployment.facilities,
