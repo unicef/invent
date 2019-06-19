@@ -85,12 +85,10 @@ export const donorCustomFieldMapper = collection => {
 export const apiReadParser = p => {
   const [ platforms, digitalHealthInterventions ] = lib.platformsMapper(p.platforms);
   p = lib.parseCustomAnswers(p);
-  const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
   return { ...p,
     platforms,
     digitalHealthInterventions,
-    country_custom_answers,
     donor_custom_answers
   };
 };
@@ -181,7 +179,6 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
   }
   const platforms = platformsWriteParser(p.platforms, p.digitalHealthInterventions);
 
-  const country_custom_answers = customCountryAnswerParser(countryCustomAnswers);
   const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors);
   return {
     project: {
@@ -192,7 +189,6 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
       donors_answers: undefined,
       modified: undefined
     },
-    country_custom_answers,
     donor_custom_answers
   };
 };
