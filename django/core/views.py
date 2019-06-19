@@ -91,7 +91,7 @@ class StaticDataView(GenericAPIView):
         data['thematic_overview'] = THEMATIC_OVERVIEW
         data['toolkit_questions'] = TOOLKIT_QUESTIONS
         data['sub_level_types'] = SUB_LEVEL_TYPES
-        data['regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.REGIONS]
+        data['unicef_regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.UNICEF_REGIONS]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
 
         return Response(data)
