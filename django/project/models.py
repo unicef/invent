@@ -296,6 +296,58 @@ class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
+class UNICEFResultArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    goal_area = models.ForeignKey('UNICEFGoal', related_name='result_areas', on_delete=models.CASCADE)
+
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'UNICEF Result Areas'
+
+    def __str__(self):
+        return '[{}] {}'.format(self.goal_area.name, self.name)
+
+
+class UNICEFCapabilityLevel(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    goal_area = models.ForeignKey('UNICEFGoal', related_name='capability_levels', on_delete=models.CASCADE)
+
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'UNICEF Capability Levels'
+
+    def __str__(self):
+        return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_level_question, self.name)
+
+
+class UNICEFCapabilityCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    goal_area = models.ForeignKey('UNICEFGoal', related_name='capability_categories', on_delete=models.CASCADE)
+
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'UNICEF Capability Categories'
+
+    def __str__(self):
+        return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_category_question, self.name)
+
+
+class UNICEFCapabilitySubCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    goal_area = models.ForeignKey('UNICEFGoal', related_name='capability_subcategories', on_delete=models.CASCADE)
+
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'UNICEF Capability Sub Categories'
+
+    def __str__(self):
+        return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_subcategory_question, self.name)
+
+
+class UNICEFGoal(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    capability_level_question = models.CharField(max_length=512)
+    capability_category_question = models.CharField(max_length=512)
+    capability_subcategory_question = models.CharField(max_length=512)
+
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'UNICEF Goal Areas'
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
