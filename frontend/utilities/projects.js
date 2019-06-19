@@ -19,7 +19,7 @@ export const fetchProjectData = async (store, params, error) => {
 
 export const projectFields = () => ({
   name: null,
-  organisation: null,
+  organisation: 56,
   country: null,
   implementation_overview: null,
   start_date: null,
@@ -28,8 +28,13 @@ export const projectFields = () => ({
   contact_email: null,
   team: [],
   viewers: [],
+  goal_area: null,
+  result_area: null,
+  capability_levels: [],
+  capability_categories: [],
+  capability_subcategories: [],
   platforms: [],
-  digitalHealthInterventions: [],
+  dhis: [],
   health_focus_areas: [],
   hsc_challenges: [],
   donors: []
