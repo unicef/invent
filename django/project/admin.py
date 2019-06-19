@@ -24,6 +24,14 @@ class ViewOnlyPermissionMixin:
         return False
 
 
+class ViewOnlyInlineMixin:
+    fields = ('name',)
+    readonly_fields = ('name',)
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
@@ -110,44 +118,20 @@ class ProjectAdmin(AllObjectsAdmin):
         return False
 
 
-class ResultAreaInline(admin.TabularInline):
+class ResultAreaInline(ViewOnlyInlineMixin, admin.TabularInline):
     model = UNICEFResultArea
-    fields = ('name',)
-    readonly_fields = ('name',)
-    can_delete = False
-
-    def has_add_permission(self, request, obj):
-        return False
 
 
-class CapabilityLevelInline(admin.TabularInline):
+class CapabilityLevelInline(ViewOnlyInlineMixin, admin.TabularInline):
     model = UNICEFCapabilityLevel
-    fields = ('name',)
-    readonly_fields = ('name',)
-    can_delete = False
-
-    def has_add_permission(self, request, obj):
-        return False
 
 
-class CapabilityCategoryInline(admin.TabularInline):
+class CapabilityCategoryInline(ViewOnlyInlineMixin, admin.TabularInline):
     model = UNICEFCapabilityCategory
-    fields = ('name',)
-    readonly_fields = ('name',)
-    can_delete = False
-
-    def has_add_permission(self, request, obj):
-        return False
 
 
-class CapabilitySubCategoryInline(admin.TabularInline):
+class CapabilitySubCategoryInline(ViewOnlyInlineMixin, admin.TabularInline):
     model = UNICEFCapabilitySubCategory
-    fields = ('name',)
-    readonly_fields = ('name',)
-    can_delete = False
-
-    def has_add_permission(self, request, obj):
-        return False
 
 
 class UNICEFGoalAdmin(admin.ModelAdmin):
