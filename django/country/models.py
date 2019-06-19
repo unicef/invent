@@ -61,6 +61,17 @@ class Country(UserManagement, LandingPageCommon):
         (5, _('Western Pacific Region'))
     ]
 
+    UNICEF_REGIONS = [
+        (0, _('EAPR')),
+        (1, _('ECAR')),
+        (2, _('ESAR')),
+        (3, _('LCAR')),
+        (4, _('MENA')),
+        (5, _('ROSA')),
+        (6, _('WCAR')),
+        (7, _('HQ'))
+    ]
+
     code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
     region = models.IntegerField(choices=REGIONS, null=True, blank=True)
     map_data = JSONField(default=dict, blank=True)
@@ -70,9 +81,16 @@ class Country(UserManagement, LandingPageCommon):
     lat = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
     lon = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
 
+    unicef_region = models.IntegerField(choices=UNICEF_REGIONS, null=True, blank=True)
+
     class Meta:
         verbose_name_plural = "Countries"
         ordering = ('id',)
+
+
+class FieldOffice(models.Model):
+    name = models.CharField(max_length=256)
+    country = models.ForeignKey(Country, related_name='field_offices', on_delete=models.CASCADE)
 
 
 @receiver(pre_save, sender=Country)
