@@ -19,6 +19,7 @@ export const state = () => ({
 export const getters = {
   getProjectData: (state, getters) => ({
     ...state,
+    donors: getters.getDonors,
     interoperability_links: getters.getInteroperabilityLinks,
     published: undefined,
     loading: undefined,
