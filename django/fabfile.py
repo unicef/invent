@@ -3,12 +3,12 @@ from fabric.api import local, run, cd, env
 from fabric.context_managers import warn_only
 
 # ENVIRONMENTS #
-PROD_HOST_STRING = 'tiip@207.154.215.126'
+PROD_HOST_STRING = ''
 
 
 def dev():
     """Configure dev"""
-    env.host_string = 'tiip@dev.tiip.pulilab.com'
+    env.host_string = ''
     env.name = 'dev'
     env.port = 22
     env.branch = "development"
@@ -32,7 +32,7 @@ def production():
 
 def staging():
     """Configure staging"""
-    env.host_string = 'tiip@139.59.148.238'
+    env.host_string = 'whomaps@157.230.27.132'
     env.name = 'staging'
     env.port = 22
     env.branch = "master"
