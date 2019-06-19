@@ -83,21 +83,11 @@ export const donorCustomFieldMapper = collection => {
 };
 
 export const apiReadParser = p => {
-  const [ coverage, coverageDataFirstLevel ] = lib.coverageMapper(p.coverage);
-  const [ coverage_second_level, coverageDataSecondLevelLevel ] = lib.coverageMapper(p.coverage_second_level);
-  const coverageData = { ...coverageDataFirstLevel, ...coverageDataSecondLevelLevel };
-  const interoperability_links = lib.interoperabilityLinksMapper(p.interoperability_links);
   const [ platforms, digitalHealthInterventions ] = lib.platformsMapper(p.platforms);
-  const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
   p = lib.parseCustomAnswers(p);
   const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
   return { ...p,
-    coverage,
-    coverage_second_level,
-    coverageData,
-    coverageType,
-    interoperability_links,
     platforms,
     digitalHealthInterventions,
     country_custom_answers,
@@ -189,36 +179,15 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
   }
-  const interoperability_links = interoperabilityLinkWriteParser(p.interoperability_links);
   const platforms = platformsWriteParser(p.platforms, p.digitalHealthInterventions);
-  let coverage = [];
-  let coverage_second_level = [];
-  let national_level_deployment = null;
-  if (p.coverageType === 1) {
-    coverage = coverageWriteParser(p.coverage, p.coverageData);
-    coverage_second_level = coverageWriteParser(p.coverage_second_level, p.coverageData);
-    national_level_deployment = null;
-  } else {
-    coverage = [];
-    coverage_second_level = [];
-    national_level_deployment = {
-      clients: get(p, 'national_level_deployment.clients', 0),
-      health_workers: get(p, 'national_level_deployment.health_workers',0),
-      facilities: get(p, 'national_level_deployment.facilities', 0)
-    };
-  }
+
   const country_custom_answers = customCountryAnswerParser(countryCustomAnswers);
   const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors);
   return {
     project: {
       ...result,
-      interoperability_links,
       platforms,
-      coverage,
-      coverage_second_level,
-      national_level_deployment,
       digitalHealthInterventions: undefined,
-      coverageData: undefined,
       country_answers: undefined,
       donors_answers: undefined,
       modified: undefined
