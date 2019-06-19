@@ -23,12 +23,6 @@
               :show-flag="false"
             />
           </simple-field>
-
-          <simple-field
-            :content="project.geographic_scope"
-            :header="$gettext('Geographic scope') | translate"
-          />
-
           <simple-field
             :content="project.implementation_overview"
             :header="$gettext('Overview of the digital health implementation') | translate"
@@ -93,119 +87,9 @@
             <health-system-challenges-list :value="project.hsc_challenges" />
           </simple-field>
 
-          <simple-field :header="$gettext('Health Information System (HIS)') | translate">
-            <his-bucket-list :value="project.his_bucket" />
-          </simple-field>
-
-          <div class="GrayArea">
-            <simple-field
-              v-if="isNationalLevelDeployment || (project.coverage && project.coverage.length)"
-              :header="$gettext('Coverage type')"
-            >
-              <type-field
-                :value="project.coverageType"
-                :list="coverageList"
-              />
-            </simple-field>
-            <simple-field v-if="isNationalLevelDeployment">
-              <div slot="header">
-                <fa icon="flag" />
-                <translate>National Level Deployment</translate>
-              </div>
-
-              <coverage-field :coverage="project.national_level_deployment" />
-            </simple-field>
-
-            <sub-level-coverage-field
-              v-if="project.coverageType === 1"
-              :coverage="project.coverage"
-              :coverage-data="project.coverageData"
-              :coverage-second-level="project.coverageSecondLevel"
-            />
-          </div>
-
-          <simple-field :header="$gettext('Has the government financially invested in the project?') | translate">
-            <type-field
-              :value="project.government_investor"
-              :list="investedList"
-            />
-          </simple-field>
-
-          <simple-field :header="$gettext('Implementing partner(s)') | translate">
-            <ul>
-              <li
-                v-for="(partner, index) in project.implementing_partners"
-                :key="index"
-              >
-                {{ partner }}
-              </li>
-            </ul>
-          </simple-field>
-
           <simple-field :header="$gettext('Investor(s)') | translate">
             <donors-list :value="project.donors" />
           </simple-field>
-        </collapsible-card>
-
-        <collapsible-card
-          id="technology"
-          :title="$gettext('3. Techonology overview') | translate"
-        >
-          <simple-field
-            :content="project.implementation_dates"
-            :header="$gettext('Technology deployment date') | translate"
-            date
-          />
-
-          <simple-field :header="$gettext('Under what license is the project governed') | translate">
-            <licenses-list :value="project.licenses" />
-          </simple-field>
-
-          <simple-field
-            :content="project.repository"
-            :header="$gettext('Code documentation or download link') | translate"
-            link
-          />
-
-          <simple-field
-            :content="project.mobile_application"
-            :header="$gettext('Link to the application') | translate"
-            link
-          />
-
-          <simple-field
-            :content="project.wiki"
-            :header="$gettext('Link to wiki or project website') | translate"
-            link
-          />
-        </collapsible-card>
-
-        <collapsible-card
-          id="interoperability"
-          :title="$gettext('4. Interoperability &amp; standards') "
-        >
-          <simple-field :header="$gettext('What other system do you interoperate with ?') | translate">
-            <interoperability-links-list :value="project.interoperability_links" />
-          </simple-field>
-
-          <simple-field :header="$gettext('What data standards does your digital health project use?') | translate">
-            <standards-list :value="project.interoperability_standards" />
-          </simple-field>
-        </collapsible-card>
-
-        <collapsible-card
-          v-if="countryQuestions && countryQuestions.length > 0"
-          id="countrycustom"
-          :title="customFieldsName(country.name)"
-        >
-          <custom-readonly-field
-            v-for="question in countryQuestions"
-            :id="question.id"
-            :key="question.id"
-            :question="question.question"
-            :is-draft="isDraft"
-            :type="question.type"
-          />
         </collapsible-card>
 
         <div
@@ -246,13 +130,6 @@ import TeamList from './TeamList';
 import PlatformsList from './PlatformsList';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
-import HisBucketList from '../common/list/HisBucketList';
-import TypeField from './TypeField';
-import CoverageField from './CoverageField';
-import SubLevelCoverageField from './SubLevelCoverageField';
-import LicensesList from './LicensesList';
-import StandardsList from './StandardsList';
-import InteroperabilityLinksList from './InteroperabilityLinksList';
 import DonorsList from '../common/list/DonorsList';
 import CustomReadonlyField from './CustomReadonlyField';
 
@@ -269,13 +146,6 @@ export default {
     PlatformsList,
     HealthFocusAreasList,
     HealthSystemChallengesList,
-    HisBucketList,
-    TypeField,
-    CoverageField,
-    SubLevelCoverageField,
-    LicensesList,
-    StandardsList,
-    InteroperabilityLinksList,
     DonorsList,
     CustomReadonlyField
   },
@@ -295,31 +165,15 @@ export default {
     project () {
       return this.isDraft ? this.draft : this.published;
     },
-    isNationalLevelDeployment () {
-      return this.project.coverageType === 2 && this.project.national_level_deployment && (this.project.national_level_deployment.clients ||
-        this.project.national_level_deployment.facilities || this.project.national_level_deployment.health_workers);
-    },
     country () {
       if (this.project.country) {
         return this.getCountryDetails(this.project.country);
       }
       return null;
     },
-    countryQuestions () {
-      if (this.country) {
-        return this.country.country_questions;
-      }
-      return [];
-    },
     donors () {
       return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
     },
-    coverageList () {
-      return ['', this.$gettext('Sub National'), this.$gettext('National')];
-    },
-    investedList () {
-      return [this.$gettext('No, they have not yet contributed'), this.$gettext('Yes, they are contributing in-kind people or time'), this.$gettext('Yes, there is a financial contribution through MOH budget')];
-    }
   },
   methods: {
     customFieldsName (name) {

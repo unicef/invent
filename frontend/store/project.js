@@ -29,7 +29,6 @@ export const getters = {
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
-  getGeographicScope: state => state.geographic_scope,
   getImplementationOverview: state => state.implementation_overview,
   getStartDate: state => state.start_date,
   getEndDate: state => state.end_date,
@@ -41,40 +40,10 @@ export const getters = {
   getDigitalHealthInterventions: state => [...state.digitalHealthInterventions],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
-  getHisBucket: state => state.his_bucket,
-  getCoverageType: state => state.coverageType,
-  getCoverage: state => state.coverage.length === 0 ? [null] : state.coverage,
-  getCoverageData: state => state.coverageData,
-  getCoverageSecondLevel: state => state.coverage_second_level.length === 0 ? [null] : state.coverage_second_level,
-  getNationalLevelDeployment: state => state.national_level_deployment ? { ...state.national_level_deployment } : {},
-  getGovernmentInvestor: state => state.government_investor,
-  getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
-  getDonors: state => state.donors,
-  getImplementationDates: state => state.implementation_dates,
-  getLicenses: state => state.licenses,
-  getRepository: state => state.repository,
-  getMobileApplication: state => state.mobile_application,
-  getWiki: state => state.wiki,
-  getInteroperabilityLinks: (state, getters, rootState, rootGetters) => {
-    const result = {};
-    rootGetters['projects/getInteroperabilityLinks'].forEach((ir, index) => {
-      result[ir.id] = { ...state.interoperability_links[ir.id], index };
-    });
-    return result;
+  getDonors: state => {
+    const cleaned = state.donors.filter(d => d !== 20);
+    return [20, ...cleaned];
   },
-  getInteroperabilityStandards: state => state.interoperability_standards,
-  getCountryAnswers: state => state.country_answers ? [...state.country_answers] : [],
-  getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
-  getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
-    const country = rootGetters['countries/getCountryDetails'](getters.getCountry);
-    if (country && country.country_questions) {
-      return country.country_questions.map(cq => {
-        const answer = getters.getCountryAnswerDetails(cq.id);
-        return { question_id: cq.id, answer: answer ? answer.answer : [] };
-      });
-    }
-  },
-  getPublishedCountryAnswerDetails: (state, getters) => id => getters.getPublished.country_custom_answers.find(ca => ca.question_id === id),
   getDonorsAnswers: state => state.donors_answers ? [...state.donors_answers] : [],
   getDonorsAnswerDetails: (state, getters) => id => getters.getDonorsAnswers.find(da => da.question_id === id),
   getAllDonorsAnswers: (state, getters, rootState, rootGetters) => {
@@ -103,22 +72,18 @@ export const actions = {
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
-    const countriesToFetch = new Set();
     const donorsToFetch = new Set();
     if (data.draft) {
       const draft = { ...clean, ...apiReadParser(data.draft) };
-      countriesToFetch.add(draft.country);
       draft.donors.forEach(d => donorsToFetch.add(d));
       commit('INIT_PROJECT', draft);
     }
     if (data.published) {
       const published = { ...clean, ...apiReadParser(data.published) };
-      countriesToFetch.add(published.country);
       published.donors.forEach(d => donorsToFetch.add(d));
       commit('SET_PUBLISHED', Object.freeze(published));
     }
     await Promise.all([
-      ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, { root: true })),
       ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, { root: true })),
       dispatch('loadTeamViewers', id)
     ]);
@@ -137,7 +102,8 @@ export const actions = {
     if (profile) {
       clean.country = profile.country;
       clean.team = [profile.id];
-      await dispatch('countries/loadCountryDetails', profile.country, { root: true });
+      clean.donors = [20];
+      await dispatch('system/loadDonorDetails', 20, { root: true });
     }
     commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
@@ -157,9 +123,6 @@ export const actions = {
   setCountry ({ commit, dispatch }, value) {
     dispatch('countries/loadCountryDetails', value, { root: true });
     commit('SET_COUNTRY', value);
-  },
-  setGeographicScope ({ commit }, value) {
-    commit('SET_GEOGRAPHIC_SCOPE', value);
   },
   setImplementationOverview ({ commit }, value) {
     commit('SET_IMPLEMENTATION_OVERVIEW', value);
@@ -194,36 +157,6 @@ export const actions = {
   setHscChallenges ({ commit }, value) {
     commit('SET_HSC_CHALLENGES', value);
   },
-  setHisBucket ({ commit }, value) {
-    commit('SET_HIS_BUCKET', value);
-  },
-  setCoverageType ({ commit }, value) {
-    commit('SET_COVERAGE_TYPE', value);
-  },
-  setCoverage ({ commit }, value) {
-    commit('SET_COVERAGE', value);
-  },
-  setCoverageData ({ commit, state }, { coverage, subLevel }) {
-    if (coverage) {
-      const cov = { ...state.coverageData };
-      cov[subLevel] = { ...state.coverageData[subLevel], ...coverage };
-      commit('SET_COVERAGE_DATA', cov);
-    } else {
-      commit('DELETE_COVERAGE_DATA', subLevel);
-    }
-  },
-  setCoverageSecondLevel ({ commit }, value) {
-    commit('SET_COVERAGE_SECOND_LEVEL', value);
-  },
-  setNationalLevelDeployment ({ commit }, value) {
-    commit('SET_NATIONAL_LEVEL_DEPLOYMENT', value);
-  },
-  setGovernmentInvestor ({ commit }, value) {
-    commit('SET_GOVERNMENT_INVESTOR', value);
-  },
-  setImplementingPartners ({ commit }, value) {
-    commit('SET_IMPLEMENTING_PARTNERS', value);
-  },
   setDonors ({ commit, dispatch }, value) {
     value.forEach(d => dispatch('system/loadDonorDetails', d, { root: true }));
     commit('SET_DONORS', value);
@@ -231,37 +164,11 @@ export const actions = {
   setImplementationDates ({ commit }, value) {
     commit('SET_IMPLEMENTATION_DATES', value);
   },
-  setLicenses ({ commit }, value) {
-    commit('SET_LICENSES', value);
-  },
-  setRepository ({ commit }, value) {
-    commit('SET_REPOSITORY', value);
-  },
-  setMobileApplication ({ commit }, value) {
-    commit('SET_MOBILE_APPLICATION', value);
-  },
-  setWiki ({ commit }, value) {
-    commit('SET_WIKI', value);
-  },
-  setInteroperabilityLinks ({ commit }, value) {
-    commit('SET_INTEROPERABILITY_LINKS', value);
-  },
-  setInteroperabilityStandards ({ commit }, value) {
-    commit('SET_INTEROPERABILITY_STANDARDS', value);
-  },
   setPublished ({ commit }, value) {
     commit('SET_PUBLISHED', value);
   },
   setLoading ({ commit }, value) {
     commit('SET_LOADING', value);
-  },
-  setCountryAnswer ({ commit, getters }, answer) {
-    const index = getters.getCountryAnswers.findIndex(ca => ca.question_id === answer.question_id);
-    if (index > -1) {
-      commit('UPDATE_COUNTRY_ANSWER', { answer, index });
-    } else {
-      commit('ADD_COUNTRY_ANSWER', answer);
-    }
   },
   setDonorAnswer ({ commit, getters }, answer) {
     const index = getters.getDonorsAnswers.findIndex(da => da.question_id === answer.question_id);
@@ -356,9 +263,6 @@ export const mutations = {
   SET_COUNTRY: (state, country) => {
     state.country = country;
   },
-  SET_GEOGRAPHIC_SCOPE: (state, geographic_scope) => {
-    state.geographic_scope = geographic_scope;
-  },
   SET_IMPLEMENTATION_OVERVIEW: (state, implementation_overview) => {
     state.implementation_overview = implementation_overview;
   },
@@ -392,62 +296,11 @@ export const mutations = {
   SET_HSC_CHALLENGES: (state, hsc_challenges) => {
     Vue.set(state, 'hsc_challenges', [...hsc_challenges]);
   },
-  SET_HIS_BUCKET: (state, his_bucket) => {
-    Vue.set(state, 'his_bucket', [...his_bucket]);
-  },
-  SET_COVERAGE_TYPE: (state, coverageType) => {
-    state.coverageType = coverageType;
-  },
-  SET_COVERAGE: (state, coverage) => {
-    Vue.set(state, 'coverage', [...coverage]);
-  },
-  SET_COVERAGE_DATA: (state, coverageData) => {
-    Vue.set(state, 'coverageData', { ...coverageData });
-  },
-  DELETE_COVERAGE_DATA: (state, subLevel) => {
-    Vue.delete(state.coverageData, subLevel);
-  },
-  SET_COVERAGE_SECOND_LEVEL: (state, coverage_second_level) => {
-    Vue.set(state, 'coverage_second_level', [...coverage_second_level]);
-  },
-  SET_NATIONAL_LEVEL_DEPLOYMENT: (state, national_level_deployment) => {
-    Vue.set(state, 'national_level_deployment', { ...national_level_deployment });
-  },
-  SET_GOVERNMENT_INVESTOR: (state, government_investor) => {
-    state.government_investor = government_investor;
-  },
-  SET_IMPLEMENTING_PARTNERS: (state, implementing_partners) => {
-    Vue.set(state, 'implementing_partners', [...implementing_partners]);
-  },
   SET_DONORS: (state, donors) => {
     Vue.set(state, 'donors', [...donors]);
   },
   SET_IMPLEMENTATION_DATES: (state, implementation_dates) => {
     state.implementation_dates = implementation_dates;
-  },
-  SET_LICENSES: (state, licenses) => {
-    Vue.set(state, 'licenses', [...licenses]);
-  },
-  SET_REPOSITORY: (state, repository) => {
-    state.repository = repository;
-  },
-  SET_MOBILE_APPLICATION: (state, mobile_application) => {
-    state.mobile_application = mobile_application;
-  },
-  SET_WIKI: (state, wiki) => {
-    state.wiki = wiki;
-  },
-  SET_INTEROPERABILITY_LINKS: (state, interoperability_links) => {
-    Vue.set(state, 'interoperability_links', { ...interoperability_links });
-  },
-  SET_INTEROPERABILITY_STANDARDS: (state, interoperability_standards) => {
-    Vue.set(state, 'interoperability_standards', [...interoperability_standards]);
-  },
-  ADD_COUNTRY_ANSWER: (state, answer) => {
-    state.country_answers.push(answer);
-  },
-  UPDATE_COUNTRY_ANSWER: (state, { answer, index }) => {
-    state.country_answers.splice(index, 1, answer);
   },
   ADD_DONOR_ANSWER: (state, answer) => {
     state.donors_answers.push(answer);
@@ -465,7 +318,6 @@ export const mutations = {
     state.name = get(project, 'name', '');
     state.organisation = get(project, 'organisation', null);
     state.country = get(project, 'country', null);
-    state.geographic_scope = get(project, 'geographic_scope', '');
     state.implementation_overview = get(project, 'implementation_overview', '');
     state.start_date = get(project, 'start_date', '');
     state.end_date = get(project, 'end_date', '');
@@ -477,27 +329,8 @@ export const mutations = {
     state.digitalHealthInterventions = get(project, 'digitalHealthInterventions', []);
     state.health_focus_areas = get(project, 'health_focus_areas', []);
     state.hsc_challenges = get(project, 'hsc_challenges', []);
-    state.his_bucket = get(project, 'his_bucket', []);
-    state.coverageType = get(project, 'coverageType', null);
-    state.coverage = get(project, 'coverage', []);
-    state.coverageData = get(project, 'coverageData', {});
-    state.coverage_second_level = get(project, 'coverage_second_level', []);
     state.modified = get(project, 'modified', new Date());
-    state.national_level_deployment = get(project, 'national_level_deployment', {
-      health_workers: 0,
-      clients: 0,
-      facilities: 0
-    });
-    state.government_investor = get(project, 'government_investor', '');
-    state.implementing_partners = get(project, 'implementing_partners', []);
     state.donors = get(project, 'donors', []);
-    state.implementation_dates = get(project, 'implementation_dates', '');
-    state.licenses = get(project, 'licenses', []);
-    state.repository = get(project, 'repository', '');
-    state.mobile_application = get(project, 'mobile_application', '');
-    state.wiki = get(project, 'wiki', '');
-    state.interoperability_links = get(project, 'interoperability_links', {});
-    state.interoperability_standards = get(project, 'interoperability_standards', []);
     state.country_answers = get(project, 'country_custom_answers', []);
     state.donors_answers = get(project, 'donor_custom_answers', []);
   },

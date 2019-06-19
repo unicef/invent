@@ -1,21 +1,11 @@
 <template>
   <div class="NewProjectForm">
-    <div
-      v-show="!showForm"
-      class="Loader"
-    >
-      <div />
-      <span>Loading</span>
-    </div>
     <el-form
       ref="projectForm"
       label-position="top"
       @submit.native.prevent
     >
-      <el-row
-        v-show="showForm"
-        type="flex"
-      >
+      <el-row type="flex">
         <el-col :span="18">
           <general-overview
             ref="generalOverview"
@@ -24,8 +14,6 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
-            @hook:mounted="mountedHandler"
-            @hook:created="createdHandler"
           />
           <implementation-overview
             ref="implementationOverview"
@@ -33,17 +21,6 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
-            @hook:mounted="mountedHandler"
-            @hook:created="createdHandler"
-          />
-          <country-custom
-            ref="countryCustom"
-            :use-publish-rules="usePublishRules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
-            :api-errors="apiErrors"
-            @hook:mounted="mountedHandler"
-            @hook:created="createdHandler"
           />
           <donor-custom
             ref="donorCustom"
@@ -51,8 +28,6 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
-            @hook:mounted="mountedHandler"
-            @hook:created="createdHandler"
           />
         </el-col>
         <el-col :span="6">
@@ -72,7 +47,6 @@ import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
-import CountryCustom from './sections/CountryCustom';
 import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -81,7 +55,6 @@ export default {
     ProjectNavigation,
     GeneralOverview,
     ImplementationOverview,
-    CountryCustom,
     DonorCustom
   },
   $_veeValidate: {
@@ -106,9 +79,6 @@ export default {
     },
     isNewProject () {
       return this.$route.name.includes('organisation-projects-create');
-    },
-    showForm () {
-      return this.readyElements >= this.createdElements;
     },
     draftRules: draftRules,
     publishRules: publishRules,
@@ -154,14 +124,6 @@ export default {
       } else {
         callback();
       }
-    },
-    createdHandler () {
-      this.createdElements += 1;
-    },
-    mountedHandler () {
-      setTimeout(() => {
-        this.readyElements += 1;
-      }, 300);
     },
     async unCaughtErrorHandler (errors) {
       if (this.$sentry) {
@@ -209,9 +171,6 @@ export default {
       const validations = await Promise.all([
         this.$refs.generalOverview.validate(),
         this.$refs.implementationOverview.validate(),
-        this.$refs.technologyOverview.validate(),
-        this.$refs.interoperabilityAndStandards.validate(),
-        this.$refs.countryCustom.validate(),
         this.$refs.donorCustom.validate()
       ]);
       console.log('root validations', validations);
@@ -221,9 +180,6 @@ export default {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
       this.$refs.implementationOverview.clear();
-      this.$refs.technologyOverview.clear();
-      this.$refs.interoperabilityAndStandards.clear();
-      this.$refs.countryCustom.clear();
       this.$refs.donorCustom.clear();
     },
     async doSaveDraft () {

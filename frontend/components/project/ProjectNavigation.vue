@@ -59,42 +59,6 @@
               <translate>Implementation</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'technology'}">
-            <el-button
-              type="text"
-              @click="scrollTo('technology')"
-            >
-              <span class="Step">
-                <fa icon="arrow-right" />
-              </span>
-              <translate>Technology</translate>
-            </el-button>
-          </li>
-          <li :class="{active: active === 'interoperability'}">
-            <el-button
-              type="text"
-              @click="scrollTo('interoperability')"
-            >
-              <span class="Step">
-                <fa icon="arrow-right" />
-              </span>
-              <translate>Interoperability</translate>
-            </el-button>
-          </li>
-          <li
-            v-show="showCountryFieldsLink"
-            :class="{active: active === 'countrycustom'}"
-          >
-            <el-button
-              type="text"
-              @click="scrollTo('countrycustom')"
-            >
-              <span class="Step">
-                <fa icon="arrow-right" />
-              </span>
-              <translate>Country fields</translate>
-            </el-button>
-          </li>
           <li
             v-show="showDonorFieldsLink"
             :class="{active: active === 'donorcustom'}"
