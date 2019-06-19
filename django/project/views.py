@@ -14,7 +14,8 @@ from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
+    UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory
 from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
@@ -64,11 +65,13 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         return dict(
-            interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
-            licenses=Licence.objects.values('id', 'name'),
-            interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
-            his_bucket=HISBucket.objects.values('id', 'name'),
+            goal_areas=UNICEFGoal.objects.values('id', 'name', 'capability_level_question',
+                                                 'capability_category_question', 'capability_subcategory_question'),
+            result_areas=UNICEFResultArea.objects.values('id', 'name', 'goal_area_id'),
+            capability_levels=UNICEFCapabilityLevel.objects.values('id', 'name', 'goal_area_id'),
+            capability_categories=UNICEFCapabilityCategory.objects.values('id', 'name', 'goal_area_id'),
+            capability_subcategories=UNICEFCapabilitySubCategory.objects.values('id', 'name', 'goal_area_id'),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies
