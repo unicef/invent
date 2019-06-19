@@ -1,5 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import forOwn from 'lodash/forOwn';
+import get from 'lodash/get';
 
 export const state = () => ({
   userProjects: [],
@@ -20,6 +21,20 @@ const getTodayString = () => {
 
 export const getters = {
   getUserProjectList: state => [...state.userProjects.map(p => ({ ...p }))],
+  getGoalAreas: state => get(state, 'projectStructure.goal_areas', []),
+  getResultAreas: state => get(state, 'projectStructure.result_areas', []),
+  getCapabilityCategories: state => (id) => {
+    const all = get(state, 'projectStructure.capability_categories', []);
+    return all.filter(i => i.goal_area_id === id);
+  },
+  getCapabilityLevels: state => (id) => {
+    const all = get(state, 'projectStructure.capability_levels', []);
+    return all.filter(i => i.goal_area_id === id);
+  },
+  getCapabilitySubcategories: state => (id) => {
+    const all = get(state, 'projectStructure.capability_subcategories', []);
+    return all.filter(i => i.goal_area_id === id);
+  },
   getHealthFocusAreas: state => state.projectStructure.health_focus_areas ? [...state.projectStructure.health_focus_areas] : [],
   getHisBucket: state => state.projectStructure.his_bucket ? [...state.projectStructure.his_bucket] : [],
   getHscChallenges: state => state.projectStructure.hsc_challenges ? [...state.projectStructure.hsc_challenges] : [],
