@@ -36,24 +36,6 @@
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
-          <technology-overview
-            ref="technologyOverview"
-            :rules="rules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
-            :api-errors="apiErrors"
-            @hook:mounted="mountedHandler"
-            @hook:created="createdHandler"
-          />
-          <interoperability-and-standards
-            ref="interoperabilityAndStandards"
-            :rules="rules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
-            :api-errors="apiErrors"
-            @hook:mounted="mountedHandler"
-            @hook:created="createdHandler"
-          />
           <country-custom
             ref="countryCustom"
             :use-publish-rules="usePublishRules"
@@ -90,8 +72,6 @@ import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
-import TechnologyOverview from './sections/TechnologyOverview';
-import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
 import CountryCustom from './sections/CountryCustom';
 import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
@@ -101,8 +81,6 @@ export default {
     ProjectNavigation,
     GeneralOverview,
     ImplementationOverview,
-    TechnologyOverview,
-    InteroperabilityAndStandards,
     CountryCustom,
     DonorCustom
   },

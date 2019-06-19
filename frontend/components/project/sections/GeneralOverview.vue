@@ -15,7 +15,7 @@
       >
         <template slot="label">
           <translate key="project-name">
-            What is the project name?
+            Intiative Name
           </translate>
           <form-hint>
             <translate key="project-name-hint">
@@ -48,6 +48,7 @@
           data-vv-name="organisation"
         />
       </custom-required-form-item>
+
       <custom-required-form-item
         :error="errors.first('country')"
         :draft-rule="draftRules.country"
@@ -55,7 +56,7 @@
       >
         <template slot="label">
           <translate key="country">
-            Which country is the project located in?
+            Country
           </translate>
         </template>
         <country-select
@@ -65,39 +66,7 @@
           data-vv-as="Country"
         />
       </custom-required-form-item>
-      <custom-required-form-item
-        :error="errors.first('geographic_scope')"
-        :draft-rule="draftRules.geographic_scope"
-        :publish-rule="publishRules.geographic_scope"
-      >
-        <template slot="label">
-          <translate key="geographic-scope">
-            What is the geographic scope of the project?
-          </translate>
-          <form-hint>
-            <translate key="geographic-scope-hint">
-              Describe the user types, geographic coverage and other coverage details.
-            </translate>
-          </form-hint>
-        </template>
 
-        <character-count-input
-          v-model="geographic_scope"
-          v-validate="rules.geographic_scope"
-          :rules="rules.geographic_scope"
-          data-vv-name="geographic_scope"
-          data-vv-as="Geographic scope"
-          type="textarea"
-        />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              Please describe where your implementation is currently taking place
-            </translate>
-          </p>
-        </span>
-      </custom-required-form-item>
       <custom-required-form-item
         :error="errors.first('implementation_overview')"
         :draft-rule="draftRules.implementation_overview"
@@ -105,7 +74,7 @@
       >
         <template slot="label">
           <translate key="implementation-overview">
-            Please provide a narrative summary of the digital health implementation.
+            Initiative Description
           </translate>
           <form-hint>
             <translate key="implementation-overview-hint">
@@ -190,6 +159,7 @@
           </custom-required-form-item>
         </el-col>
       </el-row>
+
       <el-row
         :gutter="20"
         type="flex"
@@ -202,7 +172,7 @@
           >
             <template slot="label">
               <translate key="contact-name">
-                Contact name
+                Programme Focal Point Name
               </translate>
               <form-hint>
                 <translate key="contact-name-hint">
@@ -228,7 +198,7 @@
           >
             <template slot="label">
               <translate key="contact-email">
-                Contact email
+                Programme Focal Point Email
               </translate>
             </template>
 
@@ -319,7 +289,6 @@ export default {
       name: ['project', 'getName', 'setName', 0],
       organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
-      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 0],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0],
