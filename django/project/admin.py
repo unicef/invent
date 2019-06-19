@@ -25,17 +25,23 @@ from user.models import UserProfile, Organisation
 import scheduler.celery # noqa
 
 
+class ViewOnlyPermissionMixin:
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
         'name',
     ]
 
-
-class InteroperabilityLinkAdmin(AllObjectsAdmin):
-    list_display = [
-        'pre',
-        'name',
-    ]
 
 class ParentFilter(admin.SimpleListFilter):
     title = 'Parent Filter'
@@ -54,38 +60,26 @@ class ParentFilter(admin.SimpleListFilter):
         else:
             return queryset.exclude(parent=None)
 
-class DigitalStrategyAdmin(AllObjectsAdmin):
+class DigitalStrategyAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
     list_filter = [ParentFilter]
     list_display = [
         '__str__'
     ]
 
 
-class HealthFocusAreaAdmin(AllObjectsAdmin):
+class HealthFocusAreaAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
     pass
 
 
-class HealthCategoryAdmin(AllObjectsAdmin):
+class HealthCategoryAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
     pass
 
 
-class LicenceAdmin(AllObjectsAdmin):
+class HSCGroupAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
     pass
 
 
-class InteroperabilityStandardAdmin(AllObjectsAdmin):
-    pass
-
-
-class HISBucketAdmin(AllObjectsAdmin):
-    pass
-
-
-class HSCGroupAdmin(AllObjectsAdmin):
-    pass
-
-
-class HSCChallengeAdmin(AllObjectsAdmin):
+class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
     pass
 
 
