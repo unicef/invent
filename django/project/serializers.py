@@ -25,89 +25,38 @@ def url_validator(value):
     return value
 
 
-class NDPSerializer(serializers.Serializer):
-    clients = serializers.IntegerField(min_value=0, max_value=2000000000)
-    health_workers = serializers.IntegerField(min_value=0, max_value=2000000000)
-    facilities = serializers.IntegerField(min_value=0, max_value=2000000000)
-    facilities_list = serializers.ListField(child=serializers.CharField(max_length=128), max_length=20000,
-                                            required=False, allow_null=True)
-
-
-class CoverageSerializer(NDPSerializer):
-    district = serializers.CharField(max_length=128)
-
-
-class PlatformSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=True)
-    strategies = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1)
-
-
-class InteroperabilityLinksSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    selected = serializers.BooleanField(required=False)
-    link = serializers.CharField(required=False, max_length=256)
-
-    @staticmethod
-    def validate_link(value):
-        return url_validator(value)
-
-
-class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
-    @staticmethod
-    def validate_link(value):
-        return value
-
-
-class DraftPlatformSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=True)
-    strategies = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
-
-
-INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
-                    (1, 'Yes, they are contributing in-kind people or time'),
-                    (2, 'Yes, there is a financial contribution through MOH budget')]
-
-
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
     country = serializers.IntegerField(min_value=0, max_value=100000)
-    geographic_scope = serializers.CharField(max_length=1024, required=False)
     implementation_overview = serializers.CharField(max_length=1024)
     start_date = serializers.CharField(max_length=256, required=True)
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
 
+    # UNICEF SECTION
+    field_office = serializers.IntegerField(required=False)
+    goal_area = serializers.IntegerField()
+    result_area = serializers.IntegerField(required=False)
+    capability_levels = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+    capability_categories = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+    capability_subcategories = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+
     # SECTION 2 Implementation Overview
-    platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+    platforms = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+    dhis = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     health_focus_areas = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1)
-    his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
-    coverage = CoverageSerializer(many=True, required=False, allow_null=True)
-    coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
-    national_level_deployment = NDPSerializer(required=False, allow_null=True)
-    government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES, required=False)
-    implementing_partners = serializers.ListField(
-        child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False, allow_empty=True)
-    donors = serializers.ListField(child=serializers.IntegerField(), max_length=32)
-
-    # SECTION 3 Technology Overview
-    implementation_dates = serializers.CharField(max_length=128, required=False)
-    licenses = serializers.ListField(child=serializers.IntegerField(), max_length=16, required=False)
-    repository = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    wiki = serializers.CharField(max_length=256, required=False, allow_blank=True)
-
-    # SECTION 4 Interoperability & Standards
-    interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
-    interoperability_standards = serializers.ListField(
-        child=serializers.IntegerField(), required=False, max_length=50)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     class Meta:
         model = Project
@@ -130,18 +79,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
 
         return instance
 
-    @staticmethod
-    def validate_wiki(value):
-        return url_validator(value)
-
-    @staticmethod
-    def validate_mobile_application(value):
-        return url_validator(value)
-
-    @staticmethod
-    def validate_repository(value):
-        return url_validator(value)
-
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
@@ -156,16 +93,8 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     contact_email = serializers.EmailField(required=False)
     start_date = serializers.CharField(max_length=256, required=False)
 
-    # SECTION 2 Implementation Overview
-    platforms = DraftPlatformSerializer(many=True, required=False)
-    health_focus_areas = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
-    hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
-    donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
-
-    # SECTION 4
-    interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
+    # UNICEF SECTION
+    goal = serializers.IntegerField(required=False)
 
     # ODK DATA
     odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
@@ -206,18 +135,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
         instance.draft = validated_data
         return instance
-
-    @staticmethod
-    def validate_wiki(value):
-        return value
-
-    @staticmethod
-    def validate_mobile_application(value):
-        return value
-
-    @staticmethod
-    def validate_repository(value):
-        return value
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):
