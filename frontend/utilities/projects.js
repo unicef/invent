@@ -21,7 +21,6 @@ export const projectFields = () => ({
   name: null,
   organisation: null,
   country: null,
-  geographic_scope: null,
   implementation_overview: null,
   start_date: null,
   end_date: null,
@@ -33,26 +32,7 @@ export const projectFields = () => ({
   digitalHealthInterventions: [],
   health_focus_areas: [],
   hsc_challenges: [],
-  his_bucket: [],
-  coverageType: 1,
-  coverage: [],
-  coverageData: {},
-  coverage_second_level: [],
-  national_level_deployment: {
-    health_workers: null,
-    clients: null,
-    facilities: null
-  },
-  government_investor: null,
-  implementing_partners: [],
-  donors: [],
-  implementation_dates: null,
-  licenses: [],
-  repository: null,
-  mobile_application: null,
-  wiki: null,
-  interoperability_links: {},
-  interoperability_standards: []
+  donors: []
 });
 
 export const draftRules = () => {
@@ -77,30 +57,8 @@ export const draftRules = () => {
       required: true,
       min: 1
     },
-    geographic_scope: {
-      max: 1024
-    },
     implementation_overview: {
       max: 1024
-    },
-    coverage: {},
-    coverage_second_level: {},
-    national_level_deployment: {
-      health_workers: {
-      },
-      clients: {
-      },
-      facilities: {
-      }
-    },
-    repository: {
-      max: 256
-    },
-    mobile_application: {
-      max: 256
-    },
-    wiki: {
-      max: 256
     }
   };
 };
@@ -119,10 +77,6 @@ export const publishRules = () => {
       required: true
     },
     geographic_scope: {
-      max: 1024
-    },
-    implementation_overview: {
-      required: true,
       max: 1024
     },
     start_date: {
@@ -157,77 +111,10 @@ export const publishRules = () => {
       required: true,
       min: 1
     },
-    his_bucket: {},
-    coverage: {
-      district: {
-        required: true
-      },
-      health_workers: {
-        integer: true
-      },
-      clients: {
-        integer: true
-      },
-      facilities: {
-        integer: true
-      },
-      facilities_list: {}
-    },
-    coverage_second_level: {
-      district: {
-        required: false
-      },
-      health_workers: {
-        required: false,
-        integer: true
-      },
-      clients: {
-        required: false,
-        integer: true
-      },
-      facilities: {
-        required: false,
-        integer: true
-      },
-      facilities_list: {
-        required: false
-      }
-    },
-    national_level_deployment: {
-      health_workers: {},
-      clients: {},
-      facilities: {}
-    },
-    government_investor: {},
-    implementing_partners: {},
     donors: {
       required: true
     },
     implementation_dates: {},
-    licenses: {},
-    repository: {
-      max: 256,
-      url: {
-        require_protocol: true
-      }
-    },
-    mobile_application: {
-      max: 256,
-      url: {
-        require_protocol: true
-      }
-    },
-    wiki: {
-      max: 256,
-      url: {
-        require_protocol: true
-      }
-    },
-    interoperability_links: {
-      url: {
-        require_protocol: true
-      }
-    },
-    interoperability_standards: {}
+    licenses: {}
   };
 };
