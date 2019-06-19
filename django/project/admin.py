@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.core import mail
 from django.utils.html import mark_safe
 from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from allauth.account.models import EmailAddress
@@ -36,20 +37,28 @@ class InteroperabilityLinkAdmin(AllObjectsAdmin):
         'name',
     ]
 
+class ParentFilter(admin.SimpleListFilter):
+    title = 'Parent Filter'
+    parameter_name = 'parent'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Parent Only', _('Parent Only')),
+            ('Children Only', _('Children Only'))
+        )
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset.all()
+        elif self.value() == 'Parent Only':
+            return queryset.filter(parent=None)
+        else:
+            return queryset.exclude(parent=None)
 
 class DigitalStrategyAdmin(AllObjectsAdmin):
+    list_filter = [ParentFilter]
     list_display = [
         '__str__'
     ]
-
-    def get_list_display(self, request):
-        list_display = super().get_list_display(request)
-        return list_display + ['get_is_parent']
-
-    def get_is_parent(self, obj):
-        return obj.parent is None
-    get_is_parent.short_description = "Is Parent"
-    get_is_parent.boolean = True
 
 
 class HealthFocusAreaAdmin(AllObjectsAdmin):
