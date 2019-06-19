@@ -37,8 +37,17 @@ export const getters = {
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,
   getViewers: state => state.viewers,
+  getGoalArea: state => state.goal_area,
+  getResultArea: state => state.result_area,
+  getGoalAreaDetails: (state, getters, rootState, rootGetters) => {
+    const selected = rootGetters['projects/getGoalAreas'].find(ga => ga.id === state.goal_area);
+    return selected || {};
+  },
+  getCapabilityLevels: state => state.capability_levels,
+  getCapabilityCategories: state => state.capability_categories,
+  getCapabilitySubcategories: state => state.capability_subcategories,
   getPlatforms: state => state.platforms.length === 0 ? [null] : state.platforms,
-  getDigitalHealthInterventions: state => [...state.digitalHealthInterventions],
+  getDigitalHealthInterventions: state => [...state.dhis],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
   getDonors: state => {
@@ -73,7 +82,7 @@ export const actions = {
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
-    const donorsToFetch = new Set();
+    const donorsToFetch = new Set([20]);
     if (data.draft) {
       const draft = { ...clean, ...apiReadParser(data.draft) };
       draft.donors.forEach(d => donorsToFetch.add(d));
@@ -103,8 +112,12 @@ export const actions = {
     if (profile) {
       clean.country = profile.country;
       clean.team = [profile.id];
+      clean.organisation = 56;
       clean.donors = [20];
-      await dispatch('system/loadDonorDetails', 20, { root: true });
+      await Promise.all([
+        dispatch('countries/loadCountryDetails', profile.country, { root: true }),
+        dispatch('system/loadDonorDetails', 20, { root: true })
+      ]);
     }
     commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
@@ -114,6 +127,21 @@ export const actions = {
     commit('INIT_PROJECT', value);
     commit('SET_TEAM', value.team);
     commit('SET_VIEWERS', value.viewers);
+  },
+  setGoalArea ({ commit }, value) {
+    commit('SET_DATA', { key: 'goal_area', value });
+  },
+  setResultArea ({ commit }, value) {
+    commit('SET_DATA', { key: 'result_area', value });
+  },
+  setCapabilityLevels ({ commit }, value) {
+    commit('SET_DATA', { key: 'capability_levels', value });
+  },
+  setCapabilityCategories ({ commit }, value) {
+    commit('SET_DATA', { key: 'capability_categories', value });
+  },
+  setCapabilitySubcategories ({ commit }, value) {
+    commit('SET_DATA', { key: 'capability_subcategories', value });
   },
   setName ({ commit }, value) {
     commit('SET_NAME', value);
@@ -204,7 +232,7 @@ export const actions = {
   async createProject ({ getters, dispatch }) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
-    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
+    draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
     dispatch('projects/addProjectToList', data, { root: true });
@@ -215,7 +243,7 @@ export const actions = {
   async saveDraft ({ getters, dispatch }, id) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
-    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
+    draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
@@ -229,7 +257,7 @@ export const actions = {
   async publishProject ({ getters, dispatch, commit }, id) {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
-    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
+    draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
@@ -255,6 +283,9 @@ export const actions = {
 };
 
 export const mutations = {
+  SET_DATA: (state, { value, key }) => {
+    state[key] = value;
+  },
   SET_NAME: (state, name) => {
     state.name = name;
   },
@@ -289,7 +320,7 @@ export const mutations = {
     Vue.set(state, 'platforms', [...platforms]);
   },
   SET_DIGITAL_HEALTH_INTERVENTIONS: (state, dhi) => {
-    Vue.set(state, 'digitalHealthInterventions', [...dhi]);
+    Vue.set(state, 'dhis', [...dhi]);
   },
   SET_HEALTH_FOCUS_AREAS: (state, health_focus_areas) => {
     Vue.set(state, 'health_focus_areas', [...health_focus_areas]);
@@ -317,7 +348,7 @@ export const mutations = {
   },
   INIT_PROJECT: (state, project) => {
     state.name = get(project, 'name', '');
-    state.organisation = get(project, 'organisation', null);
+    state.organisation = get(project, 'organisation', 56);
     state.country = get(project, 'country', null);
     state.implementation_overview = get(project, 'implementation_overview', '');
     state.start_date = get(project, 'start_date', '');
@@ -326,8 +357,13 @@ export const mutations = {
     state.contact_email = get(project, 'contact_email', '');
     state.team = get(project, 'team', []);
     state.viewers = get(project, 'viewers', []);
+    state.goal_area = get(project, 'goal_area', null);
+    state.result_area = get(project, 'result_area', null);
+    state.capability_levels = get(project, 'capability_levels', []);
+    state.capability_categories = get(project, 'capability_categories', []);
+    state.capability_subcategories = get(project, 'capability_subcategories', []);
     state.platforms = get(project, 'platforms', []);
-    state.digitalHealthInterventions = get(project, 'digitalHealthInterventions', []);
+    state.dhis = get(project, 'dhis', []);
     state.health_focus_areas = get(project, 'health_focus_areas', []);
     state.hsc_challenges = get(project, 'hsc_challenges', []);
     state.modified = get(project, 'modified', new Date());
