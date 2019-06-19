@@ -14,9 +14,9 @@ from django.conf import settings
 from allauth.account.models import EmailAddress
 from core.admin import AllObjectsAdmin
 from country.models import Country
-from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
+from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
+    HealthCategory, HSCChallenge, ProjectImport, Project, HSCGroup, \
+    ImportRow, UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory
 from user.models import UserProfile, Organisation
 
@@ -41,6 +41,15 @@ class DigitalStrategyAdmin(AllObjectsAdmin):
     list_display = [
         '__str__'
     ]
+
+    def get_list_display(self, request):
+        list_display = super().get_list_display(request)
+        return list_display + ['get_is_parent']
+
+    def get_is_parent(self, obj):
+        return obj.parent is None
+    get_is_parent.short_description = "Is Parent"
+    get_is_parent.boolean = True
 
 
 class HealthFocusAreaAdmin(AllObjectsAdmin):
