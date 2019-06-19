@@ -229,13 +229,14 @@ class DigitalStrategy(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrdered
         return '[{}]{} {}'.format(self.group, parent, self.name)
 
     class Meta:
-        verbose_name_plural = 'Digital Strategies'
+        verbose_name = 'WHO Digital Health Intervention (DHI)'
+        verbose_name_plural = 'WHO Digital Health Interventions (DHIs)'
         ordering = ['group', 'name']
 
 
 class HSCGroup(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta:
-        verbose_name = 'Health System Challenge Group'
+        verbose_name = 'WHO Health System Challenge Group'
         ordering = ['name']
 
 
@@ -254,8 +255,8 @@ class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSof
         return '({}) {}'.format(self.group.name, self.name)
 
     class Meta:
-        verbose_name = 'Health System Challenge'
-        verbose_name_plural = 'Health System Challenges'
+        verbose_name = 'WHO Health System Challenge'
+        verbose_name_plural = 'WHO Health System Challenges'
         ordering = ['group', 'name']
 
     objects = HSCChallengeQuerySet.as_manager()
@@ -263,7 +264,8 @@ class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSof
 
 class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
-        verbose_name_plural = 'Health Categories'
+        verbose_name = 'WHO Health Category'
+        verbose_name_plural = 'WHO Health Categories'
 
 
 class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
@@ -273,6 +275,8 @@ class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrdered
         return '[{}] {}'.format(self.health_category.name, self.name)
 
     class Meta:
+        verbose_name = 'WHO Health Focus Area'
+        verbose_name_plural = 'WHO Health Focus Areas'
         ordering = ['health_category__name', 'name']
 
 
@@ -281,7 +285,10 @@ class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedM
 
 
 class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
+    class Meta:
+        verbose_name = 'Platform'
+        verbose_name_plural = 'Platforms'
+        ordering = ['name']
 
 
 class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
