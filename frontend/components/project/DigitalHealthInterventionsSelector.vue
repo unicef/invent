@@ -21,7 +21,7 @@
             icon="check"
             size="xs"
           />
-          <digital-health-intervention-item :id="item.id" />
+          <digital-health-intervention-item :id="item" />
         </li>
       </ul>
       <el-button
@@ -43,12 +43,6 @@ export default {
   components: {
     DigitalHealthInterventionItem
   },
-  props: {
-    platformId: {
-      type: Number,
-      default: null
-    }
-  },
   $_veeValidate: {
     value () {
       return this.dhi;
@@ -57,11 +51,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selectedDHI: 'project/getDigitalHealthInterventions'
-    }),
-    dhi () {
-      return this.selectedDHI.filter(dhi => dhi.platform === this.platformId);
-    }
+      dhi: 'project/getDigitalHealthInterventions'
+    })
   },
   watch: {
     dhi: {
@@ -77,7 +68,7 @@ export default {
       setDigitalHealthInterventionsDialogState: 'layout/setDigitalHealthInterventionsDialogState'
     }),
     openDialog () {
-      this.setDigitalHealthInterventionsDialogState(this.platformId);
+      this.setDigitalHealthInterventionsDialogState(true);
     }
   }
 };
