@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
-from .models import Country, Donor
+from .models import Country, Donor, FieldOffice
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -10,7 +10,7 @@ import scheduler.celery  # noqa
 
 @admin.register(Country)
 class CountryAdmin(AllObjectsAdmin):
-    list_display = ('name', 'code', 'region', 'project_approval')
+    list_display = ('name', 'code', 'unicef_region', 'project_approval')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
 
@@ -33,6 +33,11 @@ class CountryAdmin(AllObjectsAdmin):
 
     def has_delete_permission(self, request, obj=None):  # pragma: no cover
         return False
+
+
+@admin.register(FieldOffice)
+class FieldOfficeAdmin(admin.ModelAdmin):
+    fields = list_display = ('name', 'country')
 
 
 @admin.register(Donor)
