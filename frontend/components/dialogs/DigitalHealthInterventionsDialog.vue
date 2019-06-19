@@ -86,11 +86,8 @@ export default {
     ...mapGetters({
       selectedPlatform: 'layout/getDigitalHealthInterventionsDialogState',
       digitalHealthInterventions: 'projects/getDigitalHealthInterventions',
-      selectedDHi: 'project/getDigitalHealthInterventions'
+      selectedDHI: 'project/getDigitalHealthInterventions'
     }),
-    savedSelection () {
-      return this.selectedDHi.filter(dhi => dhi.platform === this.selectedPlatform).map(dhi => dhi.id);
-    },
     visible: {
       get () {
         return this.selectedPlatform !== null;
@@ -107,7 +104,7 @@ export default {
     }),
 
     loadCurrentSelection () {
-      this.currentSelection = [...this.savedSelection];
+      this.currentSelection = [...this.selectedDHI];
     },
     clearAll () {
       this.currentSelection = [];
@@ -116,9 +113,8 @@ export default {
       this.setDigitalHealthInterventionsDialogState(null);
     },
     apply () {
-      const selected = this.currentSelection.map(id => ({ platform: this.selectedPlatform, id }));
-      const filtered = this.selectedDHi.filter(dhi => dhi.platform !== this.selectedPlatform);
-      this.setDigitalHealthInterventions([...filtered, ...selected]);
+      const selected = this.currentSelection.map(id => (id));
+      this.setDigitalHealthInterventions(selected);
       this.setDigitalHealthInterventionsDialogState(null);
     }
   }

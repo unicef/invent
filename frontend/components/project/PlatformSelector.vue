@@ -1,6 +1,8 @@
 <template>
   <lazy-el-select
-    :value="platform"
+    :value="platforms"
+    multiple
+    filterable
     :placeholder="$gettext('Select from list') | translate"
     popper-class="PlatformSelectorDropdown"
     class="PlatformSelector"
@@ -9,7 +11,7 @@
     @blur="$emit('blur')"
   >
     <el-option
-      v-for="paltform in availablePlatforms"
+      v-for="paltform in technologyPlatforms"
       :key="paltform.id"
       :label="paltform.name"
       :value="paltform.id"
@@ -30,10 +32,6 @@ export default {
     }
   },
   props: {
-    index: {
-      type: Number,
-      default: 0
-    },
     platforms: {
       type: Array,
       default: () => []
@@ -42,19 +40,11 @@ export default {
   computed: {
     ...mapGetters({
       technologyPlatforms: 'projects/getTechnologyPlatforms'
-    }),
-    platform () {
-      return this.platforms[this.index];
-    },
-    availablePlatforms () {
-      return this.technologyPlatforms.filter(tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform);
-    }
+    })
   },
   methods: {
     changeHandler (value) {
-      const p = [...this.platforms];
-      p[this.index] = value;
-      this.$emit('change', p);
+      this.$emit('change', value);
     }
   }
 };
