@@ -21,10 +21,10 @@ from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
 
-from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
+from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, CSVExportSerializer, ProjectImportV2Serializer, ImportRowSerializer
-from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
+from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
 
@@ -493,7 +493,6 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
             representation = [
                 {'Name': p.name},
                 {'Country': Country.get_name_by_id(p.data.get('country'))},
-                {'Implementation Date': p.data.get('implementation_dates')},
                 {'Start Date': p.data.get('start_date')},
                 {'End Date': p.data.get('end_date')},
                 {'Organisation Name': Organisation.get_name_by_id(p.data.get('organisation'))},
@@ -510,20 +509,6 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                 {'Health System Challenges': ", ".join(
                     ['({}) {}'.format(x.name, x.challenge) for x in
                      HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))])},
-                {'Health Information System Support': ", ".join(
-                    [str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))])},
-                {'Government Investor': INVESTOR_CHOICES[p.data.get('government_investor', 0)][1]},
-                {'Licenses': ", ".join(
-                    [str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))])},
-                {'Repository': p.data.get('repository')},
-                {'Mobile Application': p.data.get('mobile_application')},
-                {'Wiki': p.data.get('wiki')},
-                {'Interoperability Standards': ", ".join(
-                    [str(x) for x in InteroperabilityStandard.objects.get_names_for_ids(
-                        p.data.get("interoperability_standards", []))])},
-                {'National Level Deployment': p.str_national_level_deployment()},
-                {'First Level Coverage': p.str_coverage()},
-                {'Second Level Coverage': p.str_coverage(second_level=True)},
             ]
 
             if single_country_selected and has_country_permission:
