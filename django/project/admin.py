@@ -110,8 +110,49 @@ class ProjectAdmin(AllObjectsAdmin):
         return False
 
 
+class ResultAreaInline(admin.TabularInline):
+    model = UNICEFResultArea
+    fields = ('name',)
+    readonly_fields = ('name',)
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
+class CapabilityLevelInline(admin.TabularInline):
+    model = UNICEFCapabilityLevel
+    fields = ('name',)
+    readonly_fields = ('name',)
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
+class CapabilityCategoryInline(admin.TabularInline):
+    model = UNICEFCapabilityCategory
+    fields = ('name',)
+    readonly_fields = ('name',)
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
+class CapabilitySubCategoryInline(admin.TabularInline):
+    model = UNICEFCapabilitySubCategory
+    fields = ('name',)
+    readonly_fields = ('name',)
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
 class UNICEFGoalAdmin(admin.ModelAdmin):
-    pass
+    ordering = search_fields = ['name']
+    inlines = [ResultAreaInline, CapabilityLevelInline, CapabilityCategoryInline, CapabilitySubCategoryInline]
 
 
 class UNICEFResultAreaAdmin(admin.ModelAdmin):
