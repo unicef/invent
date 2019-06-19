@@ -33,23 +33,6 @@
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('organisation')"
-        :draft-rule="draftRules.organisation"
-        :publish-rule="publishRules.organisation"
-      >
-        <template slot="label">
-          <translate key="organisation">
-            What is the name of the lead organization?
-          </translate>
-        </template>
-        <organisation-select
-          v-model="organisation"
-          v-validate="rules.organisation"
-          data-vv-name="organisation"
-        />
-      </custom-required-form-item>
-
-      <custom-required-form-item
         :error="errors.first('country')"
         :draft-rule="draftRules.country"
         :publish-rule="publishRules.country"
@@ -287,7 +270,6 @@ export default {
   computed: {
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
-      organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
