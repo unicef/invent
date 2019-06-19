@@ -38,7 +38,6 @@
           <el-input
             ref="input"
             v-model="inputField"
-            :disabled="disabled"
             :placeholder="$gettext('Add a new option here') | translate"
             type="text"
             @keyup.enter.native="addOption"
@@ -46,7 +45,7 @@
         </el-col>
         <el-col :span="8">
           <el-button
-            :disabled="!inputField || disabled"
+            :disabled="!inputField"
             type="text"
             class="IconLeft AddOption"
             @click="addOption"
