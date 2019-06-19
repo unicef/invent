@@ -352,19 +352,19 @@ class UNICEFGoalAdmin(admin.ModelAdmin):
 
 
 class UNICEFResultAreaAdmin(admin.ModelAdmin):
-    ordering = ['goal_area__name', 'name']
+    ordering = search_fields = ['goal_area__name', 'name']
 
 
 class UNICEFCapabilityLevelAdmin(admin.ModelAdmin):
-    ordering = ['goal_area__name', 'name']
+    ordering = search_fields = ['goal_area__name', 'name']
 
 
 class UNICEFCapabilityCategoryAdmin(admin.ModelAdmin):
-    ordering = ['goal_area__name', 'name']
+    ordering = search_fields = ['goal_area__name', 'name']
 
 
 class UNICEFCapabilitySubCategoryAdmin(admin.ModelAdmin):
-    ordering = ['goal_area__name', 'name']
+    ordering = search_fields = ['goal_area__name', 'name']
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
