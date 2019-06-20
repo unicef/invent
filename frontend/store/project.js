@@ -130,6 +130,10 @@ export const actions = {
   },
   setGoalArea ({ commit }, value) {
     commit('SET_DATA', { key: 'goal_area', value });
+    commit('SET_DATA', { key: 'result_area', value: null });
+    commit('SET_DATA', { key: 'capability_levels', value: [] });
+    commit('SET_DATA', { key: 'capability_categories', value: [] });
+    commit('SET_DATA', { key: 'capability_subcategories', value: [] });
   },
   setResultArea ({ commit }, value) {
     commit('SET_DATA', { key: 'result_area', value });
