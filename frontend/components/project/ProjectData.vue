@@ -10,22 +10,41 @@
         >
           <simple-field
             :content="project.name"
-            :header="$gettext('Project Name') | translate"
+            :header="$gettext('Initiative Name') | translate"
           />
 
           <simple-field :header="$gettext('Organisation') | translate">
             <organisation-item :id="project.organisation" />
           </simple-field>
 
-          <simple-field :header="$gettext('Project country') | translate">
+          <simple-field :header="$gettext('Country') | translate">
             <country-item
               :id="project.country"
               :show-flag="false"
             />
           </simple-field>
+
+          <simple-field
+            :header="$gettext('Region') | translate"
+            :content="selectedRegion"
+          />
+
+          <simple-field
+            :header="$gettext('Field Office') | translate"
+          >
+            <FieldOfficeItem
+              :value="project.field_office"
+              :country="project.country"
+            />
+          </simple-field>
+
+          <simple-field
+            :header="$gettext('Last Updated') | translate"
+            :content="lastUpdated"
+          />
           <simple-field
             :content="project.implementation_overview"
-            :header="$gettext('Overview of the digital health implementation') | translate"
+            :header="$gettext('Initiative Description') | translate"
           />
 
           <el-row>
@@ -48,13 +67,13 @@
             <el-col :span="12">
               <simple-field
                 :content="project.contact_name"
-                :header="$gettext('Contact name') | translate"
+                :header="$gettext('Programme Focal Point Name') | translate"
               />
             </el-col>
             <el-col :span="12">
               <simple-field
                 :content="project.contact_email"
-                :header="$gettext('Contact email') | translate"
+                :header="$gettext('Programme Focal Point Email') | translate"
               />
             </el-col>
           </el-row>
@@ -82,8 +101,8 @@
             :content="resultArea.name"
           />
 
-          <template v-if="goalArea.id && goalArea.id === 1">
-            <simple-field :header="$gettext('Digital Health Interventions') | translate">
+          <template v-if="goalArea && goalArea.id && goalArea.id === 1">
+            <simple-field :header="$gettext('What is the health capability area(s) addressed? What are the Health System Challenges addressed by the Digital Health Intervention?') | translate">
               <DhiList
                 :values="project.dhis"
               />
@@ -98,7 +117,7 @@
             </simple-field>
           </template>
 
-          <template v-else-if="goalArea">
+          <template v-else-if="goalArea && goalArea.id">
             <simple-field :header="goalArea.capability_level_question">
               <CapabilitiesList
                 :value="project.capability_levels"
@@ -162,6 +181,7 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
 import ProjectNavigation from './ProjectNavigation';
 import CollapsibleCard from './CollapsibleCard';
 import SimpleField from './SimpleField';
@@ -169,6 +189,7 @@ import OrganisationItem from '../common/OrganisationItem';
 import CountryItem from '../common/CountryItem';
 import TeamList from './TeamList';
 import PlatformsList from './PlatformsList';
+import FieldOfficeItem from './FieldOfficeItem';
 import DhiList from './DhiList';
 import CapabilitiesList from './CapabilitiesList';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
@@ -187,6 +208,7 @@ export default {
     CountryItem,
     TeamList,
     PlatformsList,
+    FieldOfficeItem,
     DhiList,
     HealthFocusAreasList,
     HealthSystemChallengesList,
@@ -204,7 +226,9 @@ export default {
       goalAreas: 'projects/getGoalAreas',
       getCapabilityLevels: 'projects/getCapabilityLevels',
       getCapabilityCategories: 'projects/getCapabilityCategories',
-      getCapabilitySubcategories: 'projects/getCapabilitySubcategories'
+      getCapabilitySubcategories: 'projects/getCapabilitySubcategories',
+      unicef_regions: 'system/getUnicefRegions',
+      modified: 'project/getModified'
     }),
     route () {
       return this.$route.name.split('__')[0];
@@ -220,6 +244,16 @@ export default {
         return this.getCountryDetails(this.project.country);
       }
       return null;
+    },
+    selectedRegion () {
+      if (this.country) {
+        const result = this.unicef_regions.find(uf => uf.id === this.country.unicef_region);
+        return (result && result.name) || 'N/A';
+      }
+      return 'N/A';
+    },
+    lastUpdated () {
+      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
     },
     donors () {
       return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);

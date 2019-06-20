@@ -97,7 +97,7 @@
         >
           <template slot="label">
             <translate key="strategies">
-              Digital Health Intervention(s)
+              What is the health capability area(s) addressed? What are the Health System Challenges addressed by the Digital Health Intervention?
             </translate>
             <form-hint>
               Form Hint
@@ -105,7 +105,6 @@
           </template>
           <digital-health-interventions-selector
             v-validate="rules.strategies"
-            :data-vv-scope="'strategies'"
             data-vv-name="strategies"
             data-vv-as="Digital health interventions"
           />
@@ -113,7 +112,11 @@
       </template>
 
       <template v-else-if="goal_area">
-        <custom-required-form-item>
+        <custom-required-form-item
+          :error="errors.first('capability_levels')"
+          :draft-rule="draftRules.capability_levels"
+          :publish-rule="publishRules.capability_levels"
+        >
           <template slot="label">
             {{ selectedGoalArea.capability_level_question }}
           </template>
@@ -121,6 +124,9 @@
             v-model="capability_levels"
             :goal-area="goal_area"
             :values-function="getCapabilityLevelsItems"
+            data-vv-name="capability_levels"
+            data-vv-validate-on="change"
+            :data-vv-as="selectedGoalArea.capability_level_question"
           />
         </custom-required-form-item>
         <custom-required-form-item>

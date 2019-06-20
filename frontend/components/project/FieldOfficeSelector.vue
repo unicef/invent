@@ -1,12 +1,11 @@
 <template>
   <lazy-el-select
+    :disabled="!country"
     :value="value"
-    :disabled="!goalArea"
     :placeholder="$gettext('Select from list') | translate"
     filterable
-    clearable
-    popper-class="ResultAreasSelectorDropdown"
-    class="ResultAreasSelector"
+    popper-class="FieldOfficeDropdown"
+    class="FieldOffice"
     @change="changeHandler"
   >
     <el-option
@@ -31,7 +30,7 @@ export default {
       type: Number,
       default: null
     },
-    goalArea: {
+    country: {
       type: Number,
       default: null
     }
@@ -43,10 +42,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'projects/getResultAreas'
+      items: 'projects/getFieldOffices'
     }),
     filtered () {
-      return this.items.filter(ra => ra.goal_area_id === this.goalArea);
+      return this.items.filter(i => i.country_id === this.country);
     }
   },
   methods: {
@@ -63,10 +62,10 @@ export default {
 </script>
 
 <style lang="less">
-.ResultAreasSelector {
+.FieldOffice {
   width: 100%;
 }
-.ResultAreasSelectorDropdown {
+.FieldOfficeDropdown {
 
 }
 </style>

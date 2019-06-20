@@ -12,6 +12,7 @@ export const state = () => ({
   organisations: [],
   donors: [],
   regions: [],
+  unicef_regions: [],
   donorsLibrary: {}
 });
 
@@ -84,7 +85,8 @@ export const getters = {
   getDonors: state => state.donors,
   getDonorDetails: state => id => ({ ...state.donors.find(d => d.id === id), ...state.donorsLibrary[id] }),
   getRegions: state => state.regions,
-  getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) })
+  getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) }),
+  getUnicefRegions: state => state.unicef_regions
 };
 
 export const actions = {
@@ -111,6 +113,7 @@ export const actions = {
       commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
       commit('SET_REGIONS', data.regions);
+      commit('SET_DATA', { key: 'unicef_regions', value: data.unicef_regions });
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, { root: true });
     } catch (e) {
       console.error('system/loadStaticData failed');
@@ -165,6 +168,9 @@ export const actions = {
 };
 
 export const mutations = {
+  SET_DATA: (state, { value, key }) => {
+    state[key] = value;
+  },
   SET_USER_PROFILES: (state, value) => {
     state.profiles = value;
   },
