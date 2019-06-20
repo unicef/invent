@@ -23,12 +23,12 @@ export const getters = {
   getUserProjectList: state => [...state.userProjects.map(p => ({ ...p }))],
   getGoalAreas: state => get(state, 'projectStructure.goal_areas', []),
   getResultAreas: state => get(state, 'projectStructure.result_areas', []),
-  getCapabilityCategories: state => (id) => {
-    const all = get(state, 'projectStructure.capability_categories', []);
-    return all.filter(i => i.goal_area_id === id);
-  },
   getCapabilityLevels: state => (id) => {
     const all = get(state, 'projectStructure.capability_levels', []);
+    return all.filter(i => i.goal_area_id === id);
+  },
+  getCapabilityCategories: state => (id) => {
+    const all = get(state, 'projectStructure.capability_categories', []);
     return all.filter(i => i.goal_area_id === id);
   },
   getCapabilitySubcategories: state => (id) => {
