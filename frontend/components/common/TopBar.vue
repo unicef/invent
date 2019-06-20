@@ -73,7 +73,7 @@
           </template>
           <template v-if="user">
             <el-col class="AuthLinks">
-              <div>
+              <!-- <div>
                 <nuxt-link
                   key="dashboardBtn"
                   :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
@@ -81,7 +81,7 @@
                 >
                   <translate>Dashboard</translate>
                 </nuxt-link>
-              </div>
+              </div> -->
               <div>
                 <nuxt-link
                   key="myProjectsBtn"

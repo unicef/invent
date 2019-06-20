@@ -88,7 +88,7 @@
         >
           <translate>Project</translate>
         </nuxt-link>
-        <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
+        <!-- <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
           <translate>Assessment</translate>
         </nuxt-link>
         <nuxt-link
@@ -104,7 +104,7 @@
           :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})"
         >
           <translate>Summary score</translate>
-        </nuxt-link>
+        </nuxt-link> -->
       </div>
     </div>
   </div>
