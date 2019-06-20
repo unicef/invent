@@ -230,7 +230,7 @@ class DigitalStrategy(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrdered
 
     class Meta:
         verbose_name = 'WHO Digital Health Intervention (DHI)'
-        verbose_name_plural = 'WHO Digital Health Interventions (DHIs)'
+        verbose_name_plural = 'WHO Digital Health Interventions (=UNICEF Health Capability Categories)'
         ordering = ['group', 'name']
 
 
