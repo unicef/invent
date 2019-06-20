@@ -9,25 +9,6 @@
       show-legend
     >
       <custom-required-form-item
-        :error="errors.first('result_area')"
-        :draft-rule="draftRules.result_area"
-        :publish-rule="publishRules.result_area"
-      >
-        <template slot="label">
-          <translate key="result-area">
-            UNICEF Result Area
-          </translate>
-        </template>
-
-        <ResultAreasSelector
-          v-model="result_area"
-          v-validate="rules.result_area"
-          data-vv-name="result_area"
-          data-vv-validate-on="change"
-          data-vv-as="UNICEF Result Area"
-        />
-      </custom-required-form-item>
-      <custom-required-form-item
         :error="errors.first('goal_area')"
         :draft-rule="draftRules.goal_area"
         :publish-rule="publishRules.goal_area"
@@ -44,6 +25,27 @@
           data-vv-name="goal_area"
           data-vv-validate-on="change"
           data-vv-as="UNICEF Goal"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="errors.first('result_area')"
+        :draft-rule="draftRules.result_area"
+        :publish-rule="publishRules.result_area"
+      >
+        <template slot="label">
+          <translate key="result-area">
+            UNICEF Result Area
+          </translate>
+        </template>
+
+        <ResultAreasSelector
+          v-model="result_area"
+          v-validate="rules.result_area"
+          :goal-area="goal_area"
+          data-vv-name="result_area"
+          data-vv-validate-on="change"
+          data-vv-as="UNICEF Result Area"
         />
       </custom-required-form-item>
 
