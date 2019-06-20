@@ -49,11 +49,9 @@ class ProjectSearch(ExtendedModel):
     donor_names = ArrayField(models.CharField(max_length=128), default=list)
 
     software = ArrayField(models.IntegerField(), default=list)
-    coverage = ArrayField(models.CharField(max_length=64), default=list)
     dhi_categories = ArrayField(models.IntegerField(), default=list)
     hsc = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
-    his = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
     def search(cls, queryset: QuerySet, search_term: str, search_in: List[str]) -> QuerySet:
