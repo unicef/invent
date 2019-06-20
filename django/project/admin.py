@@ -28,6 +28,7 @@ class ViewOnlyInlineMixin:
     fields = ('name',)
     readonly_fields = ('name',)
     can_delete = False
+    show_change_link = True
 
     def has_add_permission(self, request, obj):
         return False
