@@ -4,8 +4,8 @@ from django.contrib import admin
 from django.views.i18n import JSONCatalog
 from rest_framework.documentation import include_docs_urls
 
-admin.site.site_header = 'Digital Health Atlas'
-API_TITLE = 'Digital Health Atlas API'
+admin.site.site_header = 'UNICEF T4D & Innovation Inventory Portal'
+API_TITLE = 'UNICEF T4D & Innovation Inventory Portal API'
 API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
