@@ -128,21 +128,14 @@ class ProjectSearch(ExtendedModel):
             self.donors = [int(x) for x in project.data.get("donors", [])]
             self.donor_names = [Donor.objects.get(id=int(x)).name for x in project.data.get("donors", [])]
 
-            self.software = [int(x['id']) for x in project.data.get("platforms", [])]
-            self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]
-            self.dhi_categories = list(set(filter(None.__ne__,
-                                                  [DigitalStrategy.get_parent_id(int(strategy_id), 'parent') for
-                                                   strategy_id in list(itertools.chain(
-                                                      *[platform['strategies'] for platform in
-                                                        project.data.get("platforms", []) if
-                                                        platform.get('strategies')]))])))
+            self.software = project.data.get('platforms')
             self.hsc = project.data.get('hsc_challenges')
-
+            self.dhi_categories = list(set(filter(None.__ne__,
+                                                  [DigitalStrategy.get_parent_id(int(id), 'parent') for
+                                                   id in project.data.get("dhis", [])])))
             self.hfa_categories = list(set(filter(None.__ne__,
                                                   [HealthFocusArea.get_parent_id(int(id), 'health_category') for
                                                    id in project.data.get("health_focus_areas", [])])))
-            self.his = project.data.get('his_bucket')
-
             self.save()
 
 
