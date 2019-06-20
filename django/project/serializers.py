@@ -30,7 +30,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
     country = serializers.IntegerField(min_value=0, max_value=100000)
-    implementation_overview = serializers.CharField(max_length=1024)
+    implementation_overview = serializers.CharField(max_length=1024, required=False)  # TODO: fix later
     start_date = serializers.CharField(max_length=256, required=True)
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
