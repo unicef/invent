@@ -22,8 +22,6 @@ class ProjectSearch(ExtendedModel):
         "country": "country__name",
         "region": "country__region",
         "overview": "project__data__implementation_overview",
-        "loc": "coverage",
-        "partner": "project__data__implementing_partners",
         "donor": "donor_names"
     }
 
@@ -34,9 +32,7 @@ class ProjectSearch(ExtendedModel):
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
         "hfa": "hfa_categories",  # eg: hfa=1&hfa=2
         "hsc": "hsc",  # eg: hsc=1&hsc=2
-        "his": "his",  # eg: his=1&his=2
         "region": "country__region",  # eg: region=3
-        "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
         "donor": "donors",
         "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
     }
@@ -90,10 +86,10 @@ class ProjectSearch(ExtendedModel):
         if selected_fields:
             for field in selected_fields:
                 if query_params[field]:
-                    if field in ["country", "region", "gov"]:
+                    if field in ["country", "region"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
-                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his"]:
+                    elif field in ["donor", "sw", "dhi", "hfa", "hsc"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
