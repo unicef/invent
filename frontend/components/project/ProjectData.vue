@@ -72,19 +72,60 @@
           id="implementation"
           :title="$gettext('2. Implementation Overview') | translate"
         >
-          <simple-field :header="$gettext('Software and related Digital Health Interventions (DHI)') | translate">
+          <simple-field
+            :header="$gettext('UNICEF Goal area') | translate"
+            :content="goalArea.name"
+          />
+
+          <simple-field
+            :header="$gettext('UNICEF Result area') | translate"
+            :content="resultArea.name"
+          />
+
+          <template v-if="goalArea.id && goalArea.id === 1">
+            <simple-field :header="$gettext('Digital Health Interventions') | translate">
+              <DhiList
+                :values="project.dhis"
+              />
+            </simple-field>
+
+            <simple-field :header="$gettext('Health focus area(s)') | translate">
+              <health-focus-areas-list :value="project.health_focus_areas" />
+            </simple-field>
+
+            <simple-field :header="$gettext('Health System Challenges (HSC)') | translate">
+              <health-system-challenges-list :value="project.hsc_challenges" />
+            </simple-field>
+          </template>
+
+          <template v-else-if="goalArea">
+            <simple-field :header="goalArea.capability_level_question">
+              <CapabilitiesList
+                :value="project.capability_levels"
+                :goal-area="goalArea.id"
+                :values-function="getCapabilityLevels"
+              />
+            </simple-field>
+            <simple-field :header="goalArea.capability_category_question">
+              <CapabilitiesList
+                :value="project.capability_categories"
+                :goal-area="goalArea.id"
+                :values-function="getCapabilityCategories"
+              />
+            </simple-field>
+            <simple-field :header="goalArea.capability_subcategory_question">
+              <CapabilitiesList
+                :value="project.capability_subcategories"
+                :goal-area="goalArea.id"
+                :values-function="getCapabilitySubcategories"
+              />
+            </simple-field>
+          </template>
+
+          <simple-field :header="$gettext('Software') | translate">
             <platforms-list
               :platforms="project.platforms"
-              :dhi="project.digitalHealthInterventions"
             />
-          </simple-field>
-
-          <simple-field :header="$gettext('Health focus area(s)') | translate">
-            <health-focus-areas-list :value="project.health_focus_areas" />
-          </simple-field>
-
-          <simple-field :header="$gettext('Health System Challenges (HSC)') | translate">
-            <health-system-challenges-list :value="project.hsc_challenges" />
           </simple-field>
 
           <simple-field :header="$gettext('Investor(s)') | translate">
@@ -128,6 +169,8 @@ import OrganisationItem from '../common/OrganisationItem';
 import CountryItem from '../common/CountryItem';
 import TeamList from './TeamList';
 import PlatformsList from './PlatformsList';
+import DhiList from './DhiList';
+import CapabilitiesList from './CapabilitiesList';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
 import DonorsList from '../common/list/DonorsList';
@@ -144,17 +187,24 @@ export default {
     CountryItem,
     TeamList,
     PlatformsList,
+    DhiList,
     HealthFocusAreasList,
     HealthSystemChallengesList,
     DonorsList,
-    CustomReadonlyField
+    CustomReadonlyField,
+    CapabilitiesList
   },
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
       published: 'project/getPublished',
       getCountryDetails: 'countries/getCountryDetails',
-      getDonorDetails: 'system/getDonorDetails'
+      getDonorDetails: 'system/getDonorDetails',
+      resultAreas: 'projects/getResultAreas',
+      goalAreas: 'projects/getGoalAreas',
+      getCapabilityLevels: 'projects/getCapabilityLevels',
+      getCapabilityCategories: 'projects/getCapabilityCategories',
+      getCapabilitySubcategories: 'projects/getCapabilitySubcategories'
     }),
     route () {
       return this.$route.name.split('__')[0];
@@ -174,6 +224,14 @@ export default {
     donors () {
       return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
     },
+    resultArea () {
+      const result = this.resultAreas.find(r => r.id === this.project.result_area);
+      return result || {};
+    },
+    goalArea () {
+      const result = this.goalAreas.find(r => r.id === this.project.goal_area);
+      return result || {};
+    }
   },
   methods: {
     customFieldsName (name) {
