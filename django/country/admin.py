@@ -37,7 +37,8 @@ class CountryAdmin(AllObjectsAdmin):
 
 @admin.register(FieldOffice)
 class FieldOfficeAdmin(admin.ModelAdmin):
-    fields = list_display = ('name', 'country')
+    fields = list_display = ('country', 'name')
+    ordering = search_fields = ['country__name', 'name']
 
 
 @admin.register(Donor)
