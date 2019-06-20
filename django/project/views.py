@@ -19,7 +19,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, Donor
+from country.models import Country, Donor, FieldOffice
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
@@ -74,7 +74,8 @@ class ProjectPublicViewSet(ViewSet):
             capability_subcategories=UNICEFCapabilitySubCategory.objects.values('id', 'name', 'goal_area_id'),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
-            strategies=strategies
+            strategies=strategies,
+            field_offices=FieldOffice.objects.values('id', 'name', 'country_id')
         )
 
     @staticmethod
