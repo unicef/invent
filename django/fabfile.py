@@ -32,7 +32,8 @@ def production():
 
 def staging():
     """Configure staging"""
-    env.host_string = 'whomaps@157.230.27.132'
+    # env.host_string = 'whomaps@157.230.27.132'
+    env.host_string = 'whomaps@tipp.pulilab.com'
     env.name = 'staging'
     env.port = 22
     env.branch = "master"
