@@ -37,6 +37,12 @@ export default {
       required: true
     }
   },
+  $_veeValidate: {
+    value () {
+      return this.value;
+    },
+    events: 'change'
+  },
   data () {
     return {
       open: false

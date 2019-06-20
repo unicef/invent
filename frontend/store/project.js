@@ -30,6 +30,8 @@ export const getters = {
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
+  getFieldOffice: state => state.field_office,
+  getModified: state => state.modified,
   getImplementationOverview: state => state.implementation_overview,
   getStartDate: state => state.start_date,
   getEndDate: state => state.end_date,
@@ -137,6 +139,9 @@ export const actions = {
   },
   setResultArea ({ commit }, value) {
     commit('SET_DATA', { key: 'result_area', value });
+  },
+  setFieldOffice ({ commit }, value) {
+    commit('SET_DATA', { key: 'field_office', value });
   },
   setCapabilityLevels ({ commit }, value) {
     commit('SET_DATA', { key: 'capability_levels', value });
@@ -354,6 +359,8 @@ export const mutations = {
     state.name = get(project, 'name', '');
     state.organisation = get(project, 'organisation', 56);
     state.country = get(project, 'country', null);
+    state.modified = get(project, 'modified', null);
+    state.field_office = get(project, 'field_office', null);
     state.implementation_overview = get(project, 'implementation_overview', '');
     state.start_date = get(project, 'start_date', '');
     state.end_date = get(project, 'end_date', '');

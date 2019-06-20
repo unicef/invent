@@ -21,6 +21,8 @@ export const projectFields = () => ({
   name: null,
   organisation: 56,
   country: null,
+  modified: null,
+  field_office: null,
   implementation_overview: null,
   start_date: null,
   end_date: null,
@@ -101,6 +103,15 @@ export const publishRules = () => {
     team: {
       required: true
     },
+    goal_area: {
+      required: true
+    },
+    capability_levels: {
+    },
+    capability_categories: {
+    },
+    capability_subcategories: {
+    },
     platforms: {
       required: true
     },
@@ -117,7 +128,7 @@ export const publishRules = () => {
       min: 1
     },
     donors: {
-      required: true
+      required: false
     },
     implementation_dates: {},
     licenses: {}

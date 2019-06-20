@@ -50,6 +50,36 @@
         />
       </custom-required-form-item>
 
+      <custom-required-form-item>
+        <template slot="label">
+          <translate key="region">
+            Region
+          </translate>
+        </template>
+        {{ selectedRegion }}
+      </custom-required-form-item>
+
+      <custom-required-form-item>
+        <template slot="label">
+          <translate key="field-offices">
+            Field Office
+          </translate>
+        </template>
+        <FieldOfficeSelector
+          v-model="field_office"
+          :country="country"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item v-if="modified">
+        <template slot="label">
+          <translate key="updated">
+            Last updated
+          </translate>
+        </template>
+        {{ lastUpdated }}
+      </custom-required-form-item>
+
       <custom-required-form-item
         :error="errors.first('implementation_overview')"
         :draft-rule="draftRules.implementation_overview"
@@ -248,26 +278,32 @@
 </template>
 
 <script>
-import { isAfter } from 'date-fns';
+import { isAfter, format } from 'date-fns';
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import TeamSelector from '../TeamSelector';
+import FieldOfficeSelector from '../FieldOfficeSelector';
 import CountrySelect from '../../common/CountrySelect';
-import OrganisationSelect from '../../common/OrganisationSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
     CollapsibleCard,
     CountrySelect,
     TeamSelector,
-    OrganisationSelect,
+    FieldOfficeSelector,
     FormHint
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
+    ...mapGetters({
+      unicef_regions: 'system/getUnicefRegions',
+      getCountryDetails: 'countries/getCountryDetails',
+      modified: 'project/getModified'
+    }),
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
@@ -277,13 +313,25 @@ export default {
       contact_name: ['project', 'getContactName', 'setContactName', 0],
       contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
-      viewers: ['project', 'getViewers', 'setViewers', 0]
+      viewers: ['project', 'getViewers', 'setViewers', 0],
+      field_office: ['project', 'getFieldOffice', 'setFieldOffice', 0]
     }),
     endDateError () {
       if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
         return this.$gettext('End date must be after Start date');
       }
       return '';
+    },
+    selectedRegion () {
+      const country = this.getCountryDetails(this.country);
+      if (country) {
+        const result = this.unicef_regions.find(uf => uf.id === country.unicef_region);
+        return (result && result.name) || 'N/A';
+      }
+      return 'N/A';
+    },
+    lastUpdated () {
+      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
     }
   },
   methods: {
