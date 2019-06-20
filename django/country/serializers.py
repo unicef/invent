@@ -233,7 +233,7 @@ class CountrySerializer(SuperAdminCountrySerializer):
 class CountryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ('id', 'name', 'code', 'lat', 'lon')
+        fields = ('id', 'name', 'code', 'lat', 'lon', 'unicef_region')
 
 
 DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
