@@ -14,10 +14,16 @@
             type="flex"
             align="middle"
           >
-            <el-col class="LogoWHO">
+            <!-- <el-col class="LogoWHO">
               <img
                 :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
                 :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
+              >
+            </el-col> -->
+            <el-col class="LogoUnicef">
+              <img
+                :src="customOrganisation ? organisationLogo : '/logo-unicef.svg'"
+                :alt="customOrganisation ? $gettext('Country logo') : $gettext('Unicef')"
               >
             </el-col>
             <el-col class="Separator">
@@ -73,7 +79,7 @@
           </template>
           <template v-if="user">
             <el-col class="AuthLinks">
-              <!-- <div>
+              <div>
                 <nuxt-link
                   key="dashboardBtn"
                   :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
@@ -81,7 +87,7 @@
                 >
                   <translate>Dashboard</translate>
                 </nuxt-link>
-              </div> -->
+              </div>
               <div>
                 <nuxt-link
                   key="myProjectsBtn"
@@ -241,6 +247,14 @@ export default {
         }
       }
 
+      .LogoUnicef {
+        width: 100%;
+
+        img {
+          height: 40px;
+        }
+      }
+
       .LogoDHA {
         width: 100%;
 
@@ -288,7 +302,7 @@ export default {
       font-size: @fontSizeBase;
       font-weight: 700;
       line-height: 24px;
-      color: @colorBrandPrimary;
+      color: @colorTextPrimary;
       text-decoration: none;
       transition: @transitionAll;
 
@@ -327,19 +341,19 @@ export default {
       }
 
       &:hover {
-        color: @colorBrandPrimaryLight;
+        color: @colorTextPrimary;
 
         &::before {
-          background-color: @colorBrandPrimaryLight;
+          background-color: @colorBrandPrimary;
           transform: translateY(0);
         }
       }
 
       &.nuxt-link-active {
-        color: @colorBrandAccent;
+        color: @colorBrandPrimary;
 
         &::before {
-          background-color: @colorBrandAccent;
+          background-color: @colorBrandPrimary;
           transform: translateY(0);
         }
       }

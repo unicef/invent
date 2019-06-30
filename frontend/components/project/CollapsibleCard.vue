@@ -106,10 +106,10 @@ export default {
       text-align: right;
 
       .Text {
-        font-size: @fontSizeSmall
+        font-size: @fontSizeSmall;
       }
 
-      .Required{
+      .Required {
         display: inline-block;
         width: 12px;
         height: 12px;
@@ -117,7 +117,6 @@ export default {
         line-height: 12px;
         font-weight: 900;
         text-align: center;
-        color: #FFFFFF;
         border-radius: 50%;
 
         > span {
@@ -125,11 +124,15 @@ export default {
           top: 4px;
         }
       }
-      .Draft{
-        background-color: @colorDraft
+
+      .Draft {
+        color: @colorTextPrimary;
+        background-color: @colorDraft;
       }
-      .Publish{
-        background-color: @colorPublished
+
+      .Publish {
+        color: @colorWhite;
+        background-color: @colorPublished;
       }
     }
 
