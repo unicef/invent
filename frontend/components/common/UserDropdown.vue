@@ -193,7 +193,7 @@ export default {
     font-size: @fontSizeBase;
     font-weight: 700;
     line-height: 24px;
-    color: @colorBrandPrimary;
+    color: @colorTextPrimary !important;
     text-decoration: none;
 
     .svg-inline--fa {
