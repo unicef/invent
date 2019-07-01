@@ -193,8 +193,12 @@ export default {
     font-size: @fontSizeBase;
     font-weight: 700;
     line-height: 24px;
-    color: @colorBrandPrimary;
+    color: @colorTextPrimary;
     text-decoration: none;
+
+    &:hover {
+      color: @colorTextSecondary;
+    }
 
     .svg-inline--fa {
       margin-right: 6px;
