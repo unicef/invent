@@ -19,12 +19,6 @@
                 :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
                 :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
               >
-            </el-col> -->
-            <el-col class="LogoUnicef">
-              <img
-                :src="customOrganisation ? organisationLogo : '/logo-unicef.svg'"
-                :alt="customOrganisation ? $gettext('Country logo') : $gettext('Unicef')"
-              >
             </el-col>
             <el-col class="Separator">
               <div />
@@ -33,6 +27,12 @@
               <img
                 src="/logo-dha.svg"
                 alt="Digital Health Atlas"
+              >
+            </el-col> -->
+            <el-col class="LogoUnicef">
+              <img
+                src="/logo-unicef.svg"
+                alt="Unicef"
               >
             </el-col>
           </el-row>
@@ -247,20 +247,20 @@ export default {
         }
       }
 
-      .LogoUnicef {
-        width: 100%;
-
-        img {
-          height: 40px;
-        }
-      }
-
       .LogoDHA {
         width: 100%;
 
         img {
           height: 24px;
           transform: translateY(2px);
+        }
+      }
+
+      .LogoUnicef {
+        width: 100%;
+
+        img {
+          height: 40px;
         }
       }
 
@@ -330,7 +330,7 @@ export default {
       &::before {
         content: "";
         position: absolute;
-        top: -19px;
+        top: -17px;
         left: 0;
         display: inline-block;
         width: 100%;
@@ -341,10 +341,10 @@ export default {
       }
 
       &:hover {
-        color: @colorTextPrimary;
+        color: @colorTextSecondary;
 
         &::before {
-          background-color: @colorBrandPrimary;
+          background-color: @colorGray;
           transform: translateY(0);
         }
       }
@@ -361,6 +361,10 @@ export default {
       .svg-inline--fa {
         margin-right: 6px;
       }
+    }
+
+    .HeaderBtn.md-button {
+      transform: translateY(-1px);
     }
 
     .Separator {

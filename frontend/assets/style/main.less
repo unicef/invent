@@ -53,15 +53,24 @@
 //   font-style: italic;
 // }
 
-// button,
-// input,
-// select,
-// textarea {
-//   font-family: inherit;
-//   font-size: inherit;
-//   line-height: inherit;
-//   color: inherit;
-// }
+
+
+// --------------------------------------------------
+// Roboto font type
+// --------------------------------------------------
+
+
+
+// --------------------------------------------------
+// Reset font family for Element UI
+// --------------------------------------------------
+
+* {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
 
 
 
@@ -76,7 +85,7 @@ html {
 
   // TODO: Remove Angular Material
   height: auto !important;
-  font-family: Arial, sans-serif !important;
+  font-family: 'Roboto', Arial, sans-serif !important;
   -webkit-tap-highlight-color: transparent;
   //
 }
@@ -86,7 +95,7 @@ body {
   margin: 0 ;
   padding: 0;
   // Brand typo
-  font-family: Arial, sans-serif !important;
+  font-family: 'Roboto', Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   // letter-spacing: -0.25px;
@@ -158,6 +167,15 @@ a {
 
 .SubPage {
   min-height: 100vh;
+
+  .LogoHolder {
+    .LogoUnicef {
+      img {
+        margin-top: 2px !important;
+        height: 26px !important;
+      }
+    }
+  }
 }
 
 .PageTitle {
