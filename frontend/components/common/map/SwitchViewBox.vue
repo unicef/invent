@@ -6,9 +6,9 @@
         :active-text="$gettext('National') | translate"
         :inactive-text="$gettext('Sub-national') | translate"
         active-value="national"
-        active-color="#FB7E37"
+        active-color="#F26A21"
         inactive-value="subNational"
-        inactive-color="#FBC02D"
+        inactive-color="#FFC20E"
         @change="setActiveTab($event)"
       />
     </div>

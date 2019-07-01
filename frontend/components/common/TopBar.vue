@@ -14,7 +14,7 @@
             type="flex"
             align="middle"
           >
-            <el-col class="LogoWHO">
+            <!-- <el-col class="LogoWHO">
               <img
                 :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
                 :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
@@ -27,6 +27,12 @@
               <img
                 src="/logo-dha.svg"
                 alt="Digital Health Atlas"
+              >
+            </el-col> -->
+            <el-col class="LogoUnicef">
+              <img
+                src="/logo-unicef.svg"
+                alt="Unicef"
               >
             </el-col>
           </el-row>
@@ -73,7 +79,7 @@
           </template>
           <template v-if="user">
             <el-col class="AuthLinks">
-              <!-- <div>
+              <div>
                 <nuxt-link
                   key="dashboardBtn"
                   :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
@@ -81,7 +87,7 @@
                 >
                   <translate>Dashboard</translate>
                 </nuxt-link>
-              </div> -->
+              </div>
               <div>
                 <nuxt-link
                   key="myProjectsBtn"
@@ -250,6 +256,14 @@ export default {
         }
       }
 
+      .LogoUnicef {
+        width: 100%;
+
+        img {
+          height: 40px;
+        }
+      }
+
       .Separator {
         width: auto;
         height: 36px;
@@ -288,7 +302,7 @@ export default {
       font-size: @fontSizeBase;
       font-weight: 700;
       line-height: 24px;
-      color: @colorBrandPrimary;
+      color: @colorTextPrimary;
       text-decoration: none;
       transition: @transitionAll;
 
@@ -316,7 +330,7 @@ export default {
       &::before {
         content: "";
         position: absolute;
-        top: -19px;
+        top: -17px;
         left: 0;
         display: inline-block;
         width: 100%;
@@ -327,19 +341,19 @@ export default {
       }
 
       &:hover {
-        color: @colorBrandPrimaryLight;
+        color: @colorTextSecondary;
 
         &::before {
-          background-color: @colorBrandPrimaryLight;
+          background-color: @colorGray;
           transform: translateY(0);
         }
       }
 
       &.nuxt-link-active {
-        color: @colorBrandAccent;
+        color: @colorBrandPrimary;
 
         &::before {
-          background-color: @colorBrandAccent;
+          background-color: @colorBrandPrimary;
           transform: translateY(0);
         }
       }
@@ -347,6 +361,10 @@ export default {
       .svg-inline--fa {
         margin-right: 6px;
       }
+    }
+
+    .HeaderBtn.md-button {
+      transform: translateY(-1px);
     }
 
     .Separator {

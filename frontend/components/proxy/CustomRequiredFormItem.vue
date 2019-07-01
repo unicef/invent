@@ -54,7 +54,7 @@ export default {
       return this.publishRule && this.publishRule.required;
     }
   }
-}
+};
 </script>
 
 <style lang="less">
@@ -69,7 +69,6 @@ export default {
       line-height: 12px;
       font-weight: 900;
       text-align: center;
-      color: #FFFFFF;
       border-radius: 50%;
 
       > span {
@@ -78,10 +77,12 @@ export default {
       }
     }
     .DraftRequired{
-      background-color: @colorDraft
+      color: @colorTextPrimary;
+      background-color: @colorDraft;
     }
     .PublishRequired{
-      background-color: @colorPublished
+      color: @colorWhite;
+      background-color: @colorPublished;
     }
   }
 </style>
