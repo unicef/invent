@@ -33,7 +33,13 @@ class ProjectSearch(ExtendedModel):
         "hsc": "hsc",  # eg: hsc=1&hsc=2
         "region": "country__unicef_region",  # eg: region=3
         "donor": "donors",
-        "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
+        "approved": "project__approval__approved",  # false=> approved=0 ; true=> approved=1
+        "goal": "project__data__goal_area",  # eg: goal=1
+        "result": "project__data__result_area",  # eg: result=1
+        "fo": "project__data__field_office",  # eg: fo=1&fo=2
+        "cl": "capability_levels",  # eg: cl=1&cl=2
+        "cc": "capability_categories",  # eg: cc=1&cc=2
+        "cs": "capability_subcategories",  # eg: cs=1&cs=2
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
