@@ -147,6 +147,9 @@ class ProjectSearch(ExtendedModel):
             self.hfa_categories = list(set(filter(None.__ne__,
                                                   [HealthFocusArea.get_parent_id(int(id), 'health_category') for
                                                    id in project.data.get("health_focus_areas", [])])))
+            self.capability_levels = project.data.get('capability_levels')
+            self.capability_categories = project.data.get('capability_categories')
+            self.capability_subcategories = project.data.get('capability_subcategories')
             self.save()
 
 
