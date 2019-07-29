@@ -59,7 +59,14 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__hsc_challenges",
         "country__unicef_region",
         "donors",
-        "project__approval__approved"
+        "project__approval__approved",
+        # UNICEF fields
+        "project__data__goal_area",
+        "project__data__result_area",
+        "project__data__field_office",
+        "project__data__capability_levels",
+        "project__data__capability_categories",
+        "project__data__capability_subcategories",
     )
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__unicef_region')
