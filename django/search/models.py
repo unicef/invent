@@ -54,6 +54,11 @@ class ProjectSearch(ExtendedModel):
     hsc = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
 
+    # UNICEF fields
+    capability_levels = ArrayField(models.IntegerField(), default=list)
+    capability_categories = ArrayField(models.IntegerField(), default=list)
+    capability_subcategories = ArrayField(models.IntegerField(), default=list)
+
     @classmethod
     def search(cls, queryset: QuerySet, search_term: str, search_in: List[str]) -> QuerySet:
         """
