@@ -27,6 +27,13 @@ class ListResultSerializer(serializers.Serializer):
     country_custom_answers_private = serializers.ReadOnlyField(source="project__data__country_custom_answers_private")
     donor_custom_answers = serializers.ReadOnlyField(source="project__data__donor_custom_answers")
     donor_custom_answers_private = serializers.SerializerMethodField()
+    # UNICEF FIELDS
+    goal_area = serializers.ReadOnlyField(source="project__data__goal_area")
+    result_area = serializers.ReadOnlyField(source="project__data__result_area")
+    field_office = serializers.ReadOnlyField(source="project__data__field_office")
+    capability_levels = serializers.ReadOnlyField(source="project__data__capability_levels")
+    capability_categories = serializers.ReadOnlyField(source="project__data__capability_categories")
+    capability_subcategories = serializers.ReadOnlyField(source="project__data__capability_subcategories")
 
     def get_donor_custom_answers_private(self, obj):
         private_fields = obj.get("project__data__donor_custom_answers_private")
