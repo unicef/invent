@@ -97,6 +97,14 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         donor: eg: donor=1&donor=2
         approved: approved=0 (for not approved), approved=1 (for approved)
 
+        ** UNICEF filters **
+        fo: Field Office in eg: fo=1&fo=2
+        goal: Goal Area in eg: goal=1&goal=2
+        result: Result Area in eg: result=1&result=2
+        cl: Capability Levels overlap eg: cl=1&cl=2
+        cc: Capability Categories overlap eg: cc=1&cc=2
+        cs: Capability Sucategories overlap eg: cs=1&cs=2
+
         ** FOUND IN FEATURE **
         found: include if present (defaults to exclude)
 
