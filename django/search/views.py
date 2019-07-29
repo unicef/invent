@@ -57,12 +57,12 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__platforms",
         "project__data__health_focus_areas",
         "project__data__hsc_challenges",
-        "country__region",
+        "country__unicef_region",
         "donors",
         "project__approval__approved"
     )
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__region')
+    ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__unicef_region')
     ordering = ('project_id',)
     pagination_class = ResultsSetPagination
 
