@@ -35,14 +35,18 @@ export default {
     },
     region: {
       type: Number,
-      default: -1
+      default: null
     }
   },
   computed: {
     ...mapGetters({
+      countries: 'countries/getCountries',
       countriesByRegion: 'countries/getCountriesByUnicefRegion'
     }),
     filteredCountries () {
+      if (this.region === null) {
+        return this.countries;
+      }
       return this.countriesByRegion(this.region);
     },
     innerValue: {
