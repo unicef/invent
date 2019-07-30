@@ -9,7 +9,7 @@
     class="CountrySelector"
   >
     <el-option
-      v-for="country in countries"
+      v-for="country in filteredCountries"
       :key="country.id"
       :label="country.name"
       :value="country.id"
@@ -32,12 +32,23 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    region: {
+      type: Number,
+      default: null
     }
   },
   computed: {
     ...mapGetters({
-      countries: 'countries/getCountries'
+      countries: 'countries/getCountries',
+      countriesByRegion: 'countries/getCountriesByUnicefRegion'
     }),
+    filteredCountries () {
+      if (this.region === null) {
+        return this.countries;
+      }
+      return this.countriesByRegion(this.region);
+    },
     innerValue: {
       get () {
         return this.value;

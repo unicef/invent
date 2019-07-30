@@ -1,12 +1,17 @@
 <template>
   <div class="CountryFilters">
-    <country-select
-      v-model="selectedCounties"
-      :disabled="disableCountries"
-    />
     <region-select
       v-model="selectedRegion"
       :disabled="disableRegions"
+    />
+    <country-select
+      v-model="selectedCountries"
+      :disabled="disableCountries"
+      :region="disableCountries ? -1 : selectedRegion"
+    />
+    <field-office-selector
+      v-model="selectedOffice"
+      :country="firstSelectedCountry"
     />
   </div>
 </template>
@@ -16,25 +21,42 @@ import { mapGettersActions } from '../../utilities/form.js';
 
 import CountrySelect from '../common/CountrySelect';
 import RegionSelect from '../common/RegionSelect';
+import FieldOfficeSelector from '../project/FieldOfficeSelector';
 import { mapGetters } from 'vuex';
 export default {
   components: {
     CountrySelect,
-    RegionSelect
+    RegionSelect,
+    FieldOfficeSelector
   },
   computed: {
     ...mapGetters({
       dashboardType: 'dashboard/getDashboardType'
     }),
     ...mapGettersActions({
-      selectedCounties: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
+      selectedCountries: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
+      selectedOffice: ['dashboard', 'getFilteredOffice', 'setFilteredOffice'],
       selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
     }),
     disableCountries () {
-      return !!this.selectedRegion || this.dashboardType === 'country';
+      return (!this.selectedRegion && this.selectedRegion !== 0) || this.dashboardType === 'country';
     },
     disableRegions () {
-      return this.selectedCounties.length > 0 || this.dashboardType === 'country';
+      return this.dashboardType === 'country';
+    },
+    firstSelectedCountry () {
+      return this.selectedCountries && this.selectedCountries.length ? this.selectedCountries[0] : null;
+    }
+  },
+  watch: {
+    selectedCountries (newCountries, oldCountries) {
+      if (!oldCountries || !oldCountries.length || !newCountries ||
+        !newCountries.length || oldCountries[0] !== newCountries[0]) {
+        this.selectedOffice = null;
+      }
+    },
+    selectedRegion (newRegion) {
+      this.selectedCountries = [];
     }
   }
 };
