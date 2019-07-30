@@ -1,12 +1,12 @@
 <template>
   <div class="CountryFilters">
-    <country-select
-      v-model="selectedCounties"
-      :disabled="disableCountries"
-    />
     <region-select
       v-model="selectedRegion"
       :disabled="disableRegions"
+    />
+    <country-select
+      v-model="selectedCountries"
+      :disabled="disableCountries"
     />
   </div>
 </template>
@@ -27,14 +27,14 @@ export default {
       dashboardType: 'dashboard/getDashboardType'
     }),
     ...mapGettersActions({
-      selectedCounties: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
+      selectedCountries: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
       selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
     }),
     disableCountries () {
-      return !!this.selectedRegion || this.dashboardType === 'country';
+      return (!this.selectedRegion && this.selectedRegion !== 0) || this.dashboardType === 'country';
     },
     disableRegions () {
-      return this.selectedCounties.length > 0 || this.dashboardType === 'country';
+      return this.dashboardType === 'country';
     }
   }
 };
