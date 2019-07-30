@@ -7,6 +7,7 @@
     <country-select
       v-model="selectedCountries"
       :disabled="disableCountries"
+      :region="disableCountries ? -1 : selectedRegion"
     />
   </div>
 </template>
@@ -35,6 +36,11 @@ export default {
     },
     disableRegions () {
       return this.dashboardType === 'country';
+    }
+  },
+  watch: {
+    selectedRegion (newRegion) {
+      this.selectedCountries = [];
     }
   }
 };
