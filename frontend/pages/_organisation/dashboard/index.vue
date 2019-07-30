@@ -9,6 +9,7 @@
 import DashboardMap from '../../../components/dashboard/DashboardMap';
 import DashboardProjectBox from '../../../components/dashboard/DashboardProjectBox';
 import { mapGetters, mapActions } from 'vuex';
+import debounce from 'lodash/debounce';
 export default {
   components: {
     DashboardMap,
@@ -42,10 +43,7 @@ export default {
     searchParameters: {
       immediate: false,
       handler (query) {
-        if (this.dashboardSection === 'map') {
-          this.$router.replace({ ...this.$route, query });
-          this.load();
-        }
+        this.searchParameterChanged(query);
       }
     }
   },
@@ -53,6 +51,12 @@ export default {
     ...mapActions({
       loadProjectsMap: 'dashboard/loadProjectsMap'
     }),
+    searchParameterChanged: debounce(function (query) {
+      if (this.dashboardSection === 'map') {
+        this.$router.replace({ ...this.$route, query });
+        this.load();
+      }
+    }, 100),
     async load () {
       this.$nuxt.$loading.start();
       await this.loadProjectsMap();
