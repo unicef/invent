@@ -14,13 +14,12 @@ export const state = () => ({
   selectedDHI: [],
   selectedHFA: [],
   selectedHSC: [],
-  selectedHIS: [],
+  selectedGoal: null,
+  selectedResult: null,
   selectedPlatforms: [],
   selectedRows: [],
   filteredCountries: [],
   filteredRegion: null,
-  governmentApproved: null,
-  governmentFinanced: null,
   selectAll: false,
   pageSize: 10,
   page: 1,
@@ -43,7 +42,8 @@ export const getters = {
     g.donor === null &&
     g.gov === undefined &&
     g.hfa.length === 0 &&
-    g.his.length === 0 &&
+    g.goal === undefined &&
+    g.result === undefined &&
     g.hsc.length === 0 &&
     g.in === undefined &&
     g.q === undefined &&
@@ -73,7 +73,8 @@ export const getters = {
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
   getSelectedHSC: state => state.selectedHSC,
-  getSelectedHIS: state => state.selectedHIS,
+  getSelectedGoal: state => state.selectedGoal,
+  getSelectedResult: state => state.selectedResult,
   getSelectedPlatforms: state => state.selectedPlatforms,
   getSelectedRows: state => state.selectedRows,
   getFilteredCountries: state => {
@@ -112,7 +113,7 @@ export const getters = {
       dhi: state.selectedDHI,
       hfa: state.selectedHFA,
       hsc: state.selectedHSC,
-      his: state.selectedHIS,
+      goal: state.selectedGoal,
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
       sc: state.selectedColumns
     };
@@ -174,8 +175,12 @@ export const actions = {
     commit('SET_SELECTED_HSC', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedHIS ({ commit }, columns) {
-    commit('SET_SELECTED_HIS', columns);
+  setSelectedGoal ({ commit }, columns) {
+    commit('SET_SELECTED_GOAL', columns);
+    commit('SET_CURRENT_PAGE', 1);
+  },
+  setSelectedResult ({ commit }, columns) {
+    commit('SET_SELECTED_RESULT', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
   setSelectedPlatforms ({ commit }, columns) {
@@ -282,7 +287,8 @@ export const mutations = {
     state.selectedDHI = intArrayFromQs(options.dhi);
     state.selectedHFA = intArrayFromQs(options.hfa);
     state.selectedHSC = intArrayFromQs(options.hsc);
-    state.selectedHIS = intArrayFromQs(options.his);
+    state.selectedGoal = options.goal ? +options.goal : null;
+    state.selectedResult = options.result ? +options.result : null;
     state.selectedColumns = options.sc ? strArrayFromQs(options.sc) : defaultSelectedColumns();
     state.dashboardType = options.view_as ? options.view_as : 'user';
     state.dashboardId = options.view_as === 'country' ? intArrayFromQs(options.country)[0] : options.view_as === 'donor' ? +options.donor : null;
@@ -299,8 +305,11 @@ export const mutations = {
   SET_SELECTED_HSC: (state, hsc) => {
     state.selectedHSC = hsc;
   },
-  SET_SELECTED_HIS: (state, his) => {
-    state.selectedHIS = his;
+  SET_SELECTED_GOAL: (state, goal) => {
+    state.selectedGoal = goal || null;
+  },
+  SET_SELECTED_RESULT: (state, result) => {
+    state.selectedResult = result || null;
   },
   SET_SELECTED_PLATFORMS: (state, platforms) => {
     state.selectedPlatforms = platforms;
