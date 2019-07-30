@@ -1,6 +1,6 @@
 import qs from 'qs';
 
-export const searchIn = () => ['name', 'org', 'country', 'overview', 'partner', 'donor', 'loc'];
+export const searchIn = () => ['name', 'country', 'overview', 'partner', 'donor'];
 
 export const stateGenerator = () => ({
   selectedCountry: null,
