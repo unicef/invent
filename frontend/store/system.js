@@ -112,7 +112,7 @@ export const actions = {
       commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
       commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
-      commit('SET_REGIONS', data.regions);
+      commit('SET_REGIONS', data.unicef_regions);
       commit('SET_DATA', { key: 'unicef_regions', value: data.unicef_regions });
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, { root: true });
     } catch (e) {
