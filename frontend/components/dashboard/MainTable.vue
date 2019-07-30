@@ -51,37 +51,8 @@
           />
         </template>
       </el-table-column>
-      <el-table-column
-        v-if="selectedColumns.includes('3')"
-        :resizable="false"
-        :label="$gettext('Organisation Name') | translate"
-        sortable="custom"
-        prop="organisation__name"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <organisation-item
-            :id="scope.row.organisation"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-if="selectedColumns.includes('4')"
-        :resizable="false"
-        :label="$gettext('Government Investor') | translate"
-        sortable="custom"
-        prop="project__data__government_investor"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <span v-show="scope.row.government_investor">
-            <translate>Yes</translate>
-          </span>
-          <span v-show="!scope.row.government_investor">
-            <translate>No</translate>
-          </span>
-        </template>
-      </el-table-column>
+
+
       <el-table-column
         v-if="selectedColumns.includes('5')"
         :resizable="false"

@@ -2,7 +2,7 @@ import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator 
 import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
-export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+export const defaultSelectedColumns = () => ['1', '2', '5', '6', '7', '8', '9', '10'];
 
 export const state = () => ({
   ...stateGenerator(),
@@ -55,6 +55,7 @@ export const getters = {
     g.in === undefined &&
     g.q === undefined &&
     g.region === null &&
+    g.fo === null &&
     g.sw.length === 0 &&
     g.view_as === undefined);
   },
@@ -118,6 +119,7 @@ export const getters = {
       country,
       donor,
       region: state.filteredRegion,
+      fo: state.filteredOffice,
       gov: state.governmentFinanced ? [1, 2] : undefined,
       approved: state.governmentApproved ? 1 : undefined,
       sw: state.selectedPlatforms,
@@ -312,6 +314,7 @@ export const mutations = {
     state.searchIn = options.in ? options.in : searchIn();
     state.filteredCountries = intArrayFromQs(options.country);
     state.filteredRegion = options.region ? +options.region : null;
+    state.filteredOffice = options.fo ? +options.fo : null;
     state.governmentFinanced = options.gov ? true : null;
     state.governmentApproved = options.approved ? true : null;
     state.selectedPlatforms = intArrayFromQs(options.sw);
