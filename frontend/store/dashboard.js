@@ -16,6 +16,9 @@ export const state = () => ({
   selectedHSC: [],
   selectedGoal: null,
   selectedResult: null,
+  selectedCapabilityLevels: [],
+  selectedCapabilityCategories: [],
+  selectedCapabilitySubcategories: [],
   selectedPlatforms: [],
   selectedRows: [],
   filteredCountries: [],
@@ -44,6 +47,9 @@ export const getters = {
     g.hfa.length === 0 &&
     g.goal === undefined &&
     g.result === undefined &&
+    g.cl.length === 0 &&
+    g.cc.length === 0 &&
+    g.cs.length === 0 &&
     g.hsc.length === 0 &&
     g.in === undefined &&
     g.q === undefined &&
@@ -76,6 +82,9 @@ export const getters = {
   getSelectedGoal: state => state.selectedGoal,
   getSelectedResult: state => state.selectedResult,
   getSelectedPlatforms: state => state.selectedPlatforms,
+  getSelectedCapabilityLevels: state => state.selectedCapabilityLevels,
+  getSelectedCapabilityCategories: state => state.selectedCapabilityCategories,
+  getSelectedCapabilitySubcategories: state => state.selectedCapabilitySubcategories,
   getSelectedRows: state => state.selectedRows,
   getFilteredCountries: state => {
     return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountries;
@@ -115,6 +124,9 @@ export const getters = {
       hsc: state.selectedHSC,
       goal: state.selectedGoal,
       result: state.selectedResult,
+      cl: state.selectedCapabilityLevels,
+      cc: state.selectedCapabilityCategories,
+      cs: state.selectedCapabilitySubcategories,
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
       sc: state.selectedColumns
     };
@@ -182,6 +194,18 @@ export const actions = {
   },
   setSelectedResult ({ commit }, columns) {
     commit('SET_SELECTED_RESULT', columns);
+    commit('SET_CURRENT_PAGE', 1);
+  },
+  setSelectedCapabilityLevels ({ commit }, columns) {
+    commit('SET_SELECTED_CAPABILITY_LEVELS', columns);
+    commit('SET_CURRENT_PAGE', 1);
+  },
+  setSelectedCapabilityCategories ({ commit }, columns) {
+    commit('SET_SELECTED_CAPABILITY_CATEGORIES', columns);
+    commit('SET_CURRENT_PAGE', 1);
+  },
+  setSelectedCapabilitySubcategories ({ commit }, columns) {
+    commit('SET_SELECTED_CAPABILITY_SUBCATEGORIES', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
   setSelectedPlatforms ({ commit }, columns) {
@@ -290,6 +314,9 @@ export const mutations = {
     state.selectedHSC = intArrayFromQs(options.hsc);
     state.selectedGoal = options.goal ? +options.goal : null;
     state.selectedResult = options.result ? +options.result : null;
+    state.selectedCapabilityLevels = intArrayFromQs(options.cl);
+    state.selectedCapabilityCategories = intArrayFromQs(options.cc);
+    state.selectedCapabilitySubcategories = intArrayFromQs(options.cs);
     state.selectedColumns = options.sc ? strArrayFromQs(options.sc) : defaultSelectedColumns();
     state.dashboardType = options.view_as ? options.view_as : 'user';
     state.dashboardId = options.view_as === 'country' ? intArrayFromQs(options.country)[0] : options.view_as === 'donor' ? +options.donor : null;
@@ -311,6 +338,15 @@ export const mutations = {
   },
   SET_SELECTED_RESULT: (state, result) => {
     state.selectedResult = result || null;
+  },
+  SET_SELECTED_CAPABILITY_LEVELS: (state, cl) => {
+    state.selectedCapabilityLevels = cl;
+  },
+  SET_SELECTED_CAPABILITY_CATEGORIES: (state, cc) => {
+    state.selectedCapabilityCategories = cc;
+  },
+  SET_SELECTED_CAPABILITY_SUBCATEGORIES: (state, cs) => {
+    state.selectedCapabilitySubcategories = cs;
   },
   SET_SELECTED_PLATFORMS: (state, platforms) => {
     state.selectedPlatforms = platforms;
