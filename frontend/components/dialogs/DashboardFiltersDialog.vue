@@ -85,24 +85,26 @@
           v-show="selectedFilter === 'platform'"
           :selected.sync="platforms"
         />
-        <capability-filter
-          v-show="selectedFilter === 'capabilityLevels'"
-          type="capabilityLevels"
-          :goal-area="selectedGoalArea"
-          :selected.sync="capabilityLevels"
-        />
-        <capability-filter
-          v-show="selectedFilter === 'capabilityCategories'"
-          type="capabilityCategories"
-          :goal-area="selectedGoalArea"
-          :selected.sync="capabilityCategories"
-        />
-        <capability-filter
-          v-show="selectedFilter === 'capabilitySubcategories'"
-          type="capabilitySubcategories"
-          :goal-area="selectedGoalArea"
-          :selected.sync="capabilitySubcategories"
-        />
+        <template v-if="selectedGoalArea && selectedGoalArea !== 1">
+          <capability-filter
+            v-show="selectedFilter === 'capabilityLevels'"
+            type="capabilityLevels"
+            :goal-area="selectedGoalArea"
+            :selected.sync="capabilityLevels"
+          />
+          <capability-filter
+            v-show="selectedFilter === 'capabilityCategories'"
+            type="capabilityCategories"
+            :goal-area="selectedGoalArea"
+            :selected.sync="capabilityCategories"
+          />
+          <capability-filter
+            v-show="selectedFilter === 'capabilitySubcategories'"
+            type="capabilitySubcategories"
+            :goal-area="selectedGoalArea"
+            :selected.sync="capabilitySubcategories"
+          />
+        </template>
       </el-col>
     </el-row>
     <span slot="footer">
