@@ -114,6 +114,7 @@ export const getters = {
       hfa: state.selectedHFA,
       hsc: state.selectedHSC,
       goal: state.selectedGoal,
+      result: state.selectedResult,
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
       sc: state.selectedColumns
     };
