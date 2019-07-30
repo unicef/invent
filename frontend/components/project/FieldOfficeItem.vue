@@ -1,6 +1,11 @@
 <template>
   <div class="FieldOfficeItem">
-    {{ selected.name }}
+    <span v-if="selected">{{ selected.name }}</span>
+    <span v-else>
+      <translate>
+        N/A
+      </translate>
+    </span>
   </div>
 </template>
 
