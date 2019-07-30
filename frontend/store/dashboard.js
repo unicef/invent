@@ -18,6 +18,7 @@ export const state = () => ({
   selectedPlatforms: [],
   selectedRows: [],
   filteredCountries: [],
+  filteredOffice: null,
   filteredRegion: null,
   governmentApproved: null,
   governmentFinanced: null,
@@ -80,6 +81,7 @@ export const getters = {
     return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountries;
   },
   getFilteredRegion: state => state.filteredRegion,
+  getFilteredOffice: state => state.filteredOffice,
   getGovernmentApproved: state => state.governmentApproved,
   getGovernmentFinanced: state => state.governmentFinanced,
   getSelectAll: state => state.selectAll,
@@ -203,6 +205,10 @@ export const actions = {
     commit('SET_FILTERED_REGION', value);
     commit('SET_CURRENT_PAGE', 1);
   },
+  setFilteredOffice ({ commit }, value) {
+    commit('SET_FILTERED_OFFICE', value);
+    commit('SET_CURRENT_PAGE', 1);
+  },
   setGovernmentApproved ({ commit }, value) {
     commit('SET_GOVERNMENT_APPROVED', value);
     commit('SET_CURRENT_PAGE', 1);
@@ -310,6 +316,9 @@ export const mutations = {
   },
   SET_FILTERED_COUNTRIES: (state, value) => {
     state.filteredCountries = value;
+  },
+  SET_FILTERED_OFFICE: (state, value) => {
+    state.filteredOffice = value;
   },
   SET_FILTERED_REGION: (state, value) => {
     state.filteredRegion = value;
