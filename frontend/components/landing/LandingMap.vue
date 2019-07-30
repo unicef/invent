@@ -37,13 +37,9 @@
           :map-ready="mapReady"
           :selected-country-pin="selectedCountryPin"
           :active-sub-level.sync="activeSubLevel"
-          :national-level-coverage="activeTab ==='national'"
+          :national-level-coverage="true"
           :sub-national-projects="subNationalProjects"
           :national-projects="nationalProjects"
-        />
-        <switch-view-box
-          v-if="activeCountry"
-          :active-tab.sync="activeTab"
         />
         <world-zoom-button />
 
@@ -63,15 +59,13 @@ import NoSSR from 'vue-no-ssr';
 import CountryCenterMarker from '../common/map/CountryCenterMarker';
 import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
 import WorldZoomButton from '../common/map/WorldZoomButton';
-import SwitchViewBox from '../common/map/SwitchViewBox';
 
 export default {
   components: {
     'no-ssr': NoSSR,
     CountryCenterMarker,
     CountryDetailsOverlay,
-    WorldZoomButton,
-    SwitchViewBox
+    WorldZoomButton
   },
   mixins: [MapMixin]
 };
