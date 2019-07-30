@@ -49,6 +49,12 @@ export default {
     }
   },
   watch: {
+    selectedCountries (newCountries, oldCountries) {
+      if (!oldCountries || !oldCountries.length || !newCountries ||
+        !newCountries.length || oldCountries[0] !== newCountries[0]) {
+        this.selectedOffice = null;
+      }
+    },
     selectedRegion (newRegion) {
       this.selectedCountries = [];
     }
