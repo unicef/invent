@@ -16,6 +16,53 @@
       />
     </div>
     <div class="FilterItems">
+      <template v-if="selectedGoal && selectedGoal !== 1">
+        <filter-item
+          :selected="selectedCapabilityLevels"
+          :limit="4"
+          :label="selectedGoalAreaDetails.capability_level_question"
+          item="capabilityLevels"
+        >
+          <capability-list
+            :value="selectedCapabilityLevels"
+            type="capabilityLevels"
+            :goal-area="selectedGoal"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedCapabilityLevels')"
+          />
+        </filter-item>
+        <filter-item
+          :selected="selectedCapabilityCategories"
+          :limit="4"
+          :label="selectedGoalAreaDetails.capability_category_question"
+          item="capabilityCategories"
+        >
+          <capability-list
+            :value="selectedCapabilityCategories"
+            type="capabilityCategories"
+            :goal-area="selectedGoal"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedCapabilityCategories')"
+          />
+        </filter-item>
+        <filter-item
+          :selected="selectedCapabilitySubcategories"
+          :limit="4"
+          :label="selectedGoalAreaDetails.capability_subcategory_question"
+          item="capabilitySubcategories"
+        >
+          <capability-list
+            :value="selectedCapabilitySubcategories"
+            type="capabilitySubcategories"
+            :goal-area="selectedGoal"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedCapabilitySubcategories')"
+          />
+        </filter-item>
+      </template>
       <template v-if="selectedGoal === 1">
         <filter-item
           :selected="selectedHFA"
@@ -43,6 +90,19 @@
             @delete="deleteFromCollection($event, 'selectedHSC')"
           />
         </filter-item>
+        <filter-item
+          :selected="selectedDHI"
+          :limit="4"
+          :label="$gettext('Digital Health Interventions') | translate"
+          item="dhi"
+        >
+          <dhi-categories-list
+            :value="selectedDHI"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedDHI')"
+          />
+        </filter-item>
       </template>
       <filter-item
         :selected="selectedPlatforms"
@@ -55,20 +115,6 @@
           :limit="4"
           actions
           @delete="deleteFromCollection($event, 'selectedPlatforms')"
-        />
-      </filter-item>
-
-      <filter-item
-        :selected="selectedDHI"
-        :limit="4"
-        :label="$gettext('Digital Health Interventions') | translate"
-        item="dhi"
-      >
-        <dhi-categories-list
-          :value="selectedDHI"
-          :limit="4"
-          actions
-          @delete="deleteFromCollection($event, 'selectedDHI')"
         />
       </filter-item>
     </div>
@@ -85,9 +131,11 @@ import FilterItem from '@/components/dashboard/FilterItem';
 import DhiCategoriesList from '@/components/common/list/DhiCategoriesList';
 import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
 import HealthSystemChallengesList from '@/components/common/list/HealthSystemChallengesList';
+import CapabilityList from '@/components/common/list/CapabilityList';
 import SimplePlatformList from '@/components/common/list/SimplePlatformList';
 import GoalAreasSelector from '@/components/common/GoalAreasSelector';
 import ResultAreasSelector from '@/components/common/ResultAreasSelector';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -99,18 +147,31 @@ export default {
     HfaCategoriesList,
     HealthSystemChallengesList,
     SimplePlatformList,
+    CapabilityList,
     GoalAreasSelector,
     ResultAreasSelector
   },
   computed: {
+    ...mapGetters({
+      goalAreas: 'projects/getGoalAreas'
+    }),
     ...mapGettersActions({
       selectedGoal: ['dashboard', 'getSelectedGoal', 'setSelectedGoal', 0],
       selectedResult: ['dashboard', 'getSelectedResult', 'setSelectedResult', 0],
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
+      selectedCapabilityLevels: ['dashboard', 'getSelectedCapabilityLevels', 'setSelectedCapabilityLevels', 0],
+      selectedCapabilityCategories: ['dashboard', 'getSelectedCapabilityCategories', 'setSelectedCapabilityCategories', 0],
+      selectedCapabilitySubcategories: ['dashboard', 'getSelectedCapabilitySubcategories', 'setSelectedCapabilitySubcategories', 0],
       selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0]
-    })
+    }),
+    selectedGoalAreaDetails () {
+      if (this.selectedGoal) {
+        return this.goalAreas.find(g => g.id === this.selectedGoal);
+      }
+      return null;
+    }
   },
   methods: {
     deleteFromCollection (id, collectionName) {
