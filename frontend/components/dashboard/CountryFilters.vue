@@ -9,6 +9,10 @@
       :disabled="disableCountries"
       :region="disableCountries ? -1 : selectedRegion"
     />
+    <field-office-selector
+      v-model="selectedOffice"
+      :country="firstSelectedCountry"
+    />
   </div>
 </template>
 
@@ -17,11 +21,13 @@ import { mapGettersActions } from '../../utilities/form.js';
 
 import CountrySelect from '../common/CountrySelect';
 import RegionSelect from '../common/RegionSelect';
+import FieldOfficeSelector from '../project/FieldOfficeSelector';
 import { mapGetters } from 'vuex';
 export default {
   components: {
     CountrySelect,
-    RegionSelect
+    RegionSelect,
+    FieldOfficeSelector
   },
   computed: {
     ...mapGetters({
@@ -29,6 +35,7 @@ export default {
     }),
     ...mapGettersActions({
       selectedCountries: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
+      selectedOffice: ['dashboard', 'getFilteredOffice', 'setFilteredOffice'],
       selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
     }),
     disableCountries () {
@@ -36,6 +43,9 @@ export default {
     },
     disableRegions () {
       return this.dashboardType === 'country';
+    },
+    firstSelectedCountry () {
+      return this.selectedCountries && this.selectedCountries.length ? this.selectedCountries[0] : null;
     }
   },
   watch: {
