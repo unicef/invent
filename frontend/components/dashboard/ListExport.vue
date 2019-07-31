@@ -111,7 +111,7 @@ export default {
       try {
         return this.getHealthFocusAreas.filter(hfa => hfa.health_focus_areas.some(h => health_focus_areas.includes(h.id))).map(hf => hf.name).join(',');
       } catch (e) {
-        console.log(e);
+        console.warn(e);
         return '';
       }
     },
@@ -124,7 +124,7 @@ export default {
             custom[dc.label] = value.join(',');
           });
         } catch (e) {
-          console.error('failed to parse custom donor answers', e);
+          console.warn('failed to parse custom donor answers', e);
         }
       }
       if (this.dashboardType === 'country') {
@@ -134,7 +134,7 @@ export default {
             custom[cc.label] = value.join(',');
           });
         } catch (e) {
-          console.error('failed to parse custom country answers', e);
+          console.warn('failed to parse custom country answers', e);
         }
       }
       return custom;
