@@ -16,8 +16,8 @@ class SearchTests(SetupTests):
         project_data2 = copy.deepcopy(self.project_data)
         project_data2['project'].update(name="phrase3 phrase5 overview")
         project_data2['project'].update(country=self.country_id, government_investor=2)
-        project_data2['project'].update(platforms=[dict(id=1, strategies=[119, 118]),
-                                                   dict(id=2, strategies=[119, 171])])
+        project_data2['project'].update(platforms=[1, 2])
+        project_data2['project'].update(dhis=[118, 171])
         self.d1cq = DonorCustomQuestion.objects.create(question="test 1", private=True, donor_id=self.d1.id)
         self.d2cq = DonorCustomQuestion.objects.create(question="test 2", private=True, donor_id=self.d2.id)
         project_data2['donor_custom_answers'] = {self.d1.id: [{"question_id": self.d1cq.id, "answer": ["answer1"]}],
@@ -73,16 +73,6 @@ class SearchTests(SetupTests):
         self.assertTrue(response.json()['count'] >= 1)
 
         data = {"q": "overview"}  # OVERVIEW
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] >= 1)
-
-        data = {"q": "dist1"}  # LOCATION
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] >= 1)
-
-        data = {"q": "partner1"}  # PARTNER
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['count'] >= 1)
@@ -168,7 +158,6 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
         self.assertEqual(response.json()['results']['type'], 'list')
-        self.assertTrue("his_bucket" in response.json()['results']['projects'][0])
 
     def test_filter_software(self):
         url = reverse("search-project-list")
@@ -208,20 +197,6 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
 
-    def test_filter_his(self):
-        url = reverse("search-project-list")
-        data = {"his": 1}
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 2)
-
-    def test_filter_bad_filter_term(self):
-        url = reverse("search-project-list")
-        data = {"his": 'k'}
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 0)
-
     def test_filter_bad_and_good_multi_filter_term(self):
         url = reverse("search-project-list")
         data = {"his": [1, 'k']}
@@ -250,28 +225,6 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
 
-    def test_filter_gov(self):
-        url = reverse("search-project-list")
-        data = {"gov": 1}
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 0)
-
-        data = {"gov": 2}
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
-
-        data = {"gov": [1, 2]}
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
-
-        data = {"gov": 0}
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
-
     def test_filter_approved(self):
         url = reverse("search-project-list")
         data = {"approved": 1}
@@ -297,65 +250,6 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
-
-    def test_multi_filter_different_filter(self):
-        # all the filters are AND relations, within the same filter there's an OR relation
-        url = reverse("search-project-list")
-        data = {"country": self.country_id, "approved": 1}
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
-
-    def test_multi_filter_same_filter(self):
-        # all the filters are AND relations, within the same filter there's an OR relation
-        project_data = self.project_data.copy()
-        project_data['project'].update(platforms=[dict(id=1, strategies=[206]),
-                                       dict(id=2, strategies=[223])])
-        self.country.country_questions.all().delete()
-        self.d1.donor_questions.all().delete()
-        self.d2.donor_questions.all().delete()
-        url = reverse("project-publish", kwargs=dict(project_id=self.project_id, country_id=self.country_id))
-        response = self.test_user_client.put(url, project_data, format="json")
-        self.assertEqual(response.status_code, 200)
-
-        p1 = Project.objects.first()
-        p2 = Project.objects.last()
-
-        p1_dhis = list(itertools.chain(*[platform['strategies'] for platform in p1.data.get('platforms')]))
-        p2_dhis = list(itertools.chain(*[platform['strategies'] for platform in p2.data.get('platforms')]))
-
-        dhi1 = p1_dhis[0]
-        dhi2 = p2_dhis[0]
-
-        self.assertNotEqual(dhi1, dhi2)
-
-        dhi1_parent = DigitalStrategy.objects.get(id=dhi1).parent
-        dhi2_parent = DigitalStrategy.objects.get(id=dhi2).parent
-
-        self.assertNotEqual(dhi1_parent, dhi2_parent)
-
-        data = {"dhi": dhi1_parent.id}
-
-        url = reverse("search-project-list")
-
-        # Should find only one
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
-
-        data = {"dhi": dhi2_parent.id}
-
-        # Should find only one
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
-
-        data = {"dhi": [dhi1_parent.id, dhi2_parent.id]}
-
-        # Should find two, because same-filter clauses are OR
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 2)
 
     def test_filter_view_as_donor_list_results_success(self):
         # add user to donor access
