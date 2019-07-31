@@ -25,15 +25,15 @@ export const getters = {
   getResultAreas: state => get(state, 'projectStructure.result_areas', []),
   getCapabilityLevels: state => (id) => {
     const all = get(state, 'projectStructure.capability_levels', []);
-    return all.filter(i => i.goal_area_id === id);
+    return id ? all.filter(i => i.goal_area_id === id) : all;
   },
   getCapabilityCategories: state => (id) => {
     const all = get(state, 'projectStructure.capability_categories', []);
-    return all.filter(i => i.goal_area_id === id);
+    return id ? all.filter(i => i.goal_area_id === id) : all;
   },
   getCapabilitySubcategories: state => (id) => {
     const all = get(state, 'projectStructure.capability_subcategories', []);
-    return all.filter(i => i.goal_area_id === id);
+    return id ? all.filter(i => i.goal_area_id === id) : all;
   },
   getFieldOffices: state => get(state, 'projectStructure.field_offices', []),
   getHealthFocusAreas: state => state.projectStructure.health_focus_areas ? [...state.projectStructure.health_focus_areas] : [],
@@ -44,8 +44,8 @@ export const getters = {
   getLicenses: state => state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
   getDigitalHealthInterventions: state => state.projectStructure.strategies ? [...state.projectStructure.strategies] : [],
   getDigitalHealthInterventionDetails: (state, getters) => id => {
-    for (let category of getters.getDigitalHealthInterventions) {
-      for (let group of category.subGroups) {
+    for (const category of getters.getDigitalHealthInterventions) {
+      for (const group of category.subGroups) {
         const result = group.strategies.find(s => s.id === id);
         if (result) {
           return result;
