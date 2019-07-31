@@ -48,7 +48,7 @@ class SetupTests(APITestCase):
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
         self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
-                                              region=Country.REGIONS[0][0])
+                                              region=Country.REGIONS[0][0], unicef_region=Country.UNICEF_REGIONS[0][0])
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
@@ -80,39 +80,18 @@ class SetupTests(APITestCase):
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
             "country": self.country_id,
-            "platforms": [{
-                "id": 1,
-                "strategies": [1, 2]
-            }, {
-                "id": 2,
-                "strategies": [1, 9]
-            }],
-            "licenses": [1, 2],
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "coverage_second_level": [
-                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49},
-                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89}
-            ],
-            "national_level_deployment":
-                {"clients": 20000, "health_workers": 0, "facilities": 0,
-                 "facilities_list": ['facility1', 'facility2', 'facility3']},
+            "platforms": [1, 2],
             "donors": [self.d1.id, self.d2.id],
-            "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
-            "government_investor": 0,
-            "implementing_partners": ["partner1", "partner2"],
-            "repository": "http://some.repo",
-            "mobile_application": "http://mobile.app.org",
-            "wiki": "http://wiki.org",
-            "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
-                                       {"id": 2, "selected": True},
-                                       {"id": 3, "selected": True, "link": "http://example.org"}],
-            "interoperability_standards": [1],
             "start_date": str(datetime.today().date()),
-            "end_date": str(datetime.today().date())
+            "end_date": str(datetime.today().date()),
+            "field_office": 1,
+            "goal_area": 1,
+            "result_area": 1,
+            "capability_levels": [],
+            "capability_categories": [],
+            "capability_subcategories": [],
+            "dhis": []
         }}
 
         # Create project draft
