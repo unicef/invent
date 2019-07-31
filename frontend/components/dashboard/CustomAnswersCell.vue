@@ -72,7 +72,7 @@ export default {
       return [];
     },
     limited () {
-      return this.limit && this.values.length > this.limit ? this.values.slice(0, this.limit) : this.selected;
+      return this.limit && this.values.length > this.limit ? this.values.slice(0, this.limit) : this.values;
     },
     excluded () {
       if (this.values && this.limited) {
