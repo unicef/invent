@@ -32,7 +32,7 @@ export default {
             [
               {
                 text: this.$gettext('Digital Health Atlas'),
-                fillColor: '#008DC9',
+                fillColor: '#1CABE2',
                 color: '#FFFFFF',
                 colSpan: 2,
                 style: 'mainHeader',
