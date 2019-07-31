@@ -36,6 +36,22 @@
           />
         </template>
       </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('5')"
+        :resizable="false"
+        :label="$gettext('Region') | translate"
+        sortable="custom"
+        prop="country__region"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <region-item
+            :id="scope.row.region"
+          />
+        </template>
+      </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('2')"
         :resizable="false"
@@ -52,21 +68,94 @@
         </template>
       </el-table-column>
 
-
       <el-table-column
-        v-if="selectedColumns.includes('5')"
+        v-if="selectedColumns.includes('16')"
         :resizable="false"
-        :label="$gettext('Region') | translate"
-        sortable="custom"
-        prop="country__region"
+        :label="$gettext('Field office') | translate"
         width="180"
       >
         <template slot-scope="scope">
-          <region-item
-            :id="scope.row.region"
+          <FieldOfficeItem
+            :value="scope.row.field_office"
+            :country="scope.row.country"
           />
         </template>
       </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('11')"
+        :resizable="false"
+        :label="$gettext('Goal Area') | translate"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <GoalAreaItem
+            :value="scope.row.goal_area"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('12')"
+        :resizable="false"
+        :label="$gettext('Result Area') | translate"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <ResultAreaItem
+            :value="scope.row.result_area"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('13')"
+        :resizable="false"
+        :label="$gettext('Capability Levels') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <CapabilitiesList
+            show-icon
+            :value="scope.row.capability_levels"
+            :goal-area="scope.row.goal_area"
+            :values-function="getCapabilityLevels"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('14')"
+        :resizable="false"
+        :label="$gettext('Capability Categories') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <CapabilitiesList
+            show-icon
+            :value="scope.row.capability_categories"
+            :goal-area="scope.row.goal_area"
+            :values-function="getCapabilityCategories"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('15')"
+        :resizable="false"
+        :label="$gettext('Capability Subcategories') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <CapabilitiesList
+            show-icon
+            :value="scope.row.capability_subcategories"
+            :goal-area="scope.row.goal_area"
+            :values-function="getCapabilitySubcategories"
+          />
+        </template>
+      </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('6')"
         :resizable="false"
@@ -84,7 +173,7 @@
       <el-table-column
         v-if="selectedColumns.includes('7')"
         :resizable="false"
-        :label="$gettext('Contact Name') | translate"
+        :label="$gettext('Programme Focal Point Name') | translate"
         width="240"
       >
         <template slot-scope="scope">
@@ -101,22 +190,11 @@
       <el-table-column
         v-if="selectedColumns.includes('8')"
         :resizable="false"
-        :label="$gettext('Implementation Overview') | translate"
+        :label="$gettext('Initiative Description') | translate"
         width="240"
       >
         <template slot-scope="scope">
           <p>{{ scope.row.implementation_overview }}</p>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('9')"
-        :resizable="false"
-        :label="$gettext('Geographic Scope') | translate"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <p>{{ scope.row.geographic_scope }}</p>
         </template>
       </el-table-column>
 
@@ -190,26 +268,32 @@
 import { mapGetters, mapActions } from 'vuex';
 import { mapGettersActions } from '../../utilities/form.js';
 
-import ProjectCard from '../common/ProjectCard';
-import CountryItem from '../common/CountryItem';
-import OrganisationItem from '../common/OrganisationItem';
-import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
-import DonorsList from '../common/list/DonorsList';
-import RegionItem from '../common/RegionItem';
-import CustomAnswersCell from './CustomAnswersCell';
+import ProjectCard from '@/components/common/ProjectCard';
+import CountryItem from '@/components/common/CountryItem';
+import HealthFocusAreasList from '@/components/common/list/HealthFocusAreasList';
+import DonorsList from '@/components/common/list/DonorsList';
+import RegionItem from '@/components/common/RegionItem';
+import CustomAnswersCell from '@/components/dashboard/CustomAnswersCell';
+import GoalAreaItem from '@/components/dashboard/GoalAreaItem';
+import ResultAreaItem from '@/components/dashboard/ResultAreaItem';
 import CurrentPage from '@/components/dashboard/CurrentPage';
+import FieldOfficeItem from '@/components/project/FieldOfficeItem';
+import CapabilitiesList from '@/components/project/CapabilitiesList';
 import { setTimeout } from 'timers';
 
 export default {
   components: {
     ProjectCard,
     CountryItem,
-    OrganisationItem,
     HealthFocusAreasList,
     DonorsList,
     RegionItem,
     CustomAnswersCell,
-    CurrentPage
+    CurrentPage,
+    FieldOfficeItem,
+    CapabilitiesList,
+    GoalAreaItem,
+    ResultAreaItem
   },
   data () {
     return {
@@ -226,7 +310,10 @@ export default {
       selectAll: 'dashboard/getSelectAll',
       total: 'dashboard/getTotal',
       countryColumns: 'dashboard/getCountryColumns',
-      donorColumns: 'dashboard/getDonorColumns'
+      donorColumns: 'dashboard/getDonorColumns',
+      getCapabilityLevels: 'projects/getCapabilityLevels',
+      getCapabilityCategories: 'projects/getCapabilityCategories',
+      getCapabilitySubcategories: 'projects/getCapabilitySubcategories'
     }),
     ...mapGettersActions({
       pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],
@@ -512,7 +599,8 @@ export default {
       }
 
       .HealthFocusAreasList,
-      .CustomAnswersCell {
+      .CustomAnswersCell,
+      .CapabilitiesList {
         ul {
           list-style-type: none;
           margin: 0;

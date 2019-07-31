@@ -1,12 +1,20 @@
 <template>
-  <ul class="CapabilitiesList">
-    <li
-      v-for="item in selected"
-      :key="item.id"
-    >
-      {{ item.name }}
-    </li>
-  </ul>
+  <div class="CapabilitiesList">
+    <ul>
+      <li
+        v-for="item in selected"
+        :key="item.id"
+      >
+        <span v-if="showIcon">
+          <fa
+            icon="check"
+            size="xs"
+          />
+        </span>
+        <span>{{ item.name }}</span>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -27,6 +35,10 @@ export default {
     valuesFunction: {
       type: Function,
       required: true
+    },
+    showIcon: {
+      type: Boolean,
+      defaultL: false
     }
   },
   data () {
@@ -39,7 +51,10 @@ export default {
       return this.valuesFunction(this.goalArea);
     },
     selected () {
-      return this.items.filter(i => this.value.some(v => v === i.id));
+      if (this.value && Array.isArray(this.value)) {
+        return this.items.filter(i => this.value.some(v => v === i.id));
+      }
+      return [];
     }
   }
 };
