@@ -16,14 +16,6 @@ from country.models import CustomQuestion
 from project.utils import remove_keys
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
 
-URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
-
-
-def url_validator(value):
-    if not URL_REGEX.match(value):
-        raise ValidationError('Enter a valid URL.')
-    return value
-
 
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
