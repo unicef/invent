@@ -91,26 +91,6 @@ class Project(SoftDeleteModel, ExtendedModel):
     def get_anon_data(self):
         return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
-    def str_national_level_deployment(self):
-        nld = self.data.get('national_level_deployment', {})
-        if not nld:
-            return ''
-        return "National Level Deployment: " \
-               "[Clients: {}, Health Workers: {}, Facilities: {}]".format(nld.get('clients'),
-                                                                          nld.get('health_workers'),
-                                                                          nld.get('facilities'))
-
-    def str_coverage(self, second_level=False):
-        coverage = self.data.get('coverage' if not second_level else 'coverage_second_level', [])
-        if not coverage:
-            return ''
-        return ", ".join(["District: {} "
-                          "[Clients: {}, Health Workers: {}, Facilities: {}]".format(c.get('district'),
-                                                                                     c.get('clients'),
-                                                                                     c.get('health_workers'),
-                                                                                     c.get('facilities'))
-                         for c in coverage])
-
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
