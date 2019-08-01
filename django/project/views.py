@@ -506,7 +506,7 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                     [str(x) for x in HealthFocusArea.objects.get_names_for_ids(p.data.get("health_focus_areas", []))])},
                 {"Software": ", ".join([str(x) for x in
                                         TechnologyPlatform.objects.get_names_for_ids(
-                                            [x['id'] for x in p.data.get("platforms", [])])])},
+                                            [x for x in p.data.get("platforms", [])])])},
                 {'Health System Challenges': ", ".join(
                     ['({}) {}'.format(x.name, x.challenge) for x in
                      HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))])},
