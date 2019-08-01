@@ -69,9 +69,10 @@ export default {
   .CountryFilters {
     .el-select {
       width: 100%;
+      margin-bottom: 10px;
 
-      &:first-child {
-        margin-bottom: 10px;
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }

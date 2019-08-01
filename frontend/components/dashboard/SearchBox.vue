@@ -71,18 +71,6 @@
               <translate>Project Name</translate>
             </el-checkbox>
             <el-checkbox
-              label="org"
-              class="CheckboxSmall"
-            >
-              <translate>Organisation Name</translate>
-            </el-checkbox>
-            <el-checkbox
-              label="loc"
-              class="CheckboxSmall"
-            >
-              <translate>Location</translate>
-            </el-checkbox>
-            <el-checkbox
               label="overview"
               class="CheckboxSmall"
             >

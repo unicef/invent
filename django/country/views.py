@@ -115,29 +115,6 @@ class DonorPartnerLogoViewSet(DonorSuperAdminPermissionMixin, mixins.CreateModel
     parser_classes = (MultiPartParser, FormParser)
 
 
-class CountryExportView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = []
-        for country in Country.objects.all():
-            country_data = {'country': country.name, 'country_code': country.code, 'platforms': {}}
-
-            for platform in TechnologyPlatform.objects.all():
-                strategies_set = set()
-                project_searches = ProjectSearch.objects.filter(country_id=country.id, software__contains=[platform.id])
-
-                for ps in project_searches:
-                    strategies_set.update(ps.dhi_categories)
-
-                if project_searches:
-                    country_data['platforms'][platform.id] = {
-                        'strategies': list(strategies_set),
-                        'projects': list(project_searches.values_list('project_id', flat=True))
-                    }
-            data.append(country_data)
-
-        return Response(data)
-
-
 class MapFileViewSet(CountryAdminPermissionMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
                      mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = MapFile.objects.all()

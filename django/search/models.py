@@ -1,4 +1,3 @@
-import itertools
 from typing import Dict, List
 
 from django.db import models
@@ -20,7 +19,7 @@ class ProjectSearch(ExtendedModel):
         "name": "project__name",
         "org": "organisation__name",
         "country": "country__name",
-        "region": "country__region",
+        "region": "country__unicef_region",
         "overview": "project__data__implementation_overview",
         "donor": "donor_names"
     }
@@ -32,9 +31,15 @@ class ProjectSearch(ExtendedModel):
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
         "hfa": "hfa_categories",  # eg: hfa=1&hfa=2
         "hsc": "hsc",  # eg: hsc=1&hsc=2
-        "region": "country__region",  # eg: region=3
+        "region": "country__unicef_region",  # eg: region=3
         "donor": "donors",
-        "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
+        "approved": "project__approval__approved",  # false=> approved=0 ; true=> approved=1
+        "goal": "project__data__goal_area",  # eg: goal=1
+        "result": "project__data__result_area",  # eg: result=1
+        "fo": "project__data__field_office",  # eg: fo=1&fo=2
+        "cl": "capability_levels",  # eg: cl=1&cl=2
+        "cc": "capability_categories",  # eg: cc=1&cc=2
+        "cs": "capability_subcategories",  # eg: cs=1&cs=2
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -48,6 +53,11 @@ class ProjectSearch(ExtendedModel):
     dhi_categories = ArrayField(models.IntegerField(), default=list)
     hsc = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
+
+    # UNICEF fields
+    capability_levels = ArrayField(models.IntegerField(), default=list)
+    capability_categories = ArrayField(models.IntegerField(), default=list)
+    capability_subcategories = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
     def search(cls, queryset: QuerySet, search_term: str, search_in: List[str]) -> QuerySet:
@@ -79,17 +89,18 @@ class ProjectSearch(ExtendedModel):
             for value in values:
                 try:
                     lookup.append(int(value))
-                except ValueError:
+                except ValueError:  # pragma: no cover
                     pass
             return lookup
 
         if selected_fields:
             for field in selected_fields:
                 if query_params[field]:
-                    if field in ["country", "region"]:
+                    if field in ["country", "region", "goal", "result", "fo"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
-                    elif field in ["donor", "sw", "dhi", "hfa", "hsc"]:
+                    elif field in ["donor", "sw", "dhi", "hfa", "hsc",
+                                   "cl", "cc", "cs"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
@@ -136,6 +147,9 @@ class ProjectSearch(ExtendedModel):
             self.hfa_categories = list(set(filter(None.__ne__,
                                                   [HealthFocusArea.get_parent_id(int(id), 'health_category') for
                                                    id in project.data.get("health_focus_areas", [])])))
+            self.capability_levels = project.data.get('capability_levels')
+            self.capability_categories = project.data.get('capability_categories')
+            self.capability_subcategories = project.data.get('capability_subcategories')
             self.save()
 
 

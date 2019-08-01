@@ -13,23 +13,10 @@
         </el-col>
       </el-row>
       <div
-        v-show="!showTabbedView"
         class="CountrySubHeader"
       >
-        <span v-if="showSubNational">
-          <sub-level-item
-            :id="activeSubLevel"
-          />
-          <span class="SubLevelCounter">
-            <translate :parameters="{count: currentSubLevelProjects.length }">
-              &nbsp; {count} project(s)
-            </translate>
-          </span>
-        </span>
         <div v-if="showNational">
-          <span class="SubLevelItem">
-            <translate>National</translate>
-          </span>
+          <span class="SubLevelItem"/>
           <span class="SubLevelCounter">
             <translate :parameters="{count: nationalProjects.length} ">
               &nbsp; {count} project(s)
@@ -40,13 +27,6 @@
       <!-- -->
       <el-row class="ProjectsList">
         <el-col>
-          <tabbed-card-project-list
-            v-if="showTabbedView"
-            :projects="filteredProjects"
-            :active-tab="activeTab"
-            @change="tabChangeHandler"
-          />
-
           <div
             v-show="showSubLevelHint"
             class="HintText"
@@ -111,14 +91,9 @@
 import CountryItem from '../CountryItem';
 import ProjectCard from '../ProjectCard';
 
-import TabbedCardProjectList from './TabbedCardProjectList';
-import SubLevelItem from '../SubLevelItem';
-
 export default {
   components: {
     CountryItem,
-    TabbedCardProjectList,
-    SubLevelItem,
     ProjectCard
   },
   props: {
@@ -156,16 +131,13 @@ export default {
       return this.activeCountry && !this.selectedCountry;
     },
     showSubNational () {
-      return !this.showTabbedView &&
-      this.activeTab === 'subNational' &&
-      this.activeSubLevel;
+      return false;
     },
     showNational () {
-      return !this.showTabbedView &&
-      this.activeTab === 'national';
+      return true;
     },
     showSubLevelHint () {
-      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational';
+      return false;
     },
     showMapProjectBox () {
       return this.activeCountry;

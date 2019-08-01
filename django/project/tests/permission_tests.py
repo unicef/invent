@@ -152,8 +152,8 @@ class PermissionTests(SetupTests):
         response = anon_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("platforms")[0].get('id'),
-                         self.project_data['project']['platforms'][0]['id'])
+        self.assertEqual(response.json()['published'].get("platforms"),
+                         self.project_data['project']['platforms'])
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY + Project.FIELDS_FOR_LOGGED_IN:
@@ -191,8 +191,8 @@ class PermissionTests(SetupTests):
         response = test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("platforms")[0].get('id'),
-                         self.project_data['project']['platforms'][0]['id'])
+        self.assertEqual(response.json()['published'].get("platforms"),
+                         self.project_data['project']['platforms'])
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:

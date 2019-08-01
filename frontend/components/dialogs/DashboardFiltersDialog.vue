@@ -7,41 +7,59 @@
     top="10vh"
     width="90vw"
     custom-class="FilterDialog"
-    @open="loadCurrentSelection"
+    @opened="loadCurrentSelection"
   >
     <el-row
       type="flex"
       class="FilterDialogWrapper"
     >
       <el-col class="FilterSelector">
-        <filter-item
-          :active="selectedFilter === 'dhi'"
-          :selected="dhi"
-          :header="$gettext('Digital Health Interventions') | translate"
-          item="dhi"
-          @clear="dhi=[]"
-        />
-        <filter-item
-          :active="selectedFilter === 'hfa'"
-          :selected="hfa"
-          :header="$gettext('Health focus areas') | translate"
-          item="hfa"
-          @clear="hfa=[]"
-        />
-        <filter-item
-          :active="selectedFilter === 'hsc'"
-          :selected="hsc"
-          :header="$gettext('Health system challenges') | translate"
-          item="hsc"
-          @clear="hsc=[]"
-        />
-        <filter-item
-          :active="selectedFilter === 'his'"
-          :selected="his"
-          :header="$gettext('Health Information System') | translate"
-          item="his"
-          @clear="his=[]"
-        />
+        <template v-if="selectedGoalArea === 1">
+          <filter-item
+            :active="selectedFilter === 'dhi'"
+            :selected="dhi"
+            :header="$gettext('Digital Health Interventions') | translate"
+            item="dhi"
+            @clear="dhi=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'hfa'"
+            :selected="hfa"
+            :header="$gettext('Health focus areas') | translate"
+            item="hfa"
+            @clear="hfa=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'hsc'"
+            :selected="hsc"
+            :header="$gettext('Health system challenges') | translate"
+            item="hsc"
+            @clear="hsc=[]"
+          />
+        </template>
+        <template v-else-if="selectedGoalAreaDetails">
+          <filter-item
+            :active="selectedFilter === 'capabilityLevels'"
+            :selected="capabilityLevels"
+            :header="selectedGoalAreaDetails.capability_level_question"
+            item="capabilityLevels"
+            @clear="capabilityLevels=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'capabilityCategories'"
+            :selected="capabilityCategories"
+            :header="selectedGoalAreaDetails.capability_category_question"
+            item="capabilityCategories"
+            @clear="capabilityCategories=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'capabilitySubcategories'"
+            :selected="capabilitySubcategories"
+            :header="selectedGoalAreaDetails.capability_subcategory_question"
+            item="capabilitySubcategories"
+            @clear="capabilitySubcategories=[]"
+          />
+        </template>
         <filter-item
           :active="selectedFilter === 'platform'"
           :selected="platforms"
@@ -63,14 +81,30 @@
           v-show="selectedFilter === 'hsc'"
           :selected.sync="hsc"
         />
-        <health-information-system-filter
-          v-show="selectedFilter === 'his'"
-          :selected.sync="his"
-        />
         <platform-filter
           v-show="selectedFilter === 'platform'"
           :selected.sync="platforms"
         />
+        <template v-if="selectedGoalArea && selectedGoalArea !== 1">
+          <capability-filter
+            v-show="selectedFilter === 'capabilityLevels'"
+            type="capabilityLevels"
+            :goal-area="selectedGoalArea"
+            :selected.sync="capabilityLevels"
+          />
+          <capability-filter
+            v-show="selectedFilter === 'capabilityCategories'"
+            type="capabilityCategories"
+            :goal-area="selectedGoalArea"
+            :selected.sync="capabilityCategories"
+          />
+          <capability-filter
+            v-show="selectedFilter === 'capabilitySubcategories'"
+            type="capabilitySubcategories"
+            :goal-area="selectedGoalArea"
+            :selected.sync="capabilitySubcategories"
+          />
+        </template>
       </el-col>
     </el-row>
     <span slot="footer">
@@ -86,12 +120,6 @@
           >
             <translate>Cancel</translate>
           </el-button>
-          <!-- <el-button
-            type="text"
-            class="DeleteButton"
-            @click="clearAll">
-            <translate>Clear All</translate>
-          </el-button> -->
         </el-col>
         <el-col class="PrimaryButtons">
           <el-button
@@ -112,8 +140,9 @@ import { mapGettersActions } from '../../utilities/form.js';
 import FilterItem from './FilterItem';
 import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter';
 import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter';
-import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter';
+
 import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter';
+import CapabilityFilter from '@/components/dialogs/filters/CapabilityFilter';
 import PlatformFilter from './filters/PlatformFilter';
 
 export default {
@@ -121,30 +150,42 @@ export default {
     FilterItem,
     HealthFocusAreasFilter,
     DigitalHealthInterventionsFilter,
-    HealthInformationSystemFilter,
     HealthSystemChallengesFilter,
-    PlatformFilter
+    PlatformFilter,
+    CapabilityFilter
   },
   data () {
     return {
       dhi: [],
       hfa: [],
       hsc: [],
-      his: [],
+      capabilityLevels: [],
+      capabilityCategories: [],
+      capabilitySubcategories: [],
       platforms: []
     };
   },
   computed: {
     ...mapGetters({
-      selectedFilter: 'layout/getDashboardFiltersDialogState'
+      selectedFilter: 'layout/getDashboardFiltersDialogState',
+      selectedGoalArea: 'dashboard/getSelectedGoal',
+      goalAreas: 'projects/getGoalAreas'
     }),
     ...mapGettersActions({
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
-      selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
+      selectedCapabilityLevels: ['dashboard', 'getSelectedCapabilityLevels', 'setSelectedCapabilityLevels', 0],
+      selectedCapabilityCategories: ['dashboard', 'getSelectedCapabilityCategories', 'setSelectedCapabilityCategories', 0],
+      selectedCapabilitySubcategories: ['dashboard', 'getSelectedCapabilitySubcategories', 'setSelectedCapabilitySubcategories', 0],
       selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0]
     }),
+    selectedGoalAreaDetails () {
+      if (this.selectedGoalArea) {
+        return this.goalAreas.find(g => g.id === this.selectedGoalArea);
+      }
+      return null;
+    },
     visible: {
       get () {
         return this.selectedFilter !== null;
@@ -162,14 +203,18 @@ export default {
       this.dhi = [...this.selectedDHI];
       this.hfa = [...this.selectedHFA];
       this.hsc = [...this.selectedHSC];
-      this.his = [...this.selectedHIS];
+      this.capabilityLevels = [...this.selectedCapabilityLevels];
+      this.capabilityCategories = [...this.selectedCapabilityCategories];
+      this.capabilitySubCategories = [...this.selectedCapabilitySubcategories];
       this.platforms = [...this.selectedPlatforms];
     },
     clearAll () {
       this.dhi = [];
       this.hfa = [];
       this.hsc = [];
-      this.his = [];
+      this.capabilityLevels = [];
+      this.capabilityCategories = [];
+      this.capabilitySubcategories = [];
       this.platforms = [];
     },
     cancel () {
@@ -179,7 +224,9 @@ export default {
       this.selectedDHI = this.dhi;
       this.selectedHFA = this.hfa;
       this.selectedHSC = this.hsc;
-      this.selectedHIS = this.his;
+      this.selectedCapabilityLevels = this.capabilityLevels;
+      this.selectedCapabilityCategories = this.capabilityCategories;
+      this.selectedCapabilitySubcategories = this.capabilitySubcategories;
       this.selectedPlatforms = this.platforms;
       this.$nextTick(() => {
         this.setDashboardFiltersDialogState(null);

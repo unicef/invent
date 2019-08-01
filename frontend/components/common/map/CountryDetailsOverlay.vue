@@ -63,7 +63,7 @@ export default {
     },
     nationalLevelCoverage: {
       type: Boolean,
-      default: false
+      default: true
     },
     nationalProjects: {
       type: Array,

@@ -1,13 +1,13 @@
 import qs from 'qs';
 
-export const searchIn = () => ['name', 'org', 'country', 'overview', 'partner', 'donor', 'loc'];
+export const searchIn = () => ['name', 'country', 'overview', 'partner', 'donor'];
 
 export const stateGenerator = () => ({
   selectedCountry: null,
   currentZoom: 3,
   activeCountry: null,
   mapReady: false,
-  projectBoxActiveTab: 'subNational',
+  projectBoxActiveTab: 'national',
   activeSubLevel: null,
   searchString: '',
   searchIn: searchIn(),
@@ -63,7 +63,7 @@ export const gettersGenerator = () => ({
   getActiveTabProjects: (state, getters) => state.projectBoxActiveTab === 'subNational' ? getters.getSelectedCountrySubNationalProjects : getters.getSelectedCountryNationalProjects,
   getSelectedCountryProjects: state => state.projectsMap.filter(p => p.country && (p.country === state.selectedCountry || p.country === state.activeCountry)),
   getSelectedCountrySubNationalProjects: (state, getters) => getters.getSelectedCountryProjects.filter(cp => cp.coverage && cp.coverage.length > 0),
-  getSelectedCountryNationalProjects: (state, getters) => getters.getSelectedCountryProjects.filter(cp => cp.national_level_deployment && Object.keys(cp.national_level_deployment).length > 0),
+  getSelectedCountryNationalProjects: (state, getters) => getters.getSelectedCountryProjects,
   getSelectedCountryCurrentSubLevelProjects: (state, getters, rootState, rootGetters) => {
     const id = state.activeSubLevel;
     const subLevel = rootGetters['countries/getSubLevelDetails'](id);

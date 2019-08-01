@@ -57,12 +57,19 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__platforms",
         "project__data__health_focus_areas",
         "project__data__hsc_challenges",
-        "country__region",
+        "country__unicef_region",
         "donors",
-        "project__approval__approved"
+        "project__approval__approved",
+        # UNICEF fields
+        "project__data__goal_area",
+        "project__data__result_area",
+        "project__data__field_office",
+        "project__data__capability_levels",
+        "project__data__capability_categories",
+        "project__data__capability_subcategories",
     )
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__region')
+    ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__unicef_region')
     ordering = ('project_id',)
     pagination_class = ResultsSetPagination
 
@@ -89,6 +96,14 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
         donor: eg: donor=1&donor=2
         approved: approved=0 (for not approved), approved=1 (for approved)
+
+        ** UNICEF filters **
+        fo: Field Office in eg: fo=1&fo=2
+        goal: Goal Area in eg: goal=1&goal=2
+        result: Result Area in eg: result=1&result=2
+        cl: Capability Levels overlap eg: cl=1&cl=2
+        cc: Capability Categories overlap eg: cc=1&cc=2
+        cs: Capability Sucategories overlap eg: cs=1&cs=2
 
         ** FOUND IN FEATURE **
         found: include if present (defaults to exclude)

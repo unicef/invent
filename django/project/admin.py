@@ -30,7 +30,7 @@ class ViewOnlyInlineMixin:
     can_delete = False
     show_change_link = True
 
-    def has_add_permission(self, request, obj):
+    def has_add_permission(self, request, obj):  # pragma: no cover
         return False
 
 
@@ -44,12 +44,12 @@ class ParentFilter(admin.SimpleListFilter):
     title = 'Parent Filter'
     parameter_name = 'parent'
 
-    def lookups(self, request, model_admin):
+    def lookups(self, request, model_admin):  # pragma: no cover
         return (
             ('Parent Only', _('Parent Only')),
             ('Children Only', _('Children Only'))
         )
-    def queryset(self, request, queryset):
+    def queryset(self, request, queryset):  # pragma: no cover
         if self.value() is None:
             return queryset.all()
         elif self.value() == 'Parent Only':

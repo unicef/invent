@@ -10,9 +10,10 @@
 </template>
 
 <script>
-import MainTable from '../../../components/dashboard/MainTable';
-import TableTopActions from '../../../components/dashboard/TableTopActions';
+import MainTable from '@/components/dashboard/MainTable';
+import TableTopActions from '@/components/dashboard/TableTopActions';
 import { mapGetters, mapActions } from 'vuex';
+import debounce from 'lodash/debounce';
 
 export default {
   components: {
@@ -36,6 +37,11 @@ export default {
         message: 'Unable to process the search with the current parameters'
       });
     }
+    if (store.getters['dashboard/getDashboardType'] === 'donor') {
+      await store.dispatch('system/loadDonorDetails', store.getters['dashboard/getDashboardId']);
+    } else if (store.getters['dashboard/getDashboardType'] === 'country') {
+      await store.dispatch('countries/loadCountryDetails', store.getters['dashboard/getDashboardId']);
+    }
   },
   computed: {
     ...mapGetters({
@@ -47,10 +53,7 @@ export default {
     searchParameters: {
       immediate: false,
       handler (query) {
-        if (this.dashboardSection === 'list') {
-          this.$router.replace({ ...this.$route, query });
-          this.load();
-        }
+        this.searchParameterChanged(query);
       }
     }
   },
@@ -58,6 +61,12 @@ export default {
     ...mapActions({
       loadProjectList: 'dashboard/loadProjectList'
     }),
+    searchParameterChanged: debounce(function (query) {
+      if (this.dashboardSection === 'list') {
+        this.$router.replace({ ...this.$route, query });
+        this.load();
+      }
+    }, 100),
     async load () {
       this.$nuxt.$loading.start();
       await this.loadProjectList();

@@ -4,6 +4,7 @@
 
 <script>
 import { format } from 'date-fns';
+import get from 'lodash/get';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -18,7 +19,15 @@ export default {
       getHealthFocusAreas: 'projects/getHealthFocusAreas',
       dashboardType: 'dashboard/getDashboardType',
       countryColumns: 'dashboard/getCountryColumns',
-      donorColumns: 'dashboard/getDonorColumns'
+      donorColumns: 'dashboard/getDonorColumns',
+      goalAreas: 'projects/getGoalAreas',
+      resultAreas: 'projects/getResultAreas',
+      capabilityLevels: 'projects/getCapabilityLevels',
+      capabilityCategories: 'projects/getCapabilityCategories',
+      capabilitySubcategories: 'projects/getCapabilitySubcategories',
+      fieldOffices: 'projects/getFieldOffices',
+      regions: 'system/getUnicefRegions',
+      hscChallenges: 'projects/getHscChallenges'
     }),
     exportDate () {
       return format(Date.now(), 'Do MMM, YYYY');
@@ -31,8 +40,8 @@ export default {
           body: [
             [
               {
-                text: this.$gettext('Digital Health Atlas'),
-                fillColor: '#008DC9',
+                text: this.$gettext('TIIP'),
+                fillColor: '#1CABE2',
                 color: '#FFFFFF',
                 colSpan: 2,
                 style: 'mainHeader',
@@ -166,6 +175,75 @@ export default {
       }
       return '';
     },
+    parseFlatList (flatList, type) {
+      try {
+        const all = typeof this[type] === 'function' ? this[type]() : this[type];
+        return all.filter(cb => flatList.includes(cb.id)).map(cb => cb.name).join(',');
+      } catch (e) {
+        console.warn(e);
+        return '';
+      }
+    },
+    parseHscChallenges (values) {
+      try {
+        return this.hscChallenges.reduce((a, c) => {
+          c.challenges.forEach(cc => {
+            if (values.includes(cc.id)) {
+              a.push(cc.challenge);
+            }
+          });
+          return a;
+        }, []).join(',');
+      } catch (e) {
+        console.warn(e);
+        return '';
+      }
+    },
+    parseHealthFocusAreas (health_focus_areas) {
+      try {
+        return this.getHealthFocusAreas.filter(hfa => hfa.health_focus_areas.some(h => health_focus_areas.includes(h.id))).map(hf => hf.name).join(',');
+      } catch (e) {
+        console.warn(e);
+        return '';
+      }
+    },
+    capabilityData ({ capabilityLevels, capabilityCategories, capabilitySubcategories }) {
+      return [
+        [
+          { text: this.$gettext('Capability Levels:'), style: 'subHeader' },
+          capabilityLevels
+        ],
+        [
+          { text: this.$gettext('Capability Categories:'), style: 'subHeader' },
+          capabilityCategories
+        ],
+        {
+          stack: [
+            { text: this.$gettext('Capability Subcategories:'), style: 'subHeader' },
+            capabilitySubcategories
+          ],
+          colSpan: 2
+        }, ''
+      ];
+    },
+    dhaFields ({ health_focus_areas, hsc_challenges }) {
+      return [
+        {
+          stack: [
+            { text: this.$gettext('Health Focus Area:'), style: 'subHeader' },
+            health_focus_areas
+          ],
+          colSpan: 2
+        }, '',
+        {
+          stack: [
+            { text: this.$gettext('Health System Challenges'), style: 'subHeader' },
+            hsc_challenges
+          ],
+          colSpan: 2
+        }, ''
+      ];
+    },
     printPdf () {
       this.base64Images = require('../../utilities/exportBase64Images.js');
       this.pdfMake = require('pdfmake/build/pdfmake.js');
@@ -178,9 +256,15 @@ export default {
         const country = this.getCountryDetails(project.country);
         const country_name = country && country.name ? country.name.toUpperCase() : '';
         const donors = project.donors.map(d => this.getDonorDetails(d)).filter(d => d).map(d => d.name);
-        const organisation = this.getOrganisationDetails(project.organisation);
-        const organisation_name = organisation ? organisation.name : '';
-        const health_focus_areas = this.getHealthFocusAreas.filter(hfa => project.health_focus_areas.some(h => h === hfa.id)).map(hf => hf.name);
+        const health_focus_areas = this.parseHealthFocusAreas(project.health_focus_areas);
+        const goalArea = get(this.goalAreas.find(g => g.id === project.goal_area), 'name', '');
+        const resultArea = get(this.resultAreas.find(g => g.id === project.result_area), 'name', '');
+        const region = get(this.regions.find(r => r.id === project.region), 'name', '');
+        const fieldOffice = get(this.fieldOffices.find(r => r.id === project.field_office), 'name', '');
+        const capabilityLevels = this.parseFlatList(project.capability_levels, 'capabilityLevels');
+        const capabilityCategories = this.parseFlatList(project.capability_categories, 'capabilityCategories');
+        const capabilitySubcategories = this.parseFlatList(project.capability_subcategories, 'capabilitySubcategories');
+        const hsc_challenges = this.parseHscChallenges(project.hsc_challenges);
 
         docDefinition.content.push({
           margin: [0, 10],
@@ -206,47 +290,51 @@ export default {
               ],
               [
                 [
-                  { text: this.$gettext('Government investor:'), style: 'subHeader' },
-                  this.printBoolean(project.government_investor)],
-                [
-                  { text: this.$gettext('Organisation name:'), style: 'subHeader' },
-                  organisation_name
+                  { text: this.$gettext('Region:'), style: 'subHeader' },
+                  region
                 ],
                 [
-                  { text: this.$gettext('Investors:'), style: 'subHeader' },
-                  donors.join(', ')
+                  { text: this.$gettext('Field office:'), style: 'subHeader' },
+                  fieldOffice
                 ],
+
                 {
                   stack: [
-                    { text: this.$gettext('Health Focus Area:'), style: 'subHeader' },
-                    health_focus_areas.join(', ')
+                    { text: this.$gettext('Investors:'), style: 'subHeader' },
+                    donors.join(', ')
                   ],
-                  colSpan: 2
+                  colSpan: 3
                 },
-                '',
+                '', '',
+
                 [
-                  { text: this.$gettext('Point of contact:'), style: 'subHeader' },
+                  { text: this.$gettext('Programme Focal Point Name:'), style: 'subHeader' },
                   `${project.contact_name || ''} - ${project.contact_email || ''}`
                 ]
               ],
               [
                 {
                   stack: [
-                    { text: this.$gettext('Overview of digital health implementation:'),
+                    { text: this.$gettext('Initiative Description:'),
                       style: 'subHeader' },
                     { text: project.implementation_overview || '' }
                   ],
-                  colSpan: 3
+                  colSpan: 6
                 },
-                '', '',
-                {
-                  stack: [
-                    { text: this.$gettext('Geographical coverage:'), style: 'subHeader' },
-                    project.geographic_scope || ''
-                  ],
-                  colSpan: 3
-                },
-                '', ''
+                '', '', '', '', ''
+              ],
+              [
+                [
+                  { text: this.$gettext('Goal Area:'), style: 'subHeader' },
+                  goalArea
+                ],
+                [
+                  { text: this.$gettext('Result Area:'), style: 'subHeader' },
+                  resultArea
+                ],
+                ...project.goal_area !== 1
+                  ? this.capabilityData({ capabilityLevels, capabilityCategories, capabilitySubcategories })
+                  : this.dhaFields({ health_focus_areas, hsc_challenges })
               ],
               ...project.custom.map(c => [
                 {
@@ -258,6 +346,7 @@ export default {
                 },
                 '', '', '', '', ''
               ])
+
             ]
           }
         });
