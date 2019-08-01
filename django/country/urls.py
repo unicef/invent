@@ -21,9 +21,6 @@ router.register(r'country-custom-questions', CountryCustomQuestionViewSet, base_
 router.register(r'donor-custom-questions', DonorCustomQuestionViewSet, base_name='donor-custom-questions')
 
 urlpatterns = [
-                  url(r'^countries/export/$',
-                      view=views.CountryExportView.as_view(),
-                      name='country-export'),
                   url(r"^countries/map-download/(?P<country_id>\d+)/$",
                       view=views.MapDownloadViewSet.as_view({'get': 'map_download'}),
                       name="country-map-download"),
