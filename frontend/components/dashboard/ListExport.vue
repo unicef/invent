@@ -82,7 +82,7 @@ export default {
     },
     parseCountry (countryId) {
       const country = this.getCountryDetails(countryId);
-      return country && country.name ? country.name.toUpperCase() : '';
+      return country && country.name ? country.name : '';
     },
     parseDonors (donors) {
       try {
