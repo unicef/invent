@@ -289,7 +289,7 @@ class UNICEFResultArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Result Areas'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{}] {}'.format(self.goal_area.name, self.name)
 
 
@@ -299,7 +299,7 @@ class UNICEFCapabilityLevel(InvalidateCacheMixin, ExtendedNameOrderedSoftDeleted
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Capability Levels'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_level_question, self.name)
 
 
@@ -309,7 +309,7 @@ class UNICEFCapabilityCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDele
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Capability Categories'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_category_question, self.name)
 
 
@@ -319,7 +319,7 @@ class UNICEFCapabilitySubCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftD
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Capability Sub Categories'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_subcategory_question, self.name)
 
 
@@ -331,7 +331,7 @@ class UNICEFGoal(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Goal Areas'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '{}'.format(self.name)
 
 
@@ -344,7 +344,7 @@ class ProjectImport(ExtendedModel):
     failed = models.TextField(null=True, blank=True, default='')
     status = models.NullBooleanField(null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.csv.name
 
 
