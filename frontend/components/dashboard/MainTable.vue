@@ -201,7 +201,7 @@
       <el-table-column
         v-if="selectedColumns.includes('10')"
         :resizable="false"
-        :label="$gettext('Health Focus Area') | translate"
+        :label="$gettext('Health Focus Areas') | translate"
         width="240"
       >
         <template slot-scope="scope">
