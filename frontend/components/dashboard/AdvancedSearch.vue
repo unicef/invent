@@ -3,71 +3,107 @@
     <filter-presets-actions />
     <search-box />
     <country-filters />
-    <div class="FilterSwitches">
-      <filter-switch
-        v-model="governamentApproved"
-        :label="$gettext('Only MOH Verified Projects') | translate"
-        :tooltip="$gettext('Show only projects that have been verified by the country MOH') | translate"
+    <div class="UnicefSingleSelection">
+      <goal-areas-selector
+        v-model="selectedGoal"
+        :placeholder="$gettext('Select Goal Area') | translate"
+        clearable
       />
-      <filter-switch
-        v-model="governamentFinanced"
-        :label="$gettext('Government financed') | translate"
-        :tooltip="$gettext('Show only projects that have been received financial or in-kind government support') | translate"
+      <result-areas-selector
+        v-model="selectedResult"
+        :goal-area="selectedGoal"
+        :placeholder="$gettext('Select Result Area') | translate"
       />
     </div>
     <div class="FilterItems">
-      <filter-item
-        :selected="selectedDHI"
-        :limit="4"
-        :label="$gettext('Digital Health Interventions') | translate"
-        item="dhi"
-      >
-        <dhi-categories-list
-          :value="selectedDHI"
+      <template v-if="selectedGoal && selectedGoal !== 1">
+        <filter-item
+          :selected="selectedCapabilityLevels"
           :limit="4"
-          actions
-          @delete="deleteDhiHandler"
-        />
-      </filter-item>
-      <filter-item
-        :selected="selectedHFA"
-        :limit="4"
-        :label="$gettext('Health Focus Area') | translate"
-        item="hfa"
-      >
-        <hfa-categories-list
-          :value="selectedHFA"
+          :label="selectedGoalAreaDetails.capability_level_question"
+          item="capabilityLevels"
+        >
+          <capability-list
+            :value="selectedCapabilityLevels"
+            type="capabilityLevels"
+            :goal-area="selectedGoal"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedCapabilityLevels')"
+          />
+        </filter-item>
+        <filter-item
+          :selected="selectedCapabilityCategories"
           :limit="4"
-          actions
-          @delete="deleteHfaHandler"
-        />
-      </filter-item>
-      <filter-item
-        :selected="selectedHSC"
-        :limit="4"
-        :label="$gettext('Health System Challenges') | translate"
-        item="hsc"
-      >
-        <health-system-challenges-list
-          :value="selectedHSC"
+          :label="selectedGoalAreaDetails.capability_category_question"
+          item="capabilityCategories"
+        >
+          <capability-list
+            :value="selectedCapabilityCategories"
+            type="capabilityCategories"
+            :goal-area="selectedGoal"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedCapabilityCategories')"
+          />
+        </filter-item>
+        <filter-item
+          :selected="selectedCapabilitySubcategories"
           :limit="4"
-          actions
-          @delete="deleteHscHandler"
-        />
-      </filter-item>
-      <filter-item
-        :selected="selectedHIS"
-        :limit="4"
-        :label="$gettext('Health Information System') | translate"
-        item="his"
-      >
-        <his-bucket-list
-          :value="selectedHIS"
+          :label="selectedGoalAreaDetails.capability_subcategory_question"
+          item="capabilitySubcategories"
+        >
+          <capability-list
+            :value="selectedCapabilitySubcategories"
+            type="capabilitySubcategories"
+            :goal-area="selectedGoal"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedCapabilitySubcategories')"
+          />
+        </filter-item>
+      </template>
+      <template v-if="selectedGoal === 1">
+        <filter-item
+          :selected="selectedHFA"
           :limit="4"
-          actions
-          @delete="deleteHisHandler"
-        />
-      </filter-item>
+          :label="$gettext('Health Focus Area') | translate"
+          item="hfa"
+        >
+          <hfa-categories-list
+            :value="selectedHFA"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedHFA')"
+          />
+        </filter-item>
+        <filter-item
+          :selected="selectedHSC"
+          :limit="4"
+          :label="$gettext('Health System Challenges') | translate"
+          item="hsc"
+        >
+          <health-system-challenges-list
+            :value="selectedHSC"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedHSC')"
+          />
+        </filter-item>
+        <filter-item
+          :selected="selectedDHI"
+          :limit="4"
+          :label="$gettext('Digital Health Interventions') | translate"
+          item="dhi"
+        >
+          <dhi-categories-list
+            :value="selectedDHI"
+            :limit="4"
+            actions
+            @delete="deleteFromCollection($event, 'selectedDHI')"
+          />
+        </filter-item>
+      </template>
       <filter-item
         :selected="selectedPlatforms"
         :limit="4"
@@ -78,7 +114,7 @@
           :value="selectedPlatforms"
           :limit="4"
           actions
-          @delete="deletePlatformsHandler"
+          @delete="deleteFromCollection($event, 'selectedPlatforms')"
         />
       </filter-item>
     </div>
@@ -86,57 +122,60 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form';
+import { mapGettersActions } from '@/utilities/form';
 
-import FilterPresetsActions from './FilterPresetsActions';
-import SearchBox from './SearchBox';
-import CountryFilters from './CountryFilters';
-import FilterSwitch from './FilterSwitch';
-import FilterItem from './FilterItem';
-import DhiCategoriesList from '../common/list/DhiCategoriesList';
-import HfaCategoriesList from '../common/list/HfaCategoriesList';
-import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
-import HisBucketList from '../common/list/HisBucketList';
-import SimplePlatformList from '../common/list/SimplePlatformList';
+import FilterPresetsActions from '@/components/dashboard/FilterPresetsActions';
+import SearchBox from '@/components/dashboard/SearchBox';
+import CountryFilters from '@/components/dashboard/CountryFilters';
+import FilterItem from '@/components/dashboard/FilterItem';
+import DhiCategoriesList from '@/components/common/list/DhiCategoriesList';
+import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
+import HealthSystemChallengesList from '@/components/common/list/HealthSystemChallengesList';
+import CapabilityList from '@/components/common/list/CapabilityList';
+import SimplePlatformList from '@/components/common/list/SimplePlatformList';
+import GoalAreasSelector from '@/components/common/GoalAreasSelector';
+import ResultAreasSelector from '@/components/common/ResultAreasSelector';
+import { mapGetters } from 'vuex';
+
 export default {
   components: {
     FilterPresetsActions,
     SearchBox,
     CountryFilters,
-    FilterSwitch,
     FilterItem,
     DhiCategoriesList,
     HfaCategoriesList,
     HealthSystemChallengesList,
-    HisBucketList,
-    SimplePlatformList
+    SimplePlatformList,
+    CapabilityList,
+    GoalAreasSelector,
+    ResultAreasSelector
   },
   computed: {
+    ...mapGetters({
+      goalAreas: 'projects/getGoalAreas'
+    }),
     ...mapGettersActions({
-      governamentApproved: ['dashboard', 'getGovernmentApproved', 'setGovernmentApproved', 0],
-      governamentFinanced: ['dashboard', 'getGovernmentFinanced', 'setGovernmentFinanced', 0],
+      selectedGoal: ['dashboard', 'getSelectedGoal', 'setSelectedGoal', 0],
+      selectedResult: ['dashboard', 'getSelectedResult', 'setSelectedResult', 0],
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
-      selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
+      selectedCapabilityLevels: ['dashboard', 'getSelectedCapabilityLevels', 'setSelectedCapabilityLevels', 0],
+      selectedCapabilityCategories: ['dashboard', 'getSelectedCapabilityCategories', 'setSelectedCapabilityCategories', 0],
+      selectedCapabilitySubcategories: ['dashboard', 'getSelectedCapabilitySubcategories', 'setSelectedCapabilitySubcategories', 0],
       selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0]
-    })
+    }),
+    selectedGoalAreaDetails () {
+      if (this.selectedGoal) {
+        return this.goalAreas.find(g => g.id === this.selectedGoal);
+      }
+      return null;
+    }
   },
   methods: {
-    deleteDhiHandler (id) {
-      this.selectedDHI = this.selectedDHI.filter(dhi => dhi !== id);
-    },
-    deleteHfaHandler (id) {
-      this.selectedHFA = this.selectedHFA.filter(hfa => hfa !== id);
-    },
-    deleteHscHandler (id) {
-      this.selectedHSC = this.selectedHSC.filter(hsc => hsc !== id);
-    },
-    deleteHisHandler (id) {
-      this.selectedHIS = this.selectedHIS.filter(his => his !== id);
-    },
-    deletePlatformsHandler (id) {
-      this.selectedPlatforms = this.selectedPlatforms.filter(p => p !== id);
+    deleteFromCollection (id, collectionName) {
+      this[collectionName] = this[collectionName].filter(item => item !== id);
     }
   }
 };
@@ -162,6 +201,12 @@ export default {
 
       &:last-child {
         border: 0;
+      }
+    }
+
+    .UnicefSingleSelection {
+      .el-select:first-child {
+        margin-bottom: 10px;
       }
     }
 

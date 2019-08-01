@@ -601,107 +601,6 @@ class CountryTests(APITestCase):
         self.assertIn("partner_logos", response.json().keys())
         self.assertTrue(isinstance(response.json()['partner_logos'], list))
 
-    def test_country_export(self):
-        country = Country.objects.create(name='country111', code='C2')
-        org = Organisation.objects.create(name="org1")
-        d1 = Donor.objects.create(name="Donor1", code="donor1")
-        p1 = TechnologyPlatform.objects.create(name='platform1')
-        p2 = TechnologyPlatform.objects.create(name='platform2')
-        s_parent = DigitalStrategy.objects.create(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
-        s1 = DigitalStrategy.objects.create(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
-        s2 = DigitalStrategy.objects.create(parent=s_parent, name="strategy2", group=DigitalStrategy.GROUP_CHOICES[0])
-        s3 = DigitalStrategy.objects.create(parent=s_parent, name="strategy3", group=DigitalStrategy.GROUP_CHOICES[0])
-
-        project_data1 = {"project": {
-            "date": datetime.utcnow(),
-            "name": "Proj1",
-            "organisation": org.id,
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": [1, 2],
-            "geographic_scope": "somewhere",
-            "country": country.id,
-            "platforms": [{
-                "id": p1.id,
-                "strategies": [s1.id, s2.id]
-            }, {
-                "id": p2.id,
-                "strategies": [s1.id]
-            }],
-            "licenses": [1, 2],
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "coverage_second_level": [
-                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49},
-                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89}
-            ],
-            "national_level_deployment":
-                {"clients": 20000, "health_workers": 0, "facilities": 0,
-                 "facilities_list": ['facility1', 'facility2', 'facility3']},
-            "donors": [d1.id],
-            "his_bucket": [1, 2],
-            "hsc_challenges": [1, 2],
-            "government_investor": 0,
-            "implementing_partners": ["partner1", "partner2"],
-            "repository": "http://some.repo",
-            "mobile_application": "http://mobile.app.org",
-            "wiki": "http://wiki.org",
-            "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
-                                       {"id": 2, "selected": True},
-                                       {"id": 3, "selected": True, "link": "http://example.org"}],
-            "interoperability_standards": [1],
-            "start_date": str(datetime.today().date()),
-            "end_date": str(datetime.today().date())
-        }}
-
-        # Create project draft
-        url = reverse("project-create", kwargs={"country_id": country.id})
-        response = self.test_user_client.post(url, project_data1, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-
-        project1_id = response.json().get("id")
-
-        # Publish
-        url = reverse("project-publish", kwargs={"project_id": project1_id, "country_id": country.id})
-        response = self.test_user_client.put(url, project_data1, format="json")
-        self.assertEqual(response.status_code, 200)
-
-        project_data2 = copy(project_data1)
-        project_data2['project']['name'] = "Proj2"
-        project_data2['project']['platforms'] = [{
-            "id": p1.id,
-            "strategies": [s1.id, s2.id]
-        }, {
-            "id": p2.id,
-            "strategies": [s3.id]
-        }]
-
-        # Create project draft
-        url = reverse("project-create", kwargs={"country_id": country.id})
-        response = self.test_user_client.post(url, project_data2, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-
-        project2_id = response.json().get("id")
-
-        # Publish
-        url = reverse("project-publish", kwargs={"project_id": project2_id, "country_id": country.id})
-        response = self.test_user_client.put(url, project_data2, format="json")
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('country-export'))
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[-1], {'country': country.name, 'country_code': country.code,
-                                               'platforms': {
-                                                   str(p1.id): {'strategies': [s_parent.id],
-                                                                'projects': [project2_id, project1_id]},
-                                                   str(p2.id): {'strategies': [s_parent.id],
-                                                                'projects': [project2_id, project1_id]}}})
-
     def test_create_retrieve_update_mapfile_noperm_fail(self):
         url = reverse('map-file-list')
         map_file = SimpleUploadedFile("file.txt", b"file_content")
@@ -1383,7 +1282,7 @@ class CountryAdminTests(TestCase):
         ma = CountryAdmin(Country, self.site)
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
         translate_bools = ['is_translated_{}'.format(language_code) for language_code, _ in settings.LANGUAGES]
-        self.assertEqual(ma.get_list_display(self.request), ['name', 'code', 'region',
+        self.assertEqual(ma.get_list_display(self.request), ['name', 'code', 'unicef_region',
                                                              'project_approval'] + translate_bools)
 
 

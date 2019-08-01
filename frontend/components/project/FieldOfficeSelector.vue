@@ -4,6 +4,7 @@
     :value="value"
     :placeholder="$gettext('Select from list') | translate"
     filterable
+    clearable
     popper-class="FieldOfficeDropdown"
     class="FieldOffice"
     @change="changeHandler"

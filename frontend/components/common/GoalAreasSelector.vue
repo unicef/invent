@@ -1,16 +1,15 @@
 <template>
   <lazy-el-select
     :value="value"
-    :disabled="!goalArea"
-    :placeholder="$gettext('Select from list') | translate"
+    :placeholder="realPlaceholder"
     filterable
-    clearable
-    popper-class="ResultAreasSelectorDropdown"
-    class="ResultAreasSelector"
+    :clearable="clearable"
+    popper-class="GoalAreasSelectorDropdown"
+    class="GoalAreasSelector"
     @change="changeHandler"
   >
     <el-option
-      v-for="item in filtered"
+      v-for="item in items"
       :key="item.id"
       :label="item.name"
       :value="item.id"
@@ -31,9 +30,13 @@ export default {
       type: Number,
       default: null
     },
-    goalArea: {
-      type: Number,
+    placeholder: {
+      type: String,
       default: null
+    },
+    clearable: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -43,10 +46,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'projects/getResultAreas'
+      items: 'projects/getGoalAreas'
     }),
-    filtered () {
-      return this.items.filter(ra => ra.goal_area_id === this.goalArea);
+    realPlaceholder () {
+      return this.placeholder || this.$gettext('Select from list');
     }
   },
   methods: {
@@ -63,10 +66,10 @@ export default {
 </script>
 
 <style lang="less">
-.ResultAreasSelector {
+.GoalAreasSelector {
   width: 100%;
 }
-.ResultAreasSelectorDropdown {
+.GoalAreasSelectorDropdown {
 
 }
 </style>

@@ -91,26 +91,6 @@ class Project(SoftDeleteModel, ExtendedModel):
     def get_anon_data(self):
         return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
-    def str_national_level_deployment(self):
-        nld = self.data.get('national_level_deployment', {})
-        if not nld:
-            return ''
-        return "National Level Deployment: " \
-               "[Clients: {}, Health Workers: {}, Facilities: {}]".format(nld.get('clients'),
-                                                                          nld.get('health_workers'),
-                                                                          nld.get('facilities'))
-
-    def str_coverage(self, second_level=False):
-        coverage = self.data.get('coverage' if not second_level else 'coverage_second_level', [])
-        if not coverage:
-            return ''
-        return ", ".join(["District: {} "
-                          "[Clients: {}, Health Workers: {}, Facilities: {}]".format(c.get('district'),
-                                                                                     c.get('clients'),
-                                                                                     c.get('health_workers'),
-                                                                                     c.get('facilities'))
-                         for c in coverage])
-
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
@@ -309,7 +289,7 @@ class UNICEFResultArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Result Areas'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{}] {}'.format(self.goal_area.name, self.name)
 
 
@@ -319,7 +299,7 @@ class UNICEFCapabilityLevel(InvalidateCacheMixin, ExtendedNameOrderedSoftDeleted
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Capability Levels'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_level_question, self.name)
 
 
@@ -329,7 +309,7 @@ class UNICEFCapabilityCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDele
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Capability Categories'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_category_question, self.name)
 
 
@@ -339,7 +319,7 @@ class UNICEFCapabilitySubCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftD
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Capability Sub Categories'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{} - {}] {}'.format(self.goal_area.name, self.goal_area.capability_subcategory_question, self.name)
 
 
@@ -351,7 +331,7 @@ class UNICEFGoal(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'UNICEF Goal Areas'
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '{}'.format(self.name)
 
 
@@ -364,7 +344,7 @@ class ProjectImport(ExtendedModel):
     failed = models.TextField(null=True, blank=True, default='')
     status = models.NullBooleanField(null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.csv.name
 
 
