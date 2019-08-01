@@ -281,6 +281,7 @@ export const actions = {
       await dispatch('setSelectedCountry', id);
       commit('SET_ACTIVE_COUNTRY', id);
     } else if (type === 'donor') {
+      await dispatch('system/loadDonorDetails', getters.getDashboardId, { root: true });
       selectedColumns.push(...getters.getDonorColumns.map(cc => cc.id));
     }
     commit('SET_PROJECT_BUCKET', []);
