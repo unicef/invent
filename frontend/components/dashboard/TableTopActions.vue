@@ -204,7 +204,7 @@ export default {
   },
   data () {
     return {
-      exportType: 'CSV',
+      exportType: 'XLSX',
       columnSelectorOpen: false,
       selectedColumns: [],
       viewportSize: 2000
