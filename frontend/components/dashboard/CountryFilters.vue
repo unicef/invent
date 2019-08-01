@@ -50,13 +50,12 @@ export default {
   },
   watch: {
     selectedCountries (newCountries, oldCountries) {
-      if (!oldCountries || !oldCountries.length || !newCountries ||
-        !newCountries.length || oldCountries[0] !== newCountries[0]) {
+      if (!newCountries || !newCountries.length || (oldCountries && oldCountries.length && oldCountries[0] !== newCountries[0])) {
         this.selectedOffice = null;
       }
     },
     selectedRegion (newRegion) {
-      this.selectedCountries = [];
+      this.selectedCountries = this.selectedCountries.filter(c => c.unicef_region === newRegion.id);
     }
   }
 };
