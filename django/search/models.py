@@ -89,7 +89,7 @@ class ProjectSearch(ExtendedModel):
             for value in values:
                 try:
                     lookup.append(int(value))
-                except ValueError:
+                except ValueError:  # pragma: no cover
                     pass
             return lookup
 

@@ -155,10 +155,9 @@ class ProjectTests(SetupTests):
         ))
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(len(response.json()['project'].keys()), 8)
+        self.assertEqual(len(response.json()['project'].keys()), 3)
         self.assertEqual(response.json()['project']['health_focus_areas']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['donors']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['project']['his_bucket']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['hsc_challenges']['0'], ['A valid integer is required.'])
 
     def test_publish_project_makes_public_id(self):
@@ -187,8 +186,8 @@ class ProjectTests(SetupTests):
                                platforms=[999], dhis=[998])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published']["platforms"][0]["id"], 999)
-        self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0], 998)
+        self.assertEqual(response.json()['published']["platforms"], [999])
+        self.assertEqual(response.json()['published']["dhis"], [998])
 
     def test_project_data_missing(self):
         data = copy.deepcopy(self.project_data)
@@ -261,15 +260,6 @@ class ProjectTests(SetupTests):
         url = reverse("make-version", kwargs={"project_id": 999})
         response = self.test_user_client.post(url, format="json")
         self.assertEqual(response.status_code, 400)
-
-    def xtest_get_coverage_versions(self):
-        url = reverse("make-version", kwargs={"project_id": self.project_id})
-        self.test_user_client.post(url, format="json")
-        url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(len(response.json()[0]['data']), 3)
 
     def test_get_toolkit_versions(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
@@ -555,39 +545,18 @@ class ProjectTests(SetupTests):
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
             "country": country.id,
-            "platforms": [{
-                "id": 1,
-                "strategies": [1, 2]
-            }, {
-                "id": 2,
-                "strategies": [1, 9]
-            }],
-            "licenses": [1, 2],
-            "coverage": [
-                {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
-                {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
-            ],
-            "coverage_second_level": [
-                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49},
-                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89}
-            ],
-            "national_level_deployment":
-                {"clients": 20000, "health_workers": 0, "facilities": 0,
-                 "facilities_list": ['facility1', 'facility2', 'facility3']},
+            "platforms": [1, 2],
             "donors": [self.d1.id, self.d2.id],
-            "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
-            "government_investor": 0,
-            "implementing_partners": ["partner1", "partner2"],
-            "repository": "http://some.repo",
-            "mobile_application": "http://mobile.app.org",
-            "wiki": "http://wiki.org",
-            "interoperability_links": [{"id": 1, "selected": True, "link": "http://blabla.com"},
-                                       {"id": 2, "selected": True},
-                                       {"id": 3, "selected": True, "link": "http://example.org"}],
-            "interoperability_standards": [1],
             "start_date": str(datetime.today().date()),
-            "end_date": str(datetime.today().date())
+            "end_date": str(datetime.today().date()),
+            "field_office": 1,
+            "goal_area": 1,
+            "result_area": 1,
+            "capability_levels": [],
+            "capability_categories": [],
+            "capability_subcategories": [],
+            "dhis": []
         }}
 
         # Create project draft
