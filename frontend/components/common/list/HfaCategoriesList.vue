@@ -9,6 +9,12 @@
           v-if="actions"
           @click="$emit('delete', hfa.id)"
         />
+        <span v-if="showCheck">
+          <fa
+            icon="check"
+            size="xs"
+          />
+        </span>
         <span> {{ hfa.name }} </span>
       </li>
     </ul>
@@ -34,6 +40,14 @@ export default {
     limit: {
       type: Number,
       default: null
+    },
+    valueIsChild: {
+      type: Boolean,
+      default: false
+    },
+    showCheck: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -41,7 +55,12 @@ export default {
       healthFocusAreas: 'projects/getHealthFocusAreas'
     }),
     selected () {
-      const result = this.healthFocusAreas.filter(h => this.value.includes(h.id));
+      let result = [];
+      if (!this.valueIsChild) {
+        result = this.healthFocusAreas.filter(h => this.value.includes(h.id));
+      } else {
+        result = this.healthFocusAreas.filter(hfa => hfa.health_focus_areas.some(hfaInner => this.value.includes(hfaInner.id)));
+      }
       return this.limit ? result.slice(0, this.limit) : result;
     }
   }
