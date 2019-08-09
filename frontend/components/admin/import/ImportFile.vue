@@ -213,11 +213,6 @@ export default {
         const innerNames = c.challenges.map(i => i.challenge);
         return a.concat(innerNames);
       }, []);
-      const flatsHIS = this.projectDicts.his_bucket.reduce((a, c) => {
-        a.push(c.name);
-        return a;
-      }, []);
-      const flatLicenses = this.projectDicts.licenses.map(l => l.name);
       const flatPlatforms = this.projectDicts.technology_platforms.map(p => p.name);
       const flathDHI = this.projectDicts.strategies.reduce((a, c) => {
         const innerValue = c.subGroups.reduce((innerA, innerC) => {
@@ -225,15 +220,11 @@ export default {
         }, []);
         return a.concat(innerValue);
       }, []);
-      const flatOrganisations = this.systemDicts.organisations.map(o => o.name);
       return [
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
-        [nameMapping.his_bucket, ...flatsHIS],
-        [nameMapping.licenses, ...flatLicenses],
         [nameMapping.platforms, ...flatPlatforms],
-        [nameMapping.digitalHealthInterventions, ...flathDHI],
-        [nameMapping.organisation, ...flatOrganisations]
+        [nameMapping.digitalHealthInterventions, ...flathDHI]
       ];
     },
     draftRequiredFields () {
@@ -269,10 +260,10 @@ export default {
         donor: this.donor,
         sheet_name: this.selectedSheet,
         header_mapping: Object.keys(this.parsed[0]).map(title => ({ selected: null, title })),
-        'draft': this.isDraftOrPublish === 'draft',
-        'rows': [
+        draft: this.isDraftOrPublish === 'draft',
+        rows: [
           {
-            'data': this.parsed
+            data: this.parsed
           }
         ]
       };
