@@ -304,7 +304,7 @@ export default {
               type: 'info'
             });
           const id = newRow.project;
-          this.$router.push(this.localePath({ name: 'organisation-projects-id', params: { id, organisation: this.$route.params.organisation } }));
+          this.$router.push(this.localePath({ name: 'organisation-projects-id-edit', params: { id, organisation: this.$route.params.organisation } }));
         } catch (e) {
           console.log('stay');
         }
