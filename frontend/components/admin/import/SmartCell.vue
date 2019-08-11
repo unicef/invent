@@ -21,29 +21,9 @@
             type="textarea"
             :rows="6"
           />
-          <el-radio-group
-            v-if="isGovInvestor"
-            v-model="internalValue"
-          >
-            <el-radio :label="0">
-              <translate>
-                No, they have not yet contributed
-              </translate>
-            </el-radio>
-            <el-radio :label="1">
-              <translate>
-                Yes, they are contributing in-kind people or time
-              </translate>
-            </el-radio>
-            <el-radio :label="2">
-              <translate>
-                Yes, there is a financial contribution through MOH budget
-              </translate>
-            </el-radio>
-          </el-radio-group>
         </div>
 
-        <template v-else-if="isDate || isTextArea || isGovInvestor">
+        <template v-else-if="isDate || isTextArea">
           {{ internalValue }}
         </template>
 
@@ -153,6 +133,9 @@ export default {
     },
     internalValue: {
       get () {
+        if (this.isDate) {
+          return new Date(this.value);
+        }
         return this.value;
       },
       set (value) {
@@ -174,9 +157,6 @@ export default {
         'contact_name', 'contact_email', 'mobile_application',
         'wiki', 'repository', 'health_workers', 'clients', 'facilities'].includes(this.column);
     },
-    isGovInvestor () {
-      return this.column === 'government_investor';
-    },
     isForced () {
       return ['country', 'donors'].includes(this.column);
     },
@@ -191,36 +171,18 @@ export default {
         const resolver = {
           organisation: () => this.findSystemValue('organisations'),
           platforms: () => this.findProjectCollectionValue('technology_platforms', false),
-          digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true, 'subGroups', 'strategies'),
+          dhis: () => this.findProjectCollectionValue('strategies', true, 'subGroups', 'strategies'),
           health_focus_areas: () => this.findProjectCollectionValue('health_focus_areas', true, 'health_focus_areas'),
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
-          his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
-          implementing_partners: this.stringArray,
-          government_investor: () => {
-            const labelLib = {
-              'no they have not yet contributed': 0,
-              'yes they are contributing inkind people or time': 1,
-              'yes there is a financial contribution through moh budget': 2
-            };
-            const cleaned = ('' + this.value).replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
-            const value = Number.isInteger(this.value) ? this.value : labelLib[cleaned];
-            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === cleaned);
-            return {
-              ids: [value],
-              names: [label]
-            };
-          },
-          licenses: () => this.findProjectCollectionValue('licenses', true),
-          interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
-          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards', true),
-          sub_level: () => {
-            const value = Array.isArray(this.value) ? this.value[0] : this.value;
-            const level = this.subLevels.find(cf => cf.id === value || cf.name === value);
-            if (level) {
-              return { names: [level.name], ids: [level.id] };
-            }
-            return { names: [], ids: [] };
-          },
+          start_date: () => this.parseDate(),
+          end_date: () => this.parseDate(),
+          field_office: () => this.findProjectCollectionValue('field_offices'),
+          goal_area: () => this.findProjectCollectionValue('goal_areas'),
+          result_area: () => this.findProjectCollectionValue('result_areas'),
+          capability_levels: () => this.findProjectCollectionValue('capability_levels', true),
+          capability_categories: () => this.findProjectCollectionValue('capability_categories', true),
+          capability_subcategories: () => this.findProjectCollectionValue('capability_subcategories', true),
+
           custom_field: () => {
             const q = this.customFieldsLib[this.type];
             if (!q) {
@@ -268,13 +230,20 @@ export default {
       this.handleValidation(valid, errors[0], this.column);
     },
     clickHandler () {
-      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
+      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage) {
         this.active = true;
         return;
       }
       if (this.column) {
         this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type });
       }
+    },
+    parseDate () {
+      const result = this.value ? new Date(this.value) : null;
+      return {
+        ids: [result],
+        names: [result]
+      };
     },
     stringToArray (value) {
       if (Array.isArray(value)) {
@@ -375,21 +344,24 @@ export default {
 
     &.Disabled {
       cursor: not-allowed;
+      pointer-events: none;
     }
 
     &.ValidationError {
-      border: 2px solid red !important;
+      border: 2px solid @colorDanger !important;
 
       .ErrorOverlay {
-        background-color: red;
+        background-color: @colorDanger;
+        color: @colorWhite;
+        font-weight: 500;
       }
     }
 
     &.ParsingError {
-      border: 2px solid orange !important;
+      border: 2px solid @colorDraft !important;
 
       .ErrorOverlay {
-        background-color: orange;
+        background-color: @colorDraft;
       }
     }
 
