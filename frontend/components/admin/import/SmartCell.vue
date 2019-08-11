@@ -299,8 +299,8 @@ export default {
       return this.toInternalRepresentation(filtered);
     },
     apiValue () {
-      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions'];
-      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor', 'sub_level'];
+      const isMultiple = ['platforms', 'health_focus_areas', 'hsc_challenges', 'dhis', 'capability_levels', 'capability_categories', 'capability_subcategories', 'custom_field'];
+      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'field_office', 'goal_area', 'result_area'];
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];
     }
