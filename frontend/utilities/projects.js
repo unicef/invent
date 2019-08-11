@@ -51,7 +51,7 @@ export const draftRules = () => {
     },
 
     organisation: {
-      required: true,
+      required: false,
       max: 128
     },
     contact_name: {
