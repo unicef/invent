@@ -115,23 +115,6 @@
         v-model="country"
       />
     </el-form-item>
-    <el-form-item>
-      <template #label>
-        <form-hint>
-          <translate>
-            Select Investment Partner
-          </translate>
-          <template #hint>
-            <translate>
-              Data can only be uploaded for one investor at a time. You can update each project once they are saved in your My Projects page before publication.
-            </translate>
-          </template>
-        </form-hint>
-      </template>
-      <donor-select
-        v-model="donor"
-      />
-    </el-form-item>
     <el-form-item
       v-if="false"
       class="DraftOrPublished"
@@ -168,7 +151,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import DonorSelect from '@/components/common/DonorSelect';
 import CountrySelect from '@/components/common/CountrySelect';
 import FormHint from '@/components/common/FormHint';
 import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
@@ -177,7 +159,6 @@ import { draftRules } from '@/utilities/projects';
 
 export default {
   components: {
-    DonorSelect,
     CountrySelect,
     XlsxRead,
     XlsxSheets,
@@ -190,7 +171,7 @@ export default {
   data () {
     return {
       country: null,
-      donor: null,
+      donor: 20,
       isDraftOrPublish: 'draft',
       inputFile: null,
       selectedSheet: null,
