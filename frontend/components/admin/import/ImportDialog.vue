@@ -21,20 +21,12 @@
         {{ dialogData.original }}
       </el-col>
       <el-col>
-        <h3 v-if="dialogData.column !== 'digitalHealthInterventions'">
+        <h3 v-if="dialogData.column !== 'dhis'">
           <translate>
             Edit
           </translate>
         </h3>
-        <organisation-select
-          v-if="dialogData.column === 'organisation'"
-          v-model="dialogData.value[0]"
-          :auto-save="true"
-        />
-        <his-bucket-selector
-          v-if="dialogData.column === 'his_bucket'"
-          v-model="dialogData.value"
-        />
+
         <health-system-challenges-selector
           v-if="dialogData.column === 'hsc_challenges'"
           v-model="dialogData.value"
@@ -43,17 +35,7 @@
           v-if="dialogData.column === 'health_focus_areas'"
           v-model="dialogData.value"
         />
-        <template v-if="dialogData.column === 'implementing_partners'">
-          <el-select
-            v-model="dialogData.value"
-            class="FullWidth"
-            multiple
-            filterable
-            allow-create
-            default-first-option
-            placeholder="Add a partner"
-          />
-        </template>
+
         <template v-if="dialogData.column === 'platforms'">
           <platform-selector
             v-model="dialogData.value"
@@ -61,33 +43,50 @@
           />
         </template>
 
-        <template v-if="dialogData.column === 'sub_level'">
-          <el-select v-model="dialogData.value[0]">
-            <el-option
-              v-for="item in subLevels"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </template>
-
-        <template v-if="dialogData.column === 'digitalHealthInterventions'">
+        <template v-if="dialogData.column === 'dhis'">
           <digital-health-interventions-filter
             child-selection
             :selected.sync="dialogData.value"
           />
         </template>
 
-        <template v-if="dialogData.column === 'interoperability_standards'">
-          <standards-selector
-            v-model="dialogData.value"
+        <template v-if="dialogData.column === 'field_office'">
+          <FieldOfficeSelector
+            v-model="dialogData.value[0]"
+            :country="country"
           />
         </template>
 
-        <template v-if="dialogData.column === 'licenses'">
-          <license-selector
+        <template v-if="dialogData.column === 'goal_area'">
+          <GoalAreasSelector
+            v-model="dialogData.value[0]"
+          />
+        </template>
+
+        <template v-if="dialogData.column === 'result_area'">
+          <ResultAreasSelector
+            v-model="dialogData.value[0]"
+            show-all
+          />
+        </template>
+
+        <template v-if="dialogData.column === 'capability_levels'">
+          <CapabilitySelector
             v-model="dialogData.value"
+            :values-function="getCapabilityLevelsItems"
+          />
+        </template>
+
+        <template v-if="dialogData.column === 'capability_categories'">
+          <CapabilitySelector
+            v-model="dialogData.value"
+            :values-function="getCapabilityCategoriesItems"
+          />
+        </template>
+        <template v-if="dialogData.column === 'capability_subcategories'">
+          <CapabilitySelector
+            v-model="dialogData.value"
+            :values-function="getCapabilitySubcategoriesItems"
           />
         </template>
 
@@ -165,25 +164,27 @@
 </template>
 
 <script>
-import OrganisationSelect from '@/components/common/OrganisationSelect';
 import PlatformSelector from '@/components/project/PlatformSelector';
-import HisBucketSelector from '@/components/project/HisBucketSelector';
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector';
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector';
 import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter';
-import StandardsSelector from '@/components/project/StandardsSelector';
-import LicenseSelector from '@/components/project/LicenseSelector';
+import GoalAreasSelector from '@/components/common/GoalAreasSelector';
+import ResultAreasSelector from '@/components/common/ResultAreasSelector';
+import CapabilitySelector from '@/components/project/CapabilitySelector';
+import FieldOfficeSelector from '@/components/project/FieldOfficeSelector';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
-    OrganisationSelect,
     PlatformSelector,
-    HisBucketSelector,
     HealthSystemChallengesSelector,
     HealthFocusAreasSelector,
     DigitalHealthInterventionsFilter,
-    StandardsSelector,
-    LicenseSelector
+    GoalAreasSelector,
+    ResultAreasSelector,
+    CapabilitySelector,
+    FieldOfficeSelector
+
   },
   props: {
     customFieldsLib: {
@@ -197,6 +198,10 @@ export default {
     subLevels: {
       type: Array,
       required: true
+    },
+    country: {
+      type: Number,
+      required: true
     }
   },
   data () {
@@ -205,6 +210,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      getCapabilityLevelsItems: 'projects/getCapabilityLevels',
+      getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
+      getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories'
+    }),
     dialogVisible: {
       get () {
         return !!this.dialogData;
@@ -215,8 +225,8 @@ export default {
     },
     dialogStyle () {
       return {
-        top: this.dialogData.column === 'digitalHealthInterventions' ? '10vh' : undefined,
-        width: this.dialogData.column === 'digitalHealthInterventions' ? '90vw' : '50%',
+        top: this.dialogData.column === 'dhis' ? '10vh' : undefined,
+        width: this.dialogData.column === 'dhis' ? '90vw' : '50%',
         className: ['ImportDialog', this.dialogData.column].join(' ')
       };
     }
