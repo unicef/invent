@@ -16,7 +16,7 @@ export default {
   },
   props: {
     value: {
-      type: String,
+      type: [String, Date],
       default: null
     },
     disabled: {
@@ -27,7 +27,7 @@ export default {
   computed: {
     internalValue: {
       get () {
-        return this.value;
+        return this.value instanceof Date ? this.value.toJSON() : this.value;
       },
       set (value) {
         this.$emit('change', value ? value.toJSON() : null);
