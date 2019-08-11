@@ -119,7 +119,7 @@
       <template #label>
         <form-hint>
           <translate>
-            Select Investor
+            Select Investment Partner
           </translate>
           <template #hint>
             <translate>
@@ -220,11 +220,23 @@ export default {
         }, []);
         return a.concat(innerValue);
       }, []);
+      const flatGoalAreas = this.projectDicts.goal_areas.map(p => p.name);
+      const flatFieldOffices = this.projectDicts.field_offices.map(p => p.name);
+      const flatResultAreas = this.projectDicts.result_areas.map(p => p.name);
+      const flatCapabilityLevels = this.projectDicts.capability_levels.map(p => p.name);
+      const flatCapabilityCategories = this.projectDicts.capability_categories.map(p => p.name);
+      const flatCapabilitySubcategories = this.projectDicts.capability_subcategories.map(p => p.name);
       return [
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
         [nameMapping.platforms, ...flatPlatforms],
-        [nameMapping.digitalHealthInterventions, ...flathDHI]
+        [nameMapping.digitalHealthInterventions, ...flathDHI],
+        [nameMapping.field_office, ...flatFieldOffices],
+        [nameMapping.goal_area, ...flatGoalAreas],
+        [nameMapping.result_area, ...flatResultAreas],
+        [nameMapping.capability_levels, ...flatCapabilityLevels],
+        [nameMapping.capability_categories, ...flatCapabilityCategories],
+        [nameMapping.capability_subcategories, ...flatCapabilitySubcategories]
       ];
     },
     draftRequiredFields () {
