@@ -115,23 +115,6 @@
         v-model="country"
       />
     </el-form-item>
-    <el-form-item>
-      <template #label>
-        <form-hint>
-          <translate>
-            Select Investor
-          </translate>
-          <template #hint>
-            <translate>
-              Data can only be uploaded for one investor at a time. You can update each project once they are saved in your My Projects page before publication.
-            </translate>
-          </template>
-        </form-hint>
-      </template>
-      <donor-select
-        v-model="donor"
-      />
-    </el-form-item>
     <el-form-item
       v-if="false"
       class="DraftOrPublished"
@@ -168,7 +151,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import DonorSelect from '@/components/common/DonorSelect';
 import CountrySelect from '@/components/common/CountrySelect';
 import FormHint from '@/components/common/FormHint';
 import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
@@ -177,7 +159,6 @@ import { draftRules } from '@/utilities/projects';
 
 export default {
   components: {
-    DonorSelect,
     CountrySelect,
     XlsxRead,
     XlsxSheets,
@@ -190,7 +171,7 @@ export default {
   data () {
     return {
       country: null,
-      donor: null,
+      donor: 20,
       isDraftOrPublish: 'draft',
       inputFile: null,
       selectedSheet: null,
@@ -213,11 +194,6 @@ export default {
         const innerNames = c.challenges.map(i => i.challenge);
         return a.concat(innerNames);
       }, []);
-      const flatsHIS = this.projectDicts.his_bucket.reduce((a, c) => {
-        a.push(c.name);
-        return a;
-      }, []);
-      const flatLicenses = this.projectDicts.licenses.map(l => l.name);
       const flatPlatforms = this.projectDicts.technology_platforms.map(p => p.name);
       const flathDHI = this.projectDicts.strategies.reduce((a, c) => {
         const innerValue = c.subGroups.reduce((innerA, innerC) => {
@@ -225,15 +201,23 @@ export default {
         }, []);
         return a.concat(innerValue);
       }, []);
-      const flatOrganisations = this.systemDicts.organisations.map(o => o.name);
+      const flatGoalAreas = this.projectDicts.goal_areas.map(p => p.name);
+      const flatFieldOffices = this.projectDicts.field_offices.map(p => p.name);
+      const flatResultAreas = this.projectDicts.result_areas.map(p => p.name);
+      const flatCapabilityLevels = this.projectDicts.capability_levels.map(p => p.name);
+      const flatCapabilityCategories = this.projectDicts.capability_categories.map(p => p.name);
+      const flatCapabilitySubcategories = this.projectDicts.capability_subcategories.map(p => p.name);
       return [
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
-        [nameMapping.his_bucket, ...flatsHIS],
-        [nameMapping.licenses, ...flatLicenses],
         [nameMapping.platforms, ...flatPlatforms],
         [nameMapping.digitalHealthInterventions, ...flathDHI],
-        [nameMapping.organisation, ...flatOrganisations]
+        [nameMapping.field_office, ...flatFieldOffices],
+        [nameMapping.goal_area, ...flatGoalAreas],
+        [nameMapping.result_area, ...flatResultAreas],
+        [nameMapping.capability_levels, ...flatCapabilityLevels],
+        [nameMapping.capability_categories, ...flatCapabilityCategories],
+        [nameMapping.capability_subcategories, ...flatCapabilitySubcategories]
       ];
     },
     draftRequiredFields () {
@@ -269,10 +253,10 @@ export default {
         donor: this.donor,
         sheet_name: this.selectedSheet,
         header_mapping: Object.keys(this.parsed[0]).map(title => ({ selected: null, title })),
-        'draft': this.isDraftOrPublish === 'draft',
-        'rows': [
+        draft: this.isDraftOrPublish === 'draft',
+        rows: [
           {
-            'data': this.parsed
+            data: this.parsed
           }
         ]
       };

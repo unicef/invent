@@ -1,7 +1,7 @@
 <template>
   <lazy-el-select
     :value="value"
-    :disabled="!goalArea"
+    :disabled="!goalArea && !showAll"
     :placeholder="realPlaceholder"
     filterable
     clearable
@@ -38,6 +38,10 @@ export default {
     placeholder: {
       type: String,
       default: null
+    },
+    showAll: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -50,7 +54,7 @@ export default {
       items: 'projects/getResultAreas'
     }),
     filtered () {
-      return this.items.filter(ra => ra.goal_area_id === this.goalArea);
+      return this.showAll ? this.items : this.items.filter(ra => ra.goal_area_id === this.goalArea);
     },
     realPlaceholder () {
       return this.placeholder || this.$gettext('Select from list');

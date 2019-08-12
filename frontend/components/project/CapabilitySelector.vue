@@ -30,7 +30,7 @@ export default {
     },
     goalArea: {
       type: Number,
-      required: true
+      default: null
     },
     valuesFunction: {
       type: Function,
