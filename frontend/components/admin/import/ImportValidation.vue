@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     internalDraftRules () {
-      return { ...draftRules(), organisation: { required: true } };
+      return { ...draftRules() };
     },
     internalPublishRules () {
       const standardRules = publishRules();

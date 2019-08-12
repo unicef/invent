@@ -83,7 +83,7 @@ export default {
       }
     },
     async save (country, donor, publish) {
-      const filled = this.$children.filter(sc => sc.column && !['custom_fields', 'sub_level'].includes(sc.column));
+      const filled = this.$children.filter(sc => sc.column && !['custom_fields'].includes(sc.column));
 
       const countryCustom = this.$children.filter(sc => sc.type && sc.type.startsWith('MOH')).map(c => ({
         question_id: this.customFieldsLib[c.type].id,
@@ -100,28 +100,6 @@ export default {
         a[c.column] = c.apiValue();
         return a;
       }, projectFields());
-      const subLevel = this.$children.find(sc => sc.column === 'sub_level');
-      const sublLevelValue = subLevel ? subLevel.apiValue() : null;
-      if (sublLevelValue && sublLevelValue.toLowerCase() === 'national level') {
-        result.national_level_deployment = {
-          clients: +result.clients || result.national_level_deployment.clients,
-          facilities: +result.facilities || result.national_level_deployment.facilities,
-          health_workers: +result.health_workers || result.national_level_deployment.health_workers
-        };
-      } else if (sublLevelValue) {
-        result.coverage.push(sublLevelValue);
-        result.coverageData = {
-          [sublLevelValue]: {
-            clients: +result.clients || result.national_level_deployment.clients,
-            facilities: +result.facilities || result.national_level_deployment.facilities,
-            health_workers: +result.health_workers || result.national_level_deployment.health_workers
-          }
-        };
-      }
-      if (result.platforms && result.platforms[0] && result.digitalHealthInterventions) {
-        const platform = result.platforms[0];
-        result.digitalHealthInterventions = result.digitalHealthInterventions.map(id => ({ platform, id }));
-      }
       result.team = [this.userProfile.id];
       result.country = country;
       result.donors = [donor];

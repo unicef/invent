@@ -5,6 +5,7 @@
       :custom-fields-lib="customFieldsLib"
       :imported="rows"
       :sub-levels="subLevels"
+      :country="rawImport.country"
       @update="updateValue"
     />
     <el-card class="box-card">
@@ -67,12 +68,17 @@
                       <template
                         v-for="header in rawImport.header_mapping"
                       >
-                        <div
+                        <SmartCell
                           :key="row.id + header.title"
+                          :value="data[header.title]"
+                          :type="header.selected"
+                          :rules="rules[header.selected]"
                           class="Column"
-                        >
-                          {{ data[header.title] }}
-                        </div>
+                          :sub-levels="subLevels"
+                          :custom-fields-lib="customFieldsLib"
+                          :name-mapping="nameMapping"
+                          disabled
+                        />
                       </template>
                     </template>
                   </import-row>
@@ -266,6 +272,7 @@ export default {
       }
     },
     async singleRowSave (doSave, valid, scrollToError) {
+      let newRow = null;
       if (valid) {
         try {
           await this.$confirm(
@@ -277,22 +284,39 @@ export default {
               type: 'warning'
             });
           this.$nuxt.$loading.start('save');
-          await this.doSingleRowSave(doSave);
+          newRow = await this.doSingleRowSave(doSave, true);
+          this.$nuxt.$loading.finish('save');
         } catch (e) {
+          this.$nuxt.$loading.finish('save');
           this.$message({
             type: 'info',
-            message: this.$gettext('Save canceled')
+            message: this.$gettext('Saving Cancelled')
           });
+          return;
         }
-        this.$nuxt.$loading.finish('save');
+        try {
+          await this.$confirm(
+            this.$gettext('Your project has been successfully saved as a draft, you can go to your project page or keep working on the import interface'),
+            this.$gettext('Success!'),
+            {
+              confirmButtonText: this.$gettext('Project page'),
+              cancelButtonText: this.$gettext('Keep working'),
+              type: 'info'
+            });
+          const id = newRow.project;
+          this.$router.push(this.localePath({ name: 'organisation-projects-id-edit', params: { id, organisation: this.$route.params.organisation } }));
+        } catch (e) {
+          console.log('stay');
+        }
       } else {
         scrollToError();
       }
     },
-    async doSingleRowSave (doSave, bubble) {
+    async doSingleRowSave (doSave, nested) {
       try {
         const newRow = await doSave(this.rawImport.country, this.rawImport.donor, !this.rawImport.draft);
         await this.patchRow(newRow);
+        return newRow;
       } catch (e) {
         console.error(e);
         if (e.response && e.response.data) {
@@ -300,7 +324,7 @@ export default {
             confirmButtonText: 'OK'
           });
         }
-        if (bubble) {
+        if (nested) {
           throw e;
         }
       }
@@ -319,7 +343,7 @@ export default {
       } catch (e) {
         this.$message({
           type: 'info',
-          message: this.$gettext('Save all projects canceled')
+          message: this.$gettext('Saving all projects has been cancelled')
         });
       }
     },
@@ -334,6 +358,19 @@ export default {
         console.log(e);
       }
       this.$nuxt.$loading.finish('saveAll');
+      try {
+        await this.$confirm(
+          this.$gettext('Your projects have been successfully saved as a draft, you can go to your project inbox or keep working on the import interface'),
+          this.$gettext('Success!'),
+          {
+            confirmButtonText: this.$gettext('Project inbox'),
+            cancelButtonText: this.$gettext('Keep working'),
+            type: 'info'
+          });
+        this.$router.push(this.localePath({ name: 'organisation-projects', params: this.$route.params }));
+      } catch (e) {
+        console.log('stay');
+      }
     }
   }
 };
