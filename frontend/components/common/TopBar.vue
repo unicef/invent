@@ -100,6 +100,7 @@
               </div>
               <div>
                 <nuxt-link
+                  v-if="isSuperUser"
                   key="planningAndGuidanceBtn"
                   :to="localePath({name: 'organisation-cms', params: $route.params})"
                   class="HeaderBtn"
@@ -108,7 +109,7 @@
                 </nuxt-link>
               </div>
               <div>
-                <toolkit-dialog-wrapper />
+                <toolkit-dialog-wrapper v-if="isSuperUser" />
               </div>
               <div>
                 <nuxt-link
@@ -216,6 +217,9 @@ export default {
         return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
       return null;
+    },
+    isSuperUser () {
+      return this.user && this.user.is_superuser;
     }
 
   }
