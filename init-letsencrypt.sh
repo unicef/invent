@@ -68,7 +68,6 @@ if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
-    --server https://acme-v02.api.letsencrypt.org/directory
     $staging_arg \
     $email_arg \
     $domain_args \
