@@ -156,6 +156,7 @@ import FormHint from '@/components/common/FormHint';
 import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
 import { importTemplate, nameMapping } from '@/utilities/import';
 import { draftRules } from '@/utilities/projects';
+import get from 'lodash/get';
 
 export default {
   components: {
@@ -185,6 +186,18 @@ export default {
     ...mapState('projects', {
       projectDicts: state => state.projectStructure
     }),
+    finalImportTemplate () {
+      const unicefCustomQuestions = get(this, 'systemDicts.donorsLibrary.20.donor_questions');
+      return importTemplate.map(i => {
+        const row = {
+          ...i
+        };
+        unicefCustomQuestions.forEach(q => {
+          row[q.question] = q.options.join('|');
+        });
+        return row;
+      });
+    },
     fieldsData () {
       const flatHFA = this.projectDicts.health_focus_areas.reduce((a, c) => {
         const innerNames = c.health_focus_areas.map(i => i.name);
@@ -211,7 +224,7 @@ export default {
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
         [nameMapping.platforms, ...flatPlatforms],
-        [nameMapping.digitalHealthInterventions, ...flathDHI],
+        [nameMapping.dhis, ...flathDHI],
         [nameMapping.field_office, ...flatFieldOffices],
         [nameMapping.goal_area, ...flatGoalAreas],
         [nameMapping.result_area, ...flatResultAreas],
@@ -232,7 +245,7 @@ export default {
     },
     templateSheets () {
       return [
-        { name: 'Import Example', data: importTemplate },
+        { name: 'Import Example', data: this.finalImportTemplate },
         { name: 'Fields', data: this.fieldsData },
         { name: 'Draft required fields', data: this.draftRequiredFields }
       ];

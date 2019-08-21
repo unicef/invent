@@ -26,9 +26,9 @@ export const importTemplate = [
     'Programme Focal Point Name': 'Nico',
     'Programme Focal Point Email': 'nico@pulilab.com',
     Software: 'Bamboo',
-    'Digital Health Interventions': '3.4.1 Notify birth event, 3.4.2 Register birth event',
-    'Health Focus Areas': 'Adolescents and communicable diseases, Other sexual and reproductive health',
-    'Health System Challenges': '1.1 Lack of population denominator,\n1.2 Delayed reporting of events',
+    'Digital Health Interventions': '3.4.1 Notify birth event|3.4.2 Register birth event',
+    'Health Focus Areas': 'Adolescents and communicable diseases|Other sexual and reproductive health',
+    'Health System Challenges': '1.1 Lack of population denominator|1.2 Delayed reporting of events',
     'UNICEF Goal': '21. Survive and Thrive',
     'UNICEF Result Area': '21-01 Maternal and newborn health',
     'Field Office': 'According to selected country'
