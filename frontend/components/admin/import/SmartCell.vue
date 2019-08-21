@@ -251,8 +251,8 @@ export default {
       }
       if (typeof value === 'string') {
         let splitted = [];
-        if (value.includes(',')) {
-          splitted = value.split(',');
+        if (value.includes('|')) {
+          splitted = value.split('|');
         } else {
           splitted = value.split(';');
         }
