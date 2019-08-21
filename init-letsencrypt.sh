@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(*.tipp.pulilab.com tipp.pulilab.com)
+domains=(*.tipp.pulilab.com)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="hilive@pulilab.com" # Adding a valid address is strongly recommended
@@ -68,6 +68,7 @@ if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
+    --server https://acme-v02.api.letsencrypt.org/directory
     $staging_arg \
     $email_arg \
     $domain_args \
