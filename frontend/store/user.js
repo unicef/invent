@@ -64,11 +64,22 @@ export const actions = {
   async loadProfile ({ commit, getters }, profileId) {
     try {
       if (getters.getToken && !getters.getProfile) {
-        let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
+        const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
         commit('SET_PROFILE', data);
       }
     } catch (e) {
       console.error('user/loadProfile failed');
+    }
+  },
+
+  async refreshProfile ({ commit, getters }) {
+    try {
+      if (getters.getToken && getters.getProfile && getters.getProfile.id) {
+        const { data } = await this.$axios.get(`/api/userprofiles/${getters.getProfile.id}/`);
+        commit('SET_PROFILE', data);
+      }
+    } catch (e) {
+      console.error('user/loadProfile failed', e);
     }
   },
 
