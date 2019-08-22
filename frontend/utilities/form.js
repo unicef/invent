@@ -3,7 +3,7 @@ import Vue from 'vue';
 
 export const mapGettersActions = (collection) => {
   const result = {};
-  for (let item in collection) {
+  for (const item in collection) {
     const [module, getterName, setterName, waitTime, skipGetter] = collection[item];
     const getter = module + '/' + getterName;
     const setter = module + '/' + setterName;

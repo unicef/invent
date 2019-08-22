@@ -65,6 +65,7 @@
 import DateField from '@/components/admin/import/DateField';
 import { Validator } from 'vee-validate';
 import { mapState } from 'vuex';
+import { format } from 'date-fns';
 
 export default {
   components: {
@@ -239,7 +240,7 @@ export default {
       }
     },
     parseDate () {
-      const result = this.value ? new Date(this.value) : null;
+      const result = this.value ? format(this.valie, 'dd/MM/yyyy', new Date(null)) : null;
       return {
         ids: [result],
         names: [result]
