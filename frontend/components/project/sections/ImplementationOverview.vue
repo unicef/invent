@@ -15,7 +15,7 @@
       >
         <template slot="label">
           <translate key="unicef-goal">
-            UNICEF Goal
+            Goal Area
           </translate>
         </template>
 
@@ -24,7 +24,7 @@
           v-validate="rules.goal_area"
           data-vv-name="goal_area"
           data-vv-validate-on="change"
-          data-vv-as="UNICEF Goal"
+          data-vv-as="Goal Area"
         />
       </custom-required-form-item>
 
@@ -35,7 +35,7 @@
       >
         <template slot="label">
           <translate key="result-area">
-            UNICEF Result Area
+            Result Area
           </translate>
         </template>
 
@@ -45,7 +45,7 @@
           :goal-area="goal_area"
           data-vv-name="result_area"
           data-vv-validate-on="change"
-          data-vv-as="UNICEF Result Area"
+          data-vv-as="Result Area"
         />
       </custom-required-form-item>
 
