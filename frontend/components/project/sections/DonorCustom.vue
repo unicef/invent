@@ -56,6 +56,9 @@ export default {
   },
   methods: {
     customFieldsName (name) {
+      if (name === 'UNICEF') {
+        return this.$gettext('Additional {name} fields', { name });
+      }
       return this.$gettext('{name} custom fields', { name });
     },
     async validate () {
