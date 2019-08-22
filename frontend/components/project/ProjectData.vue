@@ -92,12 +92,12 @@
           :title="$gettext('2. Implementation Overview') | translate"
         >
           <simple-field
-            :header="$gettext('UNICEF Goal area') | translate"
+            :header="$gettext('Goal area') | translate"
             :content="goalArea.name"
           />
 
           <simple-field
-            :header="$gettext('UNICEF Result area') | translate"
+            :header="$gettext('Result area') | translate"
             :content="resultArea.name"
           />
 
