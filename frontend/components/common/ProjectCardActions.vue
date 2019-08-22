@@ -31,7 +31,7 @@
           <translate>Edit Draft</translate>
         </nuxt-link>
       </el-col>
-      <el-col>
+      <el-col v-if="isSuperUser">
         <nuxt-link
           :to="localePath({name: 'organisation-projects-id-assessment', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   props: {
     project: {
@@ -57,6 +58,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      user: 'user/getProfile'
+    }),
+    isSuperUser () {
+      return this.user && this.user.is_superuser;
+    },
     showViewDraft () {
       return this.forceShow || this.project.isViewer || this.project.isMember;
     },
