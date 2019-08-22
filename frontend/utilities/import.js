@@ -21,8 +21,8 @@ export const importTemplate = [
   {
     'Project Name': 'MyProject',
     'Initiative Description': 'Narrative free text',
-    'Project Start Date': '04-22-2015',
-    'Project End Date': '06-22-2019',
+    'Project Start Date': '01/01/2015',
+    'Project End Date': '01/01/2019',
     'Programme Focal Point Name': 'Nico',
     'Programme Focal Point Email': 'nico@pulilab.com',
     Software: 'Bamboo',
