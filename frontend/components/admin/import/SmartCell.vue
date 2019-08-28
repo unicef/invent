@@ -240,7 +240,7 @@ export default {
       }
     },
     parseDate () {
-      const result = this.value ? format(this.valie, 'dd/MM/yyyy', new Date(null)) : null;
+      const result = this.value ? new Date(this.value) : null;
       return {
         ids: [result],
         names: [result]
