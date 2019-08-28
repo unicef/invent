@@ -16,7 +16,7 @@
         class="CountrySubHeader"
       >
         <div v-if="showNational">
-          <span class="SubLevelItem"/>
+          <span class="SubLevelItem" />
           <span class="SubLevelCounter">
             <translate :parameters="{count: nationalProjects.length} ">
               &nbsp; {count} project(s)
@@ -204,6 +204,9 @@ export default {
     }
 
     .ProjectsList {
+      max-height: 475px;
+      overflow: scroll;
+
       .el-tabs__header {
         margin: 0;
         background-color: @colorWhite;
