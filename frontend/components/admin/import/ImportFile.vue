@@ -22,7 +22,7 @@
             :collection="sheet.data"
             :sheet-name="sheet.name"
           />
-          <xlsx-download filename="DHA_Import_template.xlsx">
+          <xlsx-download filename="TIIP_Import_template.xlsx">
             <a class="XLSXTemplate">
               <translate> you can use this file as a reference for the format of the data </translate>
               <fa icon="file-excel" />
