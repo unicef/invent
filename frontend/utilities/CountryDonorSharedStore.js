@@ -50,10 +50,12 @@ export const actions = () => ({
       dispatch('admin/map/setFacilities', data.map_data.facilities, { root: true });
       dispatch('admin/map/setFirstSubLevel', data.map_data.first_sub_level.admin_level, { root: true });
       dispatch('admin/map/setFirstSubLevelType', data.map_data.first_sub_level.name, { root: true });
+      dispatch('admin/map/setFirstSubLevelList', data.map_data.first_sub_level.elements, { root: true });
       dispatch('admin/map/setSecondSubLevel', data.map_data.second_sub_level.admin_level, { root: true });
       dispatch('admin/map/setSecondSubLevelType', data.map_data.second_sub_level.name, { root: true });
+      dispatch('admin/map/setSecondSubLevelList', data.map_data.second_sub_level.elements, { root: true });
       dispatch('admin/map/setCountryCenter', data.map_data.polylabel, { root: true });
-      dispatch('admin/map/parseSubLevelsPolyCenters', data.map_data.first_sub_level, { root: true });
+      dispatch('admin/map/setSecondSubLevelSource', data.map_data.second_sub_level_source, { root: true });
     }
 
     if (state.type === 'country') {

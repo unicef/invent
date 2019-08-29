@@ -1,10 +1,11 @@
 <template>
   <div class="DialogsContainer">
-    <digital-health-interventions-dialog />
-    <dashboard-filters-dialog />
-    <save-filter-dialog />
-    <send-email-dialog />
-    <project-approval-dialog />
+    <DigitalHealthInterventionsDialog />
+    <DashboardFiltersDialog />
+    <SaveFilterDialog />
+    <SendEmailDialog />
+    <ProjectApprovalDialog />
+    <EditSubLevelDialog />
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import DashboardFiltersDialog from './DashboardFiltersDialog';
 import SaveFilterDialog from './SaveFilterDialog';
 import SendEmailDialog from './SendEmailDialog';
 import ProjectApprovalDialog from './ProjectApprovalDialog';
+import EditSubLevelDialog from './EditSubLevelDialog';
 import { mapGettersActions } from '../..//utilities/form';
 
 export default {
@@ -22,7 +24,8 @@ export default {
     DashboardFiltersDialog,
     SaveFilterDialog,
     SendEmailDialog,
-    ProjectApprovalDialog
+    ProjectApprovalDialog,
+    EditSubLevelDialog
   },
   computed: {
     ...mapGettersActions({
