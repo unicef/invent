@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { LMap, LTileLayer, LMarker, LTooltip, LPopup, LControlZoom, LGeoJson, LFeatureGroup } from 'vue2-leaflet';
+import { LMap, LTileLayer, LMarker, LTooltip, LPopup, LControlZoom, LGeoJson, LFeatureGroup, LIcon } from 'vue2-leaflet';
 import { Icon } from 'leaflet';
 import CustomMarkerCluster from '@/components/common/map/CustomMarkerCluster';
 
@@ -20,3 +20,4 @@ Vue.component('l-control-zoom', LControlZoom);
 Vue.component('custom-marker-cluster', CustomMarkerCluster);
 Vue.component('l-geo-json', LGeoJson);
 Vue.component('l-feature-group', LFeatureGroup);
+Vue.component('l-icon', LIcon);

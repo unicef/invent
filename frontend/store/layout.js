@@ -3,7 +3,8 @@ export const state = () => ({
   dashboardFiltersDialogState: null,
   saveFiltersDialogState: null,
   sendEmailDialogState: null,
-  showEmptyProfileWarning: false
+  showEmptyProfileWarning: false,
+  editSubLevelDialogState: null
 });
 
 export const getters = {
@@ -11,41 +12,33 @@ export const getters = {
   getDashboardFiltersDialogState: state => state.dashboardFiltersDialogState,
   getSaveFiltersDialogState: state => state.saveFiltersDialogState,
   getSendEmailDialogState: state => state.sendEmailDialogState,
-  getShowEmptyProfileWarning: state => state.showEmptyProfileWarning
+  getShowEmptyProfileWarning: state => state.showEmptyProfileWarning,
+  getEditSubLevelDialogState: state => state.editSubLevelDialogState
 };
 
 export const actions = {
   setDigitalHealthInterventionsDialogState ({ commit }, value) {
-    commit('SET_DIGITAL_HEALTH_INTERVENTIONS_DIALOG_STATE', value);
+    commit('SET_DATA', { type: 'digitalHealthInterventionsDialogState', value });
   },
   setDashboardFiltersDialogState ({ commit }, value) {
-    commit('SET_DASHBOARD_FILTERS_DIALOG_STATE', value);
+    commit('SET_DATA', { type: 'dashboardFiltersDialogState', value });
   },
   setSaveFiltersDialogState ({ commit }, value) {
-    commit('SET_SAVE_FILTERS_DIALOG_STATE', value);
+    commit('SET_DATA', { type: 'saveFiltersDialogState', value });
   },
   setSendEmailDialogState ({ commit }, value) {
-    commit('SET_SEND_EMAIL_DIALOG_STATE', value);
+    commit('SET_DATA', { type: 'sendEmailDialogState', value });
   },
   setShowEmptyProfileWarning ({ commit }, value) {
-    commit('SET_SHOW_EMPTY_PROFILE_WARNING', value);
+    commit('SET_DATA', { type: 'showEmptyProfileWarning', value });
+  },
+  setEditSubLevelDialogState ({ commit }, value) {
+    commit('SET_DATA', { type: 'editSubLevelDialogState', value });
   }
 };
 
 export const mutations = {
-  SET_DIGITAL_HEALTH_INTERVENTIONS_DIALOG_STATE: (state, value) => {
-    state.digitalHealthInterventionsDialogState = value;
-  },
-  SET_DASHBOARD_FILTERS_DIALOG_STATE: (state, value) => {
-    state.dashboardFiltersDialogState = value;
-  },
-  SET_SAVE_FILTERS_DIALOG_STATE: (state, value) => {
-    state.saveFiltersDialogState = value;
-  },
-  SET_SEND_EMAIL_DIALOG_STATE: (state, value) => {
-    state.sendEmailDialogState = value;
-  },
-  SET_SHOW_EMPTY_PROFILE_WARNING: (state, value) => {
-    state.showEmptyProfileWarning = value;
+  SET_DATA: (state, { type, value }) => {
+    state[type] = value;
   }
 };

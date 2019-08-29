@@ -59,6 +59,7 @@
             :world-copy-jump="true"
             :options="mapOptions"
             class="MapContainer"
+            @ready="setMapReady()"
           >
             <l-tilelayer
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
@@ -79,15 +80,21 @@
               @moveend="countryCenterMoveHandler"
             >
               <l-tooltip> Country Central Pin </l-tooltip>
+              <l-icon
+                :icon-size="[27, 46]"
+                :icon-anchor="[13.5, 13.5]"
+                :icon-url="iconCenterPic"
+              />
             </l-marker>
 
             <l-feature-group v-if="showSubLevelsPins">
               <l-marker
                 v-for="pin in subLevelsPolyCenters"
                 :key="pin.name"
-                :lat-lng="pin.latlng"
+                :lat-lng="pin.polyCenter"
                 :draggable="true"
-                @moveend="subLevelsPinsMoveHandler($event, pin.name)"
+                @moveend="subLevelsPinsMoveHandler($event, pin)"
+                @click="setEditSubLevelDialogState({item: pin, callback: updateFirstSubLevelItem})"
               >
                 <l-tooltip> {{ pin.name }} </l-tooltip>
               </l-marker>
@@ -137,18 +144,10 @@
         <h5>Sub Level I <span>(Displayed on the map)</span></h5>
         <div>
           <el-select
-            v-model="firstSubLevel"
-            placeholder="Admin level"
-          >
-            <el-option
-              v-for="level in subLevels"
-              :key="level"
-              :label="`admin-level-${level}`"
-              :value="level"
-            />
-          </el-select>
-          <el-select
             v-model="firstSubLevelType"
+            allow-create
+            default-first-option
+            filterable
             placeholder="Sub level name"
           >
             <el-option
@@ -156,6 +155,18 @@
               :key="name.name"
               :label="name.displayName"
               :value="name.name"
+            />
+          </el-select>
+          <el-select
+            v-model="firstSubLevel"
+            :disabled="!firstSubLevelType"
+            placeholder="Admin level"
+          >
+            <el-option
+              v-for="level in subLevels"
+              :key="level"
+              :label="`admin-level-${level}`"
+              :value="level"
             />
           </el-select>
         </div>
@@ -169,6 +180,7 @@
             <li
               v-for="item in firstSubLevelList"
               :key="item.id"
+              @click="setEditSubLevelDialogState({item, callback: updateFirstSubLevelItem})"
             >
               <fa icon="map-pin" />
               {{ item.name }}
@@ -182,23 +194,13 @@
         class="MapSettingSection"
       >
         <h5>Sub Level II <span>(Only for selection)</span></h5>
-        <p>Hover on a district name to highlight it on the country map.</p>
         <div>
-          <el-select
-            v-model="secondSubLevel"
-            placeholder="Admin Level"
-            clearable
-          >
-            <el-option
-              v-for="level in availableSubLevels"
-              :key="level"
-              :label="`admin-level-${level}`"
-              :value="level"
-            />
-          </el-select>
           <el-select
             v-model="secondSubLevelType"
             placeholder="Sub level name"
+            allow-create
+            default-first-option
+            filterable
             clearable
           >
             <el-option
@@ -210,6 +212,64 @@
           </el-select>
         </div>
 
+        <div class="ImportFromSelector">
+          <el-radio
+            v-model="secondSubLevelSource"
+            label="map"
+            border
+          >
+            From Map
+          </el-radio>
+          <el-radio
+            v-model="secondSubLevelSource"
+            label="file"
+            border
+          >
+            From File
+          </el-radio>
+        </div>
+
+        <div v-if="secondSubLevelSource === 'map'">
+          <el-select
+            v-model="secondSubLevel"
+            :disabled="!secondSubLevelType"
+            placeholder="Admin Level"
+            clearable
+          >
+            <el-option
+              v-for="level in availableSubLevels"
+              :key="level"
+              :label="`admin-level-${level}`"
+              :value="level"
+            />
+          </el-select>
+        </div>
+
+        <div
+          v-if="secondSubLevelSource === 'file'"
+          class="FileImport"
+        >
+          <template v-if="!fileParsed">
+            <xlsx-workbook>
+              <xlsx-sheet
+                :collection="currentSecondSubLevelExport"
+                sheet-name="Default"
+              />
+              <xlsx-download filename="second-sub-level-list.xlsx">
+                <a href="#">Download current list</a>
+              </xlsx-download>
+            </xlsx-workbook>
+
+            <input
+              type="file"
+              @change="onFileChange"
+            >
+            <xlsx-read :file="importFile">
+              <xlsx-json @parsed="subLevelParsed" />
+            </xlsx-read>
+          </template>
+        </div>
+
         <div
           v-show="showSecondSubLevelList"
           class="SubLevelList"
@@ -217,9 +277,12 @@
           <h5> List of {{ secondSubLevelType }}</h5>
           <ul>
             <li
+
               v-for="item in secondSubLevelList"
               :key="item.id"
+              @click="setEditSubLevelDialogState({item, callback: updateSecondSubLevelItem})"
             >
+              <fa icon="map-pin" />
               {{ item.name }}
             </li>
           </ul>
@@ -244,19 +307,27 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { calculatePolyCenter } from '../../utilities/coords';
-import { blobDownloader } from '../../utilities/dom';
+import { blobDownloader, uuidv4 } from '../../utilities/dom';
+import iconCenterPic from '~/assets/img/pins/pin-without-counter-active.svg';
 
 import FacilityImport from './FacilityImport';
 import NoSSR from 'vue-no-ssr';
+import { XlsxRead, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
 
 export default {
   name: 'VueMapCustomizer',
   components: {
     'no-ssr': NoSSR,
-    FacilityImport
+    FacilityImport,
+    XlsxJson,
+    XlsxRead,
+    XlsxWorkbook,
+    XlsxSheet,
+    XlsxDownload
   },
   data () {
     return {
+      iconCenterPic,
       zoom: 3,
       mapOptions: { zoomControl: false, attributionControl: false },
       showCenterPin: true,
@@ -264,7 +335,10 @@ export default {
       forceMapFileChange: false,
       mapFile: {},
       uploadMapFile: false,
-      mapFileList: []
+      mapFileList: [],
+      mapReady: false,
+      importFile: null,
+      fileParsed: false
     };
   },
   computed: {
@@ -273,6 +347,7 @@ export default {
       country: 'admin/country/getData',
       subLevelTypes: 'system/getSubLevelTypes',
       firstSubLevelList: 'admin/map/getFirstSubLevelList',
+      mapSecondSubLevelList: 'admin/map/getSecondSubLevelListFromMap',
       secondSubLevelList: 'admin/map/getSecondSubLevelList',
       subLevels: 'admin/map/getSubLevels',
       firstSubLevelMap: 'admin/map/getFirstSubLevelMap',
@@ -282,18 +357,42 @@ export default {
       getSecondSubLevelType: 'admin/map/getSecondSubLevelType',
       countryCenter: 'admin/map/getCountryCenter',
       countryBorder: 'admin/map/getCountryBorder',
-      subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters'
+      subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters',
+      getSecondSubLevelSource: 'admin/map/getSecondSubLevelSource'
     }),
     uploadHeaders () {
       return {
-        'Authorization': `Token ${this.token}`
+        Authorization: `Token ${this.token}`
       };
+    },
+    secondSubLevelSource: {
+      get () {
+        return this.getSecondSubLevelSource;
+      },
+      set (value) {
+        this.setSecondSubLevelSource(value);
+      }
     },
     firstSubLevelTypes () {
       return this.subLevelTypes.filter(n => n.name !== this.secondSubLevelType);
     },
     secondSubLevelTypes  () {
       return this.subLevelTypes.filter(n => n.name !== this.firstSubLevelType);
+    },
+    currentSecondSubLevelExport () {
+      if (this.secondSubLevelList && this.secondSubLevelList.length > 0) {
+        const template = {
+          id: '',
+          name: '',
+          'name:fr': '',
+          'name:pt': '',
+          'name:es': '',
+          'name:ar': ''
+        };
+        const existing = this.secondSubLevelList.map(sb => ({ ...template, id: sb.id, name: sb.name }));
+        return [...existing, ...[...Array(999).keys()].map(() => ({ ...template, id: uuidv4(), name: '' }))];
+      }
+      return [{}];
     },
     firstSubLevel: {
       get () {
@@ -340,9 +439,6 @@ export default {
       return this.secondSubLevel
         ? this.secondSubLevelList
         : this.firstSubLevel ? this.firstSubLevelList : [];
-    },
-    showSaveButton () {
-      return this.showFirstSubLevelList;
     }
   },
   methods: {
@@ -355,11 +451,33 @@ export default {
       setSecondSubLevelType: 'admin/map/setSecondSubLevelType',
       setCountryCenter: 'admin/map/setCountryCenter',
       setSubLevelsPolyCenters: 'admin/map/setSubLevelsPolyCenters',
-      updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter'
+      updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter',
+      setSecondSubLevelSource: 'admin/map/setSecondSubLevelSource',
+      setSecondSubLevelList: 'admin/map/setSecondSubLevelList',
+      setFirstSubLevelList: 'admin/map/setFirstSubLevelList',
+      setEditSubLevelDialogState: 'layout/setEditSubLevelDialogState'
     }),
-
+    onFileChange (event) {
+      this.importFile = event.target.files ? event.target.files[0] : null;
+    },
+    subLevelParsed (value) {
+      const filtered = value.filter(v => v.name && v.id);
+      this.setSecondSubLevelList(filtered);
+      this.fileParsed = true;
+      this.$message(this.$gettext('File imported succesffully'));
+    },
+    updateSecondSubLevelItem (updated) {
+      const newList = this.secondSubLevelList.map(i => i.id === updated.id ? updated : i);
+      this.setSecondSubLevelList(newList);
+    },
+    updateFirstSubLevelItem (updated) {
+      const newList = this.firstSubLevelList.map(i => i.id === updated.id ? updated : i);
+      this.setFirstSubLevelList(newList);
+    },
+    setMapReady () {
+      this.mapReady = true;
+    },
     async downloadMap () {
-      // /api/countries/map-download/${country.id}/
       this.$nuxt.$loading.start();
       try {
         const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, { responseType: 'blob' });
@@ -382,18 +500,15 @@ export default {
     polycenterCalculation () {
       const countryCenter = calculatePolyCenter(this.countryBorder.geometry);
       this.setCountryCenter(countryCenter);
-      const subLevelsPolycenter = this.firstSubLevelMap.map(sb => {
-        return {
-          name: sb.properties.name,
-          latlng: calculatePolyCenter(sb.geometry)
-        };
-      }).filter(p => p.latlng);
-      this.setSubLevelsPolyCenters(subLevelsPolycenter);
+      this.setFirstSubLevelList.forEach(sb => {
+        const polyCenter = calculatePolyCenter(sb.geometry);
+        this.updateSubLevelPolyCenter({ ...sb, polyCenter });
+      });
     },
 
-    subLevelsPinsMoveHandler (event, name) {
-      const latlng = event.target.getLatLng();
-      this.updateSubLevelPolyCenter({ name, latlng });
+    subLevelsPinsMoveHandler (event, pin) {
+      const polyCenter = event.target.getLatLng();
+      this.updateSubLevelPolyCenter({ ...pin, polyCenter });
     },
 
     beforeMapUpload () {
@@ -414,88 +529,250 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .CountryMapCustomizer {
-    align-items: stretch;
-    width: 100%;
+.CountryMapCustomizer {
+  align-items: stretch;
+  width: 100%;
 
-    > .el-col {
-      // Left side - Vue map
-      &:first-child {
-        width: 100%;
-        min-width: calc(100% - 340px);
-      }
+  .ActiveCountry {
+    background-image: url('~assets/img/pins/pin-without-counter-active.svg');
+  }
 
-      // Right side - Levels & Facilities
-      &:last-child {
-        min-width: 340px;
-        max-width: 340px;
-        // MapContainer + CountryMapHeader + CountryMapSettings
-        height: calc(50vh + 58px + 90px);
-        min-height: calc(50vh + 58px + 90px);
-        max-height: calc(500px + 58px + 90px);
-        overflow-y: auto;
-        padding: 0;
-        border-left: 1px solid @colorGrayLight;
-        background-color: @colorBrandBlueLight;
+  > .el-col {
+    // Left side - Vue map
+    &:first-child {
+      width: 100%;
+      min-width: calc(100% - 340px);
+    }
 
-        .MapSettingSection {
-          padding: 20px 40px;
-          border-bottom: 1px solid @colorGrayLight;
+    // Right side - Levels & Facilities
+    &:last-child {
+      min-width: 340px;
+      max-width: 340px;
+      // MapContainer + CountryMapHeader + CountryMapSettings
+      height: calc(50vh + 58px + 90px);
+      min-height: calc(50vh + 58px + 90px);
+      max-height: calc(500px + 58px + 90px);
+      overflow-y: auto;
+      padding: 0;
+      border-left: 1px solid @colorGrayLight;
+      background-color: @colorBrandBlueLight;
 
-          &:last-child {
-            padding-bottom: 80px;
-            border: 0;
-          }
+      .MapSettingSection {
+        padding: 20px 40px;
+        border-bottom: 1px solid @colorGrayLight;
 
-          h5 {
-            margin: 10px 0 20px;
-            font-size: @fontSizeBase;
+        &:last-child {
+          padding-bottom: 80px;
+          border: 0;
+        }
 
-            span {
-              font-weight: 400;
-              color: @colorGray;
-            }
-          }
+        h5 {
+          margin: 10px 0 20px;
+          font-size: @fontSizeBase;
 
-          p {
-            margin: 0 0 20px;
-            font-size: @fontSizeSmall;
-            line-height: 18px;
+          span {
+            font-weight: 400;
             color: @colorGray;
           }
+        }
 
-          .el-select {
-            width: 100%;
-            margin-bottom: 20px;
+        p {
+          margin: 0 0 20px;
+          font-size: @fontSizeSmall;
+          line-height: 18px;
+          color: @colorGray;
+        }
+
+        .el-select {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+
+        .ImportFromSelector {
+          display: flex;
+          margin-bottom: 20px;
+
+          .el-radio {
+            margin-right: 0;
           }
+        }
+
+        .FileImport {
+          input[type="file"] {
+            margin: 20px 0;
+          }
+          h5 {
+            margin: 0;
+          }
+        }
+
+        .SubLevelList {
+          ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+              position: relative;
+              font-size: @fontSizeBase;
+              margin: 0 0 10px;
+              padding: 0 20px;
+              color: @colorBrandPrimary;
+              cursor: pointer;
+              transition: @transitionAll;
+
+              &:hover {
+                color: @colorBrandPrimaryLight;
+              }
+
+              .svg-inline--fa {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .CountryMapHeader {
+      height: 58px;
+      padding: 0 40px;
+      background-color: @colorWhite;
+
+      .CountryMapTitle {
+        width: 100%;
+        padding-right: 20px;
+        font-size: @fontSizeMedium;
+        font-weight: 700;
+        .textTruncate();
+      }
+
+      .CountryMapFile {
+        width: auto;
+        font-size: @fontSizeBase;
+        text-align: right;
+        white-space: nowrap;
+
+        .el-button {
+          margin-left: 20px;
+          padding: 0;
+        }
+
+        // .UploadComp {}
+      }
+    }
+
+    .CountryMapSettings {
+      height: 90px;
+      padding: 0 40px;
+      background-color: @colorWhite;
+
+      > .el-row {
+        height: 100%;
+      }
+
+      .PinSwitch {
+        padding: 2px 0 6px;
+
+        > span {
+          position: relative;
+          top: 4px;
+          display: inline-block;
+          width: 160px;
+          font-size: @fontSizeBase;
+          font-weight: 700;
+          line-height: 16px;
+          .textTruncate();
+        }
+
+        .el-switch {
+          .el-switch__label {
+            color: @colorGray;
+
+            &.is-active {
+              color: @colorTextPrimary;
+            }
+          }
+        }
+
+        &.CountryCenter {
+          .el-switch {
+            &.is-checked {
+              .el-switch__core {
+                border-color: @colorBrandAccent;
+                background-color: @colorBrandAccent;
+              }
+            }
+          }
+        }
+      }
+
+      .el-button {
+        float: right;
+      }
+    }
+
+    .MapContainer {
+      box-sizing: border-box;
+      height: 50vh;
+      min-height: 50vh;
+      max-height: 500px;
+      border: 1px solid @colorGrayLight;
+      border-width: 1px 0;
+    }
+
+    // vue map custom styling
+    .map-container {
+      height: 15vh;
+      max-height: 500px;
+
+      .country {
+        fill: #e3e5ee;
+      }
+
+      .first-sub-level {
+        fill: #e3e5ee;
+        stroke: #9b9da8;
+        stroke-width: 2px;
+      }
+
+      .second-sub-level {
+        fill: #e3e5ee;
+        stroke: #283593;
+        stroke-width: 1px;
+      }
+
+      .label {
+        &.hidden {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+[dir="rtl"] {
+  .CountryMapCustomizer {
+    > .el-col {
+
+      &:last-child {
+        border-left: none;
+        border-right: 1px solid @colorGrayLight;
+
+        .MapSettingSection {
 
           .SubLevelList {
             ul {
-              list-style-type: none;
-              margin: 0;
-              padding: 0;
-
               li {
-                position: relative;
-                font-size: @fontSizeBase;
-                margin: 0 0 10px;
-                padding: 0 20px;
-                color: @colorBrandPrimary;
-                cursor: pointer;
-                transition: @transitionAll;
-
-                &:hover {
-                  color: @colorBrandPrimaryLight;
-                }
-
                 .svg-inline--fa {
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  width: 14px;
+                  left: auto;
+                  right: 0;
                 }
               }
             }
@@ -504,175 +781,35 @@ export default {
       }
 
       .CountryMapHeader {
-        height: 58px;
-        padding: 0 40px;
-        background-color: @colorWhite;
-
         .CountryMapTitle {
-          width: 100%;
-          padding-right: 20px;
-          font-size: @fontSizeMedium;
-          font-weight: 700;
-          .textTruncate();
+          padding-left: 20px;
+          padding-right: 0;
         }
 
         .CountryMapFile {
-          width: auto;
-          font-size: @fontSizeBase;
-          text-align: right;
-          white-space: nowrap;
-
           .el-button {
-            margin-left: 20px;
-            padding: 0;
+            margin-left: 0px;
+            margin-right: 20px;
           }
-
-          // .UploadComp {}
         }
       }
 
       .CountryMapSettings {
-        height: 90px;
-        padding: 0 40px;
-        background-color: @colorWhite;
-
-        > .el-row {
-          height: 100%;
-        }
-
-        .PinSwitch {
-          padding: 2px 0 6px;
-
-          > span {
-            position: relative;
-            top: 4px;
-            display: inline-block;
-            width: 160px;
-            font-size: @fontSizeBase;
-            font-weight: 700;
-            line-height: 16px;
-            .textTruncate();
-          }
-
-          .el-switch {
-            .el-switch__label {
-              color: @colorGray;
-
-              &.is-active {
-                color: @colorTextPrimary;
-              }
-            }
-          }
-
-          &.CountryCenter {
-            .el-switch {
-              &.is-checked {
-                .el-switch__core {
-                  border-color: @colorBrandAccent;
-                  background-color: @colorBrandAccent;
-                }
-              }
-            }
-          }
-        }
-
         .el-button {
-          float: right;
-        }
-      }
-
-      .MapContainer {
-        box-sizing: border-box;
-        height: 50vh;
-        min-height: 50vh;
-        max-height: 500px;
-        border: 1px solid @colorGrayLight;
-        border-width: 1px 0;
-      }
-
-      // vue map custom styling
-      .map-container {
-        height: 15vh;
-        max-height: 500px;
-
-        .country {
-          fill: #e3e5ee;
+          float: left;
         }
 
-        .first-sub-level {
-          fill: #e3e5ee;
-          stroke: #9b9da8;
-          stroke-width: 2px;
+        .el-switch__label.el-switch__label--left {
+          margin-left: 10px;
+          margin-right: 0;
         }
 
-        .second-sub-level {
-          fill: #e3e5ee;
-          stroke: #283593;
-          stroke-width: 1px;
-        }
-
-        .label {
-          &.hidden {
-            display: none;
-          }
+        .el-switch__label.el-switch__label--right {
+          margin-left: 0;
+          margin-right: 10px;
         }
       }
     }
   }
-
-  [dir="rtl"] {
-    .CountryMapCustomizer {
-      > .el-col {
-
-        &:last-child {
-          border-left: none;
-          border-right: 1px solid @colorGrayLight;
-
-          .MapSettingSection {
-
-            .SubLevelList {
-              ul {
-                li {
-                  .svg-inline--fa {
-                    left: auto;
-                    right: 0;
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        .CountryMapHeader {
-          .CountryMapTitle {
-            padding-left: 20px;
-            padding-right: 0;
-          }
-
-          .CountryMapFile {
-            .el-button {
-              margin-left: 0px;
-              margin-right: 20px;
-            }
-          }
-        }
-
-        .CountryMapSettings {
-          .el-button {
-            float: left;
-          }
-
-          .el-switch__label.el-switch__label--left {
-            margin-left: 10px;
-            margin-right: 0;
-          }
-
-          .el-switch__label.el-switch__label--right {
-            margin-left: 0;
-            margin-right: 10px;
-          }
-        }
-      }
-    }
-  }
+}
 </style>
