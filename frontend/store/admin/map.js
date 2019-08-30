@@ -182,9 +182,9 @@ export const actions = {
     value = value || null;
     commit('SET_DATA', { type: 'secondSubLevelList', value });
   },
-  updateSubLevelPolyCenter ({ commit, getters }, updated) {
-    const index = getters.getFirstSubLevelList.findIndex(c => c.id === updated.id);
-    commit('UPDATE_SUB_LEVELS_POLYCENTERS', { index, data: updated });
+  updateSubLevelPolyCenter ({ commit, getters }, { id, polyCenter }) {
+    const index = getters.getFirstSubLevelList.findIndex(c => c.id === id);
+    commit('UPDATE_SUB_LEVELS_POLYCENTERS', { index, polyCenter });
   },
   setFacilities ({ commit }, list) {
     list = list || [];
@@ -225,8 +225,9 @@ export const mutations = {
   SET_COUNTRY_DATA: (state, { id, map_file }) => {
     state.country = { id, map_file };
   },
-  UPDATE_SUB_LEVELS_POLYCENTERS: (state, { index, data }) => {
-    state.firstSubLevelList.splice(index, 1, data);
+  UPDATE_SUB_LEVELS_POLYCENTERS: (state, { index, polyCenter }) => {
+    const updated = { ...state.firstSubLevelList[index], polyCenter };
+    state.firstSubLevelList.splice(index, 1, updated);
   },
   RESET_MAP_STATE: state => {
     state.geoJson = null;
