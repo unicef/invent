@@ -159,7 +159,6 @@
           </el-select>
           <el-select
             v-model="firstSubLevel"
-            :disabled="!firstSubLevelType"
             placeholder="Admin level"
           >
             <el-option
@@ -232,7 +231,6 @@
         <div v-if="secondSubLevelSource === 'map'">
           <el-select
             v-model="secondSubLevel"
-            :disabled="!secondSubLevelType"
             placeholder="Admin Level"
             clearable
           >
@@ -500,9 +498,9 @@ export default {
     polycenterCalculation () {
       const countryCenter = calculatePolyCenter(this.countryBorder.geometry);
       this.setCountryCenter(countryCenter);
-      this.setFirstSubLevelList.forEach(sb => {
+      this.firstSubLevelMap.forEach(sb => {
         const polyCenter = calculatePolyCenter(sb.geometry);
-        this.updateSubLevelPolyCenter({ ...sb, polyCenter });
+        this.updateSubLevelPolyCenter({ id: sb.properties.id, polyCenter });
       });
     },
 
