@@ -130,7 +130,7 @@
               </form-hint>
             </template>
 
-            <el-date-picker
+            <SafeDatePicker
               ref="Start date"
               v-model="start_date"
               v-validate="rules.start_date"
@@ -160,7 +160,7 @@
               </form-hint>
             </template>
 
-            <el-date-picker
+            <SafeDatePicker
               v-model="end_date"
               v-validate="rules.end_date"
               :placeholder="$gettext('End date') | translate"

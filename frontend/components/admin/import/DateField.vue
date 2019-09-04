@@ -1,5 +1,5 @@
 <template>
-  <el-date-picker
+  <SafeDatePicker
     v-model="internalValue"
     :disabled="disabled"
     class="ImportDatePicker"
