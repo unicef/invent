@@ -19,7 +19,7 @@
           </translate>
         </template>
 
-        <el-date-picker
+        <SafeDatePicker
           v-model="implementation_dates"
           v-validate="rules.implementation_dates"
           :placeholder="$gettext('Pick a day') | translate"
