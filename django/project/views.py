@@ -25,7 +25,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, CSVExportSerializer, ProjectImportV2Serializer, ImportRowSerializer
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
+    HealthCategory, HSCChallenge, HealthFocusArea
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -236,6 +236,14 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
         return Response(instance.to_response_dict(published=published, draft=draft))
+
+
+class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+    def update(self, request, project_id):
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        project.unpublish()
+        data = project.to_representation(draft_mode=True)
+        return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):

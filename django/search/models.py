@@ -152,6 +152,12 @@ class ProjectSearch(ExtendedModel):
             self.capability_subcategories = project.data.get('capability_subcategories')
             self.save()
 
+    def reset(self):
+        for field in self._meta.fields:
+            if field.name not in ('created', 'modified', 'project'):
+                setattr(self, field.name, field.get_default())
+        self.save()
+
 
 @receiver(post_save, sender=Project)
 def create_search_objects(sender, instance, created, **kwargs):

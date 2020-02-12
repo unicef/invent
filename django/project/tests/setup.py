@@ -105,3 +105,11 @@ class SetupTests(APITestCase):
         url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 200)
+
+    def check_project_search_init_state(self, project):
+        obj = project.search
+        self.assertEqual(obj.project_id, project.id)
+
+        for field in obj._meta.fields:
+            if field.name not in ('created', 'modified', 'project'):
+                self.assertEqual(getattr(obj, field.name), field.get_default())

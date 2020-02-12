@@ -49,6 +49,7 @@ class ParentFilter(admin.SimpleListFilter):
             ('Parent Only', _('Parent Only')),
             ('Children Only', _('Children Only'))
         )
+
     def queryset(self, request, queryset):  # pragma: no cover
         if self.value() is None:
             return queryset.all()
