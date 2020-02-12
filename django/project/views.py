@@ -25,7 +25,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, CSVExportSerializer, ProjectImportV2Serializer, ImportRowSerializer
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
+    HealthCategory, HSCChallenge, HealthFocusArea
 
 
 class ProjectPublicViewSet(ViewSet):
