@@ -7,14 +7,11 @@ from django.http import HttpResponse
 from rest_framework import mixins, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
-from search.models import ProjectSearch
 from user.models import UserProfile
-from project.models import TechnologyPlatform
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
