@@ -238,6 +238,14 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_response_dict(published=published, draft=draft))
 
 
+class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+    def update(self, request, project_id):
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        project.unpublish()
+        data = project.to_representation(draft_mode=True)
+        return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
+
+
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
     def create(self, request, country_id):
         """
