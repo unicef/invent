@@ -159,6 +159,12 @@ class Project(SoftDeleteModel, ExtendedModel):
             p.save()
         return stale_ids
 
+    def unpublish(self):
+        self.public_id = ''
+        self.data = {}
+        self.save()
+        self.search.reset()
+
 
 @receiver(post_save, sender=Project)
 def on_create_init(sender, instance, created, **kwargs):
