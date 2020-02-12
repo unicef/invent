@@ -2,6 +2,7 @@ import copy
 from datetime import datetime
 
 from django.urls import reverse
+from rest_framework import status
 
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
@@ -784,3 +785,51 @@ class ProjectTests(SetupTests):
         Project.remove_stale_donors()
         project.refresh_from_db()
         self.assertEqual(project.data['donors'], [self.d1.id])
+
+    def test_unpublish_project(self):
+        data = copy.deepcopy(self.project_data)
+        data['project']['name'] = 'test unpublish'
+
+        # create project draft
+        url = reverse('project-create', kwargs={'country_id': self.country_id})
+        response = self.test_user_client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+
+        project = Project.objects.get(id=resp_data['id'])
+        self.assertEqual(project.data, {})
+
+        self.check_project_search_init_state(project)
+
+        # publish project
+        url = reverse('project-publish', kwargs={'project_id': resp_data['id'], 'country_id': self.country_id})
+        response = self.test_user_client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertNotEqual(resp_data['public_id'], '')
+
+        project.refresh_from_db()
+        self.assertNotEqual(project.data, {})
+
+        # check project search
+        self.assertEqual(project.search.project_id, project.id)
+        self.assertNotEqual(project.search.country_id, None)
+        self.assertNotEqual(project.search.organisation_id, None)
+        self.assertNotEqual(project.search.donors, [])
+        self.assertNotEqual(project.search.donor_names, [])
+        self.assertNotEqual(project.search.software, [])
+        self.assertNotEqual(project.search.hsc, [])
+        self.assertNotEqual(project.search.hfa_categories, [])
+
+        # unpublish project
+        url = reverse('project-unpublish', kwargs={'project_id': resp_data['id']})
+        response = self.test_user_client.put(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+
+        project.refresh_from_db()
+        self.assertEqual(project.data, {})
+
+        self.check_project_search_init_state(project)

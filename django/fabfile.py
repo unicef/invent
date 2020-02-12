@@ -201,6 +201,10 @@ def test(app=""):
     local("docker-compose exec django ptw -- {} -s --testmon".format(app))
 
 
+def test_specific(specific_test=''):
+    local(f"docker-compose exec django py.test -s -k {specific_test}")
+
+
 def cov():
     local(
         "docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
