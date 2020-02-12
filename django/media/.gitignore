@@ -1,3 +1,6 @@
 *
 !test.json
 !.gitignore
+!topojson-backups/.gitignore
+!topojson-backups/
+!test_maps
