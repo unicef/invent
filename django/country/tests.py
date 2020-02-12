@@ -1,6 +1,4 @@
 import os
-from copy import copy
-from datetime import datetime
 from fnmatch import fnmatch
 from unittest.mock import patch
 
@@ -23,8 +21,7 @@ from rest_framework.test import APITestCase
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
 from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion
-from project.models import TechnologyPlatform, DigitalStrategy
-from user.models import UserProfile, Organisation
+from user.models import UserProfile
 from django.utils.six import StringIO
 from django.conf import settings
 
