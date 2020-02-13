@@ -25,6 +25,11 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-unpublish"),
+    path(r'projects/publishaslatest/<int:project_id>/',
+         view=views.ProjectPublishAsLatestViewSet.as_view({
+             'get': 'update'
+         }),
+         name="project-publish-as-latest"),
     path(r'projects/draft/<int:country_id>/',
          view=views.ProjectDraftViewSet.as_view({
              'post': 'create'
