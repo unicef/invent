@@ -868,7 +868,5 @@ class ProjectTests(SetupTests):
         # try to publish as latest again
         response = self.test_user_client.get(publish_as_latest_url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-
-        # checks
         resp_modified_datetime = datetime.strptime(response.json()['published']['modified'], '%Y-%m-%dT%H:%M:%S.%fZ')
         self.assertGreater(timezone.make_aware(resp_modified_datetime, pytz.UTC), project.modified)
