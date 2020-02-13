@@ -246,6 +246,20 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
+class ProjectPublishAsLatestViewSet(TeamTokenAuthMixin, ViewSet):
+    def update(self, request, project_id):
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+
+        if not project.public_id:
+            raise ValidationError({'project': 'Project is not published'})
+
+        project.save()  # modification date is updated here
+
+        draft = project.to_representation(draft_mode=True)
+        published = project.to_representation()
+        return Response(project.to_response_dict(published=published, draft=draft))
+
+
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
     def create(self, request, country_id):
         """
