@@ -1,7 +1,9 @@
 import copy
 from datetime import datetime
 
+import pytz
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
 from django.core import mail
@@ -833,3 +835,38 @@ class ProjectTests(SetupTests):
         self.assertEqual(project.data, {})
 
         self.check_project_search_init_state(project)
+
+    def test_project_publish_as_latest(self):
+        data = copy.deepcopy(self.project_data)
+        data['project']['name'] = 'test publish as latest'
+
+        # create project draft
+        url = reverse('project-create', kwargs={'country_id': self.country_id})
+        response = self.test_user_client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+
+        project = Project.objects.get(id=resp_data['id'])
+        self.assertEqual(project.data, {})
+
+        # try to publish as latest (should fail)
+        publish_as_latest_url = reverse('project-publish-as-latest', args=[project.id])
+        response = self.test_user_client.get(publish_as_latest_url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+
+        # publish project
+        url = reverse('project-publish', kwargs={'project_id': resp_data['id'], 'country_id': self.country_id})
+        response = self.test_user_client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertNotEqual(resp_data['public_id'], '')
+
+        project.refresh_from_db()
+        self.assertNotEqual(project.data, {})
+
+        # try to publish as latest again
+        response = self.test_user_client.get(publish_as_latest_url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_modified_datetime = datetime.strptime(response.json()['published']['modified'], '%Y-%m-%dT%H:%M:%S.%fZ')
+        self.assertGreater(timezone.make_aware(resp_modified_datetime, pytz.UTC), project.modified)
