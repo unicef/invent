@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
-from .models import Country, Donor, FieldOffice
+from .models import Country, Donor, FieldOffice, CountryOffice
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -37,10 +37,16 @@ class CountryAdmin(AllObjectsAdmin):
 
 @admin.register(FieldOffice)
 class FieldOfficeAdmin(admin.ModelAdmin):
-    fields = list_display = ('country', 'name')
+    list_display = ('country', 'name')
     ordering = search_fields = ['country__name', 'name']
 
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
     fields = list_display = ('name', 'code')
+
+
+@admin.register(CountryOffice)
+class CountryOfficeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'region')
+    search_fields = ['name']
