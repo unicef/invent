@@ -59,6 +59,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
     odk_id = models.CharField(null=True, blank=True, max_length=64)
     odk_extra_data = JSONField(default=dict)
+    country_office = models.ForeignKey('country.CountryOffice', blank=True, null=True, on_delete=models.CASCADE)
+    field_office = models.ForeignKey('country.FieldOffice', blank=True, null=True, on_delete=models.CASCADE)
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
