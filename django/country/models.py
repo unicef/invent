@@ -88,9 +88,16 @@ class Country(UserManagement, LandingPageCommon):
         ordering = ('id',)
 
 
+class CountryOffice(ExtendedModel):
+    name = models.CharField(max_length=256)
+    region = models.IntegerField(choices=Country.REGIONS, null=True, blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+
 class FieldOffice(models.Model):
     name = models.CharField(max_length=256)
     country = models.ForeignKey(Country, related_name='field_offices', on_delete=models.CASCADE)
+    country_office = models.ForeignKey(CountryOffice, blank=True, null=True, on_delete=models.CASCADE)
 
 
 @receiver(pre_save, sender=Country)
