@@ -12,19 +12,19 @@ class CustomFieldTests(SetupTests):
     def test_country_answer_wrong_country(self):
         url = reverse("project-create",
                       kwargs={
-                          "country_id": 999,
+                          "country_office_id": 999,
                       })
         data = copy(self.project_data)
         data.update({"country_custom_answers": [dict(question_id=1, answer=["lol1"])]})
 
         response = self.test_user_client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'details': 'No such country'})
+        self.assertEqual(response.json(), {'details': 'No such country office'})
 
     def test_country_answer_wrong_country_and_project(self):
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": 999,
+                          "country_office_id": 999,
                           "project_id": 999
                       })
         data = copy(self.project_data)
@@ -37,7 +37,7 @@ class CustomFieldTests(SetupTests):
     def test_country_answers_are_ignored_if_no_questions(self):
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id
+                          "country_office_id": self.country_office.id
                       })
         data = copy(self.project_data)
         # will be ignored even if the question ID is invalid
@@ -52,7 +52,7 @@ class CustomFieldTests(SetupTests):
         CountryCustomQuestion.objects.create(question="What up?", country_id=self.country_id)
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id
+                          "country_office_id": self.country_office.id
                       })
         data = copy(self.project_data)
         data.update({"country_custom_answers": [dict(question_id='a', answer=["lol1"])]})
@@ -72,7 +72,7 @@ class CustomFieldTests(SetupTests):
         CountryCustomQuestion.objects.create(question="What up?", country_id=self.country_id)
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id
+                          "country_office_id": self.country_office.id
                       })
         data = copy(self.project_data)
         data.update({"country_custom_answers": [dict()]})
@@ -84,7 +84,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -95,7 +95,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -108,7 +108,7 @@ class CustomFieldTests(SetupTests):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -126,7 +126,7 @@ class CustomFieldTests(SetupTests):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -146,7 +146,7 @@ class CustomFieldTests(SetupTests):
         q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id, required=True)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         # answer key present but empty
@@ -180,7 +180,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                       })
 
         response = self.test_user_client.post(url, data=data, format='json')
@@ -189,7 +189,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -202,7 +202,7 @@ class CustomFieldTests(SetupTests):
                                                  type=CountryCustomQuestion.NUMBER)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -225,7 +225,7 @@ class CustomFieldTests(SetupTests):
                                                   type=CountryCustomQuestion.MULTI)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -245,7 +245,7 @@ class CustomFieldTests(SetupTests):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -269,7 +269,7 @@ class CustomFieldTests(SetupTests):
         q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -297,7 +297,7 @@ class CustomFieldTests(SetupTests):
         q3 = CountryCustomQuestion.objects.create(question="test2 private", country_id=self.country_id, private=True)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -388,7 +388,7 @@ class CustomFieldTests(SetupTests):
         q = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -406,7 +406,7 @@ class CustomFieldTests(SetupTests):
         q = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -426,7 +426,7 @@ class CustomFieldTests(SetupTests):
         dq2 = DonorCustomQuestion.objects.create(question="test2", donor_id=self.d1.id, required=True)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         # answer key present but empty
@@ -463,7 +463,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                       })
 
         response = self.test_user_client.post(url, data=data, format='json')
@@ -472,7 +472,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -488,7 +488,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                       })
 
         response = self.test_user_client.post(url, data=data, format='json')
@@ -497,7 +497,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -509,7 +509,7 @@ class CustomFieldTests(SetupTests):
         DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id
+                          "country_office_id": self.country_office.id
                       })
         data = copy(self.project_data)
         data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id='a', answer=["lol1"])]}})
@@ -528,7 +528,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -546,7 +546,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -566,7 +566,7 @@ class CustomFieldTests(SetupTests):
         DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
         url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id
+                          "country_office_id": self.country_office.id
                       })
         data = copy(self.project_data)
         data.update({"donor_custom_answers": {str(self.d1.id): [dict()]}})
@@ -579,7 +579,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-draft",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
@@ -591,7 +591,7 @@ class CustomFieldTests(SetupTests):
 
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
 
