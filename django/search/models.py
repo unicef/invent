@@ -9,7 +9,7 @@ from django.http import QueryDict
 
 from core.models import ExtendedModel
 from project.models import Project, HealthFocusArea, DigitalStrategy
-from country.models import Country, Donor
+from country.models import Country, Donor, CountryOffice
 from user.models import Organisation
 
 
@@ -18,6 +18,7 @@ class ProjectSearch(ExtendedModel):
         # query_param: QuerySet param | eg: in=name&in=org
         "name": "project__name",
         "org": "organisation__name",
+        "country_office": "country_office__name",
         "country": "country__name",
         "region": "country__unicef_region",
         "overview": "project__data__implementation_overview",
@@ -26,6 +27,7 @@ class ProjectSearch(ExtendedModel):
 
     FILTER_BY = {
         # query_param: QuerySet param
+        "country_office": "country_office_id",  # eg: country_office=1
         "country": "country_id",  # eg: country=1&country=2
         "sw": "software",  # eg: sw=1&sw=2
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
@@ -43,6 +45,7 @@ class ProjectSearch(ExtendedModel):
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
+    country_office = models.ForeignKey(CountryOffice, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
 
@@ -133,6 +136,7 @@ class ProjectSearch(ExtendedModel):
         Update search object from project object
         """
         if project.public_id:
+            self.country_office_id = int(project.data["country_office"])
             self.country_id = int(project.data["country"])
             self.organisation_id = int(project.data["organisation"])
 
