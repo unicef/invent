@@ -31,7 +31,7 @@ class CSVExportTests(SetupTests):
         CountryCustomQuestion.objects.create(question="Country Question With No Answer", country_id=self.country_id)
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
@@ -61,7 +61,7 @@ class CSVExportTests(SetupTests):
 
         url = reverse("project-publish",
                       kwargs={
-                          "country_id": self.country_id,
+                          "country_office_id": self.country_office.id,
                           "project_id": self.project_id
                       })
         data = copy(self.project_data)
