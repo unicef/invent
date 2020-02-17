@@ -4,7 +4,7 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
-from country.models import Country, Donor
+from country.models import Country, Donor, CountryOffice
 from user.models import Organisation, UserProfile
 
 
@@ -54,6 +54,12 @@ class SetupTests(APITestCase):
         self.country.name_fr = 'Hongrie'
         self.country.save()
 
+        self.country_office = CountryOffice.objects.create(
+            name='Test Country Office',
+            region=Country.REGIONS[0][0],
+            country=self.country
+        )
+
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
@@ -79,7 +85,7 @@ class SetupTests(APITestCase):
             "implementation_dates": "2016",
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
-            "country": self.country_id,
+            "country_office": self.country_office.id,
             "platforms": [1, 2],
             "donors": [self.d1.id, self.d2.id],
             "hsc_challenges": [1, 2],
@@ -95,16 +101,17 @@ class SetupTests(APITestCase):
         }}
 
         # Create project draft
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
         self.project_id = response.json().get("id")
 
         # Publish
-        url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_id,
+                                                 "country_office_id": self.country_office.id})
         response = self.test_user_client.put(url, self.project_data, format="json")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, response.json())
 
     def check_project_search_init_state(self, project):
         obj = project.search
