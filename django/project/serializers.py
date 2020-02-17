@@ -19,6 +19,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
+    country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
     country = serializers.IntegerField(min_value=0, max_value=100000)
     implementation_overview = serializers.CharField(max_length=1024, required=False)  # TODO: fix later
     start_date = serializers.CharField(max_length=256, required=True)
@@ -51,11 +52,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
     class Meta:
         model = Project
 
-    def validate_country(self, value):
+    def validate_country_office(self, value):
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
-            if project.public_id and project.data['country'] != self.initial_data['country']:
-                raise serializers.ValidationError('Country cannot be altered on published projects.')
+            if project.public_id and project.data['country_office'] != self.initial_data['country_office']:
+                raise serializers.ValidationError('Country office cannot be altered on published projects.')
         return value
 
     def update(self, instance, validated_data):
@@ -77,6 +78,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128)
     organisation = serializers.CharField(max_length=128, required=False)
+    country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
     country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
     implementation_overview = serializers.CharField(max_length=1024, required=False)
     contact_name = serializers.CharField(max_length=256, required=False)
@@ -91,11 +93,11 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
     odk_extra_data = serializers.JSONField(required=False)
 
-    def validate_country(self, value):
+    def validate_country_office(self, value):
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
-            if project.public_id and project.draft['country'] != self.initial_data['country']:
-                raise serializers.ValidationError('Country cannot be altered on published projects.')
+            if project.public_id and project.draft['country_office'] != self.initial_data['country_office']:
+                raise serializers.ValidationError('Country office cannot be altered on published projects.')
         return value
 
     def create(self, validated_data):
