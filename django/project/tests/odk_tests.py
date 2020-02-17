@@ -8,7 +8,7 @@ from project.tests.setup import SetupTests
 
 class ODKProjectTests(SetupTests):
     def test_post_draft_with_odk_stuff(self):
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
 
         odk_etag = "59605878-6a6a-4f5f-9262-256939398333"
@@ -32,7 +32,8 @@ class ODKProjectTests(SetupTests):
         self.assertEqual(project.odk_id, odk_id)
         self.assertEqual(project.odk_extra_data, odk_extra_data)
 
-        url = reverse("project-draft", kwargs={"country_id": self.country_id, "project_id": project_draft_id})
+        url = reverse("project-draft",
+                      kwargs={"country_office_id": self.country_office.id, "project_id": project_draft_id})
         data['project'].update(odk_etag="59605878-6a6a-4f5f-9262-256939398334")
 
         response = self.test_user_client.put(url, data, format="json")
