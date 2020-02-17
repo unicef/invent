@@ -2,11 +2,7 @@ from collections import defaultdict
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
 from django.urls import reverse
-from django.utils.translation import ugettext, override
-
-from django.template import loader
 
 from rest_framework import mixins, status
 from rest_framework.permissions import IsAuthenticated
@@ -19,6 +15,7 @@ from cms.serializers import CmsSerializer, CommentSerializer
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
+from core.utils import send_mail_wrapper
 
 
 class FlagMixin(object):
@@ -34,7 +31,6 @@ class FlagMixin(object):
 
     @staticmethod
     def _notify_admins(instance):
-        html_template = loader.get_template("email/master-inline.html")
         change_url = reverse('admin:cms_{}_change'.format(instance._meta.model_name), args=(instance.id,))
 
         admins = User.objects.filter(is_superuser=True)
@@ -47,19 +43,11 @@ class FlagMixin(object):
                     email_mapping[settings.LANGUAGE_CODE].append(admin.email)
 
             for language, email_list in email_mapping.items():
-                with override(language):
-                    subject = ugettext("Content has been flagged.")
-                    html_message = html_template.render({'type': 'flag_content',
-                                                         'change_url': change_url,
-                                                         'language': language})
-
-                send_mail(
-                    subject=subject,
-                    message="",
-                    from_email=settings.FROM_EMAIL,
-                    recipient_list=email_list,
-                    html_message=html_message,
-                    fail_silently=True)
+                send_mail_wrapper(subject="Content has been flagged.",
+                                  email_type="flag_content",
+                                  to=email_list,
+                                  language=language,
+                                  context={'change_url': change_url})
 
 
 class CmsViewSet(FlagMixin, ModelViewSet):
