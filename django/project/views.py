@@ -1,3 +1,4 @@
+import copy
 import csv
 from collections import OrderedDict
 
@@ -19,7 +20,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, Donor, FieldOffice
+from country.models import Country, Donor, FieldOffice, CountryOffice
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
@@ -150,13 +151,17 @@ class CheckRequiredMixin:
 
 class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
-    def update(self, request, project_id, country_id):
+    def update(self, request, project_id, country_office_id):
         """
         Publish a project
         Takes project data and custom question-answers in one go.
         """
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-        country = get_object_or_400(Country, error_message="No such country", id=country_id)
+        country_office = get_object_or_400(CountryOffice, error_message="No such country office", id=country_office_id)
+        country = country_office.country
+
+        project_data = copy.deepcopy(request.data['project']) if 'project' in request.data else {}
+        project_data['country'] = country.id
 
         country_answers = None
         all_donor_answers = []
@@ -165,7 +170,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
 
-        data_serializer = ProjectPublishedSerializer(project, data=request.data['project'])
+        data_serializer = ProjectPublishedSerializer(project, data=project_data)
 
         data_serializer.fields.get('name').validators = \
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
@@ -261,11 +266,15 @@ class ProjectPublishAsLatestViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
-    def create(self, request, country_id):
+    def create(self, request, country_office_id):
         """
         Creates a Draft project.
         """
-        country = get_object_or_400(Country, error_message="No such country", id=country_id)
+        country_office = get_object_or_400(CountryOffice, error_message="No such country office", id=country_office_id)
+        country = country_office.country
+
+        project_data = copy.deepcopy(request.data['project']) if 'project' in request.data else {}
+        project_data['country'] = country.id
 
         instance = country_answers = None
         all_donor_answers = []
@@ -274,7 +283,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
 
-        data_serializer = ProjectDraftSerializer(data=request.data['project'])
+        data_serializer = ProjectDraftSerializer(data=project_data)
         data_serializer.is_valid()
 
         if data_serializer.errors:
@@ -330,12 +339,16 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
-    def update(self, request, project_id, country_id):
+    def update(self, request, project_id, country_office_id):
         """
         Updates a draft project.
         """
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-        country = get_object_or_400(Country, error_message="No such country", id=country_id)
+        country_office = get_object_or_400(CountryOffice, error_message="No such country office", id=country_office_id)
+        country = country_office.country
+
+        project_data = copy.deepcopy(request.data['project']) if 'project' in request.data else {}
+        project_data['country'] = country.id
 
         country_answers = None
         all_donor_answers = []
