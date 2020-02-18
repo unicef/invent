@@ -408,7 +408,7 @@ class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet
     def update(self, request, *args, **kwargs):
         instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         self.check_object_permissions(self.request, instance)
-        serializer = ProjectGroupSerializer(instance, data=request.data)
+        serializer = ProjectGroupSerializer(instance, data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
