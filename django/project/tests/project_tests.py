@@ -2,6 +2,7 @@ import copy
 from datetime import datetime
 
 import pytz
+from allauth.account.models import EmailAddress
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
@@ -870,3 +871,80 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         resp_modified_datetime = datetime.strptime(response.json()['published']['modified'], '%Y-%m-%dT%H:%M:%S.%fZ')
         self.assertGreater(timezone.make_aware(resp_modified_datetime, pytz.UTC), project.modified)
+
+    def test_add_new_users_by_invalid_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        groups = {
+            "team": [],
+            "viewers": [],
+            "new_team_emails": ["new_email"],
+            "new_viewer_emails": ["yolo"]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+
+        self.assertEqual(response.json(), {'new_team_emails': {'0': ['Enter a valid email address.']},
+                                           'new_viewer_emails': {'0': ['Enter a valid email address.']}})
+
+    def test_add_new_users_by_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserProfile.objects.count(), 1)
+        self.assertEqual(EmailAddress.objects.count(), 1)
+        owner_id = response.json()['team'][0]
+
+        groups = {
+            "team": [],
+            "viewers": [],
+            "new_team_emails": ["new_email@yo.com"],
+            "new_viewer_emails": ["new_email@lol.ok"]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+
+        self.assertTrue(response.json()['team'])
+        self.assertTrue(response.json()['viewers'])
+        self.assertTrue(owner_id not in response.json()['team'])
+        self.assertEqual(UserProfile.objects.count(), 3)
+        self.assertEqual(EmailAddress.objects.count(), 3)
+
+        welcome_emails_count = 0
+        for m in mail.outbox:
+            if m.subject == 'Welcome to the Digital Health Atlas':
+                welcome_emails_count += 1
+        self.assertEqual(welcome_emails_count, 3)
+
+        notified_on_member_add_count = 0
+        for m in mail.outbox:
+            if m.subject == 'You have been added to a project in the Digital Health Atlas':
+                notified_on_member_add_count += 1
+                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+        self.assertEqual(notified_on_member_add_count, 2)
+
+        set_password_sent = 0
+        for m in mail.outbox:
+            if m.subject == "Set Your Password on Digital Health Atlas":
+                set_password_sent += 1
+                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+        self.assertEqual(set_password_sent, 2)
+
+    def test_add_new_users_by_already_existing_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserProfile.objects.count(), 1)
+        owner_id = response.json()['team'][0]
+        owner_email = UserProfile.objects.get().user.email
+
+        groups = {
+            "team": [owner_id],
+            "viewers": [],
+            "new_team_emails": [owner_email],
+            "new_viewer_emails": [owner_email]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+        self.assertTrue(owner_id in response.json()['team'])
+        self.assertTrue(owner_id in response.json()['viewers'])
+        self.assertEqual(UserProfile.objects.count(), 1)
