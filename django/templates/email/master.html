@@ -393,6 +393,29 @@
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
 
+                        <!-- TEMPLATE: ADMIN REQUEST -->
+                        {% elif type == "admin_request" %}
+                        <h1>{% trans "Admin request notification" %}</h1>
+                        <h2>{% trans "Dear" %} {{ full_name }},</h2>
+                        <p>{% blocktrans %}{{ requester }} has requested to be a {{ requester_type }}. Please go to the admin interface's user management section to review this request.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/{{ admin_type }}" target="_blank">{% trans "Go to admin interface" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: ADMIN REQUEST-->
+
+
                         <!-- TEMPLATE: DONOR ADMIN -->
                         {% elif type == "donor_admin" %}
                         <h1>{% trans "Investor admin" %}</h1>
