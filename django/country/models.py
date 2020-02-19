@@ -93,6 +93,9 @@ class CountryOffice(ExtendedModel):
     region = models.IntegerField(choices=Country.REGIONS, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
+    def __str__(self):  # pragma: no cover
+        return self.name
+
 
 class FieldOffice(models.Model):
     name = models.CharField(max_length=256)
