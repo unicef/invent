@@ -1,14 +1,17 @@
 <template>
   <div class="TeamList">
-    <ul v-show="team.length > 0">
+    <ul v-show="team.length > 0 || unknown > 0">
       <li
         v-for="p in team"
         :key="p.id"
       >
         {{ p.name }}
       </li>
+      <li v-show="unknown > 0">
+        <translate>+ {{unknown}} members</translate>
+      </li>
     </ul>
-    <span v-show="team.length === 0">
+    <span v-show="team.length === 0 && unknown === 0">
       <translate>N/A</translate>
     </span>
   </div>
@@ -28,13 +31,17 @@ export default {
   },
   computed: {
     ...mapGetters({
-      profiles: 'system/getUserProfiles'
+      profiles: 'system/getUserProfilesNoFilter'
     }),
     team () {
+      console.log(this.value)
       if (this.value) {
-        return this.profiles.filter(p => this.value.includes(p.id));
+        return this.profiles.filter(p => this.value.includes(p.id) && p.name);
       }
       return [];
+    },
+    unknown () {
+      return this.profiles.filter(p => this.value.includes(p.id) && p.name === null).length;
     }
   }
 };
