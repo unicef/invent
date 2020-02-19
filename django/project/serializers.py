@@ -1,7 +1,14 @@
+from allauth.account import app_settings as allauth_settings
+from allauth.account.utils import complete_signup
 from django.conf import settings
-from django.core.mail import send_mail
-from django.template import loader
-from django.utils.translation import ugettext, override
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from rest_auth.app_settings import create_token
+from rest_auth.models import TokenModel
+from rest_auth.utils import jwt_encode
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ReadOnlyField
@@ -9,9 +16,11 @@ from rest_framework.validators import UniqueValidator
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
+from core.utils import send_mail_wrapper
 
 from country.models import CustomQuestion
 from project.utils import remove_keys
+from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
 
 
@@ -128,10 +137,72 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):
+    new_team_emails = serializers.ListField(
+        child=serializers.EmailField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    new_viewer_emails = serializers.ListField(
+        child=serializers.EmailField(), max_length=64, min_length=0, allow_empty=True, required=False)
+
     class Meta:
         model = Project
-        fields = ("team", "viewers")
+        fields = ("team", "viewers", "new_team_emails", "new_viewer_emails")
         read_only_fields = ("id",)
+
+    def send_set_password_email(self, user, request):
+        current_site = get_current_site(request)
+        context = {
+            'email': user.email,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            'token': default_token_generator.make_token(user),
+            'protocol': 'https' if not settings.DEBUG else 'http'
+        }
+        send_mail_wrapper(subject="Set Your Password on Digital Health Atlas",
+                          email_type="password_invited",
+                          to=user.email,
+                          language=user.userprofile.language,
+                          context=context)
+
+    def perform_create(self, email):
+        user = User.objects.create_user(username=email[:150], email=email)
+        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
+
+        if getattr(settings, 'REST_USE_JWT', False):
+            self.token = jwt_encode(user)
+        else:  # pragma: no cover
+            # Backwards compatibility for use without JWT
+            create_token(TokenModel, user, None)
+
+        complete_signup(self.context['request']._request, user,
+                        allauth_settings.EMAIL_VERIFICATION,
+                        None)
+
+        self.send_set_password_email(user, self.context['request'])
+
+        return user
+
+    def save(self, **kwargs):
+        for email in self.validated_data.get('new_team_emails', []):
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = self.perform_create(email)
+            self.validated_data['team'].append(user.userprofile)
+
+        for email in self.validated_data.get('new_viewer_emails', []):
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = self.perform_create(email)
+            self.validated_data['viewers'].append(user.userprofile)
+
+        self.validated_data.pop('new_team_emails', None)
+        self.validated_data.pop('new_viewer_emails', None)
+
+        # remove duplicates
+        self.validated_data['team'] = list(set(self.validated_data['team']))
+        self.validated_data['viewers'] = list(set(self.validated_data['viewers']))
+
+        return super().save(**kwargs)
 
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)
@@ -152,47 +223,31 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         new_team_members = [x for x in validated_data.get('team', []) if x not in instance.team.all()]
         new_viewers = [x for x in validated_data.get('viewers', []) if x not in instance.viewers.all()]
 
-        html_template = loader.get_template("email/master-inline.html")
-
         for profile in new_team_members:
-            with override(profile.language):
-                subject = ugettext("You have been added to a project in the Digital Health Atlas")
-                html_message = html_template.render({
-                    "type": "new_member",
-                    "user_name": profile.name,
-                    "project_id": instance.id,
-                    "project_name": instance.name,
-                    "role": "team member",
-                    "language": profile.language
-                })
-
-            send_mail(
-                subject=subject,
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[profile.user.email],
-                html_message=html_message,
-                fail_silently=True)
+            context = {
+                "user_name": profile.name,
+                "project_id": instance.id,
+                "project_name": instance.name,
+                "role": "team member",
+            }
+            send_mail_wrapper(subject="You have been added to a project in the Digital Health Atlas",
+                              email_type="new_member",
+                              to=profile.user.email,
+                              language=profile.language,
+                              context=context)
 
         for profile in new_viewers:
-            with override(profile.language):
-                subject = ugettext("You have been added to a project in the Digital Health Atlas")
-                html_message = html_template.render({
-                    "type": "new_member",
-                    "user_name": profile.name,
-                    "project_id": instance.id,
-                    "project_name": instance.name,
-                    "role": "viewer",
-                    "language": profile.language
-                })
-
-            send_mail(
-                subject=subject,
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[profile.user.email],
-                html_message=html_message,
-                fail_silently=True)
+            context = {
+                "user_name": profile.name,
+                "project_id": instance.id,
+                "project_name": instance.name,
+                "role": "viewer",
+            }
+            send_mail_wrapper(subject="You have been added to a project in the Digital Health Atlas",
+                              email_type="new_member",
+                              to=profile.user.email,
+                              language=profile.language,
+                              context=context)
 
 
 class MapProjectCountrySerializer(serializers.ModelSerializer):
