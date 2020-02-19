@@ -1,3 +1,5 @@
+<!-- To make css inline use this tool: https://inliner.cm/ -->
+
 <!-- {% load utils %}
 {% load staticfiles %}
 {% load i18n %} -->
@@ -296,7 +298,8 @@
         <td class="container" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;display:block;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:580px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:580px;color:#474747;" >
           <div class="content" style="box-sizing:border-box;display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:580px;padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;" >
 
-
+            <!-- START CENTERED WHITE CONTAINER -->
+            <!-- <span class="preheader" style="color:transparent;display:none;height:0;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;visibility:hidden;width:0;" >This is preheader text. Some clients will show this text as a preview.</span> -->
             <table class="main" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;background-color:#FFFFFF;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;border-radius:3px;" >
 
               <!-- START MAIN CONTENT AREA -->
@@ -473,7 +476,7 @@
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "A password reset has been requested for the Digital Health Atlas account linked to your email address" %} {{ email }}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "To reset your password, click the link below:" %}</b></p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
-                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank" style="color:#008DC9;text-decoration:underline;" >{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=reset" target="_blank" style="color:#008DC9;text-decoration:underline;" >{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=reset</a>
                         </p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you did not request this password reset, please ignore this message." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
@@ -481,6 +484,17 @@
                           <a href="mailto:digitalhealthatlas@gmail.com" style="color:#008DC9;text-decoration:underline;" >digitalhealthatlas@gmail.com</a>
                         </p>
                         <!-- /TEMPLATE: PASSWORD RESET -->
+
+
+                        <!-- TEMPLATE: PASSWORD INVITE -->
+                        {% elif type == "password_invited" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Set Your Password on Digital Health Atlas" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "You have been invited to the Digital Health Atlas through a project. Please set you password so you can log in and view/edit your project." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "To set your password, click the link below:" %}</b></p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                        <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank" style="color:#008DC9;text-decoration:underline;" >{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
+                        </p>
+                        <!-- /TEMPLATE: PASSWORD INVITED -->
 
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
