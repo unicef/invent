@@ -15,6 +15,14 @@
             :publish-rules="publishRules"
             :api-errors="apiErrors"
           />
+          <focal-overview
+            ref="focalOverview"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+          />
           <implementation-overview
             ref="implementationOverview"
             :rules="rules"
@@ -46,6 +54,7 @@
 import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
+import focalOverview from './sections/FocalOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
 import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
@@ -54,6 +63,7 @@ export default {
   components: {
     ProjectNavigation,
     GeneralOverview,
+    focalOverview,
     ImplementationOverview,
     DonorCustom
   },
@@ -170,6 +180,7 @@ export default {
     async validate () {
       const validations = await Promise.all([
         this.$refs.generalOverview.validate(),
+        this.$refs.focalOverview.validate(),
         this.$refs.implementationOverview.validate(),
         this.$refs.donorCustom.validate()
       ]);
@@ -179,6 +190,7 @@ export default {
     clearValidation () {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
+      this.$refs.focalOverview.clear();
       this.$refs.implementationOverview.clear();
       this.$refs.donorCustom.clear();
     },
@@ -187,7 +199,8 @@ export default {
       this.usePublishRules = false;
       this.$nextTick(async () => {
         const valid = await this.$refs.generalOverview.validateDraft();
-        if (valid) {
+        const focal = await this.$refs.focalOverview.validateDraft();
+        if (valid && focal) {
           try {
             if (this.isNewProject) {
               const id = await this.createProject();
