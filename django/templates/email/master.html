@@ -393,6 +393,29 @@
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
 
+                        <!-- TEMPLATE: ADMIN REQUEST -->
+                        {% elif type == "admin_request" %}
+                        <h1>{% trans "Admin request notification" %}</h1>
+                        <h2>{% trans "Dear" %} {{ full_name }},</h2>
+                        <p>{% blocktrans %}{{ requester }} has requested to be a {{ requester_type }}. Please go to the admin interface's user management section to review this request.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/{{ admin_type }}" target="_blank">{% trans "Go to admin interface" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: ADMIN REQUEST-->
+
+
                         <!-- TEMPLATE: DONOR ADMIN -->
                         {% elif type == "donor_admin" %}
                         <h1>{% trans "Investor admin" %}</h1>
@@ -478,7 +501,7 @@
                         <p>{% trans "A password reset has been requested for the Digital Health Atlas account linked to your email address" %} {{ email }}</p>
                         <p><b>{% trans "To reset your password, click the link below:" %}</b></p>
                         <p>
-                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=reset" target="_blank">{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=reset</a>
                         </p>
                         <p>{% trans "If you did not request this password reset, please ignore this message." %}</p>
                         <p>
@@ -486,6 +509,17 @@
                           <a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
                         </p>
                         <!-- /TEMPLATE: PASSWORD RESET -->
+
+
+                        <!-- TEMPLATE: PASSWORD INVITE -->
+                        {% elif type == "password_invited" %}
+                        <h1>{% trans "Set Your Password on Digital Health Atlas" %}</h1>
+                        <p>{% trans "You have been invited to the Digital Health Atlas through a project. Please set you password so you can log in and view/edit your project." %}</p>
+                        <p><b>{% trans "To set your password, click the link below:" %}</b></p>
+                        <p>
+                        <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank">{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
+                        </p>
+                        <!-- /TEMPLATE: PASSWORD INVITED -->
 
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->

@@ -2,10 +2,8 @@ import paramiko
 
 from django.conf import settings
 from celery.utils.log import get_task_logger
-from django.template import loader
-from django.core.mail import send_mail
-from django.utils.translation import ugettext, override
 
+from core.utils import send_mail_wrapper
 from scheduler.celery import app
 
 logger = get_task_logger(__name__)
@@ -40,25 +38,20 @@ def send_user_request_to_admins(profile_id):
         for_what = donor.name
 
     for admin in admins:
-        with override(admin.language):
-            subject = "Request: {} has requested to be a {} for {}".format(str(profile),
-                                                                           profile.get_account_type_display(),
-                                                                           for_what)
-            subject = ugettext(subject)
-            html_template = loader.get_template("email/master-inline.html")
-            html_message = html_template.render({"type": "admin_request",
-                                                 "full_name": admin.name,
-                                                 "requester": str(profile),
-                                                 "requester_type": profile.get_account_type_display(),
-                                                 "admin_type": admin_type,
-                                                 "language": admin.language})
-
-        send_mail(
-            subject=subject,
-            message="",
-            from_email=settings.FROM_EMAIL,
-            recipient_list=[admin.user.email],
-            html_message=html_message)
+        subject = "Request: {} has requested to be a {} for {}".format(str(profile),
+                                                                       profile.get_account_type_display(),
+                                                                       for_what)
+        context = {
+            "full_name": admin.name,
+            "requester": str(profile),
+            "requester_type": profile.get_account_type_display(),
+            "admin_type": admin_type,
+        }
+        send_mail_wrapper(subject=subject,
+                          email_type="admin_request",
+                          to=admin.user.email,
+                          language=admin.language,
+                          context=context)
 
 
 @app.task(name="sync_users_to_odk")

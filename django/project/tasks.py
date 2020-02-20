@@ -10,12 +10,13 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext, override
+from django.utils.translation import ugettext
 from django.template import loader
 
 from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
 
+from core.utils import send_mail_wrapper
 from user.models import Organisation
 from country.models import Country
 
@@ -38,26 +39,18 @@ def send_project_approval_digest():
             if not projects:
                 return
 
-            html_template = loader.get_template('email/master-inline.html')
-
             email_mapping = defaultdict(list)
             for profile in country.users.all():
                 email_mapping[profile.language].append(profile.user.email)
 
             for language, email_list in email_mapping.items():
-                with override(language):
-                    subject = ugettext('Action required: New projects awaiting approval')
-                    html_message = html_template.render({'type': 'status_report',
-                                                         'country_name': country.name,
-                                                         'projects': projects,
-                                                         'language': language})
+                context = {'country_name': country.name, 'projects': projects}
 
-                send_mail(
-                    subject=subject,
-                    message='',
-                    from_email=settings.FROM_EMAIL,
-                    recipient_list=email_list,
-                    html_message=html_message)
+                send_mail_wrapper(subject='Action required: New projects awaiting approval',
+                                  email_type='status_report',
+                                  to=email_list,
+                                  language=language,
+                                  context=context)
 
 
 @app.task(name="sync_project_from_odk")

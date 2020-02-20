@@ -4,11 +4,10 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
 from django.db.transaction import atomic
-from django.template import loader
-from django.core.mail import send_mail
+
+from core.utils import send_mail_wrapper
 from django.core import management
-from django.utils.translation import ugettext, override
-from django.conf import settings
+from django.utils.translation import ugettext
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
@@ -128,25 +127,19 @@ class UpdateAdminMixin:
         return instance
 
     def notify_users(self, user_profiles, instance, group):
-        html_template = loader.get_template('email/master-inline.html')
         for profile in user_profiles:
-            with override(profile.language):
-                subject = "Notification: You have been selected as {} for {}".format(group, instance.name)
-                subject = ugettext(subject)
-                model_name = self.Meta.model.__name__.lower()
-                html_message = html_template.render({'type': '{}_admin'.format(model_name),
-                                                     'group': group,
-                                                     'full_name': profile.name,
-                                                     '{}_name'.format(model_name): instance.name,
-                                                     'language': profile.language})
-
-            send_mail(
-                subject=subject,
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[profile.user.email],
-                html_message=html_message,
-                fail_silently=True)
+            subject = "Notification: You have been selected as {} for {}".format(group, instance.name)
+            model_name = self.Meta.model.__name__.lower()
+            context = {
+                'group': group,
+                'full_name': profile.name,
+                '{}_name'.format(model_name): instance.name
+            }
+            send_mail_wrapper(subject=subject,
+                              email_type='{}_admin'.format(model_name),
+                              to=profile.user.email,
+                              language=profile.language,
+                              context=context)
 
 
 def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
