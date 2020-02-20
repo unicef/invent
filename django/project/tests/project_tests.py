@@ -885,8 +885,9 @@ class ProjectTests(SetupTests):
         }
         response = self.test_user_client.put(url, groups, format="json")
 
-        self.assertEqual(response.json(), {'new_team_emails': {'0': ['Enter a valid email address.']},
-                                           'new_viewer_emails': {'0': ['Enter a valid email address.']}})
+        self.assertEqual(
+            response.json(), {'new_team_emails': {'0': ['Incorrect email address.', 'Enter a valid email address.']},
+                              'new_viewer_emails': {'0': ['Incorrect email address.', 'Enter a valid email address.']}})
 
     def test_add_new_users_by_email(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -899,10 +900,11 @@ class ProjectTests(SetupTests):
         groups = {
             "team": [],
             "viewers": [],
-            "new_team_emails": ["new_email@yo.com"],
-            "new_viewer_emails": ["new_email@lol.ok"]
+            "new_team_emails": ["new_email@unicef.org"],
+            "new_viewer_emails": ["new_email@pulilab.com"]
         }
         response = self.test_user_client.put(url, groups, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
 
         self.assertTrue(response.json()['team'])
         self.assertTrue(response.json()['viewers'])
@@ -920,14 +922,14 @@ class ProjectTests(SetupTests):
         for m in mail.outbox:
             if m.subject == 'You have been added to a project in the Digital Health Atlas':
                 notified_on_member_add_count += 1
-                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+                self.assertTrue("new_email@unicef.org" in m.to or "new_email@pulilab.com" in m.to)
         self.assertEqual(notified_on_member_add_count, 2)
 
         set_password_sent = 0
         for m in mail.outbox:
             if m.subject == "Set Your Password on Digital Health Atlas":
                 set_password_sent += 1
-                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+                self.assertTrue("new_email@unicef.org" in m.to or "new_email@pulilab.com" in m.to)
         self.assertEqual(set_password_sent, 2)
 
     def test_add_new_users_by_already_existing_email(self):
@@ -945,6 +947,7 @@ class ProjectTests(SetupTests):
             "new_viewer_emails": [owner_email]
         }
         response = self.test_user_client.put(url, groups, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertTrue(owner_id in response.json()['team'])
         self.assertTrue(owner_id in response.json()['viewers'])
         self.assertEqual(UserProfile.objects.count(), 1)
