@@ -9,7 +9,7 @@ export default {
   },
   computed: {
     optionsAndValues () {
-      const result = [...this.options].sort((a, b) => a.name.localeCompare(b.name));
+      const result = [...this.options].sort((a, b) => a.email.localeCompare(b.email));
       if (this.value) {
         if (Array.isArray(this.value) && this.value.length > 0) {
           result.push(...this.items.filter(p => this.value.some(v => v === p.id)));
