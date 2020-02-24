@@ -62,6 +62,11 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      invalidEmails: []
+    }
+  },
   computed: {
     ...mapGetters({
       items: 'system/getUserProfilesNoFilter',
@@ -80,15 +85,18 @@ export default {
     },
     onOutside () {
       this.emitEmails(this.validEmails(this.emailList(this.query)));
+      this.query = '';
+      this.errorMessage();
     },
     onPaste (str, e) {
       // good paste
-      // pepe@pepe.com, trending@tren.com
+      // pepe@unicef.org, trending@unicef.org
 
       // bad paste
       // pepe@pepito.com, doni@asd
       const emails = this.emailList(str);
       const validEmails = this.validEmails(emails);
+      this.errorMessage();
 
       if (emails.length === validEmails.length) {
         this.emitEmails(validEmails);
@@ -97,6 +105,7 @@ export default {
     },
     onEnter(e) {
       this.emitEmails(this.validEmails(this.emailList(e.target.value)));
+      this.errorMessage();
     },
     emailList (str) {
       return str.trim().replace(/ /g,'').split(',');
@@ -108,10 +117,24 @@ export default {
       return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email))
     },
     arrIncludes (val) {
-      return this.value.includes(val)
+      return this.value.includes(val);
     },
     validateEmail (email) {
-      return validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'));
+      const valid = validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'));
+      if (!valid) {
+        this.invalidEmails = [...this.invalidEmails, email]
+      }
+      return valid;
+    },
+    errorMessage () {
+      if (this.invalidEmails.length > 0 && this.invalidEmails[0] !== "") {
+        this.$message({
+          dangerouslyUseHTMLString: true,
+          message: `<b>${this.invalidEmails.join(', ')}</b> ${this.$gettext(`cant't be added. Make sure email is part of unicef.org`)}`,
+          type: 'error'
+        });
+      }
+      this.invalidEmails = [];
     }
   }
 };
