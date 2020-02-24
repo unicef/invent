@@ -93,7 +93,6 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate()
       ]);
-      console.log('Focal point overview validations', validations);
       return validations.reduce((a, c) => a && c, true);
     },
     async validateDraft () {
@@ -101,7 +100,6 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate('contact_email')
       ]);
-      console.log('Focal point overview draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }
