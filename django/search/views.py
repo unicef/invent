@@ -49,6 +49,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     list_values = (
         "project_id",
         "project__name",
+        "project__modified",
         "organisation_id",
         "country_id",
         "project__data__implementation_overview",
