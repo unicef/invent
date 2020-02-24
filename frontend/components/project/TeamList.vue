@@ -34,7 +34,6 @@ export default {
       profiles: 'system/getUserProfilesNoFilter'
     }),
     team () {
-      console.log(this.value)
       if (this.value) {
         return this.profiles.filter(p => this.value.includes(p.id) && p.name);
       }
