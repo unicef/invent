@@ -246,7 +246,7 @@ export default {
       this.$router.push(localised);
     },
     goToDashboard () {
-      const localised = this.localePath({ name: 'organisation-dashboard', params: { ...this.$route.params } });
+      const localised = this.localePath({ name: 'organisation-dashboard-list', params: { ...this.$route.params } });
       this.$router.push(localised);
     },
     setNavigationBoxLeftStyle () {
