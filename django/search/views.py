@@ -70,7 +70,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__capability_subcategories",
     )
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('project__name', 'project__modified','organisation__name',
+    ordering_fields = ('project__name', 'project__modified', 'organisation__name',
                        'country__name', 'country__unicef_region')
     ordering = ('project_id',)
     pagination_class = ResultsSetPagination
