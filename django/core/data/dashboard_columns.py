@@ -5,6 +5,8 @@ DASHBOARD_COLUMNS = [
      'label': _('Project name')},
     {'id': 2,
      'label': _('Country')},
+    {'id': 3,
+     'label': _('Last updated')},
     {'id': 5,
      'label': _('Region')},
     {'id': 6,
