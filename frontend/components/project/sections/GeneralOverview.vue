@@ -226,10 +226,11 @@
         </el-col>
       </el-row>
       <div class="TeamArea">
-        <custom-required-form-item
+        <custom-required-form-team-item
           :error="errors.first('team')"
           :draft-rule="draftRules.team"
           :publish-rule="publishRules.team"
+          v-model="team"
         >
           <template slot="label">
             <translate key="team">
@@ -248,11 +249,12 @@
             data-vv-name="team"
             data-vv-as="Team"
           />
-        </custom-required-form-item>
-        <custom-required-form-item
+        </custom-required-form-team-item>
+        <custom-required-form-team-item
           :error="errors.first('viewers')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
+          v-model="viewers"
         >
           <template slot="label">
             <translate key="viewers">
@@ -271,7 +273,7 @@
             data-vv-name="viewers"
             data-vv-as="Viewers"
           />
-        </custom-required-form-item>
+        </custom-required-form-team-item>
       </div>
     </collapsible-card>
   </div>
@@ -288,6 +290,7 @@ import CountrySelect from '../../common/CountrySelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapGetters } from 'vuex';
+import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
 
 export default {
   components: {
@@ -295,7 +298,8 @@ export default {
     CountrySelect,
     TeamSelector,
     FieldOfficeSelector,
-    FormHint
+    FormHint,
+    CustomRequiredFormTeamItem
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
