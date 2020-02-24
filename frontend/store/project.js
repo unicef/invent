@@ -230,8 +230,10 @@ export const actions = {
   },
   async saveTeamViewers ({ getters, commit, dispatch }, id) {
     const teamViewers = {
-      team: getters.getTeam,
-      viewers: getters.getViewers
+      team: getters.getTeam.filter(d => typeof d === 'number'),
+      viewers: getters.getViewers.filter(d => typeof d === 'number'),
+      new_team_emails: getters.getTeam.filter(d => typeof d === 'string'),
+      new_viewer_emails: getters.getViewers.filter(d => typeof d === 'string')
     };
     const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers);
     commit('SET_TEAM', data.team);
@@ -320,10 +322,12 @@ export const mutations = {
     state.contact_email = contact_email;
   },
   SET_TEAM: (state, team) => {
-    Vue.set(state, 'team', [...team]);
+    const items = typeof team === 'string' ? state.team.concat([team]) : team;
+    Vue.set(state, 'team', [...items]);
   },
-  SET_VIEWERS: (state, viewers) => {
-    Vue.set(state, 'viewers', [...viewers]);
+  SET_VIEWERS: (state, viewer) => {
+    const items = typeof viewer === 'string' ? state.viewers.concat([viewer]) : viewer;
+    Vue.set(state, 'viewers', [...items]);
   },
   SET_PLATFORMS: (state, platforms) => {
     Vue.set(state, 'platforms', [...platforms]);

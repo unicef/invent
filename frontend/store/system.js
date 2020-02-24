@@ -20,6 +20,9 @@ export const getters = {
   getUserProfiles: state => {
     return state.profiles ? [ ...state.profiles.filter(p => p.name) ] : [];
   },
+  getUserProfilesNoFilter: state => {
+    return state.profiles;
+  },
   getUserProfileDetails: (state, getters) => id => getters.getUserProfiles.find(u => u.id === id),
   getSearchResult: state => {
     const search = state.projectSearch ? state.projectSearch : [];

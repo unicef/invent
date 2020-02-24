@@ -195,13 +195,18 @@ export default {
               this.$router.push(localised);
             } else if (this.isDraft) {
               await this.saveDraft(this.$route.params.id);
+              location.reload();
             }
             this.$alert(this.$gettext('Your draft has been saved successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close')
             });
             return;
           } catch (e) {
-            this.apiErrors = e.response.data;
+            if (e.response) {
+              this.apiErrors = e.response.data;
+            } else {
+              console.error(e);
+            }
             this.setLoading(false);
           }
         }

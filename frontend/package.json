@@ -63,6 +63,7 @@
     "svg-pan-zoom": "3.6.0",
     "topojson": "^3.0.2",
     "trix": "^0.11.4",
+    "validator": "^12.2.0",
     "vee-validate": "^2.1.7",
     "vue": "^2.6.10",
     "vue-click-outside": "^1.0.7",

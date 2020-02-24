@@ -38,3 +38,4 @@ errorShots/
 yarn-error.log
 .vscode/
 /django/.pytest_cache/
+.history/
