@@ -24,6 +24,14 @@
       >
         {{ header }}
       </el-checkbox>
+      <span v-show="!headerSelectable">{{ header }}</span>
+      <el-checkbox
+        v-show="headerSelectable"
+        :value="selected"
+        @change="headerSelected"
+      >
+        {{ header }}
+      </el-checkbox>
     </div>
     <div class="Main">
       <slot />
