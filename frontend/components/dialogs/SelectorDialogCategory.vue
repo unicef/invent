@@ -10,11 +10,11 @@
       >
         <fa
           v-show="!categoryToggled && !alwaysExpandCategory"
-          icon="angle-down"
+          icon="angle-right"
         />
         <fa
           v-show="categoryToggled && !alwaysExpandCategory"
-          icon="angle-up"
+          icon="angle-down"
         />
         <el-checkbox
           v-show="categorySelectable"
