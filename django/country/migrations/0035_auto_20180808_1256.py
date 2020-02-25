@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Donors',
                 'ordering': ('id',),
             },
-            bases=(core.models.NameByIDMixin, models.Model),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='DonorPartnerLogo',
