@@ -65,7 +65,6 @@
 import DateField from '@/components/admin/import/DateField';
 import { Validator } from 'vee-validate';
 import { mapState } from 'vuex';
-import { format } from 'date-fns';
 
 export default {
   components: {

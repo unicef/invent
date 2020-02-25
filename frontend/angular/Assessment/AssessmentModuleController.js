@@ -13,6 +13,7 @@ class AssessmentModuleController {
     this.watchers = this.watchers.bind(this);
     this.fixUrl = fixUrl;
   }
+
   watchers () {
     this.scope.$watch(s => s.vm.projectData, data => {
       this.adjustProjectData(data);

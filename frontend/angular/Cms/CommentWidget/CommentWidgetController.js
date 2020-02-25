@@ -10,6 +10,7 @@ class CommentWidgetController {
     this.$onDestroy = this.onDestroy.bind(this);
     this.unsubscribe = $ngRedux.connect(this.mapState, actions)(this);
   }
+
   onInit () {
     this.expanded = false;
     this.editMode = false;

@@ -7,12 +7,12 @@ const thematicComponent = {
   controllerAs: 'vm',
   name: 'thematic',
   bindings: {
-    'axis': '<',
-    'domain': '<',
-    'buttonclass': '@',
-    'buttontext': '@',
-    'buttontitle': '@',
-    'buttonicon': '@'
+    axis: '<',
+    domain: '<',
+    buttonclass: '@',
+    buttontext: '@',
+    buttontitle: '@',
+    buttonicon: '@'
   }
 };
 

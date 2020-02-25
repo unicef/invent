@@ -36,6 +36,7 @@ class CountryMapController {
     this.showMapErrorDialog = false;
     this.drawMapShape(this.mapData);
   }
+
   createDialogs (gettextCatalog) {
     this.mapError = this.$mdDialog.alert({
       title: gettextCatalog.getString('Attention'),
