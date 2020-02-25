@@ -90,6 +90,7 @@
         </custom-required-form-item>
 
         <custom-required-form-item
+          v-show="platform"
           :error="errors.first('strategies')"
           :draft-rule="draftRules.strategies"
           :publish-rule="publishRules.strategies"
