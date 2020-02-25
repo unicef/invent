@@ -11,10 +11,10 @@
     @blur="$emit('blur')"
   >
     <el-option
-      v-for="paltform in technologyPlatforms"
-      :key="paltform.id"
-      :label="paltform.name"
-      :value="paltform.id"
+      v-for="platform in technologyPlatforms"
+      :key="platform.id"
+      :label="platform.name"
+      :value="platform.id"
     />
   </lazy-el-select>
 </template>
@@ -57,6 +57,4 @@ export default {
   .PlatformSelector {
     width: 100%;
   }
-
-  .PlatformSelectorDropdown {}
 </style>

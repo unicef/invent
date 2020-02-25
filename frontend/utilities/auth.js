@@ -26,7 +26,7 @@ export const deleteToken = () => {
 };
 
 export const getValueFromCookie = (req, value) => {
-  let result = req.headers.cookie.split(';').find(c => c.trim().startsWith(`${value}=`));
+  const result = req.headers.cookie.split(';').find(c => c.trim().startsWith(`${value}=`));
   return result ? result.split('=')[1] : null;
 };
 

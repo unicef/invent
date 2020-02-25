@@ -175,10 +175,10 @@
 
       <div class="TeamArea">
         <custom-required-form-team-item
+          v-model="team"
           :error="errors.first('team')"
           :draft-rule="draftRules.team"
           :publish-rule="publishRules.team"
-          v-model="team"
         >
           <template slot="label">
             <translate key="team">
@@ -199,10 +199,10 @@
           />
         </custom-required-form-team-item>
         <custom-required-form-team-item
+          v-model="viewers"
           :error="errors.first('viewers')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
-          v-model="viewers"
         >
           <template slot="label">
             <translate key="viewers">
