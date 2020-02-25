@@ -8,7 +8,7 @@
         {{ p.name }}
       </li>
       <li v-show="unknown > 0">
-        <translate>+ {{unknown}} members</translate>
+        <translate>+ {{ unknown }} members</translate>
       </li>
     </ul>
     <span v-show="team.length === 0 && unknown === 0">

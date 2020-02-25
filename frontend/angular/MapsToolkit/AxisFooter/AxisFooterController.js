@@ -18,6 +18,7 @@ class AxisFooterController {
       return axis;
     });
   }
+
   onDestroy () {
   }
 

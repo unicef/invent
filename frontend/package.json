@@ -12,6 +12,7 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
+    "precommit:fix": "npm run lint -- --fix",
     "test": "jest",
     "test:w": "jest --watch",
     "cypress:open": "cypress open",

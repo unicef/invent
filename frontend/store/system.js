@@ -18,7 +18,7 @@ export const state = () => ({
 
 export const getters = {
   getUserProfiles: state => {
-    return state.profiles ? [ ...state.profiles.filter(p => p.name) ] : [];
+    return state.profiles ? [...state.profiles.filter(p => p.name)] : [];
   },
   getUserProfilesNoFilter: state => {
     return state.profiles;

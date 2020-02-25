@@ -70,7 +70,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__capability_subcategories",
     )
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__unicef_region')
+    ordering_fields = ('project__name', 'project__modified', 'organisation__name',
+                       'country__name', 'country__unicef_region')
     ordering = ('project_id',)
     pagination_class = ResultsSetPagination
 
@@ -112,7 +113,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         ** TYPE AND ORDERING **
         type: map | list (defaults to map)
         ordering: project__name | organisation__name | country__name |
-                  project__data__government_investor | country__region
+                  project__data__government_investor | country__region |
+                  project__modified
 
         ** PAGINATION **
         page: 1...n | last (will show the last page no matter the number)
