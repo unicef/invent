@@ -65,10 +65,6 @@ class CountryTests(APITestCase):
     def test_country_model_str(self):
         self.assertEqual(str(self.country), 'Hungary')
 
-    def test_country_returns_empty_string_when_no_org_id(self):
-        name = Country.get_name_by_id("")
-        self.assertEqual(name, "")
-
     def test_retrieve_landing_detail(self):
         url = reverse("landing-country-detail", kwargs={"pk": self.country.id})
         response = self.client.get(url)
