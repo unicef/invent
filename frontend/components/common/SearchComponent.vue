@@ -57,7 +57,7 @@
               </el-col>
               <el-col class="AdvancedSearchLink">
                 <nuxt-link
-                  :to="localePath({name : 'organisation-dashboard', params: $route.params})"
+                  :to="localePath({name : 'organisation-dashboard-list', params: $route.params})"
                   class="NuxtLink IconRight"
                 >
                   <span><translate>Advanced search</translate></span><fa icon="angle-right" />

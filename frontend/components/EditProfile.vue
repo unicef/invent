@@ -591,7 +591,7 @@ export default {
       }
     },
     routeToDashboard (locale) {
-      const path = this.localePath({ name: 'organisation-dashboard', params: this.$route.params }, locale);
+      const path = this.localePath({ name: 'organisation-dashboard-list', params: this.$route.params }, locale);
       this.$router.push(path);
     },
     changingUserRole () {
