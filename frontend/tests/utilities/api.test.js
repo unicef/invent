@@ -45,7 +45,7 @@ describe('coverageMapper', () => {
     const result = api.coverageMapper(original);
     expect(result[0]).toEqual(['d']);
     expect(result[1]).toEqual({
-      'd': {
+      d: {
         clients: 1,
         facilities: 2,
         health_workers: 3,
@@ -67,7 +67,7 @@ describe('coverageMapper', () => {
     const result = api.coverageMapper(original);
     expect(result[0]).toEqual(['d']);
     expect(result[1]).toEqual({
-      'd': {
+      d: {
         clients: 1,
         facilities: 4,
         health_workers: 3,
