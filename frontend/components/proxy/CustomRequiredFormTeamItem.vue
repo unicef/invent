@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
   name: 'CustomRequiredFormTeamItem',
   model: {
@@ -49,10 +48,10 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       inputValue: ''
-    }
+    };
   },
   computed: {
     propsAndAttrs () {
@@ -69,8 +68,8 @@ export default {
     }
   },
   methods: {
-  },
-}
+  }
+};
 </script>
 
 <style lang="less">

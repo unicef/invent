@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      'doSignup': 'user/doSignup'
+      doSignup: 'user/doSignup'
     }),
     passwordMatching (rule, value, callback) {
       value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')));

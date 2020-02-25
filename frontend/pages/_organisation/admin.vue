@@ -12,12 +12,11 @@ export default {
   components: {
   },
   middleware: ['isLoggedIn'],
+  computed: {
+    ...mapGetters({})
+  },
   async fetch ({ store }) {
     store.dispatch('landing/resetSearch');
-  },
-  computed: {
-    ...mapGetters({
-    })
   }
 };
 </script>

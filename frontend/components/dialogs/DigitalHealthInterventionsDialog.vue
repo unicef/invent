@@ -20,6 +20,7 @@
       >
         <selector-dialog-column
           :header="category.name"
+          @handleToggleExpand="handleToggleExpand"
         >
           <selector-dialog-category
             v-for="cat in category.subGroups"
@@ -28,6 +29,7 @@
             :category-selectable="true"
             :category="cat"
             child-name="strategies"
+            :expand-collapse="expand.includes(category.name)"
           />
         </selector-dialog-column>
       </el-col>
@@ -79,7 +81,8 @@ export default {
   },
   data () {
     return {
-      currentSelection: []
+      currentSelection: [],
+      expand: []
     };
   },
   computed: {
@@ -88,6 +91,11 @@ export default {
       digitalHealthInterventions: 'projects/getDigitalHealthInterventions',
       selectedDHI: 'project/getDigitalHealthInterventions'
     }),
+    savedSelection () {
+      return this.selectedDHi
+        .filter(dhi => dhi.platform === this.selectedPlatform)
+        .map(dhi => dhi.id);
+    },
     visible: {
       get () {
         return this.selectedPlatform !== null;
@@ -112,9 +120,24 @@ export default {
     cancel () {
       this.setDigitalHealthInterventionsDialogState(null);
     },
+    handleToggleExpand (category, expand) {
+      if (this.expand.includes(category) && !expand) {
+        this.expand = this.expand.filter(val => val !== category);
+      } else {
+        if (expand) {
+          this.expand = [...this.expand, category];
+        }
+      }
+    },
     apply () {
-      const selected = this.currentSelection.map(id => (id));
-      this.setDigitalHealthInterventions(selected);
+      const selected = this.currentSelection.map(id => ({
+        platform: this.selectedPlatform,
+        id
+      }));
+      const filtered = this.selectedDHi.filter(
+        dhi => dhi.platform !== this.selectedPlatform
+      );
+      this.setDigitalHealthInterventions([...filtered, ...selected]);
       this.setDigitalHealthInterventionsDialogState(null);
     }
   }

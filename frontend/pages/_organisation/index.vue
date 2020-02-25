@@ -46,9 +46,6 @@ export default {
     AboutSection,
     CountryProjectsBox
   },
-  fetch ({ store }) {
-    store.dispatch('landing/resetSearch');
-  },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData'
@@ -56,6 +53,9 @@ export default {
     showCoverImage () {
       return this.landingData && this.landingData.cover;
     }
+  },
+  fetch ({ store }) {
+    store.dispatch('landing/resetSearch');
   }
 };
 </script>

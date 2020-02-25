@@ -1,6 +1,14 @@
 <template>
   <lazy-el-select
     slot="reference"
+    v-outside="{
+      exclude: [],
+      handler: 'onOutside'
+    }"
+    v-paste="{
+      exclude: [],
+      handler: 'onPaste'
+    }"
     :value="value"
     :placeholder="$gettext('Type and select a name') | translate"
     :remote-method="filterList"
@@ -10,20 +18,12 @@
     class="TeamSelector"
     :popper-class="optionsAndValues.length > value.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
     @change="changeHandler"
-    v-outside="{
-      exclude: [],
-      handler: 'onOutside'
-    }"
     @keyup.enter.native="onEnter"
-    v-paste="{
-      exclude: [],
-      handler: 'onPaste'
-    }"
   >
     <el-option
       v-for="person in optionsAndValues"
       :key="person.id"
-      :label="`${person.name ? person.name + ', ': ''}${person.organisation ?  getOrganisationDetails(person.organisation).name : ''} ${person.name ? '(' + person.email + ')' : person.email }` | truncate"
+      :label="`${person.name ? person.name + ', ': ''}${person.organisation ? getOrganisationDetails(person.organisation).name : ''} ${person.name ? '(' + person.email + ')' : person.email }` | truncate"
       :value="person.id"
     >
       <span style="float: left;">{{ person.name ? person.name : 'N/A' }}</span>
@@ -44,6 +44,12 @@ import validator from 'validator';
 export default {
   components: {
     OrganisationItem
+  },
+  filters: {
+    truncate (str) {
+      if (str.length > 50) return `${str.substr(0, 47)}...`;
+      return str;
+    }
   },
   mixins: [LightSelectMixin],
   $_veeValidate: {
@@ -68,12 +74,6 @@ export default {
       getOrganisationDetails: 'system/getOrganisationDetails'
     })
   },
-  filters: {
-    truncate (str) {
-      if (str.length > 50 ) return `${str.substr(0, 47)}...`
-      return str
-    }
-  },
   methods: {
     changeHandler (value) {
       this.$emit('change', value);
@@ -95,20 +95,20 @@ export default {
         e.target.blur();
       }
     },
-    onEnter(e) {
+    onEnter (e) {
       this.emitEmails(this.validEmails(this.emailList(e.target.value)));
     },
     emailList (str) {
-      return str.trim().replace(/ /g,'').split(',');
+      return str.trim().replace(/ /g, '').split(',');
     },
     emitEmails (mails) {
       mails.map(email => this.$emit('change', email));
     },
     validEmails (mails) {
-      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email))
+      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email));
     },
     arrIncludes (val) {
-      return this.value.includes(val)
+      return this.value.includes(val);
     },
     validateEmail (email) {
       return validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'));
