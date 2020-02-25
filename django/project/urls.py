@@ -74,10 +74,6 @@ urlpatterns = [
             'put': 'update'
         }),
         name="project-groups"),
-    url(r"^projects/csv-export/$",
-        view=views.CSVExportViewSet.as_view({
-            'post': 'create'
-        }), name="csv-export"),
     url(r"^projects/map/$",
         view=views.MapProjectCountryViewSet.as_view({
             'get': 'list',
