@@ -89,11 +89,6 @@ export default {
       this.errorMessage();
     },
     onPaste (str, e) {
-      // good paste
-      // pepe@unicef.org, trending@unicef.org
-
-      // bad paste
-      // pepe@pepito.com, doni@asd
       const emails = this.emailList(str);
       const validEmails = this.validEmails(emails);
       this.errorMessage();
