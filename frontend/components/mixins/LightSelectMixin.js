@@ -3,12 +3,13 @@ import uniqBy from 'lodash/uniqBy';
 export default {
   data () {
     return {
-      options: []
+      options: [],
+      query: ''
     };
   },
   computed: {
     optionsAndValues () {
-      const result = [...this.options].sort((a, b) => a.name.localeCompare(b.name));
+      const result = [...this.options].sort((a, b) => a.email.localeCompare(b.email));
       if (this.value) {
         if (Array.isArray(this.value) && this.value.length > 0) {
           result.push(...this.items.filter(p => this.value.some(v => v === p.id)));
@@ -21,11 +22,15 @@ export default {
   },
   methods: {
     filterList (query) {
+      this.query = query
       if (query) {
-        this.options = this.items.filter(p => p.name.toLowerCase().startsWith(query.toLowerCase()));
+        this.options = this.items.filter(p => this.filter(p.name, query) || (p.email ? this.filter(p.email, query) : false));
       } else {
         this.options = [];
       }
+    },
+    filter (val, query) {
+      return val.toLowerCase().startsWith(query.toLowerCase());
     }
   }
 };

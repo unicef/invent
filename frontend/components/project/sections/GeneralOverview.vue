@@ -173,63 +173,12 @@
         </el-col>
       </el-row>
 
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('contact_name')"
-            :draft-rule="draftRules.contact_name"
-            :publish-rule="publishRules.contact_name"
-          >
-            <template slot="label">
-              <translate key="contact-name">
-                Programme Focal Point Name
-              </translate>
-              <form-hint>
-                <translate key="contact-name-hint">
-                  This is the individual who will be the lead point of contact for any queries through the DHA.
-                </translate>
-              </form-hint>
-            </template>
-
-            <character-count-input
-              v-model="contact_name"
-              v-validate="rules.contact_name"
-              :rules="rules.contact_name"
-              data-vv-name="contact_name"
-              data-vv-as="Contact name"
-            />
-          </custom-required-form-item>
-        </el-col>
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('contact_email')"
-            :draft-rule="draftRules.contact_email"
-            :publish-rule="publishRules.contact_email"
-          >
-            <template slot="label">
-              <translate key="contact-email">
-                Programme Focal Point Email
-              </translate>
-            </template>
-
-            <character-count-input
-              v-model="contact_email"
-              v-validate="rules.contact_email"
-              :rules="rules.contact_email"
-              data-vv-name="contact_email"
-              data-vv-as="Contact email"
-            />
-          </custom-required-form-item>
-        </el-col>
-      </el-row>
       <div class="TeamArea">
-        <custom-required-form-item
+        <custom-required-form-team-item
           :error="errors.first('team')"
           :draft-rule="draftRules.team"
           :publish-rule="publishRules.team"
+          v-model="team"
         >
           <template slot="label">
             <translate key="team">
@@ -248,11 +197,12 @@
             data-vv-name="team"
             data-vv-as="Team"
           />
-        </custom-required-form-item>
-        <custom-required-form-item
+        </custom-required-form-team-item>
+        <custom-required-form-team-item
           :error="errors.first('viewers')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
+          v-model="viewers"
         >
           <template slot="label">
             <translate key="viewers">
@@ -271,7 +221,7 @@
             data-vv-name="viewers"
             data-vv-as="Viewers"
           />
-        </custom-required-form-item>
+        </custom-required-form-team-item>
       </div>
     </collapsible-card>
   </div>
@@ -288,6 +238,7 @@ import CountrySelect from '../../common/CountrySelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapGetters } from 'vuex';
+import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
 
 export default {
   components: {
@@ -295,7 +246,8 @@ export default {
     CountrySelect,
     TeamSelector,
     FieldOfficeSelector,
-    FormHint
+    FormHint,
+    CustomRequiredFormTeamItem
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {

@@ -12,6 +12,7 @@ class MapResultSerializer(serializers.Serializer):
 class ListResultSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField(source="project_id")
     name = serializers.ReadOnlyField(source="project__name")
+    modified = serializers.ReadOnlyField(source="project__modified")
     organisation = serializers.ReadOnlyField(source="organisation_id")
     country = serializers.ReadOnlyField(source="country_id")
     implementation_overview = serializers.ReadOnlyField(source="project__data__implementation_overview")
