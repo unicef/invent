@@ -102,13 +102,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
     odk_extra_data = serializers.JSONField(required=False)
 
-    def validate_country_office(self, value):
-        if self.instance:
-            project = Project.objects.get(id=self.instance.id)
-            if project.public_id and project.draft['country_office'] != self.initial_data['country_office']:
-                raise serializers.ValidationError('Country office cannot be altered on published projects.')
-        return value
-
     def create(self, validated_data):
         odk_etag = validated_data.pop('odk_etag', None)
         odk_id = validated_data.pop('odk_id', None)
