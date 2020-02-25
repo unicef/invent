@@ -88,7 +88,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128)
     organisation = serializers.CharField(max_length=128, required=False)
-    country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
     country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
     implementation_overview = serializers.CharField(max_length=1024, required=False)
     contact_name = serializers.CharField(max_length=256, required=False)
