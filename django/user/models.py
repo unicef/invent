@@ -7,7 +7,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
-from core.models import NameByIDMixin, ExtendedModel
+from core.models import ExtendedModel
 from .tasks import sync_user_to_odk, send_user_request_to_admins
 
 
@@ -21,7 +21,7 @@ User.set_password = set_password
 PBKDF2PasswordHasher.iterations = 30000
 
 
-class Organisation(NameByIDMixin, ExtendedModel):
+class Organisation(ExtendedModel):
     name = models.CharField(unique=True, max_length=255)
 
     def __str__(self):  # pragma: no cover
