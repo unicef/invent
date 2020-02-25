@@ -24,6 +24,7 @@ class PlanningAndGuidanceController {
     this.searchText = null;
     this.watchers();
   }
+
   onDestroy () {
     this.unsubscribe();
   }
@@ -146,6 +147,7 @@ class PlanningAndGuidanceController {
       });
     });
   }
+
   clearSearch () {
     this.searchText = null;
   }

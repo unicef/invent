@@ -11,7 +11,7 @@ export default function watchTitle () {
       return;
     }
     isRefreshing = true;
-    $nuxt.$meta().refresh();
+    $nuxt.$meta().refresh(); // eslint-disable-line
   });
 
   const target = document.querySelector('head > title');

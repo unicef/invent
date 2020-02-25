@@ -42,7 +42,7 @@ export default {
     },
     subPageName () {
       const noSubPage = {
-        'organisation': true,
+        organisation: true,
         'organisation-login': true,
         'organisation-signup': true
       };
