@@ -359,13 +359,6 @@ class ProjectApprovalSerializer(serializers.ModelSerializer):
         return obj.history.values('history_user__userprofile', 'approved', 'reason', 'modified')
 
 
-class CSVExportSerializer(serializers.Serializer):
-    ids = serializers.ListField(
-        child=serializers.IntegerField(), max_length=200, min_length=1, required=True)
-    country = serializers.IntegerField(required=False)
-    donor = serializers.IntegerField(required=False)
-
-
 class ImportRowSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImportRow
