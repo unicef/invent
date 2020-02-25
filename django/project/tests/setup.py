@@ -58,7 +58,7 @@ class SetupTests(APITestCase):
 
         self.country_office = CountryOffice.objects.create(
             name='Test Country Office',
-            region=Country.REGIONS[0][0],
+            region=Country.UNICEF_REGIONS[0][0],
             country=self.country
         )
 
