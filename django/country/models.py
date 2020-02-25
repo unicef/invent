@@ -7,11 +7,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
 from ordered_model.models import OrderedModel
 
-from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
 
 
-class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
+class LandingPageCommon(ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
     logo = models.ImageField(blank=True, null=True)
     cover = models.ImageField(blank=True, null=True)
