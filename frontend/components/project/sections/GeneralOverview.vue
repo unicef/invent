@@ -324,4 +324,8 @@ export default {
       width: 100% !important;
     }
   }
+
+  .TeamArea {
+    position: relative;
+  }
 </style>
