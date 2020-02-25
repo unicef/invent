@@ -63,6 +63,20 @@
               />
             </el-col>
           </el-row>
+          <div class="GrayArea">
+            <simple-field :header="$gettext('Team members') | translate">
+              <team-list :value="project.team" />
+            </simple-field>
+            <simple-field :header="$gettext('Viewers') | translate">
+              <team-list :value="project.viewers" />
+            </simple-field>
+          </div>
+        </collapsible-card>
+
+        <collapsible-card
+          id="focalpoint"
+          :title="$gettext('2. Focal Point Overview') | translate"
+        >
           <el-row>
             <el-col :span="12">
               <simple-field
@@ -77,19 +91,11 @@
               />
             </el-col>
           </el-row>
-          <div class="GrayArea">
-            <simple-field :header="$gettext('Team members') | translate">
-              <team-list :value="project.team" />
-            </simple-field>
-            <simple-field :header="$gettext('Viewers') | translate">
-              <team-list :value="project.viewers" />
-            </simple-field>
-          </div>
         </collapsible-card>
 
         <collapsible-card
           id="implementation"
-          :title="$gettext('2. Implementation Overview') | translate"
+          :title="$gettext('3. Implementation Overview') | translate"
         >
           <simple-field
             :header="$gettext('Goal area') | translate"

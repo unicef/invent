@@ -17,16 +17,18 @@ class MockRequest():
 class SetupTests(APITestCase):
     def setUp(self):
         # Create a test user with profile.
+        user_email = "test_user@unicef.org"
+
         url = reverse("rest_register")
         data = {
-            "email": "test_user@gmail.com",
+            "email": user_email,
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
         # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
+        key = EmailConfirmation.objects.get(email_address__email=user_email).key
         url = reverse("rest_verify_email")
         data = {
             "key": key,
@@ -37,7 +39,7 @@ class SetupTests(APITestCase):
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
-            "username": "test_user@gmail.com",
+            "username": user_email,
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200, response.json())
