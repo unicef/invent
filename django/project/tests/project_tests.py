@@ -548,7 +548,7 @@ class ProjectTests(SetupTests):
 
         country_office, _ = CountryOffice.objects.get_or_create(
             name='Country Office',
-            region=Country.REGIONS[0][0],
+            region=Country.UNICEF_REGIONS[0][0],
             country=country
         )
 

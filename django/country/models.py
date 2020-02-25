@@ -90,7 +90,7 @@ class Country(UserManagement, LandingPageCommon):
 
 class CountryOffice(ExtendedModel):
     name = models.CharField(max_length=256)
-    region = models.IntegerField(choices=Country.REGIONS, null=True, blank=True)
+    region = models.IntegerField(choices=Country.UNICEF_REGIONS, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
     def __str__(self):  # pragma: no cover
