@@ -239,6 +239,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+    @transaction.atomic
     def update(self, request, project_id):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         project.unpublish()
