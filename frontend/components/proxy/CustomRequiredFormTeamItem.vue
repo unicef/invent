@@ -23,8 +23,13 @@
         </span>
       </span>
       <span class="pull-right">
-        <el-tooltip class="item" effect="dark" content="You need a unicef.org email to add users" placement="left">
-          <i class="el-icon-warning warning"></i>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="You need a unicef.org email to add users"
+          placement="left"
+        >
+          <i class="el-icon-warning warning" />
         </el-tooltip>
       </span>
     </template>
