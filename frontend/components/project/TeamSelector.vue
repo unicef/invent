@@ -1,6 +1,14 @@
 <template>
   <lazy-el-select
     slot="reference"
+    v-outside="{
+      exclude: [],
+      handler: 'onOutside'
+    }"
+    v-paste="{
+      exclude: [],
+      handler: 'onPaste'
+    }"
     :value="value"
     :placeholder="$gettext('Type and select a name') | translate"
     :remote-method="filterList"
@@ -10,20 +18,12 @@
     class="TeamSelector"
     :popper-class="optionsAndValues.length > value.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
     @change="changeHandler"
-    v-outside="{
-      exclude: [],
-      handler: 'onOutside'
-    }"
     @keyup.enter.native="onEnter"
-    v-paste="{
-      exclude: [],
-      handler: 'onPaste'
-    }"
   >
     <el-option
       v-for="person in optionsAndValues"
       :key="person.id"
-      :label="`${person.name ? person.name + ', ': ''}${person.organisation ?  getOrganisationDetails(person.organisation).name : ''} ${person.name ? '(' + person.email + ')' : person.email }` | truncate"
+      :label="`${person.name ? person.name + ', ': ''}${person.organisation ? getOrganisationDetails(person.organisation).name : ''} ${person.name ? '(' + person.email + ')' : person.email }` | truncate"
       :value="person.id"
     >
       <span style="float: left;">{{ person.name ? person.name : 'N/A' }}</span>
@@ -45,6 +45,12 @@ export default {
   components: {
     OrganisationItem
   },
+  filters: {
+    truncate (str) {
+      if (str.length > 50) return `${str.substr(0, 47)}...`;
+      return str;
+    }
+  },
   mixins: [LightSelectMixin],
   $_veeValidate: {
     value () {
@@ -62,17 +68,16 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      invalidEmails: []
+    }
+  },
   computed: {
     ...mapGetters({
       items: 'system/getUserProfilesNoFilter',
       getOrganisationDetails: 'system/getOrganisationDetails'
     })
-  },
-  filters: {
-    truncate (str) {
-      if (str.length > 50 ) return `${str.substr(0, 47)}...`
-      return str
-    }
   },
   methods: {
     changeHandler (value) {
@@ -80,38 +85,51 @@ export default {
     },
     onOutside () {
       this.emitEmails(this.validEmails(this.emailList(this.query)));
+      this.query = '';
+      this.errorMessage();
     },
     onPaste (str, e) {
-      // good paste
-      // pepe@pepe.com, trending@tren.com
-
-      // bad paste
-      // pepe@pepito.com, doni@asd
       const emails = this.emailList(str);
       const validEmails = this.validEmails(emails);
+      this.errorMessage();
 
       if (emails.length === validEmails.length) {
         this.emitEmails(validEmails);
         e.target.blur();
       }
     },
-    onEnter(e) {
+    onEnter (e) {
       this.emitEmails(this.validEmails(this.emailList(e.target.value)));
+      this.errorMessage();
     },
     emailList (str) {
-      return str.trim().replace(/ /g,'').split(',');
+      return str.trim().replace(/ /g, '').split(',');
     },
     emitEmails (mails) {
       mails.map(email => this.$emit('change', email));
     },
     validEmails (mails) {
-      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email))
+      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email));
     },
     arrIncludes (val) {
-      return this.value.includes(val)
+      return this.value.includes(val);
     },
     validateEmail (email) {
-      return validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'));
+      const valid = validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'));
+      if (!valid) {
+        this.invalidEmails = [...this.invalidEmails, email]
+      }
+      return valid;
+    },
+    errorMessage () {
+      if (this.invalidEmails.length > 0 && this.invalidEmails[0] !== "") {
+        this.$message({
+          dangerouslyUseHTMLString: true,
+          message: `<b>${this.invalidEmails.join(', ')}</b> ${this.$gettext(`cant't be added. Make sure email is part of unicef.org`)}`,
+          type: 'error'
+        });
+      }
+      this.invalidEmails = [];
     }
   }
 };

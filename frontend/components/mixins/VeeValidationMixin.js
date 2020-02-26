@@ -83,7 +83,7 @@ export default {
       if (errors && Array.isArray(errors)) {
         this.customCountryErrors = errors;
       } else {
-        for (let key in errors) {
+        for (const key in errors) {
           this.errors.add({
             field: 'answer',
             scope: 'custom_question_' + key,
@@ -94,7 +94,7 @@ export default {
     },
     donorCustomAnswersErrorHandling (errors) {
       const result = [];
-      for (let key in errors) {
+      for (const key in errors) {
         result.push(...errors[key].map((e, index) => ({
           error: e,
           index,
@@ -104,7 +104,7 @@ export default {
       this.customDonorsErrors = result;
     },
     coreProjectErrorHandling (errors) {
-      for (let field in errors) {
+      for (const field in errors) {
         const item = errors[field];
         if (Array.isArray(item)) {
           const first = item[0];
@@ -112,7 +112,7 @@ export default {
             item.forEach((innerError, key) => {
               const scope = errorLibrary[field] + key;
               this.scopes.push(scope);
-              for (let innerField in innerError) {
+              for (const innerField in innerError) {
                 this.addErrorIfMissing({
                   field: innerField,
                   msg: innerError[innerField][0],
@@ -127,7 +127,7 @@ export default {
             });
           }
         } else {
-          for (let inner in item) {
+          for (const inner in item) {
             if (inner === 'non_field_errors') {
               this.addErrorIfMissing({
                 field,

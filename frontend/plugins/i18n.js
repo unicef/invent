@@ -13,7 +13,7 @@ Vue.mixin({
         console.log(`${word} => ${translated}`, parameters);
       }
       if (!this.$te(word) && parameters) {
-        for (let k in parameters) {
+        for (const k in parameters) {
           translated = translated.replace(`{${k}}`, parameters[k]);
         }
       }

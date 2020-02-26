@@ -22,13 +22,17 @@
           *
         </span>
       </span>
+      <span class="pull-right">
+        <el-tooltip class="item" effect="dark" content="You need a unicef.org email to add users" placement="left">
+          <i class="el-icon-warning warning"></i>
+        </el-tooltip>
+      </span>
     </template>
     <slot />
   </el-form-item>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
   name: 'CustomRequiredFormTeamItem',
   model: {
@@ -49,10 +53,10 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       inputValue: ''
-    }
+    };
   },
   computed: {
     propsAndAttrs () {
@@ -69,8 +73,8 @@ export default {
     }
   },
   methods: {
-  },
-}
+  }
+};
 </script>
 
 <style lang="less">
@@ -98,5 +102,13 @@ export default {
     .PublishRequired{
       background-color: @colorPublished
     }
+  }
+  .pull-right {
+    position: absolute;
+    right: 6px;
+  }
+  .warning {
+    // color: @colorBrandAccentLight;
+    cursor: pointer;
   }
 </style>

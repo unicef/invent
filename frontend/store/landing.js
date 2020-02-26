@@ -19,7 +19,7 @@ export const getters = {
   },
   getFoundIn: (state) => id => {
     const result = [];
-    for (let category in state.foundIn) {
+    for (const category in state.foundIn) {
       if (state.foundIn[category].includes(id)) {
         result.push(category);
       }

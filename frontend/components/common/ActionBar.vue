@@ -63,23 +63,23 @@
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
-              :class="['ActionBarLink', {'Active': isMapSubRoute}]"
-              tag="div"
-            >
-              <translate key="map-view">
-                Map view
-              </translate>
-            </nuxt-link>
-          </el-col>
-          <el-col class="ActionBarTab">
-            <nuxt-link
               :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: $route.query})"
               :class="['ActionBarLink', {'Active': isListSubRoute}]"
               tag="div"
             >
               <translate key="list-view">
                 List view
+              </translate>
+            </nuxt-link>
+          </el-col>
+          <el-col class="ActionBarTab">
+            <nuxt-link
+              :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
+              :class="['ActionBarLink', {'Active': isMapSubRoute}]"
+              tag="div"
+            >
+              <translate key="map-view">
+                Map view
               </translate>
             </nuxt-link>
           </el-col>

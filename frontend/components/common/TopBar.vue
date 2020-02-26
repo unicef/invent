@@ -82,7 +82,7 @@
               <div>
                 <nuxt-link
                   key="dashboardBtn"
-                  :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
+                  :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: {}})"
                   class="HeaderBtn"
                 >
                   <translate>Dashboard</translate>
