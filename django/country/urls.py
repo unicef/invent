@@ -2,7 +2,8 @@ from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 from country.views import CountryViewSet, PartnerLogoViewSet, DonorViewSet, DonorPartnerLogoViewSet, \
     MapFileViewSet, CountryImageViewSet, DonorImageViewSet, CountryLandingPageViewSet, DonorLandingPageViewSet, \
-    CountryCustomQuestionViewSet, DonorCustomQuestionViewSet, CountryLandingListPageViewSet, DonorLandingListPageViewSet
+    CountryCustomQuestionViewSet, DonorCustomQuestionViewSet, CountryLandingListPageViewSet, \
+    DonorLandingListPageViewSet, CountryOfficeViewSet
 from . import views
 
 router = DefaultRouter()
@@ -11,6 +12,7 @@ router.register(r'landing-country', CountryLandingListPageViewSet, base_name='la
 router.register(r'landing-donor', DonorLandingPageViewSet, base_name='landing-donor'),
 router.register(r'landing-donor', DonorLandingListPageViewSet, base_name='landing-donor'),
 router.register(r'countries', CountryViewSet, base_name='country')
+router.register(r'countryoffices', CountryOfficeViewSet, base_name='countryoffice')
 router.register(r'donors', DonorViewSet, base_name='donor')
 router.register(r'country-partner-logos', PartnerLogoViewSet, base_name='country-partner-logo')
 router.register(r'donor-partner-logos', DonorPartnerLogoViewSet, base_name='donor-partner-logo')
