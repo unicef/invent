@@ -257,12 +257,7 @@ export const actions = {
     draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
-    const isUserProject = await dispatch('saveTeamViewers', id);
-    if (isUserProject) {
-      dispatch('projects/updateProject', data, { root: true });
-    } else {
-      dispatch('projects/removeProject', data.id, { root: true });
-    }
+    await dispatch('setProject', { data, id });
     dispatch('setLoading', false);
   },
   async publishProject ({ getters, dispatch, commit }, id) {
@@ -271,15 +266,24 @@ export const actions = {
     draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
-    const isUserProject = await dispatch('saveTeamViewers', id);
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
+    await dispatch('setProject', { data, id });
+    dispatch('setLoading', false);
+  },
+  async unpublishProject ({ dispatch }, id) {
+    dispatch('setLoading', 'unpublish');
+    const { data } = await this.$axios.put(`/api/projects/unpublish/${id}/`);
+    await dispatch('setProject', { data, id });
+    dispatch('setLoading', false);
+  },
+  async setProject ({ dispatch }, { data, id }) {
+    const isUserProject = await dispatch('saveTeamViewers', id);
     if (isUserProject) {
       dispatch('projects/updateProject', data, { root: true });
     } else {
       dispatch('projects/removeProject', data.id, { root: true });
     }
-    dispatch('setLoading', false);
   },
   async discardDraft ({ getters, dispatch, commit }, id) {
     dispatch('setLoading', 'discard');

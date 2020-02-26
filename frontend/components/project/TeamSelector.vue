@@ -68,10 +68,10 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       invalidEmails: []
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -117,12 +117,12 @@ export default {
     validateEmail (email) {
       const valid = validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'));
       if (!valid) {
-        this.invalidEmails = [...this.invalidEmails, email]
+        this.invalidEmails = [...this.invalidEmails, email];
       }
       return valid;
     },
     errorMessage () {
-      if (this.invalidEmails.length > 0 && this.invalidEmails[0] !== "") {
+      if (this.invalidEmails.length > 0 && this.invalidEmails[0] !== '') {
         this.$message({
           dangerouslyUseHTMLString: true,
           message: `<b>${this.invalidEmails.join(', ')}</b> ${this.$gettext(`cant't be added. Make sure email is part of unicef.org`)}`,
