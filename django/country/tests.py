@@ -10,6 +10,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from django.utils.dateformat import format
 from requests import RequestException
+from rest_framework import status
 
 from django.core import mail
 from django.core.management import call_command
@@ -20,7 +21,7 @@ from rest_framework.test import APITestCase
 
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion
+from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion, CountryOffice
 from user.models import UserProfile
 from django.utils.six import StringIO
 from django.conf import settings
@@ -777,6 +778,56 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
+
+
+class CountryOfficeTests(APITestCase):
+
+    def setUp(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        # Validate the account.
+        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
+        url = reverse("rest_verify_email")
+        data = {
+            "key": key,
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        self.test_user = response.json()
+        self.test_user_key = response.json().get("token")
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
+
+        self.country = Country.objects.create(name="country1", code="CC", map_activated_on=timezone.now())
+
+    def test_list_country_offices_success(self):
+        CountryOffice.objects.all().delete()
+
+        country_office_1, _ = CountryOffice.objects.get_or_create(
+            name='Country Office 1',
+            region=Country.UNICEF_REGIONS[0][0],
+            country=self.country
+        )
+        country_office_2, _ = CountryOffice.objects.get_or_create(
+            name='Country Office 2',
+            region=Country.UNICEF_REGIONS[1][0],
+            country=self.country
+        )
+
+        url = reverse("countryoffice-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        country_office_ids = [item['id'] for item in response.json()]
+        self.assertIn(country_office_1.id, country_office_ids)
+        self.assertIn(country_office_2.id, country_office_ids)
 
 
 class DonorTests(APITestCase):
