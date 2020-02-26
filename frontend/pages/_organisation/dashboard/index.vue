@@ -15,6 +15,20 @@ export default {
     DashboardMap,
     DashboardProjectBox
   },
+  computed: {
+    ...mapGetters({
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection'
+    })
+  },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler (query) {
+        this.searchParameterChanged(query);
+      }
+    }
+  },
   async fetch ({ store, query, error }) {
     store.dispatch('dashboard/setDashboardSection', 'map');
     await Promise.all([
@@ -31,20 +45,6 @@ export default {
         statusCode: 404,
         message: 'Unable to process the search with the current parameters'
       });
-    }
-  },
-  computed: {
-    ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters',
-      dashboardSection: 'dashboard/getDashboardSection'
-    })
-  },
-  watch: {
-    searchParameters: {
-      immediate: false,
-      handler (query) {
-        this.searchParameterChanged(query);
-      }
     }
   },
   methods: {

@@ -290,7 +290,7 @@ export default {
           const query = { ...this.$route.query, next: undefined };
           this.$router.push({ path, query });
         } else {
-          this.$router.push(this.localePath({ name: 'organisation-dashboard', params: this.$route.params, query: { country: [this.profile.country] } }));
+          this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: this.$route.params, query: { country: [this.profile.country] } }));
         }
       } catch (e) {
         this.handleRoutingErrors(e);

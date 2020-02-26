@@ -69,6 +69,19 @@
       </el-table-column>
 
       <el-table-column
+        v-if="selectedColumns.includes('3')"
+        :resizable="false"
+        :label="$gettext('Last updated') | translate"
+        sortable="custom"
+        prop="project__modified"
+        width="180"
+      >
+        <template slot-scope="scope">
+          {{ convertDate(scope.row.modified) }}
+        </template>
+      </el-table-column>
+
+      <el-table-column
         v-if="selectedColumns.includes('16')"
         :resizable="false"
         :label="$gettext('Field office') | translate"
@@ -267,6 +280,7 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
 import { mapGettersActions } from '../../utilities/form.js';
 
@@ -393,6 +407,9 @@ export default {
         this.sorting = prop;
         this.localSort = prop;
       }
+    },
+    convertDate (date) {
+      return date ? format(date, 'DD/MM/YYYY HH:mm') : 'N/A';
     },
     fixTableHeight () {
       const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');

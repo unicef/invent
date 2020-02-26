@@ -50,6 +50,7 @@ class MapsToolkitController {
       this.scope.$digest();
     });
   }
+
   handleChangeDomain (axisId, domainId) {
     const path = window.$nuxt.$root.localePath({ name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: { axisId, domainId } });
     window.$nuxt.$router.push(path, () => {

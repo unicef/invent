@@ -55,7 +55,7 @@ export const platformsMapper = collection => {
 export const countryCustomFieldMapper = collection => {
   const customAnswers = [];
   if (typeof collection === 'object' && collection) {
-    for (let key in collection) {
+    for (const key in collection) {
       customAnswers.push({ question_id: +key, answer: collection[key] });
     }
   } else {
@@ -67,9 +67,9 @@ export const countryCustomFieldMapper = collection => {
 export const donorCustomFieldMapper = collection => {
   const customAnswers = [];
   if (typeof collection === 'object' && !Array.isArray(collection) && collection) {
-    for (let donor in collection) {
+    for (const donor in collection) {
       if (typeof collection[donor] === 'object' && !Array.isArray(collection) && collection) {
-        for (let key in collection[donor]) {
+        for (const key in collection[donor]) {
           customAnswers.push({ question_id: +key, answer: collection[donor][key], donor_id: +donor });
         }
       } else {
@@ -113,7 +113,7 @@ export const dataCleaner = value => {
 
 export const interoperabilityLinkWriteParser = links => {
   const result = [];
-  for (let link in links) {
+  for (const link in links) {
     const value = { ...links[link] };
     value.selected = value.selected ? true : undefined;
     value.link = !value.selected || lib.isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
@@ -170,7 +170,7 @@ export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
 
 export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
   const result = {};
-  for (let key in p) {
+  for (const key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
   }
@@ -196,7 +196,7 @@ export const strArrayFromQs = item => {
 
 export const queryStringComparisonParser = collection => {
   const result = {};
-  for (let key in collection) {
+  for (const key in collection) {
     const item = collection[key];
     if (item === null) {
       result[key] = null;

@@ -20,6 +20,20 @@ export default {
     MainTable,
     TableTopActions
   },
+  computed: {
+    ...mapGetters({
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection'
+    })
+  },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler (query) {
+        this.searchParameterChanged(query);
+      }
+    }
+  },
   async fetch ({ store, query, error }) {
     store.dispatch('dashboard/setDashboardSection', 'list');
     await Promise.all([
@@ -41,20 +55,6 @@ export default {
       await store.dispatch('system/loadDonorDetails', store.getters['dashboard/getDashboardId']);
     } else if (store.getters['dashboard/getDashboardType'] === 'country') {
       await store.dispatch('countries/loadCountryDetails', store.getters['dashboard/getDashboardId']);
-    }
-  },
-  computed: {
-    ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters',
-      dashboardSection: 'dashboard/getDashboardSection'
-    })
-  },
-  watch: {
-    searchParameters: {
-      immediate: false,
-      handler (query) {
-        this.searchParameterChanged(query);
-      }
     }
   },
   methods: {
