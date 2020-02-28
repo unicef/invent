@@ -126,11 +126,39 @@
           <translate>Discard draft</translate>
         </el-button>
 
+        <el-tooltip
+          v-if="isPublished"
+          effect="dark"
+          placement="top"
+          popper-class="tooltip--width"
+          :hide-after="parseInt(3200, 10)"
+        >
+          <div slot="content">
+            {{ $gettext('This action will update the timestamp') | translate }}<br>
+            {{ $gettext('of the project to the current date.') | translate }}
+          </div>
+          <el-button
+            :disabled="!!loading"
+            type="primary"
+            size="medium"
+            @click="$emit('handleClickLatest')"
+          >
+            <fa
+              v-show="loading === 'latest'"
+              icon="spinner"
+              spin
+            />
+            <translate>Publish as latest</translate>
+            <fa icon="question-circle" />
+          </el-button>
+        </el-tooltip>
+
         <el-button
           v-if="isPublished"
           :disabled="!!loading"
           type="danger"
           size="medium"
+          class="button--danger"
           @click="$emit('handleClickUnPublish')"
         >
           <fa
@@ -287,9 +315,17 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
+
+  .button--danger {
+    background-color: white!important;
+    color: @colorDanger;
+    &:hover {
+      color: @colorDanger;
+    }
+  }
 
   .ProjectNavigation {
     width: @projectAsideNavWidth;

@@ -182,6 +182,7 @@
       <el-col :span="6">
         <project-navigation
           @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-projects-id-edit', params: { ...$route.params } }, $route.params.id)"
+          @handleClickLatest="handleClickLatest($route.params.id)"
         />
       </el-col>
     </el-row>
@@ -204,7 +205,7 @@ import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
 import DonorsList from '../common/list/DonorsList';
 import CustomReadonlyField from './CustomReadonlyField';
-import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
+import handleProjectActions from '@/components/mixins/handleProjectActions';
 
 import { mapGetters } from 'vuex';
 
@@ -225,7 +226,7 @@ export default {
     CustomReadonlyField,
     CapabilitiesList
   },
-  mixins: [handleProjectUnpublish],
+  mixins: [handleProjectActions],
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
