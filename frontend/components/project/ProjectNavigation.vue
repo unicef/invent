@@ -25,8 +25,8 @@
               <translate>Draft</translate>
             </el-button>
             <el-button
-              :class="['PublishedButton', {'Active': isPublished}]"
-              :disabled="isPublished"
+              :class="['PublishedButton', {'Active': isPublished && published.name}]"
+              :disabled="isPublished || !published.name"
               @click="goToPublished"
             >
               <translate>Published</translate>
