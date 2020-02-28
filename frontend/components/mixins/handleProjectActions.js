@@ -4,6 +4,7 @@ const handleProjectUnpublish = {
   methods: {
     ...mapActions({
       unpublishProject: 'project/unpublishProject',
+      latestProject: 'project/latestProject',
       setLoading: 'project/setLoading'
     }),
     async handleClickUnPublish (destination, id) {
@@ -19,6 +20,22 @@ const handleProjectUnpublish = {
         this.$message({
           type: 'success',
           message: this.$gettext('The project has been unpublish')
+        });
+      } catch (e) {
+        this.setLoading(false);
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action cancelled')
+        });
+      }
+    },
+    async handleClickLatest (id) {
+      try {
+        await this.latestProject(id);
+        console.log('me updatee');
+        this.$message({
+          type: 'success',
+          message: this.$gettext('The project has been updated to latest')
         });
       } catch (e) {
         this.setLoading(false);

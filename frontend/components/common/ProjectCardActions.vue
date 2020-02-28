@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
+import handleProjectActions from '@/components/mixins/handleProjectActions';
 
 export default {
-  mixins: [handleProjectUnpublish],
+  mixins: [handleProjectActions],
   props: {
     project: {
       type: Object,

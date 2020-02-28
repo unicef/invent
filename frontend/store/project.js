@@ -277,6 +277,13 @@ export const actions = {
     await dispatch('setProject', { data, id });
     dispatch('setLoading', false);
   },
+  async latestProject ({ dispatch }, id) {
+    dispatch('setLoading', 'latest');
+    // waiting for Barna fix and doubts
+    const { data } = await this.$axios.get(`/api/projects/publishaslatest/${id}/`);
+    await dispatch('setProject', { data, id });
+    dispatch('setLoading', false);
+  },
   async setProject ({ dispatch }, { data, id }) {
     const isUserProject = await dispatch('saveTeamViewers', id);
     if (isUserProject) {
