@@ -32,7 +32,6 @@ const handleProjectUnpublish = {
     async handleClickLatest (id) {
       try {
         await this.latestProject(id);
-        console.log('me updatee');
         this.$message({
           type: 'success',
           message: this.$gettext('The project has been updated to latest')
