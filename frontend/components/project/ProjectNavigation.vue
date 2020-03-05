@@ -25,8 +25,8 @@
               <translate>Draft</translate>
             </el-button>
             <el-button
-              :class="['PublishedButton', {'Active': isPublished}]"
-              :disabled="isPublished"
+              :class="['PublishedButton', {'Active': isPublished && published.name}]"
+              :disabled="isPublished || !published.name"
               @click="goToPublished"
             >
               <translate>Published</translate>
@@ -124,6 +124,21 @@
             spin
           />
           <translate>Discard draft</translate>
+        </el-button>
+
+        <el-button
+          v-if="isPublished"
+          :disabled="!!loading"
+          type="danger"
+          size="medium"
+          @click="$emit('handleClickUnPublish')"
+        >
+          <fa
+            v-show="loading === 'unpublish'"
+            icon="spinner"
+            spin
+          />
+          <translate>Unpublish</translate>
         </el-button>
 
         <el-button
@@ -450,7 +465,7 @@ export default {
       background-color: @colorBrandBlueLight;
       text-align: center;
 
-      .el-button--primary {
+      .el-button--primary, .el-button--danger {
         width: 100%;
         margin: 0 0 20px;
       }

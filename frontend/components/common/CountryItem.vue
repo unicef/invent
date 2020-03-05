@@ -70,6 +70,7 @@ export default {
       font-weight: 700;
       line-height: 16px;
       color: @colorTextPrimary;
+      white-space: nowrap;
     }
   }
 </style>
