@@ -40,13 +40,25 @@
           <translate>Assessment</translate>
         </nuxt-link>
       </el-col>
+      <el-col v-if="project.isPublished">
+        <nuxt-link
+          to=""
+          class="NuxtLink IconLeft Danger"
+          @click.native="handleClickUnPublish({ name: 'organisation-projects' }, project.id)"
+        >
+          <fa icon="times-circle" />
+          <translate>Unpublish</translate>
+        </nuxt-link>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
+
 export default {
+  mixins: [handleProjectUnpublish],
   props: {
     project: {
       type: Object,
@@ -58,9 +70,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      user: 'user/getProfile'
-    }),
     isSuperUser () {
       return this.user && this.user.is_superuser;
     },
@@ -91,6 +100,13 @@ export default {
     .NuxtLink {
       margin-left: 40px;
       line-height: 24px;
+    }
+
+    .Danger {
+      color: @colorDanger;
+      &:hover {
+        color: @colorDanger;
+      }
     }
   }
 
