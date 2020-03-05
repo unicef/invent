@@ -1,15 +1,15 @@
 from typing import Dict, List
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.db.models.signals import post_save
-from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
 from django.http import QueryDict
 
 from core.models import ExtendedModel
-from project.models import Project, HealthFocusArea, DigitalStrategy
 from country.models import Country, Donor, CountryOffice
+from project.models import Project, HealthFocusArea, DigitalStrategy
 from user.models import Organisation
 
 
@@ -18,7 +18,7 @@ class ProjectSearch(ExtendedModel):
         # query_param: QuerySet param | eg: in=name&in=org
         "name": "project__name",
         "org": "organisation__name",
-        "country_office": "country_office__name",
+        "co": "country_office__name",
         "country": "country__name",
         "region": "country__unicef_region",
         "overview": "project__data__implementation_overview",
@@ -27,7 +27,7 @@ class ProjectSearch(ExtendedModel):
 
     FILTER_BY = {
         # query_param: QuerySet param
-        "country_office": "country_office_id",  # eg: country_office=1
+        "co": "country_office_id",  # eg: country_office=1
         "country": "country_id",  # eg: country=1&country=2
         "sw": "software",  # eg: sw=1&sw=2
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
