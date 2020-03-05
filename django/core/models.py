@@ -73,9 +73,6 @@ class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):
     def add_intial_q(self):
         self.query.add_q(Q(is_active=True))
 
-    # def get_names_for_ids(self, ids):
-    #     return self.filter(id__in=ids).only('name')
-
 
 class SoftDeleteModel(models.Model):
     is_active = models.BooleanField(default=True)
