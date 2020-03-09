@@ -51,6 +51,11 @@ export const actions = {
     await dispatch('system/loadOrganisations', {}, { root: true });
   },
 
+  async dorResetPassword ({ commit, dispatch }, { token, password1, password2 }) {
+    await this.$axios.post('/api/rest-auth/password/reset-password', // TODO
+      { token, password1, password2 });
+  },
+
   doLogout ({ commit, dispatch }) {
     commit('SET_USER', null);
     commit('SET_PROFILE', null);

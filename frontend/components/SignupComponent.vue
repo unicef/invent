@@ -5,20 +5,26 @@
       :body-style="{ padding: '0px' }"
     >
       <div slot="header">
-        <translate>Sign up for Digital Health Atlas</translate>
+        <template v-if="reset">
+          <translate>Enter new password</translate>
+        </template>
+        <template v-else>
+          <translate>Sign up for Digital Health Atlas</translate>
+        </template>
       </div>
       <el-form
         ref="form"
         :model="signupForm"
         :rules="rules"
         label-position="top"
-        @submit.native.prevent="signup"
+        @submit.native.prevent="submitForm"
       >
         <fieldset>
           <div class="FieldsetLegend">
             <translate>Please fill out the form below:</translate>
           </div>
           <el-form-item
+            v-if="!reset"
             :label="$gettext('Email address') | translate"
             prop="email"
           >
@@ -92,7 +98,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin';
+import FormAPIErrorsMixin from '~/components/mixins/FormAPIErrorsMixin';
 
 export default {
   mixins: [FormAPIErrorsMixin],
@@ -100,6 +106,11 @@ export default {
     shadow: {
       type: String,
       default: 'always'
+    },
+    reset: {
+      type: String,
+      default: '',
+      required: false
     }
   },
   data () {
@@ -110,11 +121,13 @@ export default {
         password2: ''
       },
       rules: {
-        email: [
-          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
-          { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
-          { validator: this.validatorGenerator('email'), trigger: 'blur' }
-        ],
+        email: (() => {
+          return this.reset ? [] : [
+            { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
+            { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
+            { validator: this.validatorGenerator('email'), trigger: 'blur' }
+          ];
+        })(),
         password1: [
           { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
           { min: 8, message: this.$gettext('This field should be at least 8 characters'), trigger: 'blur' },
@@ -129,27 +142,48 @@ export default {
   },
   methods: {
     ...mapActions({
-      doSignup: 'user/doSignup'
+      doSignup: 'user/doSignup',
+      dorResetPassword: 'user/dorResetPassword'
     }),
     passwordMatching (rule, value, callback) {
       value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')));
     },
+    submitForm () {
+      this.reset ? this.resetPassword() : this.signup();
+    },
     signup () {
+      return this.setForm({
+        message: this.$gettext('User created succesfully'),
+        apiCall: () => this.doSignup({
+          account_type: 'I',
+          password1: this.signupForm.password1,
+          password2: this.signupForm.password2,
+          email: this.signupForm.email
+        }),
+        pathName: 'organisation-edit-profile'
+      });
+    },
+    resetPassword () {
+      return this.setForm({
+        message: this.$gettext('Your password was reset successfully'),
+        apiCall: () => this.dorResetPassword({
+          password1: this.signupForm.password1,
+          password2: this.signupForm.password2,
+          token: this.reset
+        }),
+        pathName: 'organisation-login'
+      });
+    },
+    setForm ({ message, apiCall, pathName }) {
       this.deleteFormAPIErrors();
       this.$refs.form.validate(async valid => {
         if (valid) {
           try {
             // locale needs to be saved in this place due to i18n being unavailable right after the signup call
-            const message = this.$gettext('User created succesfully');
             const locale = this.$i18n.locale;
             this.$nuxt.$loading.start();
-            await this.doSignup({
-              account_type: 'I',
-              password1: this.signupForm.password1,
-              password2: this.signupForm.password2,
-              email: this.signupForm.email
-            });
-            const path = this.localePath({ ...this.$route, name: 'organisation-edit-profile' }, locale);
+            await apiCall();
+            const path = this.localePath({ ...this.$route, name: pathName }, locale);
             this.$router.push(path);
             this.$message({
               message,

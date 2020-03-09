@@ -44,7 +44,8 @@ export default {
       const noSubPage = {
         organisation: true,
         'organisation-login': true,
-        'organisation-signup': true
+        'organisation-signup': true,
+        'organisation-reset-key': true
       };
       const pages = {
         'organisation-edit-profile': this.$gettext('Admin'),
