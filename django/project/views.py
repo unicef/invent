@@ -8,22 +8,22 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
-from rest_framework.response import Response
+
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from country.models import Donor, FieldOffice, CountryOffice
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Donor, FieldOffice, CountryOffice
-
+from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
+    HealthCategory, HSCChallenge
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer
-from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, HSCChallenge
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -73,7 +73,7 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
-            field_offices=FieldOffice.objects.values('id', 'name', 'country_id')
+            field_offices=FieldOffice.objects.values('id', 'name', 'country_office_id')
         )
 
     @staticmethod
