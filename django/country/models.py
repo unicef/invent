@@ -1,10 +1,10 @@
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import MinLengthValidator
 from ordered_model.models import OrderedModel
 
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
@@ -99,7 +99,6 @@ class CountryOffice(ExtendedModel):
 
 class FieldOffice(models.Model):
     name = models.CharField(max_length=256)
-    country = models.ForeignKey(Country, related_name='field_offices', on_delete=models.CASCADE)
     country_office = models.ForeignKey(CountryOffice, blank=True, null=True, on_delete=models.CASCADE)
 
 
