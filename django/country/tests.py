@@ -1326,8 +1326,7 @@ class CountryAdminTests(TestCase):
         ma = CountryAdmin(Country, self.site)
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
         translate_bools = ['is_translated_{}'.format(language_code) for language_code, _ in settings.LANGUAGES]
-        self.assertEqual(ma.get_list_display(self.request), ['name', 'code', 'unicef_region',
-                                                             'project_approval'] + translate_bools)
+        self.assertEqual(ma.get_list_display(self.request), ['name', 'code', 'project_approval'] + translate_bools)
 
 
 class CountryManagementCommandTest(TestCase):
