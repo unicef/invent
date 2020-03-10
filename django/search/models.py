@@ -20,7 +20,7 @@ class ProjectSearch(ExtendedModel):
         "org": "organisation__name",
         "co": "country_office__name",
         "country": "country__name",
-        "region": "country__unicef_region",
+        "region": "country_office__region",
         "overview": "project__data__implementation_overview",
         "donor": "donor_names"
     }
@@ -33,7 +33,7 @@ class ProjectSearch(ExtendedModel):
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
         "hfa": "hfa_categories",  # eg: hfa=1&hfa=2
         "hsc": "hsc",  # eg: hsc=1&hsc=2
-        "region": "country__unicef_region",  # eg: region=3
+        "region": "country_office__region",  # eg: region=3
         "donor": "donors",
         "approved": "project__approval__approved",  # false=> approved=0 ; true=> approved=1
         "goal": "project__data__goal_area",  # eg: goal=1
