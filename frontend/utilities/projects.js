@@ -21,6 +21,7 @@ export const projectFields = () => ({
   name: null,
   organisation: 56,
   country: null,
+  office: null,
   modified: null,
   field_office: null,
   implementation_overview: null,
@@ -81,6 +82,9 @@ export const publishRules = () => {
       max: 128
     },
     country: {
+      required: true
+    },
+    office: {
       required: true
     },
     geographic_scope: {
