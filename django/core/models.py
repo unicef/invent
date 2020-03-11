@@ -19,16 +19,6 @@ class GetObjectOrNoneMixin(object):
             return None
 
 
-class NameByIDMixin:
-    @classmethod
-    def get_name_by_id(cls, id=None):
-        if not id:
-            return ""
-
-        obj = cls.objects.get_object_or_none(id=id)
-        return getattr(obj, 'name', "")
-
-
 class ParentByIDMixin:
     @classmethod
     def get_parent_id(cls, object_id, parent_field):
@@ -82,9 +72,6 @@ class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):
 
     def add_intial_q(self):
         self.query.add_q(Q(is_active=True))
-
-    def get_names_for_ids(self, ids):
-        return self.filter(id__in=ids).only('name')
 
 
 class SoftDeleteModel(models.Model):

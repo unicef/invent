@@ -15,11 +15,12 @@ from user.models import UserProfile
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    CountryCustomQuestion, DonorCustomQuestion
+    CountryCustomQuestion, DonorCustomQuestion, CountryOffice
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
-    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer
+    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
+    CountryOfficeSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -60,6 +61,12 @@ class CountrySuperAdminPermissionMixin:
 
 class DonorSuperAdminPermissionMixin:
     permission_classes = (IsAuthenticated, InDonorSuperAdmin,)
+
+
+class CountryOfficeViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                           viewsets.GenericViewSet):
+    queryset = CountryOffice.objects.all()
+    serializer_class = CountryOfficeSerializer
 
 
 class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,

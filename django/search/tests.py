@@ -11,7 +11,7 @@ class SearchTests(SetupTests):
     def setUp(self):
         super(SearchTests, self).setUp()
         # create draft
-        url = reverse("project-create", kwargs=dict(country_id=self.country_id))
+        url = reverse("project-create", kwargs=dict(country_office_id=self.country_office.id))
         project_data2 = copy.deepcopy(self.project_data)
         project_data2['project'].update(name="phrase3 phrase5 overview")
         project_data2['project'].update(country=self.country_id, government_investor=2)
@@ -30,7 +30,8 @@ class SearchTests(SetupTests):
         project_id = response.json()['id']
 
         # publish it
-        url = reverse("project-publish", kwargs=dict(project_id=project_id, country_id=self.country_id))
+        url = reverse("project-publish", kwargs=dict(project_id=project_id,
+                                                     country_office_id=self.country_office.id))
         response = self.test_user_client.put(url, project_data2, format="json")
         self.assertEqual(response.status_code, 200)
 

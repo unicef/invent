@@ -229,10 +229,6 @@ class HSCGroup(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class HSCChallengeQuerySet(ActiveQuerySet):
     FakeChallenge = namedtuple('FakeChallenge', ['name', 'challenge'])
 
-    def get_names_for_ids(self, ids):
-        return [self.FakeChallenge(l.group.name, l.name)
-                for l in self.filter(id__in=ids).select_related('group')]
-
 
 class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')

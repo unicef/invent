@@ -21,7 +21,7 @@ class ListResultSerializer(serializers.Serializer):
     platforms = serializers.ReadOnlyField(source="project__data__platforms")
     health_focus_areas = serializers.ReadOnlyField(source="project__data__health_focus_areas")
     hsc_challenges = serializers.ReadOnlyField(source="project__data__hsc_challenges")
-    region = serializers.ReadOnlyField(source="country__unicef_region")
+    region = serializers.ReadOnlyField(source="country_office__region")
     donors = serializers.ReadOnlyField()
     approved = serializers.ReadOnlyField(source="project__approval__approved")
     country_custom_answers = serializers.ReadOnlyField(source="project__data__country_custom_answers")

@@ -1,17 +1,17 @@
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import MinLengthValidator
 from ordered_model.models import OrderedModel
 
-from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
 
 
-class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
+class LandingPageCommon(ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
     logo = models.ImageField(blank=True, null=True)
     cover = models.ImageField(blank=True, null=True)
@@ -88,9 +88,18 @@ class Country(UserManagement, LandingPageCommon):
         ordering = ('id',)
 
 
+class CountryOffice(ExtendedModel):
+    name = models.CharField(max_length=256)
+    region = models.IntegerField(choices=Country.UNICEF_REGIONS, null=True, blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):  # pragma: no cover
+        return self.name
+
+
 class FieldOffice(models.Model):
     name = models.CharField(max_length=256)
-    country = models.ForeignKey(Country, related_name='field_offices', on_delete=models.CASCADE)
+    country_office = models.ForeignKey(CountryOffice, blank=True, null=True, on_delete=models.CASCADE)
 
 
 @receiver(pre_save, sender=Country)

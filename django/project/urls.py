@@ -15,7 +15,7 @@ urlpatterns = [
             'get': 'retrieve',
         }),
         name="project-retrieve"),
-    path(r'projects/publish/<int:project_id>/<int:country_id>/',
+    path(r'projects/publish/<int:project_id>/<int:country_office_id>/',
          view=views.ProjectPublishViewSet.as_view({
              'put': 'update'
          }),
@@ -30,11 +30,11 @@ urlpatterns = [
              'get': 'update'
          }),
          name="project-publish-as-latest"),
-    path(r'projects/draft/<int:country_id>/',
+    path(r'projects/draft/<int:country_office_id>/',
          view=views.ProjectDraftViewSet.as_view({
              'post': 'create'
          }), name="project-create"),
-    path(r'projects/draft/<int:project_id>/<int:country_id>/',
+    path(r'projects/draft/<int:project_id>/<int:country_office_id>/',
          view=views.ProjectDraftViewSet.as_view({
              'put': 'update'
          }),
@@ -74,10 +74,6 @@ urlpatterns = [
             'put': 'update'
         }),
         name="project-groups"),
-    url(r"^projects/csv-export/$",
-        view=views.CSVExportViewSet.as_view({
-            'post': 'create'
-        }), name="csv-export"),
     url(r"^projects/map/$",
         view=views.MapProjectCountryViewSet.as_view({
             'get': 'list',

@@ -14,7 +14,7 @@ class ProjectDraftTests(SetupTests):
         # Draft
         self.project_draft_data = {'project': {
             'name': 'Draft Proj 1',
-            'country': self.country_id,
+            'country_office': self.country_office.id,
             'health_focus_areas': [],
             'dhis': [],
             'capability_levels': [],
@@ -23,12 +23,13 @@ class ProjectDraftTests(SetupTests):
             'platforms': []
         }}
 
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
         self.project_draft_id = response.json().get("id")
 
         # Published
-        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id,
+                                                 "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
         data['project'].update(name='Proj 1')
         response = self.test_user_client.put(url, data, format="json")
@@ -37,7 +38,7 @@ class ProjectDraftTests(SetupTests):
         # Draft without published
         self.project_draft_data = {'project': {
             'name': 'Draft Proj 2',
-            'country': self.country_id,
+            'country_office': self.country_office.id,
             'organisation': self.org.id,
             'health_focus_areas': [],
             'dhis': [],
@@ -47,12 +48,12 @@ class ProjectDraftTests(SetupTests):
             'platforms': []
         }}
 
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
         self.project_draft_id = response.json().get("id")
 
     def test_create_new_draft_project_basic_data(self):
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_draft_data)
         data['project'].update(name='Draft Proj 3', implementation_overview="Test overview")
         response = self.test_user_client.post(url, data, format="json")
@@ -66,14 +67,15 @@ class ProjectDraftTests(SetupTests):
         self.assertFalse(response.json()['public_id'])
 
     def test_create_new_draft_name_is_not_unique(self):
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertNotEqual(self.project_draft_id, response.json().get("id"))
         self.assertEqual(Project.objects.filter(name='Draft Proj 2').count(), 2)
 
     def test_create_new_project_bad_data(self):
-        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id,
+                                                 "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
         data.update(name="")
         data.update(organisation="")
@@ -97,7 +99,8 @@ class ProjectDraftTests(SetupTests):
         self.assertFalse(response.json()['public_id'])
 
     def test_update_draft_project(self):
-        url = reverse("project-draft", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
+        url = reverse("project-draft", kwargs={"project_id": self.project_draft_id,
+                                               "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_draft_data)
         data['project'].update(name="TestProject98")
         response = self.test_user_client.put(url, data, format="json")
@@ -128,7 +131,8 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.json()['draft']['name'], 'Draft Proj 2')
         self.assertNotEqual(response.json()['draft'], response.json()['published'])
 
-        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id,
+                                                 "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
         data['project'].update(name='Proj 2')
         response = self.test_user_client.put(url, data, format="json")
@@ -154,33 +158,36 @@ class ProjectDraftTests(SetupTests):
         project_data = copy.copy(self.project_data)
         project_data['project']['name'] = "Test Project8"
         project_data['project']['health_focus_areas'] = []
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("hsc_challenges", response.json()['draft'])
 
-    def test_published_country_cannot_change(self):
-        url = reverse("project-publish", kwargs={"project_id": self.project_pub_id, "country_id": self.country_id})
+    def test_published_country_office_cannot_change(self):
+        url = reverse("project-publish", kwargs={"project_id": self.project_pub_id,
+                                                 "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
-        data['project'].update(name='unique', country=999)
+        data['project'].update(name='unique', country_office=999)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),
-                         {'project': {'country': ['Country cannot be altered on published projects.']}})
+                         {'project': {'country_office': ['Country office cannot be altered on published projects.']}})
 
-    def test_draft_country_can_change(self):
-        url = reverse("project-draft", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
+    def test_draft_country_office_can_change(self):
+        url = reverse("project-draft", kwargs={"project_id": self.project_draft_id,
+                                               "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_draft_data)
         data['project'].update(country=20)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['draft']["country"], 20)
 
-    def test_published_country_cannot_change_even_in_draft(self):
-        url = reverse("project-draft", kwargs={"project_id": self.project_pub_id, "country_id": self.country_id})
+    def test_published_country_office_cannot_change_even_in_draft(self):
+        url = reverse("project-draft", kwargs={"project_id": self.project_pub_id,
+                                               "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
-        data['project'].update(country=20)
+        data['project'].update(country_office=20)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),
-                         {'project': {'country': ['Country cannot be altered on published projects.']}})
+                         {'project': {'country_office': ['Country office cannot be altered on published projects.']}})
