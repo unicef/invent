@@ -2,15 +2,15 @@ from django.conf import settings
 from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
-from .models import Country, Donor, FieldOffice
+from .models import Country, Donor, FieldOffice, CountryOffice
+
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
-import scheduler.celery  # noqa
 
 
 @admin.register(Country)
 class CountryAdmin(AllObjectsAdmin):
-    list_display = ('name', 'code', 'unicef_region', 'project_approval')
+    list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
 
@@ -26,7 +26,8 @@ class CountryAdmin(AllObjectsAdmin):
         fields = super(CountryAdmin, self).get_fields(request, obj)
         return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data',
                                                                             'users', 'admins', 'super_admins',
-                                                                            'lat', 'lon', 'map_activated_on']]
+                                                                            'lat', 'lon', 'map_activated_on',
+                                                                            'region', 'unicef_region']]
 
     def has_add_permission(self, request):  # pragma: no cover
         return False
@@ -37,10 +38,16 @@ class CountryAdmin(AllObjectsAdmin):
 
 @admin.register(FieldOffice)
 class FieldOfficeAdmin(admin.ModelAdmin):
-    fields = list_display = ('country', 'name')
-    ordering = search_fields = ['country__name', 'name']
+    list_display = ('id', 'country_office', 'name')
+    ordering = search_fields = ['country_office__name', 'name']
 
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
     fields = list_display = ('name', 'code')
+
+
+@admin.register(CountryOffice)
+class CountryOfficeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'region')
+    search_fields = ['name']

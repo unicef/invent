@@ -11,7 +11,7 @@ from django.utils.translation import ugettext
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, CountryOffice
 
 
 class OptionsValidatorMixin:
@@ -227,6 +227,12 @@ class CountryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
         fields = ('id', 'name', 'code', 'lat', 'lon', 'unicef_region')
+
+
+class CountryOfficeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CountryOffice
+        fields = ('id', 'name', 'region', 'country')
 
 
 DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
