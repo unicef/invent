@@ -33,6 +33,24 @@
       </custom-required-form-item>
 
       <custom-required-form-item
+        :error="errors.first('office')"
+        :draft-rule="draftRules.office"
+        :publish-rule="publishRules.office"
+      >
+        <template slot="label">
+          <translate key="office">
+            Country Office
+          </translate>
+        </template>
+        <office-select
+          v-model="office"
+          v-validate="rules.office"
+          data-vv-name="office"
+          data-vv-as="Office"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
         :error="errors.first('country')"
         :draft-rule="draftRules.country"
         :publish-rule="publishRules.country"
@@ -235,6 +253,7 @@ import CollapsibleCard from '../CollapsibleCard';
 import TeamSelector from '../TeamSelector';
 import FieldOfficeSelector from '../FieldOfficeSelector';
 import CountrySelect from '../../common/CountrySelect';
+import OfficeSelect from '../../common/OfficeSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapGetters } from 'vuex';
@@ -244,6 +263,7 @@ export default {
   components: {
     CollapsibleCard,
     CountrySelect,
+    OfficeSelect,
     TeamSelector,
     FieldOfficeSelector,
     FormHint,
@@ -259,6 +279,7 @@ export default {
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
+      office: ['project', 'getOffice', 'setOffice', 0],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0],
@@ -301,6 +322,7 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country'),
+        this.$validator.validate('office'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
       ]);
