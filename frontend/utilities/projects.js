@@ -21,7 +21,7 @@ export const projectFields = () => ({
   name: null,
   organisation: 56,
   country: null,
-  office: null,
+  country_office: null,
   modified: null,
   field_office: null,
   implementation_overview: null,
@@ -50,7 +50,9 @@ export const draftRules = () => {
       min: 1,
       max: 128
     },
-
+    country_office: {
+      required: true
+    },
     organisation: {
       required: false,
       max: 128
@@ -84,7 +86,7 @@ export const publishRules = () => {
     country: {
       required: true
     },
-    office: {
+    country_office: {
       required: true
     },
     geographic_scope: {

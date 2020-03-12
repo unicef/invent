@@ -16,6 +16,7 @@
         <el-tag
           size="mini"
           type="danger"
+          :key="1"
         >
           Private field
         </el-tag>

@@ -1,7 +1,7 @@
 export const state = () => ({
   offices: [],
   office: {},
-  current: 0,
+  current: 0
 });
 
 export const mutations = {
@@ -12,18 +12,18 @@ export const mutations = {
     state.office = obj;
   },
   SET_CURRENT: (state, id) => {
-    state.current = id
+    state.current = id;
   }
 };
 
 export const actions = {
   async loadOffices ({ commit }) {
-    let data = await utilities.handleRequest(this.$axios);
+    const data = await utilities.handleRequest(this.$axios);
     utilities.sortArr(data instanceof Error ? [] : data);
     commit('SET_OFFICES', data instanceof Error ? [] : data);
   },
   async loadOffice ({ commit }, id = 1) {
-    let data = await utilities.handleRequest(this.$axios, id);
+    const data = await utilities.handleRequest(this.$axios, id);
     commit('SET_OFFICE', data instanceof Error ? {} : data);
   },
   async setOffice ({ commit }, id) {
@@ -44,4 +44,4 @@ const utilities = {
       return e;
     }
   }
-}
+};
