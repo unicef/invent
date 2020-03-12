@@ -159,6 +159,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
         project_data = copy.deepcopy(request.data['project']) if 'project' in request.data else {}
         project_data['country'] = country.id
+        project.data['country_office_id'] = country_office_id
 
         country_answers = None
         all_donor_answers = []
