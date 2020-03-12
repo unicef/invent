@@ -46,9 +46,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadOffices: 'offices/loadOffices',
-      loadOffice: 'offices/loadOffice',
-      setOffice: 'offices/setOffice'
+      loadOffices: 'offices/loadOffices'
     })
   }
 };

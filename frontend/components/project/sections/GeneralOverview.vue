@@ -50,31 +50,13 @@
         />
       </custom-required-form-item>
 
-      <custom-required-form-item
-        :error="errors.first('country')"
-        :draft-rule="draftRules.country"
-        :publish-rule="publishRules.country"
-      >
-        <template slot="label">
-          <translate key="country">
-            Country
-          </translate>
-        </template>
-        <country-select
-          v-model="country"
-          v-validate="rules.country"
-          data-vv-name="country"
-          data-vv-as="Country"
-        />
-      </custom-required-form-item>
-
       <custom-required-form-item>
         <template slot="label">
           <translate key="country">
             Country
           </translate>
         </template>
-        {{ selectedRegion }}
+        {{ countryOfOffice }}
       </custom-required-form-item>
 
       <custom-required-form-item>
@@ -265,7 +247,7 @@ import CountrySelect from '../../common/CountrySelect';
 import CountryOfficeSelect from '../../common/CountryOfficeSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
 
 export default {
@@ -280,6 +262,9 @@ export default {
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
     ...mapGetters({
       unicef_regions: 'system/getUnicefRegions',
       getCountryDetails: 'countries/getCountryDetails',
@@ -312,6 +297,10 @@ export default {
       }
       return 'N/A';
     },
+    countryOfOffice () {
+      const office = this.offices.find(obj => obj.id === this.country_office);
+      return office ? this.getCountryDetails(office.country).name : 'N/A';
+    },
     lastUpdated () {
       return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
     }
@@ -330,7 +319,6 @@ export default {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate('name'),
-        this.$validator.validate('country'),
         this.$validator.validate('country_office'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')

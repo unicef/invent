@@ -83,9 +83,6 @@ export const publishRules = () => {
       required: true,
       max: 128
     },
-    country: {
-      required: true
-    },
     country_office: {
       required: true
     },

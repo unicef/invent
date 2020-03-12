@@ -261,7 +261,6 @@ export const actions = {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = 56;
-    console.log(draft);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country_office}/`, parsed);
     await dispatch('setProject', { data, id });
