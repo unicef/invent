@@ -33,20 +33,20 @@
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('office')"
-        :draft-rule="draftRules.office"
-        :publish-rule="publishRules.office"
+        :error="errors.first('country_office')"
+        :draft-rule="draftRules.country_office"
+        :publish-rule="publishRules.country_office"
       >
         <template slot="label">
-          <translate key="office">
+          <translate key="country_office">
             Country Office
           </translate>
         </template>
-        <office-select
-          v-model="office"
-          v-validate="rules.office"
-          data-vv-name="office"
-          data-vv-as="Office"
+        <country-office-select
+          v-model="country_office"
+          v-validate="rules.country_office"
+          data-vv-name="country_office"
+          data-vv-as="country_office"
         />
       </custom-required-form-item>
 
@@ -66,6 +66,15 @@
           data-vv-name="country"
           data-vv-as="Country"
         />
+      </custom-required-form-item>
+
+      <custom-required-form-item>
+        <template slot="label">
+          <translate key="country">
+            Country
+          </translate>
+        </template>
+        {{ selectedRegion }}
       </custom-required-form-item>
 
       <custom-required-form-item>
@@ -253,7 +262,7 @@ import CollapsibleCard from '../CollapsibleCard';
 import TeamSelector from '../TeamSelector';
 import FieldOfficeSelector from '../FieldOfficeSelector';
 import CountrySelect from '../../common/CountrySelect';
-import OfficeSelect from '../../common/OfficeSelect';
+import CountryOfficeSelect from '../../common/CountryOfficeSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapGetters } from 'vuex';
@@ -263,7 +272,7 @@ export default {
   components: {
     CollapsibleCard,
     CountrySelect,
-    OfficeSelect,
+    CountryOfficeSelect,
     TeamSelector,
     FieldOfficeSelector,
     FormHint,
@@ -279,7 +288,7 @@ export default {
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
-      office: ['project', 'getOffice', 'setOffice', 0],
+      country_office: ['project', 'getCountryOffice', 'setCountryOffice', 0],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0],
@@ -322,7 +331,7 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country'),
-        this.$validator.validate('office'),
+        this.$validator.validate('country_office'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
       ]);

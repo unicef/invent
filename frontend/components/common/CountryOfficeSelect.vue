@@ -28,11 +28,6 @@ export default {
       default: null
     }
   },
-  data() {
-    return {
-      id: ''
-    }
-  },
   computed: {
     ...mapState({
       offices: state => state.offices.offices
@@ -44,22 +39,17 @@ export default {
       set (value) {
         this.$emit('change', value);
       }
-    },
+    }
   },
-  mounted() {
-    this.loadOffices()
-    this.loadOffice(1)
-    // this.id = 3
+  mounted () {
+    this.loadOffices();
   },
   methods: {
     ...mapActions({
       loadOffices: 'offices/loadOffices',
       loadOffice: 'offices/loadOffice',
-      setOffice: 'offices/setOffice',
-    }),
-    handleChange (id) {
-      this.setOffice(id)
-    }
+      setOffice: 'offices/setOffice'
+    })
   }
 };
 </script>
