@@ -12,7 +12,7 @@ from simple_history.models import HistoricalRecords
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
-from country.models import Country, Donor
+from country.models import Country, Donor, CountryOffice
 from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys
 from user.models import UserProfile
@@ -355,6 +355,7 @@ class ProjectImportV2(ExtendedModel):
     status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
     header_mapping = JSONField(default=dict, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.SET_NULL)
+    country_office = models.ForeignKey(CountryOffice, null=True, blank=True, on_delete=models.SET_NULL)
     donor = models.ForeignKey(Donor, null=True, blank=True, on_delete=models.SET_NULL)
     filename = models.CharField(max_length=256, null=True, blank=True)
     sheet_name = models.CharField(max_length=256, null=True, blank=True)
