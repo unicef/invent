@@ -374,7 +374,7 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectImportV2
         fields = ('id', 'user', 'status', 'header_mapping',
-                  'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
+                  'rows', 'country', 'country_office', 'donor', 'filename', 'sheet_name', 'draft')
 
     # TODO: Need Coverage
     def create(self, validated_data):  # pragma: no cover
