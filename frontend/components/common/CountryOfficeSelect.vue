@@ -54,6 +54,6 @@ export default {
 
 <style lang="less" scoped>
   .select-office {
-    width: 50%;
+    width: 100%;
   }
 </style>

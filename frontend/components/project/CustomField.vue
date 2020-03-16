@@ -14,9 +14,9 @@
         content="This field is hidden from public"
       >
         <el-tag
+          :key="1"
           size="mini"
           type="danger"
-          :key="1"
         >
           Private field
         </el-tag>
