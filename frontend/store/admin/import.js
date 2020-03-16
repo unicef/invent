@@ -8,7 +8,6 @@ export const actions = {
   async loadQueue ({ commit, state }) {
     if (!state.queue || state.queue.length === 0) {
       const { data } = await this.$axios.get('/api/projects/import/');
-      console.log(data)
       commit('SET_QUEUE', data);
     }
   },

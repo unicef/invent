@@ -243,7 +243,6 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import TeamSelector from '../TeamSelector';
 import FieldOfficeSelector from '../FieldOfficeSelector';
-import CountrySelect from '../../common/CountrySelect';
 import CountryOfficeSelect from '../../common/CountryOfficeSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
@@ -253,7 +252,6 @@ import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTea
 export default {
   components: {
     CollapsibleCard,
-    CountrySelect,
     CountryOfficeSelect,
     TeamSelector,
     FieldOfficeSelector,
@@ -335,7 +333,7 @@ export default {
   @import "~assets/style/mixins.less";
 
   .GeneralOverview {
-    .CountrySelector {
+    .CountrySelector, .select-office {
       width: 50%;
     }
 

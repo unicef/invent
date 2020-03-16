@@ -286,7 +286,7 @@ export default {
       return result || {};
     }
   },
-  mounted() {
+  mounted () {
     this.loadOffice(this.project.country_office);
   },
   methods: {
