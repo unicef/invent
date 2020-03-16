@@ -6,15 +6,22 @@
     <el-row type="flex">
       <el-col :span="6">
         <div class="Label">
-          <translate>Selected Country</translate>
+          <translate>Country Office</translate>
         </div>
-        <country-item :id="item.country" />
+        {{countryOffice}}
+      </el-col>
+
+      <el-col :span="6">
+        <div class="Label">
+          <translate>Country</translate>
+        </div>
+        <country-item :id="countryId" />
       </el-col>
 
       <el-col :span="6">
         <div class="Label">
           <translate>
-            Selected Investor
+            Investor
           </translate>
         </div>
         <donor-item :id="item.donor" />
@@ -56,6 +63,7 @@
 <script>
 import CountryItem from '@/components/common/CountryItem';
 import DonorItem from '@/components/common/DonorItem';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -66,6 +74,19 @@ export default {
     item: {
       type: Object,
       default: null
+    }
+  },
+  computed: {
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
+    countryOffice () {
+      const office = this.offices.find(obj => obj.id === this.item.country_office);
+      return office ? office.name : 'N/A';
+    },
+    countryId () {
+      const office = this.offices.find(obj => obj.id === this.item.country_office);
+      return office ? office.country : undefined;
     }
   }
 };
