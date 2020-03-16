@@ -32,7 +32,7 @@
       </p>
       <p>
         <translate>
-          Note that your data should be organized to have data from only one country included in a spreadsheet.
+          Note that your data should be organized to have data from only one country office included in a spreadsheet.
         </translate>
       </p>
       <p>
@@ -104,15 +104,15 @@
       <template #label>
         <form-hint>
           <translate>
-            Select Country
+            Select Country Office
           </translate>
           <template #hint>
-            <translate>Data can only be added one country at a time. If your data is from more than one country, you can make a separate sheet for each country.</translate>
+            <translate>Data can only be added one country office at a time. If your data is from more than one office, you can make a separate sheet for each one.</translate>
           </template>
         </form-hint>
       </template>
-      <country-select
-        v-model="country"
+      <country-office-select
+        v-model="country_office"
       />
     </el-form-item>
     <el-form-item
@@ -151,7 +151,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import CountrySelect from '@/components/common/CountrySelect';
+import CountryOfficeSelect from '@/components/common/CountryOfficeSelect';
 import FormHint from '@/components/common/FormHint';
 import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
 import { importTemplate, nameMapping } from '@/utilities/import';
@@ -160,7 +160,7 @@ import get from 'lodash/get';
 
 export default {
   components: {
-    CountrySelect,
+    CountryOfficeSelect,
     XlsxRead,
     XlsxSheets,
     XlsxJson,
@@ -171,7 +171,7 @@ export default {
   },
   data () {
     return {
-      country: null,
+      country_office: null,
       donor: 20,
       isDraftOrPublish: 'draft',
       inputFile: null,
@@ -185,6 +185,9 @@ export default {
     }),
     ...mapState('projects', {
       projectDicts: state => state.projectStructure
+    }),
+    ...mapState({
+      offices: state => state.offices.offices
     }),
     finalImportTemplate () {
       const unicefCustomQuestions = get(this, 'systemDicts.donorsLibrary.20.donor_questions');
@@ -262,7 +265,8 @@ export default {
       this.$nuxt.$loading.start('importXLSX');
       const importData = {
         filename: this.inputFile.name,
-        country: this.country,
+        country_office: this.country_office,
+        country: this.offices.find(obj => obj.id === this.country_office).country,
         donor: this.donor,
         sheet_name: this.selectedSheet,
         header_mapping: Object.keys(this.parsed[0]).map(title => ({ selected: null, title })),
@@ -301,10 +305,6 @@ export default {
   .XLSXTemplate{
     color: blue;
     text-decoration: underline;
-  }
-
-  .Info {
-
   }
 }
 </style>
