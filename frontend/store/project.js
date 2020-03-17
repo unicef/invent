@@ -30,6 +30,7 @@ export const getters = {
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
+  getCountryOffice: state => state.country_office,
   getFieldOffice: state => state.field_office,
   getModified: state => state.modified,
   getImplementationOverview: state => state.implementation_overview,
@@ -113,6 +114,7 @@ export const actions = {
     const profile = rootGetters['user/getProfile'];
     if (profile) {
       clean.country = profile.country;
+      clean.country_office = profile.country_office;
       clean.team = [profile.id];
       clean.organisation = 56;
       clean.donors = [20];
@@ -161,6 +163,10 @@ export const actions = {
   setCountry ({ commit, dispatch }, value) {
     dispatch('countries/loadCountryDetails', value, { root: true });
     commit('SET_COUNTRY', value);
+  },
+  setCountryOffice ({ commit, dispatch }, value) {
+    dispatch('offices/loadOffice', value, { root: true });
+    commit('SET_COUNTRY_OFFICE', value);
   },
   setImplementationOverview ({ commit }, value) {
     commit('SET_IMPLEMENTATION_OVERVIEW', value);
@@ -245,18 +251,18 @@ export const actions = {
     const draft = getters.getProjectData;
     draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
-    const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
+    const { data } = await this.$axios.post(`api/projects/draft/${draft.country_office}/`, parsed);
     dispatch('projects/addProjectToList', data, { root: true });
     await dispatch('saveTeamViewers', data.id);
     dispatch('setLoading', false);
     return data.id;
   },
-  async saveDraft ({ getters, dispatch }, id) {
+  async saveDraft ({ state, getters, dispatch }, id) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country_office}/`, parsed);
     await dispatch('setProject', { data, id });
     dispatch('setLoading', false);
   },
@@ -265,7 +271,7 @@ export const actions = {
     const draft = getters.getProjectData;
     draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
-    const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
+    const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country_office}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     await dispatch('setProject', { data, id });
@@ -295,7 +301,7 @@ export const actions = {
     dispatch('setLoading', 'discard');
     const published = getters.getPublished;
     const parsed = apiWriteParser(published, published.country_custom_answers, published.donor_custom_answers);
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/${published.country}/`, parsed);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/${published.country_office}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     commit('INIT_PROJECT', parsedResponse);
     dispatch('projects/updateProject', data, { root: true });
@@ -315,6 +321,9 @@ export const mutations = {
   },
   SET_COUNTRY: (state, country) => {
     state.country = country;
+  },
+  SET_COUNTRY_OFFICE: (state, office) => {
+    state.country_office = office;
   },
   SET_IMPLEMENTATION_OVERVIEW: (state, implementation_overview) => {
     state.implementation_overview = implementation_overview;
@@ -373,6 +382,7 @@ export const mutations = {
     state.name = get(project, 'name', '');
     state.organisation = get(project, 'organisation', 56);
     state.country = get(project, 'country', null);
+    state.country_office = get(project, 'country_office', null);
     state.modified = get(project, 'modified', null);
     state.field_office = get(project, 'field_office', null);
     state.implementation_overview = get(project, 'implementation_overview', '');

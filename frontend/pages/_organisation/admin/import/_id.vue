@@ -318,7 +318,8 @@ export default {
     },
     async doSingleRowSave (doSave, nested) {
       try {
-        const newRow = await doSave(this.rawImport.country, this.rawImport.donor, !this.rawImport.draft);
+        const { country, country_office, donor, draft } = this.rawImport
+        const newRow = await doSave(country, donor, !draft, country_office);
         await this.patchRow(newRow);
         return newRow;
       } catch (e) {

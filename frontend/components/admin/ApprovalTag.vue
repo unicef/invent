@@ -1,6 +1,7 @@
 <template>
   <div class="ApprovalTag">
     <el-tag
+      :key="value"
       :type="value ? 'success' : value === null ? 'warning' : 'danger'"
       size="small"
       disable-transitions

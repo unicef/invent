@@ -4,23 +4,31 @@
     class="ImportDetails"
   >
     <el-row type="flex">
-      <el-col :span="6">
+
+      <el-col :span="8">
         <div class="Label">
-          <translate>Selected Country</translate>
+          <translate>Country</translate>
         </div>
-        <country-item :id="item.country" />
+        <country-item :id="countryId" />
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="8">
+        <div class="Label">
+          <translate>Office</translate>
+        </div>
+        {{ countryOffice }}
+      </el-col>
+
+      <el-col :span="8">
         <div class="Label">
           <translate>
-            Selected Investor
+            Investor
           </translate>
         </div>
         <donor-item :id="item.donor" />
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="8">
         <div class="Label">
           <translate>
             Draft or Published
@@ -37,7 +45,7 @@
         </div>
         {{ item.sheet_name }}
       </el-col>
-      <el-col :span="18">
+      <el-col :span="10">
         <div class="Label">
           <translate>
             File Name
@@ -56,6 +64,7 @@
 <script>
 import CountryItem from '@/components/common/CountryItem';
 import DonorItem from '@/components/common/DonorItem';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -67,6 +76,29 @@ export default {
       type: Object,
       default: null
     }
+  },
+  computed: {
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
+    countryOffice () {
+      const office = this.offices.find(obj => obj.id === this.item.country_office);
+      return office ? office.name : 'N/A';
+    },
+    countryId () {
+      const office = this.offices.find(obj => obj.id === this.item.country_office);
+      return office ? office.country : undefined;
+    }
+  },
+  mounted () {
+    if (this.offices.length === 0) {
+      this.loadOffices();
+    }
+  },
+  methods: {
+    ...mapActions({
+      loadOffices: 'offices/loadOffices'
+    })
   }
 };
 </script>
@@ -75,7 +107,7 @@ export default {
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
- .Label {
+  .Label {
     display: block;
     margin: 0 0 15px;
     color: @colorTextPrimary;
