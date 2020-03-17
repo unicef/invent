@@ -56,6 +56,7 @@ export default {
         team: undefined,
         viewers: undefined,
         country: undefined,
+        country_office: undefined,
         donors: undefined
       };
     },

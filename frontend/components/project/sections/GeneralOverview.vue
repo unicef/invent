@@ -33,21 +33,30 @@
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('country')"
-        :draft-rule="draftRules.country"
-        :publish-rule="publishRules.country"
+        :error="errors.first('country_office')"
+        :draft-rule="draftRules.country_office"
+        :publish-rule="publishRules.country_office"
       >
+        <template slot="label">
+          <translate key="country_office">
+            Country Office
+          </translate>
+        </template>
+        <country-office-select
+          v-model="country_office"
+          v-validate="rules.country_office"
+          data-vv-name="country_office"
+          data-vv-as="country_office"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item>
         <template slot="label">
           <translate key="country">
             Country
           </translate>
         </template>
-        <country-select
-          v-model="country"
-          v-validate="rules.country"
-          data-vv-name="country"
-          data-vv-as="Country"
-        />
+        {{ countryOfOffice }}
       </custom-required-form-item>
 
       <custom-required-form-item>
@@ -234,16 +243,16 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import TeamSelector from '../TeamSelector';
 import FieldOfficeSelector from '../FieldOfficeSelector';
-import CountrySelect from '../../common/CountrySelect';
+import CountryOfficeSelect from '../../common/CountryOfficeSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
 
 export default {
   components: {
     CollapsibleCard,
-    CountrySelect,
+    CountryOfficeSelect,
     TeamSelector,
     FieldOfficeSelector,
     FormHint,
@@ -251,6 +260,9 @@ export default {
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
     ...mapGetters({
       unicef_regions: 'system/getUnicefRegions',
       getCountryDetails: 'countries/getCountryDetails',
@@ -259,6 +271,7 @@ export default {
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
+      country_office: ['project', 'getCountryOffice', 'setCountryOffice', 0],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0],
@@ -282,6 +295,10 @@ export default {
       }
       return 'N/A';
     },
+    countryOfOffice () {
+      const office = this.offices.find(obj => obj.id === this.country_office);
+      return office ? this.getCountryDetails(office.country).name : 'N/A';
+    },
     lastUpdated () {
       return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
     }
@@ -300,7 +317,7 @@ export default {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate('name'),
-        this.$validator.validate('country'),
+        this.$validator.validate('country_office'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
       ]);
@@ -316,7 +333,7 @@ export default {
   @import "~assets/style/mixins.less";
 
   .GeneralOverview {
-    .CountrySelector {
+    .CountrySelector, .select-office {
       width: 50%;
     }
 

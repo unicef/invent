@@ -17,6 +17,11 @@
             <organisation-item :id="project.organisation" />
           </simple-field>
 
+          <simple-field
+            :header="$gettext('Country Office') | translate"
+            :content="office.name"
+          />
+
           <simple-field :header="$gettext('Country') | translate">
             <country-item
               :id="project.country"
@@ -207,7 +212,7 @@ import DonorsList from '../common/list/DonorsList';
 import CustomReadonlyField from './CustomReadonlyField';
 import handleProjectActions from '@/components/mixins/handleProjectActions';
 
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -228,6 +233,9 @@ export default {
   },
   mixins: [handleProjectActions],
   computed: {
+    ...mapState({
+      office: state => state.offices.office
+    }),
     ...mapGetters({
       draft: 'project/getProjectData',
       published: 'project/getPublished',
@@ -278,7 +286,13 @@ export default {
       return result || {};
     }
   },
+  mounted () {
+    this.loadOffice(this.project.country_office);
+  },
   methods: {
+    ...mapActions({
+      loadOffice: 'offices/loadOffice'
+    }),
     customFieldsName (name) {
       return this.$gettext('{name} custom fields', { name });
     }
