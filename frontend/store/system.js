@@ -108,6 +108,7 @@ export const actions = {
   async loadStaticData ({ commit, dispatch }) {
     try {
       const { data } = await this.$axios.get('/api/static-data/');
+      console.log(data);
       commit('SET_AXIS', data.axis);
       commit('SET_DOMAINS', data.domains);
       commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
