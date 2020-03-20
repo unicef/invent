@@ -44,6 +44,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__name",
         "organisation_id",
         "country_id",
+        "country_office_id",
         "project__approval__approved",
     )
     list_values = (
@@ -52,6 +53,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__modified",
         "organisation_id",
         "country_id",
+        "country_office_id",
         "project__data__implementation_overview",
         "project__data__contact_name",
         "project__data__contact_email",
@@ -77,7 +79,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='')\
-            .select_related('project', 'project__approval', 'organisation', 'country', 'donor')
+            .select_related('project', 'project__approval', 'organisation', 'country', 'donor', 'country_office')
 
     def list(self, request, *args, **kwargs):
         """
