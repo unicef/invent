@@ -6,6 +6,7 @@ class MapResultSerializer(serializers.Serializer):
     name = serializers.ReadOnlyField(source="project__name")
     organisation = serializers.ReadOnlyField(source="organisation_id")
     country = serializers.ReadOnlyField(source="country_id")
+    country_office = serializers.ReadOnlyField(source="country_office_id")
     approved = serializers.ReadOnlyField(source="project__approval__approved")
 
 
@@ -15,6 +16,7 @@ class ListResultSerializer(serializers.Serializer):
     modified = serializers.ReadOnlyField(source="project__modified")
     organisation = serializers.ReadOnlyField(source="organisation_id")
     country = serializers.ReadOnlyField(source="country_id")
+    country_office = serializers.ReadOnlyField(source="country_office_id")
     implementation_overview = serializers.ReadOnlyField(source="project__data__implementation_overview")
     contact_name = serializers.ReadOnlyField(source="project__data__contact_name")
     contact_email = serializers.ReadOnlyField(source="project__data__contact_email")
