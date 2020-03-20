@@ -1,6 +1,7 @@
 import copy
 
 from django.urls import reverse
+from rest_framework import status
 
 from country.models import Donor, DonorCustomQuestion, CountryCustomQuestion
 from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
@@ -142,6 +143,18 @@ class SearchTests(SetupTests):
         data = {"country": self.country_id + 999}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 0)
+
+    def test_filter_country_office(self):
+        url = reverse("search-project-list")
+        data = {"co": self.country_office.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"co": self.country_office.id + 999}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 0)
 
     def test_filter_and_search(self):
