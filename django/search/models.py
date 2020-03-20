@@ -99,7 +99,7 @@ class ProjectSearch(ExtendedModel):
         if selected_fields:
             for field in selected_fields:
                 if query_params[field]:
-                    if field in ["country", "region", "goal", "result", "fo"]:
+                    if field in ["country", 'co', "region", "goal", "result", "fo"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field in ["donor", "sw", "dhi", "hfa", "hsc",
