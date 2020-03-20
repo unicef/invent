@@ -2,17 +2,21 @@
   <div class="CountryFilters">
     <region-select
       v-model="selectedRegion"
-      :disabled="disableRegions"
+      :disabled="disabledRegions"
     />
     <country-select
       v-model="selectedCountries"
-      :disabled="disableCountries"
-      :region="disableCountries ? -1 : selectedRegion"
+      :disabled="disabledCountries"
     />
-    <field-office-selector
+    <country-office-select
+      v-model="selectedCountryOffice"
+      :disabled="disabledCountryOffice"
+      :regionFilter="selectedRegion"
+    />
+    <!-- <field-office-selector
       v-model="selectedOffice"
       :country="firstSelectedCountry"
-    />
+    /> -->
   </div>
 </template>
 
@@ -20,12 +24,14 @@
 import { mapGettersActions } from '../../utilities/form.js';
 
 import CountrySelect from '../common/CountrySelect';
+import CountryOfficeSelect from '@/components/common/CountryOfficeSelect';
 import RegionSelect from '../common/RegionSelect';
 import FieldOfficeSelector from '../project/FieldOfficeSelector';
 import { mapGetters } from 'vuex';
 export default {
   components: {
     CountrySelect,
+    CountryOfficeSelect,
     RegionSelect,
     FieldOfficeSelector
   },
@@ -36,13 +42,17 @@ export default {
     ...mapGettersActions({
       selectedCountries: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
       selectedOffice: ['dashboard', 'getFilteredOffice', 'setFilteredOffice'],
-      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
+      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion'],
+      selectedCountryOffice: ['dashboard', 'getFilteredCountryOffice', 'setFilteredCountryOffice']
     }),
-    disableCountries () {
-      return (!this.selectedRegion && this.selectedRegion !== 0) || this.dashboardType === 'country';
+    disabledCountries () {
+      return typeof(this.selectedRegion) === 'number' ? true : false;
     },
-    disableRegions () {
-      return this.dashboardType === 'country';
+    disabledCountryOffice () {
+      return typeof(this.selectedRegion) === 'number' ? false : true;
+    },
+    disabledRegions () {
+      return this.selectedCountries.length > 0 ? true : false;
     },
     firstSelectedCountry () {
       return this.selectedCountries && this.selectedCountries.length ? this.selectedCountries[0] : null;
@@ -56,6 +66,7 @@ export default {
     },
     selectedRegion (newRegion) {
       this.selectedCountries = this.selectedCountries.filter(c => c.unicef_region === newRegion.id);
+      this.selectedCountryOffice = null;
     }
   }
 };

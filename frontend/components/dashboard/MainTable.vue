@@ -69,6 +69,19 @@
       </el-table-column>
 
       <el-table-column
+        v-if="selectedColumns.includes('4')"
+        :resizable="false"
+        :label="$gettext('Country Office') | translate"
+        sortable="custom"
+        prop="country_office__name"
+        width="180"
+      >
+        <template slot-scope="scope">
+          {{scope.row.country_office}}
+        </template>
+      </el-table-column>
+
+      <el-table-column
         v-if="selectedColumns.includes('3')"
         :resizable="false"
         :label="$gettext('Last updated') | translate"
