@@ -13,10 +13,6 @@
       :disabled="disabledCountryOffice"
       :regionFilter="selectedRegion"
     />
-    <!-- <field-office-selector
-      v-model="selectedOffice"
-      :country="firstSelectedCountry"
-    /> -->
   </div>
 </template>
 
@@ -41,7 +37,6 @@ export default {
     }),
     ...mapGettersActions({
       selectedCountries: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
-      selectedOffice: ['dashboard', 'getFilteredOffice', 'setFilteredOffice'],
       selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion'],
       selectedCountryOffice: ['dashboard', 'getFilteredCountryOffice', 'setFilteredCountryOffice']
     }),

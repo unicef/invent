@@ -96,18 +96,21 @@ const MapMixin = {
           fillColor: '#42B883'
         },
         iconCreateFunction: (cluster) => {
-          const projects = cluster.getAllChildMarkers().reduce((a, c) => a + c.options.projects, 0);
-          const html = `<span>${projects}</span>`;
-          const classes = ['CountryClusterIcon'];
-          if (projects === 0) {
-            classes.push('EmptyCluster');
+          if (cluster) {
+            const projects = cluster.getAllChildMarkers().reduce((a, c) => a + c.options.projects, 0);
+            const html = `<span>${projects}</span>`;
+            const classes = ['CountryClusterIcon'];
+            if (projects === 0) {
+              classes.push('EmptyCluster');
+            }
+            return L.divIcon({
+              className: classes.join(' '),
+              html,
+              iconSize: [40, 40],
+              iconAnchor: [20, 40]
+            });
           }
-          return L.divIcon({
-            className: classes.join(' '),
-            html,
-            iconSize: [40, 40],
-            iconAnchor: [20, 40]
-          });
+          return L.divIcon({})
         }
       };
     }
@@ -129,7 +132,13 @@ const MapMixin = {
       handler () {
         this.iconsGenerator();
         this.$nextTick(() => {
-          this.$refs.markerCluster.mapObject.refreshClusters();
+          if (this.$refs.markerCluster.mapObject) {
+            try {
+              this.$refs.markerCluster.mapObject.refreshClusters();
+            } catch (e) {
+              console.log(e)
+            }
+          }
         });
       }
     },
