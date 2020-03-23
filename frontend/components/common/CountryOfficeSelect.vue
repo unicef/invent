@@ -34,7 +34,7 @@ export default {
     },
     regionFilter: {
       type: [Number, String],
-      default: NaN
+      default: undefined
     }
   },
   computed: {
@@ -50,7 +50,7 @@ export default {
       }
     },
     officeList () {
-      if (this.regionFilter !== NaN) {
+      if (this.regionFilter !== undefined) {
         return this.offices.filter((office) => office.region === this.regionFilter);
       }
       return this.offices;
