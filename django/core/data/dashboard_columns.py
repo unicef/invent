@@ -7,6 +7,8 @@ DASHBOARD_COLUMNS = [
      'label': _('Country')},
     {'id': 3,
      'label': _('Last updated')},
+    {'id': 4,
+     'label': _('Country Office')},
     {'id': 5,
      'label': _('Region')},
     {'id': 6,
