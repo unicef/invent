@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.translation import ugettext
 from django.template import loader
 
@@ -27,6 +28,30 @@ from scheduler.celery import app
 from urllib.parse import urljoin
 
 logger = get_task_logger(__name__)
+
+
+@app.task(name="project_still_in_draft_notification")
+def project_still_in_draft_notification():
+    """
+    Sends notification if a project is in draft state for over a month.
+    """
+    now = timezone.now()
+    projects = Project.objects.filter(public_id='').filter(modified__lt=now - timezone.timedelta(days=31))
+
+    if not projects:  # pragma: no cover
+        return
+
+    for project in projects:
+        email_mapping = defaultdict(list)
+        for profile in project.team.all():
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            send_mail_wrapper(subject='Project has been in draft state for over a month',
+                              email_type='project_still_in_draft',
+                              to=email_list,
+                              language=language,
+                              context={'project_name': project.name})
 
 
 @app.task(name="send_project_approval_digest")
