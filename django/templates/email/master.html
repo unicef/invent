@@ -370,6 +370,12 @@
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
+                        <!-- TEMPLATE: PROJECT STILL IN DRAFT -->
+                        {% elif type == "project_still_in_draft" %}
+                        <p>{% blocktrans %}Project: <b>{{ project_name }}</b> has been in draft state for over a month.{% endblocktrans %}</p>
+                        <!-- /TEMPLATE: PROJECT STILL IN DRAFT -->
+
+
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
