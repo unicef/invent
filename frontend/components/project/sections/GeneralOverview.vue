@@ -33,7 +33,7 @@
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('country_office')"
+        :error="errors.first('country_office') ? errors.first('country_office').replace('_', ' ') : undefined"
         :draft-rule="draftRules.country_office"
         :publish-rule="publishRules.country_office"
       >
@@ -76,7 +76,7 @@
         </template>
         <FieldOfficeSelector
           v-model="field_office"
-          :country="country"
+          :office="country_office"
         />
       </custom-required-form-item>
 
@@ -288,9 +288,9 @@ export default {
       return '';
     },
     selectedRegion () {
-      const country = this.getCountryDetails(this.country);
-      if (country) {
-        const result = this.unicef_regions.find(uf => uf.id === country.unicef_region);
+      const office = this.offices.find(obj => obj.id === this.country_office);
+      if (office) {
+        const result = this.unicef_regions.find(uf => uf.id === office.region);
         return (result && result.name) || 'N/A';
       }
       return 'N/A';
