@@ -5,7 +5,7 @@ from django.utils import timezone
 from freezegun import freeze_time
 
 from project.models import Project
-from project.tasks import project_still_in_draft_notification
+from project.tasks import project_still_in_draft_notification, published_projects_updated_long_ago
 from project.tests.setup import SetupTests
 from user.models import UserProfile
 
@@ -58,3 +58,61 @@ class ProjectNotificationTests(SetupTests):
         self.assertEqual(call_args_list_2['email_type'], 'project_still_in_draft')
         self.assertEqual(call_args_list_2['to'], [user_2.email])
         self.assertEqual(call_args_list_2['context'], {'project_name': 'Draft project 2'})
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_published_projects_updated_long_ago(self, send_mail_wrapper):
+        now = timezone.now()
+
+        user_1 = User.objects.create(username='bh_1', email='bh+1@pulilab.com')
+        profile_1 = UserProfile.objects.create(user=user_1)
+        user_2 = User.objects.create(username='bh_2', email='bh+2@pulilab.com')
+        profile_2 = UserProfile.objects.create(user=user_2)
+        user_3 = User.objects.create(username='bh_3', email='bh+3@pulilab.com')
+        profile_3 = UserProfile.objects.create(user=user_3)
+
+        with freeze_time(now - timezone.timedelta(days=200)):
+            draft_project_1 = Project.objects.create(name='Draft project 1', public_id='')
+            draft_project_1.team.add(profile_1)
+
+            # make a published project without API calls
+            data = dict(country=self.country.id, country_office=self.country_office.id, organisation=self.org.id,
+                        hsc_challenges=[1, 2], platforms=[1, 2], capability_categories=[], capability_levels=[],
+                        capability_subcategories=[])
+            published_project_1 = Project.objects.create(name='Published project 1', data=data, public_id='1234')
+            published_project_1.team.add(profile_1)
+
+        with freeze_time(now - timezone.timedelta(days=190)):
+            draft_project_2 = Project.objects.create(name='Draft project 2', public_id='')
+            draft_project_2.team.add(profile_2)
+
+            # make a published project without API calls
+            data = dict(country=self.country.id, country_office=self.country_office.id, organisation=self.org.id,
+                        hsc_challenges=[1, 2], platforms=[1, 2], capability_categories=[], capability_levels=[],
+                        capability_subcategories=[])
+            published_project_2 = Project.objects.create(name='Published project 2', data=data, public_id='2345')
+            published_project_2.team.add(profile_2)
+
+        with freeze_time(now - timezone.timedelta(days=100)):
+            # make a published project without API calls
+            data = dict(country=self.country.id, country_office=self.country_office.id, organisation=self.org.id,
+                        hsc_challenges=[1, 2], platforms=[1, 2], capability_categories=[], capability_levels=[],
+                        capability_subcategories=[])
+            published_project_3 = Project.objects.create(name='Published project 3', data=data, public_id='3456')
+            published_project_3.team.add(profile_3)
+
+        published_projects_updated_long_ago.apply()
+
+        # task should send emails about Published project 1 and Published project 2
+        self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
+
+        call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
+        self.assertEqual(call_args_list_1['subject'], 'Published project last updated over 6 months')
+        self.assertEqual(call_args_list_1['email_type'], 'published_project_updated_long_ago')
+        self.assertEqual(call_args_list_1['to'], [user_1.email])
+        self.assertEqual(call_args_list_1['context'], {'project_name': 'Published project 1'})
+
+        call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
+        self.assertEqual(call_args_list_2['subject'], 'Published project last updated over 6 months')
+        self.assertEqual(call_args_list_2['email_type'], 'published_project_updated_long_ago')
+        self.assertEqual(call_args_list_2['to'], [user_2.email])
+        self.assertEqual(call_args_list_2['context'], {'project_name': 'Published project 2'})
