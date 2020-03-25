@@ -351,6 +351,12 @@
                         <!-- /TEMPLATE: PROJECT STILL IN DRAFT -->
 
 
+                        <!-- TEMPLATE: PUBLISHED PROJECT UPDATED LONG AGO -->
+                        {% elif type == "published_project_updated_long_ago" %}
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;">{% blocktrans %}Published project: <b>{{ project_name }}</b> was updated over 6 months.{% endblocktrans %}</p>
+                        <!-- /TEMPLATE: PUBLISHED PROJECT UPDATED LONG AGO -->
+
+
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Country admin" %}</h1>
