@@ -1,6 +1,6 @@
 <template>
   <lazy-el-select
-    :disabled="!country"
+    :disabled="filtered.length === 0"
     :value="value"
     :placeholder="$gettext('Select from list') | translate"
     filterable
@@ -28,10 +28,10 @@ export default {
   },
   props: {
     value: {
-      type: Number,
+      type: [Number, String],
       default: null
     },
-    country: {
+    office: {
       type: Number,
       default: null
     }
@@ -46,7 +46,7 @@ export default {
       items: 'projects/getFieldOffices'
     }),
     filtered () {
-      return this.items.filter(i => i.country_id === this.country);
+      return this.items.filter(i => i.country_office_id === this.office);
     }
   },
   methods: {
@@ -65,8 +65,5 @@ export default {
 <style lang="less">
 .FieldOffice {
   width: 100%;
-}
-.FieldOfficeDropdown {
-
 }
 </style>

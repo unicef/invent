@@ -22,14 +22,12 @@ import { mapGettersActions } from '../../utilities/form.js';
 import CountrySelect from '../common/CountrySelect';
 import CountryOfficeSelect from '@/components/common/CountryOfficeSelect';
 import RegionSelect from '../common/RegionSelect';
-import FieldOfficeSelector from '../project/FieldOfficeSelector';
 import { mapGetters } from 'vuex';
 export default {
   components: {
     CountrySelect,
     CountryOfficeSelect,
-    RegionSelect,
-    FieldOfficeSelector
+    RegionSelect
   },
   computed: {
     ...mapGetters({

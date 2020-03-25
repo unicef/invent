@@ -22,7 +22,7 @@ export default {
       type: Number,
       default: null
     },
-    country: {
+    office: {
       type: Number,
       default: null
     }
@@ -37,7 +37,7 @@ export default {
       items: 'projects/getFieldOffices'
     }),
     filtered () {
-      return this.items.filter(i => i.country_id === this.country);
+      return this.items.filter(i => i.country_office_id === this.office);
     },
     selected () {
       return this.filtered.find(f => this.value === f.id);
@@ -50,5 +50,4 @@ export default {
 .FieldOfficeItem {
   width: 100%;
 }
-
 </style>

@@ -166,6 +166,7 @@ export const actions = {
   },
   setCountryOffice ({ commit, dispatch }, value) {
     dispatch('offices/loadOffice', value, { root: true });
+    commit('SET_DATA', { key: 'field_office', value: '' });
     commit('SET_COUNTRY_OFFICE', value);
   },
   setImplementationOverview ({ commit }, value) {

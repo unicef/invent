@@ -5,7 +5,7 @@
       :custom-fields-lib="customFieldsLib"
       :imported="rows"
       :sub-levels="subLevels"
-      :country="rawImport.country"
+      :office="rawImport.country_office"
       @update="updateValue"
     />
     <el-card class="box-card">

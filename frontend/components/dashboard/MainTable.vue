@@ -103,7 +103,7 @@
         <template slot-scope="scope">
           <FieldOfficeItem
             :value="scope.row.field_office"
-            :country="scope.row.country"
+            :office="scope.row.country_office"
           />
         </template>
       </el-table-column>
