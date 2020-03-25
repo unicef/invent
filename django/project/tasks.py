@@ -54,6 +54,30 @@ def project_still_in_draft_notification():
                               context={'project_name': project.name})
 
 
+@app.task(name="published_projects_updated_long_ago")
+def published_projects_updated_long_ago():
+    """
+    Sends notification if a project is published but not updated in the last 6 months
+    """
+    now = timezone.now()
+    projects = Project.objects.exclude(public_id='').filter(modified__lt=now - timezone.timedelta(days=180))
+
+    if not projects:  # pragma: no cover
+        return
+
+    for project in projects:
+        email_mapping = defaultdict(list)
+        for profile in project.team.all():
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            send_mail_wrapper(subject='Published project last updated over 6 months',
+                              email_type='published_project_updated_long_ago',
+                              to=email_list,
+                              language=language,
+                              context={'project_name': project.name})
+
+
 @app.task(name="send_project_approval_digest")
 def send_project_approval_digest():
     countries = Country.objects.exclude(users=None)
