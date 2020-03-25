@@ -22,6 +22,11 @@ class ProjectNotificationTests(SetupTests):
         self.user_3 = User.objects.create(username='bh_3', email='bh+3@pulilab.com')
         self.profile_3 = UserProfile.objects.create(user=self.user_3)
 
+        self.published_project_data = dict(
+            country=self.country.id, country_office=self.country_office.id,
+            organisation=self.org.id, hsc_challenges=[1, 2], platforms=[1, 2],
+            capability_categories=[], capability_levels=[], capability_subcategories=[])
+
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_project_still_in_draft_notification(self, send_mail_wrapper):
         now = timezone.now()
@@ -31,10 +36,8 @@ class ProjectNotificationTests(SetupTests):
             draft_project_1.team.add(self.profile_1)
 
             # make a published project without API calls
-            data = dict(country=self.country.id, country_office=self.country_office.id, organisation=self.org.id,
-                        hsc_challenges=[1, 2], platforms=[1, 2], capability_categories=[], capability_levels=[],
-                        capability_subcategories=[])
-            published_project = Project.objects.create(name='Published project 1', data=data, public_id='1234')
+            published_project = Project.objects.create(
+                name='Published project 1', data=self.published_project_data, public_id='1234')
             published_project.team.add(self.profile_1)
 
         with freeze_time(now - timezone.timedelta(days=32)):
@@ -71,10 +74,8 @@ class ProjectNotificationTests(SetupTests):
             draft_project_1.team.add(self.profile_1)
 
             # make a published project without API calls
-            data = dict(country=self.country.id, country_office=self.country_office.id, organisation=self.org.id,
-                        hsc_challenges=[1, 2], platforms=[1, 2], capability_categories=[], capability_levels=[],
-                        capability_subcategories=[])
-            published_project_1 = Project.objects.create(name='Published project 1', data=data, public_id='1234')
+            published_project_1 = Project.objects.create(
+                name='Published project 1', data=self.published_project_data, public_id='1234')
             published_project_1.team.add(self.profile_1)
 
         with freeze_time(now - timezone.timedelta(days=190)):
@@ -82,18 +83,14 @@ class ProjectNotificationTests(SetupTests):
             draft_project_2.team.add(self.profile_2)
 
             # make a published project without API calls
-            data = dict(country=self.country.id, country_office=self.country_office.id, organisation=self.org.id,
-                        hsc_challenges=[1, 2], platforms=[1, 2], capability_categories=[], capability_levels=[],
-                        capability_subcategories=[])
-            published_project_2 = Project.objects.create(name='Published project 2', data=data, public_id='2345')
+            published_project_2 = Project.objects.create(
+                name='Published project 2', data=self.published_project_data, public_id='2345')
             published_project_2.team.add(self.profile_2)
 
         with freeze_time(now - timezone.timedelta(days=100)):
             # make a published project without API calls
-            data = dict(country=self.country.id, country_office=self.country_office.id, organisation=self.org.id,
-                        hsc_challenges=[1, 2], platforms=[1, 2], capability_categories=[], capability_levels=[],
-                        capability_subcategories=[])
-            published_project_3 = Project.objects.create(name='Published project 3', data=data, public_id='3456')
+            published_project_3 = Project.objects.create(
+                name='Published project 3', data=self.published_project_data, public_id='3456')
             published_project_3.team.add(self.profile_3)
 
         published_projects_updated_long_ago.apply()
