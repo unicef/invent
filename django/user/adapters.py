@@ -31,7 +31,7 @@ class DefaultAccountAdapterCustom(DefaultAccountAdapter):
 
 class AzureLogin(SocialLoginView):
     adapter_class = AzureOAuth2Adapter
-    callback_url = 'http://localhost/accounts/azure/login/callback/'
+    callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
 
 
