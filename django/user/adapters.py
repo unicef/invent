@@ -46,6 +46,6 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):
                 "user": user,
             }
             UserProfile.objects.get_or_create(name=sociallogin.account.extra_data['displayName'], defaults=data)
-        except:
+        except Exception:
             pass
         return user
