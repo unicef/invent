@@ -15,7 +15,7 @@ export default function ({ $axios, store: { getters, dispatch }, redirect, app: 
     const code = parseInt(error.response && error.response.status);
     if (code === 401) {
       dispatch('user/doLogout');
-      redirect('/en/-/login/');
+      redirect('/en/-/');
     }
   });
 }
