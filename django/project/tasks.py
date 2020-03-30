@@ -40,9 +40,19 @@ def project_still_in_draft_notification():
     if not projects:  # pragma: no cover
         return
 
+    # limit emails on QA and PROD
+    if settings.SITE_ID in (3, 4):
+        projects = projects[:1]
+
     for project in projects:
         email_mapping = defaultdict(list)
-        for profile in project.team.all():
+
+        receivers = project.team.all()
+        # limit emails on QA and PROD
+        if settings.SITE_ID in (3, 4):
+            receivers = receivers[:1]
+
+        for profile in receivers:
             email_mapping[profile.language].append(profile.user.email)
 
         for language, email_list in email_mapping.items():
@@ -63,9 +73,19 @@ def published_projects_updated_long_ago():
     if not projects:  # pragma: no cover
         return
 
+    # limit emails on QA and PROD
+    if settings.SITE_ID in (3, 4):
+        projects = projects[:1]
+
     for project in projects:
         email_mapping = defaultdict(list)
-        for profile in project.team.all():
+
+        receivers = project.team.all()
+        # limit emails on QA and PROD
+        if settings.SITE_ID in (3, 4):
+            receivers = receivers[:1]
+
+        for profile in receivers:
             email_mapping[profile.language].append(profile.user.email)
 
         for language, email_list in email_mapping.items():

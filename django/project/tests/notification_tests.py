@@ -1,6 +1,8 @@
 from unittest import mock
+from unittest.mock import _CallList
 
 from django.contrib.auth.models import User
+from django.test import override_settings
 from django.utils import timezone
 from freezegun import freeze_time
 
@@ -48,22 +50,38 @@ class ProjectNotificationTests(SetupTests):
             draft_project_3 = Project.objects.create(name='Draft project 3', public_id='')
             draft_project_3.team.add(self.profile_3)
 
-        project_still_in_draft_notification.apply()
+        with override_settings(SITE_ID=1):
+            project_still_in_draft_notification.apply()
 
-        # task should send emails about Draft project 1 and Draft project 2
-        self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
+            # task should send emails about Draft project 1 and Draft project 2
+            self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
 
-        call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
-        self.assertEqual(call_args_list_1['subject'], 'Project has been in draft state for over a month')
-        self.assertEqual(call_args_list_1['email_type'], 'project_still_in_draft')
-        self.assertEqual(call_args_list_1['to'], [self.user_1.email])
-        self.assertEqual(call_args_list_1['context'], {'project_name': 'Draft project 1'})
+            call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
+            self.assertEqual(call_args_list_1['subject'], 'Project has been in draft state for over a month')
+            self.assertEqual(call_args_list_1['email_type'], 'project_still_in_draft')
+            self.assertEqual(call_args_list_1['to'], [self.user_1.email])
+            self.assertEqual(call_args_list_1['context'], {'project_name': 'Draft project 1'})
 
-        call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
-        self.assertEqual(call_args_list_2['subject'], 'Project has been in draft state for over a month')
-        self.assertEqual(call_args_list_2['email_type'], 'project_still_in_draft')
-        self.assertEqual(call_args_list_2['to'], [self.user_2.email])
-        self.assertEqual(call_args_list_2['context'], {'project_name': 'Draft project 2'})
+            call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
+            self.assertEqual(call_args_list_2['subject'], 'Project has been in draft state for over a month')
+            self.assertEqual(call_args_list_2['email_type'], 'project_still_in_draft')
+            self.assertEqual(call_args_list_2['to'], [self.user_2.email])
+            self.assertEqual(call_args_list_2['context'], {'project_name': 'Draft project 2'})
+
+        # init
+        send_mail_wrapper.call_args_list = _CallList()
+
+        with override_settings(SITE_ID=3):
+            project_still_in_draft_notification.apply()
+
+            # task should send email about Draft project 1
+            self.assertEqual(len(send_mail_wrapper.call_args_list), 1)
+
+            call_args_list = send_mail_wrapper.call_args_list[0][1]
+            self.assertEqual(call_args_list['subject'], 'Project has been in draft state for over a month')
+            self.assertEqual(call_args_list['email_type'], 'project_still_in_draft')
+            self.assertEqual(call_args_list['to'], [self.user_1.email])
+            self.assertEqual(call_args_list['context'], {'project_name': 'Draft project 1'})
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_published_projects_updated_long_ago(self, send_mail_wrapper):
@@ -93,19 +111,35 @@ class ProjectNotificationTests(SetupTests):
                 name='Published project 3', data=self.published_project_data, public_id='3456')
             published_project_3.team.add(self.profile_3)
 
-        published_projects_updated_long_ago.apply()
+        with override_settings(SITE_ID=1):
+            published_projects_updated_long_ago.apply()
 
-        # task should send emails about Published project 1 and Published project 2
-        self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
+            # task should send emails about Published project 1 and Published project 2
+            self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
 
-        call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
-        self.assertEqual(call_args_list_1['subject'], 'Published project last updated over 6 months')
-        self.assertEqual(call_args_list_1['email_type'], 'published_project_updated_long_ago')
-        self.assertEqual(call_args_list_1['to'], [self.user_1.email])
-        self.assertEqual(call_args_list_1['context'], {'project_name': 'Published project 1'})
+            call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
+            self.assertEqual(call_args_list_1['subject'], 'Published project last updated over 6 months')
+            self.assertEqual(call_args_list_1['email_type'], 'published_project_updated_long_ago')
+            self.assertEqual(call_args_list_1['to'], [self.user_1.email])
+            self.assertEqual(call_args_list_1['context'], {'project_name': 'Published project 1'})
 
-        call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
-        self.assertEqual(call_args_list_2['subject'], 'Published project last updated over 6 months')
-        self.assertEqual(call_args_list_2['email_type'], 'published_project_updated_long_ago')
-        self.assertEqual(call_args_list_2['to'], [self.user_2.email])
-        self.assertEqual(call_args_list_2['context'], {'project_name': 'Published project 2'})
+            call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
+            self.assertEqual(call_args_list_2['subject'], 'Published project last updated over 6 months')
+            self.assertEqual(call_args_list_2['email_type'], 'published_project_updated_long_ago')
+            self.assertEqual(call_args_list_2['to'], [self.user_2.email])
+            self.assertEqual(call_args_list_2['context'], {'project_name': 'Published project 2'})
+
+        # init
+        send_mail_wrapper.call_args_list = _CallList()
+
+        with override_settings(SITE_ID=4):
+            published_projects_updated_long_ago.apply()
+
+            # task should send email about Published project 1
+            self.assertEqual(len(send_mail_wrapper.call_args_list), 1)
+
+            call_args_list = send_mail_wrapper.call_args_list[0][1]
+            self.assertEqual(call_args_list['subject'], 'Published project last updated over 6 months')
+            self.assertEqual(call_args_list['email_type'], 'published_project_updated_long_ago')
+            self.assertEqual(call_args_list['to'], [self.user_1.email])
+            self.assertEqual(call_args_list['context'], {'project_name': 'Published project 1'})
