@@ -50,7 +50,7 @@ class ProjectNotificationTests(SetupTests):
             draft_project_3 = Project.objects.create(name='Draft project 3', public_id='')
             draft_project_3.team.add(self.profile_3)
 
-        with override_settings(SITE_ID=1):
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
             project_still_in_draft_notification.apply()
 
             # task should send emails about Draft project 1 and Draft project 2
@@ -71,7 +71,7 @@ class ProjectNotificationTests(SetupTests):
         # init
         send_mail_wrapper.call_args_list = _CallList()
 
-        with override_settings(SITE_ID=3):
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
             project_still_in_draft_notification.apply()
 
             # task should send email about Draft project 1
@@ -111,7 +111,7 @@ class ProjectNotificationTests(SetupTests):
                 name='Published project 3', data=self.published_project_data, public_id='3456')
             published_project_3.team.add(self.profile_3)
 
-        with override_settings(SITE_ID=1):
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
             published_projects_updated_long_ago.apply()
 
             # task should send emails about Published project 1 and Published project 2
@@ -132,7 +132,7 @@ class ProjectNotificationTests(SetupTests):
         # init
         send_mail_wrapper.call_args_list = _CallList()
 
-        with override_settings(SITE_ID=4):
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
             published_projects_updated_long_ago.apply()
 
             # task should send email about Published project 1
