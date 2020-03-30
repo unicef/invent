@@ -56,14 +56,6 @@
               :span="6"
               class="SecondaryAction"
             >
-              <nuxt-link
-                :to="localePath({name: 'organisation-signup', params: $route.params})"
-                type="text"
-                class="NuxtLink Small"
-              >
-                <translate>Signup</translate>
-              </nuxt-link>
-              <div class="Separator" />
               <el-button
                 type="text"
                 size="small"
