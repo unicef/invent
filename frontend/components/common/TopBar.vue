@@ -54,19 +54,6 @@
             <el-col>
               <language-selector />
             </el-col>
-
-            <el-col class="AuthLinks">
-              <div class="Separator" />
-              <div>
-                <a
-                  href="#"
-                  class="HeaderBtn HideOnActive"
-                  @click.prevent="login"
-                >
-                  <translate>Login</translate>
-                </a>
-              </div>
-            </el-col>
           </template>
           <template v-if="user">
             <el-col class="AuthLinks">
@@ -211,11 +198,6 @@ export default {
     },
     isSuperUser () {
       return this.user && this.user.is_superuser;
-    }
-  },
-  methods: {
-    login () {
-      window.location.href = process.env.loginUrl;
     }
   }
 };
