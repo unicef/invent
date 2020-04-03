@@ -35,7 +35,7 @@ import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue'
 import InfoBox from '../../components/landing/InfoBox.vue';
 import CentralBox from '../../components/landing/CentralBox.vue';
 import AboutSection from '../../components/landing/AboutSection.vue';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -48,8 +48,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      landingData: 'landing/getLandingPageData',
-      profile: 'user/getProfile'
+      landingData: 'landing/getLandingPageData'
     }),
     showCoverImage () {
       return this.landingData && this.landingData.cover;
@@ -57,45 +56,6 @@ export default {
   },
   fetch ({ store }) {
     store.dispatch('landing/resetSearch');
-  },
-  async mounted () {
-    if (!process.server && window.location.hash) {
-      const codeMatch = window.location.hash.match(/#code=(.*)&session/);
-      window.history.replaceState(null, null, ' ');
-      if (codeMatch.length > 1) {
-        const code = codeMatch[1];
-        this.$nextTick(() => {
-          this.$nuxt.$loading.start('loginLoader');
-        });
-        try {
-          await this.login({ code });
-        } catch (e) {
-          this.$nuxt.$loading.finish('loginLoader');
-          return;
-        }
-        try {
-          if (this.profile.country) {
-            this.setSelectedCountry(this.profile.country);
-          }
-          if (this.$route.query && this.$route.query.next) {
-            const path = this.$route.query.next;
-            const query = { ...this.$route.query, next: undefined };
-            this.$router.push({ path, query });
-          } else {
-            this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: this.$route.params, query: { country: [this.profile.country] } }));
-          }
-        } catch (e) {
-          console.error(e);
-        }
-        this.$nuxt.$loading.finish('loginLoader');
-      }
-    }
-  },
-  methods: {
-    ...mapActions({
-      login: 'user/doLogin',
-      setSelectedCountry: 'dashboard/setSelectedCountry'
-    })
   }
 };
 </script>
