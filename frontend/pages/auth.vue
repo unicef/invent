@@ -90,7 +90,7 @@ export default {
     align-items: center;
     justify-content: center;
     /*<!--width: @cardSizeSmall;-->*/
-    min-height: calc(100vh - @topBarHeight - @appFooterHeight - 86px);
+    min-height: calc(100vh - @topBarHeight - @appFooterHeight - 160px);
     margin: 80px auto;
     p {
       margin-top: 20px;

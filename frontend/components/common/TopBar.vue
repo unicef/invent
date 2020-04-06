@@ -6,7 +6,7 @@
     <el-row
       type="flex"
       justify="space-between"
-      class="TopBarInner"
+      :class="{TopBarInner: true, IsAuth: auth}"
     >
       <el-col class="LogoHolder">
         <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
@@ -31,7 +31,13 @@
             </el-col> -->
             <el-col class="LogoUnicef">
               <img
-                src="/logo-unicef.svg"
+                class="UnicefLogoNormal"
+                src="/unicef-logo-banner.svg"
+                alt="Unicef"
+              >
+              <img
+                class="UnicefLogoLong"
+                src="/unicef-logo-horizontal.svg"
                 alt="Unicef"
               >
             </el-col>
@@ -171,6 +177,10 @@ export default {
     errorPage: {
       type: Boolean,
       default: false
+    },
+    auth: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -210,14 +220,17 @@ export default {
 .TopBar {
   .TopBarInner {
     .limitPageWidth();
-    height: @topBarHeight;
     background-color: @colorWhite;
     align-items: stretch;
+
+    &.IsAuth {
+      height: @topBarHeight !important;
+    }
   }
 
   .LogoHolder {
     display: flex;
-    align-self: center;
+    align-self: flex-start;
     width: auto;
 
     .LogoWHO {
@@ -240,8 +253,11 @@ export default {
     .LogoUnicef {
       width: 100%;
 
-      img {
-        height: 40px;
+      img.UnicefLogoNormal {
+        padding-bottom: 10px;
+      }
+      img.UnicefLogoLong {
+        display: none;
       }
     }
 

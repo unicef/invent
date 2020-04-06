@@ -1,7 +1,7 @@
 <template>
   <div :class="layoutClass">
     <dialogs-container />
-    <top-bar />
+    <top-bar :auth="isAuthPage" />
     <action-bar v-if="showActionBar" />
     <nuxt />
     <dha-footer />
@@ -33,6 +33,9 @@ export default {
       }
       return null;
     },
+    isAuthPage () {
+      return this.pureRoute === 'auth';
+    },
     showActionBar () {
       const hiddenOn = ['index-login', 'index-signup', 'auth', 'organisation-reset-key'];
       if (this.$route && this.$route.name) {
@@ -41,7 +44,7 @@ export default {
       return false;
     },
     layoutClass () {
-      if (!['organisation', 'organisation-login', 'organisation-signup', 'organisation-reset-key'].includes(this.pureRoute)) {
+      if (!['organisation', 'auth', 'organisation-login', 'organisation-signup', 'organisation-reset-key'].includes(this.pureRoute)) {
         return 'SubPage';
       } else if (this.$route.params.organisation !== '-') {
         return 'CountryDonorLandingPage';
