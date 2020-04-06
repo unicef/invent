@@ -30,38 +30,41 @@ export default {
     })
   },
   async mounted () {
-    if (!process.server && window.location.hash) {
-      const codeMatch = window.location.hash.match(/#code=(.*)&session/);
-      window.history.replaceState(null, null, ' ');
-      if (codeMatch.length > 1) {
-        const code = codeMatch[1];
-        this.$nextTick(() => {
-          this.$nuxt.$loading.start('loginLoader');
-        });
-        try {
-          await this.login({ code });
-        } catch (e) {
+    if (!process.server) {
+      const storedNext = localStorage.getItem('next');
+      const next = this.$route.query.next;
+      localStorage.removeItem('next');
+      if (next && next !== '/') {
+        localStorage.setItem('next', next);
+      }
+      if (window.location.hash) {
+        const codeMatch = window.location.hash.match(/#code=(.*)&session/);
+        window.history.replaceState(null, null, ' ');
+        if (codeMatch.length > 1) {
+          const code = codeMatch[1];
+          this.$nextTick(() => {
+            this.$nuxt.$loading.start('loginLoader');
+          });
+          try {
+            await this.login({ code });
+          } catch (e) {
+            this.$nuxt.$loading.finish('loginLoader');
+            return;
+          }
+          try {
+            if (this.profile.country) {
+              this.setSelectedCountry(this.profile.country);
+            }
+            if (storedNext) {
+              this.$router.push(storedNext);
+            } else {
+              this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: { organisation: '-' } }));
+            }
+          } catch (e) {
+            console.error(e);
+          }
           this.$nuxt.$loading.finish('loginLoader');
-          return;
         }
-        try {
-          if (this.profile.country) {
-            this.setSelectedCountry(this.profile.country);
-          }
-          if (this.$route.query && this.$route.query.next) {
-            const path = this.$route.query.next;
-            const query = { ...this.$route.query, next: undefined };
-            this.$router.push({ path, query });
-          } else {
-            // console.log(this.profile);
-            // console.log(this.localePath({ name: 'organisation-dashboard-list' }));
-            // const path = this.$i18n.locale;
-            this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: { organisation: '-' }, query: { country: [this.profile.country] } }));
-          }
-        } catch (e) {
-          console.error(e);
-        }
-        this.$nuxt.$loading.finish('loginLoader');
       }
     }
   },

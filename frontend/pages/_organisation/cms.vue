@@ -9,8 +9,6 @@
 export default {
   components: {
   },
-
-  middleware: ['isLoggedIn'],
   fetch ({ store }) {
     store.dispatch('landing/resetSearch');
   },

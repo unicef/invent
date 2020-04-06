@@ -11,7 +11,6 @@ import { mapGetters } from 'vuex';
 export default {
   components: {
   },
-  middleware: ['isLoggedIn'],
   computed: {
     ...mapGetters({})
   },

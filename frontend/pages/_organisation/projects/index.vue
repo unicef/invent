@@ -29,7 +29,6 @@ export default {
   components: {
     UserProjectList
   },
-  middleware: ['isLoggedIn'],
   computed: {
     ...mapGetters({
     })
