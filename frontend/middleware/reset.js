@@ -11,7 +11,8 @@ export default function ({ app, store, route, redirect }) {
       });
     }
     if (!noRedirect) {
-      redirect(app.localePath('auth'));
+      const path = app.localePath({ name: 'auth', query: { next: route.fullPath } });
+      redirect(path);
     }
   }
 }
