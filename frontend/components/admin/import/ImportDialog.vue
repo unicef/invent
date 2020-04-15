@@ -53,7 +53,7 @@
         <template v-if="dialogData.column === 'field_office'">
           <FieldOfficeSelector
             v-model="dialogData.value[0]"
-            :country="country"
+            :office="office"
           />
         </template>
 
@@ -199,7 +199,7 @@ export default {
       type: Array,
       required: true
     },
-    country: {
+    office: {
       type: Number,
       required: true
     }

@@ -88,28 +88,6 @@
             data-vv-as="Health system challenges"
           />
         </custom-required-form-item>
-
-        <custom-required-form-item
-          v-show="platform"
-          :error="errors.first('strategies')"
-          :draft-rule="draftRules.strategies"
-          :publish-rule="publishRules.strategies"
-          class="DigitalHealthIntervention"
-        >
-          <template slot="label">
-            <translate key="strategies">
-              What is the health capability area(s) addressed? What are the Health System Challenges addressed by the Digital Health Intervention?
-            </translate>
-            <form-hint>
-              Form Hint
-            </form-hint>
-          </template>
-          <digital-health-interventions-selector
-            v-validate="rules.strategies"
-            data-vv-name="strategies"
-            data-vv-as="Digital health interventions"
-          />
-        </custom-required-form-item>
       </template>
 
       <template v-else-if="goal_area">
