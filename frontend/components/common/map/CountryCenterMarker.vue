@@ -1,11 +1,11 @@
 <template>
   <div>
     <l-marker
-      v-if="icon"
+      v-if="show"
       ref="countryMarker"
+      :icon="icon"
       :options="options"
       :lat-lng="pin.latlng"
-      :icon="icon"
       class="MapMarker"
       @click="markerClickHandler"
     >
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 export default {
   components: {},
@@ -50,7 +51,7 @@ export default {
     icon: {
       type: Object,
       required: false,
-      default: null
+      default: () => ({})
     },
     options: {
       type: Object,
@@ -75,8 +76,19 @@ export default {
       popupOptions: {
         className: `CountryViewPopup`,
         closeButton: false
-      }
+      },
+      show: false
     };
+  },
+  computed: {
+    ...mapGetters({
+      getCountryProjects: 'landing/getCountryProjects'
+    })
+  },
+  mounted() {
+    setTimeout(() => {
+      this.show = true
+    }, 500);
   },
   methods: {
     markerClickHandler () {
@@ -87,7 +99,6 @@ export default {
         this.$refs[ref].mapObject[functionName]();
       }
     },
-
     openCountryView () {
       this.$emit('update:selectedCountry', this.pin.id);
       this.safeMapObjectFunctionCall('countryMarker', 'closePopup');

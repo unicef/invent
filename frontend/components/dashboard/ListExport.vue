@@ -1,5 +1,5 @@
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import pickBy from 'lodash/pickBy';
 
 export default {
@@ -10,6 +10,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
     ...mapGetters({
       getCountryDetails: 'countries/getCountryDetails',
       getDonorDetails: 'system/getDonorDetails',
@@ -35,6 +38,7 @@ export default {
         const parsed = {
           ...s,
           country: this.parseCountry(s.country),
+          country_office: this.offices.find(obj => obj.id === s.country_office).name || '',
           investors: this.parseDonors(s.donors),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),

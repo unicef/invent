@@ -31,7 +31,7 @@ export const importTemplate = [
     'Health System Challenges': '1.1 Lack of population denominator|1.2 Delayed reporting of events',
     'Goal Area': '21. Survive and Thrive',
     'Result Area': '21-01 Maternal and newborn health',
-    'Field Office': 'According to selected country'
+    'Field Office': 'According to selected country office'
   },
   {
     'Project Name': 'MyProject2',
@@ -43,7 +43,7 @@ export const importTemplate = [
     Software: 'Bamboo',
     'Goal Area': '22. Learn',
     'Result Area': '22-01 Equitable access to quality education',
-    'Field Office': 'According to selected country',
+    'Field Office': 'According to selected country office',
     'Capability Levels': '4. Interventions for data services',
     'Capability Categories': '1.3 Student to student communication',
     'Capability Subcategories': '1.1.1 Transmit education event alerts to specific population group(s)'
