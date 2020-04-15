@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.translation import ugettext
 from django.template import loader
 
@@ -27,6 +28,72 @@ from scheduler.celery import app
 from urllib.parse import urljoin
 
 logger = get_task_logger(__name__)
+
+
+@app.task(name="project_still_in_draft_notification")
+def project_still_in_draft_notification():
+    """
+    Sends notification if a project is in draft state for over a month.
+    """
+    projects = Project.objects.filter(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
+
+    if not projects:  # pragma: no cover
+        return
+
+    # limit emails
+    if not settings.EMAIL_SENDING_PRODUCTION:
+        projects = projects[:1]
+
+    for project in projects:
+        email_mapping = defaultdict(list)
+
+        receivers = project.team.all()
+        # limit emails
+        if not settings.EMAIL_SENDING_PRODUCTION:
+            receivers = receivers[:1]
+
+        for profile in receivers:
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            send_mail_wrapper(subject='Project has been in draft state for over a month',
+                              email_type='project_still_in_draft',
+                              to=email_list,
+                              language=language,
+                              context={'project_name': project.name})
+
+
+@app.task(name="published_projects_updated_long_ago")
+def published_projects_updated_long_ago():
+    """
+    Sends notification if a project is published but not updated in the last 6 months
+    """
+    projects = Project.objects.exclude(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
+
+    if not projects:  # pragma: no cover
+        return
+
+    # limit emails
+    if not settings.EMAIL_SENDING_PRODUCTION:
+        projects = projects[:1]
+
+    for project in projects:
+        email_mapping = defaultdict(list)
+
+        receivers = project.team.all()
+        # limit emails
+        if not settings.EMAIL_SENDING_PRODUCTION:
+            receivers = receivers[:1]
+
+        for profile in receivers:
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            send_mail_wrapper(subject='Published project last updated over 6 months',
+                              email_type='published_project_updated_long_ago',
+                              to=email_list,
+                              language=language,
+                              context={'project_name': project.name})
 
 
 @app.task(name="send_project_approval_digest")

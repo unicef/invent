@@ -370,6 +370,18 @@
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
+                        <!-- TEMPLATE: PROJECT STILL IN DRAFT -->
+                        {% elif type == "project_still_in_draft" %}
+                        <p>{% blocktrans %}Project: <b>{{ project_name }}</b> has been in draft state for over a month.{% endblocktrans %}</p>
+                        <!-- /TEMPLATE: PROJECT STILL IN DRAFT -->
+
+
+                        <!-- TEMPLATE: PUBLISHED PROJECT UPDATED LONG AGO -->
+                        {% elif type == "published_project_updated_long_ago" %}
+                        <p>{% blocktrans %}Published project: <b>{{ project_name }}</b> was updated over 6 months.{% endblocktrans %}</p>
+                        <!-- /TEMPLATE: PUBLISHED PROJECT UPDATED LONG AGO -->
+
+
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
