@@ -95,7 +95,9 @@ export const getters = {
   },
   getFilteredRegion: state => state.filteredRegion,
   getFilteredOffice: state => state.filteredOffice,
-  getFilteredCountryOffice: state => state.filteredCountryOffice,
+  getFilteredCountryOffice: state => {
+    return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountryOffice;
+  },
   getGovernmentApproved: state => state.governmentApproved,
   getGovernmentFinanced: state => state.governmentFinanced,
   getSelectAll: state => state.selectAll,
@@ -324,7 +326,7 @@ export const mutations = {
     state.filteredCountries = intArrayFromQs(options.country);
     state.filteredRegion = options.region ? +options.region : null;
     state.filteredOffice = options.fo ? +options.fo : null;
-    state.filteredCountryOffice = options.co ? +options.co : null;
+    state.filteredCountryOffice = intArrayFromQs(options.co);
     state.governmentFinanced = options.gov ? true : null;
     state.governmentApproved = options.approved ? true : null;
     state.selectedPlatforms = intArrayFromQs(options.sw);
