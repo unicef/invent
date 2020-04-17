@@ -218,6 +218,7 @@ export default {
 
   .SearchComponent {
     .SearchButton {
+      background-color: transparent;
       width: @actionBarHeight;
       height: @actionBarHeight;
       padding: 0;

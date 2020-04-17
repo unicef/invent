@@ -23,8 +23,14 @@ export const getters = {
 
 export const actions = {
 
-  async doLogin ({ commit, dispatch }, { username, password }) {
-    const { data } = await this.$axios.post('/api/api-token-auth/', { username, password });
+  async doLogin ({ commit, dispatch }, { username, password, code }) {
+    var result;
+    if (code) {
+      result = await this.$axios.post('/api/rest-auth/azure/', { code });
+    } else {
+      result = await this.$axios.post('/api/api-token-auth/', { username, password });
+    }
+    const { data } = result;
     commit('SET_USER', data);
     commit('SET_TOKEN', data.token);
     saveToken(data.token, data.user_profile_id);
