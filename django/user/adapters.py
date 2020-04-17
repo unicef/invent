@@ -16,7 +16,7 @@ class DefaultAccountAdapterCustom(DefaultAccountAdapter):
 
         context.update({"activate_url": activate_url})
 
-        send_mail_wrapper(subject="Welcome to the Digital Health Atlas",
+        send_mail_wrapper(subject="Welcome to the T4D & Innovation Inventory Portal",
                           email_type='email_confirmation_signup_message',
                           to=email,
                           language=context['user'].userprofile.language,
