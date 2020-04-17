@@ -39,7 +39,7 @@
           >
             <FieldOfficeItem
               :value="project.field_office"
-              :country="project.country"
+              :office="office.id"
             />
           </simple-field>
 
@@ -265,8 +265,8 @@ export default {
       return null;
     },
     selectedRegion () {
-      if (this.country) {
-        const result = this.unicef_regions.find(uf => uf.id === this.country.unicef_region);
+      if (this.office) {
+        const result = this.unicef_regions.find(uf => uf.id === this.office.region);
         return (result && result.name) || 'N/A';
       }
       return 'N/A';

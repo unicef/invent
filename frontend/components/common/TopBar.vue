@@ -6,7 +6,7 @@
     <el-row
       type="flex"
       justify="space-between"
-      class="TopBarInner"
+      :class="{TopBarInner: true, IsAuth: auth}"
     >
       <el-col class="LogoHolder">
         <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
@@ -31,7 +31,13 @@
             </el-col> -->
             <el-col class="LogoUnicef">
               <img
-                src="/logo-unicef.svg"
+                class="UnicefLogoNormal"
+                src="/unicef-logo-banner.svg"
+                alt="Unicef"
+              >
+              <img
+                class="UnicefLogoLong"
+                src="/unicef-logo-horizontal.svg"
                 alt="Unicef"
               >
             </el-col>
@@ -53,28 +59,6 @@
           <template v-if="!user">
             <el-col>
               <language-selector />
-            </el-col>
-
-            <el-col class="AuthLinks">
-              <div class="Separator" />
-              <div>
-                <nuxt-link
-                  key="signupBtn"
-                  :to="localePath({name: 'organisation-signup', params: $route.params})"
-                  class="HeaderBtn HideOnActive"
-                >
-                  <translate>Signup</translate>
-                </nuxt-link>
-              </div>
-              <div>
-                <nuxt-link
-                  key="loginBtn"
-                  :to="localePath({name: 'organisation-login', params: $route.params})"
-                  class="HeaderBtn HideOnActive"
-                >
-                  <translate>Login</translate>
-                </nuxt-link>
-              </div>
             </el-col>
           </template>
           <template v-if="user">
@@ -193,6 +177,10 @@ export default {
     errorPage: {
       type: Boolean,
       default: false
+    },
+    auth: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -221,193 +209,198 @@ export default {
     isSuperUser () {
       return this.user && this.user.is_superuser;
     }
-
   }
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .TopBar {
-    .TopBarInner {
-      .limitPageWidth();
-      height: @topBarHeight;
-      background-color: @colorWhite;
-      align-items: stretch;
+.TopBar {
+  .TopBarInner {
+    .limitPageWidth();
+    background-color: @colorWhite;
+    align-items: stretch;
+
+    &.IsAuth {
+      height: @topBarHeight !important;
     }
+  }
 
-    .LogoHolder {
-      display: flex;
-      align-self: center;
-      width: auto;
+  .LogoHolder {
+    display: flex;
+    align-self: flex-start;
+    width: auto;
 
-      .LogoWHO {
-        width: 100%;
+    .LogoWHO {
+      width: 100%;
 
-        img {
-          height: 48px;
-        }
-      }
-
-      .LogoDHA {
-        width: 100%;
-
-        img {
-          height: 24px;
-          transform: translateY(2px);
-        }
-      }
-
-      .LogoUnicef {
-        width: 100%;
-
-        img {
-          height: 40px;
-        }
-      }
-
-      .Separator {
-        width: auto;
-        height: 36px;
-        margin: 0 15px;
-
-        > div {
-          .SeparatorStyle();
-        }
+      img {
+        height: 48px;
       }
     }
 
-    .RightPart {
-      padding: 15px 0;
+    .LogoDHA {
+      width: 100%;
 
-      > .el-row > .el-col {
-        width: auto;
+      img {
+        height: 24px;
+        transform: translateY(2px);
       }
     }
 
-    .HideOnActive {
-      &.nuxt-link-active {
+    .LogoUnicef {
+      width: 100%;
+
+      img.UnicefLogoNormal {
+        padding-bottom: 10px;
+      }
+      img.UnicefLogoLong {
         display: none;
       }
-    }
-
-    .HeaderBtn
-    // TODO: Remove Angular Material
-    // hacking Toolkit md-button :(
-    ,.HeaderBtn.md-button
-    //
-    {
-      position: relative;
-      height: 24px;
-      margin: 0 5px;
-      padding: 0 10px;
-      font-size: @fontSizeBase;
-      font-weight: 700;
-      line-height: 24px;
-      color: @colorTextPrimary;
-      text-decoration: none;
-      transition: @transitionAll;
-
-      // hacking Toolkit md-button :(
-      min-height: auto;
-      min-width: auto;
-      overflow: visible;
-      background-color: transparent !important;
-
-      &.md-ink-ripple {
-        > span {
-          letter-spacing: 0 !important;
-        }
-
-        &::before {
-          top: -15px !important;
-        }
-      }
-
-      > .md-ripple-container {
-        display: none;
-      }
-      //
-
-      &::before {
-        content: "";
-        position: absolute;
-        top: -17px;
-        left: 0;
-        display: inline-block;
-        width: 100%;
-        height: 4px;
-        background-color: @colorWhite;
-        transform: translateY(-4px);
-        transition: @transitionAll;
-      }
-
-      &:hover {
-        color: @colorTextSecondary;
-
-        &::before {
-          background-color: @colorGray;
-          transform: translateY(0);
-        }
-      }
-
-      &.nuxt-link-active {
-        color: @colorBrandPrimary;
-
-        &::before {
-          background-color: @colorBrandPrimary;
-          transform: translateY(0);
-        }
-      }
-
-      .svg-inline--fa {
-        margin-right: 6px;
-      }
-    }
-
-    .HeaderBtn.md-button {
-      transform: translateY(-1px);
     }
 
     .Separator {
-      .SeparatorStyle();
-      display: inline-block;
-      margin: 0 20px;
-    }
-
-    .CountryHolder {
-      height: 24px;
-
-      .CountryFlag {
-        height: 14px;
-        margin-right: 6px;
-        padding: 5px 0;
-      }
-
-      .CountryName {
-        font-size: @fontSizeBase;
-        font-weight: 700;
-        color: @colorTextPrimary;
-        line-height: 24px;
-      }
-    }
-
-    .AuthLinks,
-    .CountrySpecificMenu {
-      .clearfix();
+      width: auto;
+      height: 36px;
+      margin: 0 15px;
 
       > div {
-        float: left;
-        height: 24px;
-      }
-    }
-
-    .CountrySpecificMenu {
-      .LogoWHOxDHA {
-        height: 24px;
+        .SeparatorStyle();
       }
     }
   }
+
+  .RightPart {
+    padding: 15px 0;
+
+    > .el-row > .el-col {
+      width: auto;
+    }
+  }
+
+  .HideOnActive {
+    &.nuxt-link-active {
+      display: none;
+    }
+  }
+
+  .HeaderBtn
+    // TODO: Remove Angular Material
+    // hacking Toolkit md-button :(
+  ,.HeaderBtn.md-button
+    //
+  {
+    position: relative;
+    height: 24px;
+    margin: 0 5px;
+    padding: 0 10px;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+    line-height: 24px;
+    color: @colorTextPrimary;
+    text-decoration: none;
+    transition: @transitionAll;
+
+    // hacking Toolkit md-button :(
+    min-height: auto;
+    min-width: auto;
+    overflow: visible;
+    background-color: transparent !important;
+
+    &.md-ink-ripple {
+      > span {
+        letter-spacing: 0 !important;
+      }
+
+      &::before {
+        top: -15px !important;
+      }
+    }
+
+    > .md-ripple-container {
+      display: none;
+    }
+    //
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -17px;
+      left: 0;
+      display: inline-block;
+      width: 100%;
+      height: 4px;
+      background-color: @colorWhite;
+      transform: translateY(-4px);
+      transition: @transitionAll;
+    }
+
+    &:hover {
+      color: @colorTextSecondary;
+
+      &::before {
+        background-color: @colorGray;
+        transform: translateY(0);
+      }
+    }
+
+    &.nuxt-link-active {
+      color: @colorBrandPrimary;
+
+      &::before {
+        background-color: @colorBrandPrimary;
+        transform: translateY(0);
+      }
+    }
+
+    .svg-inline--fa {
+      margin-right: 6px;
+    }
+  }
+
+  .HeaderBtn.md-button {
+    transform: translateY(-1px);
+  }
+
+  .Separator {
+    .SeparatorStyle();
+    display: inline-block;
+    margin: 0 20px;
+  }
+
+  .CountryHolder {
+    height: 24px;
+
+    .CountryFlag {
+      height: 14px;
+      margin-right: 6px;
+      padding: 5px 0;
+    }
+
+    .CountryName {
+      font-size: @fontSizeBase;
+      font-weight: 700;
+      color: @colorTextPrimary;
+      line-height: 24px;
+    }
+  }
+
+  .AuthLinks,
+  .CountrySpecificMenu {
+    .clearfix();
+
+    > div {
+      float: left;
+      height: 24px;
+    }
+  }
+
+  .CountrySpecificMenu {
+    .LogoWHOxDHA {
+      height: 24px;
+    }
+  }
+}
 </style>

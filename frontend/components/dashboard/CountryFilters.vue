@@ -2,16 +2,15 @@
   <div class="CountryFilters">
     <region-select
       v-model="selectedRegion"
-      :disabled="disableRegions"
+    />
+    <country-office-select
+      v-model="selectedCountryOffice"
+      :regionFilter="selectedRegion"
+      :multiple="true"
     />
     <country-select
       v-model="selectedCountries"
-      :disabled="disableCountries"
-      :region="disableCountries ? -1 : selectedRegion"
-    />
-    <field-office-selector
-      v-model="selectedOffice"
-      :country="firstSelectedCountry"
+      :disabled="disabledCountries"
     />
   </div>
 </template>
@@ -20,32 +19,30 @@
 import { mapGettersActions } from '../../utilities/form.js';
 
 import CountrySelect from '../common/CountrySelect';
+import CountryOfficeSelect from '@/components/common/CountryOfficeSelect';
 import RegionSelect from '../common/RegionSelect';
-import FieldOfficeSelector from '../project/FieldOfficeSelector';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
+
 export default {
   components: {
     CountrySelect,
-    RegionSelect,
-    FieldOfficeSelector
+    CountryOfficeSelect,
+    RegionSelect
   },
   computed: {
     ...mapGetters({
       dashboardType: 'dashboard/getDashboardType'
     }),
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
     ...mapGettersActions({
       selectedCountries: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
-      selectedOffice: ['dashboard', 'getFilteredOffice', 'setFilteredOffice'],
-      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
+      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion'],
+      selectedCountryOffice: ['dashboard', 'getFilteredCountryOffice', 'setFilteredCountryOffice']
     }),
-    disableCountries () {
-      return (!this.selectedRegion && this.selectedRegion !== 0) || this.dashboardType === 'country';
-    },
-    disableRegions () {
-      return this.dashboardType === 'country';
-    },
-    firstSelectedCountry () {
-      return this.selectedCountries && this.selectedCountries.length ? this.selectedCountries[0] : null;
+    disabledCountries () {
+      return ((this.selectedCountryOffice) && (this.selectedCountryOffice.length > 0) && ((this.selectedCountryOffice !== null))) ? true : false;
     }
   },
   watch: {
@@ -55,8 +52,25 @@ export default {
       }
     },
     selectedRegion (newRegion) {
-      this.selectedCountries = this.selectedCountries.filter(c => c.unicef_region === newRegion.id);
+      this.selectedCountries =
+        Number.isInteger(newRegion)
+        ? this.selectedCountries.filter(c => c.unicef_region === newRegion.id)
+        : this.selectedCountries;
+    },
+    selectedCountryOffice (newOffices) {
+      this.selectedCountries =
+        Array.isArray(newOffices)
+        ? this.offices.filter(o => newOffices.includes(o.id)).map(c => c.country)
+        : this.offices.filter(o => newOffices === o.id).map(c => c.country);
     }
+  },
+  mounted () {
+    this.loadOffices();
+  },
+  methods: {
+    ...mapActions({
+      loadOffices: 'offices/loadOffices'
+    })
   }
 };
 </script>

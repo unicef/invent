@@ -70,7 +70,7 @@
 <script>
 import { projectFields } from '@/utilities/projects';
 
-const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
+const blackList = ['country', 'country_office', 'donors', 'coverage', 'national_level_deployment',
   'coverageData', 'team', 'viewers', 'coverageType', 'coverage_second_level', 'interoperability_links'];
 
 export default {

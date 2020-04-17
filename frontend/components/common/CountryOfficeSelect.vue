@@ -1,12 +1,14 @@
 <template>
   <lazy-el-select
     v-model="innerValue"
+    :multiple="multiple"
+    :disabled="disabled"
     :placeholder="$gettext('Select country office') | translate"
     filterable
     class="select-office"
   >
     <el-option
-      v-for="office in offices"
+      v-for="office in officeList"
       :key="office.id"
       :label="office.name"
       :value="office.id"
@@ -26,6 +28,20 @@ export default {
     value: {
       type: [Number, Array],
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    regionFilter: {
+      type: [Number, String],
+      default: undefined
     }
   },
   computed: {
@@ -39,6 +55,12 @@ export default {
       set (value) {
         this.$emit('change', value);
       }
+    },
+    officeList () {
+      if ((this.regionFilter === undefined) || (this.regionFilter === null) || (typeof(this.regionFilter) !== 'number')) {
+        return this.offices;
+      }
+      return this.offices ? this.offices.filter((office) => office.region === this.regionFilter) : [];
     }
   },
   mounted () {

@@ -10,7 +10,9 @@ https://docs.djangoproject.com/en/1.9/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+from . import load_env
 
+load_env.load_env()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tiip.settings")
 
 application = get_wsgi_application()

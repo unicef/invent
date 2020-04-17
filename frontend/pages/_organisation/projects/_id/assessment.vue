@@ -9,7 +9,6 @@ import { fetchProjectData } from '@/utilities/projects';
 export default {
   components: {
   },
-  middleware: ['isLoggedIn'],
   async fetch ({ store, params, error }) {
     store.dispatch('landing/resetSearch');
     try {
