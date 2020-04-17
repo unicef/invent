@@ -18,7 +18,6 @@ export default {
   components: {
     AdvancedSearch
   },
-  middleware: ['isLoggedIn'],
   fetch ({ store }) {
     store.dispatch('landing/resetSearch');
   },

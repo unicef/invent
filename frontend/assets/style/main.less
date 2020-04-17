@@ -169,10 +169,13 @@ a {
   min-height: 100vh;
 
   .LogoHolder {
+    align-self: center !important;
     .LogoUnicef {
-      img {
-        margin-top: 2px !important;
-        height: 26px !important;
+      img.UnicefLogoNormal {
+        display: none;
+      }
+      img.UnicefLogoLong {
+        display: inline-block !important;
       }
     }
   }
