@@ -69,6 +69,19 @@
       </el-table-column>
 
       <el-table-column
+        v-if="selectedColumns.includes('4')"
+        :resizable="false"
+        :label="$gettext('Country Office') | translate"
+        sortable="custom"
+        prop="country_office__name"
+        width="180"
+      >
+        <template slot-scope="scope">
+          {{ countryOffice(scope.row.country_office) }}
+        </template>
+      </el-table-column>
+
+      <el-table-column
         v-if="selectedColumns.includes('3')"
         :resizable="false"
         :label="$gettext('Last updated') | translate"
@@ -90,7 +103,7 @@
         <template slot-scope="scope">
           <FieldOfficeItem
             :value="scope.row.field_office"
-            :country="scope.row.country"
+            :office="scope.row.country_office"
           />
         </template>
       </el-table-column>
@@ -281,7 +294,7 @@
 
 <script>
 import { format } from 'date-fns';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import { mapGettersActions } from '../../utilities/form.js';
 
 import ProjectCard from '@/components/common/ProjectCard';
@@ -319,6 +332,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
     ...mapGetters({
       projectsList: 'dashboard/getProjectsList',
       selectedColumns: 'dashboard/getSelectedColumns',
@@ -374,6 +390,9 @@ export default {
     }
   },
   mounted () {
+    if (this.offices.length === 0) {
+      this.loadOffices();
+    }
     setTimeout(() => {
       this.fixTableHeight();
       this.fixSorting(this.$route.query.ordering);
@@ -388,7 +407,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSelectedRows: 'dashboard/setSelectedRows'
+      setSelectedRows: 'dashboard/setSelectedRows',
+      loadOffices: 'offices/loadOffices'
     }),
     customHeaderRenderer (h, { column, $index }) {
       return h('span', { attrs: { title: column.label } }, column.label);
@@ -443,7 +463,11 @@ export default {
           fixedTableBody.style.left = -toAlignWidth + 'px';
         }
       }
-    }
+    },
+    countryOffice (id) {
+      const office = this.offices.find(obj => obj.id === id)
+      return office ? office.name : 'N/A';
+    },
   }
 };
 </script>

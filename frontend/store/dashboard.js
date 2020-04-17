@@ -2,7 +2,7 @@ import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator 
 import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
-export const defaultSelectedColumns = () => ['1', '2', '3', '5', '6', '7', '8', '10', '11', '12', '13', '14', '15', '16'];
+export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '10', '11', '12', '13', '14', '15', '16', '17'];
 
 export const state = () => ({
   ...stateGenerator(),
@@ -23,6 +23,7 @@ export const state = () => ({
   selectedRows: [],
   filteredCountries: [],
   filteredOffice: null,
+  filteredCountryOffice: null,
   filteredRegion: null,
   selectAll: false,
   pageSize: 10,
@@ -56,6 +57,7 @@ export const getters = {
     g.q === undefined &&
     g.region === null &&
     g.fo === null &&
+    g.co === null &&
     g.sw.length === 0 &&
     g.view_as === undefined);
   },
@@ -93,6 +95,9 @@ export const getters = {
   },
   getFilteredRegion: state => state.filteredRegion,
   getFilteredOffice: state => state.filteredOffice,
+  getFilteredCountryOffice: state => {
+    return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountryOffice;
+  },
   getGovernmentApproved: state => state.governmentApproved,
   getGovernmentFinanced: state => state.governmentFinanced,
   getSelectAll: state => state.selectAll,
@@ -120,6 +125,7 @@ export const getters = {
       donor,
       region: state.filteredRegion,
       fo: state.filteredOffice,
+      co: state.filteredCountryOffice,
       gov: state.governmentFinanced ? [1, 2] : undefined,
       approved: state.governmentApproved ? 1 : undefined,
       sw: state.selectedPlatforms,
@@ -241,6 +247,10 @@ export const actions = {
     commit('SET_FILTERED_OFFICE', value);
     commit('SET_CURRENT_PAGE', 1);
   },
+  setFilteredCountryOffice ({ commit }, value) {
+    commit('SET_FILTERED_COUNTRY_OFFICE', value);
+    commit('SET_CURRENT_PAGE', 1);
+  },
   setGovernmentApproved ({ commit }, value) {
     commit('SET_GOVERNMENT_APPROVED', value);
     commit('SET_CURRENT_PAGE', 1);
@@ -316,6 +326,7 @@ export const mutations = {
     state.filteredCountries = intArrayFromQs(options.country);
     state.filteredRegion = options.region ? +options.region : null;
     state.filteredOffice = options.fo ? +options.fo : null;
+    state.filteredCountryOffice = intArrayFromQs(options.co);
     state.governmentFinanced = options.gov ? true : null;
     state.governmentApproved = options.approved ? true : null;
     state.selectedPlatforms = intArrayFromQs(options.sw);
@@ -369,6 +380,9 @@ export const mutations = {
   },
   SET_FILTERED_OFFICE: (state, value) => {
     state.filteredOffice = value;
+  },
+  SET_FILTERED_COUNTRY_OFFICE: (state, value) => {
+    state.filteredCountryOffice = value;
   },
   SET_FILTERED_REGION: (state, value) => {
     state.filteredRegion = value;

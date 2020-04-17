@@ -8,7 +8,7 @@
       >
         <el-col class="LogoWHO">
           <img
-            src="/logo-who-gray-notext.svg"
+            src="/unicef-logo-footer.svg"
             alt="WHO"
           >
         </el-col>
@@ -53,7 +53,7 @@ export default {
         width: auto;
 
         img {
-          height: 30px;
+          height: 32px;
           transform: translateY(2px);
         }
       }

@@ -7,7 +7,6 @@
 <script>
 import { fetchProjectData } from '@/utilities/projects';
 export default {
-  middleware: ['isLoggedIn'],
   fetch ({ store, params, error }) {
     store.dispatch('landing/resetSearch');
     return fetchProjectData(store, params, error);

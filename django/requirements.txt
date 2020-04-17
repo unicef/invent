@@ -23,7 +23,7 @@ decorator==4.3.0
 defusedxml==0.5.0
 dj-inmemorystorage==1.4.1
 Django==2.1
-django-allauth==0.36.0
+django-allauth==0.41.0
 django-appconf==1.0.2
 django-celery-email==2.0.0
 django-cors-headers==2.3.0
@@ -41,6 +41,7 @@ docopt==0.6.2
 Fabric3==1.14.post1
 factory-boy==2.12.0
 flake8==3.5.0
+freezegun==0.3.15
 gunicorn==19.9.0
 idna==2.7
 ipdb==0.11
@@ -105,3 +106,4 @@ vine==1.1.4
 watchdog==0.8.3
 wcwidth==0.1.7
 wrapt==1.11.2
+django-dotenv

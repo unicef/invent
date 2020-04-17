@@ -5,10 +5,13 @@
 <script>
 import { format } from 'date-fns';
 import get from 'lodash/get';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   computed: {
+    ...mapState({
+      offices: state => state.offices.offices
+    }),
     ...mapGetters({
       projects: 'dashboard/getProjectsBucket',
       selectedRows: 'dashboard/getSelectedRows',
@@ -255,6 +258,7 @@ export default {
       this.parsed.forEach((project, index) => {
         const country = this.getCountryDetails(project.country);
         const country_name = country && country.name ? country.name.toUpperCase() : '';
+        const country_office_name = this.offices.find(obj => obj.id === project.country_office).name.toUpperCase() || '';
         const donors = project.donors.map(d => this.getDonorDetails(d)).filter(d => d).map(d => d.name);
         const health_focus_areas = this.parseHealthFocusAreas(project.health_focus_areas);
         const goalArea = get(this.goalAreas.find(g => g.id === project.goal_area), 'name', '');
@@ -286,7 +290,7 @@ export default {
                   color: '#008DC9',
                   style: 'subHeader'
                 },
-                country_name
+                `${country_office_name}, ${country_name}`
               ],
               [
                 [
