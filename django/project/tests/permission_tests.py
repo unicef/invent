@@ -38,7 +38,8 @@ class PermissionTests(SetupTests):
 
         outgoing_en_email = mail.outbox[en_index].message()
         outgoing_en_email_text = outgoing_en_email.as_string()
-        self.assertEqual(mail.outbox[en_index].subject, "You have been added to a project in the Digital Health Atlas")
+        self.assertEqual(mail.outbox[en_index].subject,
+                         "You have been added to a project in the T4D & Innovation Inventory Portal")
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 

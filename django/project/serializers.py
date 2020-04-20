@@ -154,7 +154,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
             'token': default_token_generator.make_token(user),
             'protocol': 'https' if not settings.DEBUG else 'http'
         }
-        send_mail_wrapper(subject="Set Your Password on Digital Health Atlas",
+        send_mail_wrapper(subject="Set Your Password on T4D & Innovation Inventory Portal",
                           email_type="password_invited",
                           to=user.email,
                           language=user.userprofile.language,
@@ -228,7 +228,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 "project_name": instance.name,
                 "role": "team member",
             }
-            send_mail_wrapper(subject="You have been added to a project in the Digital Health Atlas",
+            send_mail_wrapper(subject="You have been added to a project in the T4D & Innovation Inventory Portal",
                               email_type="new_member",
                               to=profile.user.email,
                               language=profile.language,
@@ -241,7 +241,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 "project_name": instance.name,
                 "role": "viewer",
             }
-            send_mail_wrapper(subject="You have been added to a project in the Digital Health Atlas",
+            send_mail_wrapper(subject="You have been added to a project in the T4D & Innovation Inventory Portal",
                               email_type="new_member",
                               to=profile.user.email,
                               language=profile.language,
