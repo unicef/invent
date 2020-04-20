@@ -3,6 +3,7 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from rest_auth.registration.views import SocialLoginView
 from django.conf import settings
+from django.contrib.sites.models import Site
 
 from core.utils import send_mail_wrapper
 from azure.views import AzureOAuth2Adapter
@@ -13,11 +14,9 @@ import scheduler.celery # noqa
 
 
 class DefaultAccountAdapterCustom(DefaultAccountAdapter):
-    from django.contrib.sites.models import Site
-    ACTIVATE_BASE_URL = 'http://' + Site.objects.get(id=settings.SITE_ID).domain + '/'
-
     def send_mail(self, template_prefix, email, context):
-        activate_url = self.ACTIVATE_BASE_URL + \
+        ACTIVATE_BASE_URL = 'http://' + Site.objects.get(id=settings.SITE_ID).domain + '/'
+        activate_url = ACTIVATE_BASE_URL + \
             'en/-/email-confirmation/' + context['key']
 
         context.update({"activate_url": activate_url})
