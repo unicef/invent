@@ -34,7 +34,7 @@ class AzureLogin(SocialLoginView):
     client_class = OAuth2Client
 
 
-class MyAzureAccountAdapter(DefaultSocialAccountAdapter):
+class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
     def pre_social_login(self, request, sociallogin):
         request.sociallogin = sociallogin
 
