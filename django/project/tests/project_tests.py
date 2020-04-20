@@ -932,20 +932,20 @@ class ProjectTests(SetupTests):
 
         welcome_emails_count = 0
         for m in mail.outbox:
-            if m.subject == 'Welcome to the Digital Health Atlas':
+            if m.subject == 'Welcome to the T4D & Innovation Inventory Portal':
                 welcome_emails_count += 1
         self.assertEqual(welcome_emails_count, 3)
 
         notified_on_member_add_count = 0
         for m in mail.outbox:
-            if m.subject == 'You have been added to a project in the Digital Health Atlas':
+            if m.subject == 'You have been added to a project in the T4D & Innovation Inventory Portal':
                 notified_on_member_add_count += 1
                 self.assertTrue("new_email@unicef.org" in m.to or "new_email@pulilab.com" in m.to)
         self.assertEqual(notified_on_member_add_count, 2)
 
         set_password_sent = 0
         for m in mail.outbox:
-            if m.subject == "Set Your Password on Digital Health Atlas":
+            if m.subject == "Set Your Password on T4D & Innovation Inventory Portal":
                 set_password_sent += 1
                 self.assertTrue("new_email@unicef.org" in m.to or "new_email@pulilab.com" in m.to)
         self.assertEqual(set_password_sent, 2)
