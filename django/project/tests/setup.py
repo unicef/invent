@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from allauth.account.models import EmailConfirmation
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
