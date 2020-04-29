@@ -507,33 +507,6 @@
                         <!-- /TEMPLATE: FLAG CONTENT -->
 
 
-                        <!-- TEMPLATE: PASSWORD RESET -->
-                        {% elif type == "password_reset" %}
-                        <h1>{% trans "Password Reset" %}</h1>
-                        <p>{% trans "A password reset has been requested for the Digital Health Atlas account linked to your email address" %} {{ email }}</p>
-                        <p><b>{% trans "To reset your password, click the link below:" %}</b></p>
-                        <p>
-                        <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=reset" target="_blank">{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=reset</a>
-                        </p>
-                        <p>{% trans "If you did not request this password reset, please ignore this message." %}</p>
-                        <p>
-                          {% trans "Please do not reply to this email. For support or additional questions, email" %}
-                          <a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
-                        </p>
-                        <!-- /TEMPLATE: PASSWORD RESET -->
-
-
-                        <!-- TEMPLATE: PASSWORD INVITE -->
-                        {% elif type == "password_invited" %}
-                        <h1>{% trans "Set Your Password on Digital Health Atlas" %}</h1>
-                        <p>{% trans "You have been invited to the Digital Health Atlas through a project. Please set you password so you can log in and view/edit your project." %}</p>
-                        <p><b>{% trans "To set your password, click the link below:" %}</b></p>
-                        <p>
-                        <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank">{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
-                        </p>
-                        <!-- /TEMPLATE: PASSWORD INVITED -->
-
-
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
                         {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
