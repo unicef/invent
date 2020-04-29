@@ -39,12 +39,15 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         request.sociallogin = sociallogin
 
     def save_user(self, request, sociallogin, form=None):
-        user = super().save_user(request, sociallogin, form)
-        try:
-            data = {
-                "user": user,
-            }
-            UserProfile.objects.get_or_create(name=sociallogin.account.extra_data['displayName'], defaults=data)
-        except Exception:
-            pass
+        # user = super().save_user(request, sociallogin, form)
+
+        user = sociallogin.user
+        user.set_unusable_password()
+        DefaultAccountAdapterCustom().populate_username(request, user)
+        sociallogin.save(request)
+
+        data = {
+            "name": sociallogin.account.extra_data.get('displayName'),
+        }
+        UserProfile.objects.get_or_create(user=user, defaults=data)
         return user
