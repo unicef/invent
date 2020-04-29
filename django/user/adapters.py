@@ -50,19 +50,17 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         DefaultAccountAdapterCustom().populate_username(request, user)
         sociallogin.save(request)
 
-        data = {
-            "name": sociallogin.account.extra_data.get('displayName'),
-        }
+        name = sociallogin.account.extra_data.get('displayName')
 
         try:
             profile = get_user_model().objects.exclude(id=user.id).filter(email=user.email).first().userprofile
         except AttributeError:
-            UserProfile.objects.create(user=user, defaults=data)
+            UserProfile.objects.create(user=user, name=name)
         else:
             if not hasattr(user, 'userprofile'):
                 old_user = profile.user
                 profile.user = user
-                profile.name = data['name']
+                profile.name = name
                 profile.save()
                 old_user.delete()
         return user
