@@ -51,3 +51,6 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         }
         UserProfile.objects.get_or_create(user=user, defaults=data)
         return user
+
+    def is_auto_signup_allowed(self, request, sociallogin):
+        return True
