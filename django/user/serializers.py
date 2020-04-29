@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import PasswordResetSerializer, JWTSerializer
+from rest_auth.serializers import JWTSerializer
 from rest_framework.exceptions import ValidationError
 
 from country.models import Country
 from project.models import Project
-from user.forms import PasswordHTMLEmailResetForm
 from .models import UserProfile, Organisation
 
 
@@ -105,14 +104,3 @@ class OrganisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organisation
         fields = '__all__'
-
-
-class RegisterWithProfileSerializer(RegisterSerializer):
-    def custom_signup(self, request, user):
-        if not hasattr(user, 'userprofile'):
-            account_type = request.POST.get('account_type', request.data.get('account_type', 'I'))
-            UserProfile.objects.create(user=user, account_type=account_type)
-
-
-class PasswordResetHTMLEmailSerializer(PasswordResetSerializer):
-    password_reset_form_class = PasswordHTMLEmailResetForm
