@@ -17,6 +17,7 @@ class ProfileJWTSerializer(JWTSerializer):
     user = serializers.SerializerMethodField()
     user_profile_id = serializers.SerializerMethodField()
     account_type = serializers.SerializerMethodField()
+    is_superuser = serializers.SerializerMethodField()
 
     @staticmethod
     def get_user_profile_id(obj):
@@ -33,6 +34,10 @@ class ProfileJWTSerializer(JWTSerializer):
         """
         if hasattr(obj['user'], 'userprofile'):
             return obj['user'].userprofile.account_type
+
+    @staticmethod
+    def get_is_superuser(obj):
+        return obj['user'].is_superuser
 
 
 class UserProfileListSerializer(serializers.ModelSerializer):
