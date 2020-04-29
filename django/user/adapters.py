@@ -56,7 +56,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
 
         try:
             profile = get_user_model().objects.exclude(id=user.id).filter(email=user.email).first().userprofile
-        except (UserProfile.DoesNotExist, AttributeError):
+        except AttributeError:
             UserProfile.objects.create(user=user, defaults=data)
         else:
             if not hasattr(user, 'userprofile'):
