@@ -1,6 +1,7 @@
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
+from django.contrib.auth import get_user_model
 from rest_auth.registration.views import SocialLoginView
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -52,7 +53,19 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         data = {
             "name": sociallogin.account.extra_data.get('displayName'),
         }
-        UserProfile.objects.get_or_create(user=user, defaults=data)
+
+        user_model = get_user_model()
+        try:
+            profile = user_model.objects.exclude(user=user).filter(email=user.email).first().profile
+        except user_model.RelatedObjectDoesNotExist:
+            UserProfile.objects.create(user=user, defaults=data)
+        else:
+            if not hasattr(user, 'userprofile'):
+                old_user = profile.user
+                profile.user = user
+                profile.name = data['name']
+                profile.save()
+                old_user.delete()
         return user
 
     def is_auto_signup_allowed(self, request, sociallogin):
