@@ -27,15 +27,6 @@ class SetupTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email=user_email).key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200, response.json())
-
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
