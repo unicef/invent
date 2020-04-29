@@ -145,21 +145,6 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         fields = ("team", "viewers", "new_team_emails", "new_viewer_emails")
         read_only_fields = ("id",)
 
-    def send_set_password_email(self, user, request):
-        current_site = get_current_site(request)
-        context = {
-            'email': user.email,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-            'token': default_token_generator.make_token(user),
-            'protocol': 'https' if not settings.DEBUG else 'http'
-        }
-        send_mail_wrapper(subject="Set Your Password on T4D & Innovation Inventory Portal",
-                          email_type="password_invited",
-                          to=user.email,
-                          language=user.userprofile.language,
-                          context=context)
-
     def perform_create(self, email):
         user = User.objects.create_user(username=email[:150], email=email)
         UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
