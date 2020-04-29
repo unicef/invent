@@ -27,6 +27,9 @@ class DefaultAccountAdapterCustom(DefaultAccountAdapter):
                           language=context['user'].userprofile.language,
                           context=context)
 
+    def validate_unique_email(self, email):
+        return email
+
 
 class AzureLogin(SocialLoginView):
     adapter_class = AzureOAuth2Adapter
