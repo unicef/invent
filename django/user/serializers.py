@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import JWTSerializer
 from rest_framework.exceptions import ValidationError
 
