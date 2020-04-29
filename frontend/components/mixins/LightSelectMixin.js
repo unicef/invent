@@ -26,7 +26,7 @@ export default {
     filterList (query) {
       this.query = query;
       if (query) {
-        this.options = this.items.filter(p => this.filter(p.name, query) || (p.email ? this.filter(p.email, query) : false));
+        this.options = this.items.filter(p => this.filter(p.name ? p.name : p.email, query) || (p.email ? this.filter(p.email, query) : false));
       } else {
         this.options = [];
       }
