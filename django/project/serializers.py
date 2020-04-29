@@ -1,14 +1,4 @@
-from allauth.account import app_settings as allauth_settings
-from allauth.account.utils import complete_signup
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from rest_auth.app_settings import create_token
-from rest_auth.models import TokenModel
-from rest_auth.utils import jwt_encode
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ReadOnlyField
