@@ -153,16 +153,6 @@ class UserTests(APITestCase):
         self.assertIn("account_type", response.json())
         self.assertEqual(response.json().get("account_type"), UserProfile.GOVERNMENT)
 
-    def test_forgot_password_send_email(self):
-        url = reverse("rest_password_reset")
-        data = {
-            "email": "test_user1@gmail.com",
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['detail'], 'Password reset e-mail has been sent.')
-        self.assertIn("Your Digital Health Atlas password has been reset", mail.outbox[2].subject)
-
 
 class UserProfileTests(APITestCase):
 
