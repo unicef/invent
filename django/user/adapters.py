@@ -63,6 +63,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         else:
             sociallogin.account.user = old_user
             sociallogin.account.save()
+            sociallogin.user = old_user
             old_user.userprofile.name = name
             old_user.userprofile.save()
 
