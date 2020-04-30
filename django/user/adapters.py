@@ -40,9 +40,6 @@ class AzureLogin(SocialLoginView):
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
-    def pre_social_login(self, request, sociallogin):
-        request.sociallogin = sociallogin
-
     def save_user(self, request, sociallogin, form=None):
         u = sociallogin.user
         u.set_unusable_password()
