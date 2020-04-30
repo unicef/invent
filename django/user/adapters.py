@@ -1,3 +1,4 @@
+from allauth.account.utils import setup_user_email
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
@@ -58,6 +59,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
             sociallogin.account.user = user
             sociallogin.account.save()
             UserProfile.objects.create(user=user, name=name)
+            setup_user_email(request, user, sociallogin.email_addresses)
         else:
             sociallogin.account.user = old_user
             sociallogin.account.save()
