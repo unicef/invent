@@ -43,20 +43,27 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         request.sociallogin = sociallogin
 
     def save_user(self, request, sociallogin, form=None):
-        user = super().save_user(request, sociallogin, form)
+        u = sociallogin.user
+        u.set_unusable_password()
+        DefaultAccountAdapterCustom().populate_username(request, u)
+        assert not sociallogin.is_existing
+        user = sociallogin.user
         name = sociallogin.account.extra_data.get('displayName')
 
+        user_model = get_user_model()
         try:
-            profile = get_user_model().objects.exclude(id=user.id).filter(email=user.email).first().userprofile
-        except AttributeError:
+            old_user = user_model.objects.filter(email=user.email).get()
+        except user_model.DoesNotExist:
+            user.save()
+            sociallogin.account.user = user
+            sociallogin.account.save()
             UserProfile.objects.create(user=user, name=name)
         else:
-            if not hasattr(user, 'userprofile'):
-                old_user = profile.user
-                profile.user = user
-                profile.name = name
-                profile.save()
-                old_user.delete()
+            sociallogin.account.user = old_user
+            sociallogin.account.save()
+            old_user.userprofile.name = name
+            old_user.userprofile.save()
+
         return user
 
     def is_auto_signup_allowed(self, request, sociallogin):
