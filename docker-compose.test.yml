@@ -22,7 +22,6 @@ services:
             - log_data:/var/log/django
             - ssh_data:/root/.ssh
 
-
     nginx:
         volumes:
         - ./nginx/site:/usr/share/nginx/html:rw
