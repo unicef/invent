@@ -41,7 +41,6 @@ docopt==0.6.2
 Fabric3==1.14.post1
 factory-boy==2.12.0
 flake8==3.5.0
-freezegun==0.3.15
 gunicorn==19.9.0
 idna==2.7
 ipdb==0.11
@@ -54,7 +53,7 @@ Jinja2==2.10
 kombu==4.2.1
 lazy-object-proxy==1.4.3
 Markdown==2.6.11
-MarkupSafe==1.0
+MarkupSafe==1.1.1
 mccabe==0.6.1
 microsofttranslator==0.8
 mock==2.0.0
@@ -106,4 +105,4 @@ vine==1.1.4
 watchdog==0.8.3
 wcwidth==0.1.7
 wrapt==1.11.2
-django-dotenv
+hashids==1.2.0
