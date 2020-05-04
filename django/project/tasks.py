@@ -35,7 +35,14 @@ def project_still_in_draft_notification():
     """
     Sends notification if a project is in draft state for over a month.
     """
-    projects = Project.objects.filter(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
+    # TODO: remove this later
+    if not settings.EMAIL_SENDING_PRODUCTION:
+        schedule_kwargs = dict(hours=1)
+    else:
+        schedule_kwargs = dict(days=31)
+
+    projects = Project.objects.filter(public_id='').filter(
+        modified__lt=timezone.now() - timezone.timedelta(**schedule_kwargs))
 
     if not projects:  # pragma: no cover
         return
@@ -68,7 +75,14 @@ def published_projects_updated_long_ago():
     """
     Sends notification if a project is published but not updated in the last 6 months
     """
-    projects = Project.objects.exclude(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
+    # TODO: remove this later
+    if not settings.EMAIL_SENDING_PRODUCTION:
+        schedule_kwargs = dict(hours=1)
+    else:
+        schedule_kwargs = dict(days=180)
+
+    projects = Project.objects.exclude(public_id='').filter(
+        modified__lt=timezone.now() - timezone.timedelta(**schedule_kwargs))
 
     if not projects:  # pragma: no cover
         return
