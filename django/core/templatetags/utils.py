@@ -6,4 +6,4 @@ register = template.Library()
 
 @register.simple_tag
 def site_url():
-    return "http://{}".format(Site.objects.get_current().domain)
+    return "https://{}".format(Site.objects.get_current().domain)
