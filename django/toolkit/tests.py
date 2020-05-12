@@ -1,12 +1,6 @@
 from math import ceil
-
-from django.core import mail
 from django.urls import reverse
-
-from user.models import UserProfile
 from .models import Toolkit
-from . import tasks
-
 from project.tests.setup import SetupTests
 
 
