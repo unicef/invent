@@ -1,8 +1,8 @@
 <!-- To make css inline use this tool: https://inliner.cm/ -->
 
-<!-- {% load utils %}
+{% load utils %}
 {% load staticfiles %}
-{% load i18n %} -->
+{% load i18n %}
 
 <!doctype html>
 <html>
@@ -10,7 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="content-language" content="{{ language }}">
     <meta name="viewport" content="width=device-width" />
-    <title>Email templates</title>
+    <title>UNICEF T4D & Innovation Inventory Portal Email Notification</title>
 
     <style>
       /* -------------------------------------
@@ -41,6 +41,8 @@
         border-collapse: separate;
         mso-table-lspace: 0pt;
         mso-table-rspace: 0pt;
+        -webkit-border-horizontal-spacing: 0px;
+        -webkit-border-vertical-spacing: 0px;
         width: 100%; }
         table td {
           font-family: arial, sans-serif;
@@ -78,12 +80,11 @@
       .main {
         width: 100%;
         /* border: 1px solid #D6D6D6; */
-        background: #FFFFFF;
-        border-radius: 3px; }
+        background: #FFFFFF; }
 
       .wrapper {
         box-sizing: border-box;
-        padding: 20px; }
+        padding: 0 20px 20px; }
 
       .content-block {
         padding-bottom: 10px;
@@ -91,10 +92,11 @@
       }
 
       .header {
-        height: 80px; }
+        height: 150px; }
         .header .align-right {
-          padding-top: 5px; }
+          padding-top: 15px; }
         .visit-link {
+
           font-size: 12px; }
 
       .footer {
@@ -164,7 +166,7 @@
           margin-bottom: 10px; }
 
       a {
-        color: #008DC9;
+        color: #00AEEF;
         text-decoration: underline; }
 
       /* -------------------------------------
@@ -183,9 +185,9 @@
           text-align: center; }
         .btn a {
           background-color: #FFFFFF;
-          border: solid 1px #008DC9;
+          border: solid 1px #00AEEF;
           box-sizing: border-box;
-          color: #008DC9;
+          color: #00AEEF;
           cursor: pointer;
           display: inline-block;
           font-size: 14px;
@@ -195,11 +197,11 @@
           text-decoration: none; }
 
       .btn-primary table td {
-        background-color: #008DC9; }
+        background-color: #00AEEF; }
 
       .btn-primary a {
-        background-color: #008DC9;
-        border-color: #008DC9;
+        background-color: #00AEEF;
+        border-color: #00AEEF;
         color: #FFFFFF; }
 
       /* -------------------------------------
@@ -308,10 +310,10 @@
           line-height: inherit !important;
           text-decoration: none !important; }
         .btn-primary table td:hover {
-          background-color: #008DC9 !important; }
+          background-color: #00AEEF !important; }
         .btn-primary a:hover {
-          background-color: #008DC9 !important;
-          border-color: #008DC9 !important; }
+          background-color: #00AEEF !important;
+          border-color: #00AEEF !important; }
         }
     </style>
   </head>
@@ -333,7 +335,7 @@
                   <table border="0" cellpadding="0" cellspacing="0">
                     <tr class="header">
                       <td>
-                        <img src="{% site_url %}/email-unicef-logo.png" width="154" height="60" alt="WHO x DHA logo">
+                        <img src="{% site_url %}/email/unicef-logo-banner.png" width="120" height="120" alt="Unicef logo">
                       </td>
                       <td class="align-right">
                         <a href="{% site_url %}" class="visit-link nowrap">{% trans "Visit website" %}</a>
@@ -343,10 +345,7 @@
                       <td colspan="2">
 
 
-
                         <!-- TEMPLATES -->
-
-
 
                         <!-- TEMPLATE: NEW MEMBER -->
                         {% if type == "new_member" %}
@@ -450,39 +449,6 @@
                         </table>
                         <!-- /TEMPLATE: DONOR ADMIN -->
 
-                        <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
-                        {% elif type == "email_confirmation_signup_message" %}
-                        <h1>{% trans "Welcome to the Digital Health Atlas." %}</h1>
-                        <h2>{% trans "Confirm your email address below to finalize your registration." %}</h2>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                            <tbody>
-                              <tr>
-                                <td align="left">
-                                  <table border="0" cellpadding="0" cellspacing="0">
-                                    <tbody>
-                                      <tr>
-                                        <td> <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a> </td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </td>
-                              </tr>
-                              </tbody>
-                          </table>
-                        <p>
-                            {% trans "Let us show you around." %}
-                        </p>
-                        <p>
-                            <a href="{% site_url %}/en/-/projects/create" target="_blank">{% trans "Register your project in the DHA" %}</a>
-                        </p>
-                        <p>
-                            <a href="{% site_url %}/en/-/projects" target="_blank">{% trans "Your projects inbox" %}</a>
-                        </p>
-                        <p>
-                            <a href="{% site_url %}/en/-/cms#all" target="_blank">{% trans "Global Digital Health Resources" %}</a>
-                        </p>
-                        <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
-
 
                         <!-- TEMPLATE: FLAG CONTENT -->
                         {% elif type == "flag_content" %}
@@ -505,17 +471,6 @@
                           </tbody>
                         </table>
                         <!-- /TEMPLATE: FLAG CONTENT -->
-
-
-                        <!-- TEMPLATE: TOOLKIT DIGEST -->
-                        {% elif type == "toolkit_digest" %}
-                        <h1>{% trans "Notification" %}</h1>
-                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
-                        <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
-                        <p>
-                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
-                        </p>
-                        <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
                         <!-- TEMPLATE: STATUS REPORT -->
@@ -561,89 +516,6 @@
                           </tbody>
                         </table>
                         <!-- /TEMPLATE: STATUS REPORT -->
-
-
-                        <!-- TEMPLATE: PROJECT IMPORT LIST -->
-                        {% elif type == "project_import_notify_admins" %}
-                        <h1>{% trans "Country project update" %}</h1>
-                        <h2>{% trans "Dear DHA Admin" %}</h2>
-                        <p>{% trans "The projects listed below have been imported." %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
-                          <tbody>
-                            <tr class="list-header">
-                              <td align="left">
-                                <b>{% trans "Project Name" %}</b>
-                              </td>
-                              <td align="right">
-                                {% trans "Date of import" %}
-                              </td>
-                            </tr>
-                            {% for project in projects %}
-                            <tr class="list-content">
-                              <td>
-                                  <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank"><b>{{ project.name }}</b></a>
-                              </td>
-                              <td>
-                                  {{ project.created }}
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                          <tbody>
-                            <tr>
-                              <td align="left">
-                                <table border="0" cellpadding="0" cellspacing="0">
-                                  <tbody>
-                                    <tr>
-                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go" %} {{country_name}} {% trans "Dashboard" %}</a> </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <!-- /TEMPLATE: PROJECT IMPORT LIST -->
-
-
-                        <!-- TEMPLATE: IMPORT PROJECTS -->
-                        {% elif type == "project_import_notify_owner" %}
-                        <h1>{% trans "Project access notification" %}</h1>
-                        <h2>{% trans "You were added to the following projects as a: Project Admin" %} </h2>
-                            <ul>
-                              {% for project in data.projects %}
-                                <li><a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
-                              {% endfor %}
-                            </ul>
-                            {% if data.password %}
-                            <p>
-                              <b>Your login credentials are:</b><br>
-                              <em>Username: {{ email }}</em><br>
-                              <em>Password: {{ data.password }}</em>
-                            </p>
-
-                            <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                                <tbody>
-                                  <tr>
-                                    <td align="left">
-                                      <table border="0" cellpadding="0" cellspacing="0">
-                                        <tbody>
-                                          <tr>
-                                            <td> <a href="{% site_url %}/{{ language }}/-/projects/" target="_blank">{% trans "Go to Project Inbox" %}</a> </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            {% endif %}
-                        {% endif %}
-                        <!-- /TEMPLATE: IMPORT PROJECTS -->
-
-
 
                       <!-- END TEMPLATES -->
                       </td>
