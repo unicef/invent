@@ -127,29 +127,3 @@ class ToolkitTests(SetupTests):
         self.assertEqual(ceil(response.json()[0]["domains"][1]["domain_completion"]), 10)
         self.assertEqual(ceil(response.json()[0]["axis_score"]), 38)
         self.assertEqual(ceil(response.json()[0]["axis_completion"]), 9)
-
-    def test_send_daily_toolkit_digest(self):
-        url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
-        data = {
-                "axis": 0,
-                "domain": 0,
-                "question": 0,
-                "answer": 0,
-                "value": 2
-            }
-        self.test_user_client.post(url, data, format="json")
-        tasks.send_daily_toolkit_digest()
-        self.assertEqual(mail.outbox[-1].subject, "Your Digital Health Atlas project has been updated")
-
-        profile = UserProfile.objects.get(id=self.user_profile_id)
-        self.assertEqual(profile.language, 'en')
-        self.assertIn('<meta http-equiv="content-language" content="en">',
-                      str(mail.outbox[-1].message()))
-
-        # check other language
-        profile.language = 'fr'
-        profile.save()
-        tasks.send_daily_toolkit_digest()
-
-        self.assertIn('<meta http-equiv="content-language" content="fr">',
-                      str(mail.outbox[-1].message()))
