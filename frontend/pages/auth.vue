@@ -8,12 +8,12 @@
           @click="loginStart"
         >
           <translate>
-            Login with Azure
+            Login
           </translate>
         </el-button>
         <p>
           <translate>
-            If you don't have an Azure account please contact an administrator.
+            You must have a UNICEF account to log in.
           </translate>
         </p>
       </div>
