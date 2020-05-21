@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
+from rest_framework.response import Response
 
 from django.core import mail
 from rest_framework.test import APIClient
@@ -44,6 +45,10 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 201, response.json())
 
         self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
+
+    @staticmethod
+    def create_profile_for_user(register_response: Response):
+        UserProfile.objects.create(user_id=register_response.json()['user']['pk'], name=register_response.json()['user']['username'])
 
     def test_register_user(self):
         url = reverse("rest_register")
