@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-from allauth.account.models import EmailConfirmation
 
 from country.models import Country, Donor
 from .models import Organisation, UserProfile
