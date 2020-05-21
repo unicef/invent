@@ -29,11 +29,6 @@ class TestAdmin(TestCase):
                 'password2': '123456hetNYOLC'}
         self.client.post(url, data)
 
-        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
-        url = reverse('rest_verify_email')
-        data = {'key': key}
-        self.client.post(url, data)
-
     def test_admin(self):
         admin = DigitalStrategyAdmin(DigitalStrategy, self.site)
         self.assertEqual(admin.get_queryset(self.request).count(), DigitalStrategy.all_objects.all().count())
