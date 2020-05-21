@@ -3,6 +3,7 @@ from copy import copy
 from django.urls import reverse
 from rest_framework import status
 
+from country.models import Country
 from django.core import mail
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -265,7 +266,8 @@ class PermissionTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": "test_country"}
+            "country": Country.objects.last().id,
+        }
         response = test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
 
