@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.response import Response
 
 from django.core import mail
@@ -122,14 +123,7 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -138,14 +132,9 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user2@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
+        UserTests.create_profile_for_user(response)
 
         # Log in.
         url = reverse("api_token_auth")
