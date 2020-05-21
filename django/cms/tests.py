@@ -553,13 +553,19 @@ class PermissionTest(APITestCase):
         url = reverse("rest_register")
         data = {"email": "test@who.who", "password1": "secure1234", "password2": "secure1234"}
         response = self.client.post(url, data)
-        self.user_profile_id = response.json()['user_profile_id']
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        profile = UserTests.create_profile_for_user(response)
+        self.user_profile_id = profile.id
 
         # user 2 signup
         url = reverse("rest_register")
         data = {"email": "test2@who.who", "password1": "secure1234", "password2": "secure1234"}
         response = self.client.post(url, data)
-        self.user_profile_id_2 = response.json()['user_profile_id']
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        profile = UserTests.create_profile_for_user(response)
+        self.user_profile_id_2 = profile.id
 
         self.post_data = {
             "name": "Test Post 1",
