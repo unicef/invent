@@ -33,7 +33,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['team'], [user_profile_id, user_2_profile.id])
         self.assertEqual(response.json()['viewers'], [user_profile_id])
 
-        self.assertEqual(len(mail.outbox), 3)
+        self.assertEqual(len(mail.outbox), 2)
 
         first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
         en_index = -2 if first_en else -1
