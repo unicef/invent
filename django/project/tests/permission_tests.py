@@ -1,6 +1,7 @@
 from copy import copy
 
 from django.urls import reverse
+from rest_framework import status
 
 from django.core import mail
 from django.contrib.auth.models import User
@@ -79,7 +80,7 @@ class PermissionTests(SetupTests):
             "organisation": org.id,
             "country": self.country_id}
         response = test_user_client.put(url, data, format="json")
-
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         user_profile_id = response.json()['id']
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
