@@ -23,17 +23,11 @@ class UserTests(APITestCase):
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
+
+        self.create_profile_for_user(response)
+
         self.test_user_key = response.json().get("key")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200, response.json())
 
         # Create a test user, don't validate the account.
         url = reverse("rest_register")
@@ -98,16 +92,6 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["email"][0], 'This field is required.')
 
-    def test_verify_email(self):
-        key = EmailConfirmation.objects.get(email_address__email="test_user2@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(response.json()["detail"], "ok")
-
     def test_login_user(self):
         url = reverse("api_token_auth")
         data = {
@@ -141,22 +125,6 @@ class UserTests(APITestCase):
         self.assertIn("user_profile_id", response.json())
         self.assertIn("account_type", response.json())
         self.assertEqual(response.json().get("account_type"), UserProfile.IMPLEMENTER)
-
-    def test_register_user_creates_user_profile_with_account_type(self):
-        url = reverse("rest_register")
-        data = {
-            "email": "test_user3@gmail.com",
-            "password1": "123456hetNYOLC",
-            "password2": "123456hetNYOLC",
-            "account_type": "G"
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201)
-        self.assertIn("token", response.json())
-        self.assertIn("user", response.json())
-        self.assertIn("user_profile_id", response.json())
-        self.assertIn("account_type", response.json())
-        self.assertEqual(response.json().get("account_type"), UserProfile.GOVERNMENT)
 
 
 class UserProfileTests(APITestCase):
