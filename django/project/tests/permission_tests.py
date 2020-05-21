@@ -244,7 +244,10 @@ class PermissionTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -263,7 +266,8 @@ class PermissionTests(SetupTests):
             "name": "Test Name 2",
             "organisation": org.id,
             "country": "test_country"}
-        test_user_client.put(url, data, format="json")
+        response = test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
 
         # Non member can only see the public answers
         url = reverse("project-retrieve", kwargs={"pk": project_id})
