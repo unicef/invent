@@ -158,6 +158,7 @@ class UserProfileTests(APITestCase):
             "donor": self.donor.id,
             "account_type": UserProfile.GOVERNMENT}
         response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_donor_is_not_required(self):
         url = reverse("rest_register")
