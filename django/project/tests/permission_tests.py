@@ -18,7 +18,7 @@ from user.tests import UserTests
 class PermissionTests(SetupTests):
     def test_team_member_can_update_project_groups(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
-        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='fr', name=user_2.username)
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
 
