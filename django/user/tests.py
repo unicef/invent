@@ -167,13 +167,9 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        key = EmailConfirmation.objects.get(email_address__email="test_user33@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
+        UserTests.create_profile_for_user(response)
 
         url = reverse("api_token_auth")
         data = {
