@@ -786,14 +786,7 @@ class CountryOfficeTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
