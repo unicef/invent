@@ -1,8 +1,9 @@
 import tempfile
 
-from allauth.account.models import EmailConfirmation
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from rest_framework import status
+
 from django.core import mail
 from django.test import TestCase, Client
 from rest_framework.reverse import reverse
@@ -153,15 +154,11 @@ class CmsApiTest(APITestCase):
         # Create a test user with profile.
         url = reverse("rest_register")
         data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        self.client.post(url, data)
+        # create user profile
+        UserProfile.objects.create(user_id=response.json()['user']['pk'], name=response.json()['user']['username'])
 
         # Log in the user.
         url = reverse("api_token_auth")
