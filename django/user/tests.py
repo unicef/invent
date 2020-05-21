@@ -372,8 +372,11 @@ class UserProfileTests(APITestCase):
             "username": "test_user1@gmail.com",
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        user_profile_id = response.json().get('user_profile_id')
-        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+
+        user = User.objects.get(email=data['username'])
+        profile = UserProfile.objects.create(user=user, account_type=UserProfile.DONOR)
+
+        url = reverse("userprofile-detail", kwargs={"pk": profile.id})
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         data = {
             "name": "Test Name",
@@ -383,7 +386,7 @@ class UserProfileTests(APITestCase):
             "donor": self.donor.id
         }
         response = client.put(url, data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, response.json())
         self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
 
     def test_user_profile_update_changes_account_type(self):
