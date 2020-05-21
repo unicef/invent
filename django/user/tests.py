@@ -42,7 +42,7 @@ class UserTests(APITestCase):
 
     @staticmethod
     def create_profile_for_user(register_response: Response):
-        UserProfile.objects.create(
+        return UserProfile.objects.create(
             user_id=register_response.json()['user']['pk'], name=register_response.json()['user']['username'])
 
     def test_register_user(self):
