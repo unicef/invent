@@ -1,4 +1,3 @@
-from allauth.account.models import EmailConfirmation
 from django.test import TestCase
 from django.utils.translation import override
 from django.core.cache import cache
