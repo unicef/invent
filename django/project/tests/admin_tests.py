@@ -1,4 +1,3 @@
-from allauth.account.models import EmailConfirmation
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
