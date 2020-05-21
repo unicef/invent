@@ -111,21 +111,6 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(response.json()["non_field_errors"][0], "Unable to log in with provided credentials.")
 
-    def test_register_user_creates_user_profile(self):
-        url = reverse("rest_register")
-        data = {
-            "email": "test_user3@gmail.com",
-            "password1": "123456hetNYOLC",
-            "password2": "123456hetNYOLC"
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201)
-        self.assertIn("token", response.json())
-        self.assertIn("user", response.json())
-        self.assertIn("user_profile_id", response.json())
-        self.assertIn("account_type", response.json())
-        self.assertEqual(response.json().get("account_type"), UserProfile.IMPLEMENTER)
-
 
 class UserProfileTests(APITestCase):
 
