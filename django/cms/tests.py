@@ -14,6 +14,7 @@ from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
 from country.models import Country
 from user.models import UserProfile, Organisation
+from user.tests import UserTests
 
 
 class CmsTest(TestCase):
@@ -157,8 +158,7 @@ class CmsApiTest(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        # create user profile
-        UserProfile.objects.create(user_id=response.json()['user']['pk'], name=response.json()['user']['username'])
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
