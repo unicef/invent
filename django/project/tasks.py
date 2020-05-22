@@ -44,9 +44,10 @@ def exclude_specific_project_stages(projects):
             stages_to_exclude = ['Discontinued', "Scale and Handover"]
             filtered_projects = Project.objects.none()
             for stage in stages_to_exclude:
-                key = f"draft__donor_custom_answers__{unicef.id}__{question.id}"
-                condition = {f"{key}__icontains": stage}
-                filtered_projects = filtered_projects | projects.filter(**condition)
+                for key_prefix in ['draft', 'data']:
+                    key = f"{key_prefix}__donor_custom_answers__{unicef.id}__{question.id}"
+                    condition = {f"{key}__icontains": stage}
+                    filtered_projects = filtered_projects | projects.filter(**condition)
 
             projects = projects.exclude(id__in=filtered_projects)
     return projects
@@ -93,6 +94,8 @@ def published_projects_updated_long_ago():
     Sends notification if a project is published but not updated in the last 6 months
     """
     projects = Project.objects.exclude(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
+
+    projects = exclude_specific_project_stages(projects)
 
     if not projects:  # pragma: no cover
         return
