@@ -41,7 +41,7 @@ class UserTests(APITestCase):
         self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
 
     @staticmethod
-    def create_profile_for_user(register_response: Response):
+    def create_profile_for_user(register_response: Response) -> UserProfile:
         return UserProfile.objects.create(
             user_id=register_response.json()['user']['pk'], name=register_response.json()['user']['username'])
 
