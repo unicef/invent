@@ -10,7 +10,6 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext
 from django.template import loader
