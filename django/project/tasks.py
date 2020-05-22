@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext
 from django.template import loader
@@ -19,7 +20,7 @@ from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
 from user.models import Organisation
-from country.models import Country
+from country.models import Country, Donor, DonorCustomQuestion
 
 from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
@@ -30,12 +31,34 @@ from urllib.parse import urljoin
 logger = get_task_logger(__name__)
 
 
+def exclude_specific_project_stages(projects):
+    try:
+        unicef = Donor.objects.get(name='UNICEF')
+    except Donor.DoesNotExist:
+        pass
+    else:
+        try:
+            question = DonorCustomQuestion.objects.get(donor=unicef, question='Stage')
+        except DonorCustomQuestion.DoesNotExist:
+            pass
+        else:
+            key = f"draft__donor_custom_answers__{unicef.id}__{question.id}"
+            condition_0 = {f"draft__donor_custom_answers__isnull": False}
+            condition_1 = {f"{key}__icontains": "Discontinued"}
+            condition_2 = {f"{key}__icontains": "Scale and Handover"}
+
+            projects = projects.exclude(Q(**condition_0) & (Q(**condition_1) | Q(**condition_2)))
+    return projects
+
+
 @app.task(name="project_still_in_draft_notification")
 def project_still_in_draft_notification():
     """
     Sends notification if a project is in draft state for over a month.
     """
     projects = Project.objects.filter(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
+
+    projects = exclude_specific_project_stages(projects)
 
     if not projects:  # pragma: no cover
         return
