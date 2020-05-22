@@ -33,12 +33,12 @@ logger = get_task_logger(__name__)
 def exclude_specific_project_stages(projects):
     try:
         unicef = Donor.objects.get(name='UNICEF')
-    except Donor.DoesNotExist:
+    except Donor.DoesNotExist:  # pragma: no cover
         pass
     else:
         try:
             question = DonorCustomQuestion.objects.get(donor=unicef, question='Stage')
-        except DonorCustomQuestion.DoesNotExist:
+        except DonorCustomQuestion.DoesNotExist:  # pragma: no cover
             pass
         else:
             stages_to_exclude = ['Discontinued', "Scale and Handover"]
