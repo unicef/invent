@@ -646,8 +646,7 @@ class ProjectTests(SetupTests):
         pa.approved = True
         pa.save()
         send_project_approval_digest()
-        for m in mail.outbox:
-            self.assertNotIn('/en/-/admin/country', m.message().as_string())
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_country_admins_access_all_projects_in_country_as_viewer(self):
         # Create a test user with profile.
