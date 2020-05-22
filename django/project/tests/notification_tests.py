@@ -6,6 +6,7 @@ from django.test import override_settings
 from django.utils import timezone
 from freezegun import freeze_time
 
+from country.models import Donor, DonorCustomQuestion
 from project.models import Project
 from project.tasks import project_still_in_draft_notification, published_projects_updated_long_ago
 from project.tests.setup import SetupTests
@@ -23,11 +24,37 @@ class ProjectNotificationTests(SetupTests):
         self.profile_2 = UserProfile.objects.create(user=self.user_2)
         self.user_3 = User.objects.create(username='bh_3', email='bh+3@pulilab.com')
         self.profile_3 = UserProfile.objects.create(user=self.user_3)
+        self.user_4 = User.objects.create(username='bh_4', email='bh+4@pulilab.com')
+        self.profile_4 = UserProfile.objects.create(user=self.user_4)
+        self.user_5 = User.objects.create(username='bh_5', email='bh+5@pulilab.com')
+        self.profile_5 = UserProfile.objects.create(user=self.user_5)
 
         self.published_project_data = dict(
             country=self.country.id, country_office=self.country_office.id,
             organisation=self.org.id, hsc_challenges=[1, 2], platforms=[1, 2],
             capability_categories=[], capability_levels=[], capability_subcategories=[])
+
+        self.unicef, _ = Donor.objects.get_or_create(name='UNICEF')
+        self.custom_question = DonorCustomQuestion.objects.create(
+            question="Stage",
+            donor_id=self.unicef.id,
+            options=[
+                "Opportunity and Ideation", "Preparation", "Analysis and Design", "Implementation Planning",
+                "Developing or Adapting Solution", "Piloting and Evidence Generation", "Package and Champion",
+                "Deploying", "Scaling up", "Scale and Handover", "Under Review", "Discontinued"
+            ]
+        )
+
+    @staticmethod
+    def add_donor_custom_answers_to_project(project, donor_id, custom_question_id, answer):
+        project.draft = {
+            "donor_custom_answers": {
+                donor_id: {
+                    custom_question_id: answer,
+                }
+            }
+        }
+        project.save()
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_project_still_in_draft_notification(self, send_mail_wrapper):
@@ -49,6 +76,21 @@ class ProjectNotificationTests(SetupTests):
         with freeze_time(now - timezone.timedelta(days=20)):
             draft_project_3 = Project.objects.create(name='Draft project 3', public_id='')
             draft_project_3.team.add(self.profile_3)
+
+        with freeze_time(now - timezone.timedelta(days=45)):
+            draft_project_4 = Project.objects.create(name='Draft project 4', public_id='')
+            draft_project_4.team.add(self.profile_4)
+
+            # draft_project_4 should be excluded because it is in "Scale and Handover" state
+            self.add_donor_custom_answers_to_project(
+                draft_project_4, self.unicef.id, self.custom_question.id, ['Scale and Handover'])
+
+            draft_project_5 = Project.objects.create(name='Draft project 5', public_id='')
+            draft_project_5.team.add(self.profile_5)
+
+            # draft_project_5 should be excluded because it is in "Discontinued" state
+            self.add_donor_custom_answers_to_project(
+                draft_project_5, self.unicef.id, self.custom_question.id, ['Discontinued'])
 
         with override_settings(EMAIL_SENDING_PRODUCTION=True):
             project_still_in_draft_notification.apply()
