@@ -1,3 +1,4 @@
+import copy
 from unittest import mock
 from unittest.mock import _CallList
 
@@ -145,6 +146,16 @@ class ProjectNotificationTests(SetupTests):
             published_project_3 = Project.objects.create(
                 name='Published project 3', data=self.published_project_data, public_id='3456')
             published_project_3.team.add(self.profile_3)
+
+        with freeze_time(now - timezone.timedelta(days=210)):
+            # published_project_4 should be excluded because it is in "Discontinued" state
+            data = copy.deepcopy(self.published_project_data)
+            data['donor_custom_answers'] = {
+                self.unicef.id: {self.custom_question.id: ['Discontinued']}
+            }
+
+            published_project_4 = Project.objects.create(name='Published project 4', data=data, public_id='8765')
+            published_project_4.team.add(self.profile_4)
 
         with override_settings(EMAIL_SENDING_PRODUCTION=True):
             published_projects_updated_long_ago.apply()
