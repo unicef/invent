@@ -20,6 +20,7 @@ from project.models import Project, DigitalStrategy, InteroperabilityLink, Techn
 from project.tasks import send_project_approval_digest
 
 from project.tests.setup import SetupTests, MockRequest
+from user.tests import UserTests
 
 
 class ProjectTests(SetupTests):
@@ -363,7 +364,10 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
