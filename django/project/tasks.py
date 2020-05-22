@@ -43,11 +43,11 @@ def exclude_specific_project_stages(projects):
             pass
         else:
             key = f"draft__donor_custom_answers__{unicef.id}__{question.id}"
-            condition_0 = {f"draft__donor_custom_answers__isnull": False}
             condition_1 = {f"{key}__icontains": "Discontinued"}
             condition_2 = {f"{key}__icontains": "Scale and Handover"}
 
-            projects = projects.exclude(Q(**condition_0) & (Q(**condition_1) | Q(**condition_2)))
+            specific_projects = projects.filter(Q(**condition_1) | Q(**condition_2))
+            projects = projects.exclude(id__in=specific_projects)
     return projects
 
 
