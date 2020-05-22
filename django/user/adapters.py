@@ -13,7 +13,7 @@ import scheduler.celery # noqa
 
 
 class DefaultAccountAdapterCustom(DefaultAccountAdapter):
-    def validate_unique_email(self, email):
+    def validate_unique_email(self, email):  # pragma: no cover
         return email
 
 
