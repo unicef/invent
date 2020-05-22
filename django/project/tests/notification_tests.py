@@ -45,18 +45,6 @@ class ProjectNotificationTests(SetupTests):
             ]
         )
 
-    @staticmethod
-    def add_donor_custom_answers_to_project(project, field_name, donor_id, custom_question_id, answer):
-        value = {
-            "donor_custom_answers": {
-                donor_id: {
-                    custom_question_id: answer,
-                }
-            }
-        }
-        setattr(project, field_name, value)
-        project.save()
-
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_project_still_in_draft_notification(self, send_mail_wrapper):
         now = timezone.now()
@@ -83,15 +71,19 @@ class ProjectNotificationTests(SetupTests):
             draft_project_4.team.add(self.profile_4)
 
             # draft_project_4 should be excluded because it is in "Scale and Handover" state
-            self.add_donor_custom_answers_to_project(
-                draft_project_4, 'draft', self.unicef.id, self.custom_question.id, ['Scale and Handover'])
+            draft_project_4.draft['donor_custom_answers'] = {
+                self.unicef.id: {self.custom_question.id: ['Scale and Handover']}
+            }
+            draft_project_4.save()
 
             draft_project_5 = Project.objects.create(name='Draft project 5', public_id='')
             draft_project_5.team.add(self.profile_5)
 
             # draft_project_5 should be excluded because it is in "Discontinued" state
-            self.add_donor_custom_answers_to_project(
-                draft_project_5, 'draft', self.unicef.id, self.custom_question.id, ['Discontinued'])
+            draft_project_5.draft['donor_custom_answers'] = {
+                self.unicef.id: {self.custom_question.id: ['Discontinued']}
+            }
+            draft_project_5.save()
 
         with override_settings(EMAIL_SENDING_PRODUCTION=True):
             project_still_in_draft_notification.apply()
