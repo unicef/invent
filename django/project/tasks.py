@@ -42,12 +42,14 @@ def exclude_specific_project_stages(projects):
         except DonorCustomQuestion.DoesNotExist:
             pass
         else:
-            key = f"draft__donor_custom_answers__{unicef.id}__{question.id}"
-            condition_1 = {f"{key}__icontains": "Discontinued"}
-            condition_2 = {f"{key}__icontains": "Scale and Handover"}
+            stages_to_exclude = ['Discontinued', "Scale and Handover"]
+            filtered_projects = Project.objects.none()
+            for stage in stages_to_exclude:
+                key = f"draft__donor_custom_answers__{unicef.id}__{question.id}"
+                condition = {f"{key}__icontains": stage}
+                filtered_projects = filtered_projects | projects.filter(**condition)
 
-            specific_projects = projects.filter(Q(**condition_1) | Q(**condition_2))
-            projects = projects.exclude(id__in=specific_projects)
+            projects = projects.exclude(id__in=filtered_projects)
     return projects
 
 
