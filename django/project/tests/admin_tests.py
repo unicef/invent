@@ -1,4 +1,3 @@
-from allauth.account.models import EmailConfirmation
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
@@ -27,11 +26,6 @@ class TestAdmin(TestCase):
         data = {'email': 'test_user@gmail.com',
                 'password1': '123456hetNYOLC',
                 'password2': '123456hetNYOLC'}
-        self.client.post(url, data)
-
-        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
-        url = reverse('rest_verify_email')
-        data = {'key': key}
         self.client.post(url, data)
 
     def test_admin(self):

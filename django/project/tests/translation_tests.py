@@ -1,12 +1,13 @@
-from allauth.account.models import EmailConfirmation
 from django.test import TestCase
 from django.utils.translation import override
 from django.core.cache import cache
+from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
 from project.models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, HealthCategory, HSCChallenge, HSCGroup
 from user.models import UserProfile
+from user.tests import UserTests
 
 
 class TestModelTranslations(TestCase):
@@ -18,24 +19,9 @@ class TestModelTranslations(TestCase):
             'password1': '123456hetNYOLC',
             'password2': '123456hetNYOLC'}
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
-        url = reverse('rest_verify_email')
-        data = {
-            'key': key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
-
-        key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
-        url = reverse('rest_verify_email')
-        data = {
-            'key': key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         data = {

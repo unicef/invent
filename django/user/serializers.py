@@ -18,7 +18,7 @@ class ProfileJWTSerializer(JWTSerializer):
     is_superuser = serializers.SerializerMethodField()
 
     @staticmethod
-    def get_user_profile_id(obj):
+    def get_user_profile_id(obj):  # pragma: no cover
         """
         Checks the UserProfile existence for the given key.
         """
@@ -26,7 +26,7 @@ class ProfileJWTSerializer(JWTSerializer):
             return obj['user'].userprofile.id
 
     @staticmethod
-    def get_account_type(obj):
+    def get_account_type(obj):  # pragma: no cover
         """
         Checks the UserProfile existence for the given key.
         """
