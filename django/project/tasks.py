@@ -48,7 +48,8 @@ def exclude_specific_project_stages(projects, filter_key_prefix='draft'):
                 condition = {f"{key}__icontains": stage}
                 filtered_projects = filtered_projects | projects.filter(**condition)
 
-            projects = projects.exclude(id__in=filtered_projects)
+            if filtered_projects:
+                projects = projects.exclude(id__in=filtered_projects)
     return projects
 
 
