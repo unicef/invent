@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
+from rest_framework import status
+from rest_framework.response import Response
 
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-from allauth.account.models import EmailConfirmation
 
 from country.models import Country, Donor
 from .models import Organisation, UserProfile
@@ -22,17 +23,11 @@ class UserTests(APITestCase):
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
+
+        self.create_profile_for_user(response)
+
         self.test_user_key = response.json().get("key")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200, response.json())
 
         # Create a test user, don't validate the account.
         url = reverse("rest_register")
@@ -44,6 +39,11 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 201, response.json())
 
         self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
+
+    @staticmethod
+    def create_profile_for_user(register_response: Response) -> UserProfile:
+        return UserProfile.objects.create(
+            user_id=register_response.json()['user']['pk'], name=register_response.json()['user']['username'])
 
     def test_register_user(self):
         url = reverse("rest_register")
@@ -93,16 +93,6 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["email"][0], 'This field is required.')
 
-    def test_verify_email(self):
-        key = EmailConfirmation.objects.get(email_address__email="test_user2@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(response.json()["detail"], "ok")
-
     def test_login_user(self):
         url = reverse("api_token_auth")
         data = {
@@ -122,37 +112,6 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(response.json()["non_field_errors"][0], "Unable to log in with provided credentials.")
 
-    def test_register_user_creates_user_profile(self):
-        url = reverse("rest_register")
-        data = {
-            "email": "test_user3@gmail.com",
-            "password1": "123456hetNYOLC",
-            "password2": "123456hetNYOLC"
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201)
-        self.assertIn("token", response.json())
-        self.assertIn("user", response.json())
-        self.assertIn("user_profile_id", response.json())
-        self.assertIn("account_type", response.json())
-        self.assertEqual(response.json().get("account_type"), UserProfile.IMPLEMENTER)
-
-    def test_register_user_creates_user_profile_with_account_type(self):
-        url = reverse("rest_register")
-        data = {
-            "email": "test_user3@gmail.com",
-            "password1": "123456hetNYOLC",
-            "password2": "123456hetNYOLC",
-            "account_type": "G"
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201)
-        self.assertIn("token", response.json())
-        self.assertIn("user", response.json())
-        self.assertIn("user_profile_id", response.json())
-        self.assertIn("account_type", response.json())
-        self.assertEqual(response.json().get("account_type"), UserProfile.GOVERNMENT)
-
 
 class UserProfileTests(APITestCase):
 
@@ -164,14 +123,7 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -180,14 +132,9 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user2@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
+        UserTests.create_profile_for_user(response)
 
         # Log in.
         url = reverse("api_token_auth")
@@ -210,21 +157,18 @@ class UserProfileTests(APITestCase):
             "donor": self.donor.id,
             "account_type": UserProfile.GOVERNMENT}
         response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_donor_is_not_reqired(self):
+    def test_donor_is_not_required(self):
         url = reverse("rest_register")
         data = {
             "email": "test_user33@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        key = EmailConfirmation.objects.get(email_address__email="test_user33@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
+        UserTests.create_profile_for_user(response)
 
         url = reverse("api_token_auth")
         data = {
@@ -424,8 +368,11 @@ class UserProfileTests(APITestCase):
             "username": "test_user1@gmail.com",
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        user_profile_id = response.json().get('user_profile_id')
-        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+
+        user = User.objects.get(email=data['username'])
+        profile = UserProfile.objects.create(user=user, account_type=UserProfile.DONOR)
+
+        url = reverse("userprofile-detail", kwargs={"pk": profile.id})
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
         data = {
             "name": "Test Name",
@@ -435,7 +382,7 @@ class UserProfileTests(APITestCase):
             "donor": self.donor.id
         }
         response = client.put(url, data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, response.json())
         self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
 
     def test_user_profile_update_changes_account_type(self):

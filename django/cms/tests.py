@@ -1,8 +1,9 @@
 import tempfile
 
-from allauth.account.models import EmailConfirmation
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from rest_framework import status
+
 from django.core import mail
 from django.test import TestCase, Client
 from rest_framework.reverse import reverse
@@ -13,6 +14,7 @@ from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
 from country.models import Country
 from user.models import UserProfile, Organisation
+from user.tests import UserTests
 
 
 class CmsTest(TestCase):
@@ -153,15 +155,10 @@ class CmsApiTest(APITestCase):
         # Create a test user with profile.
         url = reverse("rest_register")
         data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        self.client.post(url, data)
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -556,13 +553,19 @@ class PermissionTest(APITestCase):
         url = reverse("rest_register")
         data = {"email": "test@who.who", "password1": "secure1234", "password2": "secure1234"}
         response = self.client.post(url, data)
-        self.user_profile_id = response.json()['user_profile_id']
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        profile = UserTests.create_profile_for_user(response)
+        self.user_profile_id = profile.id
 
         # user 2 signup
         url = reverse("rest_register")
         data = {"email": "test2@who.who", "password1": "secure1234", "password2": "secure1234"}
         response = self.client.post(url, data)
-        self.user_profile_id_2 = response.json()['user_profile_id']
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        profile = UserTests.create_profile_for_user(response)
+        self.user_profile_id_2 = profile.id
 
         self.post_data = {
             "name": "Test Post 1",

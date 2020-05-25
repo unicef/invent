@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from country.models import Country, Donor, CountryOffice
 from user.models import Organisation, UserProfile
+from user.tests import UserTests
 
 
 class MockRequest():
@@ -25,6 +26,8 @@ class SetupTests(APITestCase):
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
+
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")

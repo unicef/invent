@@ -1,7 +1,9 @@
 from copy import copy
 
 from django.urls import reverse
+from rest_framework import status
 
+from country.models import Country
 from django.core import mail
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -10,12 +12,13 @@ from user.models import Organisation, UserProfile
 from project.models import Project
 
 from project.tests.setup import SetupTests
+from user.tests import UserTests
 
 
 class PermissionTests(SetupTests):
     def test_team_member_can_update_project_groups(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
-        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='fr', name=user_2.username)
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
 
@@ -30,7 +33,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['team'], [user_profile_id, user_2_profile.id])
         self.assertEqual(response.json()['viewers'], [user_profile_id])
 
-        self.assertEqual(len(mail.outbox), 3)
+        self.assertEqual(len(mail.outbox), 2)
 
         first_en = '<meta http-equiv="content-language" content="en">' in mail.outbox[-2].message().as_string()
         en_index = -2 if first_en else -1
@@ -60,6 +63,9 @@ class PermissionTests(SetupTests):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -79,7 +85,7 @@ class PermissionTests(SetupTests):
             "organisation": org.id,
             "country": self.country_id}
         response = test_user_client.put(url, data, format="json")
-
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         user_profile_id = response.json()['id']
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -107,6 +113,9 @@ class PermissionTests(SetupTests):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -167,7 +176,10 @@ class PermissionTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -236,7 +248,10 @@ class PermissionTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        UserTests.create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -254,8 +269,10 @@ class PermissionTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": "test_country"}
-        test_user_client.put(url, data, format="json")
+            "country": Country.objects.last().id,
+        }
+        response = test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
 
         # Non member can only see the public answers
         url = reverse("project-retrieve", kwargs={"pk": project_id})
