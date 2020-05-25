@@ -19,7 +19,7 @@ from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
 from user.models import Organisation
-from country.models import Country
+from country.models import Country, Donor, DonorCustomQuestion
 
 from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
@@ -30,12 +30,37 @@ from urllib.parse import urljoin
 logger = get_task_logger(__name__)
 
 
+def exclude_specific_project_stages(projects, filter_key_prefix='draft'):
+    try:
+        unicef = Donor.objects.get(name='UNICEF')
+    except Donor.DoesNotExist:  # pragma: no cover
+        pass
+    else:
+        try:
+            question = DonorCustomQuestion.objects.get(donor=unicef, question='Stage')
+        except DonorCustomQuestion.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            stages_to_exclude = ['Discontinued', "Scale and Handover"]
+            filtered_projects = Project.objects.none()
+            key = f"{filter_key_prefix}__donor_custom_answers__{unicef.id}__{question.id}"
+            for stage in stages_to_exclude:
+                condition = {f"{key}__icontains": stage}
+                filtered_projects = filtered_projects | projects.filter(**condition)
+
+            if filtered_projects:
+                projects = projects.exclude(id__in=filtered_projects)
+    return projects
+
+
 @app.task(name="project_still_in_draft_notification")
 def project_still_in_draft_notification():
     """
     Sends notification if a project is in draft state for over a month.
     """
     projects = Project.objects.filter(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
+
+    projects = exclude_specific_project_stages(projects)
 
     if not projects:  # pragma: no cover
         return
@@ -69,6 +94,8 @@ def published_projects_updated_long_ago():
     Sends notification if a project is published but not updated in the last 6 months
     """
     projects = Project.objects.exclude(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
+
+    projects = exclude_specific_project_stages(projects, filter_key_prefix='data')
 
     if not projects:  # pragma: no cover
         return
