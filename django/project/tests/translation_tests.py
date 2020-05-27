@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 
 from project.models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, HealthCategory, HSCChallenge, HSCGroup
 from user.models import UserProfile
-from user.tests import UserTests
+from user.tests import create_profile_for_user
 
 
 class TestModelTranslations(TestCase):
@@ -21,7 +21,7 @@ class TestModelTranslations(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         data = {
