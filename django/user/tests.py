@@ -30,7 +30,7 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
-        self.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         self.test_user_key = response.json().get("key")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
@@ -46,10 +46,43 @@ class UserTests(APITestCase):
 
         self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
 
-    @staticmethod
-    def create_profile_for_user(register_response: Response) -> UserProfile:
-        return UserProfile.objects.create(
-            user_id=register_response.json()['user']['pk'], name=register_response.json()['user']['username'])
+    def test_non_expiring_api_token_auth(self):
+        # NORMAL JWT
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user1@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        user_profile_id = response.json().get('user_profile_id')
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('id'), user_profile_id)
+        self.assertEqual(response.json().get('email'), "test_user1@gmail.com")
+
+        # UNAUTHORIZED ACCESS
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format('RANDOM'), format="json")
+        response = client.get(url)
+        self.assertEqual(response.status_code, 401)
+        error_detail = response.json()['detail']
+        self.assertEqual(error_detail, 'Error decoding signature.')
+
+        # NON EXPIRING TOKEN ACCESS
+        user = User.objects.get(email='test_user1@gmail.com')
+        token = Token.objects.create(user=user)
+        client = APIClient(HTTP_AUTHORIZATION="Bearer {}".format(token.key), format="json")
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('id'), user_profile_id)
+        self.assertEqual(response.json().get('email'), "test_user1@gmail.com")
+
+        # UNAUTHORIZED NON EXPIRING TOKEN ACCESS
+        client = APIClient(HTTP_AUTHORIZATION="Bearer {}".format('RANDOM'), format="json")
+        response = client.get(url)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()['detail'], 'Invalid token.')
+        self.assertNotEqual(response.json()['detail'], error_detail)
 
     def test_register_user(self):
         url = reverse("rest_register")
@@ -140,7 +173,7 @@ class UserProfileTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in.
         url = reverse("api_token_auth")
@@ -174,7 +207,7 @@ class UserProfileTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         url = reverse("api_token_auth")
         data = {
