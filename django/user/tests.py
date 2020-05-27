@@ -7,9 +7,15 @@ from rest_framework.response import Response
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
+from rest_framework.authtoken.models import Token
 
 from country.models import Country, Donor
 from .models import Organisation, UserProfile
+
+
+def create_profile_for_user(register_response: Response) -> UserProfile:
+    return UserProfile.objects.create(
+        user_id=register_response.json()['user']['pk'], name=register_response.json()['user']['username'])
 
 
 class UserTests(APITestCase):
