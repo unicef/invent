@@ -12,7 +12,7 @@ from user.models import Organisation, UserProfile
 from project.models import Project
 
 from project.tests.setup import SetupTests
-from user.tests import UserTests
+from user.tests import create_profile_for_user
 
 
 class PermissionTests(SetupTests):
@@ -65,7 +65,7 @@ class PermissionTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -115,7 +115,7 @@ class PermissionTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -179,7 +179,7 @@ class PermissionTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -251,7 +251,7 @@ class PermissionTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
