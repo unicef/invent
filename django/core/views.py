@@ -10,6 +10,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from project.permissions import InTeamOrReadOnly
 from project.models import Project
 from country.models import Country
+from user.authentication import BearerTokenAuthentication
 
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
 from .data.domains import AXIS, DOMAINS
@@ -25,12 +26,12 @@ class TokenAuthMixin(object):
     Mixin class for defining general permission and authentication settings on
     REST Framework Class Based Views.
     """
-    authentication_classes = (JSONWebTokenAuthentication,)
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated,)
 
 
 class TeamTokenAuthMixin(object):
-    authentication_classes = (JSONWebTokenAuthentication,)
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
