@@ -9,7 +9,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.postgres.fields.array import ArrayField
 from django.forms.widgets import MediaDefiningClass
 from modeltranslation.translator import translator
-from rest_framework.authtoken.models import Token
 
 from user.models import UserProfile
 from .widgets import AdminArrayField
@@ -116,4 +115,3 @@ admin.site.unregister(EmailConfirmation)
 admin.site.unregister(SocialAccount)
 admin.site.unregister(SocialToken)
 admin.site.unregister(SocialApp)
-admin.site.unregister(Token)
