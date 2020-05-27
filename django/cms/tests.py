@@ -14,7 +14,7 @@ from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
 from country.models import Country
 from user.models import UserProfile, Organisation
-from user.tests import UserTests
+from user.tests import create_profile_for_user
 
 
 class CmsTest(TestCase):
@@ -158,7 +158,7 @@ class CmsApiTest(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -555,7 +555,7 @@ class PermissionTest(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        profile = UserTests.create_profile_for_user(response)
+        profile = create_profile_for_user(response)
         self.user_profile_id = profile.id
 
         # user 2 signup
@@ -564,7 +564,7 @@ class PermissionTest(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        profile = UserTests.create_profile_for_user(response)
+        profile = create_profile_for_user(response)
         self.user_profile_id_2 = profile.id
 
         self.post_data = {
