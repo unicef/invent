@@ -20,7 +20,7 @@ from project.models import Project, DigitalStrategy, InteroperabilityLink, Techn
 from project.tasks import send_project_approval_digest
 
 from project.tests.setup import SetupTests, MockRequest
-from user.tests import UserTests
+from user.tests import create_profile_for_user
 
 
 class ProjectTests(SetupTests):
@@ -367,7 +367,7 @@ class ProjectTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -422,7 +422,7 @@ class ProjectTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -658,7 +658,7 @@ class ProjectTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -729,7 +729,7 @@ class ProjectTests(SetupTests):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
-        UserTests.create_profile_for_user(response)
+        create_profile_for_user(response)
 
         # Log in the user.
         url = reverse("api_token_auth")
