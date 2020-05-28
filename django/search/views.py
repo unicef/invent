@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from typing import Type
 
 from django.core.paginator import Paginator
 from django.utils.functional import cached_property
@@ -8,7 +7,6 @@ from rest_framework import filters, mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.serializers import BaseSerializer
 from rest_framework.viewsets import GenericViewSet
 
 from core.views import TokenAuthMixin
@@ -90,12 +88,12 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         Search in projects, works by the following query params:
 
         ** SEARCH PARAMETERS **
-        
+
         `q` search term eg: q=test  
         `in` search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc&in=partner&in=donor]  
 
         ** FILTER PARAMETERS **
-        
+
         `country` eg: country=1&country=2  
         `sw` eg: sw=1&sw=2  
         `dhi` eg: dhi=1&dhi=2  
@@ -108,7 +106,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         `approved` eg: approved=0 (for not approved), approved=1 (for approved)  
 
         ** UNICEF filters **
-        
+
         `fo` Field Office in eg: fo=1&fo=2  
         `goal` Goal Area in eg: goal=1&goal=2  
         `result` Result Area in eg: result=1&result=2  
@@ -117,23 +115,23 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         `cs` Capability Sucategories overlap eg: cs=1&cs=2  
 
         ** FOUND IN FEATURE **
-        
+
         `found` include if present (defaults to exclude)  
 
         ** TYPE AND ORDERING **
-        
+
         `type` map | list (defaults to map) [eg: type=map]  
         `ordering` project__name | organisation__name | country__name | 
                    project__data__government_investor | country__region | 
                    project__modified  
 
         ** PAGINATION **
-        
+
         `page` 1...n | last (will show the last page no matter the number)  
         `page_size` eg: 20  
 
         ** VIEW AS **
-        
+
         `view_as` donor | country  
         """
         results = {}
