@@ -35,7 +35,7 @@ class ResultsSetPagination(PageNumberPagination):
         ]))
 
 
-class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
+class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
     search = ProjectSearch.search
     filter = ProjectSearch.filter
     found_in = ProjectSearch.found_in
