@@ -6,3 +6,4 @@ exclude=
     *migrations/*,
     *settings/*,
     .venv/*
+extend-ignore=W291,E741
