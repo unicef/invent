@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from typing import Type
 
 from django.core.paginator import Paginator
 from django.utils.functional import cached_property
@@ -7,8 +8,10 @@ from rest_framework import filters, mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 from rest_framework.viewsets import GenericViewSet
 
+from core.views import TokenAuthMixin
 from country.models import Donor, Country
 from .serializers import MapResultSerializer, ListResultSerializer
 from .models import ProjectSearch
