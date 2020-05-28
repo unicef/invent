@@ -79,6 +79,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
                        'country__name', 'country_office__region')
     ordering = ('project_id',)
     pagination_class = ResultsSetPagination
+    serializer_class = ListResultSerializer
 
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='')\
