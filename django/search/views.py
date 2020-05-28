@@ -148,9 +148,6 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         view_as = query_params.get('view_as')
 
         if view_as and view_as == 'donor':
-            if not request.user.is_authenticated:
-                raise ValidationError("You must be authenticated for viewing as.")
-
             donor_list = query_params.getlist('donor')
             if not donor_list:
                 raise ValidationError("No donor selected for view as.")
@@ -169,9 +166,6 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
                 raise ValidationError("No access to donor.")
 
         elif view_as and view_as == 'country':
-            if not request.user.is_authenticated:
-                raise ValidationError("You must be authenticated for viewing as.")
-
             country_list = query_params.getlist('country')
             if not country_list:
                 raise ValidationError("No country selected for view as.")
