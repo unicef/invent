@@ -28,6 +28,21 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
 
 class ProjectPublicViewSet(ViewSet):
     def project_structure(self, request):
+        """
+        Terminology and taxonomy endpoint - List all the available taxonomies and terminologies
+
+        Reponse:  
+        `technology_platforms` == WHO's Software list  
+        `goal_areas`  
+        `result_areas`  
+        `capability_levels`  
+        `capability_categories`  
+        `capability_subcategories`  
+        `health_focus_areas` == WHO's Health Focus Areas  
+        `hsc_challenges` == WHO's Health System Challanges  
+        `strategies` == WHO's Digital Health Interventions  
+        `field_offices`  
+        """
         return Response(self._get_project_structure())
 
     @cache_structure
