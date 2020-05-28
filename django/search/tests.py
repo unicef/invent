@@ -297,8 +297,8 @@ class SearchTests(SetupTests):
         data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor"}
 
         response = self.client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), ['You must be authenticated for viewing as.'])
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()['detail'], 'Authentication credentials were not provided.')
 
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
@@ -338,8 +338,8 @@ class SearchTests(SetupTests):
         self.country.users.remove(self.userprofile)
 
         response = self.client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), ['You must be authenticated for viewing as.'])
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()['detail'], 'Authentication credentials were not provided.')
 
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
