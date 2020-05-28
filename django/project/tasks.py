@@ -207,9 +207,9 @@ def sync_project_from_odk():  # pragma: no cover
         elif column_type == 'country':
             project['country'] = escaped_int_converter(value)
         elif 'platforms' in column_type:
-                platforms = project.get('platforms', [])
-                value = escaped_int_converter(value)
-                project['platforms'] = platforms + [{'id': value}]
+            platforms = project.get('platforms', [])
+            value = escaped_int_converter(value)
+            project['platforms'] = platforms + [{'id': value}]
         elif column_type == 'clients':
             nld = project.get('national_level_deployment', dict(default_nld))
             nld['clients'] = escaped_int_converter(value)
