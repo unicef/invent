@@ -145,24 +145,24 @@ class ProjectNotificationTests(SetupTests):
             draft_project_1 = Project.objects.create(name='Draft project 1', public_id='')
             draft_project_1.team.add(self.profile_1)
 
-            # make a published project without API calls
+            # make a published project without API calls, task should pick this up
             published_project_1 = Project.objects.create(
-                name='Published project 1', data=self.published_project_data, public_id='1234')
+                name='Published project 1', data=self.published_project_data, public_id='1111')
             published_project_1.team.add(self.profile_1)
 
         with freeze_time(now - timezone.timedelta(days=190)):
             draft_project_2 = Project.objects.create(name='Draft project 2', public_id='')
             draft_project_2.team.add(self.profile_2)
 
-            # make a published project without API calls
+            # task should pick this up
             published_project_2 = Project.objects.create(
-                name='Published project 2', data=self.published_project_data, public_id='2345')
+                name='Published project 2', data=self.published_project_data, public_id='2222')
             published_project_2.team.add(self.profile_2)
 
         with freeze_time(now - timezone.timedelta(days=100)):
-            # make a published project without API calls
+            # task shouldn't pick this up
             published_project_3 = Project.objects.create(
-                name='Published project 3', data=self.published_project_data, public_id='3456')
+                name='Published project 3', data=self.published_project_data, public_id='3333')
             published_project_3.team.add(self.profile_3)
 
         with freeze_time(now - timezone.timedelta(days=210)):
@@ -172,8 +172,13 @@ class ProjectNotificationTests(SetupTests):
                 self.unicef.id: {self.custom_question.id: ['Discontinued']}
             }
 
-            published_project_4 = Project.objects.create(name='Published project 4', data=data, public_id='8765')
+            published_project_4 = Project.objects.create(name='Published project 4', data=data, public_id='4444')
             published_project_4.team.add(self.profile_4)
+
+            # task should pick this up
+            published_project_5 = Project.objects.create(
+                name='Published project 5', data=self.published_project_data, public_id='5555')
+            published_project_5.team.add(self.profile_2)
 
         with override_settings(EMAIL_SENDING_PRODUCTION=True):
             published_projects_updated_long_ago.apply()
@@ -181,17 +186,24 @@ class ProjectNotificationTests(SetupTests):
             # task should send emails about Published project 1 and Published project 2
             self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
 
-            call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
-            self.assertEqual(call_args_list_1['subject'], 'Published project last updated over 6 months')
-            self.assertEqual(call_args_list_1['email_type'], 'published_project_updated_long_ago')
-            self.assertEqual(call_args_list_1['to'], [self.user_1.email])
-            self.assertEqual(call_args_list_1['context'], {'project_name': 'Published project 1'})
-
-            call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
-            self.assertEqual(call_args_list_2['subject'], 'Published project last updated over 6 months')
-            self.assertEqual(call_args_list_2['email_type'], 'published_project_updated_long_ago')
-            self.assertEqual(call_args_list_2['to'], [self.user_2.email])
-            self.assertEqual(call_args_list_2['context'], {'project_name': 'Published project 2'})
+            for call in send_mail_wrapper.call_args_list:
+                call_args = call[1]
+                self.assertEqual(call_args['subject'], 'Published project last updated over 6 months')
+                self.assertEqual(call_args['email_type'], 'missing_data_common_template')
+                self.assertEqual(call_args['context']['details'],
+                                 'The following published project(s) has been last updated over 6 month:')
+                self.assertEqual(call_args['language'], 'en')
+                if call_args['to'] == self.user_1.email:
+                    # user_1 should receive notifications about published project 1
+                    self.assertEqual(call_args['context']['name'], self.profile_1.name)
+                    self.assertEqual(len(call_args['context']['projects']), 1)
+                    self.assertIn(published_project_1, call_args['context']['projects'])
+                else:
+                    # user_2 should receive notifications about published project 2
+                    self.assertEqual(call_args['context']['name'], self.profile_2.name)
+                    self.assertEqual(len(call_args['context']['projects']), 2)
+                    self.assertIn(published_project_2, call_args['context']['projects'])
+                    self.assertIn(published_project_5, call_args['context']['projects'])
 
         # init
         send_mail_wrapper.call_args_list = _CallList()
@@ -204,6 +216,8 @@ class ProjectNotificationTests(SetupTests):
 
             call_args_list = send_mail_wrapper.call_args_list[0][1]
             self.assertEqual(call_args_list['subject'], 'Published project last updated over 6 months')
-            self.assertEqual(call_args_list['email_type'], 'published_project_updated_long_ago')
-            self.assertEqual(call_args_list['to'], [self.user_1.email])
-            self.assertEqual(call_args_list['context'], {'project_name': 'Published project 1'})
+            self.assertEqual(call_args_list['email_type'], 'missing_data_common_template')
+            self.assertEqual(call_args_list['context']['details'],
+                             'The following published project(s) has been last updated over 6 month:')
+            self.assertEqual(call_args_list['to'], self.user_1.email)
+            self.assertIn(published_project_1, call_args_list['context']['projects'])
