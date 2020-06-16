@@ -99,7 +99,7 @@ def published_projects_updated_long_ago():
     """
     from user.models import UserProfile
 
-    projects = Project.objects.exclude(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
+    projects = Project.objects.published_only().filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
 
     projects = exclude_specific_project_stages(projects, filter_key_prefix='data')
 
