@@ -369,16 +369,39 @@
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
-                        <!-- TEMPLATE: PROJECT STILL IN DRAFT -->
-                        {% elif type == "project_still_in_draft" %}
-                        <p>{% blocktrans %}Project: <b>{{ project_name }}</b> has been in draft state for over a month.{% endblocktrans %}</p>
-                        <!-- /TEMPLATE: PROJECT STILL IN DRAFT -->
-
-
                         <!-- TEMPLATE: PUBLISHED PROJECT UPDATED LONG AGO -->
                         {% elif type == "published_project_updated_long_ago" %}
                         <p>{% blocktrans %}Published project: <b>{{ project_name }}</b> was updated over 6 months.{% endblocktrans %}</p>
                         <!-- /TEMPLATE: PUBLISHED PROJECT UPDATED LONG AGO -->
+
+
+                        <!-- REMINDER COMMON TEMPLATE -->
+                        {% elif type == "reminder_common_template" %}
+                        <h2>{% trans "Dear" %} {{ name }}</h2>
+                        <p>{{ details }}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <!-- /REMINDER COMMON TEMPLATE -->
 
 
                         <!-- TEMPLATE: COUNTRY ADMIN -->
