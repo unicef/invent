@@ -51,19 +51,22 @@ class ProjectNotificationTests(SetupTests):
         now = timezone.now()
 
         with freeze_time(now - timezone.timedelta(days=40)):
+            # task should pick this up
             draft_project_1 = Project.objects.create(name='Draft project 1', public_id='')
             draft_project_1.team.add(self.profile_1)
 
-            # make a published project without API calls
+            # make a published project without API calls, task shouldn't pick this up
             published_project = Project.objects.create(
                 name='Published project 1', data=self.published_project_data, public_id='1234')
             published_project.team.add(self.profile_1)
 
         with freeze_time(now - timezone.timedelta(days=32)):
+            # task should pick this up
             draft_project_2 = Project.objects.create(name='Draft project 2', public_id='')
             draft_project_2.team.add(self.profile_2)
 
         with freeze_time(now - timezone.timedelta(days=20)):
+            # task shouldn't pick this up, it is not over 30 days
             draft_project_3 = Project.objects.create(name='Draft project 3', public_id='')
             draft_project_3.team.add(self.profile_3)
 
@@ -86,23 +89,34 @@ class ProjectNotificationTests(SetupTests):
             }
             draft_project_5.save()
 
+            # task should pick this up
+            draft_project_6 = Project.objects.create(name='Draft project 6', public_id='')
+            draft_project_6.team.add(self.profile_2)
+
         with override_settings(EMAIL_SENDING_PRODUCTION=True):
             project_still_in_draft_notification.apply()
 
             # task should send emails about Draft project 1 and Draft project 2
             self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
 
-            call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
-            self.assertEqual(call_args_list_1['subject'], 'Project has been in draft state for over a month')
-            self.assertEqual(call_args_list_1['email_type'], 'project_still_in_draft')
-            self.assertEqual(call_args_list_1['to'], [self.user_1.email])
-            self.assertEqual(call_args_list_1['context'], {'project_name': 'Draft project 1'})
-
-            call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
-            self.assertEqual(call_args_list_2['subject'], 'Project has been in draft state for over a month')
-            self.assertEqual(call_args_list_2['email_type'], 'project_still_in_draft')
-            self.assertEqual(call_args_list_2['to'], [self.user_2.email])
-            self.assertEqual(call_args_list_2['context'], {'project_name': 'Draft project 2'})
+            for call in send_mail_wrapper.call_args_list:
+                call_args = call[1]
+                self.assertEqual(call_args['subject'], 'Project has been in draft state for over a month')
+                self.assertEqual(call_args['email_type'], 'missing_data_common_template')
+                self.assertEqual(call_args['context']['details'],
+                                 'The following project(s) has been in draft state for over a month:')
+                self.assertEqual(call_args['language'], 'en')
+                if call_args['to'] == self.user_1.email:
+                    # user_1 should receive notifications about draft project 1
+                    self.assertEqual(call_args['context']['name'], self.profile_1.name)
+                    self.assertEqual(len(call_args['context']['projects']), 1)
+                    self.assertIn(draft_project_1, call_args['context']['projects'])
+                else:
+                    # user_2 should receive notifications about draft project 2 and draft project 6
+                    self.assertEqual(call_args['context']['name'], self.profile_2.name)
+                    self.assertEqual(len(call_args['context']['projects']), 2)
+                    self.assertIn(draft_project_2, call_args['context']['projects'])
+                    self.assertIn(draft_project_6, call_args['context']['projects'])
 
         # init
         send_mail_wrapper.call_args_list = _CallList()
@@ -115,9 +129,13 @@ class ProjectNotificationTests(SetupTests):
 
             call_args_list = send_mail_wrapper.call_args_list[0][1]
             self.assertEqual(call_args_list['subject'], 'Project has been in draft state for over a month')
-            self.assertEqual(call_args_list['email_type'], 'project_still_in_draft')
-            self.assertEqual(call_args_list['to'], [self.user_1.email])
-            self.assertEqual(call_args_list['context'], {'project_name': 'Draft project 1'})
+            self.assertEqual(call_args_list['email_type'], 'missing_data_common_template')
+            self.assertEqual(call_args_list['context']['details'],
+                             'The following project(s) has been in draft state for over a month:')
+            self.assertEqual(call_args_list['language'], 'en')
+            self.assertEqual(call_args_list['to'], self.user_1.email)
+            self.assertEqual(len(call_args_list['context']['projects']), 1)
+            self.assertIn(draft_project_1, call_args_list['context']['projects'])
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_published_projects_updated_long_ago(self, send_mail_wrapper):
