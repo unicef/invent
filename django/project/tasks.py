@@ -57,7 +57,7 @@ def project_still_in_draft_notification():
     """
     from user.models import UserProfile
 
-    projects = Project.objects.filter(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
+    projects = Project.objects.draft_only().filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
 
     projects = exclude_specific_project_stages(projects)
 
