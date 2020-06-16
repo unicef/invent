@@ -97,6 +97,8 @@ def published_projects_updated_long_ago():
     """
     Sends notification if a project is published but not updated in the last 6 months
     """
+    from user.models import UserProfile
+
     projects = Project.objects.exclude(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
 
     projects = exclude_specific_project_stages(projects, filter_key_prefix='data')
@@ -106,25 +108,30 @@ def published_projects_updated_long_ago():
 
     # limit emails
     if not settings.EMAIL_SENDING_PRODUCTION:
-        projects = projects[:1]
+        projects = Project.objects.filter(id=projects.first().id)
 
-    for project in projects:
-        email_mapping = defaultdict(list)
+    project_team_members = set(projects.values_list('team', flat=True))
 
-        receivers = project.team.all()
-        # limit emails
-        if not settings.EMAIL_SENDING_PRODUCTION:
-            receivers = receivers[:1]
-
-        for profile in receivers:
-            email_mapping[profile.language].append(profile.user.email)
-
-        for language, email_list in email_mapping.items():
-            send_mail_wrapper(subject='Published project last updated over 6 months',
-                              email_type='published_project_updated_long_ago',
-                              to=email_list,
-                              language=language,
-                              context={'project_name': project.name})
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Published project last updated over 6 months")
+            details = _('The following published project(s) has been last updated over 6 month:')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )
 
 
 @app.task(name="send_project_approval_digest")
