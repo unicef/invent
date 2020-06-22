@@ -1,31 +1,28 @@
 import json
-import traceback
 import logging
-import requests
-
-from datetime import datetime
-
+import traceback
 from collections import defaultdict
+from datetime import datetime
+from urllib.parse import urljoin
+
+import requests
+from celery.utils.log import get_task_logger
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
-from django.contrib.auth.models import User
+from django.template import loader
 from django.utils import timezone
 from django.utils.translation import ugettext
-from django.template import loader
-
-from celery.utils.log import get_task_logger
+from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
-from user.models import Organisation
 from country.models import Country, Donor, DonorCustomQuestion
-
+from scheduler.celery import app
+from user.models import Organisation
 from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
-
-from scheduler.celery import app
-from urllib.parse import urljoin
 
 logger = get_task_logger(__name__)
 
@@ -58,7 +55,9 @@ def project_still_in_draft_notification():
     """
     Sends notification if a project is in draft state for over a month.
     """
-    projects = Project.objects.filter(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
+    from user.models import UserProfile
+
+    projects = Project.objects.draft_only().filter(modified__lt=timezone.now() - timezone.timedelta(days=31))
 
     projects = exclude_specific_project_stages(projects)
 
@@ -67,25 +66,30 @@ def project_still_in_draft_notification():
 
     # limit emails
     if not settings.EMAIL_SENDING_PRODUCTION:
-        projects = projects[:1]
+        projects = Project.objects.filter(id=projects.first().id)
 
-    for project in projects:
-        email_mapping = defaultdict(list)
+    project_team_members = set(projects.values_list('team', flat=True))
 
-        receivers = project.team.all()
-        # limit emails
-        if not settings.EMAIL_SENDING_PRODUCTION:
-            receivers = receivers[:1]
-
-        for profile in receivers:
-            email_mapping[profile.language].append(profile.user.email)
-
-        for language, email_list in email_mapping.items():
-            send_mail_wrapper(subject='Project has been in draft state for over a month',
-                              email_type='project_still_in_draft',
-                              to=email_list,
-                              language=language,
-                              context={'project_name': project.name})
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Project has been in draft state for over a month")
+            details = _('The following project(s) has been in draft state for over a month:')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )
 
 
 @app.task(name="published_projects_updated_long_ago")
@@ -93,7 +97,9 @@ def published_projects_updated_long_ago():
     """
     Sends notification if a project is published but not updated in the last 6 months
     """
-    projects = Project.objects.exclude(public_id='').filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
+    from user.models import UserProfile
+
+    projects = Project.objects.published_only().filter(modified__lt=timezone.now() - timezone.timedelta(days=180))
 
     projects = exclude_specific_project_stages(projects, filter_key_prefix='data')
 
@@ -102,25 +108,30 @@ def published_projects_updated_long_ago():
 
     # limit emails
     if not settings.EMAIL_SENDING_PRODUCTION:
-        projects = projects[:1]
+        projects = Project.objects.filter(id=projects.first().id)
 
-    for project in projects:
-        email_mapping = defaultdict(list)
+    project_team_members = set(projects.values_list('team', flat=True))
 
-        receivers = project.team.all()
-        # limit emails
-        if not settings.EMAIL_SENDING_PRODUCTION:
-            receivers = receivers[:1]
-
-        for profile in receivers:
-            email_mapping[profile.language].append(profile.user.email)
-
-        for language, email_list in email_mapping.items():
-            send_mail_wrapper(subject='Published project last updated over 6 months',
-                              email_type='published_project_updated_long_ago',
-                              to=email_list,
-                              language=language,
-                              context={'project_name': project.name})
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Published project last updated over 6 months")
+            details = _('The following published project(s) has been last updated over 6 month:')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )
 
 
 @app.task(name="send_project_approval_digest")
