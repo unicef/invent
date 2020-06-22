@@ -1,10 +1,10 @@
 import uuid
 from collections import namedtuple
 
-from django.db import models
-from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
+from django.db import models
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -15,8 +15,8 @@ from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, Acti
 from country.models import Country, Donor, CountryOffice
 from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys
-from user.models import UserProfile
 from toolkit.toolkit_data import toolkit_default
+from user.models import UserProfile
 
 
 class ProjectManager(models.Manager):
@@ -38,6 +38,9 @@ class ProjectManager(models.Manager):
 
     def published_only(self):
         return self.exclude(public_id='')
+
+    def draft_only(self):
+        return self.filter(public_id='')
 
 
 class ProjectQuerySet(ActiveQuerySet, ProjectManager):
