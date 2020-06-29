@@ -77,8 +77,9 @@ def project_still_in_draft_notification():
             pass
         else:
             member_projects = [project for project in projects.filter(team=member)]
-            subject = _("Project has been in draft state for over a month")
-            details = _('The following project(s) has been in draft state for over a month:')
+            subject = _("One or more of your projects have not been published yet")
+            details = _('The following project(s) have been draft only for over a month, '
+                        'please consider publishing so they become visible in the search or on the map: ')
             send_mail_wrapper(
                 subject=subject,
                 email_type='missing_data_common_template',
@@ -119,8 +120,8 @@ def published_projects_updated_long_ago():
             pass
         else:
             member_projects = [project for project in projects.filter(team=member)]
-            subject = _("Published project last updated over 6 months")
-            details = _('The following published project(s) has been last updated over 6 month:')
+            subject = _("One or more of your projects have not been updated for 6 months")
+            details = _('Please check in to keep the project data current by verifying the following project(s):')
             send_mail_wrapper(
                 subject=subject,
                 email_type='missing_data_common_template',
