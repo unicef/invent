@@ -82,7 +82,7 @@ def project_still_in_draft_notification():
                         'please consider publishing so they become visible in the search or on the map: ')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_data_common_template',
+                email_type='reminder_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
@@ -124,7 +124,7 @@ def published_projects_updated_long_ago():
             details = _('Please check in to keep the project data current by verifying the following project(s):')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_data_common_template',
+                email_type='reminder_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
