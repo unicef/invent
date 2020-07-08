@@ -101,7 +101,7 @@ class ProjectNotificationTests(SetupTests):
 
             for call in send_mail_wrapper.call_args_list:
                 call_args = call[1]
-                self.assertEqual(call_args['email_type'], 'missing_data_common_template')
+                self.assertEqual(call_args['email_type'], 'reminder_common_template')
                 self.assertEqual(call_args['language'], 'en')
                 if call_args['to'] == self.user_1.email:
                     # user_1 should receive notifications about draft project 1
@@ -125,7 +125,7 @@ class ProjectNotificationTests(SetupTests):
             self.assertEqual(len(send_mail_wrapper.call_args_list), 1)
 
             call_args_list = send_mail_wrapper.call_args_list[0][1]
-            self.assertEqual(call_args_list['email_type'], 'missing_data_common_template')
+            self.assertEqual(call_args_list['email_type'], 'reminder_common_template')
             self.assertEqual(call_args_list['language'], 'en')
             self.assertEqual(call_args_list['to'], self.user_1.email)
             self.assertEqual(len(call_args_list['context']['projects']), 1)
@@ -182,7 +182,7 @@ class ProjectNotificationTests(SetupTests):
 
             for call in send_mail_wrapper.call_args_list:
                 call_args = call[1]
-                self.assertEqual(call_args['email_type'], 'missing_data_common_template')
+                self.assertEqual(call_args['email_type'], 'reminder_common_template')
                 self.assertEqual(call_args['language'], 'en')
                 if call_args['to'] == self.user_1.email:
                     # user_1 should receive notifications about published project 1
@@ -206,6 +206,6 @@ class ProjectNotificationTests(SetupTests):
             self.assertEqual(len(send_mail_wrapper.call_args_list), 1)
 
             call_args_list = send_mail_wrapper.call_args_list[0][1]
-            self.assertEqual(call_args_list['email_type'], 'missing_data_common_template')
+            self.assertEqual(call_args_list['email_type'], 'reminder_common_template')
             self.assertEqual(call_args_list['to'], self.user_1.email)
             self.assertIn(published_project_1, call_args_list['context']['projects'])
