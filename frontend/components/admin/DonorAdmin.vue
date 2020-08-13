@@ -2,7 +2,7 @@
   <div class="CountryAdmin">
     <div class="PageTitle">
       <h2>
-        <translate :parameters="{name: donor.name}">
+        <translate :parameters="{ name: donor.name }">
           Investor admin for {name}
         </translate>
       </h2>
@@ -24,16 +24,10 @@
           v-if="userProfile.is_superuser"
           :label="$gettext('Choose investor') | translate"
         >
-          <donor-select
-            :value="donorId"
-            @change="setDonorId"
-          />
+          <donor-select :value="donorId" @change="setDonorId" />
         </el-form-item>
 
-        <el-form-item
-          :label="$gettext('Logo')"
-          prop="logo"
-        >
+        <el-form-item :label="$gettext('Logo')" prop="logo">
           <file-upload
             :disabled="notSDA"
             :auto-upload="false"
@@ -42,15 +36,8 @@
           />
         </el-form-item>
 
-        <el-form-item
-          :label="$gettext('Cover image') | translate"
-          prop="cover"
-        >
-          <file-upload
-            :disabled="notSDA"
-            :files.sync="cover"
-            :limit="1"
-          />
+        <el-form-item :label="$gettext('Cover image') | translate" prop="cover">
+          <file-upload :disabled="notSDA" :files.sync="cover" :limit="1" />
         </el-form-item>
 
         <el-form-item :label="$gettext('Cover text') | translate">
@@ -63,19 +50,11 @@
         </el-form-item>
 
         <el-form-item :label="$gettext('Footer title') | translate">
-          <el-input
-            v-model="footerTitle"
-            :disabled="notSDA"
-            type="text"
-          />
+          <el-input v-model="footerTitle" :disabled="notSDA" type="text" />
         </el-form-item>
 
         <el-form-item :label="$gettext('Footer text') | translate">
-          <el-input
-            v-model="footerText"
-            :disabled="notSDA"
-            type="text"
-          />
+          <el-input v-model="footerText" :disabled="notSDA" type="text" />
         </el-form-item>
 
         <el-form-item
@@ -98,19 +77,21 @@
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
           <div
-            :class="['Persona', { 'active': selectedPersona === 'D'}]"
+            :class="['Persona', { active: selectedPersona === 'D' }]"
             @click="selectPersona('D')"
           >
             <div class="PersonaName">
-              <translate>Investor Viewers</translate>
+              <translate>Viewers</translate>
             </div>
             <div class="RequestCount">
-              <translate :parameters="{num: userSelection.length - users.length}">
+              <translate
+                :parameters="{ num: userSelection.length - users.length }"
+              >
                 {num} new request(s)
               </translate>
             </div>
           </div>
-          <div
+          <!-- <div
             :class="['Persona', { 'active': selectedPersona === 'DA'}]"
             @click="selectPersona('DA')"
           >
@@ -122,16 +103,20 @@
                 {num} new request(s)
               </translate>
             </div>
-          </div>
+          </div> -->
           <div
-            :class="['Persona', { 'active': selectedPersona === 'SDA'}]"
+            :class="['Persona', { active: selectedPersona === 'SDA' }]"
             @click="selectPersona('SDA')"
           >
             <div class="PersonaName">
-              <translate>Investor System Admins</translate>
+              <translate>System Admins</translate>
             </div>
             <div class="RequestCount">
-              <translate :parameters="{num: superadminSelection.length - superAdmins.length}">
+              <translate
+                :parameters="{
+                  num: superadminSelection.length - superAdmins.length
+                }"
+              >
                 {num} new request(s)
               </translate>
             </div>
@@ -139,14 +124,12 @@
         </el-col>
 
         <el-col class="UserTransfers">
-          <div
-            v-if="selectedPersona === 'D'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'D'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Privileges for Investor Users</translate>
+                  <fa icon="info-circle" />
+                  <translate>Privileges for Investor Users</translate>
                 </template>
                 <div>
                   <ul>
@@ -165,18 +148,18 @@
             v-model="users"
             :titles="transferTitles"
             :data="userSelection"
-            :filter-placeholder="$gettext('Type to filter users...') | translate"
+            :filter-placeholder="
+              $gettext('Type to filter users...') | translate
+            "
             filterable
           />
 
-          <div
-            v-if="selectedPersona === 'DA'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'DA'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Privileges for Investor Admins</translate>
+                  <fa icon="info-circle" />
+                  <translate>Privileges for Investor Admins</translate>
                 </template>
                 <div>
                   <ul>
@@ -210,24 +193,25 @@
             v-model="admins"
             :titles="transferTitles"
             :data="adminSelection"
-            :filter-placeholder="$gettext('Type to filter users...') | translate"
+            :filter-placeholder="
+              $gettext('Type to filter users...') | translate
+            "
             filterable
           />
 
-          <div
-            v-if="selectedPersona === 'SDA'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'SDA'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Privileges for Investor System Admins</translate>
+                  <fa icon="info-circle" />
+                  <translate>Privileges for Investor System Admins</translate>
                 </template>
                 <div>
                   <ul>
                     <li>
                       <translate key="sda-list-item-1">
-                        Can read/export responses to private investor-specific questions
+                        Can read/export responses to private investor-specific
+                        questions
                       </translate>
                     </li>
                     <li>
@@ -260,7 +244,9 @@
             v-model="superAdmins"
             :titles="transferTitles"
             :data="superadminSelection"
-            :filter-placeholder="$gettext('Type to filter users...') | translate"
+            :filter-placeholder="
+              $gettext('Type to filter users...') | translate
+            "
             filterable
           />
         </el-col>
@@ -275,22 +261,12 @@
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
-      <el-row
-        type="flex"
-        justify="space-between"
-      >
-        <el-button
-          type="text"
-          class="CancelButton IconLeft"
-        >
+      <el-row type="flex" justify="space-between">
+        <el-button type="text" class="CancelButton IconLeft">
           <fa icon="reply" />
           <translate>Dismiss changes</translate>
         </el-button>
-        <el-button
-          type="primary"
-          size="medium"
-          @click="save"
-        >
+        <el-button type="primary" size="medium" @click="save">
           <translate>Save changes</translate>
         </el-button>
       </el-row>
@@ -299,16 +275,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import CollapsibleCard from '../project/CollapsibleCard';
-import DhaQuestionaire from '../admin/DhaQuestionaire';
-import FileUpload from '../common/FileUpload';
-import DonorSelect from '../common/DonorSelect';
-import { mapGettersActions } from '../../utilities/form';
+import { mapGetters, mapActions } from "vuex";
+import CollapsibleCard from "../project/CollapsibleCard";
+import DhaQuestionaire from "../admin/DhaQuestionaire";
+import FileUpload from "../common/FileUpload";
+import DonorSelect from "../common/DonorSelect";
+import { mapGettersActions } from "../../utilities/form";
 
 export default {
-
-  name: 'CountryAdministrator',
+  name: "CountryAdministrator",
 
   components: {
     CollapsibleCard,
@@ -317,40 +292,46 @@ export default {
     DonorSelect
   },
 
-  data () {
+  data() {
     return {
-      selectedPersona: 'D',
-      logoError: '',
-      coverError: '',
+      selectedPersona: "D",
+      logoError: "",
+      coverError: "",
       flagForKeepingPartnerLogosError: false,
-      partnerLogosError: '',
+      partnerLogosError: "",
       rules: {
         logo: [
-          { validator: (rule, value, callback) => {
-            if (this.logoError) {
-              callback(new Error(this.logoError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.logoError) {
+                callback(new Error(this.logoError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ],
         cover: [
-          { validator: (rule, value, callback) => {
-            if (this.coverError) {
-              callback(new Error(this.coverError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.coverError) {
+                callback(new Error(this.coverError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ],
         partnerLogos: [
-          { validator: (rule, value, callback) => {
-            if (this.partnerLogosError) {
-              callback(new Error(this.partnerLogosError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.partnerLogosError) {
+                callback(new Error(this.partnerLogosError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ]
       }
     };
@@ -358,173 +339,203 @@ export default {
 
   computed: {
     ...mapGettersActions({
-      coverText: ['admin/donor', 'getCoverText', 'setCoverText'],
-      footerTitle: ['admin/donor', 'getFooterTitle', 'setFooterTitle'],
-      footerText: ['admin/donor', 'getFooterText', 'setFooterText']
+      coverText: ["admin/donor", "getCoverText", "setCoverText"],
+      footerTitle: ["admin/donor", "getFooterTitle", "setFooterTitle"],
+      footerText: ["admin/donor", "getFooterText", "setFooterText"]
     }),
 
     ...mapGetters({
-      donor: 'admin/donor/getData',
-      userSelection: 'admin/donor/getUserSelection',
-      adminSelection: 'admin/donor/getAdminSelection',
-      superadminSelection: 'admin/donor/getSuperadminSelection',
-      userProfile: 'user/getProfile'
+      donor: "admin/donor/getData",
+      userSelection: "admin/donor/getUserSelection",
+      adminSelection: "admin/donor/getAdminSelection",
+      superadminSelection: "admin/donor/getSuperadminSelection",
+      userProfile: "user/getProfile"
     }),
 
-    notSDA () {
-      return this.userProfile.account_type === 'DA' && !this.userProfile.is_superuser;
+    notSDA() {
+      return (
+        this.userProfile.account_type === "DA" && !this.userProfile.is_superuser
+      );
     },
 
     logo: {
-      get () {
-        if (typeof this.donor.logo === 'string') {
-          return [{
-            url: this.donor.logo,
-            name: ('' + this.donor.logo).split('/').pop()
-          }];
+      get() {
+        if (typeof this.donor.logo === "string") {
+          return [
+            {
+              url: this.donor.logo,
+              name: ("" + this.donor.logo).split("/").pop()
+            }
+          ];
         } else if (!this.donor.logo) {
           return [];
         } else {
           return [this.donor.logo];
         }
       },
-      set ([value]) {
-        this.setDataField({ field: 'logo', data: value });
+      set([value]) {
+        this.setDataField({ field: "logo", data: value });
       }
     },
 
     cover: {
-      get () {
-        if (typeof this.donor.cover === 'string') {
-          return [{
-            url: this.donor.cover,
-            name: ('' + this.donor.cover).split('/').pop()
-          }];
+      get() {
+        if (typeof this.donor.cover === "string") {
+          return [
+            {
+              url: this.donor.cover,
+              name: ("" + this.donor.cover).split("/").pop()
+            }
+          ];
         } else if (!this.donor.cover) {
           return [];
         } else {
           return [this.donor.cover];
         }
       },
-      set ([value]) {
-        this.setDataField({ field: 'cover', data: value });
+      set([value]) {
+        this.setDataField({ field: "cover", data: value });
       }
     },
 
     partnerLogos: {
-      get () {
+      get() {
         return this.donor.partner_logos.map(rawLogo => {
           if (rawLogo.raw || rawLogo.uid) {
             return rawLogo;
           } else if (rawLogo.image) {
-            return ({
+            return {
               url: rawLogo.image,
-              name: ('' + rawLogo.image).split('/').pop(),
+              name: ("" + rawLogo.image).split("/").pop(),
               id: rawLogo.id
-            });
+            };
           }
         });
       },
-      set (value) {
-        this.setDataField({ field: 'partner_logos', data: value });
+      set(value) {
+        this.setDataField({ field: "partner_logos", data: value });
       }
     },
 
     users: {
-      get () {
+      get() {
         return this.donor.users || [];
       },
-      set (value) {
-        this.setDataField({ field: 'users', data: value });
+      set(value) {
+        this.setDataField({ field: "users", data: value });
       }
     },
 
     admins: {
-      get () {
+      get() {
         return this.donor.admins || [];
       },
-      set (value) {
-        this.setDataField({ field: 'admins', data: value });
+      set(value) {
+        this.setDataField({ field: "admins", data: value });
       }
     },
 
     superAdmins: {
-      get () {
+      get() {
         return this.donor.super_admins || [];
       },
-      set (value) {
-        this.setDataField({ field: 'super_admins', data: value });
+      set(value) {
+        this.setDataField({ field: "super_admins", data: value });
       }
     },
 
     donorId: {
-      get () {
+      get() {
         return this.donor.id || this.userProfile.donor;
       },
-      async set (value) {
+      async set(value) {
         this.setId(value);
         await this.fetchData();
       }
     },
-    transferTitles () {
-      return [this.$gettext('New requests'), this.$gettext('Approved')];
+    transferTitles() {
+      return [this.$gettext("New requests"), this.$gettext("Approved")];
     }
   },
 
   watch: {
-    logo (newArr, oldArr) {
+    logo(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
         return;
       }
 
-      const filteredArray = [...this.logo.filter(image => {
-        return !image.raw || (image.raw && image.raw.name.endsWith('.jpg')) || (image.raw && image.raw.name.endsWith('.jpeg')) || (image.raw && image.raw.name.endsWith('.png'));
-      })];
+      const filteredArray = [
+        ...this.logo.filter(image => {
+          return (
+            !image.raw ||
+            (image.raw && image.raw.name.endsWith(".jpg")) ||
+            (image.raw && image.raw.name.endsWith(".jpeg")) ||
+            (image.raw && image.raw.name.endsWith(".png"))
+          );
+        })
+      ];
 
       if (newArr.length !== filteredArray.length) {
         this.logo = filteredArray;
-        this.logoError = 'Wrong image format, you can only upload .jpg and .png files';
+        this.logoError =
+          "Wrong image format, you can only upload .jpg and .png files";
       } else {
-        this.logoError = '';
+        this.logoError = "";
       }
       this.$refs.countryInfo.validate(() => {});
     },
 
-    cover (newArr, oldArr) {
+    cover(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
         return;
       }
 
-      const filteredArray = [...this.cover.filter(image => {
-        return !image.raw || (image.raw && image.raw.name.endsWith('.jpg')) || (image.raw && image.raw.name.endsWith('.jpeg')) || (image.raw && image.raw.name.endsWith('.png'));
-      })];
+      const filteredArray = [
+        ...this.cover.filter(image => {
+          return (
+            !image.raw ||
+            (image.raw && image.raw.name.endsWith(".jpg")) ||
+            (image.raw && image.raw.name.endsWith(".jpeg")) ||
+            (image.raw && image.raw.name.endsWith(".png"))
+          );
+        })
+      ];
 
       if (newArr.length !== filteredArray.length) {
         this.cover = filteredArray;
-        this.coverError = 'Wrong image format, you can only upload .jpg and .png files';
+        this.coverError =
+          "Wrong image format, you can only upload .jpg and .png files";
       } else {
-        this.coverError = '';
+        this.coverError = "";
       }
       this.$refs.countryInfo.validate(() => {});
     },
 
-    partnerLogos (newArr, oldArr) {
+    partnerLogos(newArr, oldArr) {
       // Handles error message placing for wrong image formats
-      const filteredArray = [...this.partnerLogos.filter(image => {
-        return !image.raw || (image.raw && image.raw.name.endsWith('.jpg')) || (image.raw && image.raw.name.endsWith('.jpeg')) || (image.raw && image.raw.name.endsWith('.png'));
-      })];
+      const filteredArray = [
+        ...this.partnerLogos.filter(image => {
+          return (
+            !image.raw ||
+            (image.raw && image.raw.name.endsWith(".jpg")) ||
+            (image.raw && image.raw.name.endsWith(".jpeg")) ||
+            (image.raw && image.raw.name.endsWith(".png"))
+          );
+        })
+      ];
 
       if (newArr.length !== filteredArray.length) {
         this.partnerLogos = filteredArray;
-        this.partnerLogosError = 'Wrong image format, you can only upload .jpg and .png files';
+        this.partnerLogosError =
+          "Wrong image format, you can only upload .jpg and .png files";
         this.flagForKeepingPartnerLogosError = true;
       } else if (this.flagForKeepingPartnerLogosError) {
         this.flagForKeepingPartnerLogosError = false;
         return;
       } else {
-        this.partnerLogosError = '';
+        this.partnerLogosError = "";
       }
       this.$refs.countryInfo.validate(() => {});
     }
@@ -532,25 +543,25 @@ export default {
 
   methods: {
     ...mapActions({
-      setDataField: 'admin/donor/setDataField',
-      saveChanges: 'admin/donor/saveChanges',
-      setId: 'admin/donor/setId',
-      fetchData: 'admin/donor/fetchData'
+      setDataField: "admin/donor/setDataField",
+      saveChanges: "admin/donor/saveChanges",
+      setId: "admin/donor/setId",
+      fetchData: "admin/donor/fetchData"
     }),
 
-    selectPersona (selected) {
+    selectPersona(selected) {
       this.selectedPersona = selected;
     },
 
-    setDonorId (value) {
+    setDonorId(value) {
       this.donorId = value;
     },
-    save () {
+    save() {
       if (this.$refs.customQuestions.allSaved) {
         this.saveChanges();
       } else {
-        this.$alert('Your questionnaire is not completely saved', 'Warning', {
-          confirmButtonText: 'Ok'
+        this.$alert("Your questionnaire is not completely saved", "Warning", {
+          confirmButtonText: "Ok"
         });
       }
     }
@@ -559,205 +570,204 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .CountryAdmin {
-    margin-bottom: 60px;
+.CountryAdmin {
+  margin-bottom: 60px;
 
-    .CollapsibleCard {
-      width: @cardSizeMedium;
-      margin: 0 auto 20px;
+  .CollapsibleCard {
+    width: @cardSizeMedium;
+    margin: 0 auto 20px;
+  }
+
+  .CountryInformation {
+    .ContentContainer {
+      padding: 40px;
     }
 
-    .CountryInformation {
-      .ContentContainer {
-        padding: 40px;
-      }
-
-      .el-checkbox {
-        line-height: 40px;
-      }
-
-      .DonorSelector {
-        width: 50%;
-      }
+    .el-checkbox {
+      line-height: 40px;
     }
 
-    .UserManagement {
-      .ContentContainer {
-        padding: 0;
-      }
+    .DonorSelector {
+      width: 50%;
+    }
+  }
 
-      .AdminPersonaChooser {
-        width: 200px;
-        border-right: 2px solid @colorGrayLighter;
+  .UserManagement {
+    .ContentContainer {
+      padding: 0;
+    }
 
-        .Persona {
-          position: relative;
-          display: block;
-          padding: 16px 20px;
-          border-bottom: 1px solid @colorGrayLighter;
-          cursor: pointer;
+    .AdminPersonaChooser {
+      width: 200px;
+      border-right: 2px solid @colorGrayLighter;
+
+      .Persona {
+        position: relative;
+        display: block;
+        padding: 16px 20px;
+        border-bottom: 1px solid @colorGrayLighter;
+        cursor: pointer;
+        transition: @transitionAll;
+
+        .PersonaName {
+          color: @colorTextSecondary;
+          font-size: @fontSizeBase;
+          line-height: 16px;
+          margin-bottom: 8px;
+        }
+
+        .RequestCount {
+          color: @colorTextMuted;
+          font-size: @fontSizeSmall;
+        }
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 50%;
+          right: 12px;
+          transform: translateY(-50%);
+          height: 14px;
+          opacity: 0;
           transition: @transitionAll;
+        }
+
+        &:hover {
+          background-color: @colorGrayLightest;
 
           .PersonaName {
-            color: @colorTextSecondary;
-            font-size: @fontSizeBase;
-            line-height: 16px;
-            margin-bottom: 8px;
+            color: @colorTextPrimary;
           }
 
           .RequestCount {
-            color: @colorTextMuted;
-            font-size: @fontSizeSmall;
+            color: @colorGray;
           }
 
           .svg-inline--fa {
-            position: absolute;
-            top: 50%;
-            right: 12px;
-            transform: translateY(-50%);
-            height: 14px;
-            opacity: 0;
-            transition: @transitionAll;
+            opacity: 0.5;
+          }
+        }
+
+        &.active {
+          background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
+          border-color: mix(@colorWhite, @colorBrandPrimary, 70%);
+
+          .PersonaName {
+            font-weight: 700;
+            color: @colorBrandPrimary;
           }
 
-          &:hover {
-            background-color: @colorGrayLightest;
-
-            .PersonaName {
-              color: @colorTextPrimary;
-            }
-
-            .RequestCount {
-              color: @colorGray;
-            }
-
-            .svg-inline--fa {
-              opacity: .5;
-            }
+          .RequestCount {
+            color: @colorTextSecondary;
           }
 
-          &.active {
-            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
-            border-color: mix(@colorWhite, @colorBrandPrimary, 70%);
+          .svg-inline--fa {
+            color: @colorBrandPrimary;
+            opacity: 1;
+          }
+        }
+      }
+    }
 
-            .PersonaName {
-              font-weight: 700;
-              color: @colorBrandPrimary;
-            }
+    .UserTransfers {
+      padding: 20px 40px;
 
-            .RequestCount {
-              color: @colorTextSecondary;
-            }
+      .PersonaPrivileges {
+        margin: 0 0 20px;
 
-            .svg-inline--fa {
-              color: @colorBrandPrimary;
-              opacity: 1;
-            }
+        ul {
+          margin: 0;
+          padding: 0 0 0 40px;
+
+          li {
+            font-size: @fontSizeSmall;
+            line-height: 18px;
+            color: @colorTextSecondary;
+          }
+        }
+      }
+
+      .el-transfer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin: 0 0 20px;
+      }
+
+      .el-transfer-panel {
+        width: 100%;
+
+        .el-transfer-panel__body {
+          min-height: 250px;
+          max-height: 40vh;
+          overflow-y: auto;
+        }
+
+        // &:first-child {
+        //   .el-transfer-panel__header {
+        //     background-color: lighten(@colorDraft, 33%);
+        //   }
+        // }
+        //
+        // &:last-child {
+        //   .el-transfer-panel__header {
+        //     background-color: lighten(@colorPublished, 52%);
+        //   }
+        // }
+      }
+
+      // .el-transfer-buttons {}
+    }
+  }
+
+  .Questionnaire {
+    .ContentContainer {
+      padding: 20px;
+    }
+  }
+
+  .AdminActionBarBottom {
+    box-sizing: border-box;
+    min-width: @cardSizeMedium;
+    max-width: @cardSizeMedium;
+    margin: 40px auto;
+    padding: 40px 0;
+    border-top: 1px solid @colorGrayLight;
+  }
+}
+
+[dir="rtl"] {
+  .CountryAdmin {
+    .UserManagement {
+      .AdminPersonaChooser {
+        border-left: 2px solid @colorGrayLighter;
+        border-right: none;
+
+        .Persona {
+          .svg-inline--fa {
+            left: 12px;
+            right: auto;
+            transform: translateY(-50%) rotate(180deg);
           }
         }
       }
 
       .UserTransfers {
-        padding: 20px 40px;
-
         .PersonaPrivileges {
-          margin: 0 0 20px;
-
+          .el-collapse .el-collapse-item__header .svg-inline--fa {
+            margin-left: 6px;
+            margin-right: 0;
+          }
           ul {
-            margin: 0;
-            padding: 0 0 0 40px;
-
-            li {
-              font-size: @fontSizeSmall;
-              line-height: 18px;
-              color: @colorTextSecondary;
-            }
-          }
-        }
-
-        .el-transfer {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          margin: 0 0 20px;
-        }
-
-        .el-transfer-panel {
-          width: 100%;
-
-          .el-transfer-panel__body {
-            min-height: 250px;
-            max-height: 40vh;
-            overflow-y: auto;
-          }
-
-          // &:first-child {
-          //   .el-transfer-panel__header {
-          //     background-color: lighten(@colorDraft, 33%);
-          //   }
-          // }
-          //
-          // &:last-child {
-          //   .el-transfer-panel__header {
-          //     background-color: lighten(@colorPublished, 52%);
-          //   }
-          // }
-        }
-
-        // .el-transfer-buttons {}
-      }
-    }
-
-    .Questionnaire {
-      .ContentContainer {
-        padding: 20px;
-      }
-    }
-
-    .AdminActionBarBottom {
-      box-sizing: border-box;
-      min-width: @cardSizeMedium;
-      max-width: @cardSizeMedium;
-      margin: 40px auto;
-      padding: 40px 0;
-      border-top: 1px solid @colorGrayLight;
-    }
-  }
-
-  [dir="rtl"] {
-    .CountryAdmin {
-      .UserManagement {
-
-        .AdminPersonaChooser {
-          border-left: 2px solid @colorGrayLighter;
-          border-right: none;
-
-          .Persona {
-            .svg-inline--fa {
-              left: 12px;
-              right: auto;
-              transform: translateY(-50%) rotate(180deg);
-            }
-          }
-        }
-
-        .UserTransfers {
-          .PersonaPrivileges {
-            .el-collapse .el-collapse-item__header .svg-inline--fa {
-              margin-left: 6px;
-              margin-right: 0;
-            }
-            ul {
-              padding-left: 0;
-              padding-right: 40px;
-            }
+            padding-left: 0;
+            padding-right: 40px;
           }
         }
       }
     }
   }
+}
 </style>
