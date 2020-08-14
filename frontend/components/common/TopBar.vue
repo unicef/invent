@@ -1,19 +1,15 @@
 <template>
-  <div
-    v-scroll-class:TopBarMin="180"
-    class="TopBar"
-  >
+  <div v-scroll-class:TopBarMin="180" class="TopBar">
     <el-row
       type="flex"
       justify="space-between"
-      :class="{TopBarInner: true, IsAuth: auth}"
+      :class="{ TopBarInner: true, IsAuth: auth }"
     >
       <el-col class="LogoHolder">
-        <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
-          <el-row
-            type="flex"
-            align="middle"
-          >
+        <nuxt-link
+          :to="localePath({ name: 'organisation', params: $route.params })"
+        >
+          <el-row type="flex" align="middle">
             <!-- <el-col class="LogoWHO">
               <img
                 :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
@@ -34,24 +30,21 @@
                 class="UnicefLogoNormal"
                 src="/unicef-logo-banner.svg"
                 alt="Unicef"
-              >
+              />
               <img
                 class="UnicefLogoLong"
                 src="/unicef-logo-horizontal.svg"
                 alt="Unicef"
-              >
+              />
             </el-col>
           </el-row>
         </nuxt-link>
       </el-col>
 
-      <el-col
-        v-if="!errorPage"
-        class="RightPart"
-      >
+      <el-col v-if="!errorPage" class="RightPart">
         <!-- ANON MODE -->
         <el-row
-          :class="{'AnonView': !user, 'LoggedInView': user}"
+          :class="{ AnonView: !user, LoggedInView: user }"
           type="flex"
           justify="end"
           align="middle"
@@ -66,7 +59,13 @@
               <div>
                 <nuxt-link
                   key="dashboardBtn"
-                  :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: {}})"
+                  :to="
+                    localePath({
+                      name: 'organisation-dashboard-list',
+                      params: $route.params,
+                      query: {}
+                    })
+                  "
                   class="HeaderBtn"
                 >
                   <translate>Dashboard</translate>
@@ -75,14 +74,19 @@
               <div>
                 <nuxt-link
                   key="myProjectsBtn"
-                  :to="localePath({name: 'organisation-projects', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-projects',
+                      params: $route.params
+                    })
+                  "
                   exact
                   class="HeaderBtn"
                 >
                   <translate>My Projects</translate>
                 </nuxt-link>
               </div>
-              <div>
+              <!-- <div>
                 <nuxt-link
                   v-if="isSuperUser"
                   key="planningAndGuidanceBtn"
@@ -91,14 +95,19 @@
                 >
                   <translate>Planning and Guidance</translate>
                 </nuxt-link>
-              </div>
-              <div>
+              </div> -->
+              <!-- <div>
                 <toolkit-dialog-wrapper v-if="isSuperUser" />
-              </div>
+              </div> -->
               <div>
                 <nuxt-link
                   key="newProjectBtn"
-                  :to="localePath({name: 'organisation-projects-create', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-projects-create',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn"
                 >
                   <fa icon="plus-circle" />
@@ -109,10 +118,7 @@
             </el-col>
           </template>
 
-          <el-col
-            v-if="countrySpecific"
-            class="CountryHolder"
-          >
+          <el-col v-if="countrySpecific" class="CountryHolder">
             <el-row type="flex">
               <el-col>
                 <div class="Separator" />
@@ -122,7 +128,7 @@
                   :src="countryFlag"
                   alt="country flag"
                   class="CountryFlag"
-                >
+                />
               </el-col>
               <el-col>
                 <div class="CountryName">
@@ -132,21 +138,23 @@
             </el-row>
           </el-col>
 
-          <el-col
-            v-if="customOrganisation"
-            class="CountrySpecificMenu"
-          >
+          <el-col v-if="customOrganisation" class="CountrySpecificMenu">
             <div class="Separator" />
             <div>
               <nuxt-link
                 key="whoLandingBtn"
-                :to="localePath({name: 'organisation', params: {organisation: '-'}})"
+                :to="
+                  localePath({
+                    name: 'organisation',
+                    params: { organisation: '-' }
+                  })
+                "
               >
                 <img
                   class="LogoWHOxDHA"
                   alt="WHO logo small"
                   src="/logo-whoxdha.svg"
-                >
+                />
               </nuxt-link>
             </div>
           </el-col>
@@ -157,16 +165,16 @@
 </template>
 
 <script>
-import VueScrollClass from 'vue-scroll-class';
-import { mapGetters } from 'vuex';
+import VueScrollClass from "vue-scroll-class";
+import { mapGetters } from "vuex";
 
-import LanguageSelector from './LanguageSelector';
-import UserDropdown from './UserDropdown';
-import ToolkitDialogWrapper from './ToolkitDialogWrapper';
+import LanguageSelector from "./LanguageSelector";
+import UserDropdown from "./UserDropdown";
+import ToolkitDialogWrapper from "./ToolkitDialogWrapper";
 
 export default {
   directives: {
-    'scroll-class': VueScrollClass
+    "scroll-class": VueScrollClass
   },
   components: {
     LanguageSelector,
@@ -185,28 +193,28 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'user/getProfile',
-      landingData: 'landing/getLandingPageData'
+      user: "user/getProfile",
+      landingData: "landing/getLandingPageData"
     }),
-    customOrganisation () {
+    customOrganisation() {
       return this.landingData !== null;
     },
-    countrySpecific () {
+    countrySpecific() {
       return this.customOrganisation && this.landingData.code.length === 2;
     },
-    organisationLogo () {
+    organisationLogo() {
       if (this.landingData) {
         return this.landingData.logo_url;
       }
       return null;
     },
-    countryFlag () {
+    countryFlag() {
       if (this.landingData) {
         return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
       return null;
     },
-    isSuperUser () {
+    isSuperUser() {
       return this.user && this.user.is_superuser;
     }
   }
@@ -291,7 +299,7 @@ export default {
     // hacking Toolkit md-button :(
   ,.HeaderBtn.md-button
     //
-  {
+ {
     position: relative;
     height: 24px;
     margin: 0 5px;
