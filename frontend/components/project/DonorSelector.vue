@@ -20,20 +20,19 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
-  components: {
-  },
+  components: {},
   $_veeValidate: {
-    value () {
+    value() {
       return this.value;
     },
-    events: 'change|blur'
+    events: "change|blur"
   },
   model: {
-    prop: 'value',
-    event: 'change'
+    prop: "value",
+    event: "change"
   },
   props: {
     value: {
@@ -47,45 +46,45 @@ export default {
   },
   computed: {
     ...mapGetters({
-      donors: 'system/getDonors'
+      donors: "system/getDonors"
     }),
-    internalValue () {
+    internalValue() {
       return this.value.filter(v => v !== 20);
     },
-    filteredDonors () {
+    filteredDonors() {
       return this.donors.filter(d => d.id !== 20);
     }
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
+    changeHandler(value) {
+      this.$emit("change", value);
     }
   }
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .DonorSelector {
-    width: 100%;
-  }
+.DonorSelector {
+  width: 100%;
+}
 
-  .DonorSelectorDropdown {
-     .OrganisationItem {
-      display: inline-block;
-      margin-left: 6px;
-      font-weight: 400;
-      color: @colorGray;
+.DonorSelectorDropdown {
+  .OrganisationItem {
+    display: inline-block;
+    margin-left: 6px;
+    font-weight: 400;
+    color: @colorGray;
 
-      &::before {
-        content: "(";
-      }
+    &::before {
+      content: "(";
+    }
 
-      &::after {
-        content: ")";
-      }
+    &::after {
+      content: ")";
     }
   }
+}
 </style>
