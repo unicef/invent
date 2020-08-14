@@ -13,43 +13,37 @@
           <h4><translate>Global Support to DHA</translate></h4>
           <div class="SupporterLogos">
             <div class="Partner">
-              <img
-                src="/static/partners/logo-who.png"
-                alt="WHO"
-              >
+              <img src="/static/partners/logo-who.png" alt="WHO" />
             </div>
             <div class="Partner">
-              <img
-                src="static/partners/logo-hrp-new-cropped.png"
-                alt="HRP"
-              >
+              <img src="static/partners/logo-hrp-new-cropped.png" alt="HRP" />
             </div>
             <div class="Partner">
               <img
                 src="/static/partners/logo-path_new-color.png"
                 style="height: 42px"
                 alt="PATH"
-              >
+              />
             </div>
             <div class="Partner">
               <img
                 src="/static/partners/logo-digital_square.png"
                 style="height: 54px"
                 alt="Digital Square"
-              >
+              />
+            </div>
+            <div class="Partner">
+              <img src="/static/partners/logo-unfpa.png" alt="UNFPA" />
             </div>
             <div class="Partner">
               <img
-                src="/static/partners/logo-unfpa.png"
-                alt="UNFPA"
-              >
+                src="/static/partners/unicef-logo-vertical.png"
+                alt="UNICEF"
+              />
             </div>
           </div>
         </div>
-        <div
-          v-if="partnerLogos"
-          class="CountrySupporter"
-        >
+        <div v-if="partnerLogos" class="CountrySupporter">
           <h4><translate>In-country support to DHA</translate></h4>
           <div class="SupporterLogos">
             <div
@@ -57,10 +51,7 @@
               :key="index"
               class="Partner"
             >
-              <img
-                :src="logo.image_url"
-                alt="PartnerLogo"
-              >
+              <img :src="logo.image_url" alt="PartnerLogo" />
             </div>
           </div>
         </div>
@@ -70,31 +61,35 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters({
-      landingData: 'landing/getLandingPageData',
-      landingPageDefaults: 'system/getLandingPageDefaults'
+      landingData: "landing/getLandingPageData",
+      landingPageDefaults: "system/getLandingPageDefaults"
     }),
-    countrySpecific () {
+    countrySpecific() {
       return this.landingData !== null;
     },
-    title () {
-      return this.countrySpecific ? this.landingData.footer_title : this.landingPageDefaults.footer_title;
+    title() {
+      return this.countrySpecific
+        ? this.landingData.footer_title
+        : this.landingPageDefaults.footer_title;
     },
-    permanentFooterText () {
+    permanentFooterText() {
       return this.landingPageDefaults.permanent_footer;
     },
-    countryText () {
+    countryText() {
       if (this.countrySpecific) {
         return this.landingData.footer_text;
       }
       return null;
     },
-    partnerLogos () {
+    partnerLogos() {
       if (this.countrySpecific) {
-        return this.landingData.partner_logos.length > 0 ? this.landingData.partner_logos : null;
+        return this.landingData.partner_logos.length > 0
+          ? this.landingData.partner_logos
+          : null;
       }
       return null;
     }
@@ -103,54 +98,54 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .AboutSection {
-    .limitPageWidth();
-    background-color: @colorWhite;
+.AboutSection {
+  .limitPageWidth();
+  background-color: @colorWhite;
 
-    > .el-row {
-      align-items: stretch;
-    }
+  > .el-row {
+    align-items: stretch;
+  }
 
-    h4 {
-      color: @colorTextPrimary;
-      margin: 0 0 20px;
-    }
+  h4 {
+    color: @colorTextPrimary;
+    margin: 0 0 20px;
+  }
 
-    p {
-      font-size: @fontSizeSmall;
-      line-height: 18px;
-      color: @colorTextPrimary;
-    }
+  p {
+    font-size: @fontSizeSmall;
+    line-height: 18px;
+    color: @colorTextPrimary;
+  }
 
-    .AboutSectionLeft {
-      min-width: 360px;
-      max-width: 360px;
-      margin-right: 30px;
-      padding: 40px;
-    }
+  .AboutSectionLeft {
+    min-width: 360px;
+    max-width: 360px;
+    margin-right: 30px;
+    padding: 40px;
+  }
 
-    .AboutSectionRight {
-      padding: 40px 30px;
+  .AboutSectionRight {
+    padding: 40px 30px;
 
-      .SupporterLogos {
-        .clearfix();
+    .SupporterLogos {
+      .clearfix();
 
-        .Partner {
-          float: left;
-          display: inline-flex;
-          height: 60px;
-          margin: 10px 80px 20px 0;
+      .Partner {
+        float: left;
+        display: inline-flex;
+        height: 60px;
+        margin: 10px 80px 20px 0;
 
-          img {
-            width: auto;
-            height: 50px;
-            align-self: center;
-          }
+        img {
+          width: auto;
+          height: 50px;
+          align-self: center;
         }
       }
     }
   }
+}
 </style>
