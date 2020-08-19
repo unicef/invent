@@ -5,8 +5,6 @@
 @import "variables.less";
 @import "mixins.less";
 
-
-
 // --------------------------------------------------
 // Import other stuff
 // --------------------------------------------------
@@ -15,51 +13,42 @@
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-
-
 // --------------------------------------------------
 // Univers font type
 // --------------------------------------------------
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55-webfont.woff') format('woff');
-//   font-weight: normal;
-//   font-style: normal;
-// }
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55-webfont.woff2") format("woff2"),
+    url("~assets/fonts/univers_55-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55_italic-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55_italic-webfont.woff') format('woff');
-//   font-weight: normal;
-//   font-style: italic;
-// }
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55_italic-webfont.woff2") format("woff2"),
+    url("~assets/fonts/univers_55_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+}
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55_bold-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55_bold-webfont.woff') format('woff');
-//   font-weight: bold;
-//   font-style: normal;
-// }
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55_bold-webfont.woff2") format("woff2"),
+    url("~assets/fonts/univers_55_bold-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55_bold_oblique-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55_bold_oblique-webfont.woff') format('woff');
-//   font-weight: bold;
-//   font-style: italic;
-// }
-
-
-
-// --------------------------------------------------
-// Roboto font type
-// --------------------------------------------------
-
-
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55_bold_oblique-webfont.woff2")
+      format("woff2"),
+    url("~assets/fonts/univers_55_bold_oblique-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+}
 
 // --------------------------------------------------
 // Reset font family for Element UI
@@ -72,8 +61,6 @@
   color: inherit;
 }
 
-
-
 // --------------------------------------------------
 // General layout
 // --------------------------------------------------
@@ -85,17 +72,17 @@ html {
 
   // TODO: Remove Angular Material
   height: auto !important;
-  font-family: 'Roboto', Arial, sans-serif !important;
+  font-family: "Univers", Arial, sans-serif !important;
   -webkit-tap-highlight-color: transparent;
   //
 }
 
 body {
   min-height: 100%;
-  margin: 0 ;
+  margin: 0;
   padding: 0;
   // Brand typo
-  font-family: 'Roboto', Arial, sans-serif !important;
+  font-family: "Univers", Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   // letter-spacing: -0.25px;
@@ -109,8 +96,8 @@ body {
     .limitPageWidth();
     margin: 0 auto !important;
     padding: 0;
-    background-color: #F4F4F4;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
+    background-color: #f4f4f4;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -205,7 +192,6 @@ a {
   .Back {
     margin-bottom: -10px;
   }
-
 }
 
 .Loader {
@@ -222,7 +208,7 @@ a {
     border: 6px solid @colorGrayLight;
     border-top-color: @colorBrandAccent;
     -webkit-animation: loading 1s infinite linear;
-    animation: loading 1s infinite linear
+    animation: loading 1s infinite linear;
   }
 
   span {
@@ -239,13 +225,13 @@ a {
 
   @-webkit-keyframes loading {
     100% {
-      transform: rotate(360deg) translate3d(0,0,0);
+      transform: rotate(360deg) translate3d(0, 0, 0);
     }
   }
 
   @keyframes loading {
     100% {
-      transform: rotate(360deg) translate3d(0,0,0);
+      transform: rotate(360deg) translate3d(0, 0, 0);
     }
   }
 }
@@ -272,13 +258,13 @@ a {
   }
 
   .CountryClusterIcon {
-    background-image: url('~assets/img/pins/pin-cluster.svg');
+    background-image: url("~assets/img/pins/pin-cluster.svg");
 
     &.EmptyCluster {
       opacity: 0.6 !important;
     }
 
-     span {
+    span {
       display: inline-block;
       width: 40px;
       line-height: 40px;
@@ -290,10 +276,10 @@ a {
   }
 
   .CountryCenterIcon {
-    background-image: url('~assets/img/pins/pin-with-counter.svg');
+    background-image: url("~assets/img/pins/pin-with-counter.svg");
 
     &.ActiveCountry {
-      background-image: url('~assets/img/pins/pin-with-counter-active.svg');
+      background-image: url("~assets/img/pins/pin-with-counter-active.svg");
     }
 
     &.EmptyMarker {
@@ -312,8 +298,6 @@ a {
   }
 }
 
-
-
 // --------------------------------------------------
 // Leaflet plugin customisation
 // --------------------------------------------------
@@ -329,24 +313,26 @@ a {
 .leaflet-container {
   .leaflet-bar {
     border: 0 !important;
-    box-shadow: 0 0 20px 5px rgba(0,0,0,.15);
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.15);
 
     a {
       border-color: @colorTextMuted;
     }
   }
 
-  .leaflet-control-zoom {}
+  .leaflet-control-zoom {
+  }
 
   .leaflet-control-zoom-in,
   .leaflet-control-zoom-out {
     position: relative;
     overflow: hidden;
     text-indent: -9999px;
-    background-color: rgba(255,255,255,.9);
+    background-color: rgba(255, 255, 255, 0.9);
     transition: @transitionAll;
 
-    &::before, &::after {
+    &::before,
+    &::after {
       content: "";
       position: absolute;
       top: 50%;
@@ -367,7 +353,8 @@ a {
     &:hover {
       background-color: fade(@colorGrayLightest, 90%);
 
-      &::before, &::after {
+      &::before,
+      &::after {
         background-color: @colorBrandPrimary;
       }
     }
@@ -379,8 +366,6 @@ a {
     }
   }
 }
-
-
 
 // --------------------------------------------------
 // Components customisation
@@ -465,7 +450,7 @@ a {
 // Button
 
 .el-button {
-  font-family: Arial, sans-serif;
+  font-family: "Univers", Arial, sans-serif;
   border: 0 !important;
 
   &.el-button--default {
@@ -577,7 +562,7 @@ fieldset {
 .el-input {
   .el-input__inner {
     border-radius: 0 !important;
-    font-family: Arial, sans-serif;
+    font-family: "Univers", Arial, sans-serif;
   }
 
   &.el-input-group {
@@ -604,7 +589,7 @@ fieldset {
         }
 
         &::after {
-          content: '*';
+          content: "*";
           margin-left: 4px;
           color: @colorDanger;
         }
@@ -648,8 +633,6 @@ fieldset {
     }
   }
 
-
-
   .ItemIndent {
     box-sizing: border-box;
     margin: 20px 0 30px 2px;
@@ -684,7 +667,7 @@ fieldset {
   // disabled
   .is-disabled {
     .el-select__caret {
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 
@@ -697,7 +680,7 @@ fieldset {
       width: 39px;
       height: calc(100% - 2px);
       margin: 1px 0;
-      background-color: #EDEDED;
+      background-color: #ededed;
       border-left: 1px solid @colorGray;
 
       &::before {
@@ -729,7 +712,6 @@ fieldset {
 
 .el-checkbox {
   .el-checkbox__inner {
-
     // thicker tick
     &::after {
       top: 1px;
@@ -754,7 +736,8 @@ fieldset {
 
   // for border=false — needs an extra class
   &.CheckboxSmall {
-    .el-checkbox__input {}
+    .el-checkbox__input {
+    }
     .el-checkbox__label {
       font-size: @fontSizeSmall;
       line-height: 16px;
@@ -772,14 +755,14 @@ fieldset {
   }
 }
 
-
 .el-radio {
   .el-radio__label {
     font-weight: 400;
   }
 
   &.RadioSmall {
-    .el-radio__input {}
+    .el-radio__input {
+    }
     .el-radio__label {
       font-size: @fontSizeSmall;
       line-height: 16px;
@@ -835,14 +818,14 @@ fieldset {
         padding: 5px 0;
       }
 
-      .el-checkbox__input ,
+      .el-checkbox__input,
       .el-radio__input {
         vertical-align: top;
         top: 2px;
       }
 
       .el-checkbox__label,
-      .el-radio__label  {
+      .el-radio__label {
         white-space: normal;
         padding-right: 30px;
       }
@@ -877,13 +860,13 @@ fieldset {
       transition: @transitionAll;
     }
   }
-
 }
 
 // Dropdown
 
 .el-dropdown-menu {
-  .el-dropdown-menu__item {}
+  .el-dropdown-menu__item {
+  }
 }
 
 .el-select-dropdown {
@@ -898,12 +881,12 @@ fieldset {
 // Dialog modal
 
 .v-modal {
-  opacity: .8;
+  opacity: 0.8;
   background-color: darken(@colorBrandPrimaryDark, 25%);
 }
 
 .el-dialog {
-  box-shadow: 0 6px 24px 4px rgba(0,0,0,0.22);
+  box-shadow: 0 6px 24px 4px rgba(0, 0, 0, 0.22);
 
   .el-dialog__header {
     position: relative;
@@ -925,7 +908,7 @@ fieldset {
 
       &:hover {
         i {
-          opacity: .8;
+          opacity: 0.8;
         }
       }
 
@@ -974,7 +957,7 @@ fieldset {
   .el-message-box {
     padding: 0;
     border-radius: 0;
-    box-shadow: 0 6px 24px 4px rgba(0,0,0,0.22);
+    box-shadow: 0 6px 24px 4px rgba(0, 0, 0, 0.22);
 
     .el-message-box__header {
       padding: 20px 20px 10px;
@@ -1008,7 +991,8 @@ fieldset {
         line-height: 21px;
       }
 
-      .el-message-box__input {}
+      .el-message-box__input {
+      }
     }
 
     .el-message-box__btns {
@@ -1031,8 +1015,8 @@ fieldset {
 
 .el-tooltip__popper {
   border: 0 !important;
-  opacity: .9;
-  filter: drop-shadow(0 3px 5px rgba(0,0,0,.35));
+  opacity: 0.9;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
 
   &.is-light {
     color: @colorTextPrimary;
@@ -1046,7 +1030,7 @@ fieldset {
 // DatePicker
 
 .el-picker-panel {
-  box-shadow: 0 0 12px 4px rgba(0,0,0,.24), 0 4px 16px 0 rgba(0,0,0,.12);
+  box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.24), 0 4px 16px 0 rgba(0, 0, 0, 0.12);
 }
 
 // Popover
@@ -1056,7 +1040,7 @@ fieldset {
   margin: 0 !important;
   border: 1px solid @colorTextMuted;
   border-radius: 0;
-  box-shadow: 0 0 12px 4px rgba(0,0,0,.24), 0 4px 16px 0 rgba(0,0,0,.12);
+  box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.24), 0 4px 16px 0 rgba(0, 0, 0, 0.12);
 
   .popper__arrow {
     display: none;
@@ -1106,7 +1090,7 @@ fieldset {
             color: @colorTextPrimary;
 
             .fa-check {
-              opacity: .5;
+              opacity: 0.5;
             }
           }
 
@@ -1222,7 +1206,8 @@ fieldset {
 
 // Upload
 
-.el-upload {}
+.el-upload {
+}
 
 .el-upload-list--picture {
   .el-upload-list__item {
