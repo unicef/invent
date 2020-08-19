@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="implementation"
-    class="ImplementationOverview"
-  >
+  <div id="implementation" class="ImplementationOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
@@ -77,7 +74,8 @@
         >
           <template slot="label">
             <translate key="hsc-challenges">
-              What are the Health System Challenges addressed by the Digital Health Intervention?
+              What are the Health System Challenges addressed by the Digital
+              Health Intervention?
             </translate>
           </template>
           <health-system-challenges-selector
@@ -149,7 +147,7 @@
         />
       </custom-required-form-item>
 
-      <custom-required-form-item
+      <!-- <custom-required-form-item
         :error="errors.first('donors')"
         :draft-rule="draftRules.donors"
         :publish-rule="publishRules.donors"
@@ -160,7 +158,8 @@
           </translate>
           <form-hint>
             <translate key="donors-hint">
-              Investment partners can include those contributing funds, human resources or in-kind support.
+              Investment partners can include those contributing funds, human
+              resources or in-kind support.
             </translate>
           </form-hint>
         </template>
@@ -171,28 +170,29 @@
           data-vv-name="donors"
           data-vv-as="Investors"
         />
-      </custom-required-form-item>
+
+      </custom-required-form-item> -->
     </collapsible-card>
   </div>
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
+import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
 
-import CollapsibleCard from '../CollapsibleCard';
-import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
-import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
-import GoalAreasSelector from '@/components/common/GoalAreasSelector';
-import ResultAreasSelector from '@/components/common/ResultAreasSelector';
-import CapabilitySelector from '../CapabilitySelector';
-import PlatformSelector from '../PlatformSelector';
-import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
-import DonorSelector from '../DonorSelector';
-import FormHint from '../FormHint';
+import CollapsibleCard from "../CollapsibleCard";
+import HealthSystemChallengesSelector from "../HealthSystemChallengesSelector";
+import HealthFocusAreasSelector from "../HealthFocusAreasSelector";
+import GoalAreasSelector from "@/components/common/GoalAreasSelector";
+import ResultAreasSelector from "@/components/common/ResultAreasSelector";
+import CapabilitySelector from "../CapabilitySelector";
+import PlatformSelector from "../PlatformSelector";
+import DigitalHealthInterventionsSelector from "../DigitalHealthInterventionsSelector";
+import DonorSelector from "../DonorSelector";
+import FormHint from "../FormHint";
 
-import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters } from 'vuex';
+import { mapGettersActions } from "../../../utilities/form";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -211,34 +211,57 @@ export default {
 
   computed: {
     ...mapGetters({
-      selectedGoalArea: 'project/getGoalAreaDetails',
-      getCapabilityLevelsItems: 'projects/getCapabilityLevels',
-      getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
-      getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories'
+      selectedGoalArea: "project/getGoalAreaDetails",
+      getCapabilityLevelsItems: "projects/getCapabilityLevels",
+      getCapabilityCategoriesItems: "projects/getCapabilityCategories",
+      getCapabilitySubcategoriesItems: "projects/getCapabilitySubcategories"
     }),
     ...mapGettersActions({
-      goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],
-      result_area: ['project', 'getResultArea', 'setResultArea', 0],
-      capability_levels: ['project', 'getCapabilityLevels', 'setCapabilityLevels', 0],
-      capability_categories: ['project', 'getCapabilityCategories', 'setCapabilityCategories', 0],
-      capability_subcategories: ['project', 'getCapabilitySubcategories', 'setCapabilitySubcategories', 0],
-      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
-      digitalHealthInterventions: ['project', 'getDigitalHealthInterventions', 'setDigitalHealthInterventions', 0],
-      health_focus_areas: ['project', 'getHealthFocusAreas', 'setHealthFocusAreas', 0],
-      hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
-      donors: ['project', 'getDonors', 'setDonors', 0]
+      goal_area: ["project", "getGoalArea", "setGoalArea", 0],
+      result_area: ["project", "getResultArea", "setResultArea", 0],
+      capability_levels: [
+        "project",
+        "getCapabilityLevels",
+        "setCapabilityLevels",
+        0
+      ],
+      capability_categories: [
+        "project",
+        "getCapabilityCategories",
+        "setCapabilityCategories",
+        0
+      ],
+      capability_subcategories: [
+        "project",
+        "getCapabilitySubcategories",
+        "setCapabilitySubcategories",
+        0
+      ],
+      platforms: ["project", "getPlatforms", "setPlatforms", 0],
+      digitalHealthInterventions: [
+        "project",
+        "getDigitalHealthInterventions",
+        "setDigitalHealthInterventions",
+        0
+      ],
+      health_focus_areas: [
+        "project",
+        "getHealthFocusAreas",
+        "setHealthFocusAreas",
+        0
+      ],
+      hsc_challenges: ["project", "getHscChallenges", "setHscChallenges", 0],
+      donors: ["project", "getDonors", "setDonors", 0]
     }),
-    shoDHAFields () {
+    shoDHAFields() {
       return this.goal_area === 1;
     }
   },
   methods: {
-    async validate () {
+    async validate() {
       this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate()
-      ]);
-      console.log('Implementation overview validations', validations);
+      const validations = await Promise.all([this.$validator.validate()]);
+      console.log("Implementation overview validations", validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }
@@ -246,31 +269,31 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .ImplementationOverview {
-    .DigitalHealthIntervention {
-      margin-top: 30px;
-    }
+.ImplementationOverview {
+  .DigitalHealthIntervention {
+    margin-top: 30px;
+  }
 
-    .CoverageArea {
-      .CoverageSubtitle {
-        position: relative;
-        display: block;
-        margin: 0 0 20px;
-        padding: 10px 0 0 20px;
-        font-size: @fontSizeSmall;
-        font-weight: 700;
-        color: @colorGray;
-        text-transform: uppercase;
+  .CoverageArea {
+    .CoverageSubtitle {
+      position: relative;
+      display: block;
+      margin: 0 0 20px;
+      padding: 10px 0 0 20px;
+      font-size: @fontSizeSmall;
+      font-weight: 700;
+      color: @colorGray;
+      text-transform: uppercase;
 
-        .svg-inline--fa {
-          position: absolute;
-          top: 10px;
-          left: 0;
-        }
+      .svg-inline--fa {
+        position: absolute;
+        top: 10px;
+        left: 0;
       }
     }
   }
+}
 </style>
