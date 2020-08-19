@@ -1,289 +1,350 @@
-@import '../../variables';
+@import "../../variables";
 
 linechart {
-    margin-bottom: -65px;
-    position: relative;
+  margin-bottom: -65px;
+  position: relative;
 
-    .linechart-labels {
-        color: $color-gray;
-        background-color: $color-gray-lightest;
-        font-size: 12px;
+  .linechart-labels {
+    color: $color-gray;
+    background-color: $color-gray-lightest;
+    font-size: 12px;
+    cursor: default;
+    height: 60px;
+    padding-left: 20px;
+    padding-right: 5px;
+
+    ul {
+      list-style-type: none;
+      padding-left: 5px;
+      display: flex;
+      flex-flow: column wrap;
+      height: 35px;
+
+      li {
+        flex-basis: 50%;
+        height: 100%;
+
+        .smallness {
+          position: relative;
+          display: inline-flex;
+          max-width: 20px;
+          overflow: hidden;
+          margin-top: 2px;
+          font-weight: 700;
+          color: $color-gray;
+        }
+
+        &.labelhov {
+          text-transform: capitalize;
+        }
+
+        .material-icons {
+          font-size: 12px;
+          transform: translate(0, 2px);
+
+          &.labelicon1 {
+            color: $color-axis1;
+          }
+          &.labelicon2 {
+            color: $color-axis2;
+          }
+          &.labelicon3 {
+            color: $color-axis3;
+          }
+          &.labelicon4 {
+            color: $color-axis4;
+          }
+          &.labelicon5 {
+            color: $color-axis5;
+          }
+          &.labelicon6 {
+            color: $color-axis6;
+          }
+        }
+      }
+    }
+
+    .chosercontainer {
+      border-left: 1px solid #e0e0e0;
+
+      md-input-container,
+      .axischooser,
+      label {
+        margin: 0 8px;
+      }
+
+      .axischooser {
+        color: $text-primary;
+      }
+
+      md-input-container {
+        min-width: 175px;
+        margin-top: 15px;
+
+        label {
+          font-size: 14px;
+          transform: translate3d(0, 10px, 0) scale(0.75) !important;
+
+          &:select,
+          &:focus {
+            color: $color-primary;
+          }
+        }
+      }
+    }
+  }
+
+  .linechartcontainer {
+    height: 350px;
+    min-width: 500px;
+
+    .visualization {
+      &.activelabel1 {
+        .line-axis,
+        .dot-axis {
+          opacity: 0.2;
+        }
+        .line-axis1,
+        .dot-axis1 {
+          opacity: 1;
+        }
+      }
+      &.activelabel2 {
+        .line-axis,
+        .dot-axis {
+          opacity: 0.2;
+        }
+        .line-axis2,
+        .dot-axis2 {
+          opacity: 1;
+        }
+      }
+      &.activelabel3 {
+        .line-axis,
+        .dot-axis {
+          opacity: 0.2;
+        }
+        .line-axis3,
+        .dot-axis3 {
+          opacity: 1;
+        }
+      }
+      &.activelabel4 {
+        .line-axis,
+        .dot-axis {
+          opacity: 0.2;
+        }
+        .line-axis4,
+        .dot-axis4 {
+          opacity: 1;
+        }
+      }
+      &.activelabel5 {
+        .line-axis,
+        .dot-axis {
+          opacity: 0.2;
+        }
+        .line-axis5,
+        .dot-axis5 {
+          opacity: 1;
+        }
+      }
+      &.activelabel6 {
+        .line-axis,
+        .dot-axis {
+          opacity: 0.2;
+        }
+        .line-axis6,
+        .dot-axis6 {
+          opacity: 1;
+        }
+      }
+
+      .axis {
+        path {
+          fill: none;
+          stroke: #777;
+          shape-rendering: crispEdges;
+        }
+
+        text {
+          font-family: "Univers", Arial, sans-serif;
+          fill: #9d9d9d;
+          font-size: 12px;
+        }
+
+        .domain {
+          display: none;
+        }
+
+        &.x-axis text {
+          transform: translate(0, 40px);
+        }
+      }
+
+      .linechart-ruler {
+        stroke: #9d9d9d;
+        stroke-width: 0.4px;
+        fill: none;
+      }
+
+      .line-axis {
+        opacity: 1;
+        transition: opacity 0.2s ease-in;
         cursor: default;
-        height: 60px;
-        padding-left: 20px;
-        padding-right: 5px;
+        stroke-width: 3px;
+        fill: none;
 
-        ul {
-
-            list-style-type: none;
-            padding-left: 5px;
-            display: flex;
-            flex-flow: column wrap;
-            height: 35px;
-
-            li {
-                flex-basis: 50%;
-                height: 100%;
-
-                .smallness {
-                    position: relative;
-                    display: inline-flex;
-                    max-width: 20px;
-                    overflow: hidden;
-                    margin-top: 2px;
-                    font-weight: 700;
-                    color: $color-gray;
-                }
-
-                &.labelhov {
-                    text-transform: capitalize;
-                }
-
-                .material-icons {
-                    font-size: 12px;
-                    transform: translate(0, 2px);
-
-                    &.labelicon1 {
-                        color: $color-axis1;
-                    }
-                    &.labelicon2 {
-                        color: $color-axis2;
-                    }
-                    &.labelicon3 {
-                        color: $color-axis3;
-                    }
-                    &.labelicon4 {
-                        color: $color-axis4;
-                    }
-                    &.labelicon5 {
-                        color: $color-axis5;
-                    }
-                    &.labelicon6 {
-                        color: $color-axis6;
-                    }
-                }
-            }
+        &.line-axis1 {
+          stroke: $color-axis1;
+        }
+        &.line-axis2 {
+          stroke: $color-axis2;
+        }
+        &.line-axis3 {
+          stroke: $color-axis3;
+        }
+        &.line-axis4 {
+          stroke: $color-axis4;
+        }
+        &.line-axis5 {
+          stroke: $color-axis5;
+        }
+        &.line-axis6 {
+          stroke: $color-axis6;
         }
 
-        .chosercontainer {
-            border-left: 1px solid #E0E0E0;
-
-            md-input-container,
-            .axischooser, label {
-                margin: 0 8px;
-            }
-
-            .axischooser {
-                color: $text-primary;
-            }
-
-            md-input-container {
-                min-width: 175px;
-                margin-top: 15px;
-
-                label {
-                    font-size: 14px;
-                    transform: translate3d(0, 10px, 0) scale(0.75) !important;
-
-                    &:select, &:focus {
-                        color: $color-primary;
-                    }
-                }
-            }
+        &.line-axis-dashed {
+          stroke-linecap: round;
+          stroke-dasharray: 2 7;
         }
-    }
+      }
 
-    .linechartcontainer {
-        height: 350px;
-        min-width: 500px;
+      .dot-axis {
+        stroke-width: 1px;
+        stroke: white;
+        opacity: 1;
+        transition: opacity 0.2s ease-in;
+        cursor: default;
 
-        .visualization {
-            &.activelabel1 {
-                .line-axis, .dot-axis {
-                    opacity: 0.2;
-                }
-                .line-axis1, .dot-axis1 {
-                    opacity: 1;
-                }
-            }
-            &.activelabel2 {
-                .line-axis, .dot-axis {
-                    opacity: 0.2;
-                }
-                .line-axis2, .dot-axis2 {
-                    opacity: 1;
-                }
-            }
-            &.activelabel3 {
-                .line-axis, .dot-axis {
-                    opacity: 0.2;
-                }
-                .line-axis3, .dot-axis3 {
-                    opacity: 1;
-                }
-            }
-            &.activelabel4 {
-                .line-axis, .dot-axis {
-                    opacity: 0.2;
-                }
-                .line-axis4, .dot-axis4 {
-                    opacity: 1;
-                }
-            }
-            &.activelabel5 {
-                .line-axis, .dot-axis {
-                    opacity: 0.2;
-                }
-                .line-axis5, .dot-axis5 {
-                    opacity: 1;
-                }
-            }
-            &.activelabel6 {
-                .line-axis, .dot-axis {
-                    opacity: 0.2;
-                }
-                .line-axis6, .dot-axis6 {
-                    opacity: 1;
-                }
-            }
-
-            .axis {
-                path {
-                    fill: none;
-                    stroke: #777;
-                    shape-rendering: crispEdges;
-                }
-
-                text {
-                    font-family: Arial, 'Helvetica Neue', sans-serif;
-                    fill: #9D9D9D;
-                    font-size: 12px;
-                }
-
-                .domain {
-                    display: none;
-                }
-
-                &.x-axis text {
-                    transform: translate(0, 40px);
-                }
-            }
-
-            .linechart-ruler {
-                stroke: #9D9D9D;
-                stroke-width: 0.4px;
-                fill: none;
-            }
-
-            .line-axis {
-                opacity: 1;
-                transition: opacity 0.2s ease-in;
-                cursor: default;
-                stroke-width: 3px;
-                fill: none;
-
-                &.line-axis1 {
-                    stroke: $color-axis1;
-                }
-                &.line-axis2 {
-                    stroke: $color-axis2;
-                }
-                &.line-axis3 {
-                    stroke: $color-axis3;
-                }
-                &.line-axis4 {
-                    stroke: $color-axis4;
-                }
-                &.line-axis5 {
-                    stroke: $color-axis5;
-                }
-                &.line-axis6 {
-                    stroke: $color-axis6;
-                }
-
-                &.line-axis-dashed {
-                    stroke-linecap: round;
-                    stroke-dasharray: 2 7;
-                }
-            }
-
-            .dot-axis {
-                stroke-width: 1px;
-                stroke: white;
-                opacity: 1;
-                transition: opacity 0.2s ease-in;
-                cursor: default;
-
-                &:hover {
-                    stroke-width: 3px;
-                    r: 6px;
-                }
-
-                &.dot-axis1 {
-                    fill: $color-axis1;
-                }
-                &.dot-axis2 {
-                    fill: $color-axis2;
-                }
-                &.dot-axis3 {
-                    fill: $color-axis3;
-                }
-                &.dot-axis4 {
-                    fill: $color-axis4;
-                }
-                &.dot-axis5 {
-                    fill: $color-axis5;
-                }
-                &.dot-axis6 {
-                    fill: $color-axis6;
-                }
-            }
+        &:hover {
+          stroke-width: 3px;
+          r: 6px;
         }
-    }
 
-    .secondary-colors {
-        .line-axis1 { stroke: #7CB342!important; }
-        .line-axis2 { stroke: #039BE5!important; }
-        .line-axis3 { stroke: #FB8C00!important; }
-        .line-axis4 { stroke: #EF5350!important; }
-        .line-axis5 { stroke: #AB47BC!important; }
-        .line-axis6 { stroke: #7E57C2!important; }
-        .line-axis7 { stroke: #2196F3!important; }
-        .line-axis8 { stroke: #009688!important; }
-        .dot-axis1 { fill: #7CB342!important; }
-        .dot-axis2 { fill: #039BE5!important; }
-        .dot-axis3 { fill: #FB8C00!important; }
-        .dot-axis4 { fill: #EF5350!important; }
-        .dot-axis5 { fill: #AB47BC!important; }
-        .dot-axis6 { fill: #7E57C2!important; }
-        .dot-axis7 { fill: #2196F3!important; }
-        .dot-axis8 { fill: #009688!important; }
+        &.dot-axis1 {
+          fill: $color-axis1;
+        }
+        &.dot-axis2 {
+          fill: $color-axis2;
+        }
+        &.dot-axis3 {
+          fill: $color-axis3;
+        }
+        &.dot-axis4 {
+          fill: $color-axis4;
+        }
+        &.dot-axis5 {
+          fill: $color-axis5;
+        }
+        &.dot-axis6 {
+          fill: $color-axis6;
+        }
+      }
     }
+  }
 
-    .secondary-labelcolors {
-        .labelicon1 { color: #7CB342!important; }
-        .labelicon2 { color: #039BE5!important; }
-        .labelicon3 { color: #FB8C00!important; }
-        .labelicon4 { color: #EF5350!important; }
-        .labelicon5 { color: #AB47BC!important; }
-        .labelicon6 { color: #7E57C2!important; }
-        .labelicon7 { color: #2196F3!important; }
-        .labelicon8 { color: #009688!important; }
+  .secondary-colors {
+    .line-axis1 {
+      stroke: #7cb342 !important;
     }
+    .line-axis2 {
+      stroke: #039be5 !important;
+    }
+    .line-axis3 {
+      stroke: #fb8c00 !important;
+    }
+    .line-axis4 {
+      stroke: #ef5350 !important;
+    }
+    .line-axis5 {
+      stroke: #ab47bc !important;
+    }
+    .line-axis6 {
+      stroke: #7e57c2 !important;
+    }
+    .line-axis7 {
+      stroke: #2196f3 !important;
+    }
+    .line-axis8 {
+      stroke: #009688 !important;
+    }
+    .dot-axis1 {
+      fill: #7cb342 !important;
+    }
+    .dot-axis2 {
+      fill: #039be5 !important;
+    }
+    .dot-axis3 {
+      fill: #fb8c00 !important;
+    }
+    .dot-axis4 {
+      fill: #ef5350 !important;
+    }
+    .dot-axis5 {
+      fill: #ab47bc !important;
+    }
+    .dot-axis6 {
+      fill: #7e57c2 !important;
+    }
+    .dot-axis7 {
+      fill: #2196f3 !important;
+    }
+    .dot-axis8 {
+      fill: #009688 !important;
+    }
+  }
+
+  .secondary-labelcolors {
+    .labelicon1 {
+      color: #7cb342 !important;
+    }
+    .labelicon2 {
+      color: #039be5 !important;
+    }
+    .labelicon3 {
+      color: #fb8c00 !important;
+    }
+    .labelicon4 {
+      color: #ef5350 !important;
+    }
+    .labelicon5 {
+      color: #ab47bc !important;
+    }
+    .labelicon6 {
+      color: #7e57c2 !important;
+    }
+    .labelicon7 {
+      color: #2196f3 !important;
+    }
+    .labelicon8 {
+      color: #009688 !important;
+    }
+  }
 }
 
 .chart-tooltip {
-    position: fixed;
-    min-width: 80px;
-    padding: 4px;
-    font-weight: 500;
-    font-size: 10px;
-    opacity: 0;
-    transition: opacity .25s ease-in-out;
-    -webkit-transform: translateZ(0);
-    z-index: 300;
-    pointer-events: none;
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.54);
-    color: #FFF;
+  position: fixed;
+  min-width: 80px;
+  padding: 4px;
+  font-weight: 500;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+  -webkit-transform: translateZ(0);
+  z-index: 300;
+  pointer-events: none;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.54);
+  color: #fff;
 }
