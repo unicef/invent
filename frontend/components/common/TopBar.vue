@@ -58,17 +58,33 @@
             <el-col class="AuthLinks">
               <div>
                 <nuxt-link
-                  key="dashboardBtn"
+                  key="inventoryBtn"
                   :to="
                     localePath({
-                      name: 'organisation-dashboard-list',
+                      name: 'organisation-inventory',
                       params: $route.params,
                       query: {}
                     })
                   "
                   class="HeaderBtn"
                 >
-                  <translate>Dashboard</translate>
+                  <translate>TIIP Inventory</translate>
+                </nuxt-link>
+              </div>
+              <!-- organisation-dashboard-list -->
+              <div>
+                <nuxt-link
+                  key="portfolioBtn"
+                  :to="
+                    localePath({
+                      name: 'organisation-portfolio-innovation',
+                      params: $route.params,
+                      query: {}
+                    })
+                  "
+                  class="HeaderBtn"
+                >
+                  <translate>Innovation Portfolio</translate>
                 </nuxt-link>
               </div>
               <div>
@@ -84,6 +100,21 @@
                   class="HeaderBtn"
                 >
                   <translate>My Projects</translate>
+                </nuxt-link>
+              </div>
+              <div>
+                <nuxt-link
+                  key="managerBtn"
+                  :to="
+                    localePath({
+                      name: 'organisation-portfolio-management',
+                      params: $route.params,
+                      query: {}
+                    })
+                  "
+                  class="HeaderBtn"
+                >
+                  <translate>Portfolio Manager</translate>
                 </nuxt-link>
               </div>
               <!-- <div>
@@ -110,7 +141,7 @@
                   "
                   class="HeaderBtn"
                 >
-                  <fa icon="plus-circle" />
+                  <fa icon="plus-circle" size="lg" />
                   <translate>New Project</translate>
                 </nuxt-link>
               </div>
@@ -281,7 +312,7 @@ export default {
   }
 
   .RightPart {
-    padding: 15px 0;
+    padding: 14px 0;
 
     > .el-row > .el-col {
       width: auto;
@@ -292,6 +323,11 @@ export default {
     &.nuxt-link-active {
       display: none;
     }
+  }
+
+  .HeaderBtn.nuxt-link-active {
+    color: @colorTextPrimary !important;
+    font-weight: 700;
   }
 
   .HeaderBtn
@@ -305,7 +341,7 @@ export default {
     margin: 0 5px;
     padding: 0 10px;
     font-size: @fontSizeBase;
-    font-weight: 700;
+    font-weight: 100;
     line-height: 24px;
     color: @colorTextPrimary;
     text-decoration: none;
