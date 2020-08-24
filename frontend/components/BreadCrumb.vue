@@ -5,12 +5,12 @@
         <nuxt-link
           :to="localePath({ name: 'organisation', params: $route.params })"
         >
-          <fa icon="home" size="lg" />
+          <fa icon="home" />
         </nuxt-link>
       </el-col>
       <template v-if="subPageName">
         <el-col class="Sep">
-          <fa icon="angle-right" />
+          <fa icon="angle-right" size="sm" />
         </el-col>
         <el-col :key="subPageName" class="Page">
           {{ subPageName }}
@@ -34,7 +34,8 @@ export default {
         organisation: true,
         "organisation-login": true,
         "organisation-signup": true,
-        "organisation-reset-key": true
+        "organisation-reset-key": true,
+        "organisation-portfolio-management-new": false
       };
       const pages = {
         "organisation-edit-profile": this.$gettext("Admin"),
@@ -59,7 +60,10 @@ export default {
         "organisation-portfolio-innovation": this.$gettext(
           "Innovation Portfolio"
         ),
-        "organisation-portfolio-management": this.$gettext("Portfolio Manager")
+        "organisation-portfolio-management": this.$gettext("Portfolio Manager"),
+        "organisation-portfolio-management-new": this.$gettext(
+          "Create a new portfolio"
+        )
       };
       const match = pages[this.pureRoute];
       if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
@@ -103,16 +107,8 @@ export default {
   .Page {
     font-size: @fontSizeBase;
     line-height: @actionBarHeight;
-    font-weight: 700;
+    font-weight: 100;
     white-space: nowrap;
   }
-
-  // h3 {
-  //   display: inline-block;
-  //   margin: 0;
-  //   font-size: @fontSizeLarge;
-  //   color: @colorWhite;
-  //   white-space: nowrap;
-  // }
 }
 </style>
