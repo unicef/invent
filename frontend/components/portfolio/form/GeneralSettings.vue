@@ -1,5 +1,5 @@
 <template>
-  <div id="general" class="GeneralSettings">
+  <div id="general" class="general-settings">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('General settings') | translate"
@@ -11,15 +11,9 @@
         row
       >
         <template slot="label">
-          <translate key="project-name">
+          <translate key="portfolio-name">
             Portfolio name
           </translate>
-          <form-hint>
-            <translate key="project-name-hint">
-              If this is your first time uploading a project, a sample data form
-              can be found here for reference.
-            </translate>
-          </form-hint>
         </template>
         <character-count-input
           v-model="name"
@@ -32,151 +26,123 @@
 
       <custom-required-form-item
         :error="errors.first('description')"
-        :draft-rule="draftRules.implementation_overview"
-        :publish-rule="publishRules.implementation_overview"
+        :draft-rule="draftRules.description"
+        :publish-rule="publishRules.description"
         row
       >
         <template slot="label">
-          <translate key="implementation-overview">
+          <translate key="portfolio-description">
             Description
           </translate>
-          <form-hint>
-            <translate key="implementation-overview-hint">
-              Describe your overall digital health project design.
-            </translate>
-          </form-hint>
         </template>
 
         <character-count-input
-          v-model="implementation_overview"
-          v-validate="rules.implementation_overview"
-          :rules="rules.implementation_overview"
-          data-vv-name="implementation_overview"
-          data-vv-as="Implementation Overview"
+          v-model="description"
+          v-validate="rules.description"
+          :rules="rules.description"
+          data-vv-name="description"
+          data-vv-as="Description"
           type="textarea"
         />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate
-              >Describe what the technology aims to achieve, detailing the
-              users, the reasons for deploying the system, and current and
-              future phases of deployment.</translate
-            >
-          </p>
-        </span>
       </custom-required-form-item>
-
       <custom-required-form-item
         :error="
-          errors.first('country_office')
-            ? errors.first('country_office').replace('_', ' ')
+          errors.first('status')
+            ? errors.first('status').replace('_', ' ')
             : undefined
         "
-        :draft-rule="draftRules.country_office"
-        :publish-rule="publishRules.country_office"
+        :draft-rule="draftRules.status"
+        :publish-rule="publishRules.status"
         row
       >
         <template slot="label">
-          <translate key="country_office">
+          <translate key="status">
             Status
           </translate>
         </template>
         <country-office-select
-          v-model="country_office"
-          v-validate="rules.country_office"
-          data-vv-name="country_office"
-          data-vv-as="country_office"
+          v-model="status"
+          v-validate="rules.status"
+          data-vv-name="status"
+          data-vv-as="status"
         />
       </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="
+          errors.first('icon')
+            ? errors.first('icon').replace('_', ' ')
+            : undefined
+        "
+        :draft-rule="draftRules.icon"
+        :publish-rule="publishRules.icon"
+        row
+      >
+        <template slot="label">
+          <translate key="icon">
+            Icon
+          </translate>
+        </template>
+        <icon-select
+          v-model="icon"
+          icons=""
+          v-validate="rules.icon"
+          data-vv-name="icon"
+          data-vv-as="icon"
+        />
+      </custom-required-form-item>
+
+      <div class="disclaimer">
+        <fa icon="info-circle" size="md" />
+        <p>
+          <translate>
+            This is a bottom note section if it’s needed: lorem ispumd olor sit
+            amet. Prima luce, cum quibus mons aliud consensu ab eo. Cum sociis
+            natoque penatibus et magnis dis parturient. Ambitioni dedisse
+            scripsisse iudicaretur. Quis aute iure reprehenderit in voluptate
+            velit esse.
+          </translate>
+        </p>
+      </div>
     </collapsible-card>
   </div>
 </template>
 
 <script>
-import { isAfter, format } from "date-fns";
-import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
-import ProjectFieldsetMixin from "@/components/mixins/ProjectFieldsetMixin";
-import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
-import TeamSelector from "@/components/project/TeamSelector";
-import FieldOfficeSelector from "@/components/project/FieldOfficeSelector";
-import CountryOfficeSelect from "@/components/common/CountryOfficeSelect";
-import FormHint from "@/components/project/FormHint";
 import { mapGettersActions } from "@/utilities/form";
 import { mapGetters, mapState } from "vuex";
-import CustomRequiredFormTeamItem from "@/components/proxy/CustomRequiredFormTeamItem";
+import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
+import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
+import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
+import CountryOfficeSelect from "@/components/common/CountryOfficeSelect";
+import IconSelect from "@/components/portfolio/form/inputs/IconSelect";
 
 export default {
   components: {
     CollapsibleCard,
     CountryOfficeSelect,
-    TeamSelector,
-    FieldOfficeSelector,
-    FormHint,
-    CustomRequiredFormTeamItem
+    IconSelect
   },
-  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   computed: {
     ...mapState({
+      // todo: setIcons
       offices: state => state.offices.offices
     }),
     ...mapGetters({
-      unicef_regions: "system/getUnicefRegions",
-      getCountryDetails: "countries/getCountryDetails",
-      modified: "project/getModified"
+      // todo: getIcons
     }),
     ...mapGettersActions({
-      name: ["project", "getName", "setName", 0],
-      country: ["project", "getCountry", "setCountry", 0],
-      country_office: ["project", "getCountryOffice", "setCountryOffice", 0],
-      implementation_overview: [
-        "project",
-        "getImplementationOverview",
-        "setImplementationOverview",
-        0
-      ],
-      start_date: ["project", "getStartDate", "setStartDate", 0],
-      end_date: ["project", "getEndDate", "setEndDate", 0],
-      contact_name: ["project", "getContactName", "setContactName", 0],
-      contact_email: ["project", "getContactEmail", "setContactEmail", 0],
-      team: ["project", "getTeam", "setTeam", 0],
-      viewers: ["project", "getViewers", "setViewers", 0],
-      field_office: ["project", "getFieldOffice", "setFieldOffice", 0]
-    }),
-    endDateError() {
-      if (
-        this.usePublishRules &&
-        this.start_date &&
-        this.end_date &&
-        isAfter(this.start_date, this.end_date)
-      ) {
-        return this.$gettext("End date must be after Start date");
-      }
-      return "";
-    },
-    selectedRegion() {
-      const office = this.offices.find(obj => obj.id === this.country_office);
-      if (office) {
-        const result = this.unicef_regions.find(uf => uf.id === office.region);
-        return (result && result.name) || "N/A";
-      }
-      return "N/A";
-    },
-    countryOfOffice() {
-      const office = this.offices.find(obj => obj.id === this.country_office);
-      return office ? this.getCountryDetails(office.country).name : "N/A";
-    },
-    lastUpdated() {
-      return format(new Date(this.modified), "DD/MM/YYYY HH:mm");
-    }
+      name: ["portfolio", "getName", "setName", 0],
+      description: ["portfolio", "getDescription", "setDescription", 0],
+      status: ["portfolio", "getStatus", "setStatus", 0],
+      icon: ["portfolio", "getIcon", "setIcon", 0]
+    })
   },
   methods: {
     async validate() {
       this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate(),
-        Promise.resolve(this.endDateError === "")
-      ]);
+      const validations = await Promise.all([this.$validator.validate()]);
       console.log("General settings published validation", validations);
       return validations.reduce((a, c) => a && c, true);
     },
@@ -184,9 +150,9 @@ export default {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate("name"),
-        this.$validator.validate("country_office"),
-        this.$validator.validate("contact_email"),
-        this.$validator.validate("team")
+        this.$validator.validate("description"),
+        this.$validator.validate("status"),
+        this.$validator.validate("icon")
       ]);
       console.log("General settings draft validation", validations);
       return validations.reduce((a, c) => a && c, true);
@@ -199,18 +165,28 @@ export default {
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
-.GeneralSettings {
-  .CountrySelector,
+.general-settings {
+  .el-card {
+    overflow: inherit;
+  }
   .select-office {
     width: 50%;
   }
-
-  .Date {
-    width: 100% !important;
+  .disclaimer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color: @colorBrandGrayDark;
+    svg {
+      color: #a8a8a9;
+      margin: 0 8px;
+    }
+    p {
+      margin: 0;
+      font-size: 12px;
+      letter-spacing: 0;
+      line-height: 18px;
+    }
   }
-}
-
-.TeamArea {
-  position: relative;
 }
 </style>

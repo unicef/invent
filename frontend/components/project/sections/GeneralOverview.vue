@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="general"
-    class="GeneralOverview"
-  >
+  <div id="general" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('General overview') | translate"
@@ -19,7 +16,8 @@
           </translate>
           <form-hint>
             <translate key="project-name-hint">
-              If this is your first time uploading a project, a sample data form can be found here for reference.
+              If this is your first time uploading a project, a sample data form
+              can be found here for reference.
             </translate>
           </form-hint>
         </template>
@@ -33,7 +31,11 @@
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('country_office') ? errors.first('country_office').replace('_', ' ') : undefined"
+        :error="
+          errors.first('country_office')
+            ? errors.first('country_office').replace('_', ' ')
+            : undefined
+        "
         :draft-rule="draftRules.country_office"
         :publish-rule="publishRules.country_office"
       >
@@ -74,10 +76,7 @@
             Field Office
           </translate>
         </template>
-        <FieldOfficeSelector
-          v-model="field_office"
-          :office="country_office"
-        />
+        <FieldOfficeSelector v-model="field_office" :office="country_office" />
       </custom-required-form-item>
 
       <custom-required-form-item v-if="modified">
@@ -115,13 +114,16 @@
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          <p><translate>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</translate></p>
+          <p>
+            <translate
+              >Describe what the technology aims to achieve, detailing the
+              users, the reasons for deploying the system, and current and
+              future phases of deployment.</translate
+            >
+          </p>
         </span>
       </custom-required-form-item>
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
+      <el-row :gutter="20" type="flex">
         <el-col :span="12">
           <custom-required-form-item
             :error="errors.first('start_date')"
@@ -134,7 +136,8 @@
               </translate>
               <form-hint>
                 <translate key="start-date-hint">
-                  When did the overall project, not just the digital health component, start.
+                  When did the overall project, not just the digital health
+                  component, start.
                 </translate>
               </form-hint>
             </template>
@@ -164,7 +167,8 @@
               </translate>
               <form-hint>
                 <translate key="end-date-hint">
-                  When will the overall project be completed. If your project is ongoing, leave this field blank.
+                  When will the overall project be completed. If your project is
+                  ongoing, leave this field blank.
                 </translate>
               </form-hint>
             </template>
@@ -191,7 +195,8 @@
         >
           <template slot="label">
             <translate key="team">
-              Add team members (editors)--can modify entry on Add New Project page
+              Add team members (editors)--can modify entry on Add New Project
+              page
             </translate>
             <form-hint>
               <translate key="team-hint">
@@ -215,7 +220,8 @@
         >
           <template slot="label">
             <translate key="viewers">
-              Add team members (viewers)--can receive notification that project has been added
+              Add team members (viewers)--can receive notification that project
+              has been added
             </translate>
             <form-hint>
               <translate key="viewers-hint">
@@ -237,17 +243,17 @@
 </template>
 
 <script>
-import { isAfter, format } from 'date-fns';
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import CollapsibleCard from '../CollapsibleCard';
-import TeamSelector from '../TeamSelector';
-import FieldOfficeSelector from '../FieldOfficeSelector';
-import CountryOfficeSelect from '../../common/CountryOfficeSelect';
-import FormHint from '../FormHint';
-import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters, mapState } from 'vuex';
-import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
+import { isAfter, format } from "date-fns";
+import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
+import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
+import CollapsibleCard from "../CollapsibleCard";
+import TeamSelector from "../TeamSelector";
+import FieldOfficeSelector from "../FieldOfficeSelector";
+import CountryOfficeSelect from "../../common/CountryOfficeSelect";
+import FormHint from "../FormHint";
+import { mapGettersActions } from "../../../utilities/form";
+import { mapGetters, mapState } from "vuex";
+import CustomRequiredFormTeamItem from "@/components/proxy/CustomRequiredFormTeamItem";
 
 export default {
   components: {
@@ -264,64 +270,74 @@ export default {
       offices: state => state.offices.offices
     }),
     ...mapGetters({
-      unicef_regions: 'system/getUnicefRegions',
-      getCountryDetails: 'countries/getCountryDetails',
-      modified: 'project/getModified'
+      unicef_regions: "system/getUnicefRegions",
+      getCountryDetails: "countries/getCountryDetails",
+      modified: "project/getModified"
     }),
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 0],
-      country: ['project', 'getCountry', 'setCountry', 0],
-      country_office: ['project', 'getCountryOffice', 'setCountryOffice', 0],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
-      start_date: ['project', 'getStartDate', 'setStartDate', 0],
-      end_date: ['project', 'getEndDate', 'setEndDate', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
-      team: ['project', 'getTeam', 'setTeam', 0],
-      viewers: ['project', 'getViewers', 'setViewers', 0],
-      field_office: ['project', 'getFieldOffice', 'setFieldOffice', 0]
+      name: ["project", "getName", "setName", 0],
+      country: ["project", "getCountry", "setCountry", 0],
+      country_office: ["project", "getCountryOffice", "setCountryOffice", 0],
+      implementation_overview: [
+        "project",
+        "getImplementationOverview",
+        "setImplementationOverview",
+        0
+      ],
+      start_date: ["project", "getStartDate", "setStartDate", 0],
+      end_date: ["project", "getEndDate", "setEndDate", 0],
+      contact_name: ["project", "getContactName", "setContactName", 0],
+      contact_email: ["project", "getContactEmail", "setContactEmail", 0],
+      team: ["project", "getTeam", "setTeam", 0],
+      viewers: ["project", "getViewers", "setViewers", 0],
+      field_office: ["project", "getFieldOffice", "setFieldOffice", 0]
     }),
-    endDateError () {
-      if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
-        return this.$gettext('End date must be after Start date');
+    endDateError() {
+      if (
+        this.usePublishRules &&
+        this.start_date &&
+        this.end_date &&
+        isAfter(this.start_date, this.end_date)
+      ) {
+        return this.$gettext("End date must be after Start date");
       }
-      return '';
+      return "";
     },
-    selectedRegion () {
+    selectedRegion() {
       const office = this.offices.find(obj => obj.id === this.country_office);
       if (office) {
         const result = this.unicef_regions.find(uf => uf.id === office.region);
-        return (result && result.name) || 'N/A';
+        return (result && result.name) || "N/A";
       }
-      return 'N/A';
+      return "N/A";
     },
-    countryOfOffice () {
+    countryOfOffice() {
       const office = this.offices.find(obj => obj.id === this.country_office);
-      return office ? this.getCountryDetails(office.country).name : 'N/A';
+      return office ? this.getCountryDetails(office.country).name : "N/A";
     },
-    lastUpdated () {
-      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
+    lastUpdated() {
+      return format(new Date(this.modified), "DD/MM/YYYY HH:mm");
     }
   },
   methods: {
-    async validate () {
+    async validate() {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
-        Promise.resolve(this.endDateError === '')
+        Promise.resolve(this.endDateError === "")
       ]);
-      console.log('General overview published validation', validations);
+      console.log("General overview published validation", validations);
       return validations.reduce((a, c) => a && c, true);
     },
-    async validateDraft () {
+    async validateDraft() {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
-        this.$validator.validate('name'),
-        this.$validator.validate('country_office'),
-        this.$validator.validate('contact_email'),
-        this.$validator.validate('team')
+        this.$validator.validate("name"),
+        this.$validator.validate("country_office"),
+        this.$validator.validate("contact_email"),
+        this.$validator.validate("team")
       ]);
-      console.log('General overview draft validation', validations);
+      console.log("General overview draft validation", validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }
@@ -329,20 +345,21 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .GeneralOverview {
-    .CountrySelector, .select-office {
-      width: 50%;
-    }
-
-    .Date {
-      width: 100% !important;
-    }
+.GeneralOverview {
+  .CountrySelector,
+  .select-office {
+    width: 50%;
   }
 
-  .TeamArea {
-    position: relative;
+  .Date {
+    width: 100% !important;
   }
+}
+
+.TeamArea {
+  position: relative;
+}
 </style>
