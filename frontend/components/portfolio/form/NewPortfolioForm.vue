@@ -8,20 +8,33 @@
       :publish-rules="publishRules"
       :api-errors="apiErrors"
     />
+    <managers
+      ref="managers"
+      :use-publish-rules="usePublishRules"
+      :rules="rules"
+      :draft-rules="draftRules"
+      :publish-rules="publishRules"
+      :api-errors="apiErrors"
+    />
+    <problem-statement
+      ref="problemStatement"
+      :use-publish-rules="usePublishRules"
+      :rules="rules"
+      :draft-rules="draftRules"
+      :publish-rules="publishRules"
+      :api-errors="apiErrors"
+    />
+    <!-- action forms -->
     <div class="action-form">
-      <el-button
-        type="text"
-        size="large"
-        class="CancelButton"
-        @click="toForgotten"
-      >
+      <el-button type="text" size="large" @click="handleCancel">
         <translate>Cancel</translate>
       </el-button>
       <el-button
         type="text"
         size="large"
-        class="CancelButton"
-        @click="toForgotten"
+        :disabled="disabled"
+        class="create-btn"
+        @click="handleCreate"
       >
         <translate>Add Portfolio</translate>
       </el-button>
@@ -33,10 +46,14 @@
 import { mapGetters, mapActions } from "vuex";
 import { publishRules, draftRules } from "@/utilities/projects";
 import GeneralSettings from "@/components/portfolio/form/GeneralSettings";
+import Managers from "@/components/portfolio/form/Managers";
+import ProblemStatement from "@/components/portfolio/form/ProblemStatement";
 
 export default {
   components: {
-    GeneralSettings
+    GeneralSettings,
+    Managers,
+    ProblemStatement
   },
   $_veeValidate: {
     validator: "new"
@@ -46,14 +63,13 @@ export default {
       readyElements: 0,
       createdElements: 0,
       usePublishRules: false,
-      apiErrors: {}
+      apiErrors: {},
+      disabled: true
     };
   },
   computed: {
     ...mapGetters({
-      project: "project/getProjectData",
-      countryAnswers: "project/getCountryAnswers",
-      donorAnswers: "project/getDonorsAnswers"
+      portfolio: "portfolio/getProjectData"
     }),
     draftRules: draftRules,
     publishRules: publishRules,
@@ -61,59 +77,15 @@ export default {
       return this.usePublishRules ? this.publishRules : this.draftRules;
     }
   },
-  mounted() {
-    if (this.$route.query.reloadDataFromStorage) {
-      this.$nextTick(() => {
-        this.$nuxt.$loading.start();
-        try {
-          const stored = JSON.parse(
-            window.localStorage.getItem("rescuedProject")
-          );
-          this.initProjectState(stored);
-        } catch (e) {
-          this.$alert(
-            this.$gettext("Failed to restore auto-saved project"),
-            this.$gettext("Warning"),
-            {
-              confirmButtonText: this.$gettext("OK")
-            }
-          );
-        }
-        window.localStorage.removeItem("rescuedProject");
-        this.$router.replace({ ...this.$route, query: undefined });
-        this.$nuxt.$loading.finish();
-      });
-    }
-  },
+  mounted() {},
   methods: {
     ...mapActions({
-      createProject: "project/createProject",
-      saveDraft: "project/saveDraft",
-      discardDraft: "project/discardDraft",
-      publishProject: "project/publishProject",
-      setLoading: "project/setLoading",
-      initProjectState: "project/initProjectState"
+      createPortfolio: "portfolio/createPortfolio"
     }),
-    digitalHealthInterventionsValidator(rule, value, callback) {
-      const ownDhi = this.project.digitalHealthInterventions.filter(
-        dhi => dhi.platform === value && dhi.id
-      );
-      if (ownDhi.length === 0) {
-        const error = {
-          message: this.$gettext(
-            "Please select one or more Digital Health Intervetions for this Software"
-          ),
-          field: rule.fullField
-        };
-        callback(error);
-      } else {
-        callback();
-      }
-    },
     async unCaughtErrorHandler(errors) {
       if (this.$sentry) {
         this.$sentry.captureMessage(
-          "Un-caught validation error in project page",
+          "Un-caught validation error in portfolio page",
           {
             level: "error",
             extra: {
@@ -135,12 +107,10 @@ export default {
             cancelButtonText: this.$gettext("Discard changes")
           }
         );
-        const project = {
-          ...this.project,
-          country_custom_answers: this.countryAnswers,
-          donor_custom_answers: this.donorAnswers
+        const portfolio = {
+          ...this.portfolio
         };
-        const toStore = JSON.stringify(project);
+        const toStore = JSON.stringify(portfolio);
         window.localStorage.setItem("rescuedProject", toStore);
         const newUrl =
           window.location.origin +
@@ -165,83 +135,28 @@ export default {
     },
     async validate() {
       const validations = await Promise.all([
-        this.$refs.generalOverview.validate(),
-        this.$refs.focalOverview.validate(),
-        this.$refs.implementationOverview.validate(),
-        this.$refs.donorCustom.validate()
+        this.$refs.generalSettings.validate()
       ]);
       console.log("root validations", validations);
       return validations.reduce((a, c) => a && c, true);
     },
     clearValidation() {
       this.apiErrors = {};
-      this.$refs.generalOverview.clear();
-      this.$refs.focalOverview.clear();
-      this.$refs.implementationOverview.clear();
-      this.$refs.donorCustom.clear();
+      this.$refs.generalSettings.clear();
     },
-
-    async doDiscardDraft() {
-      try {
-        await this.$confirm(
-          this.$gettext(
-            "The current draft will be overwritten by the published version"
-          ),
-          this.$gettext("Attention"),
-          {
-            confirmButtonText: this.$gettext("Ok"),
-            cancelButtonText: this.$gettext("Cancel"),
-            type: "warning"
-          }
-        );
-        await this.discardDraft(this.$route.params.id);
-        this.$message({
-          type: "success",
-          message: this.$gettext("Draft overriden with published version")
-        });
-      } catch (e) {
-        this.setLoading(false);
-        this.$message({
-          type: "info",
-          message: this.$gettext("Action cancelled")
-        });
-      }
+    handleCreate() {
+      console.log("create");
     },
-    async doPublishProject() {
-      this.clearValidation();
-      this.usePublishRules = true;
-      this.$nextTick(async () => {
-        const valid = await this.validate();
-        if (valid) {
-          try {
-            await this.publishProject(this.$route.params.id);
-            const localised = this.localePath({
-              name: "organisation-projects-id-published",
-              params: { ...this.$route.params }
-            });
-            this.$router.push(localised);
-            this.$alert(
-              this.$gettext("Your draft has been published successfully"),
-              this.$gettext("Congratulation"),
-              {
-                confirmButtonText: this.$gettext("Close")
-              }
-            );
-            return;
-          } catch (e) {
-            console.log(e);
-            this.setLoading(false);
-            this.apiErrors = e.response.data;
-          }
-        }
-        this.handleErrorMessages();
-      });
+    handleCancel() {
+      this.$router.push(
+        this.localePath({ name: "organisation-portfolio-management" })
+      );
     }
   }
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
@@ -263,29 +178,18 @@ export default {
       background-color: #a8a8a9;
     }
   }
-}
-
-.NewProjectForm {
-  .limitPageWidth();
-  .Loader {
-    display: block;
-    margin: 0 auto 80px;
-    span {
-      margin: 0 auto;
+  .create-btn {
+    color: @colorWhite;
+    background-color: @colorBrandPrimary;
+    &:hover {
+      background-color: @colorBrandPrimary;
+      opacity: 0.8;
     }
-  }
-
-  > .el-form {
-    > .el-row > .el-col {
-      // form fieldsets
-      &:first-child {
-        width: calc(100% - @projectAsideNavWidth - 20px);
-        margin-right: 20px;
-      }
-
-      // aside navigation
-      &:last-child {
-        width: @projectAsideNavWidth;
+    &.is-disabled {
+      color: #a8a8a9 !important;
+      background-color: #f5f3ef;
+      &:hover {
+        background-color: #f5f3ef;
       }
     }
   }
