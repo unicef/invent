@@ -59,9 +59,8 @@ export const state = () => ({
   ],
   statusList: [
     { id: 1, name: "Active" },
-    { id: 2, name: "On hold" },
-    { id: 3, name: "Waiting" },
-    { id: 4, name: "Cancel" }
+    { id: 2, name: "Draft" },
+    { id: 3, name: "Archived" }
   ]
 });
 
