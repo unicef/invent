@@ -1,42 +1,34 @@
 <template>
-  <div
-    v-model="innerValue"
-    v-bind="{ ...$props, ...$attrs }"
-    v-on="{ ...$listeners }"
-    class="statements"
-  >
-    <div v-for="(item, i) in $attrs.value" :key="i" class="statement">
+  <div class="statements">
+    <div v-for="(item, i) in statements" :key="i" class="statement">
       <div class="close" @click="handleRemoveStatement(i)">
         <fa icon="times" />
       </div>
-      <custom-required-form-item :error="errors.first('statementName')" row>
+      <custom-required-form-item row>
         <template slot="label">
           <translate key="portfolio-statement-name">
             Name
           </translate>
         </template>
-        <character-count-input
-          v-model="item.name"
-          data-as-name="statement Name"
-          data-vv-name="statementName"
+        <el-input
+          :value="item.name"
+          placeholder="Max. 80 characters"
+          @input="handleInput($event, 'name', i)"
         />
       </custom-required-form-item>
 
-      <custom-required-form-item
-        :error="errors.first('statementDescription')"
-        row
-      >
+      <custom-required-form-item row>
         <template slot="label">
-          <translate key="portfolio-statementDescription">
+          <translate key="portfolio-statement-description">
             Description
           </translate>
         </template>
-
-        <character-count-input
-          v-model="item.description"
-          data-vv-name="statementDescription"
-          data-vv-as="Description"
+        <el-input
+          :value="item.description"
           type="textarea"
+          placeholder="Max. 1000 characters"
+          rows="3"
+          @input="handleInput($event, 'description', i)"
         />
       </custom-required-form-item>
     </div>
@@ -47,38 +39,36 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
-import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
+import cloneDeep from "lodash/cloneDeep";
+import { mapState, mapMutations } from "vuex";
 
 export default {
-  mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
-  model: {
-    prop: "value",
-    event: "change"
-  },
   computed: {
-    innerValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit("change", value);
-      }
-    }
+    ...mapState({
+      statements: state => state.portfolio.statements
+    })
   },
+
   methods: {
+    ...mapMutations({
+      setStatements: "portfolio/SET_STATEMENTS"
+    }),
     handleAddStatement() {
-      this.innerValue = [...this.$attrs.value, { name: "", description: "" }];
+      this.setStatements([...this.statements, { name: "", description: "" }]);
     },
     handleRemoveStatement(idx) {
       const outputArray = [];
-      for (let i = 0; i < this.$attrs.value.length; i++) {
+      for (let i = 0; i < this.statements.length; i++) {
         if (idx !== i) {
-          outputArray.push(this.$attrs.value[i]);
+          outputArray.push(this.statements[i]);
         }
       }
-      this.innerValue = outputArray;
+      this.setStatements(outputArray);
+    },
+    handleInput(val, key, idx) {
+      let resultArr = cloneDeep(this.statements);
+      resultArr[idx][key] = val;
+      this.setStatements(resultArr);
     }
   }
 };
@@ -111,6 +101,7 @@ export default {
     border: 1px solid #eae6e1;
     background-color: #f5f3ef;
     margin-bottom: 24px;
+    padding: 30px 60px 20px 30px;
     .close {
       position: absolute;
       top: -10px;

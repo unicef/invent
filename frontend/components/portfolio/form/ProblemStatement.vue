@@ -4,21 +4,15 @@
       ref="collapsible"
       :title="$gettext('Problem Statements') | translate"
     >
-      <statements
-        v-model="statements"
-        v-validate="rules"
-        :rules="rules"
-        data-as-name="Statements"
-        data-vv-name="statements"
-      />
+      <statements />
     </collapsible-card>
   </div>
 </template>
 
 <script>
 import { mapGettersActions } from "@/utilities/form";
-import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
-import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
+// import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
+// import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
 import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
 import Statements from "@/components/portfolio/form/inputs/Statements";
 
@@ -27,12 +21,7 @@ export default {
     CollapsibleCard,
     Statements
   },
-  mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
-  computed: {
-    ...mapGettersActions({
-      statements: ["portfolio", "getStatements", "setStatements", 0]
-    })
-  },
+  // mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   methods: {
     async validate() {
       this.$refs.collapsible.expandCard();

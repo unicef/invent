@@ -2,7 +2,7 @@
   <div id="general" class="PortfolioManagers">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Add/remove manager(s)') | translate"
+      :title="$gettext('Portfolio managers') | translate"
     >
       <custom-required-form-item
         v-model="managers"
@@ -17,12 +17,14 @@
           </translate>
         </template>
 
-        <country-office-select
+        <portfolio-select
           v-model="managers"
           v-validate="rules.managers"
           data-vv-name="managers"
           data-vv-as="managers"
           multiple
+          :items="managerList"
+          :placeholder="$gettext('Type and select name') | translate"
         />
       </custom-required-form-item>
     </collapsible-card>
@@ -35,21 +37,20 @@ import { mapGetters, mapState } from "vuex";
 import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
 import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
 import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
-
-import CountryOfficeSelect from "@/components/common/CountryOfficeSelect";
+import PortfolioSelect from "@/components/portfolio/form/inputs/PortfolioSelect";
 
 export default {
   components: {
     CollapsibleCard,
-    CountryOfficeSelect
+    PortfolioSelect
   },
   mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   computed: {
     ...mapState({
-      offices: state => state.offices.offices
+      managerList: state => state.portfolio.managerList
     }),
     ...mapGetters({
-      getCountryDetails: "countries/getCountryDetails"
+      // getCountryDetails: "countries/getCountryDetails"
     }),
     ...mapGettersActions({
       managers: ["portfolio", "getManagers", "setManagers", 0]
@@ -79,5 +80,8 @@ export default {
 @import "~assets/style/mixins.less";
 
 .PortfolioManagers {
+  .portfolio-select {
+    width: 100%;
+  }
 }
 </style>

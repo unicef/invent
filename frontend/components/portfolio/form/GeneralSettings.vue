@@ -60,11 +60,13 @@
             Status
           </translate>
         </template>
-        <country-office-select
+        <portfolio-select
           v-model="status"
           v-validate="rules.status"
           data-vv-name="status"
           data-vv-as="status"
+          :items="statusList"
+          :placeholder="$gettext('Select from list') | translate"
         />
       </custom-required-form-item>
 
@@ -113,19 +115,19 @@ import { mapGetters, mapState } from "vuex";
 import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
 import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
 import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
-import CountryOfficeSelect from "@/components/common/CountryOfficeSelect";
+import PortfolioSelect from "@/components/portfolio/form/inputs/PortfolioSelect";
 import IconSelect from "@/components/portfolio/form/inputs/IconSelect";
 
 export default {
   components: {
     CollapsibleCard,
-    CountryOfficeSelect,
-    IconSelect
+    IconSelect,
+    PortfolioSelect
   },
   mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   computed: {
     ...mapState({
-      // todo: set general state
+      statusList: state => state.portfolio.statusList
     }),
     ...mapGettersActions({
       name: ["portfolio", "getName", "setName", 0],
@@ -164,7 +166,7 @@ export default {
   .el-card {
     overflow: inherit;
   }
-  .select-office {
+  .portfolio-select {
     width: 50%;
   }
   .disclaimer {

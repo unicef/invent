@@ -48,6 +48,20 @@ export const state = () => ({
     { id: 113, title: "innovation", icon: "innovation" },
     { id: 116, title: "community_building", icon: "community_building" },
     { id: 164, title: "emergency", icon: "emergency" }
+  ],
+  // example select
+  managerList: [
+    { id: 1, name: "Alonso" },
+    { id: 2, name: "Torben" },
+    { id: 3, name: "Gyuri" },
+    { id: 4, name: "Daniel" },
+    { id: 5, name: "David" }
+  ],
+  statusList: [
+    { id: 1, name: "Active" },
+    { id: 2, name: "On hold" },
+    { id: 3, name: "Waiting" },
+    { id: 4, name: "Cancel" }
   ]
 });
 
