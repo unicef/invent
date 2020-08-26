@@ -44,7 +44,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { publishRules, draftRules } from "@/utilities/projects";
+import { publishRules, draftRules } from "@/utilities/portfolio";
 import GeneralSettings from "@/components/portfolio/form/GeneralSettings";
 import Managers from "@/components/portfolio/form/Managers";
 import ProblemStatement from "@/components/portfolio/form/ProblemStatement";
@@ -83,6 +83,7 @@ export default {
       createPortfolio: "portfolio/createPortfolio"
     }),
     async unCaughtErrorHandler(errors) {
+      // todo: change or tune in for portfolio
       if (this.$sentry) {
         this.$sentry.captureMessage(
           "Un-caught validation error in portfolio page",
