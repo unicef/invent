@@ -85,7 +85,6 @@
         </template>
         <icon-select
           v-model="icon"
-          icons=""
           v-validate="rules.icon"
           data-vv-name="icon"
           data-vv-as="icon"
@@ -93,7 +92,7 @@
       </custom-required-form-item>
 
       <div class="disclaimer">
-        <fa icon="info-circle" size="md" />
+        <fa icon="info-circle" />
         <p>
           <translate>
             This is a bottom note section if it’s needed: lorem ispumd olor sit
@@ -126,11 +125,7 @@ export default {
   mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   computed: {
     ...mapState({
-      // todo: setIcons
-      offices: state => state.offices.offices
-    }),
-    ...mapGetters({
-      // todo: getIcons
+      // todo: set general state
     }),
     ...mapGettersActions({
       name: ["portfolio", "getName", "setName", 0],
