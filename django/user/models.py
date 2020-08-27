@@ -53,6 +53,21 @@ class UserProfile(ExtendedModel):
         choices=ACCOUNT_TYPE_CHOICES,
         default=IMPLEMENTER,
     )
+
+    PORTFOLIO_NOROLE = 'N'
+    PORTFOLIO_MANAGER = 'PM'
+    PORTFOLIO_OWNER = 'GPO'
+    PORTFOLIO_ACCESS_CHOICES = (
+        (PORTFOLIO_NOROLE, _('None')),
+        (PORTFOLIO_MANAGER, _('Portfolio Manager')),
+        (PORTFOLIO_OWNER, _('Global Portfolio Owner'))
+    )
+
+    portfolio_access = models.CharField(
+        max_length=3,
+        choices=PORTFOLIO_ACCESS_CHOICES,
+        default=PORTFOLIO_NOROLE
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True, on_delete=models.SET_NULL)

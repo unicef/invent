@@ -177,6 +177,59 @@ def on_create_init(sender, instance, created, **kwargs):
         ProjectApproval.objects.get_or_create(project_id=instance.id)
 
 
+class PortfolioManager(models.Manager):
+    use_in_migrations = True
+
+    def owner_of(self, user):
+        return self.filter(managers=user.userprofile)
+
+    def viewer_of(self, user):
+        return self.filter(
+            Q(status=Portfolio.STATUS_ARCHIVED) |  # Everyone can view active portfolios
+            Q(managers=user)  # and their own portfolios
+        )
+
+
+class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
+    pass
+
+
+class Portfolio(SoftDeleteModel, ExtendedModel):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=511)
+    image = models.URLField(blank=True)
+    projects = models.ManyToManyField(Project, related_name='portfolios', blank=True)
+    managers = models.ManyToManyField(UserProfile, related_name="portfolios", blank=True)
+    STATUS_DRAFT = 'DR'
+    STATUS_ACTIVE = 'ACT'
+    STATUS_ARCHIVED = 'ARC'
+    STATUS_CHOICES = (
+        (STATUS_DRAFT, _('Draft')),
+        (STATUS_ACTIVE, _('Active')),
+        (STATUS_ARCHIVED, _('Archived'))
+    )
+
+    status = models.CharField(
+        max_length=3,
+        choices=STATUS_CHOICES,
+        default=STATUS_DRAFT
+    )
+    objects = PortfolioQuerySet.as_manager()
+
+    def __str__(self):  # pragma: no cover
+        return self.name
+
+
+class ProblemStatement(SoftDeleteModel, ExtendedModel):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=511)
+    portfolio = models.ForeignKey(Portfolio, blank=False, null=False, on_delete=models.CASCADE,
+                                  related_name='problem_statements')
+
+    def __str__(self):  # pragma: no cover
+        return self.name
+
+
 class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval', on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, blank=True, null=True,
