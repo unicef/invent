@@ -1,23 +1,17 @@
 <template>
   <el-form-item
-    class="CustomRequiredFormItem"
+    :class="`CustomRequiredFormItem ${row ? 'row-input' : ''}`"
     v-bind="propsAndAttrs"
     v-on="listeners"
   >
     <template slot="label">
       <slot name="label" />
-      <span
-        v-show="draftRequired"
-        class="Required DraftRequired"
-      >
+      <span v-show="draftRequired" class="Required DraftRequired">
         <span>
           *
         </span>
       </span>
-      <span
-        v-show="publishRequired"
-        class="Required PublishRequired"
-      >
+      <span v-show="publishRequired" class="Required PublishRequired">
         <span>
           *
         </span>
@@ -29,7 +23,7 @@
 
 <script>
 export default {
-  name: 'CustomRequiredFormItem',
+  name: "CustomRequiredFormItem",
   props: {
     draftRule: {
       type: Object,
@@ -38,19 +32,23 @@ export default {
     publishRule: {
       type: Object,
       default: null
+    },
+    row: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
-    propsAndAttrs () {
+    propsAndAttrs() {
       return { ...this.$props, ...this.$attrs };
     },
-    listeners () {
+    listeners() {
       return { ...this.$listeners };
     },
-    draftRequired () {
+    draftRequired() {
       return this.draftRule && this.draftRule.required;
     },
-    publishRequired () {
+    publishRequired() {
       return this.publishRule && this.publishRule.required;
     }
   }
@@ -59,30 +57,40 @@ export default {
 
 <style lang="less">
 @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
-  .CustomRequiredFormItem{
-    .Required{
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      font-size: 16px;
-      line-height: 12px;
-      font-weight: 900;
-      text-align: center;
-      border-radius: 50%;
-
-      > span {
-        position: relative;
-        top: 4px;
-      }
+@import "~assets/style/mixins.less";
+.CustomRequiredFormItem {
+  &.row-input {
+    display: flex;
+    width: 100%;
+    label {
+      width: 315px;
     }
-    .DraftRequired{
-      color: @colorTextPrimary;
-      background-color: @colorDraft;
-    }
-    .PublishRequired{
-      color: @colorWhite;
-      background-color: @colorPublished;
+    .el-form-item__content {
+      width: 100%;
     }
   }
+  .Required {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    font-size: 16px;
+    line-height: 12px;
+    font-weight: 900;
+    text-align: center;
+    border-radius: 50%;
+
+    > span {
+      position: relative;
+      top: 4px;
+    }
+  }
+  .DraftRequired {
+    color: @colorTextPrimary;
+    background-color: @colorDraft;
+  }
+  .PublishRequired {
+    color: @colorWhite;
+    background-color: @colorPublished;
+  }
+}
 </style>
