@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from "vuex";
 
 export default {
   model: {
-    prop: 'value',
-    event: 'change'
+    prop: "value",
+    event: "change"
   },
   props: {
     value: {
@@ -49,33 +49,39 @@ export default {
       offices: state => state.offices.offices
     }),
     innerValue: {
-      get () {
+      get() {
         return this.value;
       },
-      set (value) {
-        this.$emit('change', value);
+      set(value) {
+        this.$emit("change", value);
       }
     },
-    officeList () {
-      if ((this.regionFilter === undefined) || (this.regionFilter === null) || (typeof(this.regionFilter) !== 'number')) {
+    officeList() {
+      if (
+        this.regionFilter === undefined ||
+        this.regionFilter === null ||
+        typeof this.regionFilter !== "number"
+      ) {
         return this.offices;
       }
-      return this.offices ? this.offices.filter((office) => office.region === this.regionFilter) : [];
+      return this.offices
+        ? this.offices.filter(office => office.region === this.regionFilter)
+        : [];
     }
   },
-  mounted () {
+  mounted() {
     this.loadOffices();
   },
   methods: {
     ...mapActions({
-      loadOffices: 'offices/loadOffices'
+      loadOffices: "offices/loadOffices"
     })
   }
 };
 </script>
 
 <style lang="less" scoped>
-  .select-office {
-    width: 100%;
-  }
+.select-office {
+  width: 100%;
+}
 </style>
