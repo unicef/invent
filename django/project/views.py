@@ -594,7 +594,7 @@ class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, ViewSet):
             return Response(status=status.HTTP_200_OK, data=instance.to_response_dict())
 
 
-class PortfolioListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     serializer_class = PortfolioListSerializer
 
     def get_queryset(self):
