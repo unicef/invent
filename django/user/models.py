@@ -54,20 +54,6 @@ class UserProfile(ExtendedModel):
         default=IMPLEMENTER,
     )
 
-    PORTFOLIO_NOROLE = 'N'
-    PORTFOLIO_MANAGER = 'PM'
-    PORTFOLIO_OWNER = 'GPO'
-    PORTFOLIO_ACCESS_CHOICES = (
-        (PORTFOLIO_NOROLE, _('None')),
-        (PORTFOLIO_MANAGER, _('Portfolio Manager')),
-        (PORTFOLIO_OWNER, _('Global Portfolio Owner'))
-    )
-
-    portfolio_access = models.CharField(
-        max_length=3,
-        choices=PORTFOLIO_ACCESS_CHOICES,
-        default=PORTFOLIO_NOROLE
-    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True, on_delete=models.SET_NULL)
@@ -75,6 +61,7 @@ class UserProfile(ExtendedModel):
     donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
+    global_portfolio_owner = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""

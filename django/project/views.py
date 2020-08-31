@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin
 from country.models import Donor, FieldOffice, CountryOffice
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
@@ -20,10 +20,11 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, HSCChallenge
+    HealthCategory, HSCChallenge, Portfolio
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
+    PortfolioDetailsSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -542,3 +543,59 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
         return ImportRow.objects.filter(parent__user=self.request.user)
+
+
+class PortfolioListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    serializer_class = PortfolioListSerializer
+    queryset = Portfolio.objects.filter(status=Portfolio.STATUS_ACTIVE)
+
+
+class PortfolioViewSet(GPOAccessMixin, CreateModelMixin, ViewSet):
+    def create(self, request, *args, **kwargs):
+        """
+        Creates a draft portfolio
+        """
+        if 'portfolio' not in request.data:
+            raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
+        self.check_object_permissions(request, request.user.userprofile)
+
+        portfolio_data = copy.deepcopy(request.data['portfolio'])
+        portfolio_data['status'] = Portfolio.STATUS_DRAFT
+
+        data_serializer = PortfolioDetailsSerializer(data=portfolio_data)
+        data_serializer.is_valid()
+
+        if data_serializer.errors:
+            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
+        else:
+            instance = data_serializer.save()
+            return Response(status=status.HTTP_201_CREATED, data=instance.to_response_dict())
+
+
+class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, ViewSet):
+    def update(self, request, portfolio_id):
+        """
+        Updates a portfolio
+        """
+        portfolio = get_object_or_400(Portfolio, select_for_update=True, error_message="No such portfolio",
+                                      id=portfolio_id)
+        if 'portfolio' not in request.data:
+            raise ValidationError({'portfolio': 'Portfolio data is missing'})  # pragma: no cover
+
+        self.check_object_permissions(request, portfolio)
+
+        data_serializer = PortfolioDetailsSerializer(instance=portfolio, data=request.data, partial=True)
+        data_serializer.is_valid()
+
+        if data_serializer.errors:
+            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
+        else:
+            instance = data_serializer.save(data=request.data)
+            return Response(status=status.HTTP_200_OK, data=instance.to_response_dict())
+
+
+class PortfolioListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    serializer_class = PortfolioListSerializer
+
+    def get_queryset(self):
+        return Portfolio.objects.manager_of(self.request.user)

@@ -180,14 +180,10 @@ def on_create_init(sender, instance, created, **kwargs):
 class PortfolioManager(models.Manager):
     use_in_migrations = True
 
-    def owner_of(self, user):
-        return self.filter(managers=user.userprofile)
-
-    def viewer_of(self, user):
-        return self.filter(
-            Q(status=Portfolio.STATUS_ARCHIVED) |  # Everyone can view active portfolios
-            Q(managers=user)  # and their own portfolios
-        )
+    def manager_of(self, user):
+        if user.userprofile.global_portfolio_owner:  # global portfolio owners have full rights
+            return self.all()
+        return self.filter(managers=user.userprofile)  # otherwise we filter for managed portfolios
 
 
 class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
@@ -197,7 +193,7 @@ class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
 class Portfolio(SoftDeleteModel, ExtendedModel):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=511)
-    image = models.URLField(blank=True)
+    icon = models.TextField(max_length=1, blank=True)
     projects = models.ManyToManyField(Project, related_name='portfolios', blank=True)
     managers = models.ManyToManyField(UserProfile, related_name="portfolios", blank=True)
     STATUS_DRAFT = 'DR'
@@ -218,6 +214,9 @@ class Portfolio(SoftDeleteModel, ExtendedModel):
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+    def to_response_dict(self):
+        return dict(id=self.pk, status=self.status)
 
 
 class ProblemStatement(SoftDeleteModel, ExtendedModel):
