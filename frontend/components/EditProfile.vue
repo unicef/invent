@@ -29,12 +29,12 @@
               <el-input v-model="innerProfile.email" disabled type="text" />
             </el-form-item>
 
-            <el-form-item
+            <!-- <el-form-item
               :label="$gettext('Organisation name') | translate"
               prop="organisation"
             >
               <organisation-select v-model="innerProfile.organisation" />
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item
               :label="$gettext('Country') | translate"
@@ -158,7 +158,7 @@
                 >
               </p>
 
-              <el-collapse-transition>
+              <!-- <el-collapse-transition>
                 <div v-if="isDonorUser" class="DonorSelectorWrapper">
                   <el-form-item
                     :label="
@@ -173,7 +173,7 @@
                     />
                   </el-form-item>
                 </div>
-              </el-collapse-transition>
+              </el-collapse-transition> -->
 
               <el-collapse-transition>
                 <el-radio-group
@@ -194,6 +194,7 @@
                     :label="'DA'"
                     class="RadioSmall"
                   >
+                  <el-radio :label="'DA'" class="RadioSmall">
                     <translate>Investor Admins</translate>
                   </el-radio>
                   <user-privileges
@@ -424,7 +425,8 @@ export default {
     return {
       innerProfile: {
         name: null,
-        organisation: null,
+        // default code for unicef
+        organisation: 56,
         language: null,
         country: null,
         account_type: null,
@@ -528,7 +530,7 @@ export default {
     profile: {
       immediate: true,
       handler(profile) {
-        this.innerProfile = { ...profile };
+        this.innerProfile = { ...profile, organisation: 56 };
       }
     }
   },
@@ -544,7 +546,7 @@ export default {
     }),
 
     dismissChanges() {
-      this.innerProfile = { ...this.profile };
+      this.innerProfile = { ...this.profile, organisation: 56 };
       this.$router.go(-1);
     },
 
