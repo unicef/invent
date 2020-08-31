@@ -30,6 +30,13 @@
             </el-form-item>
 
             <el-form-item
+              :label="$gettext('Organisation name') | translate"
+              prop="organisation"
+            >
+              <organisation-select v-model="innerProfile.organisation" />
+            </el-form-item>
+
+            <el-form-item
               :label="$gettext('Country') | translate"
               prop="country"
             >
@@ -160,7 +167,10 @@
                     "
                     prop="donor"
                   >
-                    <donor-select v-model="innerProfile.donor" />
+                    <donor-select
+                      v-model="innerProfile.donor"
+                      :filters="donorFilters"
+                    />
                   </el-form-item>
                 </div>
               </el-collapse-transition>
@@ -180,13 +190,16 @@
                     type="D"
                   />
 
-                  <el-radio :label="'DA'" class="RadioSmall">
+                  <!-- <el-radio
+                    :label="'DA'"
+                    class="RadioSmall"
+                  >
                     <translate>Investor Admins</translate>
                   </el-radio>
                   <user-privileges
                     v-if="innerProfile.account_type === 'DA'"
                     type="DA"
-                  />
+                  /> -->
 
                   <el-radio :label="'SDA'" class="RadioSmall">
                     <translate>Investor System Admins</translate>
@@ -420,7 +433,8 @@ export default {
       },
       isCountryUser: false,
       isDonorUser: false,
-      changeApprovedUserRole: false
+      changeApprovedUserRole: false,
+      donorFilters: ["unicef"]
     };
   },
 
