@@ -18,8 +18,7 @@
       </span>
       <span slot="success-message">
         <translate>
-          Your message has been successfully sent!
-          We will be back to you soon!
+          Your message has been successfully sent! We will be back to you soon!
         </translate>
       </span>
       <span slot="error-header">
@@ -29,13 +28,13 @@
       </span>
       <span slot="error-message">
         <translate>
-          There was a problem processing your ticket,
-          please try again
+          There was a problem processing your ticket, please try again
         </translate>
       </span>
       <span slot="hint-text">
         <translate>
-          Click here if you are experiencing any issues or have suggestion for improving the website
+          Click here if you are experiencing any issues or have suggestion for
+          improving the website
         </translate>
       </span>
     </vue-django-feedback>
@@ -43,26 +42,26 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import VueDjangoFeedback from './feedback/RawDjangoFeedback.vue';
+import { mapGetters } from "vuex";
+import VueDjangoFeedback from "./feedback/RawDjangoFeedback.vue";
 
 export default {
   components: { VueDjangoFeedback },
   $_veeValidate: {
-    validator: 'new'
+    validator: "new"
   },
   computed: {
     ...mapGetters({
-      profile: 'user/getProfile',
-      token: 'user/getToken'
+      profile: "user/getProfile",
+      token: "user/getToken"
     }),
-    name () {
+    name() {
       if (this.profile) {
         return this.profile.name;
       }
       return null;
     },
-    email () {
+    email() {
       if (this.profile) {
         return this.profile.email;
       }
@@ -73,19 +72,30 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
-  @import "./feedback/variables.less";
-  @import "./feedback/main.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
+@import "./feedback/variables.less";
+@import "./feedback/main.less";
 
+.vue-django-feedback {
   .vue-django-feedback {
-    .vue-django-feedback {
-      z-index: 5000;
-      font-family: Arial, sans-serif;
-      color: @colorTextPrimary;
-    }
+    z-index: 5000;
+    font-family: "Univers", Arial, sans-serif;
+    color: @colorTextPrimary;
+  }
 
-    .feedback-button {
+  .feedback-button {
+    background-color: @colorBrandPrimary;
+
+    .icon.icon-opened {
+      > span {
+        font-weight: 700 !important;
+      }
+    }
+  }
+
+  .pop-up-container {
+    .header {
       background-color: @colorBrandPrimary;
 
       .icon.icon-opened {
@@ -93,110 +103,99 @@ export default {
           font-weight: 700 !important;
         }
       }
+
+      h2 {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
     }
 
-    .pop-up-container {
-      .header {
-        background-color: @colorBrandPrimary;
+    .message-container {
+      h4 {
+        color: @colorPublished;
 
-        .icon.icon-opened {
-          > span {
-            font-weight: 700 !important;
-          }
+        &.error {
+          color: @colorDanger;
         }
+      }
 
-        h2 {
+      p {
+        color: @colorTextSecondary;
+      }
+    }
+
+    .pop-up-controls {
+      border-color: @colorGrayLight;
+      border-radius: 0;
+
+      .error-info {
+        font-weight: 700;
+        color: @colorDanger;
+
+        .icon.icon-danger span {
           font-weight: 700;
-          letter-spacing: -0.5px;
         }
       }
 
-      .message-container {
-        h4 {
-          color: @colorPublished;
+      .actions {
+        button {
+          color: @colorBrandPrimary;
+          font-weight: 700;
+          text-transform: none;
 
-          &.error {
-            color: @colorDanger;
+          &:hover {
+            color: @colorBrandPrimaryLight;
+          }
+
+          &:disabled {
+            color: @colorTextMuted;
           }
         }
+      }
+    }
 
-        p {
-          color: @colorTextSecondary;
-        }
+    .input-container {
+      label {
+        color: @colorTextPrimary;
+        font-weight: 700;
       }
 
-      .pop-up-controls {
-        border-color: @colorGrayLight;
+      input,
+      textarea {
+        color: @colorTextPrimary;
+        border-color: @colorTextMuted;
         border-radius: 0;
 
-        .error-info {
-          font-weight: 700;
+        &:hover,
+        &:focus {
+          border-color: @colorGray;
+        }
+
+        &.error {
+          border-color: @colorDanger;
+        }
+      }
+
+      .feedback {
+        color: @colorTextMuted;
+
+        .errors {
           color: @colorDanger;
-
-          .icon.icon-danger span {
-            font-weight: 700;
-          }
-        }
-
-        .actions {
-          button {
-            color: @colorBrandPrimary;
-            font-weight: 700;
-            text-transform: none;
-
-            &:hover {
-              color: @colorBrandPrimaryLight;
-            }
-
-            &:disabled {
-              color: @colorTextMuted;
-            }
-          }
         }
       }
+    }
 
-      .input-container {
-        label {
-          color: @colorTextPrimary;
+    .user-block {
+      .user {
+        .name {
           font-weight: 700;
         }
 
-        input,
-        textarea {
-          color: @colorTextPrimary;
-          border-color:@colorTextMuted;
-          border-radius: 0;
-
-          &:hover,
-          &:focus {
-            border-color: @colorGray;
-          }
-
-          &.error {
-            border-color: @colorDanger;
-          }
-        }
-
-        .feedback {
-          color: @colorTextMuted;
-
-          .errors {
-            color: @colorDanger;
-          }
-        }
-      }
-
-      .user-block {
-        .user {
-          .name {
-            font-weight: 700;
-          }
-
-          .email {
-            color: @colorTextSecondary;
-          }
+        .email {
+          color: @colorTextSecondary;
         }
       }
     }
   }
+}
 </style>

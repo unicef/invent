@@ -5,8 +5,6 @@
 @import "variables.less";
 @import "mixins.less";
 
-
-
 // --------------------------------------------------
 // Import other stuff
 // --------------------------------------------------
@@ -15,51 +13,42 @@
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-
-
 // --------------------------------------------------
 // Univers font type
 // --------------------------------------------------
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55-webfont.woff') format('woff');
-//   font-weight: normal;
-//   font-style: normal;
-// }
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55-webfont.woff2") format("woff2"),
+    url("~assets/fonts/univers_55-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55_italic-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55_italic-webfont.woff') format('woff');
-//   font-weight: normal;
-//   font-style: italic;
-// }
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55_italic-webfont.woff2") format("woff2"),
+    url("~assets/fonts/univers_55_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+}
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55_bold-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55_bold-webfont.woff') format('woff');
-//   font-weight: bold;
-//   font-style: normal;
-// }
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55_bold-webfont.woff2") format("woff2"),
+    url("~assets/fonts/univers_55_bold-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
 
-// @font-face {
-//   font-family: 'Univers55';
-//   src: url('~assets/fonts/univers_55_bold_oblique-webfont.woff2') format('woff2'),
-//        url('~assets/fonts/univers_55_bold_oblique-webfont.woff') format('woff');
-//   font-weight: bold;
-//   font-style: italic;
-// }
-
-
-
-// --------------------------------------------------
-// Roboto font type
-// --------------------------------------------------
-
-
+@font-face {
+  font-family: "Univers";
+  src: url("~assets/fonts/univers_55_bold_oblique-webfont.woff2")
+      format("woff2"),
+    url("~assets/fonts/univers_55_bold_oblique-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+}
 
 // --------------------------------------------------
 // Reset font family for Element UI
@@ -72,8 +61,6 @@
   color: inherit;
 }
 
-
-
 // --------------------------------------------------
 // General layout
 // --------------------------------------------------
@@ -85,17 +72,17 @@ html {
 
   // TODO: Remove Angular Material
   height: auto !important;
-  font-family: 'Roboto', Arial, sans-serif !important;
+  font-family: "Univers", Arial, sans-serif !important;
   -webkit-tap-highlight-color: transparent;
   //
 }
 
 body {
   min-height: 100%;
-  margin: 0 ;
+  margin: 0;
   padding: 0;
   // Brand typo
-  font-family: 'Roboto', Arial, sans-serif !important;
+  font-family: "Univers", Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   // letter-spacing: -0.25px;
@@ -109,8 +96,8 @@ body {
     .limitPageWidth();
     margin: 0 auto !important;
     padding: 0;
-    background-color: #F4F4F4;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
+    background-color: #fbfaf8;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -205,7 +192,6 @@ a {
   .Back {
     margin-bottom: -10px;
   }
-
 }
 
 .Loader {
@@ -222,7 +208,7 @@ a {
     border: 6px solid @colorGrayLight;
     border-top-color: @colorBrandAccent;
     -webkit-animation: loading 1s infinite linear;
-    animation: loading 1s infinite linear
+    animation: loading 1s infinite linear;
   }
 
   span {
@@ -239,13 +225,13 @@ a {
 
   @-webkit-keyframes loading {
     100% {
-      transform: rotate(360deg) translate3d(0,0,0);
+      transform: rotate(360deg) translate3d(0, 0, 0);
     }
   }
 
   @keyframes loading {
     100% {
-      transform: rotate(360deg) translate3d(0,0,0);
+      transform: rotate(360deg) translate3d(0, 0, 0);
     }
   }
 }
@@ -272,13 +258,13 @@ a {
   }
 
   .CountryClusterIcon {
-    background-image: url('~assets/img/pins/pin-cluster.svg');
+    background-image: url("~assets/img/pins/pin-cluster.svg");
 
     &.EmptyCluster {
       opacity: 0.6 !important;
     }
 
-     span {
+    span {
       display: inline-block;
       width: 40px;
       line-height: 40px;
@@ -290,10 +276,10 @@ a {
   }
 
   .CountryCenterIcon {
-    background-image: url('~assets/img/pins/pin-with-counter.svg');
+    background-image: url("~assets/img/pins/pin-with-counter.svg");
 
     &.ActiveCountry {
-      background-image: url('~assets/img/pins/pin-with-counter-active.svg');
+      background-image: url("~assets/img/pins/pin-with-counter-active.svg");
     }
 
     &.EmptyMarker {
@@ -312,8 +298,6 @@ a {
   }
 }
 
-
-
 // --------------------------------------------------
 // Leaflet plugin customisation
 // --------------------------------------------------
@@ -329,24 +313,26 @@ a {
 .leaflet-container {
   .leaflet-bar {
     border: 0 !important;
-    box-shadow: 0 0 20px 5px rgba(0,0,0,.15);
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.15);
 
     a {
       border-color: @colorTextMuted;
     }
   }
 
-  .leaflet-control-zoom {}
+  .leaflet-control-zoom {
+  }
 
   .leaflet-control-zoom-in,
   .leaflet-control-zoom-out {
     position: relative;
     overflow: hidden;
     text-indent: -9999px;
-    background-color: rgba(255,255,255,.9);
+    background-color: rgba(255, 255, 255, 0.9);
     transition: @transitionAll;
 
-    &::before, &::after {
+    &::before,
+    &::after {
       content: "";
       position: absolute;
       top: 50%;
@@ -367,7 +353,8 @@ a {
     &:hover {
       background-color: fade(@colorGrayLightest, 90%);
 
-      &::before, &::after {
+      &::before,
+      &::after {
         background-color: @colorBrandPrimary;
       }
     }
@@ -380,16 +367,14 @@ a {
   }
 }
 
-
-
 // --------------------------------------------------
 // Components customisation
 // --------------------------------------------------
 
 // Icon
 
-[class^="el-icon-"],
-[class*=" el-icon-"] {
+[class^="el-icon-tiip-"],
+[class*=" el-icon-tiip-"] {
   // -webkit-font-smoothing: auto;
 
   &.bold {
@@ -465,7 +450,7 @@ a {
 // Button
 
 .el-button {
-  font-family: Arial, sans-serif;
+  font-family: "Univers", Arial, sans-serif;
   border: 0 !important;
 
   &.el-button--default {
@@ -577,7 +562,7 @@ fieldset {
 .el-input {
   .el-input__inner {
     border-radius: 0 !important;
-    font-family: Arial, sans-serif;
+    font-family: "Univers", Arial, sans-serif;
   }
 
   &.el-input-group {
@@ -604,7 +589,7 @@ fieldset {
         }
 
         &::after {
-          content: '*';
+          content: "*";
           margin-left: 4px;
           color: @colorDanger;
         }
@@ -648,8 +633,6 @@ fieldset {
     }
   }
 
-
-
   .ItemIndent {
     box-sizing: border-box;
     margin: 20px 0 30px 2px;
@@ -666,7 +649,7 @@ fieldset {
   // small
   &.el-select--small {
     .el-select__caret {
-      &.el-icon-arrow-up {
+      &.el-icon-tiip-arrow-up {
         width: 31px;
       }
     }
@@ -675,7 +658,7 @@ fieldset {
   // mini
   &.el-select--mini {
     .el-select__caret {
-      &.el-icon-arrow-up {
+      &.el-icon-tiip-arrow-up {
         width: 27px;
       }
     }
@@ -684,7 +667,7 @@ fieldset {
   // disabled
   .is-disabled {
     .el-select__caret {
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 
@@ -692,12 +675,12 @@ fieldset {
   .el-select__caret {
     transition: none !important;
 
-    &.el-icon-arrow-up {
+    &.el-icon-tiip-arrow-up {
       transform: translateX(4px) !important;
       width: 39px;
       height: calc(100% - 2px);
       margin: 1px 0;
-      background-color: #EDEDED;
+      background-color: #ededed;
       border-left: 1px solid @colorGray;
 
       &::before {
@@ -729,7 +712,6 @@ fieldset {
 
 .el-checkbox {
   .el-checkbox__inner {
-
     // thicker tick
     &::after {
       top: 1px;
@@ -754,7 +736,8 @@ fieldset {
 
   // for border=false — needs an extra class
   &.CheckboxSmall {
-    .el-checkbox__input {}
+    .el-checkbox__input {
+    }
     .el-checkbox__label {
       font-size: @fontSizeSmall;
       line-height: 16px;
@@ -772,14 +755,14 @@ fieldset {
   }
 }
 
-
 .el-radio {
   .el-radio__label {
     font-weight: 400;
   }
 
   &.RadioSmall {
-    .el-radio__input {}
+    .el-radio__input {
+    }
     .el-radio__label {
       font-size: @fontSizeSmall;
       line-height: 16px;
@@ -835,14 +818,14 @@ fieldset {
         padding: 5px 0;
       }
 
-      .el-checkbox__input ,
+      .el-checkbox__input,
       .el-radio__input {
         vertical-align: top;
         top: 2px;
       }
 
       .el-checkbox__label,
-      .el-radio__label  {
+      .el-radio__label {
         white-space: normal;
         padding-right: 30px;
       }
@@ -877,13 +860,13 @@ fieldset {
       transition: @transitionAll;
     }
   }
-
 }
 
 // Dropdown
 
 .el-dropdown-menu {
-  .el-dropdown-menu__item {}
+  .el-dropdown-menu__item {
+  }
 }
 
 .el-select-dropdown {
@@ -898,12 +881,12 @@ fieldset {
 // Dialog modal
 
 .v-modal {
-  opacity: .8;
+  opacity: 0.8;
   background-color: darken(@colorBrandPrimaryDark, 25%);
 }
 
 .el-dialog {
-  box-shadow: 0 6px 24px 4px rgba(0,0,0,0.22);
+  box-shadow: 0 6px 24px 4px rgba(0, 0, 0, 0.22);
 
   .el-dialog__header {
     position: relative;
@@ -925,7 +908,7 @@ fieldset {
 
       &:hover {
         i {
-          opacity: .8;
+          opacity: 0.8;
         }
       }
 
@@ -974,7 +957,7 @@ fieldset {
   .el-message-box {
     padding: 0;
     border-radius: 0;
-    box-shadow: 0 6px 24px 4px rgba(0,0,0,0.22);
+    box-shadow: 0 6px 24px 4px rgba(0, 0, 0, 0.22);
 
     .el-message-box__header {
       padding: 20px 20px 10px;
@@ -1008,7 +991,8 @@ fieldset {
         line-height: 21px;
       }
 
-      .el-message-box__input {}
+      .el-message-box__input {
+      }
     }
 
     .el-message-box__btns {
@@ -1031,8 +1015,8 @@ fieldset {
 
 .el-tooltip__popper {
   border: 0 !important;
-  opacity: .9;
-  filter: drop-shadow(0 3px 5px rgba(0,0,0,.35));
+  opacity: 0.9;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
 
   &.is-light {
     color: @colorTextPrimary;
@@ -1046,7 +1030,7 @@ fieldset {
 // DatePicker
 
 .el-picker-panel {
-  box-shadow: 0 0 12px 4px rgba(0,0,0,.24), 0 4px 16px 0 rgba(0,0,0,.12);
+  box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.24), 0 4px 16px 0 rgba(0, 0, 0, 0.12);
 }
 
 // Popover
@@ -1056,7 +1040,7 @@ fieldset {
   margin: 0 !important;
   border: 1px solid @colorTextMuted;
   border-radius: 0;
-  box-shadow: 0 0 12px 4px rgba(0,0,0,.24), 0 4px 16px 0 rgba(0,0,0,.12);
+  box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.24), 0 4px 16px 0 rgba(0, 0, 0, 0.12);
 
   .popper__arrow {
     display: none;
@@ -1106,7 +1090,7 @@ fieldset {
             color: @colorTextPrimary;
 
             .fa-check {
-              opacity: .5;
+              opacity: 0.5;
             }
           }
 
@@ -1222,7 +1206,8 @@ fieldset {
 
 // Upload
 
-.el-upload {}
+.el-upload {
+}
 
 .el-upload-list--picture {
   .el-upload-list__item {
@@ -1251,7 +1236,7 @@ fieldset {
       }
     }
 
-    .el-icon-close {
+    .el-icon-tiip-close {
       color: @colorDanger;
       font-weight: 700;
       opacity: 1;
@@ -1261,7 +1246,7 @@ fieldset {
       }
     }
 
-    .el-icon-close-tip {
+    .el-icon-tiip-close-tip {
       display: none !important;
     }
 
@@ -1312,7 +1297,7 @@ fieldset {
       }
     }
 
-    .el-icon-close {
+    .el-icon-tiip-close {
       top: 50%;
       right: 8px;
       transform: translateY(-50%);
@@ -1325,7 +1310,7 @@ fieldset {
       }
     }
 
-    .el-icon-close-tip {
+    .el-icon-tiip-close-tip {
       display: none !important;
     }
   }
@@ -1372,6 +1357,247 @@ fieldset {
       margin-right: 6px;
       color: @colorGray;
     }
+  }
+}
+
+// tiiportfolio icon set
+
+@font-face {
+  font-family: "@{portfolio-font-family}";
+  src: url("@{portfolio-font-path}/@{portfolio-font-family}.eot?3j3iak");
+  src: url("@{portfolio-font-path}/@{portfolio-font-family}.eot?3j3iak#iefix")
+      format("embedded-opentype"),
+    url("@{portfolio-font-path}/@{portfolio-font-family}.ttf?3j3iak")
+      format("truetype"),
+    url("@{portfolio-font-path}/@{portfolio-font-family}.woff?3j3iak")
+      format("woff"),
+    url("@{portfolio-font-path}/@{portfolio-font-family}.svg?3j3iak#@{portfolio-font-family}")
+      format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-tiip-"],
+[class*=" icon-tiip-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "@{portfolio-font-family}" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tiip-emergency {
+  &:before {
+    content: @icon-tiip-emergency;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-community_building {
+  &:before {
+    content: @icon-tiip-community_building;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-innovation {
+  &:before {
+    content: @icon-tiip-innovation;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-advocacy {
+  &:before {
+    content: @icon-tiip-advocacy;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-partnership {
+  &:before {
+    content: @icon-tiip-partnership;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-regional_office {
+  &:before {
+    content: @icon-tiip-regional_office;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-headquarters {
+  &:before {
+    content: @icon-tiip-headquarters;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-psychosocial_support {
+  &:before {
+    content: @icon-tiip-psychosocial_support;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-vaccines {
+  &:before {
+    content: @icon-tiip-vaccines;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-medical_supplies {
+  &:before {
+    content: @icon-tiip-medical_supplies;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-tent {
+  &:before {
+    content: @icon-tiip-tent;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-epidemic {
+  &:before {
+    content: @icon-tiip-epidemic;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-tsunami {
+  &:before {
+    content: @icon-tiip-tsunami;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-conflict {
+  &:before {
+    content: @icon-tiip-conflict;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-5year_old_girl {
+  &:before {
+    content: @icon-tiip-5year_old_girl;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-mother_and_baby .path1 {
+  &:before {
+    content: @icon-tiip-mother_and_baby-path1;
+    color: rgb(28, 171, 226);
+  }
+}
+.icon-tiip-mother_and_baby .path2 {
+  &:before {
+    content: @icon-tiip-mother_and_baby-path2;
+    margin-left: -1em;
+    color: rgb(0, 174, 239);
+  }
+}
+.icon-tiip-mental_health {
+  &:before {
+    content: @icon-tiip-mental_health;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-pregnant {
+  &:before {
+    content: @icon-tiip-pregnant;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-children_with_disabilities {
+  &:before {
+    content: @icon-tiip-children_with_disabilities;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-breast_feeding .path1 {
+  &:before {
+    content: @icon-tiip-breast_feeding-path1;
+    color: rgb(0, 174, 239);
+  }
+}
+.icon-tiip-breast_feeding .path2 {
+  &:before {
+    content: @icon-tiip-breast_feeding-path2;
+    margin-left: -1em;
+    color: rgb(28, 171, 226);
+  }
+}
+.icon-tiip-infant {
+  &:before {
+    content: @icon-tiip-infant;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-gender_balance {
+  &:before {
+    content: @icon-tiip-gender_balance;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-children {
+  &:before {
+    content: @icon-tiip-children;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-affected_population {
+  &:before {
+    content: @icon-tiip-affected_population;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-food_health {
+  &:before {
+    content: @icon-tiip-food_health;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-social_inclusion {
+  &:before {
+    content: @icon-tiip-social_inclusion;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-aids {
+  &:before {
+    content: @icon-tiip-aids;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-wash {
+  &:before {
+    content: @icon-tiip-wash;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-child_protection {
+  &:before {
+    content: @icon-tiip-child_protection;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-health {
+  &:before {
+    content: @icon-tiip-health;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-nutrition {
+  &:before {
+    content: @icon-tiip-nutrition;
+    color: @colorBrandPrimary;
+  }
+}
+.icon-tiip-education {
+  &:before {
+    content: @icon-tiip-education;
+    color: #00aeef;
   }
 }
 
