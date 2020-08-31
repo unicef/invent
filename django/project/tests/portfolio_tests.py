@@ -1,25 +1,12 @@
-import copy
 from datetime import datetime
 
-import pytz
 from django.urls import reverse
-from django.utils import timezone
-from rest_framework import status
 
-from django.core import mail
-from django.contrib.admin.sites import AdminSite
-from django.contrib.auth.models import User
-from django.core.cache import cache
 from rest_framework.test import APIClient
 
-from country.models import Country, Donor, CountryOffice
-from project.admin import ProjectAdmin
-from user.models import Organisation, UserProfile
-from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
-    Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.tasks import send_project_approval_digest
+from user.models import UserProfile
 
-from project.tests.setup import SetupTests, MockRequest
+from project.tests.setup import SetupTests
 from user.tests import create_profile_for_user
 from project.models import Portfolio
 
