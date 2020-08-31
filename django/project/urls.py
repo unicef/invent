@@ -89,4 +89,21 @@ urlpatterns = [
              'put': 'update'
          }),
          name="approval"),
+    url(r"^portfolio/active-list/$",
+        view=views.PortfolioListViewSet.as_view({
+            'get': 'list'
+        }), name="portfolio-list-active"),
+    url(r'^portfolio/create/$',
+         view=views.PortfolioViewSet.as_view({
+             'post': 'create'
+         }), name="portfolio-create"),
+    path(r'portfolio/update/<int:portfolio_id>/',
+         view=views.PortfolioUpdateViewSet.as_view({
+             'put': 'update'
+         }),
+         name="portfolio-update"),
+    url(r"^portfolio/manager-of/$",
+        view=views.PortfolioListViewSet.as_view({
+            'get': 'list'
+        }), name="portfolio-list"),
 ]

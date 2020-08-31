@@ -12,7 +12,7 @@ from country.models import CustomQuestion
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -352,4 +352,48 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         instance = super().update(instance, validated_data)
         for row in rows:
             ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
+        return instance
+
+
+class PortfolioListSerializer(serializers.ModelSerializer):
+    project_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'project_count')
+
+    @staticmethod
+    def get_project_count(obj):
+        return len(obj.projects.filter(is_active=True).all())
+
+
+class PortfolioDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers')
+
+    def create(self, validated_data):
+        managers = validated_data.pop('managers')
+        projects = validated_data.pop('projects')
+        instance = Portfolio.objects.create(**validated_data)
+        instance.managers.set(managers)
+        instance.projects.set(projects)
+        instance.save()
+
+        return instance
+
+    def update(self, instance, validated_data):
+        portfolio_data = validated_data.get('data').pop('portfolio')
+
+        instance.name = portfolio_data.get('name', instance.name)
+        instance.description = portfolio_data.get('description', instance.description)
+        instance.status = portfolio_data.get('status', instance.status)
+        instance.icon = portfolio_data.get('icon', instance.icon)
+        project_ids = [p.id for p in instance.projects.all()]
+        instance.projects.set(portfolio_data.get('projects', project_ids))
+        manager_ids = [m.id for m in instance.managers.all()]
+        instance.managers.set(portfolio_data.get('managers', manager_ids))
+
+        instance.save()
         return instance
