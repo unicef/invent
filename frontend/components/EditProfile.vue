@@ -29,12 +29,12 @@
               <el-input v-model="innerProfile.email" disabled type="text" />
             </el-form-item>
 
-            <!-- <el-form-item
+            <el-form-item
               :label="$gettext('Organisation name') | translate"
               prop="organisation"
             >
               <organisation-select v-model="innerProfile.organisation" />
-            </el-form-item> -->
+            </el-form-item>
 
             <el-form-item
               :label="$gettext('Country') | translate"
