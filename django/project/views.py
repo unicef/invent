@@ -639,5 +639,5 @@ class ProblemStatementViewSet(PortfolioAccessMixin, CreateModelMixin, ViewSet):
             ProblemStatement.delete(problem_statement)
         else:
             Response({'error': "Problem statement is not part of portfolio"},
-                     status=status.HTTP_400_BAD_REQUEST) # pragma: no cover
+                     status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
         return Response(status=status.HTTP_200_OK)
