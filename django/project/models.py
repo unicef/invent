@@ -359,6 +359,11 @@ class HardwarePlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel
         verbose_name_plural = 'Hardware Platform(s) and Physical Product(s)'
 
 
+class NontechPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Programme Innovation(s) and Non-Technology Platform(s)'
+
+
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
