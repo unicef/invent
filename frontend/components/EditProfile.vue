@@ -194,7 +194,6 @@
                     :label="'DA'"
                     class="RadioSmall"
                   >
-                  <el-radio :label="'DA'" class="RadioSmall">
                     <translate>Investor Admins</translate>
                   </el-radio>
                   <user-privileges
