@@ -3,7 +3,7 @@ from rest_auth.serializers import JWTSerializer
 from rest_framework.exceptions import ValidationError
 
 from country.models import Country
-from project.models import Project
+from project.models import Project, Portfolio
 from .models import UserProfile, Organisation
 
 
@@ -58,6 +58,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     viewer = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()
     account_type_approved = serializers.SerializerMethodField()
+    manager = serializers.SerializerMethodField(required=False)
+    global_portfolio_owner = serializers.NullBooleanField(required=False)
 
     class Meta:
         model = UserProfile
@@ -75,6 +77,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_is_superuser(obj):
         if hasattr(obj, 'user'):
             return obj.user.is_superuser
+
+    @staticmethod
+    def get_manager(obj):
+        if hasattr(obj, 'user'):
+            return Portfolio.objects.manager_of(obj.user).values_list('id', flat=True)
 
     @staticmethod
     def get_account_type_approved(obj):

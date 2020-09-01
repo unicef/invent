@@ -106,4 +106,9 @@ urlpatterns = [
         view=views.PortfolioUserListViewSet.as_view({
             'get': 'list'
         }), name="portfolio-list"),
+    path(r"^portfolio/(?P<pk>\d+)/$",
+         view=views.PortfolioDetailedViewSet.as_view({
+             'get': 'retrieve'
+         }),
+         name="portfolio-detailed"),
 ]

@@ -599,3 +599,8 @@ class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return Portfolio.objects.manager_of(self.request.user)
+
+
+class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    serializer_class = PortfolioDetailsSerializer
+    queryset = Portfolio.objects.all()
