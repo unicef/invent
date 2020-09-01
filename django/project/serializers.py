@@ -115,6 +115,12 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # UNICEF SECTION
     goal_area = serializers.IntegerField(required=False)
 
+    # NEW FIELDS
+    overview = serializers.CharField(max_length=300, required=False)
+    unicef_sector = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+    phase = serializers.IntegerField(required=False)
+
     # ODK DATA
     odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
     odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
