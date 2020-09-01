@@ -41,6 +41,10 @@ class ProjectPublishedSerializer(serializers.Serializer):
 
     # NEW FIELDS
     regional_office = serializers.ReadOnlyField()
+    unicef_sector = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1, required=True)
+    regional_priorities = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     # SECTION 2 Implementation Overview
     platforms = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
