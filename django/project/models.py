@@ -364,6 +364,11 @@ class NontechPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel)
         verbose_name_plural = 'Programme Innovation(s) and Non-Technology Platform(s)'
 
 
+class PlatformFunction(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Function(s) of Platform'
+
+
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
