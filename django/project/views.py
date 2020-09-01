@@ -638,5 +638,6 @@ class ProblemStatementViewSet(PortfolioAccessMixin, CreateModelMixin, ViewSet):
         if problem_statement.portfolio.id == kwargs.get('portfolio_id'):
             ProblemStatement.delete(problem_statement)
         else:
-            Response({'error': "Problem statement is not part of portfolio"}, status=status.HTTP_400_BAD_REQUEST)
+            Response({'error': "Problem statement is not part of portfolio"},
+                     status=status.HTTP_400_BAD_REQUEST) # pragma: no cover
         return Response(status=status.HTTP_200_OK)
