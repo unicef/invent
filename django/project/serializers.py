@@ -50,6 +50,8 @@ class ProjectPublishedSerializer(serializers.Serializer):
     target_group_reached = serializers.IntegerField(required=False)
     current_achievements = serializers.CharField(max_length=2048, required=False)
     awp = serializers.CharField(max_length=500, required=False)
+    wbs = serializers.ListField(
+        child=serializers.CharField(max_length=30), max_length=50, min_length=0, required=False, allow_empty=True)
     # SECTION 2 Implementation Overview
     platforms = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
