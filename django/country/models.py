@@ -107,6 +107,11 @@ class FieldOffice(models.Model):
     country_office = models.ForeignKey(CountryOffice, blank=True, null=True, on_delete=models.CASCADE)
 
 
+class Currency(models.Model):
+    name = models.CharField(max_length=32)
+    code = models.CharField(max_length=8)
+
+
 @receiver(pre_save, sender=Country)
 def save_coordinates(sender, instance, **kwargs):
     if instance.map_data:
