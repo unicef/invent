@@ -340,6 +340,10 @@ class UNICEFGoal(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         return '{}'.format(self.name)
 
 
+class UNICEFSector(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    pass
+
+
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
