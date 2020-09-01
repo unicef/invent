@@ -2,32 +2,55 @@ from datetime import datetime
 
 from django.urls import reverse
 
-from rest_framework.test import APIClient
+from rest_framework.test import APITestCase, APIClient
 
-from user.models import UserProfile
-
-from project.tests.setup import SetupTests
-from user.tests import create_profile_for_user
 from project.models import Portfolio
+from country.models import Country, Donor, CountryOffice
+from user.models import Organisation, UserProfile
+from user.tests import create_profile_for_user
 
 
-class PortfolioTests(SetupTests):
-    def setUp(self):
-        super().setUp()
+class PortfolioTests(APITestCase):
+    def create_user(self, user_email, user_password1, user_password_2):
+        """
+        Create a test user with profile.
+        """
+        url = reverse("rest_register")
+        data = {
+            "email": user_email,
+            "password1": user_password1,
+            "password2": user_password_2}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201, response.json())
 
-        self.project_data_2 = {"project": {
+        create_profile_for_user(response)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": user_email,
+            "password": user_password1}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        user_profile_id = response.json().get('user_profile_id')
+        return user_profile_id, test_user_client, test_user_key
+
+    def create_project(self, project_name, organization, country_office, donors, user_client):
+        project_data = {"project": {
             "date": datetime.utcnow(),
-            "name": "Test Project2",
-            "organisation": self.org.id,
+            "name": project_name,
+            "organisation": organization.id,
             "contact_name": "name1",
-            "contact_email": "b@b.com",
+            "contact_email": "a@a.com",
             "implementation_overview": "overview",
             "implementation_dates": "2016",
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
-            "country_office": self.country_office.id,
+            "country_office": country_office.id,
             "platforms": [1, 2],
-            "donors": [self.d1.id, self.d2.id],
+            "donors": [donor.id for donor in donors],
             "hsc_challenges": [1, 2],
             "start_date": str(datetime.today().date()),
             "end_date": str(datetime.today().date()),
@@ -40,81 +63,162 @@ class PortfolioTests(SetupTests):
             "dhis": []
         }}
 
-        # Create another test user with profile.
-        user_email = "test_user_gpo@unicef.org"
-
-        url = reverse("rest_register")
-        data = {
-            "email": user_email,
-            "password1": "123456hetNYOLC",
-            "password2": "123456hetNYOLC"}
-        response = self.client.post(url, data)
+        # Create project draft
+        url = reverse("project-create", kwargs={"country_office_id": country_office.id})
+        response = user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
+        project_id = response.json().get("id")
 
-        create_profile_for_user(response)
-
-        # Log in the user.
-        url = reverse("api_token_auth")
-        data = {
-            "username": user_email,
-            "password": "123456hetNYOLC"}
-        response = self.client.post(url, data)
+        # Publish
+        url = reverse("project-publish", kwargs={"project_id": project_id,
+                                                 "country_office_id": self.country_office.id})
+        response = user_client.put(url, project_data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
-        self.test_user_2_key = response.json().get("token")
-        self.test_user_2_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_2_key), format="json")
-        self.user_2_profile_id = response.json().get('user_profile_id')
 
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_2_profile_id})
-        data = {
-            "name": "Test Name",
-            "organisation": self.org.id,
-            "country": self.country_id}
-        response = self.test_user_2_client.put(url, data)
-        self.assertEqual(response.status_code, 200, response.json())
-        self.user_2_profile_id = response.json().get('id')
+        return project_id
 
-        self.userprofile_2 = UserProfile.objects.get(id=self.user_2_profile_id)
-        self.country.users.add(self.userprofile_2)
-
-        # set the userprofile to GMO
-        self.userprofile_2.global_portfolio_owner = True
-        self.userprofile_2.save()
-
-        self.portfolio_data = {
+    @staticmethod
+    def create_portfolio(name, description, managers, projects, user_client):
+        portfolio_data = {
             "portfolio": {
                 "date": datetime.utcnow(),
-                "name": "Test Portfolio",
-                "description": "Test Portfolio description",
+                "name": name,
+                "description": description,
                 "icon": "A",
-                "managers": [self.user_profile_id],
-                "projects": [self.project_id]
+                "managers": managers,
+                "projects": projects
             }
         }
 
         # Create portfolio
         url = reverse("portfolio-create")
-        response = self.test_user_2_client.post(url, self.portfolio_data, format="json")
+        return user_client.post(url, portfolio_data, format="json")
+
+    def setUp(self):
+        self.org = Organisation.objects.create(name="org1")
+        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
+                                              region=Country.REGIONS[0][0], unicef_region=Country.UNICEF_REGIONS[0][0])
+
+        self.country_id = self.country.id
+        self.country.name_en = 'Hungary'
+        self.country.name_fr = 'Hongrie'
+        self.country.save()
+
+        self.country_office = CountryOffice.objects.create(
+            name='Test Country Office',
+            region=Country.UNICEF_REGIONS[0][0],
+            country=self.country
+        )
+        self.d1 = Donor.objects.create(name="Donor1", code="donor1")
+        self.d2 = Donor.objects.create(name="Donor2", code="donor2")
+
+        self.user_1_pr_id, self.user_1_client, self.user_1_key = \
+            self.create_user("test_user@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
+
+        self.project_1_id = self.create_project("Test Project1", self.org, self.country_office,
+                                                [self.d1, self.d2], self.user_1_client)
+
+        self.user_2_pr_id, self.user_2_client, self.user_2_key = \
+            self.create_user("test_user_2@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
+
+        self.user_3_pr_id, self.user_3_client, self.user_3_key = \
+            self.create_user("test_user_3@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
+
+        # set the userprofile to GMO
+        self.userprofile_2 = UserProfile.objects.get(id=self.user_2_pr_id)
+        self.country.users.add(self.userprofile_2)
+
+        self.userprofile_2.global_portfolio_owner = True
+        self.userprofile_2.save()
+
+        response = self.create_portfolio("Test Portfolio 1", "Port-o-folio", [self.user_3_pr_id], [self.project_1_id],
+                                         self.user_2_client)
         self.assertEqual(response.status_code, 201, response.json())
 
         self.portfolio_id = response.json()['id']
 
-        # set portfolio to active
+    def test_list_portfolios(self):
+        """
+        Homepage will display the name and a brief description of each of the active portfolios within the tool.
+        When the user clicks on a portfolio, they will be directed to the corresponding portfolio view page.
+        As any user persona, I want to be able to view information about UNICEF’s portfolio approach
+        and the active portfolios.
+        """
+        url = reverse("portfolio-list-active")
+        response = self.user_1_client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 0)  # we forgot to activate the portfolio
+        # Try to set the portfolio to active as user #1, who is not allowed
         url = reverse("portfolio-update", kwargs={"portfolio_id": self.portfolio_id})
         update_data = {"portfolio": {"status": Portfolio.STATUS_ACTIVE}}
-        response = self.test_user_2_client.put(url, update_data, format="json")
-        self.assertEqual(response.status_code, 200, response.json())
+        response = self.user_1_client.put(url, update_data, format="json")
+        self.assertEqual(response.status_code, 403, response.json())
 
-    def test_list_portfolios(self):
+        # activate portolio as user 2, who is a GPO
+        response = self.user_2_client.put(url, update_data, format="json")
+        self.assertEqual(response.status_code, 200, response.json())
+        self.assertEqual(response.json()['id'], self.portfolio_id)
+        self.assertEqual(response.json()['status'], Portfolio.STATUS_ACTIVE)
+
+        # Re-check the portfolio list as user #1
         url = reverse("portfolio-list-active")
-        response = self.test_user_2_client.get(url)
+        response = self.user_1_client.get(url)
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)  # we forgot to activate the portfolio
+        self.assertEqual(response.json()[0]['id'], self.portfolio_id)
+
+        # Make the portfolio a draft again
+        url = reverse("portfolio-update", kwargs={"portfolio_id": self.portfolio_id})
+        update_data = {"portfolio": {"status": Portfolio.STATUS_DRAFT}}
+        response = self.user_2_client.put(url, update_data, format="json")
+        self.assertEqual(response.status_code, 200, response.json())
+        self.assertEqual(response.json()['id'], self.portfolio_id)
+        self.assertEqual(response.json()['status'], Portfolio.STATUS_DRAFT)
+
+    def test_user_create_portfolio_failed(self):
+        """
+        Only GMO users can create portfolios
+        """
+        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_1_pr_id], [self.project_1_id],
+                                         self.user_1_client)
+        self.assertEqual(response.status_code, 403, response.json())
+
+        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_3_pr_id], [self.project_1_id],
+                                         self.user_3_client)
+        self.assertEqual(response.status_code, 403, response.json())
 
     def test_list_user_portfolios(self):
+        # create another portfolio
+        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_2_pr_id], [self.project_1_id],
+                                         self.user_2_client)
+        self.assertEqual(response.status_code, 201, response.json())
+        self.portfolio_id_2 = response.json()['id']
 
         url = reverse("portfolio-list")
-        response = self.test_user_client.get(url)
+        response = self.user_2_client.get(url)  # GMO users see all portfolios in this list
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
 
-        response = self.test_user_2_client.get(url)
+        response = self.user_3_client.get(url)  # Managers only see their own portfolios in this list
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
+    def test_detailed_portfolio_view(self):
+        """
+        Any user should be able to view portfolio details
+        """
+        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
+        response = self.user_1_client.get(url)
+        expected = {
+            'description': 'Port-o-folio',
+            'icon': 'A',
+            'id': self.portfolio_id,
+            'managers': [self.user_3_pr_id],
+            'name': 'Test Portfolio 1',
+            'projects': [self.project_1_id],
+            'status': Portfolio.STATUS_DRAFT}
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)

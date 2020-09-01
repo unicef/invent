@@ -357,14 +357,19 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
 
 class PortfolioListSerializer(serializers.ModelSerializer):
     project_count = serializers.SerializerMethodField()
+    managers = serializers.SerializerMethodField()
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'project_count')
+        fields = ('id', 'name', 'description', 'icon', 'project_count', 'managers')
 
     @staticmethod
     def get_project_count(obj):
         return len(obj.projects.filter(is_active=True).all())
+
+    @staticmethod
+    def get_managers(obj):
+        return obj.managers.all().values_list('id', flat=True)
 
 
 class PortfolioDetailsSerializer(serializers.ModelSerializer):
