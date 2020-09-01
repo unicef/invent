@@ -45,6 +45,10 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=1, required=True)
     regional_priorities = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+    program_targets = serializers.CharField(max_length=1024, required=False)
+    program_targets_achieved = serializers.CharField(max_length=1024, required=False)
+    target_group_reached = serializers.IntegerField(required=False)
+    current_achievements = serializers.CharField(max_length=2048, required=False)
     # SECTION 2 Implementation Overview
     platforms = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
