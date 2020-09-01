@@ -88,6 +88,10 @@ class Country(UserManagement, LandingPageCommon):
         ordering = ('id',)
 
 
+class RegionalOffice(models.Model):
+    name = models.CharField(max_length=256)
+
+
 class CountryOffice(ExtendedModel):
     name = models.CharField(max_length=256)
     region = models.IntegerField(choices=Country.UNICEF_REGIONS, null=True, blank=True)
