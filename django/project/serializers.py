@@ -12,7 +12,7 @@ from country.models import CustomQuestion
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -372,16 +372,34 @@ class PortfolioListSerializer(serializers.ModelSerializer):
         return obj.managers.all().values_list('id', flat=True)
 
 
+class ProblemStatementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProblemStatement
+        fields = ('id', 'name', 'description')
+
+
 class PortfolioDetailsSerializer(serializers.ModelSerializer):
+    problem_statements = ProblemStatementSerializer(many=True)
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers')
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+
+    @staticmethod
+    def _create_problem_statements(instance, problem_statements):
+        for ps in problem_statements:
+            ProblemStatement.objects.create(name=ps['name'], description=ps['description'], portfolio=instance)
 
     def create(self, validated_data):
         managers = validated_data.pop('managers')
         projects = validated_data.pop('projects')
+
+        problem_statements = validated_data.pop('problem_statements')
         instance = Portfolio.objects.create(**validated_data)
+
+        self._create_problem_statements(instance, problem_statements)
+
         instance.managers.set(managers)
         instance.projects.set(projects)
         instance.save()
@@ -401,4 +419,18 @@ class PortfolioDetailsSerializer(serializers.ModelSerializer):
         instance.managers.set(portfolio_data.get('managers', manager_ids))
 
         instance.save()
+        return instance
+
+
+class ProblemStatementFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProblemStatement
+        fields = '__all__'
+
+    def create(self, validated_data):
+        instance = ProblemStatement.objects.create(
+            name=validated_data['name'], description=validated_data['description'],
+            portfolio=validated_data['portfolio'])
+        instance.save()
+
         return instance

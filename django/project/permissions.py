@@ -51,4 +51,5 @@ class IsGPOOrManager(permissions.BasePermission):
         # so we'll always allow GET, HEAD or OPTIONS requests.
         if request.method in permissions.SAFE_METHODS:
             return True  # pragma: no cover
-        return request.user.userprofile.global_portfolio_owner or obj.managers.filter(id=request.user.id)
+
+        return request.user.userprofile.global_portfolio_owner or obj.managers.filter(id=request.user.userprofile.id)
