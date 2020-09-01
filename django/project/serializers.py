@@ -52,6 +52,10 @@ class ProjectPublishedSerializer(serializers.Serializer):
     awp = serializers.CharField(max_length=500, required=False)
     wbs = serializers.ListField(
         child=serializers.CharField(max_length=30), max_length=50, min_length=0, required=False, allow_empty=True)
+    total_budget = serializers.IntegerField(required=False)
+    total_budget_narrative = serializers.CharField(max_length=500, required=False)
+    funding_needs = serializers.CharField(max_length=500, required=False)
+    partnership_needs = serializers.CharField(max_length=500, required=False)
     # SECTION 2 Implementation Overview
     platforms = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
