@@ -111,4 +111,14 @@ urlpatterns = [
              'get': 'retrieve'
          }),
          name="portfolio-detailed"),
+    path(r"^portfolio/(?P<pk>\d+)/problem_statements/add/$",
+         view=views.ProblemStatementViewSet.as_view({
+             'post': 'create'
+         }),
+         name="portfolio-add-problem-statement"),
+    path(r"^portfolio/<int:portfolio_id>/problem_statements/delete/(?P<pk>\d+)$",
+         view=views.ProblemStatementViewSet.as_view({
+             'delete': 'remove_problem_statement'
+         }),
+         name="portfolio-delete-problem-statement"),
 ]

@@ -86,7 +86,17 @@ class PortfolioTests(APITestCase):
                 "description": description,
                 "icon": "A",
                 "managers": managers,
-                "projects": projects
+                "projects": projects,
+                "problem_statements": [
+                    {
+                        "name": "PS 1",
+                        "description": "PS 1 description"
+                    },
+                    {
+                        "name": "PS 2",
+                        "description": "PS 2 description"
+                    }
+                ]
             }
         }
 
@@ -211,14 +221,35 @@ class PortfolioTests(APITestCase):
         """
         url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
         response = self.user_1_client.get(url)
-        expected = {
-            'description': 'Port-o-folio',
-            'icon': 'A',
-            'id': self.portfolio_id,
-            'managers': [self.user_3_pr_id],
-            'name': 'Test Portfolio 1',
-            'projects': [self.project_1_id],
-            'status': Portfolio.STATUS_DRAFT}
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.assertEqual(response.json()['id'], self.portfolio_id)
+        self.assertEqual(response.json()['managers'], [self.user_3_pr_id])
+        self.assertEqual(response.json()['projects'], [self.project_1_id])
+        response_ps_ids = {ps['id'] for ps in response.json()['problem_statements']}
+        expected_ps_ids = {ps.id for ps in Portfolio.objects.get(id=self.portfolio_id).problem_statements.all()}
+        self.assertEqual(response_ps_ids, expected_ps_ids)
+
+    def test_problem_statement_handling(self):
+        """
+        Managers need to be able to add and remove Problem Statements to existing portfolios
+        """
+        ps_data = {'problem_statement': {"name": "PS 3", "description": "PS 3 description"}}
+        url = reverse('portfolio-add-problem-statement', kwargs={"pk": self.portfolio_id})
+        response = self.user_3_client.post(url, ps_data, format="json")
+        ps_id = response.json()['id']
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
+        response = self.user_3_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['problem_statements']), 3)
+
+        url = reverse('portfolio-delete-problem-statement', kwargs={"portfolio_id": self.portfolio_id, "pk": ps_id})
+        response = self.user_3_client.delete(url)
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
+        response = self.user_3_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['problem_statements']), 2)

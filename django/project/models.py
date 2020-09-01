@@ -219,7 +219,7 @@ class Portfolio(SoftDeleteModel, ExtendedModel):
         return dict(id=self.pk, status=self.status)
 
 
-class ProblemStatement(SoftDeleteModel, ExtendedModel):
+class ProblemStatement(ExtendedModel):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=511)
     portfolio = models.ForeignKey(Portfolio, blank=False, null=False, on_delete=models.CASCADE,
@@ -227,6 +227,9 @@ class ProblemStatement(SoftDeleteModel, ExtendedModel):
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+    def to_response_dict(self):
+        return dict(id=self.pk, portfolio=self.portfolio.id)
 
 
 class ProjectApproval(ExtendedModel):
