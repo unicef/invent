@@ -349,6 +349,11 @@ class RegionalPriority(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel
         verbose_name_plural = 'Regional Priorities'
 
 
+class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Phase of Initiative'
+
+
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
