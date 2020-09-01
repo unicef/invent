@@ -344,6 +344,11 @@ class UNICEFSector(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
+class RegionalPriority(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Regional Priorities'
+
+
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
