@@ -354,6 +354,11 @@ class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         verbose_name_plural = 'Phase of Initiative'
 
 
+class HardwarePlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Hardware Platform(s) and Physical Product(s)'
+
+
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
