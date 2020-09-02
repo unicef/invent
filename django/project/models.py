@@ -341,7 +341,8 @@ class UNICEFGoal(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class UNICEFSector(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'UNICEF Sectors'
 
 
 class RegionalPriority(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
