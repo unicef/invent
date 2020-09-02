@@ -7,7 +7,8 @@ from country.models import Country
 from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
-    UNICEFCapabilitySubCategory
+    UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, HardwarePlatform, NontechPlatform, \
+    PlatformFunction
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -157,6 +158,30 @@ class UNICEFCapabilitySubCategoryAdmin(admin.ModelAdmin):
     ordering = search_fields = ['goal_area__name', 'name']
 
 
+class UNICEFSectorAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
+class RegionalPriorityAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
+class PhaseAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
+class HardwarePlatformAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
+class NontechPlatformAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
+class PlatformFunctionAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
@@ -169,3 +194,9 @@ admin.site.register(UNICEFResultArea, UNICEFResultAreaAdmin)
 admin.site.register(UNICEFCapabilityLevel, UNICEFCapabilityLevelAdmin)
 admin.site.register(UNICEFCapabilityCategory, UNICEFCapabilityCategoryAdmin)
 admin.site.register(UNICEFCapabilitySubCategory, UNICEFCapabilitySubCategoryAdmin)
+admin.site.register(UNICEFSector, UNICEFSectorAdmin)
+admin.site.register(RegionalPriority, RegionalPriorityAdmin)
+admin.site.register(Phase, PhaseAdmin)
+admin.site.register(HardwarePlatform, HardwarePlatformAdmin)
+admin.site.register(NontechPlatform, NontechPlatformAdmin)
+admin.site.register(PlatformFunction, PlatformFunctionAdmin)
