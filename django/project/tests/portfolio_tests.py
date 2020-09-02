@@ -20,7 +20,7 @@ class PortfolioTests(APITestCase):
             "email": user_email,
             "password1": user_password1,
             "password2": user_password_2}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
         create_profile_for_user(response)
@@ -30,7 +30,7 @@ class PortfolioTests(APITestCase):
         data = {
             "username": user_email,
             "password": user_password1}
-        response = self.client.post(url, data)
+        response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -80,24 +80,22 @@ class PortfolioTests(APITestCase):
     @staticmethod
     def create_portfolio(name, description, managers, projects, user_client):
         portfolio_data = {
-            "portfolio": {
-                "date": datetime.utcnow(),
-                "name": name,
-                "description": description,
-                "icon": "A",
-                "managers": managers,
-                "projects": projects,
-                "problem_statements": [
-                    {
-                        "name": "PS 1",
-                        "description": "PS 1 description"
-                    },
-                    {
-                        "name": "PS 2",
-                        "description": "PS 2 description"
-                    }
-                ]
-            }
+            "date": datetime.utcnow(),
+            "name": name,
+            "description": description,
+            "icon": "A",
+            "managers": managers,
+            "projects": projects,
+            "problem_statements": [
+                {
+                    "name": "PS 1",
+                    "description": "PS 1 description"
+                },
+                {
+                    "name": "PS 2",
+                    "description": "PS 2 description"
+                }
+            ]
         }
 
         # Create portfolio
@@ -160,8 +158,8 @@ class PortfolioTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 0)  # we forgot to activate the portfolio
         # Try to set the portfolio to active as user #1, who is not allowed
-        url = reverse("portfolio-update", kwargs={"portfolio_id": self.portfolio_id})
-        update_data = {"portfolio": {"status": Portfolio.STATUS_ACTIVE}}
+        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+        update_data = {"status": Portfolio.STATUS_ACTIVE}
         response = self.user_1_client.put(url, update_data, format="json")
         self.assertEqual(response.status_code, 403, response.json())
 
@@ -180,12 +178,22 @@ class PortfolioTests(APITestCase):
         self.assertEqual(response.json()[0]['id'], self.portfolio_id)
 
         # Make the portfolio a draft again
-        url = reverse("portfolio-update", kwargs={"portfolio_id": self.portfolio_id})
-        update_data = {"portfolio": {"status": Portfolio.STATUS_DRAFT}}
+        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+        update_data = {"status": Portfolio.STATUS_DRAFT}
         response = self.user_2_client.put(url, update_data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
         self.assertEqual(response.json()['id'], self.portfolio_id)
         self.assertEqual(response.json()['status'], Portfolio.STATUS_DRAFT)
+
+    def test_update_portfolio_problem_statement_fail(self):
+        """
+        Problem statements are handled separately
+        """
+        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+        update_data = {'problem_statements': [{"name": "PS 3", "description": "PS 3 description"}]}
+        # update portolio as user 2, who is a GPO
+        response = self.user_2_client.put(url, update_data, format="json")
+        self.assertEqual(response.status_code, 400, response.json())
 
     def test_user_create_portfolio_failed(self):
         """
@@ -253,3 +261,6 @@ class PortfolioTests(APITestCase):
         response = self.user_3_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['problem_statements']), 2)
+
+        for ps in response.json()['problem_statements']:
+            self.assertEqual(ps['project_count'], 0)
