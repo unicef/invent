@@ -47,6 +47,12 @@ class RegionalOfficeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     ordering = search_fields = ['name']
 
+
+@admin.register(Currency)
+class CurrencyAdmin(admin.ModelAdmin):
+    list_display = ordering = search_fields = ['code', 'name']
+
+
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
     fields = list_display = ('name', 'code')
