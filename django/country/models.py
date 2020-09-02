@@ -96,7 +96,7 @@ class CountryOffice(ExtendedModel):
     name = models.CharField(max_length=256)
     region = models.IntegerField(choices=Country.UNICEF_REGIONS, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    regional_office = models.ForeignKey(RegionalOffice, on_delete=models.SET_NULL, null=True)
+    regional_office = models.ForeignKey(RegionalOffice, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):  # pragma: no cover
         return self.name
