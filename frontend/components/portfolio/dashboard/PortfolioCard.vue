@@ -26,7 +26,12 @@
         </p>
         <div class="links">
           <nuxt-link
-            :to="localePath({ name: 'organisation-portfolio-management-new' })"
+            :to="
+              localePath({
+                name: 'organisation-portfolio-management-id',
+                params: { id: 'example' }
+              })
+            "
           >
             <translate>Manage</translate>
           </nuxt-link>
