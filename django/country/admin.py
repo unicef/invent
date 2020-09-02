@@ -54,5 +54,5 @@ class DonorAdmin(admin.ModelAdmin):
 
 @admin.register(CountryOffice)
 class CountryOfficeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'region')
+    list_display = ('id', 'name', 'region', 'regional_office')
     search_fields = ['name']
