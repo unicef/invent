@@ -81,7 +81,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_manager(obj):
         if hasattr(obj, 'user'):
-            return Portfolio.objects.manager_of(obj.user).values_list('id', flat=True)
+            return Portfolio.objects.is_manager(obj.user).values_list('id', flat=True)
 
     @staticmethod
     def get_account_type_approved(obj):

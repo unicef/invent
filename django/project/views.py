@@ -24,7 +24,7 @@ from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrateg
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
-    PortfolioDetailsSerializer, ProblemStatementFullSerializer
+    PortfolioDetailsSerializer, ProblemStatementFullSerializer, PortfolioUpdateSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -550,16 +550,14 @@ class PortfolioListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = Portfolio.objects.filter(status=Portfolio.STATUS_ACTIVE)
 
 
-class PortfolioViewSet(GPOAccessMixin, CreateModelMixin, ViewSet):
+class PortfolioViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
     def create(self, request, *args, **kwargs):
         """
         Creates a draft portfolio
         """
-        if 'portfolio' not in request.data:
-            raise ValidationError({'portfolio': 'Portfolio data is missing'})  # pragma: no cover
         self.check_object_permissions(request, request.user.userprofile)
 
-        portfolio_data = copy.deepcopy(request.data['portfolio'])
+        portfolio_data = request.data
         portfolio_data['status'] = Portfolio.STATUS_DRAFT
 
         data_serializer = PortfolioDetailsSerializer(data=portfolio_data)
@@ -572,33 +570,16 @@ class PortfolioViewSet(GPOAccessMixin, CreateModelMixin, ViewSet):
             return Response(status=status.HTTP_201_CREATED, data=instance.to_response_dict())
 
 
-class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, ViewSet):
-    def update(self, request, portfolio_id):
-        """
-        Updates a portfolio
-        """
-        portfolio = get_object_or_400(Portfolio, select_for_update=True, error_message="No such portfolio",
-                                      id=portfolio_id)
-        if 'portfolio' not in request.data:
-            raise ValidationError({'portfolio': 'Portfolio data is missing'})  # pragma: no cover
-
-        self.check_object_permissions(request, portfolio)
-
-        data_serializer = PortfolioDetailsSerializer(instance=portfolio, data=request.data, partial=True)
-        data_serializer.is_valid()
-
-        if data_serializer.errors:
-            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
-        else:
-            instance = data_serializer.save(data=request.data)
-            return Response(status=status.HTTP_200_OK, data=instance.to_response_dict())
+class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericViewSet):
+    serializer_class = PortfolioUpdateSerializer
+    queryset = Portfolio.objects.all()
 
 
 class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     serializer_class = PortfolioListSerializer
 
     def get_queryset(self):
-        return Portfolio.objects.manager_of(self.request.user)
+        return Portfolio.objects.is_manager(self.request.user)
 
 
 class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
@@ -606,7 +587,7 @@ class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSe
     queryset = Portfolio.objects.all()
 
 
-class ProblemStatementViewSet(PortfolioAccessMixin, CreateModelMixin, ViewSet):
+class ProblemStatementViewSet(PortfolioAccessMixin, CreateModelMixin, GenericViewSet):
     def create(self, request, *args, **kwargs):
         """
         Creates a new Problem Statement for an existing portfolio
@@ -616,7 +597,7 @@ class ProblemStatementViewSet(PortfolioAccessMixin, CreateModelMixin, ViewSet):
         portfolio = get_object_or_400(Portfolio, id=kwargs.get('pk'))
         self.check_object_permissions(request, portfolio)
 
-        ps_data = copy.deepcopy(request.data['problem_statement'])
+        ps_data = request.data['problem_statement']
         ps_data['portfolio'] = portfolio.id
 
         data_serializer = ProblemStatementFullSerializer(data=ps_data)
@@ -626,6 +607,7 @@ class ProblemStatementViewSet(PortfolioAccessMixin, CreateModelMixin, ViewSet):
             return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
         else:
             instance = data_serializer.save()
+
             return Response(status=status.HTTP_201_CREATED, data=instance.to_response_dict())
 
     def remove_problem_statement(self, request, *args, **kwargs):

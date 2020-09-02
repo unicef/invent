@@ -373,14 +373,44 @@ class PortfolioListSerializer(serializers.ModelSerializer):
 
 
 class ProblemStatementSerializer(serializers.ModelSerializer):
+    project_count = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = ProblemStatement
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'description', 'project_count')
+
+    @staticmethod
+    def get_project_count(obj):
+        return len(obj.projects.all())
+
+
+class PortfolioUpdateSerializer(serializers.ModelSerializer):
+    """
+    Override fields for optional parameter handling
+    """
+    name = serializers.CharField(required=False)
+    description = serializers.CharField(required=False)
+
+    """
+    Make the problem statements read-only
+    """
+    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'problem_statements' in kwargs.get('data'):
+            raise serializers.ValidationError("Problem statements cannot be updated through this API.")
 
 
 class PortfolioDetailsSerializer(serializers.ModelSerializer):
-    problem_statements = ProblemStatementSerializer(many=True)
+    """
+    Used for get and create
+    """
+    problem_statements = ProblemStatementSerializer(many=True, required=False)
 
     class Meta:
         model = Portfolio
@@ -392,6 +422,9 @@ class PortfolioDetailsSerializer(serializers.ModelSerializer):
             ProblemStatement.objects.create(name=ps['name'], description=ps['description'], portfolio=instance)
 
     def create(self, validated_data):
+        """
+        Creates new portfolio - needs explicit serializer due to nested fields
+        """
         managers = validated_data.pop('managers')
         projects = validated_data.pop('projects')
 
@@ -406,31 +439,8 @@ class PortfolioDetailsSerializer(serializers.ModelSerializer):
 
         return instance
 
-    def update(self, instance, validated_data):
-        portfolio_data = validated_data.get('data').pop('portfolio')
-
-        instance.name = portfolio_data.get('name', instance.name)
-        instance.description = portfolio_data.get('description', instance.description)
-        instance.status = portfolio_data.get('status', instance.status)
-        instance.icon = portfolio_data.get('icon', instance.icon)
-        project_ids = [p.id for p in instance.projects.all()]
-        instance.projects.set(portfolio_data.get('projects', project_ids))
-        manager_ids = [m.id for m in instance.managers.all()]
-        instance.managers.set(portfolio_data.get('managers', manager_ids))
-
-        instance.save()
-        return instance
-
 
 class ProblemStatementFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProblemStatement
         fields = '__all__'
-
-    def create(self, validated_data):
-        instance = ProblemStatement.objects.create(
-            name=validated_data['name'], description=validated_data['description'],
-            portfolio=validated_data['portfolio'])
-        instance.save()
-
-        return instance
