@@ -91,6 +91,9 @@ class Country(UserManagement, LandingPageCommon):
 class RegionalOffice(models.Model):
     name = models.CharField(max_length=256)
 
+    def __str__(self):  # pragma: no cover
+        return self.name
+
 
 class CountryOffice(ExtendedModel):
     name = models.CharField(max_length=256)
@@ -101,15 +104,28 @@ class CountryOffice(ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
+    class Meta:
+        verbose_name = 'UNICEF Office'
+        verbose_name_plural = 'UNICEF Offices'
+
 
 class FieldOffice(models.Model):
     name = models.CharField(max_length=256)
     country_office = models.ForeignKey(CountryOffice, blank=True, null=True, on_delete=models.CASCADE)
 
+    def __str__(self):  # pragma: no cover
+        return self.name
+
 
 class Currency(models.Model):
     name = models.CharField(max_length=32)
     code = models.CharField(max_length=8)
+
+    def __str__(self):  # pragma: no cover
+        return self.code
+
+    class Meta:
+        verbose_name_plural = 'Currencies'
 
 
 @receiver(pre_save, sender=Country)
