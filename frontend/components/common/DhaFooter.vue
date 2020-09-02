@@ -1,91 +1,63 @@
 <template>
-  <div class="FooterBg">
-    <div class="Footer">
-      <el-row
-        type="flex"
-        justify-content="start"
-        align="middle"
+  <div class="footer-bg">
+    <img class="logo-who" src="/unicef-logo-footer-blue.png" alt="WHO" />
+    <div class="text">
+      <span><translate>Disclaimer:</translate>&nbsp;</span>
+      <span>
+        <translate>
+          All reasonable precautions have been taken by the UNICEF to verify the
+          information contained in this publication. However, the published
+          material is being distributed without warranty of any kind, either
+          expressed or implied. The responsibility for the interpretation and
+          use of the material lies with the reader. In no event shall the UNICEF
+          be liable for damages arising from its use. Please read our
+        </translate>
+      </span>
+      <nuxt-link
+        :to="localePath({ name: 'organisation-terms', params: $route.params })"
       >
-        <el-col class="LogoWHO">
-          <img
-            src="/unicef-logo-footer.svg"
-            alt="WHO"
-          >
-        </el-col>
-        <el-col class="Separator">
-          <div />
-        </el-col>
-        <el-col class="Text">
-          <span><translate>Disclaimer:</translate>&nbsp;</span>
-          <span>
-            <translate>All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.</translate>
-          </span>
-          <nuxt-link :to="localePath({name: 'organisation-terms', params: $route.params})">
-            <translate>Terms of use</translate>
-          </nuxt-link>
-        </el-col>
-      </el-row>
+        <translate>Terms of use</translate>
+      </nuxt-link>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-
-};
+export default {};
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .FooterBg {
-    display: flex;
-    align-items: center;
-    height: @appFooterHeight;
-    background-color: @colorBrandGrayDark;
+.footer-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: @appFooterHeight;
+  background-color: #a8a8a9;
 
-    .Footer {
-      padding: 0 120px 0 40px;
-      width: 100%;
+  .logo-who {
+    width: 79px;
+    margin-top: -16px;
+    margin-right: 26px;
+  }
 
-      .LogoWHO {
-        width: auto;
+  .text {
+    max-width: 1185px;
+    font-size: @fontSizeSmall - 1;
+    line-height: 18px;
+    color: @colorWhite;
 
-        img {
-          height: 32px;
-          transform: translateY(2px);
-        }
-      }
-
-      .Separator {
-        width: auto;
-        height: 30px;
-
-        > div {
-          .SeparatorStyle();
-          height: 100%;
-          margin: 0 10px;
-          background-color: fade(@colorGray, 35%);
-        }
-      }
-
-      .Text {
-        width: 100%;
-        font-size: @fontSizeSmall - 1;
-        line-height: 16px;
-        color: @colorTextMuted;
-
-        @media only screen and (max-width: 1360px) {
-          font-size: @fontSizeSmall - 2;
-          line-height: 15px;
-        }
-      }
-
-      a {
-        color: inherit;
-        margin: 0 6px;
-      }
+    @media only screen and (max-width: 1360px) {
+      font-size: @fontSizeSmall - 2;
+      line-height: 15px;
     }
   }
+
+  a {
+    color: inherit;
+    margin: 0 4px;
+  }
+}
 </style>
