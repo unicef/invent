@@ -36,14 +36,14 @@
 
 <script>
 import AdvancedSearch from "@/components/dashboard/AdvancedSearch";
-import { mapActions } from "vuex";
+// import { mapActions } from "vuex";
 
 export default {
   components: {
     AdvancedSearch
   },
   fetch({ store }) {
-    store.dispatch("landing/resetSearch");
+    // store.dispatch("landing/resetSearch");
   },
   data() {
     return {
@@ -56,16 +56,16 @@ export default {
     };
   },
   mounted() {
-    if (window) {
-      const savedFilters = window.localStorage.getItem("savedFilters");
-      if (savedFilters) {
-        this.setSavedFilters(JSON.parse(savedFilters));
-      }
-    }
+    // if (window) {
+    //   const savedFilters = window.localStorage.getItem("savedFilters");
+    //   if (savedFilters) {
+    //     this.setSavedFilters(JSON.parse(savedFilters));
+    //   }
+    // }
   },
   methods: {
     ...mapActions({
-      setSavedFilters: "dashboard/setSavedFilters"
+      // setSavedFilters: "dashboard/setSavedFilters"
     }),
     handleTab(id) {
       this.tab = id;
