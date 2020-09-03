@@ -241,6 +241,7 @@ class PortfolioTests(APITestCase):
             {'name': "PS 3", 'description': "This was added recently"}]}
 
         response = self.user_3_client.patch(url, update_data, format="json")
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['problem_statements']), 2)
         expected_names = {"PS 1 updated", "PS 3"}

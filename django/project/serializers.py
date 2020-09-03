@@ -379,10 +379,27 @@ class ProblemStatementSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description')
 
 
-class PortfolioDetailsSerializer(serializers.ModelSerializer):
-    """
-    Used for get and create
-    """
+class ProblemStatementUpdateSerializer(ProblemStatementSerializer):
+    class Meta:
+        model = ProblemStatement
+        fields = ('id', 'name', 'description')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
+
+class PortfolioBaseSerializer(serializers.ModelSerializer):
+    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+
+
+class PortfolioDetailsSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False)
 
     class Meta:
@@ -413,30 +430,20 @@ class PortfolioDetailsSerializer(serializers.ModelSerializer):
         return instance
 
 
-class PortfolioUpdateSerializer(serializers.ModelSerializer):
+class PortfolioUpdateSerializer(PortfolioBaseSerializer):
     """
     Used for update
     """
-    problem_statements = ProblemStatementSerializer(many=True, required=False)
-
-    class Meta:
-        model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
-
-    def to_internal_value(self, data):
-        """
-        Validated data eats 'id' and 'portfolio_id' from 'problem_statements'
-        """
-        return data
+    problem_statements = ProblemStatementUpdateSerializer(many=True, required=False)
 
     def update(self, instance, validated_data):
         """
         Override serializer due to nested Problem Statements
         """
-        if validated_data.get('problem_statements'):
+
+        if validated_data.get('problem_statements'):  # this is to support PATCH update
             ps_data = validated_data.pop('problem_statements')
             instance = super().update(instance, validated_data)
-
             # Handle delete
             update_ids = {ps['id'] for ps in ps_data if 'id' in ps}
             existing_pss = instance.problem_statements.all()
