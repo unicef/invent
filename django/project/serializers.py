@@ -365,7 +365,7 @@ class PortfolioListSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_project_count(obj):
-        return len(obj.projects.published_only().filter(is_active=True).all())
+        return len(obj.projects.published_only().filter(is_active=True))
 
     @staticmethod
     def get_managers(obj):
