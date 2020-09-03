@@ -90,11 +90,11 @@ urlpatterns = [
          }),
          name="approval"),
     url(r"^portfolio/active-list/$",
-        view=views.PortfolioListViewSet.as_view({
+        view=views.PortfolioActiveListViewSet.as_view({
             'get': 'list'
         }), name="portfolio-list-active"),
     url(r'^portfolio/create/$',
-        view=views.PortfolioViewSet.as_view({
+        view=views.PortfolioCreateViewSet.as_view({
             'post': 'create'
         }), name="portfolio-create"),
     path(r'portfolio/update/(?P<pk>\d+)/',
