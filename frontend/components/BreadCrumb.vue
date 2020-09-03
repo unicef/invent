@@ -35,7 +35,8 @@ export default {
         "organisation-login": true,
         "organisation-signup": true,
         "organisation-reset-key": true,
-        "organisation-portfolio-management-new": false
+        "organisation-portfolio-management-new": false,
+        "organisation-portfolio-management-id": true
       };
       const pages = {
         "organisation-edit-profile": this.$gettext("Admin"),
@@ -63,7 +64,8 @@ export default {
         "organisation-portfolio-management": this.$gettext("Portfolio Manager"),
         "organisation-portfolio-management-new": this.$gettext(
           "Create a new portfolio"
-        )
+        ),
+        "organisation-portfolio-management-id": this.$gettext("Edit portfolio")
       };
       const match = pages[this.pureRoute];
       if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
