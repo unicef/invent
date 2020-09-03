@@ -402,10 +402,6 @@ class PortfolioBaseSerializer(serializers.ModelSerializer):
 class PortfolioDetailsSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False)
 
-    class Meta:
-        model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
-
     @staticmethod
     def _create_problem_statements(instance, problem_statements):
         for ps in problem_statements:
@@ -432,7 +428,7 @@ class PortfolioDetailsSerializer(PortfolioBaseSerializer):
 
 class PortfolioUpdateSerializer(PortfolioBaseSerializer):
     """
-    Used for update
+    Used for update ONLY
     """
     problem_statements = ProblemStatementUpdateSerializer(many=True, required=False)
 
