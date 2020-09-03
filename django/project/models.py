@@ -193,7 +193,7 @@ class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
 class Portfolio(SoftDeleteModel, ExtendedModel):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=511)
-    icon = models.TextField(max_length=1, blank=True)
+    icon = models.CharField(max_length=1, blank=True)
     projects = models.ManyToManyField(Project, related_name='portfolios', blank=True)
     managers = models.ManyToManyField(UserProfile, related_name="portfolios", blank=True)
     STATUS_DRAFT = 'DR'
@@ -231,7 +231,7 @@ class ProjectApproval(ExtendedModel):
     user = models.ForeignKey(UserProfile, blank=True, null=True,
                              help_text="Administrator who approved the project", on_delete=models.CASCADE)
     approved = models.NullBooleanField(blank=True, null=True)
-    reason = models.CharField(blank=True, null=True)
+    reason = models.TextField(blank=True, null=True)
     history = HistoricalRecords(excluded_fields=['project', 'created'])
 
     def __str__(self):
