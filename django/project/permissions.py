@@ -1,7 +1,6 @@
 from rest_framework import permissions
 
 from project.models import ProjectApproval, Portfolio
-from user.models import UserProfile
 
 
 class InTeamOrReadOnly(permissions.BasePermission):
@@ -32,13 +31,10 @@ class IsGPOOrReadOnly(permissions.BasePermission):
     """
     Permission to only allow Global portfolio owners to create new portfolios
     """
-
-    def has_object_permission(self, request, view, obj: UserProfile):
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
+    def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True  # pragma: no cover
-        return obj.global_portfolio_owner
+        return request.user.userprofile.global_portfolio_owner
 
 
 class IsGPOOrManager(permissions.BasePermission):
