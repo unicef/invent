@@ -61,6 +61,44 @@ export const state = () => ({
     { id: 1, name: "Active" },
     { id: 2, name: "Draft" },
     { id: 3, name: "Archived" }
+  ],
+  portfolioList: [
+    { id: 1, name: "wash", total: 37, status: "active", icon: "wash" },
+    {
+      id: 2,
+      name: "humanitarian",
+      total: 26,
+      status: "active",
+      icon: "affected_population"
+    },
+    {
+      id: 3,
+      name: "maternal & newborn health",
+      total: 34,
+      status: "active",
+      icon: "mother_and_baby"
+    },
+    {
+      id: 4,
+      name: "learning",
+      total: 25,
+      status: "active",
+      icon: "innovation"
+    },
+    {
+      id: 5,
+      name: "mental health",
+      total: 16,
+      status: "draft",
+      icon: "mental_health"
+    },
+    {
+      id: 6,
+      name: "climate change",
+      total: 20,
+      status: "archived",
+      icon: "epidemic"
+    }
   ]
 });
 
