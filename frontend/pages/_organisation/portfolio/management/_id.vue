@@ -23,8 +23,14 @@
           </p>
         </div>
       </div>
-      <div>
-        <p>will display filter for {{ tab }}</p>
+      <div class="DashboardListView">
+        <!-- <p>will display filter for {{ tab }}</p> -->
+        <el-row>
+          <table-top-actions />
+        </el-row>
+        <el-row>
+          <main-table />
+        </el-row>
       </div>
     </div>
 
@@ -36,14 +42,46 @@
 
 <script>
 import AdvancedSearch from "@/components/dashboard/AdvancedSearch";
-// import { mapActions } from "vuex";
+import MainTable from "@/components/portfolio/dashboard/MainTable";
+import TableTopActions from "@/components/portfolio/dashboard/TableTopActions";
+import { mapGetters, mapActions } from "vuex";
+import debounce from "lodash/debounce";
 
 export default {
   components: {
-    AdvancedSearch
+    AdvancedSearch,
+    MainTable,
+    TableTopActions
   },
-  fetch({ store }) {
-    // store.dispatch("landing/resetSearch");
+  async fetch({ store, query, error }) {
+    store.dispatch("landing/resetSearch");
+    store.dispatch("dashboard/setDashboardSection", "list");
+    await Promise.all([
+      store.dispatch("projects/loadUserProjects"),
+      store.dispatch("projects/loadProjectStructure"),
+      store.dispatch("countries/loadMapData")
+    ]);
+    await store.dispatch("dashboard/setSearchOptions", query);
+    try {
+      await store.dispatch("dashboard/loadProjectList");
+    } catch (e) {
+      console.log(e);
+      error({
+        statusCode: 404,
+        message: "Unable to process the search with the current parameters"
+      });
+    }
+    if (store.getters["dashboard/getDashboardType"] === "donor") {
+      await store.dispatch(
+        "system/loadDonorDetails",
+        store.getters["dashboard/getDashboardId"]
+      );
+    } else if (store.getters["dashboard/getDashboardType"] === "country") {
+      await store.dispatch(
+        "countries/loadCountryDetails",
+        store.getters["dashboard/getDashboardId"]
+      );
+    }
   },
   data() {
     return {
@@ -55,18 +93,44 @@ export default {
       tab: 1
     };
   },
+  computed: {
+    ...mapGetters({
+      searchParameters: "dashboard/getSearchParameters",
+      dashboardSection: "dashboard/getDashboardSection"
+    })
+  },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler(query) {
+        this.searchParameterChanged(query);
+      }
+    }
+  },
   mounted() {
-    // if (window) {
-    //   const savedFilters = window.localStorage.getItem("savedFilters");
-    //   if (savedFilters) {
-    //     this.setSavedFilters(JSON.parse(savedFilters));
-    //   }
-    // }
+    if (window) {
+      const savedFilters = window.localStorage.getItem("savedFilters");
+      if (savedFilters) {
+        this.setSavedFilters(JSON.parse(savedFilters));
+      }
+    }
   },
   methods: {
     ...mapActions({
-      // setSavedFilters: "dashboard/setSavedFilters"
+      loadProjectList: "dashboard/loadProjectList",
+      setSavedFilters: "dashboard/setSavedFilters"
     }),
+    searchParameterChanged: debounce(function(query) {
+      if (this.dashboardSection === "list") {
+        this.$router.replace({ ...this.$route, query });
+        this.load();
+      }
+    }, 100),
+    async load() {
+      this.$nuxt.$loading.start();
+      await this.loadProjectList();
+      this.$nuxt.$loading.finish();
+    },
     handleTab(id) {
       this.tab = id;
     }
@@ -90,7 +154,7 @@ export default {
   );
 
   .content-area {
-    z-index: 1;
+    // z-index: 1;
     position: relative;
     display: flex;
     flex-direction: column;
