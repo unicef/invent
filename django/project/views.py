@@ -551,23 +551,7 @@ class PortfolioListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
 
 class PortfolioViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
-    def create(self, request, *args, **kwargs):
-        """
-        Creates a draft portfolio
-        """
-        self.check_object_permissions(request, request.user.userprofile)
-
-        portfolio_data = request.data
-        portfolio_data['status'] = Portfolio.STATUS_DRAFT
-
-        data_serializer = PortfolioDetailsSerializer(data=portfolio_data)
-        data_serializer.is_valid()
-
-        if data_serializer.errors:
-            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
-        else:
-            instance = data_serializer.save()
-            return Response(status=status.HTTP_201_CREATED, data=instance.to_response_dict())
+    serializer_class = PortfolioDetailsSerializer
 
 
 class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericViewSet):
