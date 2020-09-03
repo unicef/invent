@@ -231,7 +231,7 @@ class ProjectApproval(ExtendedModel):
     user = models.ForeignKey(UserProfile, blank=True, null=True,
                              help_text="Administrator who approved the project", on_delete=models.CASCADE)
     approved = models.NullBooleanField(blank=True, null=True)
-    reason = models.TextField(blank=True, null=True)
+    reason = models.CharField(blank=True, null=True)
     history = HistoricalRecords(excluded_fields=['project', 'created'])
 
     def __str__(self):
