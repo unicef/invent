@@ -99,7 +99,8 @@ urlpatterns = [
         }), name="portfolio-create"),
     path(r'portfolio/update/(?P<pk>\d+)/',
          view=views.PortfolioUpdateViewSet.as_view({
-             'put': 'update'
+             'put': 'update',
+             'patch': 'partial_update'
          }),
          name="portfolio-update"),
     url(r"^portfolio/manager-of/$",
@@ -111,14 +112,4 @@ urlpatterns = [
              'get': 'retrieve'
          }),
          name="portfolio-detailed"),
-    path(r"^portfolio/(?P<pk>\d+)/problem-statements/add/$",
-         view=views.ProblemStatementViewSet.as_view({
-             'post': 'create'
-         }),
-         name="portfolio-add-problem-statement"),
-    path(r"^portfolio/<int:portfolio_id>/problem-statements/delete/(?P<pk>\d+)$",
-         view=views.ProblemStatementViewSet.as_view({
-             'delete': 'remove_problem_statement'
-         }),
-         name="portfolio-delete-problem-statement"),
 ]

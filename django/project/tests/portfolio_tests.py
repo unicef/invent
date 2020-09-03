@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from rest_framework.test import APITestCase, APIClient
 
-from project.models import Portfolio
+from project.models import Portfolio, ProblemStatement
 from country.models import Country, Donor, CountryOffice
 from user.models import Organisation, UserProfile
 from user.tests import create_profile_for_user
@@ -160,11 +160,11 @@ class PortfolioTests(APITestCase):
         # Try to set the portfolio to active as user #1, who is not allowed
         url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
         update_data = {"status": Portfolio.STATUS_ACTIVE}
-        response = self.user_1_client.put(url, update_data, format="json")
+        response = self.user_1_client.patch(url, update_data, format="json")
         self.assertEqual(response.status_code, 403, response.json())
 
         # activate portolio as user 2, who is a GPO
-        response = self.user_2_client.put(url, update_data, format="json")
+        response = self.user_2_client.patch(url, update_data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
         self.assertEqual(response.json()['id'], self.portfolio_id)
         self.assertEqual(response.json()['status'], Portfolio.STATUS_ACTIVE)
@@ -180,20 +180,20 @@ class PortfolioTests(APITestCase):
         # Make the portfolio a draft again
         url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
         update_data = {"status": Portfolio.STATUS_DRAFT}
-        response = self.user_2_client.put(url, update_data, format="json")
+        response = self.user_2_client.patch(url, update_data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
         self.assertEqual(response.json()['id'], self.portfolio_id)
         self.assertEqual(response.json()['status'], Portfolio.STATUS_DRAFT)
 
-    def test_update_portfolio_problem_statement_fail(self):
-        """
-        Problem statements are handled separately
-        """
-        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
-        update_data = {'problem_statements': [{"name": "PS 3", "description": "PS 3 description"}]}
-        # update portolio as user 2, who is a GPO
-        response = self.user_2_client.put(url, update_data, format="json")
-        self.assertEqual(response.status_code, 400, response.json())
+    # def test_update_portfolio_problem_statement_fail(self):
+    #     """
+    #     Problem statements are handled separately
+    #     """
+    #     url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+    #     update_data = {'problem_statements': [{"name": "PS 3", "description": "PS 3 description"}]}
+    #     # update portolio as user 2, who is a GPO
+    #     response = self.user_2_client.put(url, update_data, format="json")
+    #     self.assertEqual(response.status_code, 400, response.json())
 
     def test_user_create_portfolio_failed(self):
         """
@@ -242,25 +242,24 @@ class PortfolioTests(APITestCase):
         """
         Managers need to be able to add and remove Problem Statements to existing portfolios
         """
-        ps_data = {'problem_statement': {"name": "PS 3", "description": "PS 3 description"}}
-        url = reverse('portfolio-add-problem-statement', kwargs={"pk": self.portfolio_id})
-        response = self.user_3_client.post(url, ps_data, format="json")
-        ps_id = response.json()['id']
-        self.assertEqual(response.status_code, 201)
 
-        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
-        response = self.user_3_client.get(url)
+        # Test delete and update
+        ps_1 = ProblemStatement.objects.get(name="PS 1")
+        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+        update_data = {'problem_statements': [{
+            'id': ps_1.id, 'name': "PS 1 updated", 'description': ps_1.description}]}
+
+        response = self.user_3_client.patch(url, update_data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()['problem_statements']), 3)
+        self.assertEqual(len(response.json()['problem_statements']), 1)
+        self.assertEqual(response.json()['problem_statements'][0]['name'], "PS 1 updated")
+        ps_1_recheck = ProblemStatement.objects.get(id=ps_1.id)
+        self.assertEqual(ps_1_recheck.name, "PS 1 updated")
 
-        url = reverse('portfolio-delete-problem-statement', kwargs={"portfolio_id": self.portfolio_id, "pk": ps_id})
-        response = self.user_3_client.delete(url)
-        self.assertEqual(response.status_code, 200)
-
-        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
-        response = self.user_3_client.get(url)
+        # Test add
+        add_data = {'problem_statements': [{
+            'id': ps_1.id, 'name': "PS 1 updated", 'description': ps_1.description},
+            {'name': "PS 3", 'description': "This was added recently"}]}
+        response = self.user_3_client.patch(url, add_data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['problem_statements']), 2)
-
-        for ps in response.json()['problem_statements']:
-            self.assertEqual(ps['project_count'], 0)

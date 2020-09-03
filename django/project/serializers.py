@@ -372,38 +372,19 @@ class PortfolioListSerializer(serializers.ModelSerializer):
         return obj.managers.all().values_list('id', flat=True)
 
 
+class ProblemStatementFilteredListSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        data = data.filter(is_active=True)
+        return super(ProblemStatementFilteredListSerializer, self).to_representation(data)
+
+
 class ProblemStatementSerializer(serializers.ModelSerializer):
-    project_count = serializers.SerializerMethodField(required=False)
 
     class Meta:
+        list_serializer_class = ProblemStatementFilteredListSerializer
         model = ProblemStatement
-        fields = ('id', 'name', 'description', 'project_count')
-
-    @staticmethod
-    def get_project_count(obj):
-        return len(obj.projects.all())
-
-
-class PortfolioUpdateSerializer(serializers.ModelSerializer):
-    """
-    Override fields for optional parameter handling
-    """
-    name = serializers.CharField(required=False)
-    description = serializers.CharField(required=False)
-
-    """
-    Make the problem statements read-only
-    """
-    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
-
-    class Meta:
-        model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if 'problem_statements' in kwargs.get('data'):
-            raise serializers.ValidationError("Problem statements cannot be updated through this API.")
+        fields = ('id', 'name', 'description')
 
 
 class PortfolioDetailsSerializer(serializers.ModelSerializer):
@@ -440,7 +421,44 @@ class PortfolioDetailsSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ProblemStatementFullSerializer(serializers.ModelSerializer):
+class PortfolioUpdateSerializer(serializers.ModelSerializer):
+    """
+    Used for update
+    """
+    problem_statements = ProblemStatementSerializer(many=True, required=False)
+
     class Meta:
-        model = ProblemStatement
-        fields = '__all__'
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+
+    def to_internal_value(self, data):
+        """
+        Validated data eats 'id' and 'portfolio_id' from 'problem_statements'
+        """
+        return data
+
+    def update(self, instance, validated_data):
+        """
+        Override serializer due to nested Problem Statements
+        """
+        if validated_data.get('problem_statements'):
+            ps_data = validated_data.pop('problem_statements')
+            instance = super().update(instance, validated_data)
+
+            # Handle delete
+            update_ids = {ps['id'] for ps in ps_data if 'id' in ps}
+            existing_pss = instance.problem_statements.filter(is_active=True)
+            for ps_exist in existing_pss:
+                if ps_exist.id not in update_ids:  # Delete problem statements not in update data
+                    ProblemStatement.delete(ps_exist)
+            for ps in ps_data:
+                if 'id' in ps:  # update existing problem statements
+                    ps_instance = ProblemStatement.objects.get(id=ps['id'])
+                    ps_serializer = ProblemStatementSerializer(instance=ps_instance, data=ps, partial=True)
+                    if ps_serializer.is_valid(raise_exception=True):
+                        ps_serializer.save()
+                else:  # add new Problem statement
+                    ProblemStatement.objects.create(name=ps['name'], description=ps['description'], portfolio=instance)
+        else:
+            instance = super().update(instance, validated_data)
+        return instance
