@@ -216,7 +216,7 @@ class Portfolio(SoftDeleteModel, ExtendedModel):
         return self.name
 
     def to_response_dict(self):
-        return dict(id=self.pk, status=self.status)
+        return dict(id=self.pk, status=self.status)  # pragma: no cover
 
 
 class ProblemStatement(ExtendedModel):
