@@ -365,7 +365,7 @@ class PortfolioListSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_project_count(obj):
-        return len(obj.projects.filter(is_active=True).all())
+        return len(obj.projects.published_only().filter(is_active=True).all())
 
     @staticmethod
     def get_managers(obj):
@@ -448,17 +448,16 @@ class PortfolioUpdateSerializer(serializers.ModelSerializer):
             # Handle delete
             update_ids = {ps['id'] for ps in ps_data if 'id' in ps}
             existing_pss = instance.problem_statements.filter(is_active=True)
+
             for ps_exist in existing_pss:
                 if ps_exist.id not in update_ids:  # Delete problem statements not in update data
-                    ProblemStatement.delete(ps_exist)
+                    ps_exist.delete()
             for ps in ps_data:
-                if 'id' in ps:  # update existing problem statements
-                    ps_instance = ProblemStatement.objects.get(id=ps['id'])
-                    ps_serializer = ProblemStatementSerializer(instance=ps_instance, data=ps, partial=True)
-                    if ps_serializer.is_valid(raise_exception=True):
-                        ps_serializer.save()
-                else:  # add new Problem statement
-                    ProblemStatement.objects.create(name=ps['name'], description=ps['description'], portfolio=instance)
+                ps['portfolio_id'] = instance.id if 'portfolio_id' not in ps else ps['portfolio_id']
+                ProblemStatement.objects.update_or_create(
+                    id=ps['id'] if 'id' in ps else None,
+                    defaults=ps
+                )
         else:
             instance = super().update(instance, validated_data)
         return instance

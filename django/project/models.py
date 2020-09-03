@@ -190,8 +190,7 @@ class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
     pass
 
 
-class Portfolio(SoftDeleteModel, ExtendedModel):
-    name = models.CharField(max_length=255)
+class Portfolio(ExtendedNameOrderedSoftDeletedModel):
     description = models.CharField(max_length=511)
     icon = models.CharField(max_length=1, blank=True)
     projects = models.ManyToManyField(Project, related_name='portfolios', blank=True)
@@ -212,18 +211,11 @@ class Portfolio(SoftDeleteModel, ExtendedModel):
     )
     objects = PortfolioQuerySet.as_manager()
 
-    def __str__(self):  # pragma: no cover
-        return self.name
 
-
-class ProblemStatement(SoftDeleteModel, ExtendedModel):
-    name = models.CharField(max_length=255)
+class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
     description = models.CharField(max_length=511)
     portfolio = models.ForeignKey(Portfolio, blank=False, null=False, on_delete=models.CASCADE,
                                   related_name='problem_statements')
-
-    def __str__(self):  # pragma: no cover
-        return self.name
 
 
 class ProjectApproval(ExtendedModel):

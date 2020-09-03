@@ -545,7 +545,7 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
         return ImportRow.objects.filter(parent__user=self.request.user)
 
 
-class PortfolioListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+class PortfolioActiveListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     serializer_class = PortfolioListSerializer
     queryset = Portfolio.objects.filter(status=Portfolio.STATUS_ACTIVE)
 
@@ -557,7 +557,7 @@ class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
         return Portfolio.objects.is_manager(self.request.user)
 
 
-class PortfolioViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
+class PortfolioCreateViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
     serializer_class = PortfolioDetailsSerializer
 
 
