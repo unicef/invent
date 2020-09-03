@@ -180,7 +180,7 @@ def on_create_init(sender, instance, created, **kwargs):
 class PortfolioManager(models.Manager):
     use_in_migrations = True
 
-    def is_manager(self, user: UserProfile):
+    def is_manager(self, user: User):
         if user.userprofile.global_portfolio_owner:  # global portfolio owners have full rights
             return self.all()
         return self.filter(managers=user.userprofile)  # otherwise we filter for managed portfolios
@@ -215,22 +215,15 @@ class Portfolio(SoftDeleteModel, ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
-    def to_response_dict(self):
-        return dict(id=self.pk, status=self.status)  # pragma: no cover
 
-
-class ProblemStatement(ExtendedModel):
+class ProblemStatement(SoftDeleteModel, ExtendedModel):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=511)
     portfolio = models.ForeignKey(Portfolio, blank=False, null=False, on_delete=models.CASCADE,
                                   related_name='problem_statements')
-    projects = models.ManyToManyField(Project, blank=True, null=True, related_name='problem_statements')
 
     def __str__(self):  # pragma: no cover
         return self.name
-
-    def to_response_dict(self):
-        return dict(id=self.pk, portfolio=self.portfolio.id)
 
 
 class ProjectApproval(ExtendedModel):

@@ -20,11 +20,11 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, HSCChallenge, Portfolio, ProblemStatement
+    HealthCategory, HSCChallenge, Portfolio
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
-    PortfolioDetailsSerializer, ProblemStatementFullSerializer, PortfolioUpdateSerializer
+    PortfolioDetailsSerializer, PortfolioUpdateSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -550,6 +550,13 @@ class PortfolioListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = Portfolio.objects.filter(status=Portfolio.STATUS_ACTIVE)
 
 
+class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    serializer_class = PortfolioListSerializer
+
+    def get_queryset(self):
+        return Portfolio.objects.is_manager(self.request.user)
+
+
 class PortfolioViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
     serializer_class = PortfolioDetailsSerializer
 
@@ -559,51 +566,6 @@ class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericView
     queryset = Portfolio.objects.all()
 
 
-class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
-    serializer_class = PortfolioListSerializer
-
-    def get_queryset(self):
-        return Portfolio.objects.is_manager(self.request.user)
-
-
 class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = PortfolioDetailsSerializer
     queryset = Portfolio.objects.all()
-
-
-class ProblemStatementViewSet(PortfolioAccessMixin, CreateModelMixin, GenericViewSet):
-    def create(self, request, *args, **kwargs):
-        """
-        Creates a new Problem Statement for an existing portfolio
-        """
-        if 'problem_statement' not in request.data:
-            raise ValidationError({'problem_statement': 'Problem Statement data is missing'})  # pragma: no cover
-        portfolio = get_object_or_400(Portfolio, id=kwargs.get('pk'))
-        self.check_object_permissions(request, portfolio)
-
-        ps_data = request.data['problem_statement']
-        ps_data['portfolio'] = portfolio.id
-
-        data_serializer = ProblemStatementFullSerializer(data=ps_data)
-        data_serializer.is_valid()
-
-        if data_serializer.errors:
-            return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
-        else:
-            instance = data_serializer.save()
-
-            return Response(status=status.HTTP_201_CREATED, data=instance.to_response_dict())
-
-    def remove_problem_statement(self, request, *args, **kwargs):
-        """
-        Deletes a problem statement from an existing portfolio
-        """
-        portfolio = get_object_or_400(Portfolio, id=kwargs.get('portfolio_id'))
-        self.check_object_permissions(request, portfolio)
-        problem_statement = get_object_or_400(ProblemStatement, id=kwargs.get('pk'))
-        if problem_statement.portfolio.id == kwargs.get('portfolio_id'):
-            ProblemStatement.delete(problem_statement)
-        else:
-            Response({'error': "Problem statement is not part of portfolio"},
-                     status=status.HTTP_400_BAD_REQUEST)  # pragma: no cover
-        return Response(status=status.HTTP_200_OK)
