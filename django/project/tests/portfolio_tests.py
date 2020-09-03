@@ -185,16 +185,6 @@ class PortfolioTests(APITestCase):
         self.assertEqual(response.json()['id'], self.portfolio_id)
         self.assertEqual(response.json()['status'], Portfolio.STATUS_DRAFT)
 
-    # def test_update_portfolio_problem_statement_fail(self):
-    #     """
-    #     Problem statements are handled separately
-    #     """
-    #     url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
-    #     update_data = {'problem_statements': [{"name": "PS 3", "description": "PS 3 description"}]}
-    #     # update portolio as user 2, who is a GPO
-    #     response = self.user_2_client.put(url, update_data, format="json")
-    #     self.assertEqual(response.status_code, 400, response.json())
-
     def test_user_create_portfolio_failed(self):
         """
         Only GMO users can create portfolios
@@ -240,26 +230,23 @@ class PortfolioTests(APITestCase):
 
     def test_problem_statement_handling(self):
         """
-        Managers need to be able to add and remove Problem Statements to existing portfolios
+        Managers need to be able to add, update and remove Problem Statements to existing portfolios
         """
-
-        # Test delete and update
         ps_1 = ProblemStatement.objects.get(name="PS 1")
+        ps_2 = ProblemStatement.objects.get(name="PS 2")
+
         url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
-        update_data = {'problem_statements': [{
-            'id': ps_1.id, 'name': "PS 1 updated", 'description': ps_1.description}]}
+        update_data = {'problem_statements': [
+            {'id': ps_1.id, 'name': "PS 1 updated", 'description': ps_1.description},
+            {'name': "PS 3", 'description': "This was added recently"}]}
 
         response = self.user_3_client.patch(url, update_data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()['problem_statements']), 1)
-        self.assertEqual(response.json()['problem_statements'][0]['name'], "PS 1 updated")
+        self.assertEqual(len(response.json()['problem_statements']), 2)
+        expected_names = {"PS 1 updated", "PS 3"}
+        response_names = {ps['name'] for ps in response.json()['problem_statements']}
+        self.assertEqual(response_names, expected_names)
+        ps_3 = ProblemStatement.objects.get(name="PS 3")
+        self.assertNotEqual(ps_3.id, ps_2.id)  # Check that we've actually created a new Problem Statement
         ps_1_recheck = ProblemStatement.objects.get(id=ps_1.id)
         self.assertEqual(ps_1_recheck.name, "PS 1 updated")
-
-        # Test add
-        add_data = {'problem_statements': [{
-            'id': ps_1.id, 'name': "PS 1 updated", 'description': ps_1.description},
-            {'name': "PS 3", 'description': "This was added recently"}]}
-        response = self.user_3_client.patch(url, add_data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()['problem_statements']), 2)
