@@ -1,14 +1,54 @@
 <template>
-  <div>
-    <h1>Management Portofolio</h1>
-    <nuxt-link
-      :to="localePath({ name: 'organisation-portfolio-management-new' })"
-    >
-      <translate>Create a New Portfolio</translate>
-    </nuxt-link>
-  </div>
+  <section class="portfolio-main">
+    <title-card />
+    <article class="portfolios">
+      <portfolio-card v-for="item in items" :key="item.id" :item="item" />
+    </article>
+    <info-card />
+  </section>
 </template>
 
-<script></script>
+<script>
+import { mapState } from "vuex";
+import TitleCard from "@/components/portfolio/dashboard/TitleCard";
+import PortfolioCard from "@/components/portfolio/dashboard/PortfolioCard";
+import InfoCard from "@/components/portfolio/dashboard/InfoCard";
 
-<style lang="less" scoped></style>
+export default {
+  components: {
+    TitleCard,
+    PortfolioCard,
+    InfoCard
+  },
+  data() {
+    return {};
+  },
+  async fetch({ store }) {},
+  computed: {
+    ...mapState({
+      items: state => state.portfolio.portfolioList
+    })
+  },
+  methods: {}
+};
+</script>
+
+<style lang="less" scoped>
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
+
+.portfolio-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 1242px;
+  margin: 50px auto 170px;
+  .portfolios {
+    width: 100%;
+    margin-bottom: calc(60px - 16px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}
+</style>

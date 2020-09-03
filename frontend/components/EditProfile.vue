@@ -158,7 +158,7 @@
                 >
               </p>
 
-              <el-collapse-transition>
+              <!-- <el-collapse-transition>
                 <div v-if="isDonorUser" class="DonorSelectorWrapper">
                   <el-form-item
                     :label="
@@ -173,7 +173,7 @@
                     />
                   </el-form-item>
                 </div>
-              </el-collapse-transition>
+              </el-collapse-transition> -->
 
               <el-collapse-transition>
                 <el-radio-group
