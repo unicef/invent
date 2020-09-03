@@ -372,17 +372,9 @@ class PortfolioListSerializer(serializers.ModelSerializer):
         return obj.managers.all().values_list('id', flat=True)
 
 
-class ProblemStatementFilteredListSerializer(serializers.ListSerializer):
-
-    def to_representation(self, data):
-        data = data.filter(is_active=True)
-        return super(ProblemStatementFilteredListSerializer, self).to_representation(data)
-
-
 class ProblemStatementSerializer(serializers.ModelSerializer):
 
     class Meta:
-        list_serializer_class = ProblemStatementFilteredListSerializer
         model = ProblemStatement
         fields = ('id', 'name', 'description')
 
@@ -447,7 +439,7 @@ class PortfolioUpdateSerializer(serializers.ModelSerializer):
 
             # Handle delete
             update_ids = {ps['id'] for ps in ps_data if 'id' in ps}
-            existing_pss = instance.problem_statements.filter(is_active=True)
+            existing_pss = instance.problem_statements.all()
 
             for ps_exist in existing_pss:
                 if ps_exist.id not in update_ids:  # Delete problem statements not in update data

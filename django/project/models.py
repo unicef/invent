@@ -212,10 +212,16 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
     objects = PortfolioQuerySet.as_manager()
 
 
+class ProblemStatementQuerySet(ActiveQuerySet):
+    pass
+
+
 class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
     description = models.CharField(max_length=511)
     portfolio = models.ForeignKey(Portfolio, blank=False, null=False, on_delete=models.CASCADE,
                                   related_name='problem_statements')
+
+    objects = ProblemStatementQuerySet.as_manager()
 
 
 class ProjectApproval(ExtendedModel):
