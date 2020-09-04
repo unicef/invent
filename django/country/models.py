@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from ordered_model.models import OrderedModel
 
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
+from project.cache import InvalidateCacheMixin
 from user.models import UserProfile
 
 
@@ -88,7 +89,7 @@ class Country(UserManagement, LandingPageCommon):
         ordering = ('id',)
 
 
-class RegionalOffice(models.Model):
+class RegionalOffice(InvalidateCacheMixin, models.Model):
     name = models.CharField(max_length=256)
 
     def __str__(self):  # pragma: no cover
@@ -109,7 +110,7 @@ class CountryOffice(ExtendedModel):
         verbose_name_plural = 'UNICEF Offices'
 
 
-class FieldOffice(models.Model):
+class FieldOffice(InvalidateCacheMixin, models.Model):
     name = models.CharField(max_length=256)
     country_office = models.ForeignKey(CountryOffice, blank=True, null=True, on_delete=models.CASCADE)
 
@@ -117,7 +118,7 @@ class FieldOffice(models.Model):
         return self.name
 
 
-class Currency(models.Model):
+class Currency(InvalidateCacheMixin, models.Model):
     name = models.CharField(max_length=32)
     code = models.CharField(max_length=8)
 
