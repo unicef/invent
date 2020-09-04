@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin
 from country.models import Donor, FieldOffice, CountryOffice
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
@@ -20,10 +20,11 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, HSCChallenge
+    HealthCategory, HSCChallenge, Portfolio
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
+    PortfolioDetailsSerializer, PortfolioUpdateSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -542,3 +543,29 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
         return ImportRow.objects.filter(parent__user=self.request.user)
+
+
+class PortfolioActiveListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    serializer_class = PortfolioListSerializer
+    queryset = Portfolio.objects.filter(status=Portfolio.STATUS_ACTIVE)
+
+
+class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    serializer_class = PortfolioListSerializer
+
+    def get_queryset(self):
+        return Portfolio.objects.is_manager(self.request.user)
+
+
+class PortfolioCreateViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
+    serializer_class = PortfolioDetailsSerializer
+
+
+class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericViewSet):
+    serializer_class = PortfolioUpdateSerializer
+    queryset = Portfolio.objects.all()
+
+
+class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    serializer_class = PortfolioDetailsSerializer
+    queryset = Portfolio.objects.all()

@@ -12,7 +12,7 @@ from country.models import CustomQuestion
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -352,4 +352,101 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         instance = super().update(instance, validated_data)
         for row in rows:
             ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
+        return instance
+
+
+class PortfolioListSerializer(serializers.ModelSerializer):
+    project_count = serializers.SerializerMethodField()
+    managers = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'project_count', 'managers')
+
+    @staticmethod
+    def get_project_count(obj):
+        return len(obj.projects.published_only().filter(is_active=True))
+
+    @staticmethod
+    def get_managers(obj):
+        return obj.managers.all().values_list('id', flat=True)
+
+
+class ProblemStatementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProblemStatement
+        fields = ('id', 'name', 'description')
+
+
+class ProblemStatementUpdateSerializer(ProblemStatementSerializer):
+
+    class Meta(ProblemStatementSerializer.Meta):
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
+
+class PortfolioBaseSerializer(serializers.ModelSerializer):
+    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+
+
+class PortfolioDetailsSerializer(PortfolioBaseSerializer):
+    problem_statements = ProblemStatementSerializer(many=True, required=False)
+
+    @staticmethod
+    def _create_problem_statements(instance, problem_statements):
+        for ps in problem_statements:
+            ProblemStatement.objects.create(name=ps['name'], description=ps['description'], portfolio=instance)
+
+    def create(self, validated_data):
+        """
+        Creates new portfolio - needs explicit serializer due to nested fields
+        """
+        problem_statements = validated_data.pop('problem_statements')
+        instance = super().create(validated_data)
+
+        self._create_problem_statements(instance, problem_statements)
+
+        instance.save()
+
+        return instance
+
+
+class PortfolioUpdateSerializer(PortfolioBaseSerializer):
+    """
+    Used for update ONLY
+    """
+    problem_statements = ProblemStatementUpdateSerializer(many=True, required=False)
+
+    def update(self, instance, validated_data):
+        """
+        Override serializer due to nested Problem Statements
+        """
+
+        if 'problem_statements' in validated_data:  # this is to support PATCH update
+            ps_data = validated_data.pop('problem_statements')
+            instance = super().update(instance, validated_data)
+            # Handle delete
+            update_ids = {ps['id'] for ps in ps_data if 'id' in ps}
+            existing_pss = instance.problem_statements.all()
+
+            for ps_exist in existing_pss:
+                if ps_exist.id not in update_ids:  # Delete problem statements not in update data
+                    ps_exist.delete()
+            for ps in ps_data:
+                ps['portfolio_id'] = instance.id
+                ProblemStatement.objects.update_or_create(
+                    id=ps['id'] if 'id' in ps else None,
+                    defaults=ps
+                )
+        else:
+            instance = super().update(instance, validated_data)
         return instance
