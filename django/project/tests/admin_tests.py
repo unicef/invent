@@ -8,11 +8,12 @@ from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User, Permission
 
 from country.models import Country
-from project.admin import ProjectAdmin, DigitalStrategyAdmin, TechnologyPlatformAdmin
+from project.admin import ProjectAdmin, DigitalStrategyAdmin, TechnologyPlatformAdmin, PortfolioAdmin
 from user.models import UserProfile
-from project.models import Project, DigitalStrategy, TechnologyPlatform
+from project.models import Project, DigitalStrategy, TechnologyPlatform, Portfolio
 
 from project.tests.setup import MockRequest
+from core.utils import make_admin_list
 
 
 class TestAdmin(TestCase):
@@ -183,3 +184,21 @@ class TestAdmin(TestCase):
         pa = ProjectAdmin(Project, self.site)
         response = pa.changeform_view(request, object_id=str(p.id))
         self.assertTrue(isinstance(response, TemplateResponse))
+
+    def test_portfolio_admin_custom_fields(self):
+        pa = PortfolioAdmin(Portfolio, self.site)
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        self.request.user = self.user
+        self.userprofile.global_portfolio_owner = True
+        self.userprofile.save()
+
+        pr = Project.objects.create(name="test change view")
+
+        po = Portfolio.objects.create(name="test portfolio", description="test description")
+        po.projects.set([pr])
+        po.managers.set([self.userprofile])
+
+        self.assertEqual(pa.project_list(po), make_admin_list(po.projects.all()))
+        self.assertEqual(pa.managers_list(po), make_admin_list(po.managers.all()))
