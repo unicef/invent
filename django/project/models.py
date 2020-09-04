@@ -177,6 +177,51 @@ def on_create_init(sender, instance, created, **kwargs):
         ProjectApproval.objects.get_or_create(project_id=instance.id)
 
 
+class PortfolioManager(models.Manager):
+    use_in_migrations = True
+
+    def is_manager(self, user: User):
+        if user.userprofile.global_portfolio_owner:  # global portfolio owners have full rights
+            return self.all()
+        return self.filter(managers=user.userprofile)  # otherwise we filter for managed portfolios
+
+
+class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
+    pass
+
+
+class Portfolio(ExtendedNameOrderedSoftDeletedModel):
+    description = models.CharField(max_length=511)
+    icon = models.CharField(max_length=1, blank=True)
+    projects = models.ManyToManyField(Project, related_name='portfolios', blank=True)
+    managers = models.ManyToManyField(UserProfile, related_name="portfolios", blank=True)
+    STATUS_DRAFT = 'DR'
+    STATUS_ACTIVE = 'ACT'
+    STATUS_ARCHIVED = 'ARC'
+    STATUS_CHOICES = (
+        (STATUS_DRAFT, _('Draft')),
+        (STATUS_ACTIVE, _('Active')),
+        (STATUS_ARCHIVED, _('Archived'))
+    )
+
+    status = models.CharField(
+        max_length=3,
+        choices=STATUS_CHOICES,
+        default=STATUS_DRAFT
+    )
+    objects = PortfolioQuerySet.as_manager()
+
+
+class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
+    description = models.CharField(max_length=511)
+    portfolio = models.ForeignKey(Portfolio, blank=False, null=False, on_delete=models.CASCADE,
+                                  related_name='problem_statements')
+
+    # This is a workaround for some strange issue regarding ActiveQuerySet
+    class Meta:
+        default_manager_name = 'objects'
+
+
 class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval', on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, blank=True, null=True,

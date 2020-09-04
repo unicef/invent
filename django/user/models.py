@@ -53,6 +53,7 @@ class UserProfile(ExtendedModel):
         choices=ACCOUNT_TYPE_CHOICES,
         default=IMPLEMENTER,
     )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True, on_delete=models.SET_NULL)
@@ -60,6 +61,7 @@ class UserProfile(ExtendedModel):
     donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
+    global_portfolio_owner = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
