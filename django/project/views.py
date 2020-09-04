@@ -16,8 +16,8 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GP
 from country.models import Donor, FieldOffice, CountryOffice, RegionalOffice, Currency
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
-    UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, \
-    HardwarePlatform, NontechPlatform, PlatformFunction
+    UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
+    Phase, HardwarePlatform, NontechPlatform, PlatformFunction
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
