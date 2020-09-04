@@ -8,7 +8,7 @@ import project.cache
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0068_projectimportv2_country_office'),
+        ('project', '0069_portfolio_problemstatement'),
     ]
 
     operations = [
