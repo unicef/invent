@@ -251,3 +251,13 @@ class PortfolioTests(APITestCase):
         self.assertNotEqual(ps_3.id, ps_2.id)  # Check that we've actually created a new Problem Statement
         ps_1_recheck = ProblemStatement.objects.get(id=ps_1.id)
         self.assertEqual(ps_1_recheck.name, "PS 1 updated")
+
+    def test_remove_problem_statements(self):
+        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+        update_data = {'name': 'Port-O-Folio ultra updated', 'problem_statements': []}
+
+        response = self.user_3_client.patch(url, update_data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.json()['problem_statements']), 0)
+        self.assertEqual(response.json()['name'], 'Port-O-Folio ultra updated')

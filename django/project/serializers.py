@@ -380,9 +380,8 @@ class ProblemStatementSerializer(serializers.ModelSerializer):
 
 
 class ProblemStatementUpdateSerializer(ProblemStatementSerializer):
-    class Meta:
-        model = ProblemStatement
-        fields = ('id', 'name', 'description')
+
+    class Meta(ProblemStatementSerializer.Meta):
         extra_kwargs = {
             "id": {
                 "read_only": False,
@@ -437,7 +436,7 @@ class PortfolioUpdateSerializer(PortfolioBaseSerializer):
         Override serializer due to nested Problem Statements
         """
 
-        if validated_data.get('problem_statements'):  # this is to support PATCH update
+        if 'problem_statements' in validated_data:  # this is to support PATCH update
             ps_data = validated_data.pop('problem_statements')
             instance = super().update(instance, validated_data)
             # Handle delete
@@ -448,7 +447,7 @@ class PortfolioUpdateSerializer(PortfolioBaseSerializer):
                 if ps_exist.id not in update_ids:  # Delete problem statements not in update data
                     ps_exist.delete()
             for ps in ps_data:
-                ps['portfolio_id'] = instance.id if 'portfolio_id' not in ps else ps['portfolio_id']
+                ps['portfolio_id'] = instance.id
                 ProblemStatement.objects.update_or_create(
                     id=ps['id'] if 'id' in ps else None,
                     defaults=ps
