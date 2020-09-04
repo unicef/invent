@@ -60,6 +60,7 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('id'), user_profile_id)
         self.assertEqual(response.json().get('email'), "test_user1@gmail.com")
+        self.assertEqual(response.json().get('global_portfolio_owner'), False)
 
         # UNAUTHORIZED ACCESS
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format('RANDOM'), format="json")
