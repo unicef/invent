@@ -13,10 +13,11 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin
-from country.models import Donor, FieldOffice, CountryOffice
+from country.models import Donor, FieldOffice, CountryOffice, RegionalOffice, Currency
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
-    UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory
+    UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, \
+    HardwarePlatform, NontechPlatform, PlatformFunction
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
@@ -89,7 +90,15 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
-            field_offices=FieldOffice.objects.values('id', 'name', 'country_office_id')
+            field_offices=FieldOffice.objects.values('id', 'name', 'country_office_id'),
+            regional_offices=RegionalOffice.objects.values('id', 'name'),
+            currencies=Currency.objects.values('id', 'name', 'code'),
+            sectors=UNICEFSector.objects.values('id', 'name'),
+            regional_priorities=RegionalPriority.objects.values('id', 'name'),
+            phases=Phase.objects.values('id', 'name'),
+            hardware=HardwarePlatform.objects.values('id', 'name'),
+            nontech=NontechPlatform.objects.values('id', 'name'),
+            functions=PlatformFunction.objects.values('id', 'name')
         )
 
     @staticmethod
