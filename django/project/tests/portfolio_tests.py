@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from rest_framework.test import APITestCase, APIClient
 
-from project.models import Portfolio, ProblemStatement
+from project.models import Portfolio, ProblemStatement, Project
 from country.models import Country, Donor, CountryOffice
 from user.models import Organisation, UserProfile
 from user.tests import create_profile_for_user
@@ -261,3 +261,55 @@ class PortfolioTests(APITestCase):
 
         self.assertEqual(len(response.json()['problem_statements']), 0)
         self.assertEqual(response.json()['name'], 'Port-O-Folio ultra updated')
+
+    def test_add_and_remove_managers(self):
+        # create a brand new user to be a new manager
+        user_4_pr_id, user_4_client, user_4_key = \
+            self.create_user("the_new_guy@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
+        # get the list of current managers on the portfolio
+        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
+        response = self.user_1_client.get(url)
+        managers = response.json()['managers']
+        managers.append(user_4_pr_id)
+
+        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+        update_data = {'managers': managers}
+
+        response = self.user_3_client.patch(url, update_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['managers']), set(managers))
+        user_4_profile = UserProfile.objects.get(id=user_4_pr_id)
+
+        self.assertEqual(list(user_4_profile.portfolios.all().values_list('id', flat=True)), [self.portfolio_id])
+
+        update_data = {'managers': [self.user_3_pr_id]}
+
+        # user 4 removes themselves from being managers
+        response = user_4_client.patch(url, update_data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(set(response.json()['managers']), {self.user_3_pr_id})
+        user_4_profile = UserProfile.objects.get(id=user_4_pr_id)
+        self.assertEqual(list(user_4_profile.portfolios.all().values_list('id', flat=True)), [])
+
+    def test_add_and_remove_projects(self):
+        project_2_id = self.create_project("Test Project 2", self.org, self.country_office,
+                                           [self.d1, self.d2], self.user_1_client)
+        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
+        response = self.user_1_client.get(url)
+        projects = response.json()['projects']
+        projects.append(project_2_id)
+
+        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
+        update_data = {'projects': projects}
+        response = self.user_3_client.patch(url, update_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['projects']), set(projects))
+        project_2 = Project.objects.get(id=project_2_id)
+        self.assertEqual(list(project_2.portfolios.all().values_list('id', flat=True)), [self.portfolio_id])
+
+        update_data = {'projects': [self.project_1_id]}
+        response = self.user_3_client.patch(url, update_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['projects']), {self.project_1_id})
+        self.assertEqual(list(project_2.portfolios.all().values_list('id', flat=True)), [])
