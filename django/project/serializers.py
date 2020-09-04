@@ -410,16 +410,11 @@ class PortfolioDetailsSerializer(PortfolioBaseSerializer):
         """
         Creates new portfolio - needs explicit serializer due to nested fields
         """
-        managers = validated_data.pop('managers')
-        projects = validated_data.pop('projects')
-
         problem_statements = validated_data.pop('problem_statements')
-        instance = Portfolio.objects.create(**validated_data)
+        instance = super().create(validated_data)
 
         self._create_problem_statements(instance, problem_statements)
 
-        instance.managers.set(managers)
-        instance.projects.set(projects)
         instance.save()
 
         return instance
