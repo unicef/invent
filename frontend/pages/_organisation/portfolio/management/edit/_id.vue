@@ -7,18 +7,31 @@
         <fa icon="angle-left" size="sm" />
         <translate>Back</translate>
       </nuxt-link>
-      <h2><translate>Create new portfolio</translate></h2>
+      <h2>
+        <translate :parameters="{ name: name }">
+          Edit `{name}` portfolio
+        </translate>
+      </h2>
     </div>
-    <new-portfolio-form />
+    <new-portfolio-form edit />
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import NewPortfolioForm from "@/components/portfolio/form/NewPortfolioForm";
 
 export default {
   components: {
     NewPortfolioForm
+  },
+  fetch({ store, params }) {
+    store.dispatch("portfolio/getPortfolioDetails", params.id);
+  },
+  computed: {
+    ...mapState({
+      name: state => state.portfolio.name
+    })
   }
 };
 </script>
