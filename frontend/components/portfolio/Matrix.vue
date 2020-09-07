@@ -16,11 +16,15 @@
             :key="text"
           >{{ text }}</span>
         </div>
-        <div class="Elements">
+        <div
+          class="Elements"
+          :style="matrixStyle"
+        >
           <matrix-element
             v-for="(element, index) in elements"
             :key="`${element.x}_${element.y}`"
             :state="getState(index)"
+            :color="color"
             v-bind="element"
             @click="activeIndex = index"
           />
@@ -37,7 +41,7 @@
           />
           <div class="Content">
             <h4>List of projects ({{ active.projects.length }})</h4>
-            <p>{{ left[1] }}: {{ active.y }}&nbsp; &nbsp; {{ bottom[1] }}: {{ active.x }}</p>
+            <p>{{ leftText }}: {{ active.y }}&nbsp; &nbsp; {{ bottomText }}: {{ active.x }}</p>
           </div>
           <div class="List">
             <el-scrollbar
@@ -90,6 +94,18 @@ export default {
     bottom: {
       type: Array,
       required: true
+    },
+    color: {
+      type: String,
+      default: ''
+    },
+    bgColor: {
+      type: String,
+      default: ''
+    },
+    bgImage: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -98,11 +114,29 @@ export default {
     };
   },
   computed: {
+    leftText () {
+      return this.removeBracets(this.left[1]);
+    },
+    bottomText () {
+      return this.removeBracets(this.bottom[1]);
+    },
     active () {
       return this.activeIndex !== undefined ? this.elements[this.activeIndex] : undefined;
+    },
+    matrixStyle () {
+      if (this.bgImage) {
+        return `background-image: url(${this.bgImage})`;
+      }
+      if (this.bgColor) {
+        return `background-color: ${this.bgColor}`;
+      }
+      return '';
     }
   },
   methods: {
+    removeBracets (text) {
+      return text.replace(/.\(.*\)/, '');
+    },
     getPath (project) {
       return this.localePath({ name: 'organisation-projects-id-published', params: { organisation: '-', id: project.id } });
     },
@@ -185,6 +219,9 @@ export default {
           position: absolute;
           color: #A8A8A9;
           cursor: pointer;
+          &:hover {
+            color: black;
+          }
         }
         .Scroll {
           height: 490px;
@@ -217,7 +254,7 @@ export default {
     left: 40px;
     width: 560px;
     height: 560px;
-    background-image: url('/bg-ambition_matrix.svg');
+    //background-image: url('/bg-ambition_matrix.svg');
   }
   .Yaxis, .Xaxis {
     position: absolute;

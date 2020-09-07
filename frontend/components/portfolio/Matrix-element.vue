@@ -6,7 +6,7 @@
   >
     <div
       :class="`Shape ${state}`"
-      :style="`width: ${size}px; height: ${size}px`"
+      :style="`width: ${size}px; height: ${size}px; ${color ? 'background-color: '+ color : ''}`"
     />
   </div>
 </template>
@@ -31,6 +31,10 @@ export default {
     state: {
       type: String,
       default: ''
+    },
+    color: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -41,7 +45,8 @@ export default {
       return Math.floor(size / 5 * (5 - this.y));
     },
     size () {
-      return Math.floor(this.ratio * 100 / 25 + 1) * 20;
+      // return Math.floor(this.ratio * 100 / 25 + 1) * 20; // 20 || 40 || 60 || 80
+      return Math.floor(this.ratio * 100 * 6 / 10 + 20); // 20 < x < 80
     }
   }
 };
@@ -64,7 +69,7 @@ export default {
     &.inactive {
       opacity: 0.4;
     }
-    &.active {
+    &.active, &:hover {
       opacity: 1;
       box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.12);
     }
