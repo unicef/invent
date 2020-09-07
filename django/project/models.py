@@ -18,6 +18,7 @@ from project.utils import remove_keys
 from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
 
+from core.data.review_questions import REVIEWER_QUESTIONS, MANAGER_SCORES
 
 class ProjectManager(models.Manager):
     use_in_migrations = True
@@ -418,3 +419,21 @@ class ImportRow(models.Model):
     original_data = JSONField(default=dict)
     project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
+
+
+class BaseScore(models.Model):
+    ref_id = models.CharField(max_length=4)
+    choice = models.IntegerField(null=True, blank=True)
+    text_answer = models.CharField(max_length=255, null=True, blank=True)
+    problem_statement = models.ManyToManyField(ProblemStatement, null=True, blank=True, related_name='base_score')
+
+    class Meta:
+        abstract = True
+
+    def _get_data_obj(self):
+
+    def get_name(self):
+        return REVIEWER_QUESTIONS[self.ref_id]['name']
+
+    def get_text(self):
+        return REVIEWER_QUESTIONS[self.ref_id]
