@@ -6,7 +6,7 @@
         trigger="click"
         placement="bottom-end"
       >
-        <span class="title el-dropdown-link">
+        <span class="Title el-dropdown-link">
           Learning<i class="el-icon-caret-bottom el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -52,7 +52,38 @@
         label="PROBLEM STATEMENT MATRIX"
         name="problem"
       >
-        PROBLEM
+        <div class="Problems">
+          <el-row type="flex">
+            <el-col
+              v-for="(col, index) in ['Neglected', 'Moderate', 'High activity']"
+              :key="col"
+              span="8"
+            >
+              <div :class="`Problem Problem${index + 1}`">
+                <div class="Title">
+                  {{ col }}
+                </div>
+                <div>
+                  <radio
+                    v-for="statement in problemColumns[index]"
+                    :key="statement.id"
+                    :value="selectedProblem === statement.id"
+                    :disabled="disabledProblems.indexOf(statement.id) !== -1"
+                    @update="select(statement.id, $event)"
+                  >
+                    {{ statement.title }}
+                  </radio>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <div class="Info">
+              <i class="fas fa-info-circle" />
+              By clicking on a problem statement you can add or remove it from your current filter settings.
+            </div>
+          </el-row>
+        </div>
       </el-tab-pane>
       <el-tab-pane
         label="MAP VIEW"
@@ -66,13 +97,29 @@
 
 <script>
 import Matrix from '@/components/portfolio/Matrix';
+import Radio from '@/components/portfolio/form/inputs/Radio';
+import groupBy from 'lodash/groupBy';
 export default {
   components: {
-    Matrix
+    Matrix,
+    Radio
   },
   data () {
     return {
       activeName: 'ambition',
+      selectedProblem: -1,
+      disabledProblems: [3, 9],
+      problems: [
+        { id: 1, col: 0, title: 'Learners and Language of Instruction Learners and Language of Instruction ' },
+        { id: 2, col: 0, title: 'Learners and Language of Instruction' },
+        { id: 3, col: 0, title: 'Learners and Language of Instruction' },
+        { id: 4, col: 0, title: 'Learners and Language of Instruction' },
+        { id: 5, col: 1, title: 'Learners and Language of Instruction' },
+        { id: 6, col: 1, title: 'Learners and Language of Instruction' },
+        { id: 7, col: 1, title: 'Learners and Language of Instruction' },
+        { id: 8, col: 2, title: 'Learners and Language of Instruction' },
+        { id: 9, col: 2, title: 'Learners and Language of Instruction' }
+      ],
       elements: [
         {
           x: 4,
@@ -88,38 +135,29 @@ export default {
             { id: 7, title: 'Hoji Mobile Data Collection and Analysis Platform Hoji Mobile Data Collection and Analysis Platform' }
           ]
         },
-        {
-          x: 1,
-          y: 4,
-          ratio: 0.1,
-          projects: []
-        },
-        {
-          x: 3,
-          y: 4,
-          ratio: 0.1,
-          projects: []
-        },
-        {
-          x: 4,
-          y: 4,
-          ratio: 0.9,
-          projects: []
-        },
-        {
-          x: 3,
-          y: 3,
-          ratio: 0.7,
-          projects: []
-        },
-        {
-          x: 1,
-          y: 1,
-          ratio: 0.3,
-          projects: []
-        }
+        { x: 1, y: 4, ratio: 0.1, projects: [] },
+        { x: 3, y: 4, ratio: 0.1, projects: [] },
+        { x: 4, y: 4, ratio: 0.9, projects: [] },
+        { x: 3, y: 3, ratio: 0.7, projects: [] },
+        { x: 1, y: 1, ratio: 0.3, projects: [] }
       ]
     };
+  },
+  computed: {
+    problemColumns () {
+      return groupBy(this.problems, 'col');
+    }
+  },
+  methods: {
+    select (id, value) {
+      if (value) {
+        this.selectedProblem = id;
+        return;
+      }
+      if (this.selectedProblem === id) {
+        this.selectedProblem = -1;
+      }
+    }
   }
 };
 </script>
@@ -146,6 +184,7 @@ export default {
     line-height: 18px;
 
    & > div:before {
+    font-family: 'Font Awesome 5 Free';
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     display: inline-block;
@@ -154,7 +193,6 @@ export default {
     font-variant: normal;
     text-rendering: auto;
     line-height: 1;
-    font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     margin-right: 8px;
   }
@@ -182,7 +220,7 @@ export default {
   }
 
   }
-  .title {
+  span.Title {
     display: inline-block;
     cursor: pointer;
     font-size: 36px;
@@ -199,6 +237,48 @@ export default {
     letter-spacing: -1px;
     line-height: 45px;
     font-weight: normal;
+  }
+  .Problems {
+    background-color: white;
+    .Info {
+      color: #777779;
+      font-size: 12px;
+      letter-spacing: 0;
+      line-height: 15px;
+      padding: 16px;
+      .fa-info-circle {
+        margin-right: 3px;
+        font-size: 14px;
+        color: #A8A8A9;
+      }
+    }
+    .Problem {
+      height: 100%;
+      min-height: 560px;
+      &.Problem1 {
+        background-color: #CDEDF9;
+        margin-right: 7px;
+      }
+      &.Problem2 {
+        background-color: #ADE1F5;
+        margin-right: 3px;
+        margin-left: 3px;
+      }
+      &.Problem3 {
+        margin-left: 7px;
+        background-color: #7BCFEF;
+      }
+      & > .Title {
+        color: #404041;
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: -0.25px;
+        line-height: 23px;
+        text-align: center;
+        padding: 29px 0;
+        margin: 0;
+      }
+    }
   }
 }
 </style>
