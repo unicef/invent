@@ -1,10 +1,6 @@
 <template>
   <div class="NewProjectForm">
-    <el-form
-      ref="projectForm"
-      label-position="top"
-      @submit.native.prevent
-    >
+    <el-form ref="projectForm" label-position="top" @submit.native.prevent>
       <el-row type="flex">
         <el-col :span="18">
           <general-overview
@@ -51,13 +47,13 @@
 </template>
 
 <script>
-import { publishRules, draftRules } from '@/utilities/projects';
-import ProjectNavigation from './ProjectNavigation';
-import GeneralOverview from './sections/GeneralOverview';
-import focalOverview from './sections/FocalOverview';
-import ImplementationOverview from './sections/ImplementationOverview';
-import DonorCustom from './sections/DonorCustom';
-import { mapGetters, mapActions } from 'vuex';
+import { publishRules, draftRules } from "@/utilities/projects";
+import ProjectNavigation from "./ProjectNavigation";
+import GeneralOverview from "./sections/GeneralOverview";
+import focalOverview from "./sections/FocalOverview";
+import ImplementationOverview from "./sections/ImplementationOverview";
+import DonorCustom from "./sections/DonorCustom";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -68,9 +64,9 @@ export default {
     DonorCustom
   },
   $_veeValidate: {
-    validator: 'new'
+    validator: "new"
   },
-  data () {
+  data() {
     return {
       readyElements: 0,
       createdElements: 0,
@@ -80,35 +76,41 @@ export default {
   },
   computed: {
     ...mapGetters({
-      project: 'project/getProjectData',
-      countryAnswers: 'project/getCountryAnswers',
-      donorAnswers: 'project/getDonorsAnswers'
+      project: "project/getProjectData",
+      countryAnswers: "project/getCountryAnswers",
+      donorAnswers: "project/getDonorsAnswers"
     }),
-    isDraft () {
-      return this.$route.name.includes('organisation-projects-id-edit');
+    isDraft() {
+      return this.$route.name.includes("organisation-projects-id-edit");
     },
-    isNewProject () {
-      return this.$route.name.includes('organisation-projects-create');
+    isNewProject() {
+      return this.$route.name.includes("organisation-projects-create");
     },
     draftRules: draftRules,
     publishRules: publishRules,
-    rules () {
+    rules() {
       return this.usePublishRules ? this.publishRules : this.draftRules;
     }
   },
-  mounted () {
+  mounted() {
     if (this.$route.query.reloadDataFromStorage) {
       this.$nextTick(() => {
         this.$nuxt.$loading.start();
         try {
-          const stored = JSON.parse(window.localStorage.getItem('rescuedProject'));
+          const stored = JSON.parse(
+            window.localStorage.getItem("rescuedProject")
+          );
           this.initProjectState(stored);
         } catch (e) {
-          this.$alert(this.$gettext('Failed to restore auto-saved project'), this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('OK')
-          });
+          this.$alert(
+            this.$gettext("Failed to restore auto-saved project"),
+            this.$gettext("Warning"),
+            {
+              confirmButtonText: this.$gettext("OK")
+            }
+          );
         }
-        window.localStorage.removeItem('rescuedProject');
+        window.localStorage.removeItem("rescuedProject");
         this.$router.replace({ ...this.$route, query: undefined });
         this.$nuxt.$loading.finish();
       });
@@ -116,18 +118,22 @@ export default {
   },
   methods: {
     ...mapActions({
-      createProject: 'project/createProject',
-      saveDraft: 'project/saveDraft',
-      discardDraft: 'project/discardDraft',
-      publishProject: 'project/publishProject',
-      setLoading: 'project/setLoading',
-      initProjectState: 'project/initProjectState'
+      createProject: "project/createProject",
+      saveDraft: "project/saveDraft",
+      discardDraft: "project/discardDraft",
+      publishProject: "project/publishProject",
+      setLoading: "project/setLoading",
+      initProjectState: "project/initProjectState"
     }),
-    digitalHealthInterventionsValidator (rule, value, callback) {
-      const ownDhi = this.project.digitalHealthInterventions.filter(dhi => dhi.platform === value && dhi.id);
+    digitalHealthInterventionsValidator(rule, value, callback) {
+      const ownDhi = this.project.digitalHealthInterventions.filter(
+        dhi => dhi.platform === value && dhi.id
+      );
       if (ownDhi.length === 0) {
         const error = {
-          message: this.$gettext('Please select one or more Digital Health Intervetions for this Software'),
+          message: this.$gettext(
+            "Please select one or more Digital Health Intervetions for this Software"
+          ),
           field: rule.fullField
         };
         callback(error);
@@ -135,40 +141,51 @@ export default {
         callback();
       }
     },
-    async unCaughtErrorHandler (errors) {
+    async unCaughtErrorHandler(errors) {
       if (this.$sentry) {
-        this.$sentry.captureMessage('Un-caught validation error in project page', {
-          level: 'error',
-          extra: {
-            apiErrors: this.apiErrors,
-            errors
+        this.$sentry.captureMessage(
+          "Un-caught validation error in project page",
+          {
+            level: "error",
+            extra: {
+              apiErrors: this.apiErrors,
+              errors
+            }
           }
-        });
+        );
       }
 
       try {
-        await this.$confirm(this.$gettext('There was an un-caught validation error an automatic report has been submitted'),
-          this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('Recover & Reload'),
-            cancelButtonText: this.$gettext('Discard changes')
-          });
+        await this.$confirm(
+          this.$gettext(
+            "There was an un-caught validation error an automatic report has been submitted"
+          ),
+          this.$gettext("Warning"),
+          {
+            confirmButtonText: this.$gettext("Recover & Reload"),
+            cancelButtonText: this.$gettext("Discard changes")
+          }
+        );
         const project = {
           ...this.project,
           country_custom_answers: this.countryAnswers,
           donor_custom_answers: this.donorAnswers
         };
         const toStore = JSON.stringify(project);
-        window.localStorage.setItem('rescuedProject', toStore);
-        const newUrl = window.location.origin + this.$route.path + `?reloadDataFromStorage=true`;
+        window.localStorage.setItem("rescuedProject", toStore);
+        const newUrl =
+          window.location.origin +
+          this.$route.path +
+          `?reloadDataFromStorage=true`;
         window.location.href = newUrl;
       } catch (e) {
-        console.log('User declined the option to save, just reloading');
+        console.log("User declined the option to save, just reloading");
         window.location.reload(true);
       }
     },
-    handleErrorMessages () {
+    handleErrorMessages() {
       this.$nextTick(() => {
-        const errors = [...this.$el.querySelectorAll('.is-error')];
+        const errors = [...this.$el.querySelectorAll(".is-error")];
         const visibleErrors = errors.filter(e => e.offsetParent !== null);
         if (visibleErrors && visibleErrors.length > 0) {
           visibleErrors[0].scrollIntoView();
@@ -177,24 +194,24 @@ export default {
         }
       });
     },
-    async validate () {
+    async validate() {
       const validations = await Promise.all([
         this.$refs.generalOverview.validate(),
         this.$refs.focalOverview.validate(),
         this.$refs.implementationOverview.validate(),
         this.$refs.donorCustom.validate()
       ]);
-      console.log('root validations', validations);
+      console.log("root validations", validations);
       return validations.reduce((a, c) => a && c, true);
     },
-    clearValidation () {
+    clearValidation() {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
       this.$refs.focalOverview.clear();
       this.$refs.implementationOverview.clear();
       this.$refs.donorCustom.clear();
     },
-    async doSaveDraft () {
+    async doSaveDraft() {
       this.clearValidation();
       this.usePublishRules = false;
       this.$nextTick(async () => {
@@ -204,15 +221,22 @@ export default {
           try {
             if (this.isNewProject) {
               const id = await this.createProject();
-              const localised = this.localePath({ name: 'organisation-projects-id-edit', params: { ...this.$route.params, id } });
+              const localised = this.localePath({
+                name: "organisation-projects-id-edit",
+                params: { ...this.$route.params, id }
+              });
               this.$router.push(localised);
             } else if (this.isDraft) {
               await this.saveDraft(this.$route.params.id);
               location.reload();
             }
-            this.$alert(this.$gettext('Your draft has been saved successfully'), this.$gettext('Congratulation'), {
-              confirmButtonText: this.$gettext('Close')
-            });
+            this.$alert(
+              this.$gettext("Your draft has been saved successfully"),
+              this.$gettext("Congratulation"),
+              {
+                confirmButtonText: this.$gettext("Close")
+              }
+            );
             return;
           } catch (e) {
             if (e.response) {
@@ -226,27 +250,33 @@ export default {
         this.handleErrorMessages();
       });
     },
-    async doDiscardDraft () {
+    async doDiscardDraft() {
       try {
-        await this.$confirm(this.$gettext('The current draft will be overwritten by the published version'), this.$gettext('Attention'), {
-          confirmButtonText: this.$gettext('Ok'),
-          cancelButtonText: this.$gettext('Cancel'),
-          type: 'warning'
-        });
+        await this.$confirm(
+          this.$gettext(
+            "The current draft will be overwritten by the published version"
+          ),
+          this.$gettext("Attention"),
+          {
+            confirmButtonText: this.$gettext("Ok"),
+            cancelButtonText: this.$gettext("Cancel"),
+            type: "warning"
+          }
+        );
         await this.discardDraft(this.$route.params.id);
         this.$message({
-          type: 'success',
-          message: this.$gettext('Draft overriden with published version')
+          type: "success",
+          message: this.$gettext("Draft overriden with published version")
         });
       } catch (e) {
         this.setLoading(false);
         this.$message({
-          type: 'info',
-          message: this.$gettext('Action cancelled')
+          type: "info",
+          message: this.$gettext("Action cancelled")
         });
       }
     },
-    async doPublishProject () {
+    async doPublishProject() {
       this.clearValidation();
       this.usePublishRules = true;
       this.$nextTick(async () => {
@@ -254,11 +284,18 @@ export default {
         if (valid) {
           try {
             await this.publishProject(this.$route.params.id);
-            const localised = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params } });
-            this.$router.push(localised);
-            this.$alert(this.$gettext('Your draft has been published successfully'), this.$gettext('Congratulation'), {
-              confirmButtonText: this.$gettext('Close')
+            const localised = this.localePath({
+              name: "organisation-projects-id-published",
+              params: { ...this.$route.params }
             });
+            this.$router.push(localised);
+            this.$alert(
+              this.$gettext("Your draft has been published successfully"),
+              this.$gettext("Congratulation"),
+              {
+                confirmButtonText: this.$gettext("Close")
+              }
+            );
             return;
           } catch (e) {
             console.log(e);
@@ -270,38 +307,37 @@ export default {
       });
     }
   }
-
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .NewProjectForm {
-    .limitPageWidth();
+.NewProjectForm {
+  .limitPageWidth();
 
-    .Loader {
-      display: block;
-      margin: 0 auto 80px;
-       span {
-         margin: 0 auto;
-       }
+  .Loader {
+    display: block;
+    margin: 0 auto 80px;
+    span {
+      margin: 0 auto;
     }
+  }
 
-    > .el-form {
-      > .el-row > .el-col {
-        // form fieldsets
-        &:first-child {
-          width: calc(100% - @projectAsideNavWidth - 20px);
-          margin-right: 20px;
-        }
+  > .el-form {
+    > .el-row > .el-col {
+      // form fieldsets
+      &:first-child {
+        width: calc(100% - @projectAsideNavWidth - 20px);
+        margin-right: 20px;
+      }
 
-        // aside navigation
-        &:last-child {
-          width: @projectAsideNavWidth;
-        }
+      // aside navigation
+      &:last-child {
+        width: @projectAsideNavWidth;
       }
     }
   }
+}
 </style>

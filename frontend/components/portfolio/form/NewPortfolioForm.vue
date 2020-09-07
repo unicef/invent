@@ -30,9 +30,18 @@
         <translate>Cancel</translate>
       </el-button>
       <el-button
+        v-if="edit"
         type="text"
         size="large"
-        :disabled="disabled"
+        class="create-btn"
+        @click="handleEdit"
+      >
+        <translate>Save Portfolio</translate>
+      </el-button>
+      <el-button
+        v-else
+        type="text"
+        size="large"
         class="create-btn"
         @click="handleCreate"
       >
@@ -58,13 +67,18 @@ export default {
   $_veeValidate: {
     validator: "new"
   },
+  props: {
+    edit: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       readyElements: 0,
       createdElements: 0,
       usePublishRules: false,
-      apiErrors: {},
-      disabled: true
+      apiErrors: {}
     };
   },
   computed: {
@@ -80,7 +94,10 @@ export default {
   mounted() {},
   methods: {
     ...mapActions({
-      createPortfolio: "portfolio/createPortfolio"
+      createPortfolio: "portfolio/createPortfolio",
+      editPortfolio: "portfolio/editPortfolio",
+      resetPortfolio: "portfolio/resetPortfolio",
+      setLoading: "portfolio/setLoading"
     }),
     async unCaughtErrorHandler(errors) {
       // todo: change or tune in for portfolio
@@ -145,14 +162,78 @@ export default {
       this.apiErrors = {};
       this.$refs.generalSettings.clear();
     },
-    handleCreate() {
-      console.log("create");
+    async handleCreate() {
+      this.clearValidation();
+      this.usePublishRules = false;
+      this.$nextTick(async () => {
+        const general = await this.$refs.generalSettings.validateDraft();
+        if (general) {
+          try {
+            const id = await this.createPortfolio();
+            const localised = this.localePath({
+              name: "organisation-portfolio-management"
+            });
+            this.$router.push(localised);
+
+            this.$alert(
+              this.$gettext("Your portfolio has been created successfully"),
+              this.$gettext("Congratulation"),
+              {
+                confirmButtonText: this.$gettext("Close")
+              }
+            );
+            return;
+          } catch (e) {
+            if (e.response) {
+              this.apiErrors = e.response.data;
+            } else {
+              console.error(e);
+            }
+          }
+        }
+        this.handleErrorMessages();
+      });
+    },
+    async handleEdit() {
+      this.clearValidation();
+      this.usePublishRules = false;
+      this.$nextTick(async () => {
+        const general = await this.$refs.generalSettings.validateDraft();
+        if (general) {
+          try {
+            const id = await this.editPortfolio(this.$route.params.id);
+            const localised = this.localePath({
+              name: "organisation-portfolio-management"
+            });
+            this.$router.push(localised);
+
+            this.$alert(
+              this.$gettext("Your portfolio has been updated successfully"),
+              this.$gettext("Congratulation"),
+              {
+                confirmButtonText: this.$gettext("Close")
+              }
+            );
+            return;
+          } catch (e) {
+            if (e.response) {
+              this.apiErrors = e.response.data;
+            } else {
+              console.error(e);
+            }
+          }
+        }
+        this.handleErrorMessages();
+      });
     },
     handleCancel() {
       this.$router.push(
         this.localePath({ name: "organisation-portfolio-management" })
       );
     }
+  },
+  beforeDestroy() {
+    this.resetPortfolio();
   }
 };
 </script>

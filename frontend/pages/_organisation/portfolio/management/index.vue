@@ -23,10 +23,12 @@ export default {
   data() {
     return {};
   },
-  async fetch({ store }) {},
+  async fetch({ store }) {
+    store.dispatch("portfolio/getPortfolios");
+  },
   computed: {
     ...mapState({
-      items: state => state.portfolio.portfolioList
+      items: state => state.portfolio.portfolios
     })
   },
   methods: {}
@@ -48,7 +50,7 @@ export default {
     margin-bottom: calc(60px - 16px);
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    // justify-content: space-between;
   }
 }
 </style>
