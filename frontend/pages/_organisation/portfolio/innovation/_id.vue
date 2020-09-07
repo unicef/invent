@@ -30,16 +30,23 @@
         name="ambition"
       >
         <Matrix
+          bg-image="/bg-ambition_matrix.svg"
           :elements="elements"
           :left="['existing', 'challenge', 'new']"
-          :bottom="['existing', 'solution(tools)', 'new']"
+          :bottom="['existing', 'solution (tools)', 'new']"
         />
       </el-tab-pane>
       <el-tab-pane
         label="RISK-IMPACT MATRIX"
         name="risk"
       >
-        RISK-IMPACT
+        <Matrix
+          bg-color="#FCEFE8"
+          color="#F26A21"
+          :elements="elements"
+          :left="['low', 'risk', 'high']"
+          :bottom="['low', 'impact (total global need)', 'high']"
+        />
       </el-tab-pane>
       <el-tab-pane
         label="PROBLEM STATEMENT MATRIX"
