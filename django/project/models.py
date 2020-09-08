@@ -220,6 +220,7 @@ class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
     # This is a workaround for some strange issue regarding ActiveQuerySet
     class Meta:
         default_manager_name = 'objects'
+        ordering = ['name']
 
 
 class ProjectApproval(ExtendedModel):
