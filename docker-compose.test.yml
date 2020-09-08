@@ -1,46 +1,43 @@
 version: "3"
 
 services:
-    django:
-        environment:
-            - SITE_ID=3
-        # Current DO instance has 2 cores so (2 Workers * CPU Cores) + 1 = 5
-        command: /usr/local/bin/gunicorn tiip.wsgi:application -w 5 -b :8000 --timeout 120
-        volumes:
-            - ./django:/src
-            - ./nginx/site/static:/usr/share/django/static:rw
-            - ./django/media:/usr/share/django/media:rw
-            - log_data:/var/log/django
-            - media_data:/src/media
-            - ssh_data:/root/.ssh
+  django:
+    environment:
+      - SITE_ID=3
+    # Current DO instance has 2 cores so (2 Workers * CPU Cores) + 1 = 5
+    command: /usr/local/bin/gunicorn tiip.wsgi:application -w 5 -b :8000 --timeout 120
+    volumes:
+      - ./django:/src
+      - ./nginx/site/static:/usr/share/django/static:rw
+      - ./django/media:/usr/share/django/media:rw
+      - log_data:/var/log/django
+      - media_data:/src/media
 
-    celery:
-        environment:
-            - SITE_ID=3
-        volumes:
-            - ./django:/src
-            - log_data:/var/log/django
-            - ssh_data:/root/.ssh
+  celery:
+    environment:
+      - SITE_ID=3
+    volumes:
+      - ./django:/src
+      - log_data:/var/log/django
 
-    nginx:
-        volumes:
-        - ./nginx/site:/usr/share/nginx/html:rw
-        - ./nginx/conf.d_secure:/etc/nginx/conf.d:ro
-        - ./nginx/includes:/etc/nginx/includes:ro
-        - ./django/media:/usr/share/nginx/html/media:rw
-        - ./data/certbot/conf:/etc/letsencrypt
-        - ./data/certbot/www:/var/www/certbot
-        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  nginx:
+    volumes:
+      - ./nginx/site:/usr/share/nginx/html:rw
+      - ./nginx/conf.d_secure:/etc/nginx/conf.d:ro
+      - ./nginx/includes:/etc/nginx/includes:ro
+      - ./django/media:/usr/share/nginx/html/media:rw
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
-    certbot:
-        image: certbot/certbot
-        volumes:
-        - ./data/certbot/conf:/etc/letsencrypt
-        - ./data/certbot/www:/var/www/certbot
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
   postgres_data:
   log_data:
   media_data:
-  ssh_data:

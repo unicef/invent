@@ -116,21 +116,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      loadProjectList: "dashboard/loadProjectList",
-      setSavedFilters: "dashboard/setSavedFilters"
-    }),
-    searchParameterChanged: debounce(function(query) {
-      if (this.dashboardSection === "list") {
-        this.$router.replace({ ...this.$route, query });
-        this.load();
-      }
-    }, 100),
-    async load() {
-      this.$nuxt.$loading.start();
-      await this.loadProjectList();
-      this.$nuxt.$loading.finish();
-    },
+    // ...mapActions({
+    // setSavedFilters: "dashboard/setSavedFilters"
+    // }),
     handleTab(id) {
       this.tab = id;
     }
