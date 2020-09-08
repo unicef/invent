@@ -18,7 +18,8 @@ from project.utils import remove_keys
 from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
 
-from core.data.review_questions import REVIEWER_QUESTIONS, MANAGER_SCORES
+from core.data.review_questions import REVIEWER_QUESTIONS, MANAGER_QUESTIONS
+
 
 class ProjectManager(models.Manager):
     use_in_migrations = True
@@ -421,19 +422,81 @@ class ImportRow(models.Model):
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
 
 
-class BaseScore(models.Model):
-    ref_id = models.CharField(max_length=4)
-    choice = models.IntegerField(null=True, blank=True)
+class BaseQuestion(SoftDeleteModel):
+    ref_id = models.CharField(max_length=4, null=False, blank=False, unique=False)
+    choice_answer = models.IntegerField(null=True, blank=True)
     text_answer = models.CharField(max_length=255, null=True, blank=True)
-    problem_statement = models.ManyToManyField(ProblemStatement, null=True, blank=True, related_name='base_score')
+    problem_statement = models.ManyToManyField(ProblemStatement, blank=True)
 
     class Meta:
         abstract = True
 
-    def _get_data_obj(self):
-
-    def get_name(self):
-        return REVIEWER_QUESTIONS[self.ref_id]['name']
-
-    def get_text(self):
+    @property
+    def _data_obj(self):
         return REVIEWER_QUESTIONS[self.ref_id]
+
+    @property
+    def name(self):
+        return self._data_obj['name']
+
+    @property
+    def text(self):
+        return self._data_obj['text']
+
+    @property
+    def choices(self):
+        return self._data_obj['choices']
+
+    @property
+    def guidance(self):
+        return self._data_obj['guidance']
+
+    @property
+    def type(self):
+        return self._data_obj['type']
+
+    @property
+    def answer(self):
+        if self.type == 'Select':
+            return self.choice_answer
+        elif self.type == 'SelectExtended':
+            return self.choice_answer, self.text_answer
+        elif self.type == 'ProblemStatement':
+            return self.problem_statement
+
+
+class ManagerQuestion(BaseQuestion):
+    @property
+    def _data_obj(self):
+        return MANAGER_QUESTIONS[self.ref_id]
+
+
+class ProjectPortfolioState(SoftDeleteModel):
+    impact = models.ForeignKey(ManagerQuestion, on_delete=models.CASCADE, related_name='portfolio_impacts', null=True)
+    scale_phase = models.ForeignKey(ManagerQuestion, on_delete=models.CASCADE, related_name='portfolio_scale_phases',
+                                    null=True)
+    is_done = models.BooleanField(null=True, blank=True, default=False)
+    portfolio = models.OneToOneField(Portfolio, related_name='review_state', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
+
+    def assign_questionnaire(self, user: UserProfile):
+        review_questions = ReviewQuestion.objects.filter(reviewer=user, portfolio_review=self.id)
+        if review_questions:
+            return False, review_questions  # pragma: no cover
+        for ref_id in REVIEWER_QUESTIONS.keys():
+            ReviewQuestion.objects.create(ref_id=ref_id, reviewer=user, portfolio_review=self)
+        review_questions = ReviewQuestion.objects.filter(reviewer=user, portfolio_review=self)
+
+        return True, review_questions
+
+
+@receiver(post_save, sender=ProjectPortfolioState)
+def on_create_init_manager_questions(sender, instance, created, **kwargs):
+    if created:
+        instance.impact = ManagerQuestion.objects.create(ref_id='m_i')
+        instance.scale_phase = ManagerQuestion.objects.create(ref_id='m_sp')
+
+
+class ReviewQuestion(BaseQuestion):
+    reviewer = models.ForeignKey(UserProfile, related_name='review_questions', on_delete=models.CASCADE)
+    portfolio_review = models.ForeignKey(ProjectPortfolioState, related_name='questions', on_delete=models.CASCADE)

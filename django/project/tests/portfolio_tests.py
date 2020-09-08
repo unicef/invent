@@ -10,7 +10,7 @@ from user.models import Organisation, UserProfile
 from user.tests import create_profile_for_user
 
 
-class PortfolioTests(APITestCase):
+class PortfolioSetup(APITestCase):
     def create_user(self, user_email, user_password1, user_password_2):
         """
         Create a test user with profile.
@@ -142,8 +142,10 @@ class PortfolioTests(APITestCase):
         response = self.create_portfolio("Test Portfolio 1", "Port-o-folio", [self.user_3_pr_id], [self.project_1_id],
                                          self.user_2_client)
         self.assertEqual(response.status_code, 201, response.json())
-
         self.portfolio_id = response.json()['id']
+
+
+class PortfolioTests(PortfolioSetup):
 
     def test_list_portfolios(self):
         """
