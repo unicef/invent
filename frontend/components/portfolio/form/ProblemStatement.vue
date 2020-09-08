@@ -11,8 +11,6 @@
 
 <script>
 import { mapGettersActions } from "@/utilities/form";
-// import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
-// import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
 import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
 import Statements from "@/components/portfolio/form/inputs/Statements";
 
@@ -21,7 +19,6 @@ export default {
     CollapsibleCard,
     Statements
   },
-  // mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   methods: {
     async validate() {
       this.$refs.collapsible.expandCard();
