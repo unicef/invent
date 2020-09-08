@@ -19,8 +19,8 @@ REVIEWER_QUESTIONS = {
             'text': _(
                 'Which problem statement(s) (if any) does this project address across the relevant portfolio(s)?'),
             'guidance': _('Please select from the list below the problem statement(s) that this project substantially '
-                          'addresses. While many projects will touch on multiple problem statements, please limit selection '
-                          'to the 1-2 problem statements that are most relevant'),
+                          'addresses. While many projects will touch on multiple problem statements, please limit '
+                          'selection to the 1-2 problem statements that are most relevant'),
             'type': 'ProblemStatement',
             'choices': None
             },
@@ -92,7 +92,8 @@ REVIEWER_QUESTIONS = {
            'name': _('Path to Scale'),
            'text': _('Does this innovation have a sustainable and scalable business or operating model?'),
            'guidance': _('1 – No obvious path to sustainable scale for UNICEF and partners\n'
-                         '3 – Potential scaling / sustainability models exist, but need further refinement and testing\n'
+                         '3 – Potential scaling / sustainability models exist, but need further refinement and '
+                         'testing\n '
                          '5 – Robust business model for scale is in place'),
            'type': 'Select',
            'choices': standardChoices,
