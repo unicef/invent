@@ -25,8 +25,8 @@ export default {
   components: {
     NewPortfolioForm
   },
-  fetch({ store, params }) {
-    store.dispatch("portfolio/getPortfolioDetails", params.id);
+  async fetch({ store, params }) {
+    await store.dispatch("portfolio/getPortfolioDetails", params.id);
   },
   data() {
     return {
