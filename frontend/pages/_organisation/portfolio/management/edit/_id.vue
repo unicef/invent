@@ -8,7 +8,7 @@
         <translate>Back</translate>
       </nuxt-link>
       <h2>
-        <translate :parameters="{ name: name }">
+        <translate :parameters="{ name: fixedName }">
           Edit `{name}` portfolio
         </translate>
       </h2>
@@ -27,6 +27,14 @@ export default {
   },
   fetch({ store, params }) {
     store.dispatch("portfolio/getPortfolioDetails", params.id);
+  },
+  data() {
+    return {
+      fixedName: ""
+    };
+  },
+  mounted() {
+    this.fixedName = this.name;
   },
   computed: {
     ...mapState({
