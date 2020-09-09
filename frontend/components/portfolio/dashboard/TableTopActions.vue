@@ -35,17 +35,98 @@
           </xlsx-workbook>
         </template>
       </list-export>
-      <el-select
-        v-model="exportType"
-        :disabled="selectedRows.length === 0"
-        size="small"
-      >
+      <el-select v-model="exportType" :disabled="disabled" size="small">
         <el-option label="CSV" value="CSV" />
         <el-option label="XLSX" value="XLSX" />
         <el-option label="PDF" value="PDF" />
       </el-select>
     </div>
-    <div class="right">Actions</div>
+    <div class="right">
+      <div class="settings">
+        <el-popover
+          v-model="columnSelectorOpen"
+          :title="settingsTitle"
+          placement="bottom-end"
+          width="220"
+          trigger="click"
+          popper-class="CustomPopover TableSettingsDropdown"
+          @show="popperOpenHandler"
+        >
+          <el-button
+            slot="reference"
+            type="text"
+            class="TableSettingsButton IconLeft"
+          >
+            <fa icon="cog" />
+          </el-button>
+
+          <div class="CustomPopoverList Small ColumnSelector">
+            <ul class="ColumnList">
+              <li
+                v-for="c in selectedColumns"
+                :key="c.id"
+                :class="['Item', { Selected: c.selected }]"
+                @click="c.selected = !c.selected"
+              >
+                <fa icon="check" />
+                {{ c.label }}
+              </li>
+            </ul>
+            <div class="CustomPopoverActions">
+              <el-row type="flex" align="middle">
+                <el-col>
+                  <el-button
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="columnSelectorOpen = false"
+                  >
+                    <translate>Cancel</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    type="text"
+                    size="small"
+                    class="PrimaryButton"
+                    @click="updateColumns"
+                  >
+                    <translate>Update</translate>
+                  </el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-popover>
+      </div>
+      <div class="move">
+        <small>
+          <translate>Actions:</translate>
+        </small>
+        <el-tooltip v-if="tab !== 1" :content="moveTo[back]" placement="top">
+          <el-button
+            type="danger"
+            size="small"
+            circle
+            :disabled="disabled"
+            @click="handleClickBack"
+          >
+            <fa icon="arrow-left" />
+          </el-button>
+        </el-tooltip>
+        <el-tooltip v-if="tab !== 3" :content="moveTo[forward]" placement="top">
+          <el-button
+            type="success"
+            size="small"
+            circle
+            :disabled="disabled"
+            @click="handleClickForward"
+          >
+            <fa icon="arrow-right" />
+          </el-button>
+        </el-tooltip>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -54,7 +135,7 @@ import { XlsxWorkbook, XlsxSheet, XlsxDownload } from "vue-xlsx";
 import PdfExport from "@/components/dashboard/PdfExport";
 import ListExport from "@/components/dashboard/ListExport";
 
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -67,79 +148,62 @@ export default {
   data() {
     return {
       exportType: "XLSX",
+      viewportSize: 2000,
+      moveTo: [
+        this.$gettext("Move to Inventory"),
+        this.$gettext("Move to Review"),
+        this.$gettext("Move to Porfolio")
+      ],
+      back: 0,
+      forward: 1,
+      // settings
       columnSelectorOpen: false,
-      selectedColumns: [],
-      viewportSize: 2000
+      selectedColumns: []
     };
   },
   computed: {
+    ...mapState({
+      tab: state => state.portfolio.tab
+    }),
     ...mapGetters({
-      columns: "dashboard/getAvailableColumns",
-      selectedCol: "dashboard/getSelectedColumns",
       selectedRows: "dashboard/getSelectedRows",
       allSelected: "dashboard/getSelectAll",
       total: "dashboard/getTotal",
-      user: "user/getProfile",
+      // user: "user/getProfile",
       projects: "dashboard/getProjectsBucket",
-      dashboardId: "dashboard/getDashboardId",
-      dashboardType: "dashboard/getDashboardType"
+      // dashboardId: "dashboard/getDashboardId",
+      // dashboardType: "dashboard/getDashboardType",
+      // settings
+      columns: "dashboard/getAvailableColumns",
+      selectedCol: "dashboard/getSelectedColumns"
     }),
-    settingsTitle() {
-      return `${this.$gettext("main fields")} (${this.selectedCol.length}/${
-        this.columns.length
-      })`;
-    },
     selected() {
       return this.allSelected ? this.total : this.selectedRows.length;
+    },
+    disabled() {
+      return this.selectedRows.length === 0;
     },
     rowToExport() {
       return this.allSelected
         ? this.projects
         : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
     },
-    showEmailButton() {
-      const allowed = ["CA", "SCA", "D", "DA", "SDA"];
-      if (this.user) {
-        return (
-          allowed.includes(this.user.account_type) || this.user.is_superuser
-        );
-      }
-      return false;
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.setViewport();
-      window.addEventListener("resize", this.setViewport);
-    });
-  },
-  beforeDestroy() {
-    if (process.client) {
-      window.removeEventListener("resize", this.setViewport);
+    // settings
+    settingsTitle() {
+      return `${this.$gettext("main fields")} (${this.selectedCol.length}/${
+        this.columns.length
+      })`;
     }
   },
   methods: {
     ...mapActions({
-      setSelectedColumns: "dashboard/setSelectedColumns",
       setSelectAll: "dashboard/setSelectAll",
-      setSendEmailDialogState: "layout/setSendEmailDialogState",
       loadProjectsBucket: "dashboard/loadProjectsBucket",
-      setSelectedRows: "dashboard/setSelectedRows"
+      setSelectedRows: "dashboard/setSelectedRows",
+      setTab: "portfolio/setTab",
+      // settings
+      setSelectedColumns: "dashboard/setSelectedColumns"
     }),
-    setViewport() {
-      if (process.client && window) {
-        this.viewportSize = window.innerWidth;
-      }
-    },
-    popperOpenHandler() {
-      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
-    },
-    updateColumns() {
-      this.setSelectedColumns(
-        this.selectedColumns.filter(s => s.selected).map(s => s.id)
-      );
-      this.columnSelectorOpen = false;
-    },
     async toggleSelectAll() {
       if (!this.allSelected) {
         await this.loadProjectsBucket();
@@ -160,11 +224,30 @@ export default {
         this.$nuxt.$loading.finish("pdf");
       }, 500);
     },
-    async openMailDialog() {
-      if (this.allSelected) {
-        await this.loadProjectsBucket();
-      }
-      this.setSendEmailDialogState(true);
+    // back and forward values
+    handleClickBack() {
+      this.setTab(this.tab - 1);
+      console.log("Move projects back");
+      this.handleActions();
+    },
+    handleClickForward() {
+      this.setTab(this.tab + 1);
+      console.log("Move projects forward");
+      this.handleActions();
+    },
+    handleActions() {
+      this.back = this.tab - 2;
+      this.forward = this.tab;
+    },
+    // settings
+    popperOpenHandler() {
+      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
+    },
+    updateColumns() {
+      this.setSelectedColumns(
+        this.selectedColumns.filter(s => s.selected).map(s => s.id)
+      );
+      this.columnSelectorOpen = false;
     }
   }
 };
@@ -190,6 +273,26 @@ export default {
     }
     .el-select {
       width: 84px;
+    }
+  }
+  .right {
+    display: flex;
+    align-items: center;
+    .settings {
+      margin-right: 20px;
+      button {
+        font-size: 20px;
+      }
+    }
+    .move {
+      padding-left: 20px;
+      border-left: 1px solid #eae6e2;
+      small {
+        font-size: 12px;
+        letter-spacing: 0;
+        line-height: 15px;
+        margin-right: 16px;
+      }
     }
   }
 }

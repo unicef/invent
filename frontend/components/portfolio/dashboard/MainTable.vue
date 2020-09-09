@@ -402,7 +402,7 @@ export default {
       this.setSelectedRows(selection.map(s => s.id));
     },
     rowClassCalculator({ row }) {
-      return this.selectedRows.includes("row".id) ? "Selected" : "NotSelected";
+      return this.selectedRows.includes(row.id) ? "Selected" : "NotSelected";
     },
     sortChanged({ prop, order }) {
       if (order === "descending") {
@@ -474,7 +474,17 @@ export default {
     100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
       @appFooterHeight - 93px
   );
-
+  .el-table--border th {
+    border-right: 1px solid @colorWhite;
+  }
+  .el-table--group,
+  .el-table--border {
+    border: 0px solid transparent;
+  }
+  .el-table__body tr.hover-row > td,
+  .el-table__body tr.hover-row.current-row > td {
+    background-color: #e8f6fd;
+  }
   // Custom table template
   .el-table {
     th,
@@ -482,16 +492,28 @@ export default {
       vertical-align: top;
     }
 
+    .caret-wrapper .sort-caret {
+      &.ascending {
+        border-bottom-color: @colorWhite;
+      }
+      &.descending {
+        border-top-color: @colorWhite;
+      }
+    }
+
     th {
+      background-color: @colorBrandPrimary;
       > .cell {
-        line-height: 24px;
-        // truncate long headers
+        font-size: @fontSizeSmall;
+        color: @colorWhite;
+        font-weight: bold;
+        letter-spacing: 0;
+        line-height: 29px;
         white-space: nowrap;
-        //
       }
 
       &.is-leaf {
-        border-bottom-color: @colorTextMuted;
+        border-bottom-color: @colorWhite;
       }
 
       // Disable select-all-row
@@ -503,6 +525,7 @@ export default {
     }
 
     td {
+      height: 58px;
       > .cell {
         line-height: 17px;
         word-break: normal;
@@ -515,17 +538,6 @@ export default {
           -webkit-box-orient: vertical;
           // With 17 in the calc the fixed columns and the rest of the table go out of sync
           max-height: calc(16.5px * 4);
-
-          // &::after {
-          //   content: "";
-          //   text-align: right;
-          //   position: absolute;
-          //   bottom: 0;
-          //   right: 0;
-          //   width: 20%;
-          //   height: 17px;
-          //   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-          // }
         }
 
         a {
@@ -540,11 +552,7 @@ export default {
     .el-table__row {
       &.Selected {
         > td {
-          background-color: #fffbdc;
-
-          &.el-table-column--selection {
-            box-shadow: inset 2px 0 0 #fbc02d;
-          }
+          background-color: #e8f6fd;
         }
       }
     }
@@ -557,7 +565,7 @@ export default {
 
     .caret-wrapper {
       position: absolute;
-      top: 1px;
+      top: 4px;
       right: 4px;
     }
 
@@ -674,9 +682,8 @@ export default {
     height: 53px;
     //
     box-sizing: border-box;
-    border: solid @colorGrayLight;
-    border-width: 1px 1px 2px;
-    background-color: @colorBrandBlueLight;
+    border-top: 1px solid @colorGrayLight;
+    background-color: @colorWhite;
     text-align: right;
 
     .el-pagination {
@@ -693,17 +700,14 @@ export default {
         margin: 0 10px;
         font-size: @fontSizeSmall;
         color: @colorTextSecondary;
+        letter-spacing: 0;
+        line-height: 15px;
       }
 
       button {
         padding: 0;
         background-color: transparent;
         transition: @transitionAll;
-
-        &:hover {
-          background-color: lighten(@colorBrandBlueLight, 3%);
-        }
-
         i {
           font-size: @fontSizeLarge;
           font-weight: 700;

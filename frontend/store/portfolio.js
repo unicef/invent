@@ -55,7 +55,14 @@ export const state = () => ({
     { id: "ARC", name: "Archived" }
   ],
   portfolios: [],
-  portfolio: {}
+  portfolio: {},
+  // dashboard of portfolio manager
+  tabs: [
+    { id: 1, name: "Inventory", icon: "folder", total: 46 },
+    { id: 2, name: "For review", icon: "eye", total: 18 },
+    { id: 3, name: "Portfolio", icon: "briefcase", total: 35 }
+  ],
+  tab: 1
 });
 
 export const getters = {
@@ -89,6 +96,9 @@ export const actions = {
   },
   setLoading({ commit }, value) {
     commit("SET_LOADING", value);
+  },
+  setTab({ commit }, val) {
+    commit("SET_TAB", val);
   },
   async createPortfolio({ state, getters, dispatch }) {
     dispatch("setLoading", "create");
@@ -187,5 +197,8 @@ export const mutations = {
   },
   SET_PORTFOLIO: (state, portfolio) => {
     state.portfolio = portfolio;
+  },
+  SET_TAB: (state, tab) => {
+    state.tab = tab;
   }
 };
