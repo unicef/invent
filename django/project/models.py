@@ -420,7 +420,7 @@ class ImportRow(models.Model):
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
 
 
-class BaseScore(SoftDeleteModel, ExtendedModel):
+class BaseScore(ExtendedModel):
     BASE_CHOICES = [(i, i) for i in range(1, 6)]
     psa = models.ManyToManyField(ProblemStatement, blank=True)  # Problem Statement Alignment
     rnci = models.IntegerField(choices=BASE_CHOICES, null=True)  # Reach: Number of Children Impacted
@@ -436,7 +436,7 @@ class BaseScore(SoftDeleteModel, ExtendedModel):
         abstract = True
 
 
-class ScalePhase(SoftDeleteModel, ExtendedModel):
+class ScalePhase(ExtendedModel):
     SCALE_CHOICES = (
         (1, _('Ideation')),
         (2, _('Research & Development')),
