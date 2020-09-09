@@ -12,5 +12,12 @@ class ReviewTests(PortfolioSetup):
         self.pps = ProjectPortfolioState.objects.create(project=self.project, portfolio=self.portfolio)
         self.user_1_profile = UserProfile.objects.get(id=self.user_1_pr_id)
 
-    def test_portfolio_review_assign_questions(self):
-        self.pps.assign_questionnaire(self.user_1_profile)
+    def test_review_assign_questions(self):
+        review, created = self.pps.assign_questionnaire(self.user_1_profile)
+        self.assertTrue(created)
+        self.assertIsNotNone(review)
+        review_id = review.id
+        review, created = self.pps.assign_questionnaire(self.user_1_profile)
+        self.assertFalse(created)
+        self.assertIsNotNone(review)
+        self.assertEqual(review.id, review_id)

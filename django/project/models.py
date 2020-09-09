@@ -421,14 +421,8 @@ class ImportRow(models.Model):
 
 
 class BaseScore(SoftDeleteModel):
-    BASE_CHOICES = (
-        (1, 1),
-        (2, 2),
-        (3, 3),
-        (4, 4),
-        (5, 5),
-    )
-    psa = models.ManyToManyField(ProblemStatement, null=True)  # Problem Statement Alignment
+    BASE_CHOICES = [(i, i) for i in range(1, 6)]
+    psa = models.ManyToManyField(ProblemStatement, blank=True)  # Problem Statement Alignment
     rnci = models.IntegerField(choices=BASE_CHOICES, null=True)  # Reach: Number of Children Impacted
     ratp = models.IntegerField(choices=BASE_CHOICES, null=True)  # Reach: Addressing Target Populations
     ra = models.IntegerField(choices=BASE_CHOICES, null=True)  # Risk Assessment
@@ -442,16 +436,21 @@ class BaseScore(SoftDeleteModel):
         abstract = True
 
 
-class ProjectPortfolioState(BaseScore):
-    MANAGER_CHOICES = (
-        (1, 1),
-        (2, 2),
-        (3, 3),
-        (4, 4),
-        (5, 5),
+class ScalePhase(SoftDeleteModel):
+    SCALE_CHOICES = (
+        (1, _('Ideation')),
+        (2, _('Research & Development')),
+        (3, _('Proof of Concept')),
+        (4, _('Transition to Scale')),
+        (5, _('Scaling')),
+        (6, _('Sustainable Scale'))
     )
+    phase = models.IntegerField(choices=SCALE_CHOICES, primary_key=True)
+
+
+class ProjectPortfolioState(BaseScore):
     impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True)
-    scale_phase = models.IntegerField(choices=MANAGER_CHOICES, null=True)
+    scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE)
     portfolio = models.ForeignKey(Portfolio, related_name='review_state', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
 
