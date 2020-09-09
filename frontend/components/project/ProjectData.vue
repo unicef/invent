@@ -280,9 +280,9 @@ export default {
     selectedRegionOffice () {
       if (this.office) {
         const office = this.regionalOffices.find(obj => obj.id === this.office.regional_office);
-        return office ? office.name : 'N/A';
+        return office ? office.name : '';
       }
-      return 'N/A';
+      return '';
     },
     lastUpdated () {
       return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
