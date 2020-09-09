@@ -41,7 +41,7 @@
       >
         <template slot="label">
           <translate key="country_office">
-            Country Office
+            Unicef Office
           </translate>
         </template>
         <country-office-select
@@ -68,6 +68,15 @@
           </translate>
         </template>
         {{ selectedRegion }}
+      </custom-required-form-item>
+
+      <custom-required-form-item>
+        <template slot="label">
+          <translate key="multi-or-regional-office">
+            Multicountry or Regional Office
+          </translate>
+        </template>
+        {{ regionalOffice }}
       </custom-required-form-item>
 
       <custom-required-form-item>
@@ -267,12 +276,14 @@ export default {
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapState({
-      offices: state => state.offices.offices
+      offices: state => state.offices.offices,
+      office: state => state.offices.office,
     }),
     ...mapGetters({
       unicef_regions: "system/getUnicefRegions",
       getCountryDetails: "countries/getCountryDetails",
-      modified: "project/getModified"
+      modified: "project/getModified",
+      regionalOffices: "projects/getRegionalOffices"
     }),
     ...mapGettersActions({
       name: ["project", "getName", "setName", 0],
@@ -314,6 +325,10 @@ export default {
     countryOfOffice() {
       const office = this.offices.find(obj => obj.id === this.country_office);
       return office ? this.getCountryDetails(office.country).name : "N/A";
+    },
+    regionalOffice() {
+      const office = this.regionalOffices.find(obj => obj.id === this.office.regional_office);
+      return office ? office.name : "";
     },
     lastUpdated() {
       return format(new Date(this.modified), "DD/MM/YYYY HH:mm");
