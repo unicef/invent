@@ -18,8 +18,6 @@ from project.utils import remove_keys
 from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
 
-from core.data.review_questions import REVIEWER_QUESTIONS, MANAGER_QUESTIONS
-
 
 class ProjectManager(models.Manager):
     use_in_migrations = True
@@ -422,81 +420,45 @@ class ImportRow(models.Model):
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
 
 
-class BaseQuestion(SoftDeleteModel):
-    ref_id = models.CharField(max_length=4, null=False, blank=False, unique=False)
-    choice_answer = models.IntegerField(null=True, blank=True)
-    text_answer = models.CharField(max_length=255, null=True, blank=True)
-    problem_statement = models.ManyToManyField(ProblemStatement, blank=True)
+class BaseScore(SoftDeleteModel):
+    BASE_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    )
+    psa = models.ManyToManyField(ProblemStatement, null=True)  # Problem Statement Alignment
+    rnci = models.IntegerField(choices=BASE_CHOICES, null=True)  # Reach: Number of Children Impacted
+    ratp = models.IntegerField(choices=BASE_CHOICES, null=True)  # Reach: Addressing Target Populations
+    ra = models.IntegerField(choices=BASE_CHOICES, null=True)  # Risk Assessment
+    ra_comment = models.CharField(max_length=255, null=True)  # Risk Assessment - text field
+    ee = models.IntegerField(choices=BASE_CHOICES, null=True)  # Evidence of Effectiveness
+    nst = models.IntegerField(choices=BASE_CHOICES, null=True)  # Newness of Solution (Tool)
+    nc = models.IntegerField(choices=BASE_CHOICES, null=True)  # Newness of Challenge
+    ps = models.IntegerField(choices=BASE_CHOICES, null=True)  # Path to Scale
 
     class Meta:
         abstract = True
 
-    @property
-    def _data_obj(self):
-        return REVIEWER_QUESTIONS[self.ref_id]
 
-    @property
-    def name(self):
-        return self._data_obj['name']
-
-    @property
-    def text(self):
-        return self._data_obj['text']
-
-    @property
-    def choices(self):
-        return self._data_obj['choices']
-
-    @property
-    def guidance(self):
-        return self._data_obj['guidance']
-
-    @property
-    def type(self):
-        return self._data_obj['type']
-
-    @property
-    def answer(self):
-        if self.type == 'Select':
-            return self.choice_answer
-        elif self.type == 'SelectExtended':
-            return self.choice_answer, self.text_answer
-        elif self.type == 'ProblemStatement':
-            return self.problem_statement
-
-
-class ManagerQuestion(BaseQuestion):
-    @property
-    def _data_obj(self):
-        return MANAGER_QUESTIONS[self.ref_id]
-
-
-class ProjectPortfolioState(SoftDeleteModel):
-    impact = models.ForeignKey(ManagerQuestion, on_delete=models.CASCADE, related_name='portfolio_impacts', null=True)
-    scale_phase = models.ForeignKey(ManagerQuestion, on_delete=models.CASCADE, related_name='portfolio_scale_phases',
-                                    null=True)
-    is_done = models.BooleanField(null=True, blank=True, default=False)
-    portfolio = models.OneToOneField(Portfolio, related_name='review_state', on_delete=models.CASCADE)
+class ProjectPortfolioState(BaseScore):
+    MANAGER_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    )
+    impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True)
+    scale_phase = models.IntegerField(choices=MANAGER_CHOICES, null=True)
+    portfolio = models.ForeignKey(Portfolio, related_name='review_state', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
 
     def assign_questionnaire(self, user: UserProfile):
-        review_questions = ReviewQuestion.objects.filter(reviewer=user, portfolio_review=self.id)
-        if review_questions:
-            return False, review_questions  # pragma: no cover
-        for ref_id in REVIEWER_QUESTIONS.keys():
-            ReviewQuestion.objects.create(ref_id=ref_id, reviewer=user, portfolio_review=self)
-        review_questions = ReviewQuestion.objects.filter(reviewer=user, portfolio_review=self)
-
-        return True, review_questions
+        return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
 
 
-@receiver(post_save, sender=ProjectPortfolioState)
-def on_create_init_manager_questions(sender, instance, created, **kwargs):
-    if created:
-        instance.impact = ManagerQuestion.objects.create(ref_id='m_i')
-        instance.scale_phase = ManagerQuestion.objects.create(ref_id='m_sp')
-
-
-class ReviewQuestion(BaseQuestion):
-    reviewer = models.ForeignKey(UserProfile, related_name='review_questions', on_delete=models.CASCADE)
-    portfolio_review = models.ForeignKey(ProjectPortfolioState, related_name='questions', on_delete=models.CASCADE)
+class ReviewScore(BaseScore):
+    reviewer = models.ForeignKey(UserProfile, related_name='review_scores', on_delete=models.CASCADE)
+    portfolio_review = models.ForeignKey(ProjectPortfolioState, related_name='review_scores', on_delete=models.CASCADE)
