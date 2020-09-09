@@ -328,7 +328,7 @@ export default {
     },
     regionalOffice() {
       const office = this.regionalOffices.find(obj => obj.id === this.office.regional_office);
-      return office ? office.name : "N/A";
+      return office ? office.name : "";
     },
     lastUpdated() {
       return format(new Date(this.modified), "DD/MM/YYYY HH:mm");
