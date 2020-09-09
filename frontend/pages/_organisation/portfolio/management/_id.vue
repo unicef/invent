@@ -64,9 +64,9 @@ export default {
     // }
   },
   methods: {
-    ...mapActions({
-      // setSavedFilters: "dashboard/setSavedFilters"
-    }),
+    // ...mapActions({
+    // setSavedFilters: "dashboard/setSavedFilters"
+    // }),
     handleTab(id) {
       this.tab = id;
     }

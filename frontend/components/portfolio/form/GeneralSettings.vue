@@ -43,8 +43,11 @@
           data-vv-name="description"
           data-vv-as="Description"
           type="textarea"
+          rows="7"
+          resize="none"
         />
       </custom-required-form-item>
+
       <custom-required-form-item
         :error="
           errors.first('status')
