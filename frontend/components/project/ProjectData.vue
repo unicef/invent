@@ -18,7 +18,7 @@
           </simple-field>
 
           <simple-field
-            :header="$gettext('Country Office') | translate"
+            :header="$gettext('Unicef Office') | translate"
             :content="office.name"
           />
 
@@ -32,6 +32,11 @@
           <simple-field
             :header="$gettext('Region') | translate"
             :content="selectedRegion"
+          />
+
+          <simple-field
+            :header="$gettext('Multicountry or Regional Office\n') | translate"
+            :content="selectedRegionOffice"
           />
 
           <simple-field
@@ -247,7 +252,8 @@ export default {
       getCapabilityCategories: 'projects/getCapabilityCategories',
       getCapabilitySubcategories: 'projects/getCapabilitySubcategories',
       unicef_regions: 'system/getUnicefRegions',
-      modified: 'project/getModified'
+      modified: 'project/getModified',
+      regionalOffices: 'projects/getRegionalOffices'
     }),
     route () {
       return this.$route.name.split('__')[0];
@@ -268,6 +274,13 @@ export default {
       if (this.office) {
         const result = this.unicef_regions.find(uf => uf.id === this.office.region);
         return (result && result.name) || 'N/A';
+      }
+      return 'N/A';
+    },
+    selectedRegionOffice () {
+      if (this.office) {
+        const office = this.regionalOffices.find(obj => obj.id === this.office.regional_office);
+        return office ? office.name : 'N/A';
       }
       return 'N/A';
     },
