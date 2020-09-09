@@ -32,7 +32,7 @@
       </p>
       <p>
         <translate>
-          Note that your data should be organized to have data from only one country office included in a spreadsheet.
+          Note that your data should be organized to have data from only one office included in a spreadsheet.
         </translate>
       </p>
       <p>
@@ -104,10 +104,10 @@
       <template #label>
         <form-hint>
           <translate>
-            Select Country Office
+            Select Unicef Office
           </translate>
           <template #hint>
-            <translate>Data can only be added one country office at a time. If your data is from more than one office, you can make a separate sheet for each one.</translate>
+            <translate>Data can only be added one office at a time. If your data is from more than one office, you can make a separate sheet for each one.</translate>
           </template>
         </form-hint>
       </template>
