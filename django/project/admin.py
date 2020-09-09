@@ -8,7 +8,8 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, HardwarePlatform, NontechPlatform, \
-    PlatformFunction
+    PlatformFunction, Portfolio
+from core.utils import make_admin_list
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -121,6 +122,20 @@ class ProjectAdmin(AllObjectsAdmin):
         return False
 
 
+class PortfolioAdmin(AllObjectsAdmin):
+    list_display = ['__str__', 'description', 'created', 'icon', 'project_list', 'managers_list', 'is_active']
+    fields = ['name', 'description', 'projects', 'managers', 'icon', 'is_active']
+
+    def project_list(self, obj):
+        return make_admin_list(obj.projects.all())
+
+    def managers_list(self, obj):
+        return make_admin_list(obj.managers.all())
+
+    project_list.short_description = "Assigned projects"
+    managers_list.short_description = "Assigned managers"
+
+
 class ResultAreaInline(ViewOnlyInlineMixin, admin.TabularInline):
     model = UNICEFResultArea
 
@@ -189,6 +204,7 @@ admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(Portfolio, PortfolioAdmin)
 admin.site.register(UNICEFGoal, UNICEFGoalAdmin)
 admin.site.register(UNICEFResultArea, UNICEFResultAreaAdmin)
 admin.site.register(UNICEFCapabilityLevel, UNICEFCapabilityLevelAdmin)

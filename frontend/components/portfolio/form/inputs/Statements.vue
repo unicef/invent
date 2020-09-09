@@ -1,5 +1,6 @@
 <template>
   <div class="statements">
+    <!-- {{ statements }} -->
     <div v-for="(item, i) in statements" :key="i" class="statement">
       <div class="close" @click="handleRemoveStatement(i)">
         <fa icon="times" />

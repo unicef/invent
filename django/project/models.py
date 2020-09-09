@@ -192,7 +192,7 @@ class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
 
 class Portfolio(ExtendedNameOrderedSoftDeletedModel):
     description = models.CharField(max_length=511)
-    icon = models.CharField(max_length=1, blank=True)
+    icon = models.CharField(max_length=3, blank=True)
     projects = models.ManyToManyField(Project, related_name='portfolios', blank=True)
     managers = models.ManyToManyField(UserProfile, related_name="portfolios", blank=True)
     STATUS_DRAFT = 'DR'
@@ -220,6 +220,7 @@ class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
     # This is a workaround for some strange issue regarding ActiveQuerySet
     class Meta:
         default_manager_name = 'objects'
+        ordering = ['name']
 
 
 class ProjectApproval(ExtendedModel):

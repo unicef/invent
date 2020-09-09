@@ -19,8 +19,7 @@ import NewPortfolioForm from "@/components/portfolio/form/NewPortfolioForm";
 export default {
   components: {
     NewPortfolioForm
-  },
-  async fetch({ store }) {}
+  }
 };
 </script>
 

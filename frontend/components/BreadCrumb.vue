@@ -65,7 +65,10 @@ export default {
         "organisation-portfolio-management-new": this.$gettext(
           "Create a new portfolio"
         ),
-        "organisation-portfolio-management-id": this.$gettext("Edit portfolio")
+        "organisation-portfolio-management-id": this.$gettext("Edit portfolio"),
+        "organisation-portfolio-management-edit-id": this.$gettext(
+          "Edit portfolio"
+        )
       };
       const match = pages[this.pureRoute];
       if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
