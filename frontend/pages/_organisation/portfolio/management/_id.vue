@@ -15,7 +15,7 @@
           <p
             v-for="item in tabs"
             :key="item.id"
-            @click="handleTab(item.id)"
+            @click="setTab(item.id)"
             :class="`${item.id === tab && 'active'}`"
           >
             <fa :icon="item.icon" />
@@ -44,7 +44,7 @@
 import AdvancedSearch from "@/components/dashboard/AdvancedSearch";
 import MainTable from "@/components/portfolio/dashboard/MainTable";
 import TableTopActions from "@/components/portfolio/dashboard/TableTopActions";
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import debounce from "lodash/debounce";
 
 export default {
@@ -83,17 +83,11 @@ export default {
       );
     }
   },
-  data() {
-    return {
-      tabs: [
-        { id: 1, name: "Inventory", icon: "folder", total: 46 },
-        { id: 2, name: "For review", icon: "eye", total: 18 },
-        { id: 3, name: "Portfolio", icon: "briefcase", total: 35 }
-      ],
-      tab: 1
-    };
-  },
   computed: {
+    ...mapState({
+      tabs: state => state.portfolio.tabs,
+      tab: state => state.portfolio.tab
+    }),
     ...mapGetters({
       searchParameters: "dashboard/getSearchParameters",
       dashboardSection: "dashboard/getDashboardSection"
@@ -116,11 +110,21 @@ export default {
     }
   },
   methods: {
-    // ...mapActions({
-    // setSavedFilters: "dashboard/setSavedFilters"
-    // }),
-    handleTab(id) {
-      this.tab = id;
+    ...mapActions({
+      loadProjectList: "dashboard/loadProjectList",
+      setSavedFilters: "dashboard/setSavedFilters",
+      setTab: "portfolio/setTab"
+    }),
+    searchParameterChanged: debounce(function(query) {
+      if (this.dashboardSection === "list") {
+        this.$router.replace({ ...this.$route, query });
+        this.load();
+      }
+    }, 100),
+    async load() {
+      this.$nuxt.$loading.start();
+      await this.loadProjectList();
+      this.$nuxt.$loading.finish();
     }
   }
 };
@@ -151,7 +155,7 @@ export default {
     max-width: @appWidthMaxLimit - @advancedSearchWidth;
     height: 100%;
 
-    div {
+    > div {
       background-color: #fbfaf8;
     }
     .tabs-wrapper {
