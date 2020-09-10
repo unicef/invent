@@ -30,6 +30,13 @@
             :publish-rules="publishRules"
             :api-errors="apiErrors"
           />
+          <categorization
+            ref="categorization"
+            :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+          />
           <donor-custom
             ref="donorCustom"
             :use-publish-rules="usePublishRules"
@@ -55,6 +62,7 @@ import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
 import focalOverview from './sections/FocalOverview';
+import Categorization from '@/components/project/sections/Categorization';
 import ImplementationOverview from './sections/ImplementationOverview';
 import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
@@ -65,7 +73,8 @@ export default {
     GeneralOverview,
     focalOverview,
     ImplementationOverview,
-    DonorCustom
+    DonorCustom,
+    Categorization
   },
   $_veeValidate: {
     validator: 'new'
@@ -181,6 +190,7 @@ export default {
       const validations = await Promise.all([
         this.$refs.generalOverview.validate(),
         this.$refs.focalOverview.validate(),
+        this.$refs.categorization.validate(),
         this.$refs.implementationOverview.validate(),
         this.$refs.donorCustom.validate()
       ]);
@@ -191,6 +201,7 @@ export default {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
       this.$refs.focalOverview.clear();
+      this.$refs.categorization.clear();
       this.$refs.implementationOverview.clear();
       this.$refs.donorCustom.clear();
     },
@@ -200,7 +211,8 @@ export default {
       this.$nextTick(async () => {
         const valid = await this.$refs.generalOverview.validateDraft();
         const focal = await this.$refs.focalOverview.validateDraft();
-        if (valid && focal) {
+        const categorization = await this.$refs.categorization.validateDraft();
+        if (valid && focal && categorization) {
           try {
             if (this.isNewProject) {
               const id = await this.createProject();

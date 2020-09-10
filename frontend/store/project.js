@@ -50,6 +50,7 @@ export const getters = {
   getCapabilityCategories: state => state.capability_categories,
   getCapabilitySubcategories: state => state.capability_subcategories,
   getPlatforms: state => state.platforms.length === 0 ? [null] : state.platforms,
+  getSectors: state => state.unicef_sector.length === 0 ? [null] : state.unicef_sector,
   getDigitalHealthInterventions: state => [...state.dhis],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
@@ -193,6 +194,9 @@ export const actions = {
   setPlatforms ({ commit }, value) {
     commit('SET_PLATFORMS', value);
   },
+  setSectors ({ commit }, value) {
+    commit('SET_SECTORS', value);
+  },
   setDigitalHealthInterventions ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value);
   },
@@ -263,6 +267,7 @@ export const actions = {
     const draft = getters.getProjectData;
     draft.organisation = 56;
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
+    console.warn(parsed);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country_office}/`, parsed);
     await dispatch('setProject', { data, id });
     dispatch('setLoading', false);
@@ -352,6 +357,9 @@ export const mutations = {
   SET_PLATFORMS: (state, platforms) => {
     Vue.set(state, 'platforms', [...platforms]);
   },
+  SET_SECTORS: (state, unicef_sector) => {
+    Vue.set(state, 'unicef_sector', [...unicef_sector]);
+  },
   SET_DIGITAL_HEALTH_INTERVENTIONS: (state, dhi) => {
     Vue.set(state, 'dhis', [...dhi]);
   },
@@ -406,6 +414,12 @@ export const mutations = {
     state.donors = get(project, 'donors', []);
     state.country_answers = get(project, 'country_custom_answers', []);
     state.donors_answers = get(project, 'donor_custom_answers', []);
+    // INVENT
+    state.unicef_sector = get(project, 'unicef_sector', []);
+    state.functions = get(project, 'functions', []);
+    state.hardware = get(project, 'hardware', []);
+    state.nontech = get(project, 'nontech', []);
+    state.regional_priorities = get(project, 'regional_priorities', []);
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project;

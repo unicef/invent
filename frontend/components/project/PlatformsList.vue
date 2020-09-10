@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 export default {
   components: {
   },
@@ -23,22 +21,24 @@ export default {
     platforms: {
       type: Array,
       default: () => []
+    },
+    source: {
+      type: String,
+      default: 'getTechnologyPlatforms'
     }
   },
   computed: {
-    ...mapGetters({
-      technologyPlatforms: 'projects/getTechnologyPlatforms'
-    }),
     selected () {
-      return this.technologyPlatforms.filter(tp => this.platforms.includes(tp.id));
+      const list = this.$store.getters[`projects/${this.source}`];
+      return list.filter(tp => this.platforms.includes(tp.id));
     }
   }
 };
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+  //@import "~assets/style/variables.less";
+  //@import "~assets/style/mixins.less";
 
   .PlatformList {
     width: 100%;

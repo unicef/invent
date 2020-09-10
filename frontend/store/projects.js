@@ -54,6 +54,7 @@ export const getters = {
     }
   },
   getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
+  getSectors: state => state.projectStructure.sectors ? [...state.projectStructure.sectors] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
   getProjectDetails: (state, getters, rootState, rootGetters) => p => {
