@@ -29,14 +29,19 @@
             :to="
               localePath({
                 name: 'organisation-portfolio-management-id',
-                params: { id: 'example' }
+                params: { id: item.id }
               })
             "
           >
             <translate>Manage</translate>
           </nuxt-link>
           <nuxt-link
-            :to="localePath({ name: 'organisation-portfolio-management-new' })"
+            :to="
+              localePath({
+                name: 'organisation-portfolio-management-edit-id',
+                params: { id: item.id }
+              })
+            "
           >
             <translate>Edit info</translate>
           </nuxt-link>
@@ -72,7 +77,11 @@ export default {
   margin-bottom: 16px;
   overflow: hidden;
   position: relative;
+  margin-right: 20px;
   transition: all 0.25s;
+  &:nth-child(3n + 0) {
+    margin-right: 0px;
+  }
   .wrapper {
     display: flex;
     flex-direction: column;

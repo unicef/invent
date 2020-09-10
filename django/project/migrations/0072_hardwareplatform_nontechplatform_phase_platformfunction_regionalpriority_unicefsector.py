@@ -8,7 +8,7 @@ import project.cache
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0069_portfolio_problemstatement'),
+        ('project', '0071_auto_20200908_1224'),
     ]
 
     operations = [
