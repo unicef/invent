@@ -40,11 +40,20 @@ export const projectFields = () => ({
   dhis: [],
   health_focus_areas: [],
   hsc_challenges: [],
-  donors: []
+  donors: [],
+  // INVENT
+  unicef_sector: [],
+  functions: [],
+  hardware: [],
+  nontech: [],
+  regional_priorities: []
 });
 
 export const draftRules = () => {
   return {
+    unicef_sector: {
+      required: false
+    },
     name: {
       required: true,
       min: 1,
@@ -74,6 +83,9 @@ export const draftRules = () => {
 };
 export const publishRules = () => {
   return {
+    unicef_sector: {
+      required: true
+    },
     name: {
       required: true,
       min: 1,
