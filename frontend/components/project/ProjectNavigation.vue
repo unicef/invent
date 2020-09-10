@@ -59,6 +59,17 @@
               <translate>Implementation</translate>
             </el-button>
           </li>
+          <li :class="{active: active === 'categorization'}">
+            <el-button
+              type="text"
+              @click="scrollTo('categorization')"
+            >
+              <span class="Step">
+                <fa icon="arrow-right" />
+              </span>
+              <translate>Categorization</translate>
+            </el-button>
+          </li>
           <li
             v-show="showDonorFieldsLink"
             :class="{active: active === 'donorcustom'}"
