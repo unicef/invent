@@ -178,6 +178,12 @@
               source="getSectors"
             />
           </simple-field>
+          <simple-field :header="$gettext('Regional Priorities') | translate">
+            <platforms-list
+              :platforms="project.regional_priorities"
+              source="getRegionalPriorities"
+            />
+          </simple-field>
         </collapsible-card>
 
         <div

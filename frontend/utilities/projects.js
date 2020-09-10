@@ -54,6 +54,9 @@ export const draftRules = () => {
     unicef_sector: {
       required: false
     },
+    regional_priorities: {
+      required: false
+    },
     name: {
       required: true,
       min: 1,
@@ -85,6 +88,9 @@ export const publishRules = () => {
   return {
     unicef_sector: {
       required: true
+    },
+    regional_priorities: {
+      required: false
     },
     name: {
       required: true,
