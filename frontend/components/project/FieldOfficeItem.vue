@@ -1,7 +1,7 @@
 <template>
   <div class="FieldOfficeItem">
     <span v-if="selected">{{ selected.name }}</span>
-    <span v-else>
+    <span v-else class="muted">
       <translate>
         N/A
       </translate>
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   model: {
-    prop: 'value',
-    event: 'change'
+    prop: "value",
+    event: "change"
   },
   props: {
     value: {
@@ -27,19 +27,19 @@ export default {
       default: null
     }
   },
-  data () {
+  data() {
     return {
       open: false
     };
   },
   computed: {
     ...mapGetters({
-      items: 'projects/getFieldOffices'
+      items: "projects/getFieldOffices"
     }),
-    filtered () {
+    filtered() {
       return this.items.filter(i => i.country_office_id === this.office);
     },
-    selected () {
+    selected() {
       return this.filtered.find(f => this.value === f.id);
     }
   }
@@ -49,5 +49,8 @@ export default {
 <style lang="less">
 .FieldOfficeItem {
   width: 100%;
+}
+.muted {
+  color: #a8a8a9;
 }
 </style>

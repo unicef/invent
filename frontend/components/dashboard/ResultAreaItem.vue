@@ -1,11 +1,11 @@
 <template>
-  <div class="ResultAreaItem">
+  <div :class="`ResultAreaItem ${selected === 'N/A' && 'muted'}`">
     {{ selected }}
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -16,18 +16,21 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'projects/getResultAreas'
+      items: "projects/getResultAreas"
     }),
-    selected () {
+    selected() {
       const found = this.items.find(i => i.id === this.value);
-      return found ? found.name : 'N/A';
+      return found ? found.name : "N/A";
     }
   }
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .ResultAreaItem {
   width: 100%;
+}
+.muted {
+  color: #a8a8a9;
 }
 </style>

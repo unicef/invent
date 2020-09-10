@@ -29,11 +29,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <project-card
-            :project="scope.row"
-            hide-borders
-            show-verified
-          />
+          <project-card :project="scope.row" hide-borders show-verified />
         </template>
       </el-table-column>
 
@@ -46,9 +42,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <region-item
-            :id="scope.row.region"
-          />
+          <region-item :id="scope.row.region" />
         </template>
       </el-table-column>
 
@@ -61,10 +55,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <country-item
-            :id="scope.row.country"
-            :show-flag="false"
-          />
+          <country-item :id="scope.row.country" :show-flag="false" />
         </template>
       </el-table-column>
 
@@ -115,9 +106,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <GoalAreaItem
-            :value="scope.row.goal_area"
-          />
+          <GoalAreaItem :value="scope.row.goal_area" />
         </template>
       </el-table-column>
 
@@ -128,9 +117,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <ResultAreaItem
-            :value="scope.row.result_area"
-          />
+          <ResultAreaItem :value="scope.row.result_area" />
         </template>
       </el-table-column>
 
@@ -189,11 +176,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <donors-list
-            :value="scope.row.donors"
-            :limit="3"
-            show-icon
-          />
+          <donors-list :value="scope.row.donors" :limit="3" show-icon />
         </template>
       </el-table-column>
       <el-table-column
@@ -293,22 +276,22 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
-import { mapGetters, mapActions, mapState } from 'vuex';
-import { mapGettersActions } from '../../utilities/form.js';
+import { format } from "date-fns";
+import { mapGetters, mapActions, mapState } from "vuex";
+import { mapGettersActions } from "../../utilities/form.js";
 
-import ProjectCard from '@/components/common/ProjectCard';
-import CountryItem from '@/components/common/CountryItem';
-import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
-import DonorsList from '@/components/common/list/DonorsList';
-import RegionItem from '@/components/common/RegionItem';
-import CustomAnswersCell from '@/components/dashboard/CustomAnswersCell';
-import GoalAreaItem from '@/components/dashboard/GoalAreaItem';
-import ResultAreaItem from '@/components/dashboard/ResultAreaItem';
-import CurrentPage from '@/components/dashboard/CurrentPage';
-import FieldOfficeItem from '@/components/project/FieldOfficeItem';
-import CapabilitiesList from '@/components/project/CapabilitiesList';
-import { setTimeout } from 'timers';
+import ProjectCard from "@/components/common/ProjectCard";
+import CountryItem from "@/components/common/CountryItem";
+import HfaCategoriesList from "@/components/common/list/HfaCategoriesList";
+import DonorsList from "@/components/common/list/DonorsList";
+import RegionItem from "@/components/common/RegionItem";
+import CustomAnswersCell from "@/components/dashboard/CustomAnswersCell";
+import GoalAreaItem from "@/components/dashboard/GoalAreaItem";
+import ResultAreaItem from "@/components/dashboard/ResultAreaItem";
+import CurrentPage from "@/components/dashboard/CurrentPage";
+import FieldOfficeItem from "@/components/project/FieldOfficeItem";
+import CapabilitiesList from "@/components/project/CapabilitiesList";
+import { setTimeout } from "timers";
 
 export default {
   components: {
@@ -324,7 +307,7 @@ export default {
     GoalAreaItem,
     ResultAreaItem
   },
-  data () {
+  data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
@@ -336,31 +319,33 @@ export default {
       offices: state => state.offices.offices
     }),
     ...mapGetters({
-      projectsList: 'dashboard/getProjectsList',
-      selectedColumns: 'dashboard/getSelectedColumns',
-      selectedRows: 'dashboard/getSelectedRows',
-      selectAll: 'dashboard/getSelectAll',
-      total: 'dashboard/getTotal',
-      countryColumns: 'dashboard/getCountryColumns',
-      donorColumns: 'dashboard/getDonorColumns',
-      getCapabilityLevels: 'projects/getCapabilityLevels',
-      getCapabilityCategories: 'projects/getCapabilityCategories',
-      getCapabilitySubcategories: 'projects/getCapabilitySubcategories'
+      projectsList: "dashboard/getProjectsList",
+      selectedColumns: "dashboard/getSelectedColumns",
+      selectedRows: "dashboard/getSelectedRows",
+      selectAll: "dashboard/getSelectAll",
+      total: "dashboard/getTotal",
+      countryColumns: "dashboard/getCountryColumns",
+      donorColumns: "dashboard/getDonorColumns",
+      getCapabilityLevels: "projects/getCapabilityLevels",
+      getCapabilityCategories: "projects/getCapabilityCategories",
+      getCapabilitySubcategories: "projects/getCapabilitySubcategories"
     }),
     ...mapGettersActions({
-      pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],
-      currentPage: ['dashboard', 'getCurrentPage', 'setCurrentPage', 0],
-      sorting: ['dashboard', 'getSorting', 'setSorting', 0]
+      pageSize: ["dashboard", "getPageSize", "setPageSize", 0],
+      currentPage: ["dashboard", "getCurrentPage", "setCurrentPage", 0],
+      sorting: ["dashboard", "getSorting", "setSorting", 0]
     }),
-    paginationOrderStr () {
+    paginationOrderStr() {
       const loc = this.$i18n.locale;
-      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next';
+      return loc === "ar"
+        ? "sizes, next, slot, prev"
+        : "sizes, prev, slot, next";
     }
   },
   watch: {
     selectAll: {
       immediate: true,
-      handler (value) {
+      handler(value) {
         if (this.$refs.mainTable) {
           this.$refs.mainTable.clearSelection();
           if (value) {
@@ -371,7 +356,7 @@ export default {
     },
     selectedColumns: {
       immediate: false,
-      handler (columns) {
+      handler(columns) {
         this.$nextTick(() => {
           this.$refs.mainTable.doLayout();
           setTimeout(() => {
@@ -382,14 +367,14 @@ export default {
     },
     sorting: {
       immediate: false,
-      handler (current) {
+      handler(current) {
         if (current !== this.localSort) {
           this.fixSorting(current);
         }
       }
     }
   },
-  mounted () {
+  mounted() {
     if (this.offices.length === 0) {
       this.loadOffices();
     }
@@ -407,314 +392,324 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSelectedRows: 'dashboard/setSelectedRows',
-      loadOffices: 'offices/loadOffices'
+      setSelectedRows: "dashboard/setSelectedRows",
+      loadOffices: "offices/loadOffices"
     }),
-    customHeaderRenderer (h, { column, $index }) {
-      return h('span', { attrs: { title: column.label } }, column.label);
+    customHeaderRenderer(h, { column, $index }) {
+      return h("span", { attrs: { title: column.label } }, column.label);
     },
-    selectHandler (selection) {
+    selectHandler(selection) {
       this.setSelectedRows(selection.map(s => s.id));
     },
-    rowClassCalculator ({ row }) {
-      return this.selectedRows.includes('row'.id) ? 'Selected' : 'NotSelected';
+    rowClassCalculator({ row }) {
+      return this.selectedRows.includes("row".id) ? "Selected" : "NotSelected";
     },
-    sortChanged ({ prop, order }) {
-      if (order === 'descending') {
-        this.sorting = '-' + prop;
-        this.localSort = '-' + prop;
+    sortChanged({ prop, order }) {
+      if (order === "descending") {
+        this.sorting = "-" + prop;
+        this.localSort = "-" + prop;
       } else {
         this.sorting = prop;
         this.localSort = prop;
       }
     },
-    convertDate (date) {
-      return date ? format(date, 'DD/MM/YYYY HH:mm') : 'N/A';
+    convertDate(date) {
+      return date ? format(date, "DD/MM/YYYY HH:mm") : "N/A";
     },
-    fixTableHeight () {
-      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
-      this.tableMaxHeight = +maxHeight.replace('px', '');
+    fixTableHeight() {
+      const maxHeight = window
+        .getComputedStyle(this.$el)
+        .getPropertyValue("max-height");
+      this.tableMaxHeight = +maxHeight.replace("px", "");
       this.$refs.mainTable.doLayout();
     },
-    fixSorting (prop) {
+    fixSorting(prop) {
       if (prop) {
-        let direction = 'ascending';
-        if (prop.startsWith('-')) {
-          direction = 'descending';
-          prop = prop.replace('-', '');
+        let direction = "ascending";
+        if (prop.startsWith("-")) {
+          direction = "descending";
+          prop = prop.replace("-", "");
         }
         this.$refs.mainTable.sort(prop, direction);
       }
     },
-    alignFixedTableWidthForRTL () {
+    alignFixedTableWidthForRTL() {
       const locale = this.$i18n.locale;
-      if (locale === 'ar') {
-        const rawTableWidth = document.querySelector('.el-table__header').offsetWidth;
+      if (locale === "ar") {
+        const rawTableWidth = document.querySelector(".el-table__header")
+          .offsetWidth;
         const fixedFieldWidths = 275;
         const toShowBorder = 1;
 
         const toAlignWidth = rawTableWidth - fixedFieldWidths - toShowBorder;
 
-        const fixedTableHeader = document.querySelector('.el-table__fixed-header-wrapper');
-        const fixedTableBody = document.querySelector('.el-table__fixed-body-wrapper');
+        const fixedTableHeader = document.querySelector(
+          ".el-table__fixed-header-wrapper"
+        );
+        const fixedTableBody = document.querySelector(
+          ".el-table__fixed-body-wrapper"
+        );
 
         if (fixedTableBody && fixedTableHeader) {
-          fixedTableHeader.style.left = -toAlignWidth + 'px';
-          fixedTableBody.style.left = -toAlignWidth + 'px';
+          fixedTableHeader.style.left = -toAlignWidth + "px";
+          fixedTableBody.style.left = -toAlignWidth + "px";
         }
       }
     },
-    countryOffice (id) {
-      const office = this.offices.find(obj => obj.id === id)
-      return office ? office.name : 'N/A';
-    },
+    countryOffice(id) {
+      const office = this.offices.find(obj => obj.id === id);
+      return office ? office.name : "N/A";
+    }
   }
 };
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .MainTable {
-    margin: 0 40px;
-    max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+.MainTable {
+  margin: 0 40px;
+  max-height: calc(
+    100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
+      @appFooterHeight - 93px
+  );
 
-    // Custom table template
-    .el-table {
-      th, td {
-        vertical-align: top;
+  // Custom table template
+  .el-table {
+    th,
+    td {
+      vertical-align: top;
+    }
+
+    th {
+      > .cell {
+        line-height: 24px;
+        // truncate long headers
+        white-space: nowrap;
+        //
       }
 
-      th {
-        > .cell {
-          line-height: 24px;
-          // truncate long headers
-          white-space: nowrap;
-          //
-        }
-
-        &.is-leaf {
-          border-bottom-color: @colorTextMuted;
-        }
-
-        // Disable select-all-row
-        &.el-table-column--selection {
-          .el-checkbox {
-            display: none;
-          }
-        }
+      &.is-leaf {
+        border-bottom-color: @colorTextMuted;
       }
 
-      td {
-        > .cell {
-          line-height: 17px;
-          word-break: normal;
-
-          p {
-            position: relative;
-            margin: 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-            // With 17 in the calc the fixed columns and the rest of the table go out of sync
-            max-height: calc(16.5px * 4);
-
-            // &::after {
-            //   content: "";
-            //   text-align: right;
-            //   position: absolute;
-            //   bottom: 0;
-            //   right: 0;
-            //   width: 20%;
-            //   height: 17px;
-            //   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-            // }
-
-          }
-
-          a {
-            &[rel="email"] {
-              display: block;
-            }
-          }
-        }
-      }
-
-      // selected table row
-      .el-table__row {
-        &.Selected {
-          > td {
-            background-color: #FFFBDC;
-
-            &.el-table-column--selection {
-              box-shadow: inset 2px 0 0 #FBC02D;
-            }
-          }
-        }
-      }
-
-      .el-table-column--selection {
-        > .cell {
-          text-overflow: clip !important;
-        }
-      }
-
-      .caret-wrapper {
-        position: absolute;
-        top: 1px;
-        right: 4px;
-      }
-
-      .el-table__empty-block {
-        position: relative;
-        width: 100% !important;
-        text-align: center;
-
-        .el-table__empty-text {
-          width: auto;
-          font-weight: 700;
-        }
-      }
-
-      .ProjectCard {
-        overflow: visible;
-
-        .ProjectName {
-          padding-right: 12px;
-        }
-
-        .ProjectCountryOrg {
-          margin-top: 4px;
-        }
-
-        .ProjectLegend {
-          top: 1px;
-          right: -1px;
-          opacity: 1 !important;
-
-          .svg-inline--fa {
-            position: relative;
-            height: 14px;
-            font-size: 12px;
-
-            &.fa-star {
-              right: 1px;
-              font-size: 11px;
-            }
-
-            &.fa-globe-africa {
-              right: 1px;
-            }
-          }
-        }
-      }
-
-      .CountryItem {
-        .CountryFlag {
+      // Disable select-all-row
+      &.el-table-column--selection {
+        .el-checkbox {
           display: none;
         }
-
-        .CountryName {
-          margin: 0;
-          font-size: @fontSizeSmall;
-          line-height: inherit;
-        }
       }
+    }
 
-      .DonorList {
-        ul {
-          padding: 0;
+    td {
+      > .cell {
+        line-height: 17px;
+        word-break: normal;
+
+        p {
+          position: relative;
           margin: 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 4;
+          -webkit-box-orient: vertical;
+          // With 17 in the calc the fixed columns and the rest of the table go out of sync
+          max-height: calc(16.5px * 4);
+
+          // &::after {
+          //   content: "";
+          //   text-align: right;
+          //   position: absolute;
+          //   bottom: 0;
+          //   right: 0;
+          //   width: 20%;
+          //   height: 17px;
+          //   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+          // }
         }
 
-        .DonorItem {
-          display: inline-flex;
-          align-items: flex-start;
-          width: 100%;
-
-          .svg-inline--fa {
-            position: relative;
-            top: -1px;
-            margin-right: 5px;
-          }
-        }
-      }
-
-      .HealthFocusAreasList,
-      .CustomAnswersCell,
-      .CapabilitiesList {
-        ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-
-          li {
-            position: relative;
-
-            > span {
-              &:first-child {
-                position: absolute;
-                left: 0;
-                top: 0;
-              }
-
-              &:last-child {
-                display: block;
-                padding-left: 15px;
-                .textTruncate();
-              }
-            }
+        a {
+          &[rel="email"] {
+            display: block;
           }
         }
       }
     }
 
-    .Pagination {
-      z-index: 5;
+    // selected table row
+    .el-table__row {
+      &.Selected {
+        > td {
+          background-color: #fffbdc;
+
+          &.el-table-column--selection {
+            box-shadow: inset 2px 0 0 #fbc02d;
+          }
+        }
+      }
+    }
+
+    .el-table-column--selection {
+      > .cell {
+        text-overflow: clip !important;
+      }
+    }
+
+    .caret-wrapper {
+      position: absolute;
+      top: 1px;
+      right: 4px;
+    }
+
+    .el-table__empty-block {
       position: relative;
-      top: -1px;
-      width: 100%;
-      // don't forget to calculate this into max-height of MainTable
-      height: 53px;
-      //
-      box-sizing: border-box;
-      border: solid @colorGrayLight;
-      border-width: 1px 1px 2px;
-      background-color: @colorBrandBlueLight;
-      text-align: right;
+      width: 100% !important;
+      text-align: center;
 
-      .el-pagination {
-        padding: 11px 15px;
-        font-weight: 400;
+      .el-table__empty-text {
+        width: auto;
+        font-weight: 700;
+      }
+    }
 
-        .el-pagination__sizes {
-          float: left;
-          margin: 0;
-        }
+    .ProjectCard {
+      overflow: visible;
 
-        .PageCounter {
-          display: inline-block;
-          margin: 0 10px;
-          font-size: @fontSizeSmall;
-          color: @colorTextSecondary;
-        }
+      .ProjectName {
+        padding-right: 12px;
+      }
 
-        button {
-          padding: 0;
-          background-color: transparent;
-          transition: @transitionAll;
+      .ProjectCountryOrg {
+        margin-top: 4px;
+      }
 
-          &:hover {
-            background-color: lighten(@colorBrandBlueLight, 3%);
+      .ProjectLegend {
+        top: 1px;
+        right: -1px;
+        opacity: 1 !important;
+
+        .svg-inline--fa {
+          position: relative;
+          height: 14px;
+          font-size: 12px;
+
+          &.fa-star {
+            right: 1px;
+            font-size: 11px;
           }
 
-          i {
-            font-size: @fontSizeLarge;
-            font-weight: 700;
+          &.fa-globe-africa {
+            right: 1px;
+          }
+        }
+      }
+    }
+
+    .CountryItem {
+      .CountryFlag {
+        display: none;
+      }
+
+      .CountryName {
+        margin: 0;
+        font-size: @fontSizeSmall;
+        line-height: inherit;
+      }
+    }
+
+    .DonorList {
+      ul {
+        padding: 0;
+        margin: 0;
+      }
+
+      .DonorItem {
+        display: inline-flex;
+        align-items: flex-start;
+        width: 100%;
+
+        .svg-inline--fa {
+          position: relative;
+          top: -1px;
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .HealthFocusAreasList,
+    .CustomAnswersCell,
+    .CapabilitiesList {
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          position: relative;
+
+          > span {
+            &:first-child {
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+
+            &:last-child {
+              display: block;
+              padding-left: 15px;
+              .textTruncate();
+            }
           }
         }
       }
     }
   }
+
+  .Pagination {
+    z-index: 5;
+    position: relative;
+    top: -1px;
+    width: 100%;
+    // don't forget to calculate this into max-height of MainTable
+    height: 53px;
+    //
+    box-sizing: border-box;
+    border: solid @colorGrayLight;
+    border-width: 1px 1px 2px;
+    background-color: @colorBrandBlueLight;
+    text-align: right;
+
+    .el-pagination {
+      padding: 11px 15px;
+      font-weight: 400;
+
+      .el-pagination__sizes {
+        float: left;
+        margin: 0;
+      }
+
+      .PageCounter {
+        display: inline-block;
+        margin: 0 10px;
+        font-size: @fontSizeSmall;
+        color: @colorTextSecondary;
+      }
+
+      button {
+        padding: 0;
+        background-color: transparent;
+        transition: @transitionAll;
+
+        &:hover {
+          background-color: lighten(@colorBrandBlueLight, 3%);
+        }
+
+        i {
+          font-size: @fontSizeLarge;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
 </style>
