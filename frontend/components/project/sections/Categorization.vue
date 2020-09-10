@@ -58,7 +58,7 @@
             :publish-rule="publishRules.regional_priorities"
           >
             <template slot="label">
-              <translate key="sector-label">
+              <translate key="priorities-label">
                 Regional Priorities
               </translate>
             </template>
