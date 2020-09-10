@@ -2,7 +2,12 @@
   <article class="portfolio-main-title">
     <div>
       <h1>Manage your Portfolios</h1>
-      <el-button icon="el-icon-plus" type="primary" @click="handleLink">
+      <el-button
+        v-if="profile.global_portfolio_owner"
+        icon="el-icon-plus"
+        type="primary"
+        @click="handleLink"
+      >
         <translate>Create a New Portfolio</translate>
       </el-button>
     </div>
@@ -16,7 +21,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState({
+      profile: state => state.user.profile
+    })
+  },
   methods: {
     handleLink() {
       this.$router.push(

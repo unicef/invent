@@ -22,6 +22,7 @@ const getTodayString = () => {
 export const getters = {
   getUserProjectList: state => [...state.userProjects.map(p => ({ ...p }))],
   getGoalAreas: state => get(state, 'projectStructure.goal_areas', []),
+  getRegionalOffices: state => get(state, 'projectStructure.regional_offices', []),
   getResultAreas: state => get(state, 'projectStructure.result_areas', []),
   getCapabilityLevels: state => (id) => {
     const all = get(state, 'projectStructure.capability_levels', []);

@@ -1,7 +1,7 @@
 export const portfolioFields = () => ({
   name: "",
   description: "",
-  status: [],
+  status: "",
   icon: null,
   managers: [],
   statements: []
@@ -10,19 +10,19 @@ export const portfolioFields = () => ({
 export const draftRules = () => {
   return {
     name: {
-      required: false,
+      required: true,
       min: 1,
-      max: 128
+      max: 80
     },
     description: {
-      required: false,
-      max: 128
+      required: true,
+      max: 1000
     },
     status: {
       required: false
     },
     icon: {
-      required: false
+      required: true
     },
     managers: {
       required: false
@@ -42,19 +42,19 @@ export const draftRules = () => {
 export const publishRules = () => {
   return {
     name: {
-      required: false,
+      required: true,
       min: 1,
-      max: 128
+      max: 80
     },
     description: {
-      required: false,
-      max: 128
+      required: true,
+      max: 1000
     },
     status: {
       required: false
     },
     icon: {
-      required: false
+      required: true
     },
     managers: {
       required: false
