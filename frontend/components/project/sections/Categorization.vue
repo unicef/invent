@@ -47,6 +47,40 @@
           </custom-required-form-item>
         </el-col>
       </el-row>
+      <el-row
+        :gutter="20"
+        type="flex"
+      >
+        <el-col :span="24">
+          <custom-required-form-item
+            :error="errors.first('regional_priorities')"
+            :draft-rule="draftRules.regional_priorities"
+            :publish-rule="publishRules.regional_priorities"
+          >
+            <template slot="label">
+              <translate key="sector-label">
+                Regional Priorities
+              </translate>
+            </template>
+
+            <multi-selector
+              v-model="regional_priorities"
+              v-validate="rules.regional_priorities"
+              data-vv-name="regional_priorities"
+              data-vv-as="Regional Priorities"
+              source="getRegionalPriorities"
+            />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Please select the regional priorities addressed by the initiative.
+                </translate>
+              </p>
+            </span>
+          </custom-required-form-item>
+        </el-col>
+      </el-row>
     </collapsible-card>
   </div>
 </template>
@@ -72,7 +106,8 @@ export default {
       modified: 'project/getModified'
     }),
     ...mapGettersActions({
-      unicef_sector: ['project', 'getSectors', 'setSectors', 0]
+      unicef_sector: ['project', 'getSectors', 'setSectors', 0],
+      regional_priorities: ['project', 'getRegionalPriorities', 'setRegionalPriorities', 0]
     })
   },
   methods: {
@@ -86,7 +121,8 @@ export default {
     async validateDraft () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
-        this.$validator.validate('unicef_sector')
+        this.$validator.validate('unicef_sector'),
+        this.$validator.validate('regional_priorities')
       ]);
       return validations.reduce((a, c) => a && c, true);
     }
