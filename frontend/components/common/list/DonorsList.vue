@@ -1,29 +1,18 @@
-
 <template>
   <div class="DonorList">
     <ul>
-      <li
-        v-for="p in selected"
-        :key="p.id"
-        class="DonorItem"
-      >
+      <li v-for="p in selected" :key="p.id" class="DonorItem">
         <span v-show="showIcon">
-          <fa
-            icon="user-tie"
-            size="xs"
-          />
+          <fa :icon="['far', 'user']" size="xs" />
         </span>
         <span>{{ p.name }}</span>
       </li>
       <li v-show="excluded">
         <span>
-          <fa
-            icon="arrow-alt-circle-right"
-            size="xs"
-          />
+          <fa icon="arrow-alt-circle-right" size="xs" />
         </span>
         <span>
-          <translate :parameters="{excluded}">
+          <translate :parameters="{ excluded }">
             ... {excluded} more
           </translate>
         </span>
@@ -33,10 +22,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
-  components: {
-  },
+  components: {},
   props: {
     value: {
       type: Array,
@@ -53,16 +41,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      donors: 'system/getDonors'
+      donors: "system/getDonors"
     }),
-    selected () {
+    selected() {
       const result = this.donors.filter(p => this.value.includes(p.id));
       return this.limit ? result.slice(0, this.limit) : result;
     },
-    limited () {
+    limited() {
       return this.limit ? this.selected.slice(0, this.limit) : this.selected;
     },
-    excluded () {
+    excluded() {
       return this.selected.length - this.limited.length;
     }
   }

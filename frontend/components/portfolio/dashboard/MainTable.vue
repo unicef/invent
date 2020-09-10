@@ -17,7 +17,7 @@
         :resizable="false"
         type="selection"
         align="center"
-        width="35"
+        width="45"
       />
       <el-table-column
         v-if="selectedColumns.includes('1')"
@@ -30,6 +30,16 @@
       >
         <template slot-scope="scope">
           <project-card :project="scope.row" hide-borders show-verified />
+          <el-tooltip :content="favorite" placement="top">
+            <div class="favorite" @click="handleFavorite(scope.row.id)">
+              <fa
+                v-if="scope.row.favorite"
+                class="heart-full"
+                :icon="['fas', 'heart']"
+              />
+              <fa v-else class="heart-empty" :icon="['far', 'heart']" />
+            </div>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -311,7 +321,8 @@ export default {
     return {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
-      localSort: null
+      localSort: null,
+      favorite: this.$gettext("Add to Favorites")
     };
   },
   computed: {
@@ -459,6 +470,9 @@ export default {
     countryOffice(id) {
       const office = this.offices.find(obj => obj.id === id);
       return office ? office.name : "N/A";
+    },
+    handleFavorite(id) {
+      console.log(`this will mark or unmark ${id}`);
     }
   }
 };
@@ -474,6 +488,22 @@ export default {
     100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
       @appFooterHeight - 93px
   );
+  .favorite {
+    cursor: pointer;
+    position: absolute;
+    top: 32px;
+    left: -32px;
+    svg {
+      font-size: 14px;
+    }
+    .heart-full {
+      color: #c4225f;
+    }
+    .heart-empty {
+      color: @colorBrandGrayLight;
+    }
+  }
+
   .el-table--border th {
     border-right: 1px solid @colorWhite;
   }
@@ -525,11 +555,12 @@ export default {
     }
 
     td {
-      height: 58px;
+      min-height: 58px;
+      padding: 10px 16px 10px 12px;
       > .cell {
         line-height: 17px;
         word-break: normal;
-
+        padding: 0;
         p {
           position: relative;
           margin: 0;
@@ -538,6 +569,10 @@ export default {
           -webkit-box-orient: vertical;
           // With 17 in the calc the fixed columns and the rest of the table go out of sync
           max-height: calc(16.5px * 4);
+          font-size: @fontSizeSmall;
+          letter-spacing: 0;
+          line-height: 15px;
+          font-weight: 100;
         }
 
         a {
@@ -583,14 +618,6 @@ export default {
     .ProjectCard {
       overflow: visible;
 
-      .ProjectName {
-        padding-right: 12px;
-      }
-
-      .ProjectCountryOrg {
-        margin-top: 4px;
-      }
-
       .ProjectLegend {
         top: 1px;
         right: -1px;
@@ -621,7 +648,9 @@ export default {
       .CountryName {
         margin: 0;
         font-size: @fontSizeSmall;
-        line-height: inherit;
+        letter-spacing: 0;
+        line-height: 15px;
+        font-weight: 100;
       }
     }
 
@@ -654,17 +683,11 @@ export default {
 
         li {
           position: relative;
-
+          display: flex;
+          align-items: center;
           > span {
-            &:first-child {
-              position: absolute;
-              left: 0;
-              top: 0;
-            }
-
             &:last-child {
-              display: block;
-              padding-left: 15px;
+              margin-left: 6px;
               .textTruncate();
             }
           }

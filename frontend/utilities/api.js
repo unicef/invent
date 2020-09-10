@@ -1,4 +1,4 @@
-import get from 'lodash/get';
+import get from "lodash/get";
 export const coverageMapper = collection => {
   const coverage = [];
   const coverageData = {};
@@ -14,7 +14,7 @@ export const coverageMapper = collection => {
       };
     });
   } else {
-    console.warn('Invalid or malformed input passed to api/coverageMapper');
+    console.warn("Invalid or malformed input passed to api/coverageMapper");
   }
   return [coverage, coverageData];
 };
@@ -30,7 +30,9 @@ export const interoperabilityLinksMapper = links => {
       };
     });
   } else {
-    console.warn('Invalid or malformed input passed to api/interoperabilityLinksMapper');
+    console.warn(
+      "Invalid or malformed input passed to api/interoperabilityLinksMapper"
+    );
   }
   return result;
 };
@@ -43,41 +45,59 @@ export const platformsMapper = collection => {
     collection.forEach(p => {
       platforms.push(p.id);
       if (p.strategies && Array.isArray(p.strategies)) {
-        digitalHealthInterventions.push(...p.strategies.map(s => ({ id: s, platform: p.id })));
+        digitalHealthInterventions.push(
+          ...p.strategies.map(s => ({ id: s, platform: p.id }))
+        );
       }
     });
   } else {
-    console.warn('Invalid or malformed input passed to api/platformsMapper');
+    console.warn("Invalid or malformed input passed to api/platformsMapper");
   }
   return [platforms, digitalHealthInterventions];
 };
 
 export const countryCustomFieldMapper = collection => {
   const customAnswers = [];
-  if (typeof collection === 'object' && collection) {
+  if (typeof collection === "object" && collection) {
     for (const key in collection) {
       customAnswers.push({ question_id: +key, answer: collection[key] });
     }
   } else {
-    console.warn('Invalid or malformed input passed to api/countryCustomFieldMapper');
+    console.warn(
+      "Invalid or malformed input passed to api/countryCustomFieldMapper"
+    );
   }
   return customAnswers;
 };
 
 export const donorCustomFieldMapper = collection => {
   const customAnswers = [];
-  if (typeof collection === 'object' && !Array.isArray(collection) && collection) {
+  if (
+    typeof collection === "object" &&
+    !Array.isArray(collection) &&
+    collection
+  ) {
     for (const donor in collection) {
-      if (typeof collection[donor] === 'object' && !Array.isArray(collection) && collection) {
+      if (
+        typeof collection[donor] === "object" &&
+        !Array.isArray(collection) &&
+        collection
+      ) {
         for (const key in collection[donor]) {
-          customAnswers.push({ question_id: +key, answer: collection[donor][key], donor_id: +donor });
+          customAnswers.push({
+            question_id: +key,
+            answer: collection[donor][key],
+            donor_id: +donor
+          });
         }
       } else {
-        console.warn('Malformed input passed to api/countryCustomFieldMapper');
+        console.warn("Malformed input passed to api/countryCustomFieldMapper");
       }
     }
   } else {
-    console.warn('Invalid or malformed input passed to api/countryCustomFieldMapper');
+    console.warn(
+      "Invalid or malformed input passed to api/countryCustomFieldMapper"
+    );
   }
   return customAnswers;
 };
@@ -85,14 +105,13 @@ export const donorCustomFieldMapper = collection => {
 export const apiReadParser = p => {
   p = lib.parseCustomAnswers(p);
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
-  return { ...p,
-    donor_custom_answers
-  };
+  return { ...p, donor_custom_answers };
 };
 
-export const isNullUndefinedOrEmptyString = value => value === null || value === undefined || value === '';
+export const isNullUndefinedOrEmptyString = value =>
+  value === null || value === undefined || value === "";
 
-export const isEmpty = (value) => {
+export const isEmpty = value => {
   if (Array.isArray(value)) {
     return false;
   } else if (value instanceof Date) {
@@ -116,16 +135,25 @@ export const interoperabilityLinkWriteParser = links => {
   for (const link in links) {
     const value = { ...links[link] };
     value.selected = value.selected ? true : undefined;
-    value.link = !value.selected || lib.isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
+    value.link =
+      !value.selected || lib.isNullUndefinedOrEmptyString(value.link)
+        ? undefined
+        : value.link;
     const item = { id: link, ...value };
     result.push(item);
   }
-  return result.sort((a, b) => a.index - b.index).map(r => ({ ...r, index: undefined }));
+  return result
+    .sort((a, b) => a.index - b.index)
+    .map(r => ({ ...r, index: undefined }));
 };
 
 export const platformsWriteParser = (platforms, digitalHealthInterventions) => {
   return platforms.map(p => {
-    const strategies = [...digitalHealthInterventions.filter(dhi => dhi.platform === p).map(f => f.id)];
+    const strategies = [
+      ...digitalHealthInterventions
+        .filter(dhi => dhi.platform === p)
+        .map(f => f.id)
+    ];
     return { id: p, strategies: strategies || [] };
   });
 };
@@ -136,9 +164,9 @@ export const coverageWriteParser = (coverage, coverageData) => {
     return {
       district,
       ...data,
-      clients: get(data, 'clients', 0),
-      health_workers: get(data, 'health_workers', 0),
-      facilities: get(data, 'facilities', 0)
+      clients: get(data, "clients", 0),
+      health_workers: get(data, "health_workers", 0),
+      facilities: get(data, "facilities", 0)
     };
   });
 };
@@ -163,18 +191,26 @@ export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
     result[donor].push({
       ...a,
       answer: a.answer[0] ? a.answer : [],
-      donor_id: undefined });
+      donor_id: undefined
+    });
   });
   return result;
 };
 
-export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
+export const apiWriteParser = (
+  p,
+  countryCustomAnswers,
+  donorsCustomAnswers
+) => {
   const result = {};
   for (const key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
   }
-  const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors);
+  const donor_custom_answers = customDonorAnswerParser(
+    donorsCustomAnswers,
+    p.donors
+  );
   return {
     project: {
       ...result,
@@ -187,11 +223,11 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
 };
 
 export const intArrayFromQs = item => {
-  return item ? Array.isArray(item) ? item.map(i => +i) : [+item] : [];
+  return item ? (Array.isArray(item) ? item.map(i => +i) : [+item]) : [];
 };
 
 export const strArrayFromQs = item => {
-  return item ? Array.isArray(item) ? item : [item] : [];
+  return item ? (Array.isArray(item) ? item : [item]) : [];
 };
 
 export const queryStringComparisonParser = collection => {
@@ -201,7 +237,7 @@ export const queryStringComparisonParser = collection => {
     if (item === null) {
       result[key] = null;
     } else if (item && !Array.isArray(item)) {
-      result[key] = '' + item;
+      result[key] = "" + item;
     } else if (item && Array.isArray(item) && item.length > 0) {
       result[key] = item;
     }
@@ -237,12 +273,16 @@ export const parseCustomAnswers = r => {
     r.donors.forEach(d => {
       donor_answers[d] = {
         ...(r.donor_custom_answers ? r.donor_custom_answers[d] : null),
-        ...(r.donor_custom_answers_private ? r.donor_custom_answers_private[d] : null)
+        ...(r.donor_custom_answers_private
+          ? r.donor_custom_answers_private[d]
+          : null)
       };
     });
   }
   return {
     ...r,
+    // fake info
+    favorite: Math.random() >= 0.5,
     country_answers: {
       ...r.country_custom_answers,
       ...r.country_custom_answers_private
@@ -256,7 +296,7 @@ export const parseCustomAnswers = r => {
 };
 
 export const APIError = (field, message) => {
-  const error = new Error('APIError');
+  const error = new Error("APIError");
   error.response = {
     data: {
       project: {
