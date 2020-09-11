@@ -44,6 +44,31 @@
       </el-table-column>
 
       <el-table-column
+        :resizable="false"
+        :label="$gettext('Questionnaires Assigned') | translate"
+        fixed
+        sortable="custom"
+        prop="reviewers"
+        width="511"
+      >
+        <template slot-scope="scope">
+          <reviewers :id="scope.row.id" :items="scope.row.reviewers" />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        :resizable="false"
+        :label="$gettext('Scoring') | translate"
+        fixed
+        prop="scores"
+        width="221"
+      >
+        <template slot-scope="scope">
+          <scores :id="scope.row.id" :scores="scope.row.scores" />
+        </template>
+      </el-table-column>
+
+      <el-table-column
         v-if="selectedColumns.includes('5')"
         :resizable="false"
         :label="$gettext('Region') | translate"
@@ -301,6 +326,9 @@ import ResultAreaItem from "@/components/dashboard/ResultAreaItem";
 import CurrentPage from "@/components/dashboard/CurrentPage";
 import FieldOfficeItem from "@/components/project/FieldOfficeItem";
 import CapabilitiesList from "@/components/project/CapabilitiesList";
+import Reviewers from "@/components/portfolio/dashboard/table/Reviewers";
+import Scores from "@/components/portfolio/dashboard/table/Scores";
+
 import { setTimeout } from "timers";
 
 export default {
@@ -315,7 +343,9 @@ export default {
     FieldOfficeItem,
     CapabilitiesList,
     GoalAreaItem,
-    ResultAreaItem
+    ResultAreaItem,
+    Reviewers,
+    Scores
   },
   data() {
     return {
