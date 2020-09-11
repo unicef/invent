@@ -43,7 +43,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
     # NEW FIELDS
-    regional_office = serializers.ReadOnlyField()
     unicef_sector = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1, required=True)
     regional_priorities = serializers.ListField(
@@ -83,6 +82,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
         model = Project
 
     def validate_country_office(self, value):
+        try:
+            self.co = CountryOffice.objects.get(id=value)
+        except CountryOffice.DoesNotExist:
+            raise serializers.ValidationError('Country office does not exist.')
+
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
             if project.public_id and 'country_office' in project.data and \
