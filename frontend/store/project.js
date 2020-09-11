@@ -51,6 +51,7 @@ export const getters = {
   getCapabilitySubcategories: state => state.capability_subcategories,
   getPlatforms: state => state.platforms.length === 0 ? [null] : state.platforms,
   getSectors: state => state.unicef_sector.length === 0 ? [null] : state.unicef_sector,
+  getRegionalPriorities: state => state.regional_priorities.length === 0 ? [null] : state.regional_priorities,
   getDigitalHealthInterventions: state => [...state.dhis],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
@@ -196,6 +197,9 @@ export const actions = {
   },
   setSectors ({ commit }, value) {
     commit('SET_SECTORS', value);
+  },
+  setRegionalPriorities ({ commit }, value) {
+    commit('SET_REGIONAL_PRIORITIES', value);
   },
   setDigitalHealthInterventions ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value);
@@ -358,6 +362,9 @@ export const mutations = {
   },
   SET_SECTORS: (state, unicef_sector) => {
     Vue.set(state, 'unicef_sector', [...unicef_sector]);
+  },
+  SET_REGIONAL_PRIORITIES: (state, regional_priorities) => {
+    Vue.set(state, 'regional_priorities', [...regional_priorities]);
   },
   SET_DIGITAL_HEALTH_INTERVENTIONS: (state, dhi) => {
     Vue.set(state, 'dhis', [...dhi]);
