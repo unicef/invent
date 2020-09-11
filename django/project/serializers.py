@@ -8,7 +8,7 @@ from rest_framework.validators import UniqueValidator
 import scheduler.celery  # noqa
 from core.utils import send_mail_wrapper
 
-from country.models import CustomQuestion
+from country.models import CustomQuestion, CountryOffice
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
@@ -16,11 +16,14 @@ from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfo
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
-    # SECTION 1 General Overview
+    # UNICEF Office and co
+    country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
+    country = serializers.ReadOnlyField()
+    regional_office = serializers.ReadOnlyField()
+
+    # SECTION 1 General
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128)
-    country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
-    country = serializers.IntegerField(min_value=0, max_value=100000)
     overview = serializers.CharField(max_length=300, required=True)
     implementation_overview = serializers.CharField(max_length=1024, required=False)
     start_date = serializers.CharField(max_length=256, required=True)
