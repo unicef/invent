@@ -168,6 +168,18 @@
           </simple-field>
         </collapsible-card>
 
+        <collapsible-card
+          id="categorization"
+          :title="$gettext('4. Categorization') | translate"
+        >
+          <simple-field :header="$gettext('UNICEF Sector') | translate">
+            <platforms-list
+              :platforms="project.unicef_sector"
+              source="getSectors"
+            />
+          </simple-field>
+        </collapsible-card>
+
         <div
           v-if="donors && donors.length >0"
           id="donorcustom"
