@@ -45,6 +45,7 @@ class PortfolioTests(APITestCase):
             "contact_name": "name1",
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
+            "overview": "new overview",
             "implementation_dates": "2016",
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
@@ -60,7 +61,13 @@ class PortfolioTests(APITestCase):
             "capability_levels": [],
             "capability_categories": [],
             "capability_subcategories": [],
-            "dhis": []
+            "dhis": [],
+            "unicef_sector": [1, 2],
+            "regional_priorities": [1, 2],
+            "hardware": [1, 2],
+            "nontech": [1, 2],
+            "functions": [1, 2],
+            "phase": 1,
         }}
 
         # Create project draft
