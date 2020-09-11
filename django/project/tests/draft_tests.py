@@ -176,11 +176,28 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.status_code, 201)
         self.assertIn("hsc_challenges", response.json()['draft'])
 
-    def test_published_country_office_cannot_change(self):
+    def test_published_country_office_co_does_not_exist(self):
         url = reverse("project-publish", kwargs={"project_id": self.project_pub_id,
                                                  "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
         data['project'].update(name='unique', country_office=999)
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(),
+                         {'project': {'country_office': ['Country office does not exist.']}})
+
+    def test_published_country_office_cannot_change(self):
+        url = reverse("project-publish", kwargs={"project_id": self.project_pub_id,
+                                                 "country_office_id": self.country_office.id})
+        data = copy.deepcopy(self.project_data)
+
+        new_country_office = CountryOffice.objects.create(
+            name='Test Country Office 2',
+            region=Country.UNICEF_REGIONS[0][0],
+            country=self.country
+        )
+
+        data['project'].update(name='unique', country_office=new_country_office.id)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),
