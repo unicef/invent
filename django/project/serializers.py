@@ -129,6 +129,8 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     phase = serializers.IntegerField(required=False)
 
     def create(self, validated_data):
+        validated_data['country'] = self.co.country.id
+        validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
         return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
@@ -138,11 +140,8 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         if not instance.public_id:
             instance.name = validated_data["name"]
 
-        instance.odk_etag = odk_etag if self.context.get('preserve_etag') else None
-
-        if odk_extra_data:
-            instance.odk_extra_data = odk_extra_data
-
+        validated_data['country'] = self.co.country.id
+        validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
         instance.draft = validated_data
         return instance
 
