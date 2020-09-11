@@ -207,16 +207,30 @@ class ProjectDraftTests(SetupTests):
         url = reverse("project-draft", kwargs={"project_id": self.project_draft_id,
                                                "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_draft_data)
-        data['project'].update(country=20)
+
+        new_country_office = CountryOffice.objects.create(
+            name='Test Country Office 2',
+            region=Country.UNICEF_REGIONS[0][0],
+            country=self.country
+        )
+        data['project'].update(country_office=new_country_office.id)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['draft']["country"], 20)
+        self.assertEqual(response.json()['draft']["country"], self.country.id)
+        self.assertEqual(response.json()['draft']["country_office"], new_country_office.id)
 
     def test_published_country_office_cannot_change_even_in_draft(self):
         url = reverse("project-draft", kwargs={"project_id": self.project_pub_id,
                                                "country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)
-        data['project'].update(country_office=20)
+
+        new_country_office = CountryOffice.objects.create(
+            name='Test Country Office 2',
+            region=Country.UNICEF_REGIONS[0][0],
+            country=self.country
+        )
+
+        data['project'].update(country_office=new_country_office.id)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),
