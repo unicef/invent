@@ -37,6 +37,13 @@
             :publish-rules="publishRules"
             :api-errors="apiErrors"
           />
+          <technology
+            ref="technology"
+            :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+          />
           <donor-custom
             ref="donorCustom"
             :use-publish-rules="usePublishRules"
@@ -63,6 +70,7 @@ import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
 import focalOverview from './sections/FocalOverview';
 import Categorization from '@/components/project/sections/Categorization';
+import Technology from '@/components/project/sections/Technology';
 import ImplementationOverview from './sections/ImplementationOverview';
 import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
@@ -74,7 +82,8 @@ export default {
     focalOverview,
     ImplementationOverview,
     DonorCustom,
-    Categorization
+    Categorization,
+    Technology
   },
   $_veeValidate: {
     validator: 'new'
@@ -212,6 +221,7 @@ export default {
         this.$refs.generalOverview.validate(),
         this.$refs.focalOverview.validate(),
         this.$refs.categorization.validate(),
+        this.$refs.technology.validate(),
         this.$refs.implementationOverview.validate(),
         this.$refs.donorCustom.validate()
       ]);
@@ -223,6 +233,7 @@ export default {
       this.$refs.generalOverview.clear();
       this.$refs.focalOverview.clear();
       this.$refs.categorization.clear();
+      this.$refs.technology.clear();
       this.$refs.implementationOverview.clear();
       this.$refs.donorCustom.clear();
     },
@@ -233,7 +244,8 @@ export default {
         const valid = await this.$refs.generalOverview.validateDraft();
         const focal = await this.$refs.focalOverview.validateDraft();
         const categorization = await this.$refs.categorization.validateDraft();
-        if (valid && focal && categorization) {
+        const technology = await this.$refs.technology.validateDraft();
+        if (valid && focal && categorization && technology) {
           try {
             if (this.isNewProject) {
               const id = await this.createProject();

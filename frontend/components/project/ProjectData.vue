@@ -186,6 +186,30 @@
           </simple-field>
         </collapsible-card>
 
+        <collapsible-card
+          id="technology"
+          :title="$gettext('4. Technology') | translate"
+        >
+          <simple-field :header="$gettext('Hardware Platform(s) and Physical Product(s)') | translate">
+            <platforms-list
+              :platforms="project.hardware"
+              source="getHardware"
+            />
+          </simple-field>
+          <simple-field :header="$gettext('Programme Innovation(s) and Non-Technology Platform(s)') | translate">
+            <platforms-list
+              :platforms="project.nontech"
+              source="getNontech"
+            />
+          </simple-field>
+          <simple-field :header="$gettext('Function(s) of Platform') | translate">
+            <platforms-list
+              :platforms="project.functions"
+              source="getFunctions"
+            />
+          </simple-field>
+        </collapsible-card>
+
         <div
           v-if="donors && donors.length >0"
           id="donorcustom"
