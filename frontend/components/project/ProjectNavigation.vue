@@ -70,6 +70,17 @@
               <translate>Categorization</translate>
             </el-button>
           </li>
+          <li :class="{active: active === 'technology'}">
+            <el-button
+              type="text"
+              @click="scrollTo('technology')"
+            >
+              <span class="Step">
+                <fa icon="arrow-right" />
+              </span>
+              <translate>Technology</translate>
+            </el-button>
+          </li>
           <li
             v-show="showDonorFieldsLink"
             :class="{active: active === 'donorcustom'}"

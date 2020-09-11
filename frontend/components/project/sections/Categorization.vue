@@ -20,13 +20,8 @@
           >
             <template slot="label">
               <translate key="sector-label">
-                UNICEF Sector
+                Please select the sector(s) the initiative serves.
               </translate>
-<!--              <form-hint>-->
-<!--                <translate key="implementation-overview-hint">-->
-<!--                  Describe your overall digital health project design.-->
-<!--                </translate>-->
-<!--              </form-hint>-->
             </template>
 
             <multi-selector
@@ -59,7 +54,7 @@
           >
             <template slot="label">
               <translate key="priorities-label">
-                Regional Priorities
+                What regional priorities are addressed by the initiative?
               </translate>
             </template>
 
@@ -90,7 +85,6 @@ import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import MultiSelector from '@/components/project/MultiSelector';
-// import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapGetters } from 'vuex';
 
@@ -98,7 +92,6 @@ export default {
   components: {
     CollapsibleCard,
     MultiSelector
-    // FormHint
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
