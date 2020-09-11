@@ -30,7 +30,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "technology_platforms")
         self.assertContains(response, "hsc_challenges")
-        self.assertEqual(len(response.json().keys()), 10)
+        self.assertEqual(len(response.json().keys()), 18)
 
     def test_retrieve_project_structure_cache(self):
         with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):
@@ -565,6 +565,7 @@ class ProjectTests(SetupTests):
             "contact_name": "name2",
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
+            "overview": "new overview",
             "implementation_dates": "2016",
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
@@ -580,7 +581,13 @@ class ProjectTests(SetupTests):
             "capability_levels": [],
             "capability_categories": [],
             "capability_subcategories": [],
-            "dhis": []
+            "dhis": [],
+            "unicef_sector": [1, 2],
+            "regional_priorities": [1, 2],
+            "hardware": [1, 2],
+            "nontech": [1, 2],
+            "functions": [1, 2],
+            "phase": 1,
         }}
 
         # Create project draft
