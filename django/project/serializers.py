@@ -95,10 +95,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
         return value
 
     def update(self, instance, validated_data):
+        validated_data['country'] = self.co.country.id
+        validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
-        instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
 
         instance.save()
