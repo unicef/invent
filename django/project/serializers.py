@@ -129,28 +129,13 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     phase = serializers.IntegerField(required=False)
 
-    # ODK DATA
-    odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
-    odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
-    odk_extra_data = serializers.JSONField(required=False)
-
     def create(self, validated_data):
-        odk_etag = validated_data.pop('odk_etag', None)
-        odk_id = validated_data.pop('odk_id', None)
-        odk_extra_data = validated_data.pop('odk_extra_data', dict())
         return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
-            odk_etag=odk_etag,
-            odk_id=odk_id,
-            odk_extra_data=odk_extra_data
         )
 
     def update(self, instance, validated_data):
-        odk_etag = validated_data.pop('odk_etag', None)
-        validated_data.pop('odk_id', None)
-        odk_extra_data = validated_data.pop('odk_extra_data', None)
-
         if not instance.public_id:
             instance.name = validated_data["name"]
 
