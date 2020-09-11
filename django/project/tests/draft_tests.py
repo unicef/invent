@@ -1,6 +1,8 @@
 import copy
 
 from django.urls import reverse
+
+from country.models import CountryOffice, Country
 from project.models import Project, HealthFocusArea, HealthCategory
 
 from project.tests.setup import SetupTests
@@ -20,11 +22,17 @@ class ProjectDraftTests(SetupTests):
             'capability_levels': [],
             'capability_categories': [],
             'capability_subcategories': [],
-            'platforms': []
+            'platforms': [],
+            'unicef_sector': [],
+            'regional_priorities': [],
+            'hardware': [],
+            'nontech': [],
+            'functions': []
         }}
 
         url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
+        self.assertEqual(response.status_code, 201)
         self.project_draft_id = response.json().get("id")
 
         # Published
@@ -33,8 +41,8 @@ class ProjectDraftTests(SetupTests):
         data = copy.deepcopy(self.project_data)
         data['project'].update(name='Proj 1')
         response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
         self.project_pub_id = response.json().get("id")
-
         # Draft without published
         self.project_draft_data = {'project': {
             'name': 'Draft Proj 2',
@@ -45,7 +53,12 @@ class ProjectDraftTests(SetupTests):
             'capability_levels': [],
             'capability_categories': [],
             'capability_subcategories': [],
-            'platforms': []
+            'platforms': [],
+            'unicef_sector': [],
+            'regional_priorities': [],
+            'hardware': [],
+            'nontech': [],
+            'functions': []
         }}
 
         url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
