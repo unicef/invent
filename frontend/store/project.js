@@ -52,6 +52,9 @@ export const getters = {
   getPlatforms: state => state.platforms.length === 0 ? [null] : state.platforms,
   getSectors: state => state.unicef_sector.length === 0 ? [null] : state.unicef_sector,
   getRegionalPriorities: state => state.regional_priorities.length === 0 ? [null] : state.regional_priorities,
+  getHardware: state => state.hardware.length === 0 ? [null] : state.hardware,
+  getNontech: state => state.nontech.length === 0 ? [null] : state.nontech,
+  getFunctions: state => state.functions.length === 0 ? [null] : state.functions,
   getDigitalHealthInterventions: state => [...state.dhis],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
@@ -200,6 +203,15 @@ export const actions = {
   },
   setRegionalPriorities ({ commit }, value) {
     commit('SET_REGIONAL_PRIORITIES', value);
+  },
+  setHardware ({ commit }, value) {
+    commit('SET_HARDWARE', value);
+  },
+  setNontech ({ commit }, value) {
+    commit('SET_NONTECH', value);
+  },
+  setFunctions ({ commit }, value) {
+    commit('SET_FUNCTIONS', value);
   },
   setDigitalHealthInterventions ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value);
@@ -365,6 +377,15 @@ export const mutations = {
   },
   SET_REGIONAL_PRIORITIES: (state, regional_priorities) => {
     Vue.set(state, 'regional_priorities', [...regional_priorities]);
+  },
+  SET_HARDWARE: (state, hardware) => {
+    Vue.set(state, 'hardware', [...hardware]);
+  },
+  SET_NONTECH: (state, nontech) => {
+    Vue.set(state, 'nontech', [...nontech]);
+  },
+  SET_FUNCTIONS: (state, functions) => {
+    Vue.set(state, 'functions', [...functions]);
   },
   SET_DIGITAL_HEALTH_INTERVENTIONS: (state, dhi) => {
     Vue.set(state, 'dhis', [...dhi]);

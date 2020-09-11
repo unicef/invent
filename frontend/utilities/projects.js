@@ -57,6 +57,15 @@ export const draftRules = () => {
     regional_priorities: {
       required: false
     },
+    hardware: {
+      required: false
+    },
+    nontech: {
+      required: false
+    },
+    functions: {
+      required: false
+    },
     name: {
       required: true,
       min: 1,
@@ -90,6 +99,15 @@ export const publishRules = () => {
       required: true
     },
     regional_priorities: {
+      required: false
+    },
+    hardware: {
+      required: false
+    },
+    nontech: {
+      required: false
+    },
+    functions: {
       required: false
     },
     name: {
