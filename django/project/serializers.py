@@ -12,7 +12,8 @@ from country.models import CustomQuestion
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, ScalePhase, \
+    ProjectPortfolioState, ReviewScore
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -390,6 +391,21 @@ class ProblemStatementUpdateSerializer(ProblemStatementSerializer):
         }
 
 
+class ScalePhaseBriefSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ScalePhase
+        fields = ('id', 'phase')  # This is to show in ProjectPortfolioState
+
+
+class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
+    scale_phase = ScalePhaseBriefSerializer(required=False)
+
+    class Meta:
+        model = ProjectPortfolioState
+        fields = ('id', 'impact', 'scale_phase', 'portfolio', 'project', 'review_scores')
+
+
 class PortfolioBaseSerializer(serializers.ModelSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
 
@@ -399,7 +415,21 @@ class PortfolioBaseSerializer(serializers.ModelSerializer):
 
 
 class PortfolioDetailsSerializer(PortfolioBaseSerializer):
+    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
+    review_state = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements',
+                  'review_state')
+
+
+class PortfolioCreateSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False)
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
 
     @staticmethod
     def _create_problem_statements(instance, problem_statements):
@@ -414,9 +444,7 @@ class PortfolioDetailsSerializer(PortfolioBaseSerializer):
         instance = super().create(validated_data)
 
         self._create_problem_statements(instance, problem_statements)
-
         instance.save()
-
         return instance
 
 
@@ -450,3 +478,33 @@ class PortfolioUpdateSerializer(PortfolioBaseSerializer):
         else:
             instance = super().update(instance, validated_data)
         return instance
+
+
+class ProjectInPortfolioSerializer(serializers.ModelSerializer):
+    review_states = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        fields = ('id', 'name', 'review_states')
+
+    def get_review_states(self, obj):
+        portfolio = self.context.get('kwargs').get('pk')
+        try:
+            pps = obj.review_states.get(portfolio=portfolio)
+            return ProjectPortfolioStateSerializer(pps).data
+        except ProjectPortfolioState.DoesNotExist:
+            return None
+
+
+class ReviewScoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ReviewScore
+        fields = '__all__'
+
+
+class ReviewScoreUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ReviewScore
+        fields = ('psa', 'rnci', 'ratp', 'ra', 'ra_comment', 'ee', 'nst', 'nc', 'ps')

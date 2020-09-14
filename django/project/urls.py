@@ -112,4 +112,26 @@ urlpatterns = [
              'get': 'retrieve'
          }),
          name="portfolio-detailed"),
+    path(r'portfolio/<int:pk>/projects/<str:project_filter>/',
+         view=views.PortfolioProjectListViewSet.as_view({
+             'get': 'list'
+         }),
+         name="portfolio-project-list"),
+    path(r'portfolio/<int:portfolio_id>/start-project-review/',
+         view=views.PortfolioReviewCreateViewSet.as_view({
+             'post': 'create'
+         }), name='portfolio-review-start'),
+    path(r'portfolio/<int:portfolio_id>/<int:portfolio_review_id>/',
+         view=views.PortfolioReviewAssignQuestionnaireViewSet.as_view({
+             'post': 'create'
+         }), name='portfolio-assign-questionnaire'),
+    path(r'project-review/<int:pk>/',
+         view=views.ReviewScoreViewSet.as_view({
+             'get': 'retrieve',
+         }), name='review-score-get'),
+    path(r'project-review/<int:pk>/update',
+         view=views.ReviewScoreUpdateViewSet.as_view({
+             'post': 'update',
+             'delete': 'destroy'
+         }), name='review-score-modify'),
 ]

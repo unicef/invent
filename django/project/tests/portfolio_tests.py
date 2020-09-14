@@ -219,7 +219,8 @@ class PortfolioTests(PortfolioSetup):
         """
         Any user should be able to view portfolio details
         """
-        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
+        url = reverse('portfolio-detailed',
+                      kwargs={"pk": self.portfolio_id})
         response = self.user_1_client.get(url)
 
         self.assertEqual(response.status_code, 200)

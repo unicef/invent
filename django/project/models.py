@@ -423,14 +423,15 @@ class ImportRow(models.Model):
 class BaseScore(ExtendedModel):
     BASE_CHOICES = [(i, i) for i in range(1, 6)]
     psa = models.ManyToManyField(ProblemStatement, blank=True)  # Problem Statement Alignment
-    rnci = models.IntegerField(choices=BASE_CHOICES, null=True)  # Reach: Number of Children Impacted
-    ratp = models.IntegerField(choices=BASE_CHOICES, null=True)  # Reach: Addressing Target Populations
-    ra = models.IntegerField(choices=BASE_CHOICES, null=True)  # Risk Assessment
-    ra_comment = models.CharField(max_length=255, null=True)  # Risk Assessment - text field
-    ee = models.IntegerField(choices=BASE_CHOICES, null=True)  # Evidence of Effectiveness
-    nst = models.IntegerField(choices=BASE_CHOICES, null=True)  # Newness of Solution (Tool)
-    nc = models.IntegerField(choices=BASE_CHOICES, null=True)  # Newness of Challenge
-    ps = models.IntegerField(choices=BASE_CHOICES, null=True)  # Path to Scale
+    rnci = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Reach: Number of Children Impacted
+    ratp = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Reach: Addressing Target Populations
+    ra = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Risk Assessment
+    ra_comment = models.CharField(max_length=255, null=True, blank=True)  # Risk Assessment - text field
+    ee = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Evidence of Effectiveness
+    nst = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Solution (Tool)
+    nc = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Challenge
+    ps = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Path to Scale
+    complete = models.BooleanField(default=False, blank=True)
 
     class Meta:
         abstract = True
@@ -450,9 +451,10 @@ class ScalePhase(ExtendedModel):
 
 class ProjectPortfolioState(BaseScore):
     impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True)
-    scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE)
+    scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE, blank=True)
     portfolio = models.ForeignKey(Portfolio, related_name='review_state', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
 
     def assign_questionnaire(self, user: UserProfile):
         return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
