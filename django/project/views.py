@@ -20,11 +20,13 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, HSCChallenge, Portfolio
+    HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
+from user.models import UserProfile
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
-    PortfolioDetailsSerializer, PortfolioUpdateSerializer
+    PortfolioDetailsSerializer, PortfolioUpdateSerializer, PortfolioCreateSerializer, ProjectInPortfolioSerializer, \
+    ReviewScoreSerializer, ReviewScoreUpdateSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -558,7 +560,7 @@ class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
 
 class PortfolioCreateViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
-    serializer_class = PortfolioDetailsSerializer
+    serializer_class = PortfolioCreateSerializer
 
 
 class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericViewSet):
@@ -569,3 +571,77 @@ class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericView
 class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = PortfolioDetailsSerializer
     queryset = Portfolio.objects.all()
+
+
+class PortfolioReviewCreateViewSet(PortfolioAccessMixin, GenericViewSet):
+    def create(self, request, *args, **kwargs):
+        # check if portfolio exists
+        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=kwargs.get("portfolio_id"))
+        # TODO: check permissions!
+        if 'project' not in request.data:
+            raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
+
+        projects = portfolio.projects.filter(id__in=request.data['project'])
+        if len(projects) == 0:
+            raise ValidationError({'project': 'Projects are not in portfolio'})
+        # create a new review for each project if needed
+        for project in projects:
+            ProjectPortfolioState.objects.get_or_create(portfolio=portfolio, project=project)
+
+        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_201_CREATED)
+
+
+class PortfolioProjectListViewSet(ListModelMixin, GenericViewSet):
+    serializer_class = ProjectInPortfolioSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['kwargs'] = self.kwargs
+        return context
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the projects in the current portfolio with the filtered review status
+        """
+        portfolio = get_object_or_400(Portfolio, self.kwargs.get('pk'))
+        p_qs = portfolio.projects.all()
+        filter_param = self.kwargs.get('project_filter')
+        if filter_param == 'inventory':
+            return p_qs.exclude(review_states__portfolio=portfolio)
+        elif filter_param == 'review':
+            return p_qs.filter(review_states__portfolio=portfolio, review_states__approved=False)
+        elif filter_param == 'approved':
+            return p_qs.filter(review_states__portfolio=portfolio, review_states__approved=True)
+        else:
+            raise ValidationError({'project_filter': 'Allowed values are: [inventory|review|complete]'})
+
+
+class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericViewSet):
+    def get_project_and_portfolio(self):
+        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
+        # TODO: check permissions!
+        pps = portfolio.review_state.get(id=self.kwargs.get('portfolio_review_id'))
+        return portfolio, pps
+
+    def create(self, request, *args, **kwargs):
+        portfolio, pps = self.get_project_and_portfolio()
+        if 'userprofile' not in request.data:
+            raise ValidationError({'userprofile': 'UserProfile data is missing'})  # pragma: no cover
+        userprofile = get_object_or_400(UserProfile, id=request.data.get('userprofile'))
+        review, created = pps.assign_questionnaire(user=userprofile)
+        data = ReviewScoreSerializer(review).data
+        if created:
+            return Response(data=data, status=status.HTTP_201_CREATED)
+        return Response(data=data, status=status.HTTP_409_CONFLICT)
+
+
+class ReviewScoreViewSet(RetrieveModelMixin, GenericViewSet):
+    # TODO: Permissions layer
+    serializer_class = ReviewScoreSerializer
+    queryset = ReviewScore.objects.all()
+
+
+class ReviewScoreUpdateViewSet(UpdateModelMixin, DestroyModelMixin, GenericViewSet):
+    # TODO: Permissions layer
+    serializer_class = ReviewScoreUpdateSerializer
+    queryset = ReviewScore.objects.all()
