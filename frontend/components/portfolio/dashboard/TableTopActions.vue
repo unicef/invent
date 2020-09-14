@@ -228,11 +228,13 @@ export default {
     handleClickBack() {
       this.setTab(this.tab - 1);
       console.log("Move projects back");
+      // todo: integrate actions to handle the change
       this.handleActions();
     },
     handleClickForward() {
       this.setTab(this.tab + 1);
       console.log("Move projects forward");
+      // todo: integrate actions to handle the change
       this.handleActions();
     },
     handleActions() {
