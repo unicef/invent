@@ -24,7 +24,6 @@
         </div>
       </div>
       <div class="DashboardListView">
-        <!-- <p>will display filter for {{ tab }}</p> -->
         <el-row>
           <table-top-actions />
         </el-row>
@@ -58,8 +57,7 @@ export default {
     store.dispatch("dashboard/setDashboardSection", "list");
     await Promise.all([
       store.dispatch("projects/loadUserProjects"),
-      store.dispatch("projects/loadProjectStructure"),
-      store.dispatch("countries/loadMapData")
+      store.dispatch("projects/loadProjectStructure")
     ]);
     await store.dispatch("dashboard/setSearchOptions", query);
     try {
@@ -71,6 +69,7 @@ export default {
         message: "Unable to process the search with the current parameters"
       });
     }
+    // todo: integration should handle the status to refill data of projects
     if (store.getters["dashboard/getDashboardType"] === "donor") {
       await store.dispatch(
         "system/loadDonorDetails",

@@ -281,16 +281,6 @@ export const parseCustomAnswers = r => {
   }
   return {
     ...r,
-    // fake info
-    favorite: Math.random() >= 0.5,
-    reviewers: [
-      { name: "Kyle Jacons", completed: Math.random() >= 0.5 },
-      { name: "Rosa Bennet", completed: Math.random() >= 0.5 }
-    ],
-    scores: {
-      completed: Math.random() >= 0.5
-    },
-    // fake info
     country_answers: {
       ...r.country_custom_answers,
       ...r.country_custom_answers_private

@@ -56,13 +56,16 @@ export const state = () => ({
   ],
   portfolios: [],
   portfolio: {},
-  // dashboard of portfolio manager
+  // dashboard of portfolio manager interctions
   tabs: [
     { id: 1, name: "Inventory", icon: "folder", total: 46 },
     { id: 2, name: "For review", icon: "eye", total: 18 },
     { id: 3, name: "Portfolio", icon: "briefcase", total: 35 }
   ],
-  tab: 1
+  tab: 1,
+  dialogReview: false,
+  dialogScore: false,
+  currentProjectId: null
 });
 
 export const getters = {
@@ -98,8 +101,10 @@ export const actions = {
     commit("SET_LOADING", value);
   },
   setTab({ commit }, val) {
+    // todo: integrate and handle projects filters for table
     commit("SET_TAB", val);
   },
+  // portfolio actions
   async createPortfolio({ state, getters, dispatch }) {
     dispatch("setLoading", "create");
     const { data } = await this.$axios.post(`/api/portfolio/create/`, {
@@ -147,6 +152,28 @@ export const actions = {
     commit("SET_MANAGERS", data.managers);
     commit("SET_STATEMENTS", data.problem_statements);
   },
+  // review actions
+  async addReview({ state, commit, dispatch }, { id, data }) {
+    console.log(`this add a review to project ${id}`);
+    commit("SET_VALUE", { key: "dialogReview", val: false });
+    // todo: add api integration
+  },
+  // score actions
+  async addScore({ state, commit, dispatch }, { id, data }) {
+    console.log(`this add a score to project ${id}`);
+    commit("SET_VALUE", { key: "dialogReview", val: false });
+    // todo: add api integration
+  },
+  // state interaction handlers
+  setCurrentProjectId({ commit }, val) {
+    commit("SET_VALUE", { key: "currentProjectId", val });
+  },
+  setReviewDialog({ commit }, val) {
+    commit("SET_VALUE", { key: "dialogReview", val });
+  },
+  setScoreDialog({ commit }, val) {
+    commit("SET_VALUE", { key: "dialogScore", val });
+  },
   async resetPortfolio({ commit }) {
     commit("SET_NAME", "");
     commit("SET_DESCRIPTION", "");
@@ -155,6 +182,8 @@ export const actions = {
     commit("SET_MANAGERS", []);
     commit("SET_STATEMENTS", []);
   }
+  // general pre portfolio setup
+  // todo: change to portfolios API
 };
 
 const status = status => {
@@ -171,6 +200,9 @@ const status = status => {
 };
 
 export const mutations = {
+  SET_VALUE(state, { key, val }) {
+    state[key] = val;
+  },
   SET_NAME: (state, name) => {
     state.name = name;
   },

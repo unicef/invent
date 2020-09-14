@@ -44,9 +44,9 @@
       </el-table-column>
 
       <el-table-column
+        v-if="selectedColumns.includes('20')"
         :resizable="false"
         :label="$gettext('Questionnaires Assigned') | translate"
-        fixed
         sortable="custom"
         prop="reviewers"
         width="511"
@@ -57,9 +57,9 @@
       </el-table-column>
 
       <el-table-column
+        v-if="selectedColumns.includes('30')"
         :resizable="false"
         :label="$gettext('Scoring') | translate"
-        fixed
         prop="scores"
         width="221"
       >
@@ -307,6 +307,9 @@
         <current-page />
       </el-pagination>
     </div>
+    <!-- dialogs -->
+    <review />
+    <score />
   </div>
 </template>
 
@@ -328,6 +331,9 @@ import FieldOfficeItem from "@/components/project/FieldOfficeItem";
 import CapabilitiesList from "@/components/project/CapabilitiesList";
 import Reviewers from "@/components/portfolio/dashboard/table/Reviewers";
 import Scores from "@/components/portfolio/dashboard/table/Scores";
+// dialogs
+import Review from "@/components/portfolio/dashboard/dialog/Review";
+import Score from "@/components/portfolio/dashboard/dialog/Score";
 
 import { setTimeout } from "timers";
 
@@ -345,7 +351,9 @@ export default {
     GoalAreaItem,
     ResultAreaItem,
     Reviewers,
-    Scores
+    Scores,
+    Review,
+    Score
   },
   data() {
     return {

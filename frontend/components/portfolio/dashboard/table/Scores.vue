@@ -7,26 +7,12 @@
     <p v-if="scores.completed" class="complete uppercase">
       <translate>Completed</translate>
     </p>
-
-    <el-dialog title="Shipping address" :visible.sync="dialogScores">
-      <el-table :data="gridData">
-        <el-table-column
-          property="date"
-          label="Date"
-          width="150"
-        ></el-table-column>
-        <el-table-column
-          property="name"
-          label="Name"
-          width="200"
-        ></el-table-column>
-        <el-table-column property="address" label="Address"></el-table-column>
-      </el-table>
-    </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   props: {
     id: {
@@ -38,37 +24,15 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      gridData: [
-        {
-          date: "2016-05-02",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
-        },
-        {
-          date: "2016-05-04",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
-        },
-        {
-          date: "2016-05-01",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
-        },
-        {
-          date: "2016-05-03",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
-        }
-      ],
-      dialogScores: false
-    };
-  },
+
   methods: {
+    ...mapActions({
+      setScoreDialog: "portfolio/setScoreDialog",
+      setCurrentProjectId: "portfolio/setCurrentProjectId"
+    }),
     handleScore(id) {
-      console.log(`this will open score popup ${id}`);
-      this.dialogScores = true;
+      this.setScoreDialog(true);
+      this.setCurrentProjectId(id);
     }
   }
 };
