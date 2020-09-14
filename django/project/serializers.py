@@ -496,6 +496,13 @@ class ProjectInPortfolioSerializer(serializers.ModelSerializer):
             return None
 
 
+class ReviewScoreBriefSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ReviewScore
+        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review')
+
+
 class ReviewScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -507,4 +514,4 @@ class ReviewScoreUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewScore
-        fields = ('psa', 'rnci', 'ratp', 'ra', 'ra_comment', 'ee', 'nst', 'nc', 'ps')
+        fields = ('psa', 'rnci', 'ratp', 'ra', 'ra_text', 'ee', 'nst', 'nc', 'ps')
