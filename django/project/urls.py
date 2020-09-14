@@ -89,47 +89,51 @@ urlpatterns = [
              'put': 'update'
          }),
          name="approval"),
-    url(r"portfolio/active-list/",
+    url("portfolio/active-list/",
         view=views.PortfolioActiveListViewSet.as_view({
             'get': 'list'
         }), name="portfolio-list-active"),
-    url(r'portfolio/create/',
+    url('portfolio/create/',
         view=views.PortfolioCreateViewSet.as_view({
             'post': 'create'
         }), name="portfolio-create"),
-    path(r'portfolio/update/<int:pk>/',
+    path('portfolio/update/<int:pk>/',
          view=views.PortfolioUpdateViewSet.as_view({
              'put': 'update',
              'patch': 'partial_update'
          }),
          name="portfolio-update"),
-    url(r'portfolio/manager-of/',
+    url('portfolio/manager-of/',
         view=views.PortfolioUserListViewSet.as_view({
             'get': 'list'
         }), name="portfolio-list"),
-    path(r'portfolio/<int:pk>/',
+    path('portfolio/<int:pk>/',
          view=views.PortfolioDetailedViewSet.as_view({
              'get': 'retrieve'
          }),
          name="portfolio-detailed"),
-    path(r'portfolio/<int:pk>/projects/<str:project_filter>/',
+    path('portfolio/<int:pk>/add-project/',
+         view=views.PortfolioProjectAddRemoveViewSet.as_view({
+             'post': 'create'
+         }), name='portfolio-project-add'),
+    path('portfolio/<int:pk>/remove-project/',
+         view=views.PortfolioProjectAddRemoveViewSet.as_view({
+             'post': 'remove'
+         }), name='portfolio-project-remove'),
+    path('portfolio/<int:pk>/projects/<str:project_filter>/',
          view=views.PortfolioProjectListViewSet.as_view({
              'get': 'list'
          }),
          name="portfolio-project-list"),
-    path(r'portfolio/<int:portfolio_id>/start-project-review/',
-         view=views.PortfolioReviewCreateViewSet.as_view({
-             'post': 'create'
-         }), name='portfolio-review-start'),
-    path(r'portfolio/<int:portfolio_id>/<int:portfolio_review_id>/',
+    path('portfolio/<int:portfolio_id>/<int:project_id>/',
          view=views.PortfolioReviewAssignQuestionnaireViewSet.as_view({
              'post': 'create'
          }), name='portfolio-assign-questionnaire'),
-    path(r'project-review/<int:pk>/',
+    path('project-review/<int:pk>/',
          view=views.ReviewScoreViewSet.as_view({
              'get': 'retrieve',
          }), name='review-score-get'),
-    path(r'project-review/<int:pk>/update',
+    path('project-review/<int:pk>/update',
          view=views.ReviewScoreUpdateViewSet.as_view({
              'post': 'update',
              'delete': 'destroy'

@@ -426,7 +426,7 @@ class BaseScore(ExtendedModel):
     rnci = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Reach: Number of Children Impacted
     ratp = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Reach: Addressing Target Populations
     ra = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Risk Assessment
-    ra_comment = models.CharField(max_length=255, null=True, blank=True)  # Risk Assessment - text field
+    ra_text = models.CharField(max_length=255, null=True, blank=True)  # Risk Assessment - text field
     ee = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Evidence of Effectiveness
     nst = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Solution (Tool)
     nc = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Challenge
@@ -446,7 +446,7 @@ class ScalePhase(ExtendedModel):
         (5, _('Scaling')),
         (6, _('Sustainable Scale'))
     )
-    phase = models.IntegerField(choices=SCALE_CHOICES, primary_key=True)
+    scale = models.IntegerField(choices=SCALE_CHOICES, primary_key=True)
 
 
 class ProjectPortfolioState(BaseScore):
