@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from rest_framework.test import APITestCase, APIClient
 
-from project.models import Portfolio, ProblemStatement, Project
+from project.models import Portfolio, ProblemStatement
 from country.models import Country, Donor, CountryOffice
 from user.models import Organisation, UserProfile
 from user.tests import create_profile_for_user
