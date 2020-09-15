@@ -8,6 +8,11 @@ from user.models import Organisation, UserProfile
 from user.tests import create_profile_for_user
 
 
+class TestProjectData:
+    def setUp(self):
+        (self.project_data, self.org, self.country, self.country_office, self.d1, self.d2) = self.create_test_data(
+            create_relations=True
+        )
 class MockRequest():
     user = None
     GET = {}
