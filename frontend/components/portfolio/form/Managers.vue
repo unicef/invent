@@ -16,7 +16,6 @@
             Add/remove manager(s)
           </translate>
         </template>
-
         <portfolio-select
           v-model="managers"
           v-validate="rules.managers"
@@ -46,11 +45,8 @@ export default {
   },
   mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   computed: {
-    ...mapState({
-      managerList: state => state.portfolio.managerList
-    }),
     ...mapGetters({
-      // getCountryDetails: "countries/getCountryDetails"
+      managerList: "system/getUserProfilesNoFilter"
     }),
     ...mapGettersActions({
       managers: ["portfolio", "getManagers", "setManagers", 0]
