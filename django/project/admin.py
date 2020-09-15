@@ -8,7 +8,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, HardwarePlatform, NontechPlatform, \
-    PlatformFunction, Portfolio
+    PlatformFunction, Portfolio, InnovationCategory, CPD
 from core.utils import make_admin_list
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -195,6 +195,14 @@ class NontechPlatformAdmin(admin.ModelAdmin):
 
 class PlatformFunctionAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
+    
+    
+class InnovationCategoryAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+    
+
+class CPDAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
@@ -216,3 +224,5 @@ admin.site.register(Phase, PhaseAdmin)
 admin.site.register(HardwarePlatform, HardwarePlatformAdmin)
 admin.site.register(NontechPlatform, NontechPlatformAdmin)
 admin.site.register(PlatformFunction, PlatformFunctionAdmin)
+admin.site.register(InnovationCategory, InnovationCategoryAdmin)
+admin.site.register(CPD, CPDAdmin)
