@@ -63,6 +63,8 @@ class PortfolioTests(APITestCase):
             "capability_subcategories": [],
             "dhis": [],
             "unicef_sector": [1, 2],
+            "innovation_categories": [1, 2],
+            "cpd": [1, 2],
             "regional_priorities": [1, 2],
             "hardware": [1, 2],
             "nontech": [1, 2],
