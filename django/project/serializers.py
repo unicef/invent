@@ -16,6 +16,18 @@ from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement
 
 
+class PartnerSerializer(serializers.Serializer):
+    PARTNER_TYPE = [(0, _('Investment')),
+                    (1, _('Government')),
+                    (2, _('Programme')),
+                    (3, _('Technology'))]
+
+    partner_type = serializers.ChoiceField(choices=PARTNER_TYPE)
+    partner_name = serializers.CharField(max_length=100)
+    partner_email = serializers.EmailField(required=False)
+    partner_website = serializers.URLField(required=False)
+
+
 class ProjectPublishedSerializer(serializers.Serializer):
     # UNICEF Office and co
     country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
