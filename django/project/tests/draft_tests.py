@@ -5,7 +5,7 @@ from django.urls import reverse
 from country.models import CountryOffice, Country
 from project.models import Project, HealthFocusArea, HealthCategory
 
-from project.tests.setup import SetupTests
+from project.tests.setup import SetupTests, TestProjectData
 
 
 class ProjectDraftTests(SetupTests):
@@ -14,23 +14,7 @@ class ProjectDraftTests(SetupTests):
         super(ProjectDraftTests, self).setUp()
 
         # Draft
-        self.project_draft_data = {'project': {
-            'name': 'Draft Proj 1',
-            'country_office': self.country_office.id,
-            'health_focus_areas': [],
-            'dhis': [],
-            'capability_levels': [],
-            'capability_categories': [],
-            'capability_subcategories': [],
-            'platforms': [],
-            'unicef_sector': [],
-            'innovation_categories': [],
-            'cpd': [],
-            'regional_priorities': [],
-            'hardware': [],
-            'nontech': [],
-            'functions': []
-        }}
+        self.project_draft_data, *args = TestProjectData.create_test_data(self, name='Draft Proj 1')
 
         url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
@@ -46,24 +30,7 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.project_pub_id = response.json().get("id")
         # Draft without published
-        self.project_draft_data = {'project': {
-            'name': 'Draft Proj 2',
-            'country_office': self.country_office.id,
-            'organisation': self.org.id,
-            'health_focus_areas': [],
-            'dhis': [],
-            'capability_levels': [],
-            'capability_categories': [],
-            'capability_subcategories': [],
-            'platforms': [],
-            'unicef_sector': [],
-            'innovation_categories': [],
-            'cpd': [],
-            'regional_priorities': [],
-            'hardware': [],
-            'nontech': [],
-            'functions': []
-        }}
+        self.project_draft_data, *args = TestProjectData.create_test_data(self, name='Draft Proj 2')
 
         url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
