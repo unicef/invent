@@ -3,20 +3,57 @@
     :title="$gettext('Scoring: Nutrition Information System') | translate"
     :visible="dialogScore"
     modal
+    width="1240px"
+    height="1086px"
     @close="setScoreDialog(false)"
   >
-    <el-table :data="gridData">
+    <el-table :data="score" style="width: 100%" border>
       <el-table-column
-        property="date"
-        label="Date"
-        width="150"
-      ></el-table-column>
+        fixed
+        prop="question"
+        label="Questions"
+        width="250"
+        label-class-name="score-general-header"
+      >
+      </el-table-column>
       <el-table-column
-        property="name"
-        label="Name"
-        width="200"
-      ></el-table-column>
-      <el-table-column property="address" label="Address"></el-table-column>
+        prop="user"
+        label="User"
+        width="250"
+        label-class-name="score-general-header"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="average"
+        label="Average"
+        width="250"
+        label-class-name="score-general-header"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="score"
+        label="score"
+        width="305"
+        label-class-name="score-general-header"
+      >
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="Official Score"
+        width="305"
+        label-class-name="score-header"
+        class-name="score-content"
+      >
+        <template slot-scope="scope">
+          <el-button
+            @click.native.prevent="deleteRow(scope.$index, score)"
+            type="text"
+            size="small"
+          >
+            Remove
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="setScoreDialog(false)" text>
@@ -35,34 +72,57 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      gridData: [
+      // todo: nature of data is confusing and needs to be ask for it
+      score: [
         {
-          date: "2016-05-02",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
+          question: "Question 1",
+          user: "Tom",
+          average: 1,
+          score: "N/A"
         },
         {
-          date: "2016-05-04",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
+          question: "Question 2",
+          user: "Chris",
+          average: 3,
+          score: "N/A"
         },
         {
-          date: "2016-05-01",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
+          question: "Question 3",
+          user: "Orsi",
+          average: 2,
+          score: "N/A"
         },
         {
-          date: "2016-05-03",
-          name: "John Smith",
-          address: "No.1518,  Jinshajiang Road, Putuo District"
+          question: "Question 4",
+          user: "Daniel",
+          average: 5,
+          score: "N/A"
+        },
+        {
+          question: "Question 5",
+          user: "David",
+          average: 4,
+          score: "N/A"
+        },
+        {
+          question: "Question 6",
+          user: "Elsa",
+          average: 2,
+          score: "N/A"
+        },
+        {
+          question: "Question 7",
+          user: "Kyle",
+          average: 3,
+          score: "N/A"
         }
       ]
     };
   },
   computed: {
     ...mapState({
-      dialogScore: state => state.portfolio.dialogScore,
-      currentProjectId: state => state.portfolio.currentProjectId
+      dialogScore: average => average.portfolio.dialogScore,
+      currentProjectId: average => average.portfolio.currentProjectId
     })
   },
   methods: {
@@ -73,17 +133,32 @@ export default {
     handleSubmit() {
       // todo: transform and add data
       this.addScore({ id: this.currentProjectId, data: {} });
+    },
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
 .dialog-footer {
   display: flex;
   justify-content: space-between;
+}
+.score-content {
+  background-color: #eae6e1;
+}
+.score-header {
+  background-color: #374ea2 !important;
+}
+.score-general-header {
+  border-right: 1px solid @colorWhite;
+}
+.cell.score-general-header {
+  border-right: 1px solid transparent;
 }
 </style>

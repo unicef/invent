@@ -3,7 +3,7 @@
     :title="$gettext('Assign Reviewer') | translate"
     :visible="dialogReview"
     modal
-    width="610"
+    width="610px"
     @close="setReviewDialog(false)"
   >
     <div class="content">
