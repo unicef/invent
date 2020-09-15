@@ -71,6 +71,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
     functions = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
+
+    partner = PartnerSerializer(many=True, required=False, allow_empty=True)
+
     # SECTION 2 Implementation Overview
     platforms = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
