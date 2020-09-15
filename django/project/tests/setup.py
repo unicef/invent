@@ -82,8 +82,9 @@ class MockRequest():
     COOKIES = {}
 
 
-class SetupTests(APITestCase):
+class SetupTests(TestProjectData, APITestCase):
     def setUp(self):
+        super().setUp()
         # Create a test user with profile.
         user_email = "test_user@unicef.org"
 
@@ -109,19 +110,10 @@ class SetupTests(APITestCase):
         self.user_profile_id = response.json().get('user_profile_id')
 
         # Update profile.
-        self.org = Organisation.objects.create(name="org1")
-        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
-                                              region=Country.REGIONS[0][0], unicef_region=Country.UNICEF_REGIONS[0][0])
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
         self.country.save()
-
-        self.country_office = CountryOffice.objects.create(
-            name='Test Country Office',
-            region=Country.UNICEF_REGIONS[0][0],
-            country=self.country
-        )
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
@@ -134,43 +126,6 @@ class SetupTests(APITestCase):
 
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
-
-        self.d1 = Donor.objects.create(name="Donor1", code="donor1")
-        self.d2 = Donor.objects.create(name="Donor2", code="donor2")
-
-        self.project_data = {"project": {
-            "date": datetime.utcnow(),
-            "name": "Test Project1",
-            "organisation": self.org.id,
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "overview": "new overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": [1, 2],
-            "geographic_scope": "somewhere",
-            "country_office": self.country_office.id,
-            "platforms": [1, 2],
-            "donors": [self.d1.id, self.d2.id],
-            "hsc_challenges": [1, 2],
-            "start_date": str(datetime.today().date()),
-            "end_date": str(datetime.today().date()),
-            "field_office": 1,
-            "goal_area": 1,
-            "result_area": 1,
-            "capability_levels": [],
-            "capability_categories": [],
-            "capability_subcategories": [],
-            "dhis": [],
-            "unicef_sector": [1, 2],
-            "innovation_categories": [1, 2],
-            "cpd": [1, 2],
-            "regional_priorities": [1, 2],
-            "hardware": [1, 2],
-            "nontech": [1, 2],
-            "functions": [1, 2],
-            "phase": 1,
-        }}
 
         # Create project draft
         url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
