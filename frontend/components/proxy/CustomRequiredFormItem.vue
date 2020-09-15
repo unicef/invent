@@ -6,16 +6,18 @@
   >
     <template slot="label">
       <slot name="label" />
-      <span v-show="draftRequired" class="Required DraftRequired">
-        <span>
-          *
+      <template v-if="!row">
+        <span v-show="draftRequired" class="Required DraftRequired">
+          <span>
+            *
+          </span>
         </span>
-      </span>
-      <span v-show="publishRequired" class="Required PublishRequired">
-        <span>
-          *
+        <span v-show="publishRequired" class="Required PublishRequired">
+          <span>
+            *
+          </span>
         </span>
-      </span>
+      </template>
     </template>
     <slot />
   </el-form-item>
