@@ -60,6 +60,7 @@ export const getters = {
   getHardware: state => state.projectStructure.hardware ? [...state.projectStructure.hardware] : [],
   getNontech: state => state.projectStructure.nontech ? [...state.projectStructure.nontech] : [],
   getFunctions: state => state.projectStructure.functions ? [...state.projectStructure.functions] : [],
+  getCurrencies: state => state.projectStructure.currencies ? [...state.projectStructure.currencies] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
   getProjectDetails: (state, getters, rootState, rootGetters) => p => {
