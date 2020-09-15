@@ -6,8 +6,9 @@ from rest_framework.validators import UniqueValidator
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
-from core.utils import send_mail_wrapper
+from django.utils.translation import ugettext_lazy as _
 
+from core.utils import send_mail_wrapper
 from country.models import CustomQuestion, CountryOffice
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
