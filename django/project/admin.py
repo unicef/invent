@@ -195,11 +195,11 @@ class NontechPlatformAdmin(admin.ModelAdmin):
 
 class PlatformFunctionAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
-    
-    
+
+
 class InnovationCategoryAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
-    
+
 
 class CPDAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
