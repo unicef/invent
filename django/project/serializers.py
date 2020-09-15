@@ -366,7 +366,7 @@ class PortfolioListSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_project_count(obj):
-        return len(obj.projects.published_only().filter(is_active=True))
+        return len(Project.objects.published_only().filter(is_active=True, review_states__in=obj.review_states.all()))
 
     @staticmethod
     def get_managers(obj):
@@ -411,17 +411,17 @@ class PortfolioBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements')
 
 
 class PortfolioDetailsSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
-    review_state = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
+    review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements',
-                  'review_state')
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements',
+                  'review_states')
 
 
 class PortfolioCreateSerializer(PortfolioBaseSerializer):
@@ -429,7 +429,7 @@ class PortfolioCreateSerializer(PortfolioBaseSerializer):
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements')
 
     @staticmethod
     def _create_problem_statements(instance, problem_statements):
@@ -510,8 +510,8 @@ class ReviewScoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ReviewScoreUpdateSerializer(serializers.ModelSerializer):
+class ReviewScoreUserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewScore
-        fields = ('psa', 'rnci', 'ratp', 'ra', 'ra_text', 'ee', 'nst', 'nc', 'ps')
+        fields = ('psa', 'rnci', 'ratp', 'ra', 'ee', 'nst', 'nc', 'ps')
