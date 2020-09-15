@@ -43,6 +43,8 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
     # NEW FIELDS
+    innovation_categories = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     unicef_sector = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1, required=True)
     regional_priorities = serializers.ListField(
@@ -51,6 +53,8 @@ class ProjectPublishedSerializer(serializers.Serializer):
     program_targets_achieved = serializers.CharField(max_length=1024, required=False)
     target_group_reached = serializers.IntegerField(required=False)
     current_achievements = serializers.CharField(max_length=2048, required=False)
+    cpd = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     awp = serializers.CharField(max_length=500, required=False)
     wbs = serializers.ListField(
         child=serializers.CharField(max_length=30), max_length=50, min_length=0, required=False, allow_empty=True)
