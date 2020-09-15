@@ -71,6 +71,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
     functions = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
+    website_url = serializers.URLField(required=False)
+    sharepoint_url = serializers.URLField(required=False)
+    eacom_url = serializers.URLField(required=False)
+    mel_url = serializers.URLField(required=False)
+    other_url = serializers.URLField(required=False)
 
     partner = PartnerSerializer(many=True, required=False, allow_empty=True)
 
