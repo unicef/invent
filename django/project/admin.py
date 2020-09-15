@@ -122,16 +122,12 @@ class ProjectAdmin(AllObjectsAdmin):
 
 
 class PortfolioAdmin(AllObjectsAdmin):
-    list_display = ['__str__', 'description', 'created', 'icon', 'project_list', 'managers_list', 'is_active']
+    list_display = ['__str__', 'description', 'created', 'icon', 'managers_list', 'is_active']
     fields = ['name', 'description', 'projects', 'managers', 'icon', 'is_active']
-
-    def project_list(self, obj):
-        return make_admin_list(obj.projects.all())
 
     def managers_list(self, obj):
         return make_admin_list(obj.managers.all())
 
-    project_list.short_description = "Assigned projects"
     managers_list.short_description = "Assigned managers"
 
 

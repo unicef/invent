@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from project.models import ProjectApproval, Portfolio
+from project.models import ProjectApproval, Portfolio, ReviewScore
 
 
 class InTeamOrReadOnly(permissions.BasePermission):
@@ -49,3 +49,14 @@ class IsGPOOrManager(permissions.BasePermission):
             return True  # pragma: no cover
 
         return request.user.userprofile.global_portfolio_owner or obj.managers.filter(id=request.user.userprofile.id)
+
+
+class IsAssignedGPOOrManager(permissions.BasePermission):
+    """
+    Portfolio reviews can only be accessed by reviewers, portfolio managers or GPOs
+    """
+
+    def has_object_permission(self, request, view, obj: ReviewScore):
+        return request.user.userprofile.global_portfolio_owner or \
+               obj.portfolio_review.portfolio.managers.filter(id=request.user.userprofile.id) or \
+               obj.reviewer.id == request.user.userprofile.id

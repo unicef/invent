@@ -12,7 +12,8 @@ from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
+    ReviewScoreAccessMixin
 from country.models import Donor, FieldOffice, CountryOffice
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
@@ -26,7 +27,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
     PortfolioDetailsSerializer, PortfolioUpdateSerializer, PortfolioCreateSerializer, ProjectInPortfolioSerializer, \
-    ReviewScoreSerializer, ReviewScoreUpdateSerializer, ReviewScoreBriefSerializer
+    ReviewScoreSerializer, ReviewScoreUserUpdateSerializer, ReviewScoreBriefSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -585,7 +586,6 @@ class PortfolioProjectAddRemoveViewSet(PortfolioAccessMixin, GenericViewSet):
 
         # create a new review for each project if needed
         for project in projects:
-            portfolio.projects.add(project)
             ProjectPortfolioState.objects.get_or_create(portfolio=portfolio, project=project)
 
         return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_201_CREATED)
@@ -597,12 +597,10 @@ class PortfolioProjectAddRemoveViewSet(PortfolioAccessMixin, GenericViewSet):
         if 'project' not in request.data or len(request.data['project']) == 0:
             raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
 
-        projects = portfolio.projects.filter(id__in=request.data['project'])
-
+        review_states = portfolio.review_states.filter(project__in=request.data['project'])
         # Remove each project from portfolio
-        for project in projects:
-            portfolio.projects.remove(project)
-            portfolio.review_state.get(project=project).delete()
+        for rev_state in review_states:
+            rev_state.delete()
         return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
 
 
@@ -619,14 +617,15 @@ class PortfolioProjectListViewSet(ListModelMixin, GenericViewSet):
         This view should return a list of all the projects in the current portfolio with the filtered review status
         """
         portfolio = get_object_or_400(Portfolio, self.kwargs.get('pk'))
-        p_qs = portfolio.projects.all()
         filter_param = self.kwargs.get('project_filter')
         if filter_param == 'inventory':
             return Project.objects.exclude(review_states__portfolio=portfolio)
         elif filter_param == 'review':
-            return p_qs.filter(review_states__portfolio=portfolio, review_states__approved=False)
+            not_approved_reviews = portfolio.review_states.exclude(complete=True)
+            return Project.objects.filter(review_states__in=not_approved_reviews)
         elif filter_param == 'approved':
-            return p_qs.filter(review_states__portfolio=portfolio, review_states__approved=True)
+            approved_reviews = portfolio.review_states.filter(complete=True)
+            return Project.objects.filter(review_states__in=approved_reviews)
         else:
             raise ValidationError({'project_filter': 'Allowed values are: [inventory|review|complete]'})
 
@@ -635,7 +634,7 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
     def get_project_and_portfolio(self):
         portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
 
-        pps = portfolio.review_state.get(project=self.kwargs.get('project_id'))
+        pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
         return portfolio, pps
 
     def create(self, request, *args, **kwargs):
@@ -654,13 +653,11 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
         return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 
-class ReviewScoreViewSet(RetrieveModelMixin, GenericViewSet):
-    # TODO: Permissions layer
+class ReviewScoreViewSet(ReviewScoreAccessMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = ReviewScoreSerializer
     queryset = ReviewScore.objects.all()
 
 
-class ReviewScoreUpdateViewSet(UpdateModelMixin, DestroyModelMixin, GenericViewSet):
-    # TODO: Permissions layer
-    serializer_class = ReviewScoreUpdateSerializer
+class ReviewScoreUpdateViewSet(ReviewScoreAccessMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
+    serializer_class = ReviewScoreUserUpdateSerializer
     queryset = ReviewScore.objects.all()

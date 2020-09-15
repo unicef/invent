@@ -28,9 +28,10 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.status_code, 403)
         # do it with user 3, who is a GPO
         response = self.user_3_client.post(url, request_data, format="json")
-        # will fail because project is not in portfolio
         self.assertEqual(response.status_code, 201, response.json())
-        self.assertIn(self.project_rev_id, response.json()['projects'])
+        pps_data = response.json()['review_states']
+        self.assertEqual(len(pps_data), 1)
+        self.assertEqual(pps_data[0]['project'], self.project_rev_id)
 
         self.project_rev = Project.objects.get(id=self.project_rev_id)
         self.pps = ProjectPortfolioState.objects.get(portfolio=self.portfolio, project=self.project_rev)
@@ -41,16 +42,24 @@ class ReviewTests(PortfolioSetup):
                                          [self.d1, self.d2], self.user_1_client)
 
         portfolio_data = self.get_portfolio_data(portfolio_id=self.portfolio_id, client=self.user_3_client)
-        self.assertNotIn(project_id, portfolio_data['projects'])
+        pps_data = portfolio_data['review_states']
+        self.assertEqual(len(pps_data), 1)
+        self.assertEqual(pps_data[0]['project'], self.project_rev_id)
         url = reverse('portfolio-project-add', kwargs={'pk': self.portfolio_id})
         request_data = {'project': [project_id]}
         response = self.user_3_client.post(url, request_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
-        self.assertIn(project_id, response.json()['projects'])
+        pps_data = response.json()['review_states']
+        self.assertEqual(len(pps_data), 2)
+
+        pps_projects = {x['project'] for x in pps_data}
+        self.assertEqual(pps_projects, {self.project_rev_id, project_id})
         url = reverse('portfolio-project-remove', kwargs={'pk': self.portfolio_id})
         response = self.user_3_client.post(url, request_data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
-        self.assertNotIn(project_id, response.json()['projects'])
+        pps_data = response.json()['review_states']
+        self.assertEqual(len(pps_data), 1)
+        self.assertEqual(pps_data[0]['project'], self.project_rev_id)
 
     def test_get_project_states(self):
         # Test 0: incorrect filter
@@ -118,12 +127,17 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
 
         question_id = response.json()[0]['id']
+        # create a new user who is not associated with the review or the portfolio in any way
+        user_x_pr_id, user_x_client, user_x_key = self.create_user('donkey@kong.com', '12345789TIZ', '12345789TIZ')
         partial_data = {
             'ee': 1,
             'ra': 5,
-            'ra_text': "I don't even know what I'm doing"
+            'complete': True
         }
         url = reverse('review-score-modify', kwargs={"pk": question_id})
+        # Try to fill the answers with the unauthorized user
+        response = user_x_client.post(url, partial_data, format="json")
+        self.assertEqual(response.status_code, 403)  # UNAUTHORIZED
         response = self.user_1_client.post(url, partial_data, format="json")
         self.assertEqual(response.status_code, 200)
         url = reverse('review-score-get', kwargs={"pk": question_id})
@@ -131,7 +145,7 @@ class ReviewTests(PortfolioSetup):
         resp_data = response.json()
         self.assertEqual(resp_data['ee'], 1)
         self.assertEqual(resp_data['ra'], 5)
-        self.assertEqual(resp_data['ra_text'], "I don't even know what I'm doing")
+
         faulty_data = {
             'nst': 7  # Not allowed value
         }
