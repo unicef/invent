@@ -2,15 +2,15 @@ from datetime import datetime
 
 from django.urls import reverse
 
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APIClient
 
 from project.models import Portfolio, ProblemStatement, Project
-from country.models import Country, Donor, CountryOffice
-from user.models import Organisation, UserProfile
+from project.tests.setup import SetupTests
+from user.models import UserProfile
 from user.tests import create_profile_for_user
 
 
-class PortfolioTests(APITestCase):
+class PortfolioTests(SetupTests):
     def create_user(self, user_email, user_password1, user_password_2):
         """
         Create a test user with profile.
@@ -238,8 +238,9 @@ class PortfolioTests(APITestCase):
         self.assertEqual(list(user_4_profile.portfolios.all().values_list('id', flat=True)), [])
 
     def test_add_and_remove_projects(self):
-        project_2_id = self.create_project("Test Project 2", self.org, self.country_office,
-                                           [self.d1, self.d2], self.user_1_client)
+        project_2_id, project_data, org, country, country_office, d1, d2 = \
+            self.create_new_project(self.user_1_client)
+
         url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
         response = self.user_1_client.get(url)
         projects = response.json()['projects']
