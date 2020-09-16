@@ -626,13 +626,12 @@ class ProjectTests(SetupTests):
             "country": "test_country"}
         test_user_client.put(url, data, format="json")
 
-        self._create_new_project()
+        project_id, project_data, org, country, country_office, d1, d2 = self.create_new_project()
 
-        p_in_country = Project.objects.get(name="Test Project2")
+        p_in_country = Project.objects.get(id=project_id)
         p_not_in_country = Project.objects.get(name="Test Project1")
 
         # make user country admin of CTR2
-        country = Country.objects.get(code="CTR2")
         country.users.add(self.user_profile_id)
         # make sure he is not a country admin of project 1's country
         p_not_in_country.get_country().users.remove(self.user_profile_id)
@@ -697,9 +696,9 @@ class ProjectTests(SetupTests):
             "country": "test_country"}
         test_user_client.put(url, data, format="json")
 
-        self._create_new_project()
+        project_id, project_data, org, country, country_office, d1, d2 = self.create_new_project()
 
-        p_in_country = Project.objects.get(name="Test Project2")
+        p_in_country = Project.objects.get(id=project_id)
         p_not_in_country = Project.objects.get(name="Test Project1")
 
         # make sure he is not a country admin of project 1 or 2's country
