@@ -53,6 +53,10 @@
             :content="lastUpdated"
           />
           <simple-field
+            :content="project.overview"
+            :header="$gettext('Overview') | translate"
+          />
+          <simple-field
             :content="project.implementation_overview"
             :header="$gettext('Initiative Description') | translate"
           />
@@ -166,6 +170,44 @@
           <simple-field :header="$gettext('Investor(s)') | translate">
             <donors-list :value="project.donors" />
           </simple-field>
+
+          <simple-field
+            :content="project.program_targets"
+            :header="$gettext('Program Targets') | translate"
+          />
+          <simple-field
+            :content="project.program_targets_achieved"
+            :header="$gettext('Program Targets Achieved') | translate"
+          />
+          <simple-field
+            :content="project.current_achievements"
+            :header="$gettext('Current Achievements') | translate"
+          />
+          <simple-field
+            :content="project.awp"
+            :header="$gettext('Annual Work Plan') | translate"
+          />
+          <simple-field
+            :header="$gettext('Total Budget') | translate"
+          >
+            {{ project.total_budget }}
+            <list-element
+              :value="project.currency"
+              source="getCurrencies"
+            />
+          </simple-field>
+          <simple-field
+            :content="project.total_budget_narrative"
+            :header="$gettext('Total Budget (Narrative)') | translate"
+          />
+          <simple-field
+            :content="project.funding_needs"
+            :header="$gettext('Funding Needs') | translate"
+          />
+          <simple-field
+            :content="project.partnership_needs"
+            :header="$gettext('Partnership Needs') | translate"
+          />
         </collapsible-card>
 
         <collapsible-card
@@ -258,6 +300,7 @@ import HealthSystemChallengesList from '../common/list/HealthSystemChallengesLis
 import DonorsList from '../common/list/DonorsList';
 import CustomReadonlyField from './CustomReadonlyField';
 import handleProjectActions from '@/components/mixins/handleProjectActions';
+import ListElement from '@/components/project/ListElement';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
 
@@ -276,7 +319,8 @@ export default {
     HealthSystemChallengesList,
     DonorsList,
     CustomReadonlyField,
-    CapabilitiesList
+    CapabilitiesList,
+    ListElement
   },
   mixins: [handleProjectActions],
   computed: {

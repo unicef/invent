@@ -7,12 +7,18 @@
     <template slot="label">
       <slot name="label" />
       <template v-if="!row">
-        <span v-show="draftRequired" class="Required DraftRequired">
+        <span
+          v-show="draftRequired"
+          class="Required DraftRequired"
+        >
           <span>
             *
           </span>
         </span>
-        <span v-show="publishRequired" class="Required PublishRequired">
+        <span
+          v-show="publishRequired"
+          class="Required PublishRequired"
+        >
           <span>
             *
           </span>
@@ -25,7 +31,7 @@
 
 <script>
 export default {
-  name: "CustomRequiredFormItem",
+  name: 'CustomRequiredFormItem',
   props: {
     draftRule: {
       type: Object,
@@ -41,16 +47,16 @@ export default {
     }
   },
   computed: {
-    propsAndAttrs() {
+    propsAndAttrs () {
       return { ...this.$props, ...this.$attrs };
     },
-    listeners() {
+    listeners () {
       return { ...this.$listeners };
     },
-    draftRequired() {
+    draftRequired () {
       return this.draftRule && this.draftRule.required;
     },
-    publishRequired() {
+    publishRequired () {
       return this.publishRule && this.publishRule.required;
     }
   }
