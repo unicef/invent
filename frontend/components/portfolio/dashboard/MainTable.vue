@@ -17,7 +17,7 @@
         :resizable="false"
         type="selection"
         align="center"
-        width="35"
+        width="45"
       />
       <el-table-column
         v-if="selectedColumns.includes('1')"
@@ -30,6 +30,41 @@
       >
         <template slot-scope="scope">
           <project-card :project="scope.row" hide-borders show-verified />
+          <el-tooltip :content="favorite" placement="top">
+            <div class="favorite" @click="handleFavorite(scope.row.id)">
+              <fa
+                v-if="scope.row.favorite"
+                class="heart-full"
+                :icon="['fas', 'heart']"
+              />
+              <fa v-else class="heart-empty" :icon="['far', 'heart']" />
+            </div>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('20')"
+        :resizable="false"
+        :label="$gettext('Questionnaires Assigned') | translate"
+        sortable="custom"
+        prop="reviewers"
+        width="511"
+      >
+        <template slot-scope="scope">
+          <reviewers :id="scope.row.id" :items="scope.row.reviewers" />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('30')"
+        :resizable="false"
+        :label="$gettext('Scoring') | translate"
+        prop="scores"
+        width="221"
+      >
+        <template slot-scope="scope">
+          <scores :id="scope.row.id" :scores="scope.row.scores" />
         </template>
       </el-table-column>
 
@@ -272,13 +307,16 @@
         <current-page />
       </el-pagination>
     </div>
+    <!-- dialogs -->
+    <review />
+    <score />
   </div>
 </template>
 
 <script>
 import { format } from "date-fns";
 import { mapGetters, mapActions, mapState } from "vuex";
-import { mapGettersActions } from "../../utilities/form.js";
+import { mapGettersActions } from "@/utilities/form.js";
 
 import ProjectCard from "@/components/common/ProjectCard";
 import CountryItem from "@/components/common/CountryItem";
@@ -291,6 +329,12 @@ import ResultAreaItem from "@/components/dashboard/ResultAreaItem";
 import CurrentPage from "@/components/dashboard/CurrentPage";
 import FieldOfficeItem from "@/components/project/FieldOfficeItem";
 import CapabilitiesList from "@/components/project/CapabilitiesList";
+import Reviewers from "@/components/portfolio/dashboard/table/Reviewers";
+import Scores from "@/components/portfolio/dashboard/table/Scores";
+// dialogs
+import Review from "@/components/portfolio/dashboard/dialog/Review";
+import Score from "@/components/portfolio/dashboard/dialog/Score";
+
 import { setTimeout } from "timers";
 
 export default {
@@ -305,13 +349,18 @@ export default {
     FieldOfficeItem,
     CapabilitiesList,
     GoalAreaItem,
-    ResultAreaItem
+    ResultAreaItem,
+    Reviewers,
+    Scores,
+    Review,
+    Score
   },
   data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
-      localSort: null
+      localSort: null,
+      favorite: this.$gettext("Add to Favorites")
     };
   },
   computed: {
@@ -402,7 +451,7 @@ export default {
       this.setSelectedRows(selection.map(s => s.id));
     },
     rowClassCalculator({ row }) {
-      return this.selectedRows.includes("row".id) ? "Selected" : "NotSelected";
+      return this.selectedRows.includes(row.id) ? "Selected" : "NotSelected";
     },
     sortChanged({ prop, order }) {
       if (order === "descending") {
@@ -459,6 +508,9 @@ export default {
     countryOffice(id) {
       const office = this.offices.find(obj => obj.id === id);
       return office ? office.name : "N/A";
+    },
+    handleFavorite(id) {
+      console.log(`this will mark or unmark ${id}`);
     }
   }
 };
@@ -474,7 +526,33 @@ export default {
     100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
       @appFooterHeight - 93px
   );
+  .favorite {
+    cursor: pointer;
+    position: absolute;
+    top: 32px;
+    left: -32px;
+    svg {
+      font-size: 14px;
+    }
+    .heart-full {
+      color: #c4225f;
+    }
+    .heart-empty {
+      color: @colorBrandGrayLight;
+    }
+  }
 
+  .el-table--border th {
+    border-right: 1px solid @colorWhite;
+  }
+  .el-table--group,
+  .el-table--border {
+    border: 0px solid transparent;
+  }
+  .el-table__body tr.hover-row > td,
+  .el-table__body tr.hover-row.current-row > td {
+    background-color: #e8f6fd;
+  }
   // Custom table template
   .el-table {
     th,
@@ -482,16 +560,28 @@ export default {
       vertical-align: top;
     }
 
+    .caret-wrapper .sort-caret {
+      &.ascending {
+        border-bottom-color: @colorWhite;
+      }
+      &.descending {
+        border-top-color: @colorWhite;
+      }
+    }
+
     th {
+      background-color: @colorBrandPrimary;
       > .cell {
-        line-height: 24px;
-        // truncate long headers
+        font-size: @fontSizeSmall;
+        color: @colorWhite;
+        font-weight: bold;
+        letter-spacing: 0;
+        line-height: 29px;
         white-space: nowrap;
-        //
       }
 
       &.is-leaf {
-        border-bottom-color: @colorTextMuted;
+        border-bottom-color: @colorWhite;
       }
 
       // Disable select-all-row
@@ -503,10 +593,12 @@ export default {
     }
 
     td {
+      min-height: 58px;
+      padding: 10px 16px 10px 12px;
       > .cell {
         line-height: 17px;
         word-break: normal;
-
+        padding: 0;
         p {
           position: relative;
           margin: 0;
@@ -515,17 +607,10 @@ export default {
           -webkit-box-orient: vertical;
           // With 17 in the calc the fixed columns and the rest of the table go out of sync
           max-height: calc(16.5px * 4);
-
-          // &::after {
-          //   content: "";
-          //   text-align: right;
-          //   position: absolute;
-          //   bottom: 0;
-          //   right: 0;
-          //   width: 20%;
-          //   height: 17px;
-          //   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-          // }
+          font-size: @fontSizeSmall;
+          letter-spacing: 0;
+          line-height: 15px;
+          font-weight: 100;
         }
 
         a {
@@ -540,11 +625,7 @@ export default {
     .el-table__row {
       &.Selected {
         > td {
-          background-color: #fffbdc;
-
-          &.el-table-column--selection {
-            box-shadow: inset 2px 0 0 #fbc02d;
-          }
+          background-color: #e8f6fd;
         }
       }
     }
@@ -557,7 +638,7 @@ export default {
 
     .caret-wrapper {
       position: absolute;
-      top: 1px;
+      top: 4px;
       right: 4px;
     }
 
@@ -574,14 +655,6 @@ export default {
 
     .ProjectCard {
       overflow: visible;
-
-      .ProjectName {
-        padding-right: 12px;
-      }
-
-      .ProjectCountryOrg {
-        margin-top: 4px;
-      }
 
       .ProjectLegend {
         top: 1px;
@@ -613,7 +686,9 @@ export default {
       .CountryName {
         margin: 0;
         font-size: @fontSizeSmall;
-        line-height: inherit;
+        letter-spacing: 0;
+        line-height: 15px;
+        font-weight: 100;
       }
     }
 
@@ -646,17 +721,11 @@ export default {
 
         li {
           position: relative;
-
+          display: flex;
+          align-items: center;
           > span {
-            &:first-child {
-              position: absolute;
-              left: 0;
-              top: 0;
-            }
-
             &:last-child {
-              display: block;
-              padding-left: 15px;
+              margin-left: 6px;
               .textTruncate();
             }
           }
@@ -674,9 +743,8 @@ export default {
     height: 53px;
     //
     box-sizing: border-box;
-    border: solid @colorGrayLight;
-    border-width: 1px 1px 2px;
-    background-color: @colorBrandBlueLight;
+    border-top: 1px solid @colorGrayLight;
+    background-color: @colorWhite;
     text-align: right;
 
     .el-pagination {
@@ -693,17 +761,14 @@ export default {
         margin: 0 10px;
         font-size: @fontSizeSmall;
         color: @colorTextSecondary;
+        letter-spacing: 0;
+        line-height: 15px;
       }
 
       button {
         padding: 0;
         background-color: transparent;
         transition: @transitionAll;
-
-        &:hover {
-          background-color: lighten(@colorBrandBlueLight, 3%);
-        }
-
         i {
           font-size: @fontSizeLarge;
           font-weight: 700;
