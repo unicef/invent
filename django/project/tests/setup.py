@@ -89,6 +89,29 @@ class TestProjectData:
             "phase": 1,
         }}, org, country, country_office, d1, d2
 
+    def create_new_project(self, test_user_client = None):
+        if test_user_client is None:
+            test_user_client = self.test_user_client
+
+        project_name = f"Test Project{randint(999, 999999)}"
+        project_data, org, country, country_office, d1, d2 = self.create_test_data(name=project_name, 
+                                                                                   new_country_only=True)
+        
+        # Create project draft
+        url = reverse("project-create", kwargs={"country_office_id": country_office.id})
+        response = test_user_client.post(url, project_data, format="json")
+        assert response.status_code == 201
+
+        project_id = response.json().get("id")
+
+        # Publish
+        url = reverse("project-publish", kwargs={"project_id": project_id,
+                                                 "country_office_id": country_office.id})
+        response = test_user_client.put(url, project_data, format="json")
+        assert response.status_code == 200
+
+        return project_id, project_data, org, country, country_office, d1, d2
+
 
 class MockRequest():
     user = None
