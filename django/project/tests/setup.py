@@ -35,9 +35,22 @@ class TestProjectData:
             d1 = Donor.objects.create(name="Donor1", code="donor1")
             d2 = Donor.objects.create(name="Donor2", code="donor2")
         else:
+            if new_country_only:
+                country_rand = randint(2, 9)
+                country, _ = Country.objects.get_or_create(name=f'country{country_rand}', code=f'CTR{country_rand}',
+                                                           project_approval=False,
+                                                           region=Country.REGIONS[0][0],
+                                                           unicef_region=Country.UNICEF_REGIONS[0][0])
+
+                country_office = CountryOffice.objects.create(
+                    name='Test Country Office',
+                    region=Country.UNICEF_REGIONS[0][0],
+                    country=country
+                )
+            else:
+                country = self.country
+                country_office = self.country_office
             org = self.org
-            country = self.country
-            country_office = self.country_office
             d1 = self.d1
             d2 = self.d2
 
