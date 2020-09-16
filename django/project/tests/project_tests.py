@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
-from country.models import Country, Donor, CountryOffice
+from country.models import Country, Donor
 from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
@@ -544,68 +544,6 @@ class ProjectTests(SetupTests):
         hsc_group = HSCGroup.objects.create(name='name')
         item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
         self.assertEqual(str(item), '(name) challenge')
-
-    def _create_new_project(self):
-        country, c = Country.objects.get_or_create(code='CTR2', defaults={'name': "country2",
-                                                                          'project_approval': False})
-
-        user = UserProfile.objects.get(id=self.user_profile_id)
-        country.users.add(user)
-
-        country_office, _ = CountryOffice.objects.get_or_create(
-            name='Country Office',
-            region=Country.UNICEF_REGIONS[0][0],
-            country=country
-        )
-
-        self.project_data = {"project": {
-            "date": datetime.utcnow(),
-            "name": "Test Project{}".format(Project.objects.all().count() + 1),
-            "organisation": self.org.id,
-            "contact_name": "name2",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "overview": "new overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": [1, 2],
-            "geographic_scope": "somewhere",
-            "country_office": country_office.id,
-            "platforms": [1, 2],
-            "donors": [self.d1.id, self.d2.id],
-            "hsc_challenges": [1, 2],
-            "start_date": str(datetime.today().date()),
-            "end_date": str(datetime.today().date()),
-            "field_office": 1,
-            "goal_area": 1,
-            "result_area": 1,
-            "capability_levels": [],
-            "capability_categories": [],
-            "capability_subcategories": [],
-            "dhis": [],
-            "unicef_sector": [1, 2],
-            "innovation_categories": [1, 2],
-            "cpd": [1, 2],
-            "regional_priorities": [1, 2],
-            "hardware": [1, 2],
-            "nontech": [1, 2],
-            "functions": [1, 2],
-            "phase": 1,
-        }}
-
-        # Create project draft
-        url = reverse("project-create", kwargs={"country_office_id": country_office.id})
-        response = self.test_user_client.post(url, self.project_data, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-
-        project_id = response.json().get("id")
-
-        # Publish
-        url = reverse("project-publish", kwargs={"project_id": project_id,
-                                                 "country_office_id": country_office.id})
-        response = self.test_user_client.put(url, self.project_data, format="json")
-        self.assertEqual(response.status_code, 200, response.json())
-
-        return project_id, country.id
 
     def test_project_admin_link_add(self):
         request = MockRequest()
