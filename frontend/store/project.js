@@ -55,6 +55,17 @@ export const getters = {
   getHardware: state => state.hardware.length === 0 ? [null] : state.hardware,
   getNontech: state => state.nontech.length === 0 ? [null] : state.nontech,
   getFunctions: state => state.functions.length === 0 ? [null] : state.functions,
+  getOverview: state => state.overview,
+  getProgramTargets: state => state.program_targets,
+  getProgramTargetsAchieved: state => state.program_targets_achieved,
+  getCurrentAchievements: state => state.current_achievements,
+  getAwp: state => state.awp,
+  getTargetGroupReached: state => state.target_group_reached,
+  getCurrency: state => state.currency,
+  getTotalBudget: state => state.total_budget,
+  getTotalBudgetNarrative: state => state.total_budget_narrative,
+  getFundingNeeds: state => state.funding_needs,
+  getPartnershipNeeds: state => state.partnership_needs,
   getDigitalHealthInterventions: state => [...state.dhis],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
@@ -212,6 +223,39 @@ export const actions = {
   },
   setFunctions ({ commit }, value) {
     commit('SET_FUNCTIONS', value);
+  },
+  setOverview ({ commit }, value) {
+    commit('SET_DATA', { key: 'overview', value });
+  },
+  setPartnershipNeeds ({ commit }, value) {
+    commit('SET_DATA', { key: 'partnership_needs', value });
+  },
+  setFundingNeeds ({ commit }, value) {
+    commit('SET_DATA', { key: 'funding_needs', value });
+  },
+  setTotalBudgetNarrative ({ commit }, value) {
+    commit('SET_DATA', { key: 'total_budget_narrative', value });
+  },
+  setAwp ({ commit }, value) {
+    commit('SET_DATA', { key: 'awp', value });
+  },
+  setTargetGroupReached ({ commit }, value) {
+    commit('SET_DATA', { key: 'target_group_reached', value });
+  },
+  setCurrency ({ commit }, value) {
+    commit('SET_DATA', { key: 'currency', value });
+  },
+  setTotalBudget ({ commit }, value) {
+    commit('SET_DATA', { key: 'total_budget', value });
+  },
+  setCurrentAchievements ({ commit }, value) {
+    commit('SET_DATA', { key: 'current_achievements', value });
+  },
+  setProgramTargetsAchieved ({ commit }, value) {
+    commit('SET_DATA', { key: 'program_targets_achieved', value });
+  },
+  setProgramTargets ({ commit }, value) {
+    commit('SET_DATA', { key: 'program_targets', value });
   },
   setDigitalHealthInterventions ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value);
@@ -447,6 +491,17 @@ export const mutations = {
     state.hardware = get(project, 'hardware', []);
     state.nontech = get(project, 'nontech', []);
     state.regional_priorities = get(project, 'regional_priorities', []);
+    state.overview = get(project, 'overview', '');
+    state.program_targets = get(project, 'program_targets', '');
+    state.program_targets_achieved = get(project, 'program_targets_achieved', '');
+    state.current_achievements = get(project, 'current_achievements', '');
+    state.awp = get(project, 'awp', '');
+    state.total_budget_narrative = get(project, 'total_budget_narrative', '');
+    state.funding_needs = get(project, 'funding_needs', '');
+    state.partnership_needs = get(project, 'partnership_needs', '');
+    state.target_group_reached = get(project, 'target_group_reached', 0);
+    state.currency = get(project, 'currency', 1);
+    state.total_budget = get(project, 'total_budget', 0);
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project;

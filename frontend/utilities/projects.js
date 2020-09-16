@@ -46,11 +46,25 @@ export const projectFields = () => ({
   functions: [],
   hardware: [],
   nontech: [],
-  regional_priorities: []
+  regional_priorities: [],
+  overview: '',
+  program_targets: '',
+  program_targets_achieved: '',
+  current_achievements: '',
+  awp: '',
+  total_budget_narrative: '',
+  funding_needs: '',
+  partnership_needs: '',
+  target_group_reached: 0,
+  currency: 1,
+  total_budget: 0
 });
 
 export const draftRules = () => {
   return {
+    target_group_reached: {},
+    currency: {},
+    total_budget: {},
     unicef_sector: {
       required: false
     },
@@ -90,6 +104,30 @@ export const draftRules = () => {
     },
     implementation_overview: {
       max: 1024
+    },
+    overview: {
+      max: 300
+    },
+    program_targets: {
+      max: 1024
+    },
+    program_targets_achieved: {
+      max: 1024
+    },
+    current_achievements: {
+      max: 2048
+    },
+    awp: {
+      max: 500
+    },
+    total_budget_narrative: {
+      max: 500
+    },
+    funding_needs: {
+      max: 500
+    },
+    partnership_needs: {
+      max: 500
     }
   };
 };
@@ -114,6 +152,11 @@ export const publishRules = () => {
       required: true,
       min: 1,
       max: 128
+    },
+    overview: {
+      required: true,
+      min: 1,
+      max: 300
     },
     organisation: {
       required: true,

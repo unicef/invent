@@ -1,5 +1,8 @@
 <template>
-  <div id="implementation" class="ImplementationOverview">
+  <div
+    id="implementation"
+    class="ImplementationOverview"
+  >
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
@@ -147,52 +150,278 @@
         />
       </custom-required-form-item>
 
-      <!-- <custom-required-form-item
-        :error="errors.first('donors')"
-        :draft-rule="draftRules.donors"
-        :publish-rule="publishRules.donors"
+      <custom-required-form-item
+        :error="errors.first('program_targets')"
+        :draft-rule="draftRules.program_targets"
+        :publish-rule="publishRules.program_targets"
       >
         <template slot="label">
-          <translate key="donors">
-            Who are your investment partners?
+          <translate key="program_targets">
+            What are the final programme targets the initiative aims to achieve?
           </translate>
-          <form-hint>
-            <translate key="donors-hint">
-              Investment partners can include those contributing funds, human
-              resources or in-kind support.
-            </translate>
-          </form-hint>
         </template>
 
-        <donor-selector
-          v-model="donors"
-          v-validate="rules.donors"
-          data-vv-name="donors"
-          data-vv-as="Investors"
+        <character-count-input
+          v-model="program_targets"
+          v-validate="rules.program_targets"
+          :rules="rules.program_targets"
+          data-vv-name="program_targets"
+          data-vv-as="Program Targets"
+          type="textarea"
         />
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>Please provide information on the metrics for success of the initiative. </translate>
+          </p>
+        </span>
+      </custom-required-form-item>
 
-      </custom-required-form-item> -->
+      <custom-required-form-item
+        :error="errors.first('program_targets_achieved')"
+        :draft-rule="draftRules.program_targets_achieved"
+        :publish-rule="publishRules.program_targets_achieved"
+      >
+        <template slot="label">
+          <translate key="program_targets_achieved">
+            What are the programme targets the initiative has achieved to date?
+          </translate>
+        </template>
+
+        <character-count-input
+          v-model="program_targets_achieved"
+          v-validate="rules.program_targets_achieved"
+          :rules="rules.program_targets_achieved"
+          data-vv-name="program_targets_achieved"
+          data-vv-as="Program Targets Achieved"
+          type="textarea"
+        />
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>Please provide information on the successes the intiative has achieved to date. </translate>
+          </p>
+        </span>
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="errors.first('target_group_reached')"
+        :draft-rule="draftRules.target_group_reached"
+        :publish-rule="publishRules.target_group_reached"
+      >
+        <template slot="label">
+          <translate key="target_group_reached">
+            How many beneficiaries are reached be the initiative?
+          </translate>
+        </template>
+
+        <el-input
+          v-model="target_group_reached"
+          v-validate="rules.target_group_reached"
+          data-vv-name="target_group_reached"
+          data-vv-as="Target Group"
+          type="number"
+          min="0"
+          max="100000000"
+          step="1"
+        />
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>Provide the number of individuals reached by this initiative to date</translate>
+          </p>
+        </span>
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="errors.first('current_achievements')"
+        :draft-rule="draftRules.current_achievements"
+        :publish-rule="publishRules.current_achievements"
+      >
+        <template slot="label">
+          <translate key="current_achievements">
+            What is the impact the initiative has had to date?
+          </translate>
+        </template>
+
+        <character-count-input
+          v-model="current_achievements"
+          v-validate="rules.current_achievements"
+          :rules="rules.current_achievements"
+          data-vv-name="current_achievements"
+          data-vv-as="Current Achievements"
+          type="textarea"
+        />
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>Please provide information about the realisation of the initiative's objectives at the time of entry. This could include number of target population reached, partnerships, funding secured, spin-off initiatives, etc.</translate>
+          </p>
+        </span>
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="errors.first('awp')"
+        :draft-rule="draftRules.awp"
+        :publish-rule="publishRules.awp"
+      >
+        <template slot="label">
+          <translate key="awp">
+            Please input wich outcomes or activities the initiative serves in the Annual Work Plan.
+          </translate>
+        </template>
+
+        <character-count-input
+          v-model="awp"
+          v-validate="rules.awp"
+          :rules="rules.awp"
+          data-vv-name="awp"
+          data-vv-as="Annual Work Plan"
+          type="textarea"
+        />
+      </custom-required-form-item>
+
+      <el-row>
+        <el-col
+          :span="16"
+          class="BudgetSection"
+        >
+          <custom-required-form-item
+            :error="errors.first('total_budget')"
+            :draft-rule="draftRules.total_budget"
+            :publish-rule="publishRules.total_budget"
+          >
+            <template slot="label">
+              <translate key="total_budget">
+                What is the total estimated budget for the initiative?
+              </translate>
+            </template>
+
+            <el-input
+              v-model="total_budget"
+              v-validate="rules.total_budget"
+              data-vv-name="total_budget"
+              data-vv-as="Total Budget"
+              type="number"
+              min="0"
+              max="100000000"
+              step="1"
+            />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>Please provide the total estimated budget from inception to scale. </translate>
+              </p>
+            </span>
+          </custom-required-form-item>
+        </el-col>
+        <el-col :span="8">
+          <custom-required-form-item
+            :error="errors.first('currency')"
+            :draft-rule="draftRules.currency"
+            :publish-rule="publishRules.currency"
+          >
+            <template slot="label">
+              <translate key="currency-label">
+                Currency
+              </translate>
+            </template>
+
+            <single-select
+              v-model="currency"
+              v-validate="rules.currency"
+              data-vv-name="currency"
+              data-vv-as="Currency"
+              source="projects/getCurrencies"
+            />
+          </custom-required-form-item>
+        </el-col>
+      </el-row>
+
+      <custom-required-form-item
+        :error="errors.first('total_budget_narrative')"
+        :draft-rule="draftRules.total_budget_narrative"
+        :publish-rule="publishRules.total_budget_narrative"
+      >
+        <template slot="label">
+          <translate key="total_budget_narrative">
+            Please explaine briefly the main activities covered by the budget.
+          </translate>
+        </template>
+
+        <character-count-input
+          v-model="total_budget_narrative"
+          v-validate="rules.total_budget_narrative"
+          :rules="rules.total_budget_narrative"
+          data-vv-name="total_budget_narrative"
+          data-vv-as="Total Budget Narrative"
+          type="textarea"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="errors.first('funding_needs')"
+        :draft-rule="draftRules.funding_needs"
+        :publish-rule="publishRules.funding_needs"
+      >
+        <template slot="label">
+          <translate key="funding_needs">
+            Funding Needs
+          </translate>
+        </template>
+
+        <character-count-input
+          v-model="funding_needs"
+          v-validate="rules.funding_needs"
+          :rules="rules.funding_needs"
+          data-vv-name="funding_needs"
+          data-vv-as="Funding Needs"
+          type="textarea"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="errors.first('partnership_needs')"
+        :draft-rule="draftRules.partnership_needs"
+        :publish-rule="publishRules.partnership_needs"
+      >
+        <template slot="label">
+          <translate key="funding_needs">
+            Partnership Needs
+          </translate>
+        </template>
+
+        <character-count-input
+          v-model="partnership_needs"
+          v-validate="rules.partnership_needs"
+          :rules="rules.partnership_needs"
+          data-vv-name="partnership_needs"
+          data-vv-as="Partnership Needs"
+          type="textarea"
+        />
+      </custom-required-form-item>
     </collapsible-card>
   </div>
 </template>
 
 <script>
-import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
-import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
-import CollapsibleCard from "../CollapsibleCard";
-import HealthSystemChallengesSelector from "../HealthSystemChallengesSelector";
-import HealthFocusAreasSelector from "../HealthFocusAreasSelector";
-import GoalAreasSelector from "@/components/common/GoalAreasSelector";
-import ResultAreasSelector from "@/components/common/ResultAreasSelector";
-import CapabilitySelector from "../CapabilitySelector";
-import PlatformSelector from "../PlatformSelector";
-import DigitalHealthInterventionsSelector from "../DigitalHealthInterventionsSelector";
-import DonorSelector from "../DonorSelector";
-import FormHint from "../FormHint";
+import CollapsibleCard from '../CollapsibleCard';
+import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
+import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
+import GoalAreasSelector from '@/components/common/GoalAreasSelector';
+import ResultAreasSelector from '@/components/common/ResultAreasSelector';
+import CapabilitySelector from '../CapabilitySelector';
+import PlatformSelector from '../PlatformSelector';
+import SingleSelect from '@/components/common/SingleSelect';
+// import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
+// import DonorSelector from '../DonorSelector';
+// import FormHint from '../FormHint';
 
-import { mapGettersActions } from "../../../utilities/form";
-import { mapGetters } from "vuex";
+import { mapGettersActions } from '../../../utilities/form';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -203,65 +432,76 @@ export default {
     ResultAreasSelector,
     CapabilitySelector,
     PlatformSelector,
-    DigitalHealthInterventionsSelector,
-    DonorSelector,
-    FormHint
+    SingleSelect // ,
+    // DigitalHealthInterventionsSelector,
+    // DonorSelector,
+    // FormHint
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
 
   computed: {
     ...mapGetters({
-      selectedGoalArea: "project/getGoalAreaDetails",
-      getCapabilityLevelsItems: "projects/getCapabilityLevels",
-      getCapabilityCategoriesItems: "projects/getCapabilityCategories",
-      getCapabilitySubcategoriesItems: "projects/getCapabilitySubcategories"
+      selectedGoalArea: 'project/getGoalAreaDetails',
+      getCapabilityLevelsItems: 'projects/getCapabilityLevels',
+      getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
+      getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories'
     }),
     ...mapGettersActions({
-      goal_area: ["project", "getGoalArea", "setGoalArea", 0],
-      result_area: ["project", "getResultArea", "setResultArea", 0],
+      goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],
+      result_area: ['project', 'getResultArea', 'setResultArea', 0],
+      program_targets: ['project', 'getProgramTargets', 'setProgramTargets', 0],
+      program_targets_achieved: ['project', 'getProgramTargetsAchieved', 'setProgramTargetsAchieved', 0],
+      current_achievements: ['project', 'getCurrentAchievements', 'setCurrentAchievements', 0],
+      awp: ['project', 'getAwp', 'setAwp', 0],
+      total_budget_narrative: ['project', 'getTotalBudgetNarrative', 'setTotalBudgetNarrative', 0],
+      funding_needs: ['project', 'getFundingNeeds', 'setFundingNeeds', 0],
+      partnership_needs: ['project', 'getPartnershipNeeds', 'setPartnershipNeeds', 0],
+      target_group_reached: ['project', 'getTargetGroupReached', 'setTargetGroupReached', 0],
+      currency: ['project', 'getCurrency', 'setCurrency', 0],
+      total_budget: ['project', 'getTotalBudget', 'setTotalBudget', 0],
       capability_levels: [
-        "project",
-        "getCapabilityLevels",
-        "setCapabilityLevels",
+        'project',
+        'getCapabilityLevels',
+        'setCapabilityLevels',
         0
       ],
       capability_categories: [
-        "project",
-        "getCapabilityCategories",
-        "setCapabilityCategories",
+        'project',
+        'getCapabilityCategories',
+        'setCapabilityCategories',
         0
       ],
       capability_subcategories: [
-        "project",
-        "getCapabilitySubcategories",
-        "setCapabilitySubcategories",
+        'project',
+        'getCapabilitySubcategories',
+        'setCapabilitySubcategories',
         0
       ],
-      platforms: ["project", "getPlatforms", "setPlatforms", 0],
+      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
       digitalHealthInterventions: [
-        "project",
-        "getDigitalHealthInterventions",
-        "setDigitalHealthInterventions",
+        'project',
+        'getDigitalHealthInterventions',
+        'setDigitalHealthInterventions',
         0
       ],
       health_focus_areas: [
-        "project",
-        "getHealthFocusAreas",
-        "setHealthFocusAreas",
+        'project',
+        'getHealthFocusAreas',
+        'setHealthFocusAreas',
         0
       ],
-      hsc_challenges: ["project", "getHscChallenges", "setHscChallenges", 0],
-      donors: ["project", "getDonors", "setDonors", 0]
+      hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
+      donors: ['project', 'getDonors', 'setDonors', 0]
     }),
-    shoDHAFields() {
+    shoDHAFields () {
       return this.goal_area === 1;
     }
   },
   methods: {
-    async validate() {
+    async validate () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([this.$validator.validate()]);
-      console.log("Implementation overview validations", validations);
+      console.log('Implementation overview validations', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }
@@ -294,6 +534,9 @@ export default {
         left: 0;
       }
     }
+  }
+  .BudgetSection {
+    padding-right: 15px;
   }
 }
 </style>
