@@ -113,29 +113,41 @@ urlpatterns = [
          }),
          name="portfolio-detailed"),
     path('portfolio/<int:pk>/add-project/',
-         view=views.PortfolioProjectAddRemoveViewSet.as_view({
-             'post': 'create'
+         view=views.PortfolioProjectChangeReviewStatusViewSet.as_view({
+             'post': 'move_from_inventory_to_review'
          }), name='portfolio-project-add'),
     path('portfolio/<int:pk>/remove-project/',
-         view=views.PortfolioProjectAddRemoveViewSet.as_view({
-             'post': 'remove'
+         view=views.PortfolioProjectChangeReviewStatusViewSet.as_view({
+             'post': 'move_to_inventory'
          }), name='portfolio-project-remove'),
+    path('portfolio/<int:pk>/approve-project/',
+         view=views.PortfolioProjectChangeReviewStatusViewSet.as_view({
+             'post': 'approve'
+         }), name='portfolio-project-approve'),
+    path('portfolio/<int:pk>/disapprove-project/',
+         view=views.PortfolioProjectChangeReviewStatusViewSet.as_view({
+             'post': 'disapprove'
+         }), name='portfolio-project-disapprove'),
     path('portfolio/<int:pk>/projects/<str:project_filter>/',
-         view=views.PortfolioProjectListViewSet.as_view({
+         view=views.ProjectPortfolioListViewSet.as_view({
              'get': 'list'
          }),
          name="portfolio-project-list"),
     path('portfolio/<int:portfolio_id>/<int:project_id>/',
          view=views.PortfolioReviewAssignQuestionnaireViewSet.as_view({
-             'post': 'create'
+             'post': 'create_questionnaire'
          }), name='portfolio-assign-questionnaire'),
     path('project-review/<int:pk>/',
-         view=views.ReviewScoreViewSet.as_view({
+         view=views.ReviewScoreAccessSet.as_view({
              'get': 'retrieve',
-         }), name='review-score-get'),
-    path('project-review/<int:pk>/update',
-         view=views.ReviewScoreUpdateViewSet.as_view({
-             'post': 'update',
              'delete': 'destroy'
-         }), name='review-score-modify'),
+         }), name='review-score-get-or-delete'),
+    path('project-review/<int:pk>/fill/',
+         view=views.ReviewScoreAnswerViewSet.as_view({
+             'post': 'update',
+         }), name='review-score-fill'),
+    path('project-review/manager/<int:pk>/',
+         view=views.ProjectPortfolioStateManagerFillViewSet.as_view({
+             'post': 'update'
+         }), name='portfolio-project-manager-review')
 ]
