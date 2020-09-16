@@ -37,55 +37,6 @@ class PortfolioTests(APITestCase):
         user_profile_id = response.json().get('user_profile_id')
         return user_profile_id, test_user_client, test_user_key
 
-    def create_project(self, project_name, organization, country_office, donors, user_client):
-        project_data = {"project": {
-            "date": datetime.utcnow(),
-            "name": project_name,
-            "organisation": organization.id,
-            "contact_name": "name1",
-            "contact_email": "a@a.com",
-            "implementation_overview": "overview",
-            "overview": "new overview",
-            "implementation_dates": "2016",
-            "health_focus_areas": [1, 2],
-            "geographic_scope": "somewhere",
-            "country_office": country_office.id,
-            "platforms": [1, 2],
-            "donors": [donor.id for donor in donors],
-            "hsc_challenges": [1, 2],
-            "start_date": str(datetime.today().date()),
-            "end_date": str(datetime.today().date()),
-            "field_office": 1,
-            "goal_area": 1,
-            "result_area": 1,
-            "capability_levels": [],
-            "capability_categories": [],
-            "capability_subcategories": [],
-            "dhis": [],
-            "unicef_sector": [1, 2],
-            "innovation_categories": [1, 2],
-            "cpd": [1, 2],
-            "regional_priorities": [1, 2],
-            "hardware": [1, 2],
-            "nontech": [1, 2],
-            "functions": [1, 2],
-            "phase": 1,
-        }}
-
-        # Create project draft
-        url = reverse("project-create", kwargs={"country_office_id": country_office.id})
-        response = user_client.post(url, project_data, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-        project_id = response.json().get("id")
-
-        # Publish
-        url = reverse("project-publish", kwargs={"project_id": project_id,
-                                                 "country_office_id": self.country_office.id})
-        response = user_client.put(url, project_data, format="json")
-        self.assertEqual(response.status_code, 200, response.json())
-
-        return project_id
-
     @staticmethod
     def create_portfolio(name, description, managers, projects, user_client):
         portfolio_data = {
