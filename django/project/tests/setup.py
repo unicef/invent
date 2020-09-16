@@ -1,4 +1,5 @@
 from datetime import datetime
+from random import randint
 
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
@@ -14,7 +15,7 @@ class TestProjectData:
             create_relations=True
         )
 
-    def create_test_data(self, create_relations: bool = False, name: str = None):
+    def create_test_data(self, name: str = None, create_relations: bool = False, new_country_only: bool = False):
         if name is None:
             name = "Test Project1"
 
