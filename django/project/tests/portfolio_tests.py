@@ -63,28 +63,13 @@ class PortfolioTests(APITestCase):
         return user_client.post(url, portfolio_data, format="json")
 
     def setUp(self):
-        self.org = Organisation.objects.create(name="org1")
-        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
-                                              region=Country.REGIONS[0][0], unicef_region=Country.UNICEF_REGIONS[0][0])
-
-        self.country_id = self.country.id
-        self.country.name_en = 'Hungary'
-        self.country.name_fr = 'Hongrie'
-        self.country.save()
-
-        self.country_office = CountryOffice.objects.create(
-            name='Test Country Office',
-            region=Country.UNICEF_REGIONS[0][0],
-            country=self.country
-        )
-        self.d1 = Donor.objects.create(name="Donor1", code="donor1")
-        self.d2 = Donor.objects.create(name="Donor2", code="donor2")
+        super().setUp()
 
         self.user_1_pr_id, self.user_1_client, self.user_1_key = \
-            self.create_user("test_user@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
+            self.create_user("test_user_1@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
 
-        self.project_1_id = self.create_project("Test Project1", self.org, self.country_office,
-                                                [self.d1, self.d2], self.user_1_client)
+        self.project_1_id, project_data, org, country, country_office, d1, d2 = \
+            self.create_new_project(self.user_1_client)
 
         self.user_2_pr_id, self.user_2_client, self.user_2_key = \
             self.create_user("test_user_2@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
