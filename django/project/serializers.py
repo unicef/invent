@@ -395,15 +395,36 @@ class ScalePhaseBriefSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ScalePhase
-        fields = ('id', 'phase')  # This is to show in ProjectPortfolioState
+        fields = ('pk', 'scale')  # This is to show in ProjectPortfolioState
 
 
 class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
-    scale_phase = ScalePhaseBriefSerializer(required=False)
+    scale_phase = ScalePhaseBriefSerializer()
 
     class Meta:
         model = ProjectPortfolioState
         fields = ('id', 'impact', 'scale_phase', 'portfolio', 'project', 'review_scores')
+
+
+class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
+    scale_phase = serializers.IntegerField(required=True, source='get_scale')
+    impact = serializers.IntegerField(required=True)
+    project = serializers.UUIDField(read_only=True)
+    portfolio = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = ProjectPortfolioState
+        fields = ('__all__')
+
+    def update(self, instance, validated_data):
+        """
+        Override serializer to set 'complete' to True (also set scale phase based on input int
+        """
+        scale_phase_value = validated_data.pop('get_scale')
+        instance.complete = True
+        instance.scale_phase = ScalePhase.objects.get(scale=scale_phase_value)
+        instance = super().update(instance, validated_data)
+        return instance
 
 
 class PortfolioBaseSerializer(serializers.ModelSerializer):
@@ -510,8 +531,16 @@ class ReviewScoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ReviewScoreUserUpdateSerializer(serializers.ModelSerializer):
-
+class ReviewScoreFillSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewScore
-        fields = ('psa', 'rnci', 'ratp', 'ra', 'ee', 'nst', 'nc', 'ps')
+        fields = ('psa', 'psa_comment', 'rnci', 'rnci_comment', 'ratp', 'ratp_comment', 'ra', 'ra_comment', 'ee',
+                  'ee_comment', 'nst', 'nst_comment', 'nc', 'nc_comment', 'ps', 'ps_comment')
+
+    def update(self, instance, validated_data):
+        """
+        Override serializer to set 'complete' to True
+        """
+        instance.complete = True
+        instance = super().update(instance, validated_data)
+        return instance

@@ -430,15 +430,6 @@ class BaseScore(ExtendedModel):
     nst = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Solution (Tool)
     nc = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Challenge
     ps = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Path to Scale
-    # needed for review process by portfolio managers
-    psa_comment = models.CharField(max_length=255, null=True, blank=True)  # PSA - reviewer's comment field
-    rnci_comment = models.CharField(max_length=255, null=True, blank=True)  # RNCI - reviewer's comment field
-    ratp_comment = models.CharField(max_length=255, null=True, blank=True)  # RATP - reviewer's comment field
-    ra_comment = models.CharField(max_length=255, null=True, blank=True)  # Risk Assessment - reviewer's comment field
-    ee_comment = models.CharField(max_length=255, null=True, blank=True)  # EE - reviewer's comment field
-    nst_comment = models.CharField(max_length=255, null=True, blank=True)  # NST - reviewer's comment field
-    nc_comment = models.CharField(max_length=255, null=True, blank=True)  # NC - reviewer's comment field
-    ps_comment = models.CharField(max_length=255, null=True, blank=True)  # PS - reviewer's comment field
 
     complete = models.BooleanField(default=False)
 
@@ -463,6 +454,7 @@ class ProjectPortfolioState(BaseScore):
     scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE, blank=True)
     portfolio = models.ForeignKey(Portfolio, related_name='review_states', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('portfolio', 'project')
@@ -470,10 +462,23 @@ class ProjectPortfolioState(BaseScore):
     def assign_questionnaire(self, user: UserProfile):
         return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
 
+    def get_scale(self):
+        if self.scale_phase:
+            return self.scale_phase.scale
+        return None  # pragma: no cover
+
 
 class ReviewScore(BaseScore):
     reviewer = models.ForeignKey(UserProfile, related_name='review_scores', on_delete=models.CASCADE)
     portfolio_review = models.ForeignKey(ProjectPortfolioState, related_name='review_scores', on_delete=models.CASCADE)
+    psa_comment = models.CharField(max_length=255, null=True, blank=True)  # PSA - reviewer's comment field
+    rnci_comment = models.CharField(max_length=255, null=True, blank=True)  # RNCI - reviewer's comment field
+    ratp_comment = models.CharField(max_length=255, null=True, blank=True)  # RATP - reviewer's comment field
+    ra_comment = models.CharField(max_length=255, null=True, blank=True)  # Risk Assessment - reviewer's comment field
+    ee_comment = models.CharField(max_length=255, null=True, blank=True)  # EE - reviewer's comment field
+    nst_comment = models.CharField(max_length=255, null=True, blank=True)  # NST - reviewer's comment field
+    nc_comment = models.CharField(max_length=255, null=True, blank=True)  # NC - reviewer's comment field
+    ps_comment = models.CharField(max_length=255, null=True, blank=True)  # PS - reviewer's comment field
 
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')
