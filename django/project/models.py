@@ -463,9 +463,7 @@ class ProjectPortfolioState(BaseScore):
         return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
 
     def get_scale(self):
-        if self.scale_phase:
-            return self.scale_phase.scale
-        return None  # pragma: no cover
+        return self.scale_phase.scale if self.scale_phase else None
 
 
 class ReviewScore(BaseScore):
