@@ -12,7 +12,8 @@ from country.models import CustomQuestion
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, ScalePhase, \
+    ProjectPortfolioState, ReviewScore
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -361,11 +362,11 @@ class PortfolioListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'project_count', 'projects', 'managers', 'status')
+        fields = ('id', 'name', 'description', 'icon', 'project_count', 'managers', 'status')
 
     @staticmethod
     def get_project_count(obj):
-        return len(obj.projects.published_only().filter(is_active=True))
+        return len(Project.objects.published_only().filter(is_active=True, review_states__in=obj.review_states.all()))
 
     @staticmethod
     def get_managers(obj):
@@ -390,16 +391,66 @@ class ProblemStatementUpdateSerializer(ProblemStatementSerializer):
         }
 
 
+class ScalePhaseBriefSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ScalePhase
+        fields = ('pk', 'scale')  # This is to show in ProjectPortfolioState
+
+
+class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
+    scale_phase = ScalePhaseBriefSerializer()
+
+    class Meta:
+        model = ProjectPortfolioState
+        fields = ('id', 'impact', 'scale_phase', 'portfolio', 'project', 'review_scores')
+
+
+class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
+    scale_phase = serializers.IntegerField(required=True, source='get_scale')
+    impact = serializers.IntegerField(required=True)
+    project = serializers.UUIDField(read_only=True)
+    portfolio = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = ProjectPortfolioState
+        fields = ('__all__')
+
+    def update(self, instance, validated_data):
+        """
+        Override serializer to set 'complete' to True (also set scale phase based on input int
+        """
+        scale_phase_value = validated_data.pop('get_scale')
+        instance.complete = True
+        instance.scale_phase = ScalePhase.objects.get(scale=scale_phase_value)
+        instance = super().update(instance, validated_data)
+        return instance
+
+
 class PortfolioBaseSerializer(serializers.ModelSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'projects', 'managers', 'problem_statements')
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements')
 
 
 class PortfolioDetailsSerializer(PortfolioBaseSerializer):
+    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
+    review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements',
+                  'review_states')
+
+
+class PortfolioCreateSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False)
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements')
 
     @staticmethod
     def _create_problem_statements(instance, problem_statements):
@@ -414,9 +465,7 @@ class PortfolioDetailsSerializer(PortfolioBaseSerializer):
         instance = super().create(validated_data)
 
         self._create_problem_statements(instance, problem_statements)
-
         instance.save()
-
         return instance
 
 
@@ -449,4 +498,49 @@ class PortfolioUpdateSerializer(PortfolioBaseSerializer):
                 )
         else:
             instance = super().update(instance, validated_data)
+        return instance
+
+
+class ProjectInPortfolioSerializer(serializers.ModelSerializer):
+    review_states = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        fields = ('id', 'name', 'review_states')
+
+    def get_review_states(self, obj):
+        portfolio = self.context.get('kwargs').get('pk')
+        try:
+            pps = obj.review_states.get(portfolio=portfolio)
+            return ProjectPortfolioStateSerializer(pps).data
+        except ProjectPortfolioState.DoesNotExist:
+            return None
+
+
+class ReviewScoreBriefSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ReviewScore
+        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review')
+
+
+class ReviewScoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ReviewScore
+        fields = '__all__'
+
+
+class ReviewScoreFillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewScore
+        fields = ('psa', 'psa_comment', 'rnci', 'rnci_comment', 'ratp', 'ratp_comment', 'ra', 'ra_comment', 'ee',
+                  'ee_comment', 'nst', 'nst_comment', 'nc', 'nc_comment', 'ps', 'ps_comment')
+
+    def update(self, instance, validated_data):
+        """
+        Override serializer to set 'complete' to True
+        """
+        instance.complete = True
+        instance = super().update(instance, validated_data)
         return instance

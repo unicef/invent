@@ -7,7 +7,8 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManager
+from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable,\
+    IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState
 from project.models import Project
 from country.models import Country
 from user.authentication import BearerTokenAuthentication
@@ -42,7 +43,22 @@ class GPOAccessMixin:
 
 class PortfolioAccessMixin:
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
-    permission_classes = (IsAuthenticated, IsGPOOrManager)
+    permission_classes = (IsAuthenticated, IsGPOOrManagerPortfolio)
+
+
+class ProjectPortfolioStateAccessMixin:
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, IsGPOOrManagerProjectPortfolioState)
+
+
+class ReviewScoreAccessMixin:
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, IsReviewerGPOOrManager)
+
+
+class ReviewScoreReviewerAccessMixin:
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, IsReviewable)
 
 
 class CheckProjectAccessMixin(object):
