@@ -5,12 +5,14 @@ from django.db import transaction
 from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
+from rest_framework.pagination import PageNumberPagination
 
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
     ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin
@@ -637,8 +639,18 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
         return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
 
 
+class ProjectInPortfolioResultsSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 class ProjectPortfolioListViewSet(ListModelMixin, GenericViewSet):
     serializer_class = ProjectInPortfolioSerializer
+    pagination_class = ProjectInPortfolioResultsSetPagination
+    filter_backends = (OrderingFilter,)
+    ordering_fields = ('id', 'name',)
+    ordering = ('id',)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
