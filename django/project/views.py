@@ -12,7 +12,8 @@ from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
+    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin
 from country.models import Donor, FieldOffice, CountryOffice
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
@@ -20,11 +21,13 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, HSCChallenge, Portfolio
+    HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
+from user.models import UserProfile
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
-    PortfolioDetailsSerializer, PortfolioUpdateSerializer
+    PortfolioDetailsSerializer, PortfolioUpdateSerializer, PortfolioCreateSerializer, ProjectInPortfolioSerializer, \
+    ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, ProjectPortfolioStateFillSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -558,7 +561,7 @@ class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
 
 class PortfolioCreateViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
-    serializer_class = PortfolioDetailsSerializer
+    serializer_class = PortfolioCreateSerializer
 
 
 class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericViewSet):
@@ -569,3 +572,130 @@ class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericView
 class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = PortfolioDetailsSerializer
     queryset = Portfolio.objects.all()
+
+
+class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericViewSet):
+    def _check_input_and_permissions(self, request, *args, **kwargs):
+        # check if portfolio exists
+        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=kwargs.get("pk"))
+
+        self.check_object_permissions(request, portfolio)
+        if 'project' not in request.data or len(request.data['project']) == 0:
+            raise ValidationError({'project': 'Project data is missing'})
+        return portfolio
+
+    def move_from_inventory_to_review(self, request, *args, **kwargs):
+        portfolio = self._check_input_and_permissions(request, *args, **kwargs)
+        projects = Project.objects.filter(id__in=request.data['project']).exclude(review_states__portfolio=portfolio)
+        if len(projects) == 0:
+            raise ValidationError({'project': 'Project data is incorrect'})
+        # create a new review for each project if needed
+        for project in projects:
+            ProjectPortfolioState.objects.get_or_create(portfolio=portfolio, project=project)
+
+        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_201_CREATED)
+
+    def move_to_inventory(self, request, *args, **kwargs):
+        portfolio = self._check_input_and_permissions(request, *args, **kwargs)
+
+        review_states = portfolio.review_states.filter(project__in=request.data['project'], approved=False)
+        if len(review_states) == 0:
+            raise ValidationError({'project': 'Projects are not in review'})
+
+        # Remove each review_state from portfolio
+        for rev_state in review_states:
+            rev_state.delete()
+        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
+
+    def approve(self, request, *args, **kwargs):
+        portfolio = self._check_input_and_permissions(request, *args, **kwargs)
+        # only completed and unapproved projects can be approved
+        review_states = portfolio.review_states.filter(project__in=request.data['project'],
+                                                       complete=True, approved=False)
+        if len(review_states) == 0:
+            raise ValidationError({'project': 'Status change not valid for provided projects'})
+
+        # Approve each review state
+        for rev_state in review_states:
+            rev_state.approved = True
+            rev_state.save()
+
+        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
+
+    def disapprove(self, request, *args, **kwargs):
+        portfolio = self._check_input_and_permissions(request, *args, **kwargs)
+        # only completed and approved projects can be approved
+        review_states = portfolio.review_states.filter(project__in=request.data['project'], approved=True)
+        if len(review_states) == 0:
+            raise ValidationError({'project': 'Status change not valid for provided projects'})  # pragma: no cover
+
+        # Approve each review state
+        for rev_state in review_states:
+            rev_state.approved = False
+            rev_state.save()
+
+        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
+
+
+class ProjectPortfolioListViewSet(ListModelMixin, GenericViewSet):
+    serializer_class = ProjectInPortfolioSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['kwargs'] = self.kwargs
+        return context
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the projects in the current portfolio with the filtered review status
+        """
+        filter_param = self.kwargs.get('project_filter')
+        review_states = ProjectPortfolioState.objects.filter(portfolio=self.kwargs.get('pk'))
+        if filter_param == 'inventory':
+            return Project.objects.exclude(review_states__portfolio__id=self.kwargs.get('pk'))
+        elif filter_param == 'review':
+            not_approved_reviews = review_states.exclude(approved=True)
+            return Project.objects.filter(review_states__in=not_approved_reviews)
+        elif filter_param == 'approved':
+            approved_reviews = review_states.filter(approved=True)
+            return Project.objects.filter(review_states__in=approved_reviews)
+        else:
+            raise ValidationError({'project_filter': 'Allowed values are: [inventory|review|approved]'})
+
+
+class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericViewSet):
+    def get_project_and_portfolio(self):
+        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
+
+        pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
+        return portfolio, pps
+
+    def create_questionnaire(self, request, *args, **kwargs):
+        portfolio, pps = self.get_project_and_portfolio()
+        self.check_object_permissions(request, portfolio)
+
+        if 'userprofile' not in request.data:
+            raise ValidationError({'userprofile': 'UserProfile data is missing'})  # pragma: no cover
+        userprofiles = UserProfile.objects.filter(pk__in=request.data['userprofile'])
+        scores = list()
+        for profile in userprofiles:
+            score, created = pps.assign_questionnaire(user=profile)
+            scores.append(score)
+        # return with scores
+        data_serializer = ReviewScoreBriefSerializer(scores, many=True)
+        return Response(data_serializer.data, status=status.HTTP_200_OK)
+
+
+class ReviewScoreAccessSet(ReviewScoreAccessMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
+    serializer_class = ReviewScoreSerializer
+    queryset = ReviewScore.objects.all()
+
+
+class ReviewScoreAnswerViewSet(ReviewScoreReviewerAccessMixin, UpdateModelMixin, GenericViewSet):
+    serializer_class = ReviewScoreFillSerializer
+    queryset = ReviewScore.objects.all()
+
+
+class ProjectPortfolioStateManagerFillViewSet(ProjectPortfolioStateAccessMixin, UpdateModelMixin, GenericViewSet):
+    serializer_class = ProjectPortfolioStateFillSerializer
+    queryset = ProjectPortfolioState.objects.filter(complete=False)

@@ -194,11 +194,7 @@ class TestAdmin(TestCase):
         self.userprofile.global_portfolio_owner = True
         self.userprofile.save()
 
-        pr = Project.objects.create(name="test change view")
-
         po = Portfolio.objects.create(name="test portfolio", description="test description")
-        po.projects.set([pr])
         po.managers.set([self.userprofile])
 
-        self.assertEqual(pa.project_list(po), make_admin_list(po.projects.all()))
         self.assertEqual(pa.managers_list(po), make_admin_list(po.managers.all()))

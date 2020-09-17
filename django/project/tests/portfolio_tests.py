@@ -4,13 +4,13 @@ from django.urls import reverse
 
 from rest_framework.test import APITestCase, APIClient
 
-from project.models import Portfolio, ProblemStatement, Project
+from project.models import Portfolio, ProblemStatement
 from country.models import Country, Donor, CountryOffice
 from user.models import Organisation, UserProfile
 from user.tests import create_profile_for_user
 
 
-class PortfolioTests(APITestCase):
+class PortfolioSetup(APITestCase):
     def create_user(self, user_email, user_password1, user_password_2):
         """
         Create a test user with profile.
@@ -78,14 +78,13 @@ class PortfolioTests(APITestCase):
         return project_id
 
     @staticmethod
-    def create_portfolio(name, description, managers, projects, user_client):
+    def create_portfolio(name, description, managers, user_client):
         portfolio_data = {
             "date": datetime.utcnow(),
             "name": name,
             "description": description,
             "icon": "A",
             "managers": managers,
-            "projects": projects,
             "problem_statements": [
                 {
                     "name": "PS 1",
@@ -139,11 +138,12 @@ class PortfolioTests(APITestCase):
         self.userprofile_2.global_portfolio_owner = True
         self.userprofile_2.save()
 
-        response = self.create_portfolio("Test Portfolio 1", "Port-o-folio", [self.user_3_pr_id], [self.project_1_id],
-                                         self.user_2_client)
+        response = self.create_portfolio("Test Portfolio 1", "Port-o-folio", [self.user_3_pr_id], self.user_2_client)
         self.assertEqual(response.status_code, 201, response.json())
-
         self.portfolio_id = response.json()['id']
+
+
+class PortfolioTests(PortfolioSetup):
 
     def test_list_portfolios(self):
         """
@@ -189,18 +189,15 @@ class PortfolioTests(APITestCase):
         """
         Only GMO users can create portfolios
         """
-        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_1_pr_id], [self.project_1_id],
-                                         self.user_1_client)
+        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_1_pr_id], self.user_1_client)
         self.assertEqual(response.status_code, 403, response.json())
 
-        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_3_pr_id], [self.project_1_id],
-                                         self.user_3_client)
+        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_3_pr_id], self.user_3_client)
         self.assertEqual(response.status_code, 403, response.json())
 
     def test_list_user_portfolios(self):
         # create another portfolio
-        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_2_pr_id], [self.project_1_id],
-                                         self.user_2_client)
+        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_2_pr_id], self.user_2_client)
         self.assertEqual(response.status_code, 201, response.json())
         self.portfolio_id_2 = response.json()['id']
 
@@ -217,13 +214,13 @@ class PortfolioTests(APITestCase):
         """
         Any user should be able to view portfolio details
         """
-        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
+        url = reverse('portfolio-detailed',
+                      kwargs={"pk": self.portfolio_id})
         response = self.user_1_client.get(url)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['id'], self.portfolio_id)
         self.assertEqual(response.json()['managers'], [self.user_3_pr_id])
-        self.assertEqual(response.json()['projects'], [self.project_1_id])
         response_ps_ids = {ps['id'] for ps in response.json()['problem_statements']}
         expected_ps_ids = {ps.id for ps in Portfolio.objects.get(id=self.portfolio_id).problem_statements.all()}
         self.assertEqual(response_ps_ids, expected_ps_ids)
@@ -291,25 +288,3 @@ class PortfolioTests(APITestCase):
         self.assertEqual(set(response.json()['managers']), {self.user_3_pr_id})
         user_4_profile = UserProfile.objects.get(id=user_4_pr_id)
         self.assertEqual(list(user_4_profile.portfolios.all().values_list('id', flat=True)), [])
-
-    def test_add_and_remove_projects(self):
-        project_2_id = self.create_project("Test Project 2", self.org, self.country_office,
-                                           [self.d1, self.d2], self.user_1_client)
-        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
-        response = self.user_1_client.get(url)
-        projects = response.json()['projects']
-        projects.append(project_2_id)
-
-        url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
-        update_data = {'projects': projects}
-        response = self.user_3_client.patch(url, update_data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(set(response.json()['projects']), set(projects))
-        project_2 = Project.objects.get(id=project_2_id)
-        self.assertEqual(list(project_2.portfolios.all().values_list('id', flat=True)), [self.portfolio_id])
-
-        update_data = {'projects': [self.project_1_id]}
-        response = self.user_3_client.patch(url, update_data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(set(response.json()['projects']), {self.project_1_id})
-        self.assertEqual(list(project_2.portfolios.all().values_list('id', flat=True)), [])
