@@ -147,26 +147,26 @@ class ReviewTests(PortfolioSetup):
         response = self.user_3_client.get(url, format="json")
         self.assertEqual(response.status_code, 200)
         resp_data = response.json()
-        self.assertEqual(len(resp_data), 1)
-        self.assertEqual(resp_data[0]['id'], self.project_1_id)
-        self.assertEqual(resp_data[0]['review_states'], None)
+        self.assertEqual(resp_data['count'], 1)
+        self.assertEqual(resp_data['results'][0]['id'], self.project_1_id)
+        self.assertEqual(resp_data['results'][0]['review_states'], None)
         # Test 2: review
         url = reverse("portfolio-project-list",
                       kwargs={"pk": self.portfolio_id, 'project_filter': 'review'})
         response = self.user_3_client.get(url, format="json")
         self.assertEqual(response.status_code, 200)
         resp_data = response.json()
-        self.assertEqual(len(resp_data), 1)
-        self.assertEqual(resp_data[0]['id'], self.project_rev_id)
-        self.assertEqual(resp_data[0]['review_states']['id'], self.pps.id)
-        self.assertEqual(resp_data[0]['review_states']['review_scores'], [])  # no questionnaire sent yet
+        self.assertEqual(resp_data['count'], 1)
+        self.assertEqual(resp_data['results'][0]['id'], self.project_rev_id)
+        self.assertEqual(resp_data['results'][0]['review_states']['id'], self.pps.id)
+        self.assertEqual(resp_data['results'][0]['review_states']['review_scores'], [])  # no questionnaire sent yet
         # Test 3: complete
         url = reverse("portfolio-project-list",
                       kwargs={"pk": self.portfolio_id, 'project_filter': 'approved'})
         response = self.user_3_client.get(url, format="json")
         self.assertEqual(response.status_code, 200)
         resp_data = response.json()
-        self.assertEqual(len(resp_data), 0)
+        self.assertEqual(resp_data['count'], 0)
 
     def test_review_assign_questions(self):
         url = reverse("portfolio-assign-questionnaire",
