@@ -1602,6 +1602,43 @@ fieldset {
   }
 }
 
+.portfolio-area {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  width: 100vw;
+  min-width: @appWidthMinLimit;
+  max-width: @appWidthMaxLimit;
+  //height: calc(
+  //  100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight
+  //);
+
+  .content-area {
+    // z-index: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100vw - @advancedSearchWidth);
+    min-width: @appWidthMinLimit - @advancedSearchWidth;
+    max-width: @appWidthMaxLimit - @advancedSearchWidth;
+    height: 100%;
+
+    > div {
+      background-color: #fbfaf8;
+    }
+  }
+
+  .filter-area {
+    z-index: 2;
+    position: relative;
+    width: @advancedSearchWidth;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+
 @import "rtl.less";
 
 @import "~assets/style/fa/fontawesome";
