@@ -39,7 +39,7 @@
             class="el-icon-close"
             @click="activeIndex = undefined"
           />
-          <div class="Content">
+          <div class="ListTitle">
             <h4>List of projects ({{ active.projects.length }})</h4>
             <p>{{ leftText }}: {{ active.y }}&nbsp; &nbsp; {{ bottomText }}: {{ active.x }}</p>
           </div>
@@ -161,6 +161,10 @@ export default {
   //&::v-deep .el-scrollbar__bar.is-vertical {
   //  opacity: 1 !important;
   //}
+  &::v-deep .el-scrollbar__wrap {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
   .MColumns {
     display: flex;
     flex-direction: row;
@@ -199,6 +203,16 @@ export default {
         height: 100%;
         background-color: white;
         box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.12);
+        .ListTitle {
+          padding: 30px 20px 30px 40px;
+          h4 {
+            margin: 0;
+            padding-bottom: 12px;
+          }
+          p {
+            margin: 0;
+          }
+        }
         &:after {
           content:"";
           border-top: 20px solid transparent;
@@ -213,7 +227,7 @@ export default {
         }
         .el-icon-close {
           right: 20px;
-          top: 27px;
+          top: 25px;
           padding: 10px;
           font-size: 16px;
           position: absolute;
@@ -233,11 +247,12 @@ export default {
         }
         .List {
           border-top: 1px solid #EAE6E1;
+          padding-top: 24px;
           .ListLink {
             a {
               text-decoration: none;
             }
-            padding: 24px 40px;
+            padding: 0 40px 24px 40px;
             color: #1CABE2;
             font-size: 16px;
             font-weight: bold;
@@ -297,7 +312,7 @@ export default {
   .ArrowRight {
     transform: rotate(90deg);
     left: 599px;
-    bottom: 0;
+    top: 641px;
   }
 }
 </style>
