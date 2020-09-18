@@ -66,6 +66,7 @@ export default {
     border-radius: 50%;
     background-color: #154051;
     opacity: 0.8;
+    transition: all 250ms ease;
     &.inactive {
       opacity: 0.4;
     }

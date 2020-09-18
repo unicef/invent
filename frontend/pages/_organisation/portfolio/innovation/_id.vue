@@ -1,108 +1,130 @@
 <template>
-  <div class="portfolio">
-    <h2>
-      Portfolio:
-      <el-dropdown
-        trigger="click"
-        placement="bottom-end"
-      >
-        <span class="Title el-dropdown-link">
-          Learning<i class="el-icon-caret-bottom el-icon--right" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>Action 1</el-dropdown-item>
-          <el-dropdown-item>Action 2</el-dropdown-item>
-          <el-dropdown-item>Action 3</el-dropdown-item>
-          <el-dropdown-item disabled>
-            Action 4
-          </el-dropdown-item>
-          <el-dropdown-item divided>
-            Action 5
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </h2>
-    <el-tabs
-      v-model="activeName"
-    >
-      <el-tab-pane
-        label="AMBITION MATRIX"
-        name="ambition"
-      >
-        <Matrix
-          bg-image="/bg-ambition_matrix.svg"
-          :elements="elements"
-          :left="['existing', 'challenge', 'new']"
-          :bottom="['existing', 'solution (tools)', 'new']"
-        />
-      </el-tab-pane>
-      <el-tab-pane
-        label="RISK-IMPACT MATRIX"
-        name="risk"
-      >
-        <Matrix
-          bg-color="#FCEFE8"
-          color="#F26A21"
-          :elements="elements"
-          :left="['low', 'risk', 'high']"
-          :bottom="['low', 'impact (total global need)', 'high']"
-        />
-      </el-tab-pane>
-      <el-tab-pane
-        label="PROBLEM STATEMENT MATRIX"
-        name="problem"
-      >
-        <div class="Problems">
-          <el-row type="flex">
-            <el-col
-              v-for="(col, index) in ['Neglected', 'Moderate', 'High activity']"
-              :key="col"
-              span="8"
+  <section class="portfolio-area">
+    <div class="content-area">
+      <div class="portfolio">
+        <div class="PHeader">
+          <h2>
+            <translate>Portfolio:</translate>
+            <el-dropdown
+              trigger="click"
+              placement="bottom-start"
             >
-              <div :class="`Problem Problem${index + 1}`">
-                <div class="Title">
-                  {{ col }}
+              <span class="Title el-dropdown-link">
+                Learning<i class="el-icon-caret-bottom el-icon--right" />
+              </span>
+              <el-dropdown-menu
+                slot="dropdown"
+                class="PDropdown"
+              >
+                <el-dropdown-item>Action 1</el-dropdown-item>
+                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item>Action 3</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </h2>
+        </div>
+        <el-tabs
+          v-model="activeName"
+        >
+          <el-tab-pane
+            label="AMBITION MATRIX"
+            name="ambition"
+          >
+            <Matrix
+              bg-image="/bg-ambition_matrix.svg"
+              :elements="elements"
+              :left="['existing', 'challenge', 'new']"
+              :bottom="['existing', 'solution (tools)', 'new']"
+            />
+          </el-tab-pane>
+          <el-tab-pane
+            label="RISK-IMPACT MATRIX"
+            name="risk"
+          >
+            <Matrix
+              bg-color="#FCEFE8"
+              color="#F26A21"
+              :elements="elements"
+              :left="['low', 'risk', 'high']"
+              :bottom="['low', 'impact (total global need)', 'high']"
+            />
+          </el-tab-pane>
+          <el-tab-pane
+            label="PROBLEM STATEMENT MATRIX"
+            name="problem"
+          >
+            <div class="Problems">
+              <el-row type="flex">
+                <el-col
+                  v-for="(col, index) in ['Neglected', 'Moderate', 'High activity']"
+                  :key="col"
+                  span="8"
+                >
+                  <div :class="`Problem Problem${index + 1}`">
+                    <div class="Title">
+                      {{ col }}
+                    </div>
+                    <div>
+                      <radio
+                        v-for="statement in problemColumns[index]"
+                        :key="statement.id"
+                        :value="selectedProblem === statement.id"
+                        :disabled="disabledProblems.indexOf(statement.id) !== -1"
+                        @update="select(statement.id, $event)"
+                      >
+                        {{ statement.title }}
+                      </radio>
+                    </div>
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row>
+                <div class="Info">
+                  <i class="fas fa-info-circle" />
+                  By clicking on a problem statement you can add or remove it from your current filter settings.
                 </div>
-                <div>
-                  <radio
-                    v-for="statement in problemColumns[index]"
-                    :key="statement.id"
-                    :value="selectedProblem === statement.id"
-                    :disabled="disabledProblems.indexOf(statement.id) !== -1"
-                    @update="select(statement.id, $event)"
-                  >
-                    {{ statement.title }}
-                  </radio>
-                </div>
-              </div>
-            </el-col>
+              </el-row>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane
+            label="MAP VIEW"
+            name="map"
+          >
+            MAP
+          </el-tab-pane>
+        </el-tabs>
+
+        <div class="DashboardListView">
+          <el-row>
+            <table-top-actions />
           </el-row>
           <el-row>
-            <div class="Info">
-              <i class="fas fa-info-circle" />
-              By clicking on a problem statement you can add or remove it from your current filter settings.
-            </div>
+            <main-table />
           </el-row>
         </div>
-      </el-tab-pane>
-      <el-tab-pane
-        label="MAP VIEW"
-        name="map"
-      >
-        MAP
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+      </div>
+    </div>
+    <aside class="filter-area">
+      <advanced-search />
+    </aside>
+  </section>
 </template>
 
 <script>
+import TableTopActions from '@/components/portfolio/dashboard/TableTopActions';
+import MainTable from '@/components/portfolio/dashboard/MainTable';
+import AdvancedSearch from '@/components/dashboard/AdvancedSearch';
 import Matrix from '@/components/portfolio/Matrix';
 import Radio from '@/components/portfolio/form/inputs/Radio';
 import groupBy from 'lodash/groupBy';
+
 export default {
   components: {
     Matrix,
-    Radio
+    Radio,
+    MainTable,
+    AdvancedSearch,
+    TableTopActions
   },
   data () {
     return {
@@ -163,18 +185,54 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.portfolio {
-  margin: 50px 40px 160px 40px;
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
+.portfolio-area::v-deep {
+  .move {
+    display: none;
+  }
+  .actions .right .settings {
+    margin: 0;
+  }
+}
+section.portfolio-area {
+  aside.filter-area {
+    right: 0;
+    position: absolute;
+  }
+}
 
+.portfolio {
+  //margin: 0 40px 160px 40px;
+  margin-bottom: 80px;
+  .PHeader {
+    padding: 0 40px;
+    background-color: white;
+  }
   &::v-deep .el-tabs {
+    .el-tabs__header {
+      padding: 0 40px;
+      background-color: white;
+    }
     .el-tabs__nav-wrap::after {
       background-color: transparent;
     }
     .el-tabs__active-bar {
       height: 3px;
+      background-color: #1CABE2;
     }
     .el-tabs__content {
+      margin: 0 40px;
       padding-top: 40px;
+    }
+    .el-tabs__item {
+      color: #777779;
+      &.is-active, &:hover {
+        color: #404041;
+      }
+      &:hover {
+        font-weight: bold;
+      }
     }
   }
   &::v-deep .el-tabs__nav {
@@ -230,13 +288,17 @@ export default {
     }
   }
   h2 {
-    margin: 50px 0 24px 0;
+    margin: 0;
+    padding: 50px 0 24px 0;
     height: 45px;
     color: #1CABE2;
     font-size: 36px;
     letter-spacing: -1px;
     line-height: 45px;
     font-weight: normal;
+    .el-icon-caret-bottom {
+      font-size: 22px;
+    }
   }
   .Problems {
     background-color: white;
