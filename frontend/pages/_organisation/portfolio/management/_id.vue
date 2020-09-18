@@ -6,7 +6,10 @@
           <nuxt-link
             :to="localePath({ name: 'organisation-portfolio-management' })"
           >
-            <fa icon="angle-left" size="sm" />
+            <fa
+              icon="angle-left"
+              size="sm"
+            />
             <translate>Back</translate>
           </nuxt-link>
           <h2><translate>Edit portfolio</translate></h2>
@@ -15,8 +18,8 @@
           <p
             v-for="item in tabs"
             :key="item.id"
-            @click="setTab(item.id)"
             :class="`${item.id === tab && 'active'}`"
+            @click="setTab(item.id)"
           >
             <fa :icon="item.icon" />
             {{ `${item.name} (${item.total})` }}
@@ -40,11 +43,11 @@
 </template>
 
 <script>
-import AdvancedSearch from "@/components/dashboard/AdvancedSearch";
-import MainTable from "@/components/portfolio/dashboard/MainTable";
-import TableTopActions from "@/components/portfolio/dashboard/TableTopActions";
-import { mapState, mapGetters, mapActions } from "vuex";
-import debounce from "lodash/debounce";
+import AdvancedSearch from '@/components/dashboard/AdvancedSearch';
+import MainTable from '@/components/portfolio/dashboard/MainTable';
+import TableTopActions from '@/components/portfolio/dashboard/TableTopActions';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import debounce from 'lodash/debounce';
 
 export default {
   components: {
@@ -52,33 +55,33 @@ export default {
     MainTable,
     TableTopActions
   },
-  async fetch({ store, query, error }) {
-    store.dispatch("landing/resetSearch");
-    store.dispatch("dashboard/setDashboardSection", "list");
+  async fetch ({ store, query, error }) {
+    store.dispatch('landing/resetSearch');
+    store.dispatch('dashboard/setDashboardSection', 'list');
     await Promise.all([
-      store.dispatch("projects/loadUserProjects"),
-      store.dispatch("projects/loadProjectStructure")
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure')
     ]);
-    await store.dispatch("dashboard/setSearchOptions", query);
+    await store.dispatch('dashboard/setSearchOptions', query);
     try {
-      await store.dispatch("dashboard/loadProjectList");
+      await store.dispatch('dashboard/loadProjectList');
     } catch (e) {
       console.log(e);
       error({
         statusCode: 404,
-        message: "Unable to process the search with the current parameters"
+        message: 'Unable to process the search with the current parameters'
       });
     }
     // todo: integration should handle the status to refill data of projects
-    if (store.getters["dashboard/getDashboardType"] === "donor") {
+    if (store.getters['dashboard/getDashboardType'] === 'donor') {
       await store.dispatch(
-        "system/loadDonorDetails",
-        store.getters["dashboard/getDashboardId"]
+        'system/loadDonorDetails',
+        store.getters['dashboard/getDashboardId']
       );
-    } else if (store.getters["dashboard/getDashboardType"] === "country") {
+    } else if (store.getters['dashboard/getDashboardType'] === 'country') {
       await store.dispatch(
-        "countries/loadCountryDetails",
-        store.getters["dashboard/getDashboardId"]
+        'countries/loadCountryDetails',
+        store.getters['dashboard/getDashboardId']
       );
     }
   },
@@ -88,21 +91,21 @@ export default {
       tab: state => state.portfolio.tab
     }),
     ...mapGetters({
-      searchParameters: "dashboard/getSearchParameters",
-      dashboardSection: "dashboard/getDashboardSection"
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection'
     })
   },
   watch: {
     searchParameters: {
       immediate: false,
-      handler(query) {
+      handler (query) {
         this.searchParameterChanged(query);
       }
     }
   },
-  mounted() {
+  mounted () {
     if (window) {
-      const savedFilters = window.localStorage.getItem("savedFilters");
+      const savedFilters = window.localStorage.getItem('savedFilters');
       if (savedFilters) {
         this.setSavedFilters(JSON.parse(savedFilters));
       }
@@ -110,17 +113,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadProjectList: "dashboard/loadProjectList",
-      setSavedFilters: "dashboard/setSavedFilters",
-      setTab: "portfolio/setTab"
+      loadProjectList: 'dashboard/loadProjectList',
+      setSavedFilters: 'dashboard/setSavedFilters',
+      setTab: 'portfolio/setTab'
     }),
-    searchParameterChanged: debounce(function(query) {
-      if (this.dashboardSection === "list") {
+    searchParameterChanged: debounce(function (query) {
+      if (this.dashboardSection === 'list') {
         this.$router.replace({ ...this.$route, query });
         this.load();
       }
     }, 100),
-    async load() {
+    async load () {
       this.$nuxt.$loading.start();
       await this.loadProjectList();
       this.$nuxt.$loading.finish();
@@ -134,26 +137,11 @@ export default {
 @import "~assets/style/mixins.less";
 
 .portfolio-area {
-  position: relative;
-  display: flex;
-  overflow: hidden;
-  width: 100vw;
-  min-width: @appWidthMinLimit;
-  max-width: @appWidthMaxLimit;
   height: calc(
     100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight
   );
 
   .content-area {
-    // z-index: 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: calc(100vw - @advancedSearchWidth);
-    min-width: @appWidthMinLimit - @advancedSearchWidth;
-    max-width: @appWidthMaxLimit - @advancedSearchWidth;
-    height: 100%;
-
     > div {
       background-color: #fbfaf8;
     }
@@ -208,15 +196,6 @@ export default {
         }
       }
     }
-  }
-
-  .filter-area {
-    z-index: 2;
-    position: relative;
-    width: @advancedSearchWidth;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
   }
 }
 </style>
