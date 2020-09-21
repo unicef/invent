@@ -71,6 +71,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         "project__data__capability_levels",
         "project__data__capability_categories",
         "project__data__capability_subcategories",
+        "project__data__innovation_categories",
     )
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'project__modified', 'organisation__name',
@@ -113,6 +114,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         `cl` Capability Levels overlap eg: cl=1&cl=2  
         `cc` Capability Categories overlap eg: cc=1&cc=2  
         `cs` Capability Sucategories overlap eg: cs=1&cs=2  
+        `ic` Innovation Categories overlap eg: ic=1&ic=2  
 
         ** FOUND IN FEATURE **
 
