@@ -8,7 +8,7 @@ import project.cache
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0071_auto_20200908_1224'),
+        ('project', '0073_scale_phase_data'),
     ]
 
     operations = [
