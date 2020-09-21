@@ -42,6 +42,7 @@ class ProjectSearch(ExtendedModel):
         "cl": "capability_levels",  # eg: cl=1&cl=2
         "cc": "capability_categories",  # eg: cc=1&cc=2
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
+        "ic": "innovation_categories",  # eg: ic=1&ic=2
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -61,6 +62,7 @@ class ProjectSearch(ExtendedModel):
     capability_levels = ArrayField(models.IntegerField(), default=list)
     capability_categories = ArrayField(models.IntegerField(), default=list)
     capability_subcategories = ArrayField(models.IntegerField(), default=list)
+    innovation_categories = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
     def search(cls, queryset: QuerySet, search_term: str, search_in: List[str]) -> QuerySet:
@@ -155,6 +157,7 @@ class ProjectSearch(ExtendedModel):
             self.capability_levels = project.data.get('capability_levels')
             self.capability_categories = project.data.get('capability_categories')
             self.capability_subcategories = project.data.get('capability_subcategories')
+            self.innovation_categories = project.data.get('innovation_categories')
             self.save()
 
     def reset(self):
