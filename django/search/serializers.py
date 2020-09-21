@@ -37,6 +37,7 @@ class ListResultSerializer(serializers.Serializer):
     capability_levels = serializers.ReadOnlyField(source="project__data__capability_levels")
     capability_categories = serializers.ReadOnlyField(source="project__data__capability_categories")
     capability_subcategories = serializers.ReadOnlyField(source="project__data__capability_subcategories")
+    innovation_categories = serializers.ReadOnlyField(source="project__data__innovation_categories")
 
     def get_donor_custom_answers_private(self, obj):
         private_fields = obj.get("project__data__donor_custom_answers_private")
