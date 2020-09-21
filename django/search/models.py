@@ -157,7 +157,7 @@ class ProjectSearch(ExtendedModel):
             self.capability_levels = project.data.get('capability_levels')
             self.capability_categories = project.data.get('capability_categories')
             self.capability_subcategories = project.data.get('capability_subcategories')
-            self.innovation_categories = project.data.get('innovation_categories')
+            self.innovation_categories = project.data.get('innovation_categories', [])
             self.save()
 
     def reset(self):
