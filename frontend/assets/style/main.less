@@ -892,13 +892,14 @@ fieldset {
     position: relative;
     height: @dialogHeaderFooterHeight;
     padding: 0 30px;
-    background-color: @colorBrandPrimary;
+    background-color: @colorWhite;
     font-weight: 700;
+    border-bottom: 1px solid #eae6e1;
 
     .el-dialog__title {
       line-height: @dialogHeaderFooterHeight;
       font-size: @fontSizeLarger;
-      color: @colorWhite;
+      color: @colorBrandPrimary;
     }
 
     .el-dialog__headerbtn {
@@ -914,8 +915,8 @@ fieldset {
 
       i {
         font-size: @fontSizeLarger;
-        color: @colorWhite;
-        font-weight: 700;
+        color: #a8a8a9;
+        font-weight: 100;
         transition: @transitionFadeLinear;
       }
     }
@@ -929,7 +930,7 @@ fieldset {
     height: @dialogHeaderFooterHeight;
     padding: 12px;
     border-top: 1px solid @colorGrayLight;
-    background-color: @colorBrandBlueLight;
+    background-color: @colorWhite;
 
     .el-button {
       font-size: @fontSizeMedium;
@@ -1600,6 +1601,43 @@ fieldset {
     color: #00aeef;
   }
 }
+
+.portfolio-area {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  width: 100vw;
+  min-width: @appWidthMinLimit;
+  max-width: @appWidthMaxLimit;
+  //height: calc(
+  //  100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight
+  //);
+
+  .content-area {
+    // z-index: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100vw - @advancedSearchWidth);
+    min-width: @appWidthMinLimit - @advancedSearchWidth;
+    max-width: @appWidthMaxLimit - @advancedSearchWidth;
+    height: 100%;
+
+    > div {
+      background-color: #fbfaf8;
+    }
+  }
+
+  .filter-area {
+    z-index: 2;
+    position: relative;
+    width: @advancedSearchWidth;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
 
 @import "rtl.less";
 

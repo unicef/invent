@@ -41,6 +41,7 @@ export default {};
     width: 79px;
     margin-top: -16px;
     margin-right: 26px;
+    z-index: 10;
   }
 
   .text {

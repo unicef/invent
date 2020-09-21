@@ -2,11 +2,9 @@
   <div class="ProjectLegendContent">
     <template v-if="showStar">
       <span>
-        <fa
-          icon="star"
-          size="xs"
-          class="OwnerIcon"
-        />
+        <el-tooltip :content="member" placement="top">
+          <fa icon="star" class="OwnerIcon" />
+        </el-tooltip>
         <span v-show="showLabel">
           <translate>Team Member</translate>
         </span>
@@ -14,11 +12,7 @@
     </template>
     <template v-if="showEye">
       <span>
-        <fa
-          icon="eye"
-          size="xs"
-          class="ViewerIcon"
-        />
+        <fa icon="eye" class="ViewerIcon" />
         <span v-show="showLabel">
           <translate>Viewer</translate>
         </span>
@@ -26,11 +20,7 @@
     </template>
     <template v-if="showHandshake">
       <span>
-        <fa
-          icon="handshake"
-          size="xs"
-          class="DonorIcon"
-        />
+        <fa icon="handshake" class="DonorIcon" />
         <span v-show="showLabel">
           <translate>Investor</translate>
         </span>
@@ -38,21 +28,17 @@
     </template>
     <template v-if="showGlobe">
       <span>
-        <fa
-          icon="globe-africa"
-          size="xs"
-          class="CountryAdminIcon"
-        />
+        <fa icon="globe-africa" class="CountryAdminIcon" />
         <span v-show="showLabel">
           <translate>Country admin</translate>
         </span>
       </span>
     </template>
   </div>
-</template>3
+</template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -93,49 +79,61 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      member: this.$gettext("Team member")
+    };
+  },
+
   computed: {
     ...mapGetters({
-      userProfile: 'user/getProfile'
+      userProfile: "user/getProfile"
     }),
-    isMember () {
+    isMember() {
       if (this.id && this.userProfile) {
         return this.userProfile.member.includes(this.id);
       }
       return false;
     },
-    isViewer () {
+    isViewer() {
       if (this.id && this.userProfile) {
         return this.userProfile.viewer.includes(this.id);
       }
       return false;
     },
-    isTeam () {
+    isTeam() {
       return this.isMember || this.isViewer;
     },
-    isDonor () {
-      const donorPersonas = ['D', 'DA', 'SDA'];
+    isDonor() {
+      const donorPersonas = ["D", "DA", "SDA"];
       if (this.donors && Array.isArray(this.donors) && this.userProfile) {
-        return donorPersonas.includes(this.userProfile.account_type) && this.donors.includes(this.userProfile.donor);
+        return (
+          donorPersonas.includes(this.userProfile.account_type) &&
+          this.donors.includes(this.userProfile.donor)
+        );
       }
       return false;
     },
-    isCountry () {
-      const countryPersonas = ['G', 'CA', 'SCA'];
+    isCountry() {
+      const countryPersonas = ["G", "CA", "SCA"];
       if (this.country && this.userProfile) {
-        return countryPersonas.includes(this.userProfile.account_type) && this.country === this.userProfile.country;
+        return (
+          countryPersonas.includes(this.userProfile.account_type) &&
+          this.country === this.userProfile.country
+        );
       }
       return false;
     },
-    showStar () {
+    showStar() {
       return this.forceStar || this.isMember;
     },
-    showEye () {
+    showEye() {
       return this.forceEye || (!this.isMember && this.isViewer);
     },
-    showHandshake () {
+    showHandshake() {
       return this.forceHandshake || (this.isDonor && !this.isTeam);
     },
-    showGlobe () {
+    showGlobe() {
       return this.forceGlobe || (this.isCountry && !this.isTeam);
     }
   }
@@ -143,25 +141,24 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .ProjectLegendContent {
-    .OwnerIcon {
-      color: @colorOwner;
-    }
-
-    .ViewerIcon {
-      color: @colorViewer;
-    }
-
-    .DonorIcon {
-      color: @colorDonor;
-    }
-
-    .CountryAdminIcon {
-      color: @colorCountryAdmin;
-    }
+.ProjectLegendContent {
+  svg {
+    font-size: 13px !important;
   }
-
+  .OwnerIcon {
+    color: @colorOwner;
+  }
+  .ViewerIcon {
+    color: @colorViewer;
+  }
+  .DonorIcon {
+    color: @colorDonor;
+  }
+  .CountryAdminIcon {
+    color: @colorCountryAdmin;
+  }
+}
 </style>

@@ -193,7 +193,6 @@ class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
 class Portfolio(ExtendedNameOrderedSoftDeletedModel):
     description = models.CharField(max_length=511)
     icon = models.CharField(max_length=3, blank=True)
-    projects = models.ManyToManyField(Project, related_name='portfolios', blank=True)
     managers = models.ManyToManyField(UserProfile, related_name="portfolios", blank=True)
     STATUS_DRAFT = 'DR'
     STATUS_ACTIVE = 'ACT'
@@ -459,3 +458,65 @@ class ImportRow(models.Model):
     original_data = JSONField(default=dict)
     project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
+
+
+class BaseScore(ExtendedModel):
+    BASE_CHOICES = [(i, i) for i in range(1, 6)]
+    psa = models.ManyToManyField(ProblemStatement, blank=True)  # Problem Statement Alignment
+    rnci = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Reach: Number of Children Impacted
+    ratp = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Reach: Addressing Target Populations
+    ra = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Risk Assessment
+    ee = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Evidence of Effectiveness
+    nst = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Solution (Tool)
+    nc = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Challenge
+    ps = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Path to Scale
+
+    complete = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class ScalePhase(ExtendedModel):
+    SCALE_CHOICES = (
+        (1, _('Ideation')),
+        (2, _('Research & Development')),
+        (3, _('Proof of Concept')),
+        (4, _('Transition to Scale')),
+        (5, _('Scaling')),
+        (6, _('Sustainable Scale'))
+    )
+    scale = models.IntegerField(choices=SCALE_CHOICES, primary_key=True)
+
+
+class ProjectPortfolioState(BaseScore):
+    impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True)
+    scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE, blank=True)
+    portfolio = models.ForeignKey(Portfolio, related_name='review_states', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('portfolio', 'project')
+
+    def assign_questionnaire(self, user: UserProfile):
+        return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
+
+    def get_scale(self):
+        return self.scale_phase.scale if self.scale_phase else None
+
+
+class ReviewScore(BaseScore):
+    reviewer = models.ForeignKey(UserProfile, related_name='review_scores', on_delete=models.CASCADE)
+    portfolio_review = models.ForeignKey(ProjectPortfolioState, related_name='review_scores', on_delete=models.CASCADE)
+    psa_comment = models.CharField(max_length=255, null=True, blank=True)  # PSA - reviewer's comment field
+    rnci_comment = models.CharField(max_length=255, null=True, blank=True)  # RNCI - reviewer's comment field
+    ratp_comment = models.CharField(max_length=255, null=True, blank=True)  # RATP - reviewer's comment field
+    ra_comment = models.CharField(max_length=255, null=True, blank=True)  # Risk Assessment - reviewer's comment field
+    ee_comment = models.CharField(max_length=255, null=True, blank=True)  # EE - reviewer's comment field
+    nst_comment = models.CharField(max_length=255, null=True, blank=True)  # NST - reviewer's comment field
+    nc_comment = models.CharField(max_length=255, null=True, blank=True)  # NC - reviewer's comment field
+    ps_comment = models.CharField(max_length=255, null=True, blank=True)  # PS - reviewer's comment field
+
+    class Meta:
+        unique_together = ('reviewer', 'portfolio_review')
