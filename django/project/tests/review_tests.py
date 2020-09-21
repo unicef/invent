@@ -18,8 +18,9 @@ class ReviewTests(PortfolioSetup):
         self.project = Project.objects.get(id=self.project_1_id)
         self.portfolio = Portfolio.objects.get(id=self.portfolio_id)
         # add other project
-        self.project_rev_id = self.create_project("Test Project in Inventory", self.org, self.country_office,
-                                                  [self.d1, self.d2], self.user_1_client)
+        self.project_rev_id, project_data, org, country, country_office, d1, d2 = \
+            self.create_new_project(self.user_1_client)
+
         # Add project to portfolio
         url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio_id})
         request_data = {"project": [self.project_rev_id]}
@@ -38,8 +39,8 @@ class ReviewTests(PortfolioSetup):
         self.user_1_profile = UserProfile.objects.get(id=self.user_1_pr_id)
 
     def test_project_in_portfolio_status_changes(self):
-        project_id = self.create_project("Test Project N", self.org, self.country_office,
-                                         [self.d1, self.d2], self.user_1_client)
+        project_id, project_data, org, country, country_office, d1, d2 = \
+            self.create_new_project(self.user_1_client)
 
         portfolio_data = self.get_portfolio_data(portfolio_id=self.portfolio_id, client=self.user_3_client)
         pps_data = portfolio_data['review_states']
