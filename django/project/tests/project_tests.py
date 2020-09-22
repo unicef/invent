@@ -916,3 +916,25 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']["links"], new_links)
 
+    def test_publish_with_more_than_5_partners(self):
+        url = reverse("project-publish",
+                      kwargs={"project_id": self.project_id, "country_office_id": self.country_office.id})
+        data = copy.deepcopy(self.project_data)
+        new_partners = [dict(partner_type=0, partner_name="test partner 1", partner_email="p1@partner.ppp",
+                             partner_website="https://partner1.com"),
+                        dict(partner_type=1, partner_name="test partner 2", partner_email="p2@partner.ppp",
+                             partner_website="https://partner2.com"),
+                        dict(partner_type=2, partner_name="test partner 3", partner_email="p3@partner.ppp",
+                             partner_website="https://partner3.com"),
+                        dict(partner_type=3, partner_name="test partner 4", partner_email="p4@partner.ppp",
+                             partner_website="https://partner4.com"),
+                        dict(partner_type=1, partner_name="test partner 5", partner_email="p5@partner.ppp",
+                             partner_website="https://partner5.com"),
+                        dict(partner_type=0, partner_name="test partner 6", partner_email="p6@partner.ppp",
+                             partner_website="https://partner6.com"),
+                        ]
+        data['project']['partners'] = new_partners
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']["partners"], new_partners)
+        self.assertEqual(len(response.json()['published']["partners"]), 6)
