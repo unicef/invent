@@ -87,6 +87,12 @@ class TestProjectData:
             "nontech": [1, 2],
             "functions": [1, 2],
             "phase": 1,
+            "partners": [dict(partner_type=0, partner_name="test partner 1", partner_email="p1@partner.ppp",
+                             partner_website="https://partner1.com"),
+                        dict(partner_type=1, partner_name="test partner 2", partner_email="p2@partner.ppp",
+                             partner_website="https://partner2.com")],
+            "links": [dict(link_type=0, link_url="https://website.com"), 
+                      dict(link_type=1, link_url="https://sharepoint.directory")]
         }}, org, country, country_office, d1, d2
 
     def create_new_project(self, test_user_client=None):
