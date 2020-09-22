@@ -1,6 +1,6 @@
 <template>
   <span class="Element">
-    {{ selected.code || selected.name }}
+    {{ selected.name }}
   </span>
 </template>
 
