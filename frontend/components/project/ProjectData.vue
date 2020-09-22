@@ -188,6 +188,15 @@
             :header="$gettext('Annual Work Plan') | translate"
           />
           <simple-field
+            :header="$gettext('Work Breakdown Structure (WBS)') | translate"
+          >
+            <ul>
+              <li v-for="wbs in project.wbs" :key="wbs">
+                <span>{{ wbs }}</span>
+              </li>
+            </ul>
+          </simple-field>
+          <simple-field
             :header="$gettext('Total Budget') | translate"
           >
             {{ project.total_budget }}
