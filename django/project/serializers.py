@@ -29,6 +29,17 @@ class PartnerSerializer(serializers.Serializer):
     partner_website = serializers.URLField(required=False)
 
 
+class LinkSerializer(serializers.Serializer):
+    LINK_TYPE = [(0, _('Website')),
+                 (1, _('SharePoint Repository ')),
+                 (2, _('External Advocacy/Communications')),
+                 (3, _('Monitoring, Evaluation or Learning')),
+                 (4, _('Other Documents/Resources'))]
+
+    link_type = serializers.ChoiceField(choices=LINK_TYPE)
+    link_url = serializers.URLField(required=False)
+
+
 class ProjectPublishedSerializer(serializers.Serializer):
     # UNICEF Office and co
     country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
