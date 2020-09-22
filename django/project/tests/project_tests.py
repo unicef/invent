@@ -904,3 +904,15 @@ class ProjectTests(SetupTests):
         self.assertTrue(owner_id in response.json()['team'])
         self.assertTrue(owner_id in response.json()['viewers'])
         self.assertEqual(UserProfile.objects.count(), 1)
+
+    def test_publish_with_new_links(self):
+        url = reverse("project-publish",
+                      kwargs={"project_id": self.project_id, "country_office_id": self.country_office.id})
+        data = copy.deepcopy(self.project_data)
+        new_links = [dict(link_type=0, link_url="https://NEWwebsite.com"),
+                     dict(link_type=1, link_url="https://NEWsharepoint.directory")]
+        data['project']['links'] = new_links
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']["links"], new_links)
+
