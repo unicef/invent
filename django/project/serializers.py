@@ -458,7 +458,7 @@ class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
 class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
     scale_phase = serializers.IntegerField(required=True, source='get_scale')
     impact = serializers.IntegerField(required=True)
-    project = serializers.UUIDField(read_only=True)
+    project = serializers.UUIDField(read_only=True, source='project.id')
     portfolio = serializers.UUIDField(read_only=True)
 
     class Meta:
@@ -487,11 +487,14 @@ class PortfolioBaseSerializer(serializers.ModelSerializer):
 class PortfolioDetailsSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
     review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
+    ambition_matrix = serializers.ReadOnlyField(source='get_ambition_matrix_data')
+    risk_impact_matrix = serializers.ReadOnlyField(source='get_risk_impact_matrix_data')
+    problem_statement_matrix = serializers.ReadOnlyField(source='get_problem_statement_matrix_data')
 
     class Meta:
         model = Portfolio
         fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements',
-                  'review_states')
+                  'review_states', 'ambition_matrix', 'risk_impact_matrix', 'problem_statement_matrix')
 
 
 class PortfolioCreateSerializer(PortfolioBaseSerializer):
