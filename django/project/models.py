@@ -9,6 +9,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from simple_history.models import HistoricalRecords
+from django.conf import settings
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -209,6 +210,76 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         default=STATUS_DRAFT
     )
     objects = PortfolioQuerySet.as_manager()
+
+    @staticmethod
+    def _get_ambition_blobs(filtered_reviews):
+        blobs = {}
+        for review in filtered_reviews:
+            hash = review.get_ambition_hash()
+
+            if hash:
+                if hash not in blobs:
+                    blobs[hash] = {'x': review.nst, 'y': review.nc, 'projects': [review.project_id]}
+                else:
+                    blobs[hash]['projects'].append(review.project_id)
+        # generate blob ratio
+        blob_list = list(blobs.values())
+        max_blob_size = max([len(x['projects']) for x in blob_list])
+        for blob in blob_list:
+            blob['ratio'] = round(len(blob['projects'])/max_blob_size, 2)
+        return blob_list
+
+    @staticmethod
+    def _get_impact_blobs(filtered_reviews):
+        blobs = {}
+        for review in filtered_reviews:
+            hash = review.get_impact_hash()
+            if hash:
+                if hash not in blobs:
+                    blobs[hash] = {'x': review.impact, 'y': review.ra, 'projects': [review.project_id]}
+                else:
+                    blobs[hash]['projects'].append(review.project_id)
+        # generate blob ratio
+        blob_list = list(blobs.values())
+        max_blob_size = max([len(x['projects']) for x in blob_list])
+        for blob in blob_list:
+            blob['ratio'] = round(len(blob['projects'])/max_blob_size, 2)
+        return blob_list
+
+    def get_ambition_matrix_data(self):
+        """
+        Returns with a list of coordinates and assigned project ids for the ambition matrix
+        """
+        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
+        return self._get_ambition_blobs(filtered_reviews) if filtered_reviews else None
+
+    def get_risk_impact_matrix_data(self):
+        """
+        Returns with a list of coordinates and assigned project ids for the risk impact matrix
+        """
+        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
+        return self._get_impact_blobs(filtered_reviews) if filtered_reviews else None
+
+    def get_problem_statement_matrix_data(self):
+        # TODO: figure out what we need here
+        tresholds = settings.PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS
+        ps_data = {'neglected': [], 'moderate': [], 'high_activity': []}
+        filtered_reviews = self.review_states.filter(complete=True)
+        ps_dict = {}
+        for review in filtered_reviews:
+            for ps in review.psa.all():
+                if ps.pk in ps_dict:
+                    ps_dict[ps.pk] += 1
+                else:
+                    ps_dict[ps.pk] = 1
+        for ps_id in ps_dict:
+            if ps_dict[ps_id] < tresholds['MODERATE']:
+                ps_data['neglected'].append(ps_id)
+            elif ps_dict[ps_id] < tresholds['HIGH']:
+                ps_data['moderate'].append(ps_id)
+            else:
+                ps_data['high_activity'].append(ps_id)  # pragma: no cover
+        return ps_data
 
 
 class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
@@ -504,6 +575,12 @@ class ProjectPortfolioState(BaseScore):
 
     def get_scale(self):
         return self.scale_phase.scale if self.scale_phase else None
+
+    def get_impact_hash(self):
+        return f'{self.impact}-{self.ra}' if self.complete else None
+
+    def get_ambition_hash(self):
+        return f'{self.nst}-{self.nc}' if self.complete else None
 
 
 class ReviewScore(BaseScore):
