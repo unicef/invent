@@ -20,7 +20,7 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GP
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
-    Phase, HardwarePlatform, NontechPlatform, PlatformFunction
+    Phase, HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
@@ -39,16 +39,26 @@ class ProjectPublicViewSet(ViewSet):
         Terminology and taxonomy endpoint - List all the available taxonomies and terminologies
 
         Reponse:  
-        `technology_platforms` == WHO's Software list  
+        `technology_platforms` = WHO's Software list  
         `goal_areas`  
         `result_areas`  
         `capability_levels`  
         `capability_categories`  
         `capability_subcategories`  
-        `health_focus_areas` == WHO's Health Focus Areas  
-        `hsc_challenges` == WHO's Health System Challanges  
-        `strategies` == WHO's Digital Health Interventions  
+        `health_focus_areas` = WHO's Health Focus Areas  
+        `hsc_challenges` = WHO's Health System Challanges  
+        `strategies` = WHO's Digital Health Interventions  
         `field_offices`  
+        `regional_offices`  
+        `currencies`  
+        `sectors` = UNICEF Sectors  
+        `regional_priorities` = Regional Priorities  
+        `phases` = Phase of Initiative  
+        `hardware` = Hardware Platform(s) and Physical Product(s)  
+        `nontech` = Programme Innovation(s) and Non-Technology Platform(s)  
+        `functions` = Function(s) of Platform  
+        `cpd` = CPD and annual work plan  
+        `innovation_categories` = Innovation Categories  
         """
         return Response(self._get_project_structure())
 
@@ -103,7 +113,9 @@ class ProjectPublicViewSet(ViewSet):
             phases=Phase.objects.values('id', 'name'),
             hardware=HardwarePlatform.objects.values('id', 'name'),
             nontech=NontechPlatform.objects.values('id', 'name'),
-            functions=PlatformFunction.objects.values('id', 'name')
+            functions=PlatformFunction.objects.values('id', 'name'),
+            cpd=CPD.objects.values('id', 'name'),
+            innovation_categories=InnovationCategory.objects.values('id', 'name')
         )
 
     @staticmethod
