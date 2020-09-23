@@ -220,8 +220,22 @@
         </collapsible-card>
 
         <collapsible-card
+          id="stages"
+          :title="$gettext('4. Stages') | translate"
+        >
+          <simple-field
+            :header="$gettext('Phase of Initiative') | translate"
+          >
+            <list-element
+              :value="project.phase"
+              source="getPhases"
+            />
+          </simple-field>
+        </collapsible-card>
+
+        <collapsible-card
           id="categorization"
-          :title="$gettext('4. Categorization') | translate"
+          :title="$gettext('5. Categorization') | translate"
         >
           <simple-field :header="$gettext('UNICEF Sector') | translate">
             <platforms-list
@@ -239,7 +253,7 @@
 
         <collapsible-card
           id="technology"
-          :title="$gettext('4. Technology') | translate"
+          :title="$gettext('6. Technology') | translate"
         >
           <simple-field :header="$gettext('Hardware Platform(s) and Physical Product(s)') | translate">
             <platforms-list

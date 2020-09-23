@@ -60,6 +60,7 @@ export const getters = {
   getProgramTargetsAchieved: state => state.program_targets_achieved,
   getCurrentAchievements: state => state.current_achievements,
   getAwp: state => state.awp,
+  getPhase: state => state.phase,
   getWbs: state => state.wbs.length === 0 ? [null] : state.wbs,
   getTargetGroupReached: state => state.target_group_reached,
   getCurrency: state => state.currency,
@@ -239,6 +240,9 @@ export const actions = {
   },
   setAwp ({ commit }, value) {
     commit('SET_DATA', { key: 'awp', value });
+  },
+  setPhase ({ commit }, value) {
+    commit('SET_DATA', { key: 'phase', value });
   },
   setWbs ({ commit }, value) {
     commit('SET_DATA', { key: 'wbs', value });
@@ -509,6 +513,7 @@ export const mutations = {
     state.wbs = get(project, 'wbs', []);
     state.innovation_categories = get(project, 'innovation_categories', []);
     state.cpd = get(project, 'cpd', []);
+    state.phase = get(project, 'phase', null);
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project;
