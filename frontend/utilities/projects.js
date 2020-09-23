@@ -70,6 +70,7 @@ export const draftRules = () => {
     currency: {},
     total_budget: {},
     phase: {},
+    cbd: {},
     wbs: {
       max: 30
     },
@@ -141,6 +142,9 @@ export const draftRules = () => {
 };
 export const publishRules = () => {
   return {
+    phase: {
+      required: true
+    },
     unicef_sector: {
       required: true
     },

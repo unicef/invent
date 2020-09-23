@@ -183,6 +183,12 @@
             :content="project.current_achievements"
             :header="$gettext('Current Achievements') | translate"
           />
+          <simple-field :header="$gettext('In Country programme document (CPD) and annual work plan') | translate">
+            <platforms-list
+              :platforms="project.cpd"
+              source="getCpd"
+            />
+          </simple-field>
           <simple-field
             :content="project.awp"
             :header="$gettext('Annual Work Plan') | translate"
