@@ -20,7 +20,7 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GP
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
-    Phase, HardwarePlatform, NontechPlatform, PlatformFunction
+    Phase, HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
@@ -103,7 +103,9 @@ class ProjectPublicViewSet(ViewSet):
             phases=Phase.objects.values('id', 'name'),
             hardware=HardwarePlatform.objects.values('id', 'name'),
             nontech=NontechPlatform.objects.values('id', 'name'),
-            functions=PlatformFunction.objects.values('id', 'name')
+            functions=PlatformFunction.objects.values('id', 'name'),
+            cpd=CPD.objects.values('id', 'name'),
+            innovation_categories=InnovationCategory.objects.values('id', 'name')
         )
 
     @staticmethod
