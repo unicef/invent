@@ -60,7 +60,8 @@ export const projectFields = () => ({
   total_budget: 0,
   wbs: [],
   innovation_categories: [],
-  cpd: []
+  cpd: [],
+  phase: null
 });
 
 export const draftRules = () => {
@@ -68,6 +69,7 @@ export const draftRules = () => {
     target_group_reached: {},
     currency: {},
     total_budget: {},
+    phase: {},
     wbs: {
       max: 30
     },
