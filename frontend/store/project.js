@@ -61,6 +61,7 @@ export const getters = {
   getCurrentAchievements: state => state.current_achievements,
   getAwp: state => state.awp,
   getPhase: state => state.phase,
+  getCpd: state => state.cpd,
   getWbs: state => state.wbs.length === 0 ? [null] : state.wbs,
   getTargetGroupReached: state => state.target_group_reached,
   getCurrency: state => state.currency,
@@ -243,6 +244,9 @@ export const actions = {
   },
   setPhase ({ commit }, value) {
     commit('SET_DATA', { key: 'phase', value });
+  },
+  setCpd ({ commit }, value) {
+    commit('SET_DATA', { key: 'cpd', value });
   },
   setWbs ({ commit }, value) {
     commit('SET_DATA', { key: 'wbs', value });

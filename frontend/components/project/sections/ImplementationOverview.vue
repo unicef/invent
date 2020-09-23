@@ -261,6 +261,26 @@
       </custom-required-form-item>
 
       <custom-required-form-item
+        :error="errors.first('cpd')"
+        :draft-rule="draftRules.cpd"
+        :publish-rule="publishRules.cpd"
+      >
+        <template slot="label">
+          <translate key="cpd-label">
+            In Country programme document (CPD) and annual work plan?
+          </translate>
+        </template>
+
+        <multi-selector
+          v-model="cpd"
+          v-validate="rules.cpd"
+          data-vv-name="cpd"
+          data-vv-as="In Country programme document (CPD) and annual work plan"
+          source="getCpd"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
         :error="errors.first('awp')"
         :draft-rule="draftRules.awp"
         :publish-rule="publishRules.awp"
@@ -452,6 +472,7 @@ import ResultAreasSelector from '@/components/common/ResultAreasSelector';
 import CapabilitySelector from '../CapabilitySelector';
 import PlatformSelector from '../PlatformSelector';
 import SingleSelect from '@/components/common/SingleSelect';
+import MultiSelector from '@/components/project/MultiSelector';
 import AddRmButtons from '@/components/project/AddRmButtons';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapGetters } from 'vuex';
@@ -469,6 +490,7 @@ export default {
     CapabilitySelector,
     PlatformSelector,
     AddRmButtons,
+    MultiSelector,
     SingleSelect // ,
     // DigitalHealthInterventionsSelector,
     // DonorSelector,
@@ -490,6 +512,7 @@ export default {
       program_targets_achieved: ['project', 'getProgramTargetsAchieved', 'setProgramTargetsAchieved', 0],
       current_achievements: ['project', 'getCurrentAchievements', 'setCurrentAchievements', 0],
       awp: ['project', 'getAwp', 'setAwp', 0],
+      cpd: ['project', 'getCpd', 'setCpd', 0],
       total_budget_narrative: ['project', 'getTotalBudgetNarrative', 'setTotalBudgetNarrative', 0],
       funding_needs: ['project', 'getFundingNeeds', 'setFundingNeeds', 0],
       partnership_needs: ['project', 'getPartnershipNeeds', 'setPartnershipNeeds', 0],
