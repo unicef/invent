@@ -211,8 +211,18 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
     )
     objects = PortfolioQuerySet.as_manager()
 
-    @staticmethod
-    def _get_ambition_blobs(filtered_reviews):
+    ambition_matrix = JSONField(null=True)
+    risk_impact_matrix = JSONField(null=True)
+    problem_statement_matrix = JSONField(null=True)
+
+    def _get_ambition_blobs(self):
+        """
+        Returns with a list of coordinates and assigned project ids for the risk impact matrix
+        """
+        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
+        if not filtered_reviews:
+            return None  # pragma: no cover
+
         blobs = {}
         for review in filtered_reviews:
             hash = review.get_ambition_hash()
@@ -229,8 +239,13 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             blob['ratio'] = round(len(blob['projects'])/max_blob_size, 2)
         return blob_list
 
-    @staticmethod
-    def _get_impact_blobs(filtered_reviews):
+    def _get_impact_blobs(self):
+        """
+        Returns with a list of coordinates and assigned project ids for the risk-impact matrix
+        """
+        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
+        if not filtered_reviews:
+            return None  # pragma: no cover
         blobs = {}
         for review in filtered_reviews:
             hash = review.get_impact_hash()
@@ -246,25 +261,12 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             blob['ratio'] = round(len(blob['projects'])/max_blob_size, 2)
         return blob_list
 
-    def get_ambition_matrix_data(self):
-        """
-        Returns with a list of coordinates and assigned project ids for the ambition matrix
-        """
-        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
-        return self._get_ambition_blobs(filtered_reviews) if filtered_reviews else None
-
-    def get_risk_impact_matrix_data(self):
-        """
-        Returns with a list of coordinates and assigned project ids for the risk impact matrix
-        """
-        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
-        return self._get_impact_blobs(filtered_reviews) if filtered_reviews else None
-
-    def get_problem_statement_matrix_data(self):
-        # TODO: figure out what we need here
+    def _get_problem_statement_matrix_data(self):
         tresholds = settings.PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS
         ps_data = {'neglected': [], 'moderate': [], 'high_activity': []}
         filtered_reviews = self.review_states.filter(complete=True)
+        if not filtered_reviews:
+            return None  # pragma: no cover
         ps_dict = {}
         for review in filtered_reviews:
             for ps in review.psa.all():
@@ -280,6 +282,13 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             else:
                 ps_data['high_activity'].append(ps_id)  # pragma: no cover
         return ps_data
+
+    def update_matrixes(self):
+        self.ambition_matrix = self._get_ambition_blobs()
+        self.risk_impact_matrix = self._get_impact_blobs()
+        self.problem_statement_matrix = self._get_problem_statement_matrix_data()
+
+        self.save()
 
 
 class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
@@ -581,6 +590,16 @@ class ProjectPortfolioState(BaseScore):
 
     def get_ambition_hash(self):
         return f'{self.nst}-{self.nc}' if self.complete else None
+
+
+@receiver(post_save, sender=ProjectPortfolioState)
+def update_portfolio_matrixes(sender, instance, created, **kwargs):
+    """
+    Post-save hook to update portfolio matrix update data if PPSs are completed
+    """
+    if instance.complete:
+        portfolio = instance.portfolio
+        portfolio.update_matrixes()
 
 
 class ReviewScore(BaseScore):
