@@ -56,16 +56,21 @@ export const state = () => ({
   ],
   portfolios: [],
   portfolio: {},
+  projects: [],
   // dashboard of portfolio manager interctions
   tabs: [
-    { id: 1, name: "Inventory", icon: "folder", total: 46 },
-    { id: 2, name: "For review", icon: "eye", total: 18 },
-    { id: 3, name: "Portfolio", icon: "briefcase", total: 35 }
+    { id: 1, name: "Inventory", icon: "folder", total: 18 },
+    { id: 2, name: "For review", icon: "eye", total: 50 },
+    { id: 3, name: "Portfolio", icon: "briefcase", total: 25 }
   ],
   tab: 1,
   dialogReview: false,
   dialogScore: false,
-  currentProjectId: null
+  currentProjectId: null,
+  currentPortfolioId: null,
+  // tooltip display on actions
+  back: 0,
+  forward: 1
 });
 
 export const getters = {
@@ -100,9 +105,15 @@ export const actions = {
   setLoading({ commit }, value) {
     commit("SET_LOADING", value);
   },
-  setTab({ commit }, val) {
+  setTab({ state, commit, dispatch }, val) {
     // todo: integrate and handle projects filters for table
     commit("SET_TAB", val);
+    commit("SET_VALUE", { key: "back", val: state.tab - 2 });
+    commit("SET_VALUE", { key: "forward", val: state.tab });
+    // update portfolio
+    dispatch("getProjects", state.currentPortfolioId);
+    // reset on tab change the status selection
+    dispatch("dashboard/setSelectedRows", [], { root: true });
   },
   // portfolio actions
   async createPortfolio({ state, getters, dispatch }) {
@@ -151,6 +162,75 @@ export const actions = {
     commit("SET_ICON", state.icons.find(item => item.id === data.icon));
     commit("SET_MANAGERS", data.managers);
     commit("SET_STATEMENTS", data.problem_statements);
+  },
+  async getProjects({ state, commit, dispatch }, id) {
+    try {
+      const results = await Promise.all([
+        this.$axios.get(`api/portfolio/${id}/projects/inventory/`),
+        this.$axios.get(`api/portfolio/${id}/projects/review/`),
+        this.$axios.get(`api/portfolio/${id}/projects/approved/`)
+      ]);
+      // todo: pagination
+      commit("SET_VALUE", {
+        key: "currentPortfolioId",
+        val: id
+      });
+      // set the projects of the portfolio by tab filter
+      commit("SET_VALUE", {
+        key: "projects",
+        val: results[state.tab - 1].data.results.map(i => {
+          // todo: set this attributes from api
+          return {
+            ...i,
+            favorite: Math.random() >= 0.5,
+            reviewers: [
+              { name: "Kyle Jacons", completed: Math.random() >= 0.5 },
+              { name: "Rosa Bennet", completed: Math.random() >= 0.5 }
+            ],
+            scores: {
+              completed: Math.random() >= 0.5
+            }
+          };
+        })
+      });
+      // update tab counts
+      commit("SET_VALUE", {
+        key: "tabs",
+        val: [
+          {
+            id: 1,
+            name: "Inventory",
+            icon: "folder",
+            total: results[0].data.count
+          },
+          {
+            id: 2,
+            name: "For review",
+            icon: "eye",
+            total: results[1].data.count
+          },
+          {
+            id: 3,
+            name: "Portfolio",
+            icon: "briefcase",
+            total: results[2].data.count
+          }
+        ]
+      });
+    } catch (e) {
+      console.error("portfolio/loadPortfolioProjects failed");
+    }
+  },
+  // move action
+  async moveToState({ state, commit, dispatch }, { type, project }) {
+    // add-project
+    // remove-project
+    // approve-project
+    // disapprove-project
+    await this.$axios.post(
+      `/api/portfolio/${state.currentPortfolioId}/${type}/`,
+      { project }
+    );
   },
   // review actions
   async addReview({ state, commit, dispatch }, { id, data }) {

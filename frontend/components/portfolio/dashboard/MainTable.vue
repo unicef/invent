@@ -2,7 +2,7 @@
   <div class="MainTable">
     <el-table
       ref="mainTable"
-      :data="projectsList"
+      :data="projects"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       :stripe="false"
@@ -68,7 +68,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column
+      <!-- todo -->
+      <!-- <el-table-column
         v-if="selectedColumns.includes('5')"
         :resizable="false"
         :label="$gettext('Region') | translate"
@@ -214,6 +215,7 @@
           <donors-list :value="scope.row.donors" :limit="3" show-icon />
         </template>
       </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('7')"
         :resizable="false"
@@ -231,6 +233,7 @@
           </a>
         </template>
       </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('8')"
         :resizable="false"
@@ -293,7 +296,7 @@
             :limit="3"
           />
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <div class="Pagination">
@@ -365,7 +368,8 @@ export default {
   },
   computed: {
     ...mapState({
-      offices: state => state.offices.offices
+      offices: state => state.offices.offices,
+      projects: state => state.portfolio.projects
     }),
     ...mapGetters({
       projectsList: "dashboard/getProjectsList",

@@ -396,16 +396,7 @@ export const mutations = {
   SET_PROJECT_LIST: (state, projects) => {
     state.projectsList = projects.map(i => {
       return {
-        ...i,
-        // todo: set this attributes from api
-        favorite: Math.random() >= 0.5,
-        reviewers: [
-          { name: "Kyle Jacons", completed: Math.random() >= 0.5 },
-          { name: "Rosa Bennet", completed: Math.random() >= 0.5 }
-        ],
-        scores: {
-          completed: Math.random() >= 0.5
-        }
+        ...i
       };
     });
   },
