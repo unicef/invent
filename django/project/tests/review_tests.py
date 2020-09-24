@@ -121,7 +121,7 @@ class ReviewTests(PortfolioSetup):
         response = self.user_3_client.post(url, review_data_complete, format="json")
         self.assertEqual(response.status_code, 200)
         self.pps.refresh_from_db()
-        self.assertEqual(self.pps.complete, True)
+        self.assertEqual(self.pps.reviewed, True)
         self.assertEqual(self.pps.approved, False)
         # now reviewed, approve project
         url = reverse('portfolio-project-approve', kwargs={'pk': self.portfolio_id})
@@ -310,6 +310,7 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(impact_ratios, {0.67, 1.0})
         self.assertEqual(ambition_ratios, {0.67, 1.0})
         problem_statement_matrix = portfolio_details['problem_statement_matrix']
+
         self.assertEqual(len(problem_statement_matrix['high_activity']), 0)
         self.assertEqual(len(problem_statement_matrix['moderate']), 3)
-        self.assertEqual(len(problem_statement_matrix['neglected']), 2)
+        self.assertEqual(len(problem_statement_matrix['neglected']), 4)
