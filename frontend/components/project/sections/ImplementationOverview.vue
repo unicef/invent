@@ -261,6 +261,26 @@
       </custom-required-form-item>
 
       <custom-required-form-item
+        :error="errors.first('cpd')"
+        :draft-rule="draftRules.cpd"
+        :publish-rule="publishRules.cpd"
+      >
+        <template slot="label">
+          <translate key="cpd-label">
+            In Country programme document (CPD) and annual work plan?
+          </translate>
+        </template>
+
+        <multi-selector
+          v-model="cpd"
+          v-validate="rules.cpd"
+          data-vv-name="cpd"
+          data-vv-as="In Country programme document (CPD) and annual work plan"
+          source="getCpd"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
         :error="errors.first('awp')"
         :draft-rule="draftRules.awp"
         :publish-rule="publishRules.awp"
@@ -280,6 +300,42 @@
           type="textarea"
         />
       </custom-required-form-item>
+
+      <el-row
+        v-for="(wbsItem, index) in wbs"
+        :key="index"
+      >
+        <el-col :span="16">
+          <custom-required-form-item
+            :error="errors.first('wbs')"
+            :draft-rule="draftRules.wbs"
+            :publish-rule="publishRules.wbs"
+          >
+            <template slot="label">
+              <translate key="wbs">
+                Please add the relevant WBS number in the following format:
+              </translate>
+            </template>
+
+            <character-count-input
+              v-validate="rules.wbs"
+              :value="wbsItem"
+              :rules="rules.wbs"
+              data-vv-name="wbs"
+              data-vv-as="Work Breakdown Structure (WBS)"
+              @input="setWbsItem(index, $event)"
+            />
+          </custom-required-form-item>
+        </el-col>
+        <el-col :span="8" class="btContainer">
+          <add-rm-buttons
+            :show-add="isLastAndExist(wbs, index)"
+            :show-rm="wbs.length > 1"
+            @add="addDhi"
+            @rm="rmDhi(index)"
+          />
+        </el-col>
+      </el-row>
 
       <el-row>
         <el-col
@@ -416,12 +472,13 @@ import ResultAreasSelector from '@/components/common/ResultAreasSelector';
 import CapabilitySelector from '../CapabilitySelector';
 import PlatformSelector from '../PlatformSelector';
 import SingleSelect from '@/components/common/SingleSelect';
+import MultiSelector from '@/components/project/MultiSelector';
+import AddRmButtons from '@/components/project/AddRmButtons';
+import { mapGettersActions } from '../../../utilities/form';
+import { mapGetters } from 'vuex';
 // import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
 // import DonorSelector from '../DonorSelector';
 // import FormHint from '../FormHint';
-
-import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -432,6 +489,8 @@ export default {
     ResultAreasSelector,
     CapabilitySelector,
     PlatformSelector,
+    AddRmButtons,
+    MultiSelector,
     SingleSelect // ,
     // DigitalHealthInterventionsSelector,
     // DonorSelector,
@@ -453,12 +512,14 @@ export default {
       program_targets_achieved: ['project', 'getProgramTargetsAchieved', 'setProgramTargetsAchieved', 0],
       current_achievements: ['project', 'getCurrentAchievements', 'setCurrentAchievements', 0],
       awp: ['project', 'getAwp', 'setAwp', 0],
+      cpd: ['project', 'getCpd', 'setCpd', 0],
       total_budget_narrative: ['project', 'getTotalBudgetNarrative', 'setTotalBudgetNarrative', 0],
       funding_needs: ['project', 'getFundingNeeds', 'setFundingNeeds', 0],
       partnership_needs: ['project', 'getPartnershipNeeds', 'setPartnershipNeeds', 0],
       target_group_reached: ['project', 'getTargetGroupReached', 'setTargetGroupReached', 0],
       currency: ['project', 'getCurrency', 'setCurrency', 0],
       total_budget: ['project', 'getTotalBudget', 'setTotalBudget', 0],
+      wbs: ['project', 'getWbs', 'setWbs', 0],
       capability_levels: [
         'project',
         'getCapabilityLevels',
@@ -503,6 +564,20 @@ export default {
       const validations = await Promise.all([this.$validator.validate()]);
       console.log('Implementation overview validations', validations);
       return validations.reduce((a, c) => a && c, true);
+    },
+    isLastAndExist (collection, index) {
+      return !!(collection.length - 1 === index && collection[index]);
+    },
+    addDhi () {
+      this.wbs = [...this.wbs, null];
+    },
+    rmDhi (index) {
+      this.wbs = this.wbs.filter((p, i) => i !== index);
+    },
+    setWbsItem (index, value) {
+      const wbs = [...this.wbs];
+      wbs[index] = value;
+      this.wbs = wbs;
     }
   }
 };
@@ -537,6 +612,9 @@ export default {
   }
   .BudgetSection {
     padding-right: 15px;
+  }
+  .btContainer {
+    margin-top: 50px;
   }
 }
 </style>
