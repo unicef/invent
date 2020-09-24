@@ -4,7 +4,6 @@ from collections import namedtuple
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db import models
-from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -18,6 +17,7 @@ from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys
 from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
+from django.db.models import Count, Case, When, IntegerField, F, Q
 
 
 class ProjectManager(models.Manager):
@@ -219,7 +219,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         """
         Returns with a list of coordinates and assigned project ids for the risk impact matrix
         """
-        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
+        filtered_reviews = self.review_states.filter(approved=True)
         if not filtered_reviews:
             return None  # pragma: no cover
 
@@ -236,14 +236,14 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         blob_list = list(blobs.values())
         max_blob_size = max([len(x['projects']) for x in blob_list])
         for blob in blob_list:
-            blob['ratio'] = round(len(blob['projects'])/max_blob_size, 2)
+            blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
         return blob_list
 
     def _get_impact_blobs(self):
         """
         Returns with a list of coordinates and assigned project ids for the risk-impact matrix
         """
-        filtered_reviews = self.review_states.filter(complete=True)  # TODO: do we need approved instead?
+        filtered_reviews = self.review_states.filter(approved=True)
         if not filtered_reviews:
             return None  # pragma: no cover
         blobs = {}
@@ -258,30 +258,29 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         blob_list = list(blobs.values())
         max_blob_size = max([len(x['projects']) for x in blob_list])
         for blob in blob_list:
-            blob['ratio'] = round(len(blob['projects'])/max_blob_size, 2)
+            blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
         return blob_list
 
     def _get_problem_statement_matrix_data(self):
         tresholds = settings.PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS
-        ps_data = {'neglected': [], 'moderate': [], 'high_activity': []}
-        filtered_reviews = self.review_states.filter(complete=True)
-        if not filtered_reviews:
-            return None  # pragma: no cover
-        ps_dict = {}
-        for review in filtered_reviews:
-            for ps in review.psa.all():
-                if ps.pk in ps_dict:
-                    ps_dict[ps.pk] += 1
-                else:
-                    ps_dict[ps.pk] = 1
-        for ps_id in ps_dict:
-            if ps_dict[ps_id] < tresholds['MODERATE']:
-                ps_data['neglected'].append(ps_id)
-            elif ps_dict[ps_id] < tresholds['HIGH']:
-                ps_data['moderate'].append(ps_id)
-            else:
-                ps_data['high_activity'].append(ps_id)  # pragma: no cover
-        return ps_data
+
+        neglected_filter = Q(num_projects__lt=tresholds['MODERATE'])
+        moderate_filter = Q(num_projects__gte=tresholds['MODERATE'], num_projects__lt=tresholds['HIGH'])
+        high_filter = Q(num_projects__gte=tresholds['HIGH'])
+
+        base_qs = self.problem_statements.annotate(num_projects=Count(Case(When(projectportfoliostate__approved=True,
+                                                                                then=F('projectportfoliostate__id')),
+                                                   output_field=IntegerField()), distinct=True))
+
+        neglected_qs = base_qs.filter(neglected_filter)
+        moderate_qs = base_qs.filter(moderate_filter)
+        high_qs = base_qs.filter(high_filter)
+
+        return {
+            'neglected': list(neglected_qs.values_list('pk', flat=True)),
+            'moderate': list(moderate_qs.values_list('pk', flat=True)),
+            'high_activity': list(high_qs.values_list('pk', flat=True)),
+        }
 
     def update_matrixes(self):
         self.ambition_matrix = self._get_ambition_blobs()
@@ -551,8 +550,6 @@ class BaseScore(ExtendedModel):
     nc = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Challenge
     ps = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Path to Scale
 
-    complete = models.BooleanField(default=False)
-
     class Meta:
         abstract = True
 
@@ -574,6 +571,7 @@ class ProjectPortfolioState(BaseScore):
     scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE, blank=True)
     portfolio = models.ForeignKey(Portfolio, related_name='review_states', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
+    reviewed = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 
     class Meta:
@@ -586,10 +584,10 @@ class ProjectPortfolioState(BaseScore):
         return self.scale_phase.scale if self.scale_phase else None
 
     def get_impact_hash(self):
-        return f'{self.impact}-{self.ra}' if self.complete else None
+        return f'{self.impact}-{self.ra}' if self.reviewed else None
 
     def get_ambition_hash(self):
-        return f'{self.nst}-{self.nc}' if self.complete else None
+        return f'{self.nst}-{self.nc}' if self.reviewed else None
 
 
 @receiver(post_save, sender=ProjectPortfolioState)
@@ -597,7 +595,7 @@ def update_portfolio_matrixes(sender, instance, created, **kwargs):
     """
     Post-save hook to update portfolio matrix update data if PPSs are completed
     """
-    if instance.complete:
+    if instance.approved:
         portfolio = instance.portfolio
         portfolio.update_matrixes()
 
@@ -613,6 +611,8 @@ class ReviewScore(BaseScore):
     nst_comment = models.CharField(max_length=255, null=True, blank=True)  # NST - reviewer's comment field
     nc_comment = models.CharField(max_length=255, null=True, blank=True)  # NC - reviewer's comment field
     ps_comment = models.CharField(max_length=255, null=True, blank=True)  # PS - reviewer's comment field
+
+    complete = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')

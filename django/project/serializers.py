@@ -458,8 +458,8 @@ class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
 class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
     scale_phase = serializers.IntegerField(required=True, source='get_scale')
     impact = serializers.IntegerField(required=True)
-    project = serializers.UUIDField(read_only=True, source='project.id')
-    portfolio = serializers.UUIDField(read_only=True)
+    project = serializers.IntegerField(read_only=True, source='project.id')
+    portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
 
     class Meta:
         model = ProjectPortfolioState
@@ -467,10 +467,10 @@ class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-        Override serializer to set 'complete' to True (also set scale phase based on input int
+        Override serializer to set 'reviewed' to True (also set scale phase based on input int)
         """
         scale_phase_value = validated_data.pop('get_scale')
-        instance.complete = True
+        instance.reviewed = True
         instance.scale_phase = ScalePhase.objects.get(scale=scale_phase_value)
         instance = super().update(instance, validated_data)
         return instance
