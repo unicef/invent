@@ -57,7 +57,11 @@ export const projectFields = () => ({
   partnership_needs: '',
   target_group_reached: 0,
   currency: 1,
-  total_budget: 0
+  total_budget: 0,
+  wbs: [],
+  innovation_categories: [],
+  cpd: [],
+  phase: null
 });
 
 export const draftRules = () => {
@@ -65,6 +69,11 @@ export const draftRules = () => {
     target_group_reached: {},
     currency: {},
     total_budget: {},
+    phase: {},
+    cbd: {},
+    wbs: {
+      max: 30
+    },
     unicef_sector: {
       required: false
     },
@@ -133,6 +142,9 @@ export const draftRules = () => {
 };
 export const publishRules = () => {
   return {
+    phase: {
+      required: true
+    },
     unicef_sector: {
       required: true
     },
