@@ -1,6 +1,15 @@
 <template>
   <section class="portfolio-area">
     <div class="content-area">
+      <transition name="el-zoom-in-top">
+        <el-alert
+          v-show="errorDisplay"
+          class="alert-portfolio"
+          :title="errorMessage"
+          type="error"
+          show-icon
+        />
+      </transition>
       <div class="tabs-wrapper">
         <div class="title">
           <nuxt-link
@@ -9,7 +18,11 @@
             <fa icon="angle-left" size="sm" />
             <translate>Back</translate>
           </nuxt-link>
-          <h2><translate>Edit portfolio</translate></h2>
+          <h2>
+            <translate :parameters="{ name }">
+              Edit `{name}` portfolio
+            </translate>
+          </h2>
         </div>
         <div class="tabs">
           <p
@@ -78,7 +91,10 @@ export default {
   computed: {
     ...mapState({
       tabs: state => state.portfolio.tabs,
-      tab: state => state.portfolio.tab
+      tab: state => state.portfolio.tab,
+      name: state => state.portfolio.name,
+      errorDisplay: state => state.portfolio.errorDisplay,
+      errorMessage: state => state.portfolio.errorMessage
     }),
     ...mapGetters({
       searchParameters: "dashboard/getSearchParameters",
@@ -135,6 +151,10 @@ export default {
     > div {
       background-color: #fbfaf8;
     }
+    .alert-portfolio {
+      position: absolute;
+      background-color: #fce9e8;
+    }
     .tabs-wrapper {
       height: 158px;
       background-color: @colorWhite;
@@ -160,6 +180,7 @@ export default {
         }
         a {
           text-decoration: none;
+          z-index: 1;
         }
       }
       .tabs {

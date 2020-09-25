@@ -70,7 +70,10 @@ export const state = () => ({
   currentPortfolioId: null,
   // tooltip display on actions
   back: 0,
-  forward: 1
+  forward: 1,
+  // error handling
+  errorDisplay: false,
+  errorMessage: ""
 });
 
 export const getters = {
@@ -80,7 +83,8 @@ export const getters = {
   getIcon: state => state.icon,
   getManagers: state => state.managers,
   getStatements: state => state.statements,
-  getLoading: state => state.loading
+  getLoading: state => state.loading,
+  getTotal: state => state.projects.length
 };
 
 export const actions = {
@@ -165,6 +169,8 @@ export const actions = {
   },
   async getProjects({ state, commit, dispatch }, id) {
     try {
+      const { data } = await this.$axios.get(`api/portfolio/${id}/`);
+      commit("SET_NAME", data.name);
       const results = await Promise.all([
         this.$axios.get(`api/portfolio/${id}/projects/inventory/`),
         this.$axios.get(`api/portfolio/${id}/projects/review/`),
@@ -189,7 +195,29 @@ export const actions = {
             ],
             scores: {
               completed: Math.random() >= 0.5
-            }
+            },
+            modified: "2020-05-15T11:30:06.422583Z",
+            organisation: 56,
+            country: 163,
+            country_office: 1,
+            implementation_overview: "asdasdasdasdasdasdmasdmamsd",
+            contact_name: "Health",
+            contact_email: "lamas.alonso@gmail.com",
+            platforms: [52],
+            health_focus_areas: [31, 32],
+            hsc_challenges: [2],
+            region: 1,
+            donors: [20],
+            approved: null,
+            goal_area: 1,
+            result_area: null,
+            field_office: 1,
+            capability_levels: [],
+            capability_categories: [],
+            capability_subcategories: [],
+            innovation_categories: null,
+            country_answers: {},
+            donor_answers: { "20": {} }
           };
         })
       });
@@ -222,15 +250,24 @@ export const actions = {
     }
   },
   // move action
-  async moveToState({ state, commit, dispatch }, { type, project }) {
-    // add-project
-    // remove-project
-    // approve-project
-    // disapprove-project
-    await this.$axios.post(
-      `/api/portfolio/${state.currentPortfolioId}/${type}/`,
-      { project }
-    );
+  async moveToState({ state, commit, dispatch }, { type, project, tab }) {
+    // add-project, remove-project, approve-project, disapprove-project
+    try {
+      await this.$axios.post(
+        `/api/portfolio/${state.currentPortfolioId}/${type}/`,
+        { project }
+      );
+      dispatch("setTab", tab);
+    } catch (e) {
+      commit("SET_VALUE", {
+        key: "errorMessage",
+        val: e.response.data.project
+      });
+      commit("SET_VALUE", { key: "errorDisplay", val: true });
+      setTimeout(() => {
+        commit("SET_VALUE", { key: "errorDisplay", val: false });
+      }, 3200);
+    }
   },
   // review actions
   async addReview({ state, commit, dispatch }, { id, data }) {

@@ -69,7 +69,7 @@
       </el-table-column>
 
       <!-- todo -->
-      <!-- <el-table-column
+      <el-table-column
         v-if="selectedColumns.includes('5')"
         :resizable="false"
         :label="$gettext('Region') | translate"
@@ -296,7 +296,7 @@
             :limit="3"
           />
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
 
     <div class="Pagination">
