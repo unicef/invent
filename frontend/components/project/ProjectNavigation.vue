@@ -59,6 +59,17 @@
               <translate>Implementation</translate>
             </el-button>
           </li>
+          <li :class="{active: active === 'stages'}">
+            <el-button
+              type="text"
+              @click="scrollTo('stages')"
+            >
+              <span class="Step">
+                <fa icon="arrow-right" />
+              </span>
+              <translate>Stages</translate>
+            </el-button>
+          </li>
           <li :class="{active: active === 'categorization'}">
             <el-button
               type="text"
