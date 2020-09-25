@@ -183,10 +183,25 @@
             :content="project.current_achievements"
             :header="$gettext('Current Achievements') | translate"
           />
+          <simple-field :header="$gettext('In Country programme document (CPD) and annual work plan') | translate">
+            <platforms-list
+              :platforms="project.cpd"
+              source="getCpd"
+            />
+          </simple-field>
           <simple-field
             :content="project.awp"
             :header="$gettext('Annual Work Plan') | translate"
           />
+          <simple-field
+            :header="$gettext('Work Breakdown Structure (WBS)') | translate"
+          >
+            <ul>
+              <li v-for="wbs in project.wbs" :key="wbs">
+                <span>{{ wbs }}</span>
+              </li>
+            </ul>
+          </simple-field>
           <simple-field
             :header="$gettext('Total Budget') | translate"
           >
@@ -211,8 +226,22 @@
         </collapsible-card>
 
         <collapsible-card
+          id="stages"
+          :title="$gettext('4. Stages') | translate"
+        >
+          <simple-field
+            :header="$gettext('Phase of Initiative') | translate"
+          >
+            <list-element
+              :value="project.phase"
+              source="getPhases"
+            />
+          </simple-field>
+        </collapsible-card>
+
+        <collapsible-card
           id="categorization"
-          :title="$gettext('4. Categorization') | translate"
+          :title="$gettext('5. Categorization') | translate"
         >
           <simple-field :header="$gettext('UNICEF Sector') | translate">
             <platforms-list
@@ -230,7 +259,7 @@
 
         <collapsible-card
           id="technology"
-          :title="$gettext('4. Technology') | translate"
+          :title="$gettext('6. Technology') | translate"
         >
           <simple-field :header="$gettext('Hardware Platform(s) and Physical Product(s)') | translate">
             <platforms-list
