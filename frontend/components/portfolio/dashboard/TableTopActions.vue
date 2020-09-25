@@ -168,7 +168,7 @@ export default {
     ...mapGetters({
       selectedRows: "dashboard/getSelectedRows",
       allSelected: "dashboard/getSelectAll",
-      total: "dashboard/getTotal",
+      total: "portfolio/getTotal",
       // user: "user/getProfile",
       projects: "dashboard/getProjectsBucket",
       // dashboardId: "dashboard/getDashboardId",
@@ -200,7 +200,6 @@ export default {
       setSelectAll: "dashboard/setSelectAll",
       loadProjectsBucket: "dashboard/loadProjectsBucket",
       setSelectedRows: "dashboard/setSelectedRows",
-      setTab: "portfolio/setTab",
       moveToState: "portfolio/moveToState",
       // settings
       setSelectedColumns: "dashboard/setSelectedColumns"
@@ -232,19 +231,20 @@ export default {
         case 1:
           await this.moveToState({
             type: "remove-project",
-            project: this.selectedRows
+            project: this.selectedRows,
+            tab
           });
           break;
         case 2:
           await this.moveToState({
             type: "disapprove-project",
-            project: this.selectedRows
+            project: this.selectedRows,
+            tab
           });
           break;
         default:
           break;
       }
-      this.setTab(tab);
     },
     async handleClickForward() {
       const tab = this.tab + 1;
@@ -252,19 +252,20 @@ export default {
         case 2:
           await this.moveToState({
             type: "add-project",
-            project: this.selectedRows
+            project: this.selectedRows,
+            tab
           });
           break;
         case 3:
           await this.moveToState({
             type: "approve-project",
-            project: this.selectedRows
+            project: this.selectedRows,
+            tab
           });
           break;
         default:
           break;
       }
-      this.setTab(tab);
     },
     // settings
     popperOpenHandler() {
