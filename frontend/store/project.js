@@ -62,6 +62,7 @@ export const getters = {
   getAwp: state => state.awp,
   getPhase: state => state.phase,
   getCpd: state => state.cpd,
+  getPartners: state => state.partners.length === 0 ? [null] : state.partners,
   getWbs: state => state.wbs.length === 0 ? [null] : state.wbs,
   getTargetGroupReached: state => state.target_group_reached,
   getCurrency: state => state.currency,
@@ -247,6 +248,9 @@ export const actions = {
   },
   setCpd ({ commit }, value) {
     commit('SET_DATA', { key: 'cpd', value });
+  },
+  setPartners ({ commit }, value) {
+    commit('SET_DATA', { key: 'partners', value });
   },
   setWbs ({ commit }, value) {
     commit('SET_DATA', { key: 'wbs', value });
@@ -517,6 +521,7 @@ export const mutations = {
     state.wbs = get(project, 'wbs', []);
     state.innovation_categories = get(project, 'innovation_categories', []);
     state.cpd = get(project, 'cpd', []);
+    state.partners = get(project, 'partners', []);
     state.phase = get(project, 'phase', null);
   },
   SET_ORIGINAL: (state, project) => {

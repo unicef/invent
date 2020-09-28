@@ -70,6 +70,17 @@
               <translate>Stages</translate>
             </el-button>
           </li>
+          <li :class="{active: active === 'partners'}">
+            <el-button
+              type="text"
+              @click="scrollTo('partners')"
+            >
+              <span class="Step">
+                <fa icon="arrow-right" />
+              </span>
+              <translate>Partners</translate>
+            </el-button>
+          </li>
           <li :class="{active: active === 'categorization'}">
             <el-button
               type="text"

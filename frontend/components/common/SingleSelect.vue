@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import reject from 'lodash/reject';
 export default {
   model: {
     prop: 'value',
@@ -29,11 +30,15 @@ export default {
     source: {
       type: String,
       required: true
+    },
+    reject: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
     sourceList () {
-      return this.$store.getters[this.source];
+      return reject(this.$store.getters[this.source], ({ id }) => this.reject.includes(id));
     }
   },
   methods: {

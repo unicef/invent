@@ -197,7 +197,10 @@
             :header="$gettext('Work Breakdown Structure (WBS)') | translate"
           >
             <ul>
-              <li v-for="wbs in project.wbs" :key="wbs">
+              <li
+                v-for="wbs in project.wbs"
+                :key="wbs"
+              >
                 <span>{{ wbs }}</span>
               </li>
             </ul>
@@ -240,8 +243,42 @@
         </collapsible-card>
 
         <collapsible-card
+          id="partners"
+          :title="$gettext('5. Partners') | translate"
+        >
+          <div
+            v-for="partner in project.partners"
+            :key="partner.partner_type"
+            class="Partners"
+          >
+            <simple-field
+              :header="partner.partner_name"
+            >
+              <ul>
+                <li>
+                  <translate>Partner Type</translate>:
+                  <list-element
+                    :value="partner.partner_type"
+                    source="getPartnerTypes"
+                    root="system"
+                  />
+                </li>
+                <li>
+                  <translate>Partner Email</translate>:
+                  <a :href="`mailto:${partner.partner_email}`">{{ partner.partner_email }}</a>
+                </li>
+                <li>
+                  <translate>Partner Website</translate>:
+                  <a :href="`mailto:${partner.partner_website}`">{{ partner.partner_website }}</a>
+                </li>
+              </ul>
+            </simple-field>
+          </div>
+        </collapsible-card>
+
+        <collapsible-card
           id="categorization"
-          :title="$gettext('5. Categorization') | translate"
+          :title="$gettext('6. Categorization') | translate"
         >
           <simple-field :header="$gettext('UNICEF Sector') | translate">
             <platforms-list
@@ -259,7 +296,7 @@
 
         <collapsible-card
           id="technology"
-          :title="$gettext('6. Technology') | translate"
+          :title="$gettext('7. Technology') | translate"
         >
           <simple-field :header="$gettext('Hardware Platform(s) and Physical Product(s)') | translate">
             <platforms-list
