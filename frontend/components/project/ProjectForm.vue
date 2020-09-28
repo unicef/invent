@@ -37,6 +37,13 @@
             :publish-rules="publishRules"
             :api-errors="apiErrors"
           />
+          <partners
+            ref="partners"
+            :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+          />
           <categorization
             ref="categorization"
             :rules="rules"
@@ -80,6 +87,7 @@ import Categorization from '@/components/project/sections/Categorization';
 import Technology from '@/components/project/sections/Technology';
 import ImplementationOverview from './sections/ImplementationOverview';
 import Stages from '@/components/project/sections/Stages'
+import Partners from '@/components/project/sections/Partners'
 import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -92,6 +100,7 @@ export default {
     DonorCustom,
     Categorization,
     Stages,
+    Partners,
     Technology
   },
   $_veeValidate: {
@@ -244,6 +253,8 @@ export default {
       this.$refs.focalOverview.clear();
       this.$refs.categorization.clear();
       this.$refs.technology.clear();
+      this.$refs.stages.clear();
+      this.$refs.partners.clear();
       this.$refs.implementationOverview.clear();
       this.$refs.donorCustom.clear();
     },
@@ -256,7 +267,8 @@ export default {
         const categorization = await this.$refs.categorization.validateDraft();
         const technology = await this.$refs.technology.validateDraft();
         const stages = await this.$refs.stages.validateDraft();
-        if (valid && focal && categorization && technology && stages) {
+        const partners = await this.$refs.partners.validateDraft();
+        if (valid && focal && categorization && technology && stages && partners) {
           try {
             if (this.isNewProject) {
               const id = await this.createProject();
