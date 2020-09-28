@@ -10,6 +10,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable,\
     IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState
 from project.models import Project
+from project.serializers import PartnerSerializer, LinkSerializer
 from country.models import Country
 from user.authentication import BearerTokenAuthentication
 
@@ -20,7 +21,7 @@ from .data.thematic_overview import THEMATIC_OVERVIEW
 from .data.toolkit_questions import TOOLKIT_QUESTIONS
 from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
-from project.serializers import PartnerSerializer, LinkSerializer
+
 
 class TokenAuthMixin(object):
     """
