@@ -119,7 +119,7 @@ class TestProjectData:
         return project_id, project_data, org, country, country_office, d1, d2
 
 
-class MockRequest():
+class MockRequest:
     user = None
     GET = {}
     COOKIES = {}

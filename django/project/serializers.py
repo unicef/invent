@@ -474,8 +474,8 @@ class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
 class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
     scale_phase = serializers.IntegerField(required=True, source='get_scale')
     impact = serializers.IntegerField(required=True)
-    project = serializers.UUIDField(read_only=True)
-    portfolio = serializers.UUIDField(read_only=True)
+    project = serializers.IntegerField(read_only=True, source='project.id')
+    portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
 
     class Meta:
         model = ProjectPortfolioState
@@ -483,10 +483,10 @@ class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-        Override serializer to set 'complete' to True (also set scale phase based on input int
+        Override serializer to set 'reviewed' to True (also set scale phase based on input int)
         """
         scale_phase_value = validated_data.pop('get_scale')
-        instance.complete = True
+        instance.reviewed = True
         instance.scale_phase = ScalePhase.objects.get(scale=scale_phase_value)
         instance = super().update(instance, validated_data)
         return instance
@@ -503,11 +503,14 @@ class PortfolioBaseSerializer(serializers.ModelSerializer):
 class PortfolioDetailsSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
     review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
+    ambition_matrix = serializers.ReadOnlyField(source='get_ambition_matrix')
+    risk_impact_matrix = serializers.ReadOnlyField(source='get_risk_impact_matrix')
+    problem_statement_matrix = serializers.ReadOnlyField(source='get_problem_statement_matrix')
 
     class Meta:
         model = Portfolio
         fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements',
-                  'review_states')
+                  'review_states', 'ambition_matrix', 'risk_impact_matrix', 'problem_statement_matrix')
 
 
 class PortfolioCreateSerializer(PortfolioBaseSerializer):
