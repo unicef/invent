@@ -120,8 +120,8 @@ class StaticDataView(GenericAPIView):
         data['sub_level_types'] = SUB_LEVEL_TYPES
         data['unicef_regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.UNICEF_REGIONS]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
-        data['partner_types'] = dict(PartnerSerializer.PARTNER_TYPE)
-        data['link_types'] = dict(LinkSerializer.LINK_TYPE)
+        data['partner_types'] = [{'id': t[0], 'name': t[1]} for t in PartnerSerializer.PARTNER_TYPE]
+        data['link_types'] = [{'id': t[0], 'name': t[1]} for t in LinkSerializer.LINK_TYPE]
 
         return Response(data)
 
