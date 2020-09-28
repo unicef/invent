@@ -66,13 +66,14 @@ export const state = () => ({
   tab: 1,
   dialogReview: false,
   dialogScore: false,
+  dialogError: false,
   currentProjectId: null,
   currentPortfolioId: null,
   // tooltip display on actions
   back: 0,
   forward: 1,
   // error handling
-  errorDisplay: false,
+  dialogError: false,
   errorMessage: ""
 });
 
@@ -182,6 +183,7 @@ export const actions = {
         val: id
       });
       // set the projects of the portfolio by tab filter
+      // console.log(results[0].data.results);
       commit("SET_VALUE", {
         key: "projects",
         val: results[state.tab - 1].data.results.map(i => {
@@ -189,12 +191,38 @@ export const actions = {
           return {
             ...i,
             favorite: Math.random() >= 0.5,
-            reviewers: [
-              { name: "Kyle Jacons", completed: Math.random() >= 0.5 },
-              { name: "Rosa Bennet", completed: Math.random() >= 0.5 }
-            ],
-            scores: {
-              completed: Math.random() >= 0.5
+            review_states: {
+              approved: false,
+              complete: true,
+              created: "2020-09-28T10:04:54.905538Z",
+              ee: null,
+              id: 1,
+              impact: null,
+              modified: "2020-09-28T10:04:54.905551Z",
+              nc: null,
+              nst: null,
+              portfolio: 1,
+              project: 2,
+              ps: null,
+              psa: [],
+              ra: null,
+              ratp: null,
+              review_scores: [
+                {
+                  complete: false,
+                  created: "2020-09-28T10:04:54.921377Z",
+                  id: 1,
+                  modified: "2020-09-28T10:04:54.921390Z",
+                  portfolio_review: 1,
+                  reviewer: {
+                    email: "test_user_1@unicef.org",
+                    id: 1,
+                    name: "test_user_1"
+                  }
+                }
+              ],
+              rnci: null,
+              scale_phase: null
             },
             modified: "2020-05-15T11:30:06.422583Z",
             organisation: 56,
@@ -263,10 +291,7 @@ export const actions = {
         key: "errorMessage",
         val: e.response.data.project
       });
-      commit("SET_VALUE", { key: "errorDisplay", val: true });
-      setTimeout(() => {
-        commit("SET_VALUE", { key: "errorDisplay", val: false });
-      }, 3200);
+      commit("SET_VALUE", { key: "dialogError", val: true });
     }
   },
   // review actions
@@ -281,6 +306,18 @@ export const actions = {
     commit("SET_VALUE", { key: "dialogReview", val: false });
     // todo: add api integration
   },
+  async getScore({ state, commit, dispatch }, id) {
+    console.log(`this will give us the score for review id ${id}`);
+    try {
+      // todo: to be defined
+      // const { data } = await this.$axios.get(
+      //   `api/portfolio/project-review/manager/${id}/`
+      // );
+      commit("SET_VALUE", { key: "dialogScore", val: true });
+    } catch (e) {
+      console.log(e.response.data);
+    }
+  },
   // state interaction handlers
   setCurrentProjectId({ commit }, val) {
     commit("SET_VALUE", { key: "currentProjectId", val });
@@ -290,6 +327,9 @@ export const actions = {
   },
   setScoreDialog({ commit }, val) {
     commit("SET_VALUE", { key: "dialogScore", val });
+  },
+  setErrorDialog({ commit }, val) {
+    commit("SET_VALUE", { key: "dialogError", val });
   },
   async resetPortfolio({ commit }) {
     commit("SET_NAME", "");

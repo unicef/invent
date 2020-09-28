@@ -1,15 +1,6 @@
 <template>
   <section class="portfolio-area">
     <div class="content-area">
-      <transition name="el-zoom-in-top">
-        <el-alert
-          v-show="errorDisplay"
-          class="alert-portfolio"
-          :title="errorMessage"
-          type="error"
-          show-icon
-        />
-      </transition>
       <div class="tabs-wrapper">
         <div class="title">
           <nuxt-link
@@ -32,9 +23,7 @@
             @click="setTab(item.id)"
           >
             <fa :icon="item.icon" />
-            <translate>
-              {{ `${item.name}` }}
-            </translate>
+            {{ $gettext(item.name) | translate }}
             {{ ` (${item.total})` }}
           </p>
         </div>
@@ -48,10 +37,11 @@
         </el-row>
       </div>
     </div>
-
     <aside class="filter-area">
       <advanced-search />
     </aside>
+    <!-- dialogs -->
+    <error />
   </section>
 </template>
 
@@ -61,12 +51,15 @@ import MainTable from "@/components/portfolio/dashboard/MainTable";
 import TableTopActions from "@/components/portfolio/dashboard/TableTopActions";
 import { mapState, mapGetters, mapActions } from "vuex";
 import debounce from "lodash/debounce";
+// dialogs
+import Error from "@/components/portfolio/dashboard/dialog/Error";
 
 export default {
   components: {
     AdvancedSearch,
     MainTable,
-    TableTopActions
+    TableTopActions,
+    Error
   },
   async fetch({ store, query, error, params }) {
     store.dispatch("landing/resetSearch");

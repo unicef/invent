@@ -1,11 +1,11 @@
 <template>
   <div>
     <div v-for="item in items" class="reviewers">
-      <div :class="`${item.completed && 'complete'}`">
+      <div :class="`${item.complete && 'complete'}`">
         <p>
-          <b>{{ item.name }}</b>
+          <b>{{ item.reviewer.name }}</b>
         </p>
-        <p v-if="item.completed" class="uppercase">
+        <p v-if="item.complete" class="uppercase">
           <translate>Complete</translate>
         </p>
         <p v-else class="uppercase pending">
