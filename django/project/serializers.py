@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from core.utils import send_mail_wrapper
 from country.models import CustomQuestion, CountryOffice
+from country.serializers import UserProfileSerializer
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
@@ -453,12 +454,21 @@ class ScalePhaseBriefSerializer(serializers.ModelSerializer):
         fields = ('pk', 'scale')  # This is to show in ProjectPortfolioState
 
 
+class ReviewScoreBriefSerializer(serializers.ModelSerializer):
+    reviewer = UserProfileSerializer()
+
+    class Meta:
+        model = ReviewScore
+        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review', 'complete')
+
+
 class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
     scale_phase = ScalePhaseBriefSerializer()
+    review_scores = ReviewScoreBriefSerializer(many=True, required=False)
 
     class Meta:
         model = ProjectPortfolioState
-        fields = ('id', 'impact', 'scale_phase', 'portfolio', 'project', 'review_scores')
+        fields = '__all__'
 
 
 class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
@@ -558,10 +568,11 @@ class PortfolioUpdateSerializer(PortfolioBaseSerializer):
 
 class ProjectInPortfolioSerializer(serializers.ModelSerializer):
     review_states = serializers.SerializerMethodField()
+    project_data = serializers.JSONField(source='data')
 
     class Meta:
         model = Project
-        fields = ('id', 'name', 'review_states')
+        fields = ('id', 'name', 'review_states', 'project_data')
 
     def get_review_states(self, obj):
         portfolio = self.context.get('kwargs').get('pk')
@@ -570,13 +581,6 @@ class ProjectInPortfolioSerializer(serializers.ModelSerializer):
             return ProjectPortfolioStateSerializer(pps).data
         except ProjectPortfolioState.DoesNotExist:
             return None
-
-
-class ReviewScoreBriefSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ReviewScore
-        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review')
 
 
 class ReviewScoreSerializer(serializers.ModelSerializer):

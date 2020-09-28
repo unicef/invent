@@ -16,13 +16,17 @@ export default {
     source: {
       type: String,
       default: 'getTechnologyPlatforms'
+    },
+    root: {
+      type: String,
+      default: 'projects'
     }
   },
   computed: {
     selected () {
       const value = this.value;
-      const list = this.$store.getters[`projects/${this.source}`];
-      return list.find(e => e.id === value);
+      const list = this.$store.getters[`${this.root}/${this.source}`];
+      return list ? list.find(e => e.id === value) : {};
     }
   }
 };
