@@ -211,11 +211,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
     )
     objects = PortfolioQuerySet.as_manager()
 
-    ambition_matrix = JSONField(null=True)
-    risk_impact_matrix = JSONField(null=True)
-    problem_statement_matrix = JSONField(null=True)
-
-    def _get_ambition_blobs(self):
+    def get_ambition_matrix(self):
         """
         Returns with a list of coordinates and assigned project ids for the risk impact matrix
         """
@@ -239,7 +235,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
         return blob_list
 
-    def _get_impact_blobs(self):
+    def get_risk_impact_matrix(self):
         """
         Returns with a list of coordinates and assigned project ids for the risk-impact matrix
         """
@@ -261,7 +257,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
         return blob_list
 
-    def _get_problem_statement_matrix_data(self):
+    def get_problem_statement_matrix(self):
         tresholds = settings.PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS
 
         neglected_filter = Q(num_projects__lt=tresholds['MODERATE'])
@@ -281,13 +277,6 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             'moderate': list(moderate_qs.values_list('pk', flat=True)),
             'high_activity': list(high_qs.values_list('pk', flat=True)),
         }
-
-    def update_matrixes(self):
-        self.ambition_matrix = self._get_ambition_blobs()
-        self.risk_impact_matrix = self._get_impact_blobs()
-        self.problem_statement_matrix = self._get_problem_statement_matrix_data()
-
-        self.save()
 
 
 class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
@@ -588,16 +577,6 @@ class ProjectPortfolioState(BaseScore):
 
     def get_ambition_hash(self):
         return f'{self.nst}-{self.nc}' if self.reviewed else None
-
-
-@receiver(post_save, sender=ProjectPortfolioState)
-def update_portfolio_matrixes(sender, instance, created, **kwargs):
-    """
-    Post-save hook to update portfolio matrix update data if PPSs are completed
-    """
-    if instance.approved:
-        portfolio = instance.portfolio
-        portfolio.update_matrixes()
 
 
 class ReviewScore(BaseScore):

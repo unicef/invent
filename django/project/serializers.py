@@ -487,6 +487,9 @@ class PortfolioBaseSerializer(serializers.ModelSerializer):
 class PortfolioDetailsSerializer(PortfolioBaseSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
     review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
+    ambition_matrix = serializers.ReadOnlyField(source='get_ambition_matrix')
+    risk_impact_matrix = serializers.ReadOnlyField(source='get_risk_impact_matrix')
+    problem_statement_matrix = serializers.ReadOnlyField(source='get_problem_statement_matrix')
 
     class Meta:
         model = Portfolio
