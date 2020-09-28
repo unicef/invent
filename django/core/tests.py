@@ -142,7 +142,6 @@ class TestStaticDataEndpoint(TestCase):
         self.assertIn('sub_level_types', response.json())
         self.assertIn('review_questions', response.json())
 
-
     def test_language_payload(self):
         response = self.client.get(reverse('static-data'))
         self.assertEqual(response.status_code, 200)
