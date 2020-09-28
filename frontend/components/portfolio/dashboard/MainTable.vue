@@ -44,27 +44,35 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('20')"
+        v-if="selectedColumns.includes('20') && tab === 2"
         :resizable="false"
         :label="$gettext('Questionnaires Assigned') | translate"
         sortable="custom"
-        prop="reviewers"
+        prop="review_states"
         width="511"
       >
         <template slot-scope="scope">
-          <reviewers :id="scope.row.id" :items="scope.row.reviewers" />
+          <reviewers
+            v-if="scope.row.review_states"
+            :id="scope.row.id"
+            :items="scope.row.review_states.review_scores"
+          />
         </template>
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('30')"
+        v-if="selectedColumns.includes('30') && tab === 2"
         :resizable="false"
         :label="$gettext('Scoring') | translate"
         prop="scores"
         width="221"
       >
         <template slot-scope="scope">
-          <scores :id="scope.row.id" :scores="scope.row.scores" />
+          <scores
+            v-if="scope.row.review_states"
+            :id="scope.row.review_states.id"
+            :scores="scope.row.review_states"
+          />
         </template>
       </el-table-column>
 
@@ -369,7 +377,8 @@ export default {
   computed: {
     ...mapState({
       offices: state => state.offices.offices,
-      projects: state => state.portfolio.projects
+      projects: state => state.portfolio.projects,
+      tab: state => state.portfolio.tab
     }),
     ...mapGetters({
       projectsList: "dashboard/getProjectsList",

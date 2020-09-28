@@ -4,7 +4,7 @@
       <fa icon="list" />
       <translate>Change / view score</translate>
     </p>
-    <p v-if="scores.completed" class="complete uppercase">
+    <p v-if="scores.complete" class="complete uppercase">
       <translate>Completed</translate>
     </p>
   </div>
@@ -27,12 +27,10 @@ export default {
 
   methods: {
     ...mapActions({
-      setScoreDialog: "portfolio/setScoreDialog",
-      setCurrentProjectId: "portfolio/setCurrentProjectId"
+      getScore: "portfolio/getScore"
     }),
     handleScore(id) {
-      this.setScoreDialog(true);
-      this.setCurrentProjectId(id);
+      this.getScore(id);
     }
   }
 };

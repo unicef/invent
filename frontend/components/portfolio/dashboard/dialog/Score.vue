@@ -27,7 +27,7 @@
         prop="average"
         label="Average"
         width="250"
-        label-class-name="score-general-header"
+        label-class-name="score-average"
       >
       </el-table-column>
       <el-table-column
@@ -41,7 +41,7 @@
         fixed="right"
         label="Official Score"
         width="305"
-        label-class-name="score-header"
+        label-class-name="score-official"
         class-name="score-content"
       >
         <template slot-scope="scope">
@@ -152,7 +152,10 @@ export default {
 .score-content {
   background-color: #eae6e1;
 }
-.score-header {
+.score-average {
+  background-color: #a8a8a9 !important;
+}
+.score-official {
   background-color: #374ea2 !important;
 }
 .score-general-header {
