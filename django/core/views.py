@@ -21,6 +21,7 @@ from .data.thematic_overview import THEMATIC_OVERVIEW
 from .data.toolkit_questions import TOOLKIT_QUESTIONS
 from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
+from .data.review_questions import REVIEWER_QUESTIONS
 
 
 class TokenAuthMixin(object):
@@ -123,6 +124,7 @@ class StaticDataView(GenericAPIView):
         data['dashboard_columns'] = DASHBOARD_COLUMNS
         data['partner_types'] = [{'id': t[0], 'name': t[1]} for t in PartnerSerializer.PARTNER_TYPE]
         data['link_types'] = [{'id': t[0], 'name': t[1]} for t in LinkSerializer.LINK_TYPE]
+        data['review_questions'] = REVIEWER_QUESTIONS
 
         return Response(data)
 
