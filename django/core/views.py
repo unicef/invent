@@ -20,7 +20,7 @@ from .data.thematic_overview import THEMATIC_OVERVIEW
 from .data.toolkit_questions import TOOLKIT_QUESTIONS
 from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
-
+from project.serializers import PartnerSerializer, LinkSerializer
 
 class TokenAuthMixin(object):
     """
@@ -120,6 +120,8 @@ class StaticDataView(GenericAPIView):
         data['sub_level_types'] = SUB_LEVEL_TYPES
         data['unicef_regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.UNICEF_REGIONS]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
+        data['partner_types'] = dict(PartnerSerializer.PARTNER_TYPE)
+        data['link_types'] = dict(LinkSerializer.LINK_TYPE)
 
         return Response(data)
 
