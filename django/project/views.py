@@ -729,6 +729,7 @@ class ReviewScoreAnswerViewSet(ReviewScoreReviewerAccessMixin, UpdateModelMixin,
     queryset = ReviewScore.objects.all()
 
 
-class ProjectPortfolioStateManagerFillViewSet(ProjectPortfolioStateAccessMixin, UpdateModelMixin, GenericViewSet):
+class ProjectPortfolioStateManagerFillViewSet(ProjectPortfolioStateAccessMixin, RetrieveModelMixin, UpdateModelMixin,
+                                              GenericViewSet):
     serializer_class = ProjectPortfolioStateFillSerializer
     queryset = ProjectPortfolioState.objects.filter(complete=False)
