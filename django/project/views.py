@@ -634,7 +634,7 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
         # only completed and unapproved projects can be approved
         review_states = portfolio.review_states.filter(project__in=request.data['project'],
-                                                       complete=True, approved=False)
+                                                       reviewed=True, approved=False)
         if len(review_states) == 0:
             raise ValidationError({'project': 'Status change not valid for provided projects'})
 
@@ -647,12 +647,12 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
 
     def disapprove(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
-        # only completed and approved projects can be approved
+        # only approved projects can be disapproved
         review_states = portfolio.review_states.filter(project__in=request.data['project'], approved=True)
         if len(review_states) == 0:
             raise ValidationError({'project': 'Status change not valid for provided projects'})  # pragma: no cover
 
-        # Approve each review state
+        # Disapprove each review state
         for rev_state in review_states:
             rev_state.approved = False
             rev_state.save()
@@ -732,4 +732,4 @@ class ReviewScoreAnswerViewSet(ReviewScoreReviewerAccessMixin, UpdateModelMixin,
 class ProjectPortfolioStateManagerFillViewSet(ProjectPortfolioStateAccessMixin, RetrieveModelMixin, UpdateModelMixin,
                                               GenericViewSet):
     serializer_class = ProjectPortfolioStateFillSerializer
-    queryset = ProjectPortfolioState.objects.filter(complete=False)
+    queryset = ProjectPortfolioState.objects.filter(reviewed=False)

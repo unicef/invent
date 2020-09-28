@@ -4,11 +4,11 @@ from collections import namedtuple
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db import models
-from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from simple_history.models import HistoricalRecords
+from django.conf import settings
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -17,6 +17,7 @@ from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys
 from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
+from django.db.models import Count, Case, When, IntegerField, F, Q
 
 
 class ProjectManager(models.Manager):
@@ -209,6 +210,73 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         default=STATUS_DRAFT
     )
     objects = PortfolioQuerySet.as_manager()
+
+    def get_ambition_matrix(self):
+        """
+        Returns with a list of coordinates and assigned project ids for the risk impact matrix
+        """
+        filtered_reviews = self.review_states.filter(approved=True)
+        if not filtered_reviews:
+            return None  # pragma: no cover
+
+        blobs = {}
+        for review in filtered_reviews:
+            hash = review.get_ambition_hash()
+
+            if hash:
+                if hash not in blobs:
+                    blobs[hash] = {'x': review.nst, 'y': review.nc, 'projects': [review.project_id]}
+                else:
+                    blobs[hash]['projects'].append(review.project_id)
+        # generate blob ratio
+        blob_list = list(blobs.values())
+        max_blob_size = max([len(x['projects']) for x in blob_list])
+        for blob in blob_list:
+            blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
+        return blob_list
+
+    def get_risk_impact_matrix(self):
+        """
+        Returns with a list of coordinates and assigned project ids for the risk-impact matrix
+        """
+        filtered_reviews = self.review_states.filter(approved=True)
+        if not filtered_reviews:
+            return None  # pragma: no cover
+        blobs = {}
+        for review in filtered_reviews:
+            hash = review.get_impact_hash()
+            if hash:
+                if hash not in blobs:
+                    blobs[hash] = {'x': review.impact, 'y': review.ra, 'projects': [review.project_id]}
+                else:
+                    blobs[hash]['projects'].append(review.project_id)
+        # generate blob ratio
+        blob_list = list(blobs.values())
+        max_blob_size = max([len(x['projects']) for x in blob_list])
+        for blob in blob_list:
+            blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
+        return blob_list
+
+    def get_problem_statement_matrix(self):
+        tresholds = settings.PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS
+
+        neglected_filter = Q(num_projects__lt=tresholds['MODERATE'])
+        moderate_filter = Q(num_projects__gte=tresholds['MODERATE'], num_projects__lt=tresholds['HIGH'])
+        high_filter = Q(num_projects__gte=tresholds['HIGH'])
+
+        base_qs = self.problem_statements.annotate(num_projects=Count(Case(When(projectportfoliostate__approved=True,
+                                                                                then=F('projectportfoliostate__id')),
+                                                   output_field=IntegerField()), distinct=True))
+
+        neglected_qs = base_qs.filter(neglected_filter)
+        moderate_qs = base_qs.filter(moderate_filter)
+        high_qs = base_qs.filter(high_filter)
+
+        return {
+            'neglected': list(neglected_qs.values_list('pk', flat=True)),
+            'moderate': list(moderate_qs.values_list('pk', flat=True)),
+            'high_activity': list(high_qs.values_list('pk', flat=True)),
+        }
 
 
 class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
@@ -471,8 +539,6 @@ class BaseScore(ExtendedModel):
     nc = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Challenge
     ps = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Path to Scale
 
-    complete = models.BooleanField(default=False)
-
     class Meta:
         abstract = True
 
@@ -494,6 +560,7 @@ class ProjectPortfolioState(BaseScore):
     scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE, blank=True)
     portfolio = models.ForeignKey(Portfolio, related_name='review_states', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
+    reviewed = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 
     class Meta:
@@ -504,6 +571,12 @@ class ProjectPortfolioState(BaseScore):
 
     def get_scale(self):
         return self.scale_phase.scale if self.scale_phase else None
+
+    def get_impact_hash(self):
+        return f'{self.impact}-{self.ra}' if self.reviewed else None
+
+    def get_ambition_hash(self):
+        return f'{self.nst}-{self.nc}' if self.reviewed else None
 
 
 class ReviewScore(BaseScore):
@@ -517,6 +590,8 @@ class ReviewScore(BaseScore):
     nst_comment = models.CharField(max_length=255, null=True, blank=True)  # NST - reviewer's comment field
     nc_comment = models.CharField(max_length=255, null=True, blank=True)  # NC - reviewer's comment field
     ps_comment = models.CharField(max_length=255, null=True, blank=True)  # PS - reviewer's comment field
+
+    complete = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')

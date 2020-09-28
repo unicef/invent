@@ -2,6 +2,7 @@ from project.models import Portfolio, Project, ProjectPortfolioState, ReviewScor
 from user.models import UserProfile
 from project.tests.portfolio_tests import PortfolioSetup
 from django.urls import reverse
+from random import randint
 
 
 class ReviewTests(PortfolioSetup):
@@ -11,6 +12,31 @@ class ReviewTests(PortfolioSetup):
         url = reverse('portfolio-detailed',
                       kwargs={"pk": portfolio_id})
         return client.get(url).json()
+
+    def move_project_to_portfolio(self, portfolio_id, project_id, expected_response_status=201, client=None):
+        if client is None:
+            client = self.user_3_client
+        url = reverse("portfolio-project-add", kwargs={"pk": portfolio_id})
+        request_data = {"project": [project_id]}
+
+        # check permissions with user_1_client, which is not allowed
+        response = client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, expected_response_status, response.json())
+        return response.json()
+
+    def review_and_approve_project(self, pps, scores, client=None):
+        if client is None:
+            client = self.user_3_client  # pragma: no cover
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': pps.id})
+        response = client.post(url, scores, format="json")
+        self.assertEqual(response.status_code, 200, f'{response.json()}')
+
+        project_id = pps.project.id
+
+        url = reverse('portfolio-project-approve', kwargs={'pk': pps.portfolio.id})
+        response = self.user_3_client.post(url, {'project': [project_id]}, format="json")
+        self.assertEqual(response.status_code, 200, f'{response.json()}')
+        return response.json()
 
     def setUp(self):
         super(ReviewTests, self).setUp()
@@ -22,15 +48,11 @@ class ReviewTests(PortfolioSetup):
             self.create_new_project(self.user_1_client)
 
         # Add project to portfolio
-        url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio_id})
-        request_data = {"project": [self.project_rev_id]}
         # check permissions with user_1_client, which is not allowed
-        response = self.user_1_client.post(url, request_data, format="json")
-        self.assertEqual(response.status_code, 403)
+        self.move_project_to_portfolio(self.portfolio_id, self.project_rev_id, 403, self.user_1_client)
         # do it with user 3, who is a GPO
-        response = self.user_3_client.post(url, request_data, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-        pps_data = response.json()['review_states']
+        response_json = self.move_project_to_portfolio(self.portfolio_id, self.project_rev_id, 201, self.user_3_client)
+        pps_data = response_json['review_states']
         self.assertEqual(len(pps_data), 1)
         self.assertEqual(pps_data[0]['project'], self.project_rev_id)
 
@@ -55,10 +77,8 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.status_code, 400)
         response = self.user_3_client.post(url, {'project': [25000]}, format="json")
         self.assertEqual(response.status_code, 400)
-        request_data = {'project': [project_id]}
-        response = self.user_3_client.post(url, request_data, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-        pps_data = response.json()['review_states']
+        # do it the right way
+        pps_data = self.move_project_to_portfolio(self.portfolio_id, project_id, 201)['review_states']
         self.assertEqual(len(pps_data), 2)
         # Moving project from review to approved state
         # Try to approve project without official manager review
@@ -101,7 +121,7 @@ class ReviewTests(PortfolioSetup):
         response = self.user_3_client.post(url, review_data_complete, format="json")
         self.assertEqual(response.status_code, 200)
         self.pps.refresh_from_db()
-        self.assertEqual(self.pps.complete, True)
+        self.assertEqual(self.pps.reviewed, True)
         self.assertEqual(self.pps.approved, False)
         # now reviewed, approve project
         url = reverse('portfolio-project-approve', kwargs={'pk': self.portfolio_id})
@@ -130,7 +150,7 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.status_code, 400)
         response = self.user_3_client.post(url, {'project': [25000]}, format="json")
         self.assertEqual(response.status_code, 400)
-        response = self.user_3_client.post(url, request_data, format="json")
+        response = self.user_3_client.post(url, {'project': [project_id]}, format="json")
         self.assertEqual(response.status_code, 200, response.json())
         pps_data = response.json()['review_states']
         self.assertEqual(len(pps_data), 1)
@@ -236,3 +256,61 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(resp_data['ee'], 1)
         self.assertEqual(resp_data['ra'], 5)
         self.assertEqual(resp_data['rnci_comment'], None)
+
+    def test_portfolio_matrix_output(self):
+        """
+        - Create 5 projects for the portfolio
+        - Move 4 of them to review w. different scores and problem statements,
+        - Query the detailed results
+        - Check if the matrix blobs are correct
+        """
+        # create new portfolio
+        response = self.create_portfolio('Matrix test portfolio', "Portfolio for testing matrix output",
+                                         [self.user_3_pr_id],  self.user_2_client)
+        self.assertEqual(response.status_code, 201, response.json())
+        portfolio_id = response.json()['id']
+        project_ids = list()
+        for _ in range(5):
+            project_id = self.create_new_project(self.user_2_client)[0]
+            project_ids.append(project_id)
+            self.move_project_to_portfolio(portfolio_id, project_id)
+        pps_list = Portfolio.objects.get(id=portfolio_id).review_states.all()
+        problem_statements = list()
+        for i in range(5):
+            problem_statements.append(ProblemStatement.objects.create(
+                name=f"PS_Portfolio_{i}", description=f"PS_{i} description",
+                portfolio=Portfolio.objects.get(id=portfolio_id)))
+
+        i = 0
+        for pps in pps_list:
+            psa_current = [problem_statements[j].pk for j in range(0, 5, i % 2 + 1)]
+
+            scores = {
+                'psa': psa_current,
+                'rnci': randint(1, 5),
+                'ratp': randint(1, 5),
+                'ra': i % 2 + 1,
+                'ee': randint(1, 5),
+                'nst': i % 2 + 1,
+                'nc': i % 2 + 1,
+                'ps': randint(1, 5),
+                'impact': i % 2 + 1,
+                'scale_phase': randint(1, 5),
+            }
+            self.review_and_approve_project(pps, scores, self.user_2_client)
+            i += 1
+
+        portfolio_details = self.get_portfolio_data(portfolio_id, self.user_2_client)
+        impact_data = portfolio_details['risk_impact_matrix']
+        ambition_data = portfolio_details['ambition_matrix']
+        self.assertEqual(len(impact_data), 2)
+        self.assertEqual(len(ambition_data), 2)
+        impact_ratios = {x['ratio'] for x in impact_data}
+        ambition_ratios = {x['ratio'] for x in ambition_data}
+        self.assertEqual(impact_ratios, {0.67, 1.0})
+        self.assertEqual(ambition_ratios, {0.67, 1.0})
+        problem_statement_matrix = portfolio_details['problem_statement_matrix']
+
+        self.assertEqual(len(problem_statement_matrix['high_activity']), 0)
+        self.assertEqual(len(problem_statement_matrix['moderate']), 3)
+        self.assertEqual(len(problem_statement_matrix['neglected']), 4)
