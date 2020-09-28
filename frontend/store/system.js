@@ -13,6 +13,8 @@ export const state = () => ({
   donors: [],
   regions: [],
   unicef_regions: [],
+  partner_types: [],
+  link_types: [],
   donorsLibrary: {}
 });
 
@@ -89,7 +91,9 @@ export const getters = {
   getDonorDetails: state => id => ({ ...state.donors.find(d => d.id === id), ...state.donorsLibrary[id] }),
   getRegions: state => state.regions,
   getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) }),
-  getUnicefRegions: state => state.unicef_regions
+  getUnicefRegions: state => state.unicef_regions,
+  getLinkTypes: state => state.link_types,
+  getPartnerTypes: state => state.partner_types
 };
 
 export const actions = {
@@ -109,6 +113,8 @@ export const actions = {
     try {
       const { data } = await this.$axios.get('/api/static-data/');
       commit('SET_AXIS', data.axis);
+      commit('SET_DATA', { key: 'partner_types', value: data.partner_types });
+      commit('SET_DATA', { key: 'link_types', value: data.link_types });
       commit('SET_DOMAINS', data.domains);
       commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
       commit('SET_LANGUAGES', data.languages);
