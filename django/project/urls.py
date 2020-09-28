@@ -148,6 +148,7 @@ urlpatterns = [
          }), name='review-score-fill'),
     path('project-review/manager/<int:pk>/',
          view=views.ProjectPortfolioStateManagerFillViewSet.as_view({
+             'get': 'retrieve',
              'post': 'update'
          }), name='portfolio-project-manager-review')
 ]
