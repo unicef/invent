@@ -61,7 +61,8 @@ export const projectFields = () => ({
   wbs: [],
   innovation_categories: [],
   cpd: [],
-  phase: null
+  phase: null,
+  partners: []
 });
 
 export const draftRules = () => {
@@ -71,6 +72,19 @@ export const draftRules = () => {
     total_budget: {},
     phase: {},
     cbd: {},
+    partner_name: {
+      required: true,
+      max: 100
+    },
+    partner_email: {
+      email: true,
+      required: true,
+      max: 100
+    },
+    partner_website: {
+      url: { require_protocol: true },
+      max: 100
+    },
     wbs: {
       max: 30
     },
