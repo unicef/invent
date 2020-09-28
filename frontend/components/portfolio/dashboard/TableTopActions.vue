@@ -154,8 +154,6 @@ export default {
         this.$gettext("Move to Review"),
         this.$gettext("Move to Porfolio")
       ],
-      back: 0,
-      forward: 1,
       // settings
       columnSelectorOpen: false,
       selectedColumns: []
@@ -163,12 +161,14 @@ export default {
   },
   computed: {
     ...mapState({
-      tab: state => state.portfolio.tab
+      tab: state => state.portfolio.tab,
+      back: state => state.portfolio.back,
+      forward: state => state.portfolio.forward
     }),
     ...mapGetters({
       selectedRows: "dashboard/getSelectedRows",
       allSelected: "dashboard/getSelectAll",
-      total: "dashboard/getTotal",
+      total: "portfolio/getTotal",
       // user: "user/getProfile",
       projects: "dashboard/getProjectsBucket",
       // dashboardId: "dashboard/getDashboardId",
@@ -200,7 +200,7 @@ export default {
       setSelectAll: "dashboard/setSelectAll",
       loadProjectsBucket: "dashboard/loadProjectsBucket",
       setSelectedRows: "dashboard/setSelectedRows",
-      setTab: "portfolio/setTab",
+      moveToState: "portfolio/moveToState",
       // settings
       setSelectedColumns: "dashboard/setSelectedColumns"
     }),
@@ -225,21 +225,47 @@ export default {
       }, 500);
     },
     // back and forward values
-    handleClickBack() {
-      this.setTab(this.tab - 1);
-      console.log("Move projects back");
-      // todo: integrate actions to handle the change
-      this.handleActions();
+    async handleClickBack() {
+      const tab = this.tab - 1;
+      switch (tab) {
+        case 1:
+          await this.moveToState({
+            type: "remove-project",
+            project: this.selectedRows,
+            tab
+          });
+          break;
+        case 2:
+          await this.moveToState({
+            type: "disapprove-project",
+            project: this.selectedRows,
+            tab
+          });
+          break;
+        default:
+          break;
+      }
     },
-    handleClickForward() {
-      this.setTab(this.tab + 1);
-      console.log("Move projects forward");
-      // todo: integrate actions to handle the change
-      this.handleActions();
-    },
-    handleActions() {
-      this.back = this.tab - 2;
-      this.forward = this.tab;
+    async handleClickForward() {
+      const tab = this.tab + 1;
+      switch (tab) {
+        case 2:
+          await this.moveToState({
+            type: "add-project",
+            project: this.selectedRows,
+            tab
+          });
+          break;
+        case 3:
+          await this.moveToState({
+            type: "approve-project",
+            project: this.selectedRows,
+            tab
+          });
+          break;
+        default:
+          break;
+      }
     },
     // settings
     popperOpenHandler() {
