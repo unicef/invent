@@ -137,7 +137,7 @@ class ProjectSearch(ExtendedModel):
         """
         Update search object from project object
         """
-        if project.public_id:
+        if project.public_id and project.is_active:
             self.country_office_id = int(project.data.get("country_office")) \
                 if project.data.get("country_office") else None
             self.country_id = int(project.data["country"])
