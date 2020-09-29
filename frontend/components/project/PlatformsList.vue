@@ -30,7 +30,7 @@ export default {
   computed: {
     selected () {
       const list = this.$store.getters[`projects/${this.source}`];
-      return list.filter(tp => this.platforms.includes(tp.id));
+      return list && this.platforms ? list.filter(tp => this.platforms.includes(tp.id)) : [];
     }
   }
 };
