@@ -383,7 +383,3 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
-
-    def test_list_all_in_portfolio(self):
-        url = reverse("search-project-list")
-        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country"}
