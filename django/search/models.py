@@ -27,7 +27,7 @@ class ProjectSearch(ExtendedModel):
 
     FILTER_BY = {
         # query_param: QuerySet param
-        "co": "country_office_id",  # eg: country_office=1
+        "co": "country_office_id",  # eg: co=1&co=2
         "country": "country_id",  # eg: country=1&country=2
         "sw": "software",  # eg: sw=1&sw=2
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
