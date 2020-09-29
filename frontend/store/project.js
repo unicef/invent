@@ -62,6 +62,7 @@ export const getters = {
   getAwp: state => state.awp,
   getPhase: state => state.phase,
   getCpd: state => state.cpd,
+  getInnovationCategories: state => state.innovation_categories,
   getPartners: state => state.partners.length === 0 ? [null] : state.partners,
   getWbs: state => state.wbs.length === 0 ? [null] : state.wbs,
   getTargetGroupReached: state => state.target_group_reached,
@@ -248,6 +249,9 @@ export const actions = {
   },
   setCpd ({ commit }, value) {
     commit('SET_DATA', { key: 'cpd', value });
+  },
+  setInnovationCategories ({ commit }, value) {
+    commit('SET_DATA', { key: 'innovation_categories', value });
   },
   setPartners ({ commit }, value) {
     commit('SET_DATA', { key: 'partners', value });
