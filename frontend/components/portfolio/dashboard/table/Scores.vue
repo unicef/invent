@@ -4,7 +4,7 @@
       <fa icon="list" />
       <translate>Change / view score</translate>
     </p>
-    <p v-if="scores.complete" class="complete uppercase">
+    <p v-if="scores.reviewed" class="complete uppercase">
       <translate>Completed</translate>
     </p>
   </div>
