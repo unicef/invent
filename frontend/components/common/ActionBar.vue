@@ -134,12 +134,14 @@ import SearchComponent from "@/components/common/SearchComponent.vue";
 import PersonaSelector from "@/components/dashboard/PersonaSelector";
 import PortfolioFiltersHeader from "@/components/portfolio/dashboard/PortfolioFiltersHeader";
 import BreadCrumb from "@/components/BreadCrumb";
+import DashboardFiltersHeader from '@/components/dashboard/DashboardFiltersHeader'
 
 export default {
   components: {
     SearchComponent,
     PersonaSelector,
     PortfolioFiltersHeader,
+    DashboardFiltersHeader,
     BreadCrumb
   },
   computed: {

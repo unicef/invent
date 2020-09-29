@@ -147,6 +147,21 @@
       </el-table-column>
 
       <el-table-column
+        v-if="selectedColumns.includes('17')"
+        :resizable="false"
+        :label="$gettext('Innovation Categories') | translate"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <platforms-list
+            class="SimpleList"
+            :platforms="scope.row.innovation_categories"
+            source="getInnovationCategories"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
         v-if="selectedColumns.includes('12')"
         :resizable="false"
         :label="$gettext('Result Area') | translate"
@@ -337,6 +352,7 @@ import Scores from "@/components/portfolio/dashboard/table/Scores";
 // dialogs
 import Review from "@/components/portfolio/dashboard/dialog/Review";
 import Score from "@/components/portfolio/dashboard/dialog/Score";
+import PlatformsList from '@/components/project/PlatformsList';
 
 import { setTimeout } from "timers";
 
@@ -356,6 +372,7 @@ export default {
     Reviewers,
     Scores,
     Review,
+    PlatformsList,
     Score
   },
   data() {
@@ -530,6 +547,15 @@ export default {
     100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
       @appFooterHeight - 93px
   );
+
+  .SimpleList {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
+  }
+
   .favorite {
     cursor: pointer;
     position: absolute;

@@ -58,7 +58,7 @@
                 <el-col
                   v-for="(col, index) in ['Neglected', 'Moderate', 'High activity']"
                   :key="col"
-                  span="8"
+                  :span="8"
                 >
                   <div :class="`Problem Problem${index + 1}`">
                     <div class="Title">

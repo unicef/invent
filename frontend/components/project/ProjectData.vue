@@ -292,6 +292,12 @@
               source="getRegionalPriorities"
             />
           </simple-field>
+          <simple-field :header="$gettext('Innovation Categories') | translate">
+            <platforms-list
+              :platforms="project.innovation_categories"
+              source="getInnovationCategories"
+            />
+          </simple-field>
         </collapsible-card>
 
         <collapsible-card
