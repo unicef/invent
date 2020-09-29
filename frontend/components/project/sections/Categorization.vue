@@ -76,6 +76,32 @@
           </custom-required-form-item>
         </el-col>
       </el-row>
+      <el-row
+        :gutter="20"
+        type="flex"
+      >
+        <el-col :span="24">
+          <custom-required-form-item
+            :error="errors.first('innovation_categories')"
+            :draft-rule="draftRules.innovation_categories"
+            :publish-rule="publishRules.innovation_categories"
+          >
+            <template slot="label">
+              <translate key="priorities-label">
+                Please select all UNICEF Innovation categories this initiative applies to.
+              </translate>
+            </template>
+
+            <multi-selector
+              v-model="innovation_categories"
+              v-validate="rules.innovation_categories"
+              data-vv-name="innovation_categories"
+              data-vv-as="Innovation Categories"
+              source="getInnovationCategories"
+            />
+          </custom-required-form-item>
+        </el-col>
+      </el-row>
     </collapsible-card>
   </div>
 </template>
@@ -100,7 +126,8 @@ export default {
     }),
     ...mapGettersActions({
       unicef_sector: ['project', 'getSectors', 'setSectors', 0],
-      regional_priorities: ['project', 'getRegionalPriorities', 'setRegionalPriorities', 0]
+      regional_priorities: ['project', 'getRegionalPriorities', 'setRegionalPriorities', 0],
+      innovation_categories: ['project', 'getInnovationCategories', 'setInnovationCategories', 0]
     })
   },
   methods: {
@@ -115,7 +142,8 @@ export default {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate('unicef_sector'),
-        this.$validator.validate('regional_priorities')
+        this.$validator.validate('regional_priorities'),
+        this.$validator.validate('innovation_categories')
       ]);
       return validations.reduce((a, c) => a && c, true);
     }

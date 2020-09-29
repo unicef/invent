@@ -57,6 +57,7 @@ export const state = () => ({
   selectedCapabilitySubcategories: [],
   selectedPlatforms: [],
   selectedRows: [],
+  innovationCategories: [],
   filteredCountries: [],
   filteredOffice: null,
   filteredCountryOffice: null,
@@ -90,6 +91,7 @@ export const getters = {
       g.cc.length === 0 &&
       g.cs.length === 0 &&
       g.hsc.length === 0 &&
+      g.ic.length === 0 &&
       g.in === undefined &&
       g.q === undefined &&
       g.region === null &&
@@ -162,6 +164,7 @@ export const getters = {
       ? [state.dashboardId]
       : state.filteredCountryOffice;
   },
+  getInnovationCategories: state => state.innovationCategories,
   getGovernmentApproved: state => state.governmentApproved,
   getGovernmentFinanced: state => state.governmentFinanced,
   getSelectAll: state => state.selectAll,
@@ -191,6 +194,7 @@ export const getters = {
       country,
       donor,
       region: state.filteredRegion,
+      ic: state.innovationCategories,
       fo: state.filteredOffice,
       co: state.filteredCountryOffice,
       gov: state.governmentFinanced ? [1, 2] : undefined,
@@ -318,6 +322,10 @@ export const actions = {
     commit("SET_FILTERED_REGION", value);
     commit("SET_CURRENT_PAGE", 1);
   },
+  setInnovationCategories({ commit }, value) {
+    commit("SET_INNOVATION_CATEGORIES", value);
+    commit("SET_CURRENT_PAGE", 1);
+  },
   setFilteredOffice({ commit }, value) {
     commit("SET_FILTERED_OFFICE", value);
     commit("SET_CURRENT_PAGE", 1);
@@ -410,6 +418,7 @@ export const mutations = {
     state.searchString = options.q ? options.q : "";
     state.searchIn = options.in ? options.in : searchIn();
     state.filteredCountries = intArrayFromQs(options.country);
+    state.innovationCategories = intArrayFromQs(options.ic);
     state.filteredRegion = options.region ? +options.region : null;
     state.filteredOffice = options.fo ? +options.fo : null;
     state.filteredCountryOffice = intArrayFromQs(options.co);
@@ -479,6 +488,9 @@ export const mutations = {
   },
   SET_FILTERED_REGION: (state, value) => {
     state.filteredRegion = value;
+  },
+  SET_INNOVATION_CATEGORIES: (state, value) => {
+    state.innovationCategories = value;
   },
   SET_GOVERNMENT_APPROVED: (state, value) => {
     state.governmentApproved = value;

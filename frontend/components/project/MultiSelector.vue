@@ -3,7 +3,7 @@
     :value="platforms"
     multiple
     filterable
-    :placeholder="$gettext('Select from list') | translate"
+    :placeholder="placeholder || $gettext('Select from list') | translate"
     popper-class="PlatformSelectorDropdown"
     class="PlatformSelector"
     value-key="id"
@@ -40,6 +40,10 @@ export default {
     source: {
       type: String,
       required: true
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
   computed: {
