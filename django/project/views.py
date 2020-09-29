@@ -30,7 +30,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
     PortfolioDetailsSerializer, PortfolioUpdateSerializer, PortfolioCreateSerializer, ProjectInPortfolioSerializer, \
-    ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, ProjectPortfolioStateFillSerializer
+    ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, ProjectPortfolioStateManagerSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -729,7 +729,12 @@ class ReviewScoreAnswerViewSet(ReviewScoreReviewerAccessMixin, UpdateModelMixin,
     queryset = ReviewScore.objects.all()
 
 
-class ProjectPortfolioStateManagerFillViewSet(ProjectPortfolioStateAccessMixin, RetrieveModelMixin, UpdateModelMixin,
-                                              GenericViewSet):
-    serializer_class = ProjectPortfolioStateFillSerializer
-    queryset = ProjectPortfolioState.objects.filter(reviewed=False)
+class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, RetrieveModelMixin, UpdateModelMixin,
+                                          GenericViewSet):
+    serializer_class = ProjectPortfolioStateManagerSerializer
+
+    def get_queryset(self):
+        if self.request.method == 'GET':
+            return ProjectPortfolioState.objects.all()
+        else:
+            return ProjectPortfolioState.objects.filter(reviewed=False)

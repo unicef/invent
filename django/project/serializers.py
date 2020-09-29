@@ -471,11 +471,21 @@ class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
+class ReviewScoreSerializer(serializers.ModelSerializer):
+    reviewer = UserProfileSerializer(read_only=True)
+
+    class Meta:
+        model = ReviewScore
+        fields = '__all__'
+
+
+class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
     scale_phase = serializers.IntegerField(required=True, source='get_scale')
     impact = serializers.IntegerField(required=True)
     project = serializers.IntegerField(read_only=True, source='project.id')
     portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
+    review_scores = ReviewScoreSerializer(many=True, read_only=True, required=False)
+    averages = serializers.SerializerMethodField(read_only=True, required=False)
 
     class Meta:
         model = ProjectPortfolioState
@@ -490,6 +500,22 @@ class ProjectPortfolioStateFillSerializer(serializers.ModelSerializer):
         instance.scale_phase = ScalePhase.objects.get(scale=scale_phase_value)
         instance = super().update(instance, validated_data)
         return instance
+
+    @staticmethod
+    def get_averages(obj):
+        complete_scores = obj.review_scores.filter(complete=True)
+
+        def calc_avg(in_list: list):
+            return (sum(in_list) / len(in_list)) if in_list else None
+
+        return {
+            'rnci': calc_avg([score.rnci for score in complete_scores if score.rnci]),
+            'ratp': calc_avg([score.ratp for score in complete_scores if score.ratp]),
+            'ra': calc_avg([score.ra for score in complete_scores if score.ra]),
+            'ee': calc_avg([score.ee for score in complete_scores if score.ee]),
+            'nst': calc_avg([score.nst for score in complete_scores if score.nst]),
+            'ps': calc_avg([score.ps for score in complete_scores if score.ps])
+        }
 
 
 class PortfolioBaseSerializer(serializers.ModelSerializer):
@@ -584,13 +610,6 @@ class ProjectInPortfolioSerializer(serializers.ModelSerializer):
             return ProjectPortfolioStateSerializer(pps).data
         except ProjectPortfolioState.DoesNotExist:
             return None
-
-
-class ReviewScoreSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ReviewScore
-        fields = '__all__'
 
 
 class ReviewScoreFillSerializer(serializers.ModelSerializer):
