@@ -183,7 +183,7 @@ export const actions = {
         val: id
       });
       // set the projects of the portfolio by tab filter
-      // console.log(results[0].data.results);
+      // console.log(results[1].data.results);
       commit("SET_VALUE", {
         key: "projects",
         val: results[state.tab - 1].data.results.map(i => {
@@ -191,61 +191,40 @@ export const actions = {
           return {
             ...i,
             favorite: Math.random() >= 0.5,
-            review_states: {
-              approved: false,
-              complete: true,
-              created: "2020-09-28T10:04:54.905538Z",
-              ee: null,
-              id: 1,
-              impact: null,
-              modified: "2020-09-28T10:04:54.905551Z",
-              nc: null,
-              nst: null,
-              portfolio: 1,
-              project: 2,
-              ps: null,
-              psa: [],
-              ra: null,
-              ratp: null,
-              review_scores: [
-                {
-                  complete: false,
-                  created: "2020-09-28T10:04:54.921377Z",
-                  id: 1,
-                  modified: "2020-09-28T10:04:54.921390Z",
-                  portfolio_review: 1,
-                  reviewer: {
-                    email: "test_user_1@unicef.org",
-                    id: 1,
-                    name: "test_user_1"
-                  }
-                }
-              ],
-              rnci: null,
-              scale_phase: null
-            },
-            modified: "2020-05-15T11:30:06.422583Z",
-            organisation: 56,
-            country: 163,
-            country_office: 1,
-            implementation_overview: "asdasdasdasdasdasdmasdmamsd",
-            contact_name: "Health",
-            contact_email: "lamas.alonso@gmail.com",
-            platforms: [52],
-            health_focus_areas: [31, 32],
-            hsc_challenges: [2],
-            region: 1,
-            donors: [20],
-            approved: null,
-            goal_area: 1,
-            result_area: null,
-            field_office: 1,
-            capability_levels: [],
-            capability_categories: [],
-            capability_subcategories: [],
-            innovation_categories: null,
-            country_answers: {},
-            donor_answers: { "20": {} }
+            // review_states: {
+            //   approved: false,
+            //   reviewed: true,
+            //   created: "2020-09-28T10:04:54.905538Z",
+            //   ee: null,
+            //   id: 1,
+            //   impact: null,
+            //   modified: "2020-09-28T10:04:54.905551Z",
+            //   nc: null,
+            //   nst: null,
+            //   portfolio: 1,
+            //   project: 2,
+            //   ps: null,
+            //   psa: [],
+            //   ra: null,
+            //   ratp: null,
+            //   review_scores: [
+            //     {
+            //       complete: false,
+            //       created: "2020-09-28T10:04:54.921377Z",
+            //       id: 1,
+            //       modified: "2020-09-28T10:04:54.921390Z",
+            //       portfolio_review: 1,
+            //       reviewer: {
+            //         email: "test_user_1@unicef.org",
+            //         id: 1,
+            //         name: "test_user_1"
+            //       }
+            //     }
+            //   ],
+            //   rnci: null,
+            //   scale_phase: null
+            // },
+            ...i.project_data
           };
         })
       });
@@ -274,6 +253,7 @@ export const actions = {
         ]
       });
     } catch (e) {
+      // console.log(e.response.data);
       console.error("portfolio/loadPortfolioProjects failed");
     }
   },
@@ -313,6 +293,7 @@ export const actions = {
       // const { data } = await this.$axios.get(
       //   `api/portfolio/project-review/manager/${id}/`
       // );
+      // console.log(data);
       commit("SET_VALUE", { key: "dialogScore", val: true });
     } catch (e) {
       console.log(e.response.data);
