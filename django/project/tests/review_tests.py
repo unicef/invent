@@ -222,11 +222,13 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
 
         question_id = response.json()[0]['id']
+        pps_id = response.json()[0]['portfolio_review']
         # create a new user who is not associated with the review or the portfolio in any way
         user_x_pr_id, user_x_client, user_x_key = self.create_user('donkey@kong.com', '12345789TIZ', '12345789TIZ')
         partial_data = {
             'ee': 1,
             'ra': 5,
+            'nst_comment': 'I do not know how to set this'
         }
         url = reverse('review-score-fill', kwargs={"pk": question_id})
         # Try to fill the answers with the unauthorized user
@@ -243,6 +245,36 @@ class ReviewTests(PortfolioSetup):
 
         response = self.user_1_client.post(url, partial_data, format="json")
         self.assertEqual(response.status_code, 200)
+
+        # add another user review
+        user_y_pr_id, user_y_client, user_y_key = self.create_user('jeff@bezos.com', '12345789TIZ', '12345789TIZ')
+        url = reverse("portfolio-assign-questionnaire",
+                      kwargs={"portfolio_id": self.portfolio_id, 'project_id': self.project_rev_id})
+        request_data = {'userprofile': [user_y_pr_id]}
+        response = self.user_3_client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        question_id_y = response.json()[0]['id']
+
+        partial_data_2 = {
+            'ee': 2,
+            'ra': 4,
+            'nst': 1,
+            'nst_comment': 'Neither do I'
+        }
+        url = reverse('review-score-fill', kwargs={"pk": question_id_y})
+        response = user_y_client.post(url, partial_data_2, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # read pps data
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': pps_id})
+        response = self.user_1_client.get(url, {}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['averages']['ee'], 1.5)
+        self.assertEqual(response.json()['averages']['ra'], 4.5)
+        self.assertEqual(response.json()['averages']['nst'], 1.0)
+        self.assertEqual(response.json()['averages']['rnci'], None)
+        self.assertEqual(len(response.json()['review_scores']), 2)
+
         # Try to modify the answers - should not be allowed
         partial_data = {
             'rnci_comment': "I always forget this!",
