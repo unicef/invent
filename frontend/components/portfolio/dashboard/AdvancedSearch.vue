@@ -14,6 +14,12 @@
         :goal-area="selectedGoal"
         :placeholder="$gettext('Select Result Area') | translate"
       />
+      <multi-selector
+        v-model="innovationCategories"
+        class="MultiSelectorFilter"
+        source="getInnovationCategories"
+        :placeholder="$gettext('Select Innovation Categories') | translate"
+      />
     </div>
     <div class="FilterItems">
       <template v-if="selectedGoal && selectedGoal !== 1">
@@ -139,6 +145,7 @@ import CapabilityList from "@/components/common/list/CapabilityList";
 import SimplePlatformList from "@/components/common/list/SimplePlatformList";
 import GoalAreasSelector from "@/components/common/GoalAreasSelector";
 import ResultAreasSelector from "@/components/common/ResultAreasSelector";
+import MultiSelector from '@/components/project/MultiSelector'
 import { mapGetters } from "vuex";
 
 export default {
@@ -153,7 +160,8 @@ export default {
     SimplePlatformList,
     CapabilityList,
     GoalAreasSelector,
-    ResultAreasSelector
+    ResultAreasSelector,
+    MultiSelector
   },
   computed: {
     ...mapGetters({
@@ -193,7 +201,8 @@ export default {
         "getSelectedPlatforms",
         "setSelectedPlatforms",
         0
-      ]
+      ],
+      innovationCategories: ['dashboard', 'getInnovationCategories', 'setInnovationCategories', 0]
     }),
     selectedGoalAreaDetails() {
       if (this.selectedGoal) {
@@ -222,6 +231,9 @@ export default {
   border-left: 1px solid @colorGrayLight;
   background-color: @colorWhite;
 
+  .MultiSelectorFilter {
+    margin: 10px 0;
+  }
   // search filters blocks
   > div {
     padding: 20px;
