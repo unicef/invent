@@ -1,5 +1,5 @@
 <template>
-  <div class="Matrix">
+  <div :class="`Matrix ${top !== false ? 'ShowOnTop' : ''}`">
     <div class="ArrowRight" />
     <div class="ArrowTop" />
     <div class="MColumns">
@@ -25,6 +25,7 @@
             :key="`${element.x}_${element.y}`"
             :state="getState(index)"
             :color="color"
+            :reverse="top !== false"
             v-bind="element"
             @click="activeIndex = index"
           />
@@ -99,6 +100,10 @@ export default {
       type: String,
       default: ''
     },
+    top: {
+      type: Boolean,
+      default: false
+    },
     bgColor: {
       type: String,
       default: ''
@@ -164,6 +169,32 @@ export default {
   &::v-deep .el-scrollbar__wrap {
     overflow-y: scroll;
     overflow-x: hidden;
+  }
+  &.ShowOnTop {
+    .Elements {
+      top: 40px;
+    }
+    .Yaxis {
+      top: 40px;
+    }
+    .Xaxis {
+      Top: 0;
+      Bottom: initial;
+    }
+    .MColumns > .MColumn:first-child {
+      border-bottom: 0 solid transparent;
+      border-top: 1px solid #A8A8A9;
+    }
+    .ArrowRight {
+      top: 40px;
+    }
+    .ArrowTop {
+      transform: rotate(180deg);
+      top: 641px;
+    }
+    .Overlay:after {
+      top: 73px !important;
+    }
   }
   .MColumns {
     display: flex;
