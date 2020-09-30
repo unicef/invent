@@ -5,6 +5,7 @@ import { apiReadParser, apiWriteParser, APIError } from "../utilities/api";
 export const state = () => ({
   loading: false,
   name: "",
+  projectName: "",
   description: "",
   status: "DR",
   icon: null,
@@ -57,6 +58,10 @@ export const state = () => ({
   portfolios: [],
   portfolio: {},
   projects: [],
+  // review and score
+  review: {},
+  problemStatements: [],
+  loadingScore: false,
   // dashboard of portfolio manager interctions
   tabs: [
     { id: 1, name: "Inventory", icon: "folder", total: 18 },
@@ -171,6 +176,10 @@ export const actions = {
   async getProjects({ state, commit, dispatch }, id) {
     try {
       const { data } = await this.$axios.get(`api/portfolio/${id}/`);
+      commit("SET_VALUE", {
+        key: "problemStatements",
+        val: data.problem_statements
+      });
       commit("SET_NAME", data.name);
       const results = await Promise.all([
         this.$axios.get(`api/portfolio/${id}/projects/inventory/`),
@@ -191,39 +200,6 @@ export const actions = {
           return {
             ...i,
             favorite: Math.random() >= 0.5,
-            // review_states: {
-            //   approved: false,
-            //   reviewed: true,
-            //   created: "2020-09-28T10:04:54.905538Z",
-            //   ee: null,
-            //   id: 1,
-            //   impact: null,
-            //   modified: "2020-09-28T10:04:54.905551Z",
-            //   nc: null,
-            //   nst: null,
-            //   portfolio: 1,
-            //   project: 2,
-            //   ps: null,
-            //   psa: [],
-            //   ra: null,
-            //   ratp: null,
-            //   review_scores: [
-            //     {
-            //       complete: false,
-            //       created: "2020-09-28T10:04:54.921377Z",
-            //       id: 1,
-            //       modified: "2020-09-28T10:04:54.921390Z",
-            //       portfolio_review: 1,
-            //       reviewer: {
-            //         email: "test_user_1@unicef.org",
-            //         id: 1,
-            //         name: "test_user_1"
-            //       }
-            //     }
-            //   ],
-            //   rnci: null,
-            //   scale_phase: null
-            // },
             ...i.project_data
           };
         })
@@ -282,18 +258,47 @@ export const actions = {
   },
   // score actions
   async addScore({ state, commit, dispatch }, { id, data }) {
-    console.log(`this add a score to project ${id}`);
-    commit("SET_VALUE", { key: "dialogReview", val: false });
-    // todo: add api integration
+    try {
+      console.log(`this add a score to project review ${id}`);
+      // fix from elemnt ui "" default setup
+      let officialScore = {};
+      for (const [key, value] of Object.entries(data)) {
+        officialScore[key] = value === "" ? null : value;
+      }
+      commit("SET_VALUE", { key: "loadingScore", val: true });
+      await this.$axios.post(`/api/project-review/manager/${id}/`, {
+        ...officialScore
+      });
+      // update portfolio
+      dispatch("getProjects", state.currentPortfolioId);
+      // interface setters
+      commit("SET_VALUE", { key: "loadingScore", val: false });
+      commit("SET_VALUE", { key: "dialogScore", val: false });
+    } catch (e) {
+      console.log(e.response.data);
+    }
   },
-  async getScore({ state, commit, dispatch }, id) {
+  async getManagerScore({ state, commit, dispatch }, { id, name }) {
     console.log(`this will give us the score for review id ${id}`);
     try {
-      // todo: to be defined
-      // const { data } = await this.$axios.get(
-      //   `api/portfolio/project-review/manager/${id}/`
-      // );
-      // console.log(data);
+      const { data } = await this.$axios.get(
+        `api/project-review/manager/${id}/`
+      );
+      commit("SET_VALUE", { key: "projectName", val: name });
+      commit("SET_VALUE", {
+        key: "review",
+        val: {
+          ...data
+          // averages: {
+          //   ee: 1.5,
+          //   nst: 1.0,
+          //   ps: null,
+          //   ra: 4.5,
+          //   ratp: null,
+          //   rnci: null
+          // }
+        }
+      });
       commit("SET_VALUE", { key: "dialogScore", val: true });
     } catch (e) {
       console.log(e.response.data);
