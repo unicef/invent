@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p @click="handleScore(id)" class="assing mb-10">
+    <p @click="handleScore()" class="assing mb-10">
       <fa icon="list" />
       <translate>Change / view score</translate>
     </p>
@@ -15,24 +15,23 @@ import { mapActions } from "vuex";
 
 export default {
   props: {
-    id: {
-      type: Number,
-      required: true
-    },
     scores: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
   },
-
   methods: {
     ...mapActions({
-      getScore: "portfolio/getScore"
+      getManagerScore: "portfolio/getManagerScore",
     }),
-    handleScore(id) {
-      this.getScore(id);
-    }
-  }
+    handleScore() {
+      this.getManagerScore({ id: this.scores.id, name: this.name });
+    },
+  },
 };
 </script>
 
