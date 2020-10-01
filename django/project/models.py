@@ -569,9 +569,6 @@ class ProjectPortfolioState(BaseScore):
     def assign_questionnaire(self, user: UserProfile):
         return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
 
-    def get_scale(self):
-        return self.scale_phase.scale if self.scale_phase else None
-
     def get_impact_hash(self):
         return f'{self.impact}-{self.ra}' if self.reviewed else None
 
