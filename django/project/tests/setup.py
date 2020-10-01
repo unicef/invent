@@ -95,11 +95,14 @@ class TestProjectData:
                       dict(link_type=1, link_url="https://sharepoint.directory")]
         }}, org, country, country_office, d1, d2
 
-    def create_new_project(self, test_user_client=None):
+    def create_new_project(self, test_user_client=None, name=None):
         if test_user_client is None:
             test_user_client = self.test_user_client
 
-        project_name = f"Test Project{randint(999, 999999)}"
+        if name is None:
+            project_name = f"Test Project{randint(999, 999999)}"
+        else:
+            project_name=name
         project_data, org, country, country_office, d1, d2 = self.create_test_data(name=project_name,
                                                                                    new_country_only=True)
 
