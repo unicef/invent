@@ -102,7 +102,7 @@ class TestProjectData:
         if name is None:
             project_name = f"Test Project{randint(999, 999999)}"
         else:
-            project_name=name
+            project_name = name
         project_data, org, country, country_office, d1, d2 = self.create_test_data(name=project_name,
                                                                                    new_country_only=True)
 
