@@ -62,7 +62,8 @@ export const projectFields = () => ({
   innovation_categories: [],
   cpd: [],
   phase: null,
-  partners: []
+  partners: [],
+  links: []
 });
 
 export const draftRules = () => {
@@ -82,6 +83,10 @@ export const draftRules = () => {
       max: 100
     },
     partner_website: {
+      url: { require_protocol: true },
+      max: 100
+    },
+    link_website: {
       url: { require_protocol: true },
       max: 100
     },
