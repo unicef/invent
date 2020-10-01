@@ -207,7 +207,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         qs = self.filter(queryset=qs, query_params=query_params)
         qs = self.filter_queryset(qs)
 
-        results_type = query_params.get('type')
+        results_type = query_params.get('type', 'map')
 
         if results_type == 'list':
             page = self.paginate_queryset(qs.values(*list_values))
