@@ -43,6 +43,9 @@ class ProjectSearch(ExtendedModel):
         "cc": "capability_categories",  # eg: cc=1&cc=2
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
         "ic": "innovation_categories",  # eg: ic=1&ic=2
+        "portfolio": "project__review_states__portfolio",
+        "sp": "scale_phase",  # TODO: scale phase
+        "ps": "problem_statement",  # TODO: problem statements 
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
