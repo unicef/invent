@@ -10,11 +10,11 @@ class PortfolioSearchTests(PortfolioSetup):
         self.project3_id, *_ = self.create_new_project(self.user_2_client)
         self.project4_id, *_ = self.create_new_project(self.user_2_client)
         self.project5_id, *_ = self.create_new_project(self.user_2_client)
-        
+
         response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_3_pr_id], self.user_2_client)
         self.assertEqual(response.status_code, 201, response.json())
         self.portfolio2_id = response.json()['id']
-        
+
         # add Project 2, 4 to a Portfolio
         url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio_id})
         request_data = {"project": [self.project2_id, self.project4_id]}
@@ -50,7 +50,7 @@ class PortfolioSearchTests(PortfolioSetup):
 
     def test_search_within_a_portfolio(self):
         new_project_id, *_ = self.create_new_project(self.user_2_client, name="New Project 1")
-        
+
         # add new project to a Portfolio 1
         url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio_id})
         request_data = {"project": [new_project_id]}
@@ -72,15 +72,16 @@ class PortfolioSearchTests(PortfolioSetup):
     def test_filter_and_search_within_a_portfolio(self):
         new_project_id, project_data, org, country, *_ = self.create_new_project(
             self.user_2_client, name="New Project 1")
-        
+
         # add new project to a Portfolio 1
         url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio_id})
         request_data = {"project": [new_project_id]}
         response = self.user_2_client.post(url, request_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
-        
+
         url = reverse("search-project-list")
         data = {"q": "New", "in": "name", "country": country.id, "portfolio": self.portfolio_id, "type": "portfolio"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
+
