@@ -11,7 +11,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from core.views import TokenAuthMixin
 from country.models import Donor, Country
-from .serializers import MapResultSerializer, ListResultSerializer
+from .serializers import MapResultSerializer, ListResultSerializer, PortfolioResultSerializer
 from .models import ProjectSearch
 
 
@@ -73,6 +73,10 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         "project__data__capability_subcategories",
         "project__data__innovation_categories",
     )
+    portfolio_values = list_values + (
+        "project__review_states__portfolio",
+        "project__review_states__portfolio__name",
+    )
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'project__modified', 'organisation__name',
                        'country__name', 'country_office__region')
@@ -82,7 +86,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='')\
-            .select_related('project', 'project__approval', 'organisation', 'country', 'donor', 'country_office')
+            .select_related('project', 'project__approval', 'organisation', 'country', 'country_office')
 
     def list(self, request, *args, **kwargs):
         """
@@ -108,6 +112,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
 
         ** UNICEF filters **
 
+        `co` UNICEF Office eg: co=1&co=2  
         `fo` Field Office in eg: fo=1&fo=2  
         `goal` Goal Area in eg: goal=1&goal=2  
         `result` Result Area in eg: result=1&result=2  
@@ -115,6 +120,8 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         `cc` Capability Categories overlap eg: cc=1&cc=2  
         `cs` Capability Sucategories overlap eg: cs=1&cs=2  
         `ic` Innovation Categories overlap eg: ic=1&ic=2  
+        `sp` Scale Phase  # TODO: scale phase  
+        `ps` Problem Statement  # TODO: problem statements  
 
         ** FOUND IN FEATURE **
 
@@ -143,6 +150,7 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         query_params = request.query_params
         list_values = list(self.list_values)
         map_values = list(self.map_values)
+        portfolio_values = list(self.portfolio_values)
 
         qs = self.get_queryset()
 
@@ -199,10 +207,14 @@ class SearchViewSet(TokenAuthMixin, mixins.ListModelMixin, GenericViewSet):
         qs = self.filter(queryset=qs, query_params=query_params)
         qs = self.filter_queryset(qs)
 
-        results_type = 'list' if query_params.get('type') == 'list' else 'map'
+        results_type = query_params.get('type', 'map')
+
         if results_type == 'list':
             page = self.paginate_queryset(qs.values(*list_values))
             data = ListResultSerializer(page, many=True, context={"donor": donor, "country": country}).data
+        elif results_type == 'portfolio':
+            page = self.paginate_queryset(qs.values(*portfolio_values))
+            data = PortfolioResultSerializer(page, many=True, context={"donor": donor, "country": country}).data
         else:
             page = self.paginate_queryset(qs.values(*map_values))
             data = MapResultSerializer(page, many=True).data
