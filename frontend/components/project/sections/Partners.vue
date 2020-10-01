@@ -45,7 +45,7 @@
           :span="24"
         >
           <custom-required-form-item
-            :error="errors.first('partner_name')"
+            :error="errors.first('partner_name' + index)"
             :draft-rule="draftRules.partner_name"
             :publish-rule="publishRules.partner_name"
           >
@@ -59,13 +59,13 @@
               v-validate="rules.partner_name"
               :value="partner.partner_name"
               :rules="rules.partner_name"
-              data-vv-name="partner_name"
+              :data-vv-name="'partner_name' + index"
               data-vv-as="Partner Name"
               @input="setPartnerItem(index, 'partner_name' ,$event)"
             />
           </custom-required-form-item>
           <custom-required-form-item
-            :error="errors.first('partner_email')"
+            :error="errors.first('partner_email' + index)"
             :draft-rule="draftRules.partner_email"
             :publish-rule="publishRules.partner_email"
           >
@@ -79,13 +79,13 @@
               v-validate="rules.partner_email"
               :value="partner.partner_email"
               :rules="rules.partner_email"
-              data-vv-name="partner_email"
+              :data-vv-name="'partner_email' + index"
               data-vv-as="Partner Email"
               @input="setPartnerItem(index, 'partner_email' ,$event)"
             />
           </custom-required-form-item>
           <custom-required-form-item
-            :error="errors.first('partner_website')"
+            :error="errors.first('partner_website'+index)"
             :draft-rule="draftRules.partner_website"
             :publish-rule="publishRules.partner_website"
           >
@@ -99,7 +99,7 @@
               v-validate="rules.partner_website"
               :value="partner.partner_website"
               :rules="rules.partner_website"
-              data-vv-name="partner_website"
+              :data-vv-name="'partner_website' + index"
               data-vv-as="Partner Website"
               @input="setPartnerItem(index, 'partner_website' ,$event)"
             />
