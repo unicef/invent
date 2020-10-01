@@ -69,3 +69,18 @@ class PortfolioSearchTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 3)
 
+    def test_filter_and_search_within_a_portfolio(self):
+        new_project_id, project_data, org, country, *_ = self.create_new_project(
+            self.user_2_client, name="New Project 1")
+        
+        # add new project to a Portfolio 1
+        url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio_id})
+        request_data = {"project": [new_project_id]}
+        response = self.user_2_client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+        
+        url = reverse("search-project-list")
+        data = {"q": "New", "in": "name", "country": country.id, "portfolio": self.portfolio_id, "type": "portfolio"}
+        response = self.user_2_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
