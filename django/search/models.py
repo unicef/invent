@@ -111,9 +111,11 @@ class ProjectSearch(ExtendedModel):
                     elif field == "approved":
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
+                    elif field == "portfolio":
+                        lookup_param = "exact"
+                        lookup = query_params.get(field)
 
                     queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
-
         return queryset
 
     @classmethod
