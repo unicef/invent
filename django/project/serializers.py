@@ -14,7 +14,7 @@ from country.serializers import UserProfileSerializer
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, ScalePhase, \
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
     ProjectPortfolioState, ReviewScore
 
 
@@ -447,13 +447,6 @@ class ProblemStatementUpdateSerializer(ProblemStatementSerializer):
         }
 
 
-class ScalePhaseBriefSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ScalePhase
-        fields = ('pk', 'scale')  # This is to show in ProjectPortfolioState
-
-
 class ReviewScoreBriefSerializer(serializers.ModelSerializer):
     reviewer = UserProfileSerializer()
 
@@ -463,7 +456,6 @@ class ReviewScoreBriefSerializer(serializers.ModelSerializer):
 
 
 class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
-    scale_phase = ScalePhaseBriefSerializer()
     review_scores = ReviewScoreBriefSerializer(many=True, required=False)
 
     class Meta:
@@ -480,7 +472,7 @@ class ReviewScoreSerializer(serializers.ModelSerializer):
 
 
 class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
-    scale_phase = serializers.IntegerField(required=True, source='get_scale')
+    scale_phase = serializers.IntegerField(required=True)
     impact = serializers.IntegerField(required=True)
     project = serializers.IntegerField(read_only=True, source='project.id')
     portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
@@ -495,9 +487,7 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
         """
         Override serializer to set 'reviewed' to True (also set scale phase based on input int)
         """
-        scale_phase_value = validated_data.pop('get_scale')
         instance.reviewed = True
-        instance.scale_phase = ScalePhase.objects.get(scale=scale_phase_value)
         instance = super().update(instance, validated_data)
         return instance
 

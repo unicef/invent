@@ -44,3 +44,8 @@ class ListResultSerializer(serializers.Serializer):
         if private_fields and self.context['donor']:
             return {donor_id: private_fields[donor_id]
                     for donor_id in private_fields if donor_id == str(self.context['donor'].id)}
+
+
+class PortfolioResultSerializer(ListResultSerializer):
+    portfolio = serializers.ReadOnlyField(source="project__review_states__portfolio")
+    portfolio_name = serializers.ReadOnlyField(source="project__review_states__portfolio__name")

@@ -27,7 +27,7 @@ class ProjectSearch(ExtendedModel):
 
     FILTER_BY = {
         # query_param: QuerySet param
-        "co": "country_office_id",  # eg: country_office=1
+        "co": "country_office_id",  # eg: co=1&co=2
         "country": "country_id",  # eg: country=1&country=2
         "sw": "software",  # eg: sw=1&sw=2
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
@@ -43,6 +43,9 @@ class ProjectSearch(ExtendedModel):
         "cc": "capability_categories",  # eg: cc=1&cc=2
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
         "ic": "innovation_categories",  # eg: ic=1&ic=2
+        "portfolio": "project__review_states__portfolio",
+        "sp": "scale_phase",  # TODO: scale phase
+        "ps": "problem_statement",  # TODO: problem statements 
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -111,9 +114,11 @@ class ProjectSearch(ExtendedModel):
                     elif field == "approved":
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
+                    elif field == "portfolio":
+                        lookup_param = "exact"
+                        lookup = query_params.get(field)
 
                     queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
-
         return queryset
 
     @classmethod
@@ -137,7 +142,7 @@ class ProjectSearch(ExtendedModel):
         """
         Update search object from project object
         """
-        if project.public_id:
+        if project.public_id and project.is_active:
             self.country_office_id = int(project.data.get("country_office")) \
                 if project.data.get("country_office") else None
             self.country_id = int(project.data["country"])
@@ -171,6 +176,12 @@ class ProjectSearch(ExtendedModel):
 def create_search_objects(sender, instance, created, **kwargs):
     if created:
         ProjectSearch.objects.get_or_create(project_id=instance.id)
+
+
+@receiver(post_save, sender=Project)
+def remove_search_objects(sender, instance, **kwargs):  # pragma: no cover
+    if not instance.is_active and getattr(instance, 'search', None):
+        instance.search.reset()
 
 
 @receiver(post_save, sender=Project)
