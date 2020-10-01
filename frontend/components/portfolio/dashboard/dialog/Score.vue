@@ -18,12 +18,11 @@
         <i class="el-dialog__close el-icon el-icon-close"></i>
       </button>
     </template>
-    <!-- {{ review }} -->
     <el-table :data="scoreTable" style="width: 100%" border>
       <el-table-column
         fixed
         prop="question"
-        label="Questions"
+        :label="$gettext('Questions') | translate"
         width="250"
         label-class-name="score-general-header"
         class-name="question"
@@ -44,30 +43,49 @@
             </el-popover>
             <p>{{ scope.row.question.name }}</p>
             <fa class="question-icon" :icon="['fas', 'question-circle']" v-popover:question />
-            </el-tooltip>
           </div>
         </template>
       </el-table-column>
+      <!-- reviewers -->
       <el-table-column
-        prop="user1"
-        label="user1"
+        v-for="reviewer in reviewersName"
+        :key="reviewer"
+        :label="reviewer"
+        :prop="reviewer"
         width="240"
         label-class-name="score-general-header"
+        class-name=""
       >
+        <template slot-scope="scope">
+          <div class="content center">
+            <template v-if="scope.row.type === 'psa'">
+              <ul v-if="Array.isArray(scope.row[reviewer][scope.row.type]) && scope.row[reviewer][scope.row.type].length"></ul>
+              <p v-else>N/A</p>
+            </template>
+            <p v-else-if="scope.row[reviewer][scope.row.type]">{{ scope.row[reviewer][scope.row.type] }}</p>
+            <p v-else>N/A</p>
+            <el-popover
+              v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+              placement="right"
+              :title="$gettext('Comment') | translate"
+              width="360"
+              trigger="hover"
+              popper-class="score-popover"
+            >
+              <template>
+                <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
+              </template>
+              <fa
+                slot="reference"
+                v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+                class="comment-icon"
+                :icon="['fas', 'comment-alt']"
+              />
+            </el-popover>
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column
-        prop="user2"
-        label="user2"
-        width="240"
-        label-class-name="score-general-header"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="user3"
-        label="user3"
-        width="240"
-        label-class-name="score-general-header"
-      >
+      <!-- reviewers -->
       </el-table-column>
       <el-table-column
         prop="average"
@@ -81,7 +99,7 @@
       </el-table-column>
       <el-table-column
         fixed="right"
-        label="Official Score"
+        :label="$gettext('Official Score') | translate"
         width="305"
         label-class-name="score-official"
         class-name="score-content question"
@@ -103,7 +121,7 @@
             </template>
             <template v-else>
               <el-popover
-                ref="question"
+                ref="guidance"
                 placement="left"
                 :title="$gettext('Scoring Guidance') | translate"
                 width="360"
@@ -115,10 +133,11 @@
                 </template>
               </el-popover>
               <el-select
+                v-if="scope.row.type === 'psa'"
                 v-model="score[scope.row.type]"
-                :class="`${scope.row.type === 'psa' && 'select-psa'}`"
-                :multiple="scope.row.type === 'psa'"
-                :filterable="scope.row.type === 'psa'"
+                class="select-psa"
+                multiple
+                filterable
                 clearable
                 :disabled="review.reviewed"
               >
@@ -127,17 +146,23 @@
                   v-for="i in problemStatements"
                   :key="i.id"
                   :label="i.name"
-                  :value="i.id">
-                </el-option>
-                <el-option
-                  v-else
-                  v-for="(item, i) in 5"
-                  :key="item"
-                  :label="i + 1"
-                  :value="i + 1"
+                  :value="i.id"
                 />
               </el-select>
-              <fa class="question-icon" :icon="['fas', 'question-circle']" v-popover:question />
+              <el-select
+                v-else
+                v-model="score[scope.row.type]"
+                clearable
+                :disabled="review.reviewed"
+              >
+                <el-option
+                  v-for="i in points"
+                  :key="i"
+                  :label="i"
+                  :value="i"
+                />
+              </el-select>
+              <fa class="question-icon" :icon="['fas', 'question-circle']" v-popover:guidance />
             </template>
           </div>
         </template>
@@ -162,6 +187,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
+      points: [1, 2, 3, 4, 5],
       score: {
         psa: [],
         rnci: null,
@@ -184,6 +210,7 @@ export default {
       review: (state) => state.portfolio.review,
       loadingScore: (state) => state.portfolio.loadingScore,
       problemStatements: (state) => state.portfolio.problemStatements,
+      questionType: (state) => state.portfolio.questionType,
     }),
     disabled() {
       if (this.review.reviewed) {
@@ -204,68 +231,29 @@ export default {
       );
     },
     scoreTable() {
-      return [
-        {
-          question: this.reviewQuestions.psa,
-          type: "psa",
-          user: "Tom",
-          average: this.review.averages && this.review.averages.psa,
-        },
-        {
-          question: this.reviewQuestions.rnci,
-          type: "rnci",
-          user: "Chris",
-          average: this.review.averages && this.review.averages.rnci,
-        },
-        {
-          question: this.reviewQuestions.ratp,
-          type: "ratp",
-          user: "Orsi",
-          average: this.review.averages && this.review.averages.ratp,
-        },
-        {
-          question: this.reviewQuestions.ra,
-          type: "ra",
-          user: "Daniel",
-          average: this.review.averages && this.review.averages.ra,
-        },
-        {
-          question: this.reviewQuestions.ee,
-          type: "ee",
-          user: "David",
-          average: this.review.averages && this.review.averages.ee,
-        },
-        {
-          question: this.reviewQuestions.nst,
-          type: "nst",
-          user: "Elsa",
-          average: this.review.averages && this.review.averages.nst,
-        },
-        {
-          question: this.reviewQuestions.nc,
-          type: "nc",
-          user: "Kyle",
-          average: this.review.averages && this.review.averages.nc,
-        },
-        {
-          question: this.reviewQuestions.ps,
-          type: "ps",
-          user: "Kyle",
-          average: this.review.averages && this.review.averages.ps,
-        },
-        {
-          question: this.reviewQuestions.impact,
-          type: "impact",
-          user: "Kyle",
-          average: this.review.averages && this.review.averages.impact,
-        },
-        {
-          question: this.reviewQuestions.scale_phase,
-          type: "scale_phase",
-          user: "Kyle",
-          average: this.review.averages && this.review.averages.scale_phase,
-        },
-      ];
+      return this.questionType.map((type) => {
+        let reviewers = [];
+        if (this.review.review_scores) {
+          this.review.review_scores.map((i) => {
+            reviewers[i.reviewer.name] = {
+              [type]: i[type],
+              [`${type}_comment`]: i[`${type}_comment`],
+            };
+          });
+        }
+        return {
+          question: this.reviewQuestions[type],
+          type,
+          ...reviewers,
+          average: this.review.averages && this.review.averages[type],
+        };
+      });
+    },
+    reviewersName() {
+      if (this.review.review_scores) {
+        return this.review.review_scores.map((i) => i.reviewer.name);
+      }
+      return [];
     },
   },
   methods: {
@@ -301,6 +289,31 @@ export default {
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
+.score-popover.el-popover {
+  padding: 0 !important;
+  margin-left: 14px !important;
+  &.left {
+    margin-left: 0px !important;
+    margin-right: 14px !important;
+  }
+  .el-popover__title {
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    line-height: 23px;
+    padding: 20px;
+    border-bottom: 1px solid #eae6e2;
+  }
+  p {
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 21px;
+    padding: 17px 20px 23px;
+  }
+  .popper__arrow {
+    display: inline;
+  }
+}
+
 .dialog-score {
   .el-dialog__body {
     padding: 40px 60px 60px 60px;
@@ -328,30 +341,6 @@ export default {
   }
   .cell.score-general-header {
     border-right: 1px solid transparent;
-  }
-  .score-popover.el-popover {
-    padding: 0 !important;
-    margin-left: 14px !important;
-    &.left {
-      margin-left: 0px !important;
-      margin-right: 14px !important;
-    }
-    .el-popover__title {
-      font-size: 18px;
-      letter-spacing: -0.5px;
-      line-height: 23px;
-      padding: 20px;
-      border-bottom: 1px solid #eae6e2;
-    }
-    p {
-      font-size: 14px;
-      letter-spacing: 0;
-      line-height: 21px;
-      padding: 17px 20px 23px;
-    }
-    .popper__arrow {
-      display: inline;
-    }
   }
   .el-table__row:nth-last-child(2),
   .el-table__row:nth-last-child(1) {
