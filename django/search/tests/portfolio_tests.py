@@ -85,3 +85,5 @@ class PortfolioSearchTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
 
+    def test_scale_phase_filter_on_portfolio(self):
+        pass
