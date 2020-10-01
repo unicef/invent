@@ -566,6 +566,9 @@ class ProjectPortfolioState(BaseScore):
     class Meta:
         unique_together = ('portfolio', 'project')
 
+    def __str__(self):  # pragma: no cover
+        return f"{self.portfolio}: {self.project}"
+
     def assign_questionnaire(self, user: UserProfile):
         return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
 
