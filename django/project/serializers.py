@@ -495,9 +495,7 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
         """
         Override serializer to set 'reviewed' to True (also set scale phase based on input int)
         """
-        scale_phase_value = validated_data.pop('get_scale')
         instance.reviewed = True
-        instance.scale_phase = ScalePhase.objects.get(scale=scale_phase_value)
         instance = super().update(instance, validated_data)
         return instance
 
