@@ -15,6 +15,26 @@ class TestProjectData:
             create_relations=True
         )
 
+    @staticmethod
+    def create_new_country_and_office(name: str = None, country_code: str = None, project_approval: bool = True):
+        country_rand = randint(2, 9)
+        if name is None:
+            name = f'country{country_rand}'
+        if country_code is None:
+            country_code = f'CTR{country_rand}'
+
+        country, _ = Country.objects.get_or_create(name=name, code=country_code,
+                                                   project_approval=project_approval,
+                                                   region=Country.REGIONS[0][0],
+                                                   unicef_region=Country.UNICEF_REGIONS[0][0])
+
+        country_office, _ = CountryOffice.objects.get_or_create(
+            name=f'Test Country Office ({name})',
+            region=Country.UNICEF_REGIONS[0][0],
+            country=country
+        )
+        return country, country_office
+
     def create_test_data(self, name: str = None, create_relations: bool = False, new_country_only: bool = False):
         if name is None:
             name = "Test Project1"
@@ -22,32 +42,14 @@ class TestProjectData:
         if create_relations:
             org = Organisation.objects.create(name="org1")
 
-            country = Country.objects.create(name="country1", code='CTR1',
-                                             project_approval=True,
-                                             region=Country.REGIONS[0][0],
-                                             unicef_region=Country.UNICEF_REGIONS[0][0])
-
-            country_office = CountryOffice.objects.create(
-                name='Test Country Office',
-                region=Country.UNICEF_REGIONS[0][0],
-                country=country
-            )
+            country, country_office = self.create_new_country_and_office(
+                name="country1", country_code='CTR1', project_approval=True)
 
             d1 = Donor.objects.create(name="Donor1", code="donor1")
             d2 = Donor.objects.create(name="Donor2", code="donor2")
         else:
             if new_country_only:
-                country_rand = randint(2, 9)
-                country, _ = Country.objects.get_or_create(name=f'country{country_rand}', code=f'CTR{country_rand}',
-                                                           project_approval=False,
-                                                           region=Country.REGIONS[0][0],
-                                                           unicef_region=Country.UNICEF_REGIONS[0][0])
-
-                country_office = CountryOffice.objects.create(
-                    name='Test Country Office',
-                    region=Country.UNICEF_REGIONS[0][0],
-                    country=country
-                )
+                country, country_office = self.create_new_country_and_office(project_approval=False)
             else:
                 country = self.country
                 country_office = self.country_office
@@ -120,6 +122,32 @@ class TestProjectData:
         assert response.status_code == 200
 
         return project_id, project_data, org, country, country_office, d1, d2
+
+    @staticmethod
+    def create_portfolio(name, description, managers, user_client, problem_statements=None):
+        if problem_statements is None:
+            problem_statements = [
+                {
+                    "name": "PS 1",
+                    "description": "PS 1 description"
+                },
+                {
+                    "name": "PS 2",
+                    "description": "PS 2 description"
+                }
+            ]
+        portfolio_data = {
+            "date": datetime.utcnow(),
+            "name": name,
+            "description": description,
+            "icon": "A",
+            "managers": managers,
+            "problem_statements": problem_statements
+        }
+
+        # Create portfolio
+        url = reverse("portfolio-create")
+        return user_client.post(url, portfolio_data, format="json")
 
 
 class MockRequest:

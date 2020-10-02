@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
 
@@ -35,30 +33,6 @@ class PortfolioSetup(TestProjectData, APITestCase):
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
         user_profile_id = response.json().get('user_profile_id')
         return user_profile_id, test_user_client, test_user_key
-
-    @staticmethod
-    def create_portfolio(name, description, managers, user_client):
-        portfolio_data = {
-            "date": datetime.utcnow(),
-            "name": name,
-            "description": description,
-            "icon": "A",
-            "managers": managers,
-            "problem_statements": [
-                {
-                    "name": "PS 1",
-                    "description": "PS 1 description"
-                },
-                {
-                    "name": "PS 2",
-                    "description": "PS 2 description"
-                }
-            ]
-        }
-
-        # Create portfolio
-        url = reverse("portfolio-create")
-        return user_client.post(url, portfolio_data, format="json")
 
     def setUp(self):
         super().setUp()
