@@ -2,9 +2,10 @@
   <div>
     <p @click="handleScore()" class="assing mb-10">
       <fa icon="list" />
-      <translate>Change / view score</translate>
+      <translate v-if="tab === 2">Change / view score</translate>
+      <translate v-if="tab === 3">View score</translate>
     </p>
-    <p v-if="scores.reviewed" class="complete uppercase">
+    <p v-if="scores.reviewed && tab === 2" class="complete uppercase">
       <translate>Completed</translate>
     </p>
   </div>
@@ -21,6 +22,10 @@ export default {
     },
     name: {
       type: String,
+      required: true,
+    },
+    tab: {
+      type: Number,
       required: true,
     },
   },

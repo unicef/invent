@@ -61,7 +61,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('30') && tab === 2"
+        v-if="(selectedColumns.includes('30') && tab === 2) || (selectedColumns.includes('30') && tab === 3)"
         :resizable="false"
         :label="$gettext('Scoring') | translate"
         prop="scores"
@@ -72,6 +72,7 @@
             v-if="scope.row.review_states"
             :scores="scope.row.review_states"
             :name="scope.row.name"
+            :tab="tab"
           />
         </template>
       </el-table-column>
