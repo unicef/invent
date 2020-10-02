@@ -54,35 +54,52 @@
         :prop="reviewer"
         width="240"
         label-class-name="score-general-header"
-        class-name=""
+        class-name="user-row"
       >
         <template slot-scope="scope">
-          <div class="content center">
-            <template v-if="scope.row.type === 'psa'">
-              <ul v-if="Array.isArray(scope.row[reviewer][scope.row.type]) && scope.row[reviewer][scope.row.type].length"></ul>
-              <p v-else>N/A</p>
+          <template v-if="scope.row.type === 'psa'">
+            <psa-list
+              v-if="Array.isArray(scope.row[reviewer][scope.row.type]) && scope.row[reviewer][scope.row.type].length"
+              :items="scope.row[reviewer][scope.row.type]"
+            />
+            <p v-else class="na psa">N/A</p>
+          </template>
+          <p v-else-if="scope.row[reviewer][scope.row.type]" class="user-score">{{ scope.row[reviewer][scope.row.type] }}</p>
+          <p v-else class="na">N/A</p>
+          <el-popover
+            v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+            placement="right"
+            :title="$gettext('Comment') | translate"
+            width="360"
+            trigger="hover"
+            popper-class="score-popover"
+          >
+            <template>
+              <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
             </template>
-            <p v-else-if="scope.row[reviewer][scope.row.type]">{{ scope.row[reviewer][scope.row.type] }}</p>
-            <p v-else>N/A</p>
-            <el-popover
+            <fa
+              slot="reference"
               v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
-              placement="right"
-              :title="$gettext('Comment') | translate"
-              width="360"
-              trigger="hover"
-              popper-class="score-popover"
-            >
-              <template>
-                <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
-              </template>
-              <fa
-                slot="reference"
-                v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
-                class="comment-icon"
-                :icon="['fas', 'comment-alt']"
-              />
-            </el-popover>
-          </div>
+              class="comment-icon"
+              :icon="['fas', 'comment-alt']"
+            />
+          </el-popover>
+        </template>
+      </el-table-column>
+      <!-- fake columns (if needed)  -->
+      <el-table-column
+        v-for="example in examples"
+        :key="example"
+        :label="$gettext(example) | translate"
+        width="240"
+        label-class-name="score-general-header"
+        class-name="user-row"
+      >
+        <template slot-scope="scope">
+          <template v-if="scope.row.type === 'psa'">
+            <p class="na psa">N/A</p>
+          </template>
+          <p v-else class="na">N/A</p>
         </template>
       </el-table-column>
       <!-- reviewers -->
@@ -102,18 +119,15 @@
         :label="$gettext('Official Score') | translate"
         width="305"
         label-class-name="score-official"
-        class-name="score-content question"
+        class-name="score-content score"
       >
         <template slot-scope="scope">
           <div :class="`content ${scope.row.type === 'psa' ? '' : 'center'}`">
             <template v-if="review.reviewed">
               <template v-if="scope.row.type === 'psa'">
-                <ul class="psa-list">
-                  <li v-for="statement in statements(score[scope.row.type])">
-                    <fa class="triangle-icon" :icon="['fas', 'caret-right']" />
-                    {{ statement.name }}
-                  </li>
-                </ul>
+                <psa-list
+                  :items="score[scope.row.type]"
+                />
               </template>
               <template v-else>
                 <p class="statement">{{ score[scope.row.type] === null ? 'N/A' : score[scope.row.type] }}</p>
@@ -183,8 +197,12 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import PsaList from "@/components/portfolio/dashboard/table/PsaList";
 
 export default {
+  components: {
+    PsaList,
+  },
   data() {
     return {
       points: [1, 2, 3, 4, 5],
@@ -232,6 +250,7 @@ export default {
     },
     scoreTable() {
       return this.questionType.map((type) => {
+        // will generate custom reviwers rows
         let reviewers = [];
         if (this.review.review_scores) {
           this.review.review_scores.map((i) => {
@@ -241,6 +260,7 @@ export default {
             };
           });
         }
+        // will return the custom score table
         return {
           question: this.reviewQuestions[type],
           type,
@@ -254,6 +274,19 @@ export default {
         return this.review.review_scores.map((i) => i.reviewer.name);
       }
       return [];
+    },
+    examples() {
+      switch (this.reviewersName.length) {
+        case 0:
+          return ["example user 1", "example user 2"];
+          break;
+        case 1:
+          return ["example user 1"];
+          break;
+        default:
+          return [];
+          break;
+      }
     },
   },
   methods: {
@@ -277,9 +310,6 @@ export default {
         impact: this.review.impact,
         scale_phase: this.review.scale_phase,
       };
-    },
-    statements(arr) {
-      return this.problemStatements.filter((i) => arr.includes(i.id));
     },
   },
 };
@@ -349,7 +379,8 @@ export default {
     }
   }
   .el-table td {
-    &.question {
+    &.question,
+    &.score {
       padding: 16.5px 12px !important;
       .content {
         display: flex;
@@ -378,15 +409,6 @@ export default {
         input {
           width: 90px;
         }
-        .psa-list {
-          margin: 0;
-          padding: 0;
-          list-style: none;
-          li {
-            font-size: 12px;
-            margin-bottom: 4px;
-          }
-        }
         .select-psa {
           input {
             width: 250px;
@@ -400,9 +422,37 @@ export default {
             color: @colorTextPrimary;
           }
         }
-        .triangle-icon {
-          color: #a8a8a9;
-          margin-right: 5px;
+      }
+    }
+    &.user-row {
+      .user-score {
+        // display: inline-block;
+        font-size: 14px;
+        letter-spacing: 0;
+        line-height: 21px;
+        text-align: center;
+        margin: 17px 0;
+      }
+      .na {
+        text-align: center;
+        color: #a8a8a9;
+        font-size: 14px;
+        letter-spacing: 0;
+        line-height: 21px;
+        margin: 17px 0;
+        &.psa {
+          margin-top: 0;
+        }
+      }
+      .comment-icon {
+        position: absolute;
+        top: 29px;
+        right: 35%;
+        cursor: pointer;
+        color: @colorBrandPrimary;
+        font-size: 18px;
+        &:hover {
+          color: @colorTextPrimary;
         }
       }
     }
