@@ -327,7 +327,10 @@
             />
           </custom-required-form-item>
         </el-col>
-        <el-col :span="8" class="btContainer">
+        <el-col
+          :span="8"
+          class="btContainer"
+        >
           <add-rm-buttons
             :show-add="isLastAndExist(wbs, index)"
             :show-rm="wbs.length > 1"
@@ -442,7 +445,7 @@
         :publish-rule="publishRules.partnership_needs"
       >
         <template slot="label">
-          <translate key="funding_needs">
+          <translate key="partnership_needs">
             Partnership Needs
           </translate>
         </template>
@@ -456,6 +459,37 @@
           type="textarea"
         />
       </custom-required-form-item>
+
+      <custom-required-form-item
+        v-for="(linkType, index) in getLinkTypes"
+        :key="linkType.name"
+        :error="errors.first('link_website' + index)"
+        :draft-rule="draftRules.link_website"
+        :publish-rule="publishRules.link_website"
+      >
+        <template slot="label">
+          {{ linkType.name }} URL
+        </template>
+
+        <character-count-input
+          v-validate="rules.link_website"
+          :value="getLinkWebsite(index)"
+          :rules="rules.link_website"
+          :data-vv-name="'link_website' + index"
+          data-vv-as="Link Website"
+          @input="setLinkWebsite($event, index)"
+        />
+        <span
+          v-if="index === 0"
+          class="Hint"
+        >
+          <fa icon="info-circle" />
+          <p>
+            <translate>URL format: https://invent.unicef.org</translate>
+          </p>
+        </span>
+      </custom-required-form-item>
+
     </collapsible-card>
   </div>
 </template>
@@ -476,9 +510,8 @@ import MultiSelector from '@/components/project/MultiSelector';
 import AddRmButtons from '@/components/project/AddRmButtons';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapGetters } from 'vuex';
-// import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
-// import DonorSelector from '../DonorSelector';
-// import FormHint from '../FormHint';
+import findIndex from 'lodash/findIndex';
+import find from 'lodash/find';
 
 export default {
   components: {
@@ -503,7 +536,8 @@ export default {
       selectedGoalArea: 'project/getGoalAreaDetails',
       getCapabilityLevelsItems: 'projects/getCapabilityLevels',
       getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
-      getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories'
+      getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories',
+      getLinkTypes: 'system/getPartnerTypes'
     }),
     ...mapGettersActions({
       goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],
@@ -519,6 +553,7 @@ export default {
       target_group_reached: ['project', 'getTargetGroupReached', 'setTargetGroupReached', 0],
       currency: ['project', 'getCurrency', 'setCurrency', 0],
       total_budget: ['project', 'getTotalBudget', 'setTotalBudget', 0],
+      links: ['project', 'getLinks', 'setLinks', 0],
       wbs: ['project', 'getWbs', 'setWbs', 0],
       capability_levels: [
         'project',
@@ -559,9 +594,28 @@ export default {
     }
   },
   methods: {
+    setLinkWebsite (url, index) {
+      const links = [...this.links];
+      const linkIndex = findIndex(links, (l) => l.link_type === index);
+      const data = {
+        link_url: url,
+        link_type: index
+      };
+      if (linkIndex !== -1) {
+        links[linkIndex] = data;
+      } else {
+        links.push(data);
+      }
+      this.links = links;
+    },
+    getLinkWebsite (index) {
+      const link = find(this.links, (l) => l.link_type === index);
+      return link ? link.link_url : '';
+    },
     async validate () {
       this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([this.$validator.validate()]);
+      const validations = await Promise.all([this.$validator.validate(
+      )]);
       console.log('Implementation overview validations', validations);
       return validations.reduce((a, c) => a && c, true);
     },
