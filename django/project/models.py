@@ -590,5 +590,8 @@ class ReviewScore(BaseScore):
 
     complete = models.BooleanField(default=False)
 
+    def __str__(self):  # pragma: no cover
+        return f'{self.reviewer} - {self.portfolio_review.project} - {self.portfolio_review.portfolio}'
+
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')
