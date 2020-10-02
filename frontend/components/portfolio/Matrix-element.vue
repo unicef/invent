@@ -35,6 +35,10 @@ export default {
     color: {
       type: String,
       default: ''
+    },
+    reverse: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -42,7 +46,7 @@ export default {
       return Math.floor(size / 5 * (this.x - 1));
     },
     top () {
-      return Math.floor(size / 5 * (5 - this.y));
+      return Math.floor(size / 5 * (this.reverse ? this.y - 1 : 5 - this.y));
     },
     size () {
       // return Math.floor(this.ratio * 100 / 25 + 1) * 20; // 20 || 40 || 60 || 80

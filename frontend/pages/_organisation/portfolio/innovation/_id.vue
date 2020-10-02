@@ -44,8 +44,9 @@
             <Matrix
               bg-color="#FCEFE8"
               color="#F26A21"
+              top
               :elements="elements"
-              :left="['low', 'risk', 'high']"
+              :left="['high', 'risk', 'low']"
               :bottom="['low', 'impact (total global need)', 'high']"
             />
           </el-tab-pane>
@@ -144,7 +145,7 @@ export default {
       ],
       elements: [
         {
-          x: 4,
+          x: 5,
           y: 5,
           ratio: 0.5,
           projects: [
