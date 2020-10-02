@@ -63,6 +63,7 @@ export const getters = {
   getPhase: state => state.phase,
   getCpd: state => state.cpd,
   getInnovationCategories: state => state.innovation_categories,
+  getLinks: state => state.links,
   getPartners: state => state.partners.length === 0 ? [null] : state.partners,
   getWbs: state => state.wbs.length === 0 ? [null] : state.wbs,
   getTargetGroupReached: state => state.target_group_reached,
@@ -252,6 +253,9 @@ export const actions = {
   },
   setInnovationCategories ({ commit }, value) {
     commit('SET_DATA', { key: 'innovation_categories', value });
+  },
+  setLinks ({ commit }, value) {
+    commit('SET_DATA', { key: 'links', value });
   },
   setPartners ({ commit }, value) {
     commit('SET_DATA', { key: 'partners', value });
@@ -524,6 +528,7 @@ export const mutations = {
     state.total_budget = get(project, 'total_budget', 0);
     state.wbs = get(project, 'wbs', []);
     state.innovation_categories = get(project, 'innovation_categories', []);
+    state.links = get(project, 'links', []);
     state.cpd = get(project, 'cpd', []);
     state.partners = get(project, 'partners', []);
     state.phase = get(project, 'phase', null);

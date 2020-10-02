@@ -8,7 +8,7 @@ import project.cache
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0074_hardwareplatform_nontechplatform_phase_platformfunction_regionalpriority_unicefsector'),
+        ('project', '0073_hardwareplatform_nontechplatform_phase_platformfunction_regionalpriority_unicefsector'),
     ]
 
     operations = [

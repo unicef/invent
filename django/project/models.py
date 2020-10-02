@@ -543,7 +543,7 @@ class BaseScore(ExtendedModel):
         abstract = True
 
 
-class ScalePhase(ExtendedModel):
+class ProjectPortfolioState(BaseScore):
     SCALE_CHOICES = (
         (1, _('Ideation')),
         (2, _('Research & Development')),
@@ -552,12 +552,9 @@ class ScalePhase(ExtendedModel):
         (5, _('Scaling')),
         (6, _('Sustainable Scale'))
     )
-    scale = models.IntegerField(choices=SCALE_CHOICES, primary_key=True)
 
-
-class ProjectPortfolioState(BaseScore):
-    impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True)
-    scale_phase = models.ForeignKey(ScalePhase, null=True, on_delete=models.CASCADE, blank=True)
+    impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True, blank=True)
+    scale_phase = models.IntegerField(choices=SCALE_CHOICES, null=True, blank=True)
     portfolio = models.ForeignKey(Portfolio, related_name='review_states', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='review_states', on_delete=models.CASCADE)
     reviewed = models.BooleanField(default=False)
@@ -566,11 +563,11 @@ class ProjectPortfolioState(BaseScore):
     class Meta:
         unique_together = ('portfolio', 'project')
 
+    def __str__(self):  # pragma: no cover
+        return f"{self.portfolio}: {self.project}"
+
     def assign_questionnaire(self, user: UserProfile):
         return ReviewScore.objects.get_or_create(reviewer=user, portfolio_review=self)
-
-    def get_scale(self):
-        return self.scale_phase.scale if self.scale_phase else None
 
     def get_impact_hash(self):
         return f'{self.impact}-{self.ra}' if self.reviewed else None

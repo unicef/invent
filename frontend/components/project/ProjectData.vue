@@ -226,6 +226,12 @@
             :content="project.partnership_needs"
             :header="$gettext('Partnership Needs') | translate"
           />
+          <simple-field
+            v-for="{link_url, link_type} in orderedLinkList"
+            :key="'link_type' + link_type"
+            :content="link_url"
+            :header="getLinkHeader(link_type)"
+          />
         </collapsible-card>
 
         <collapsible-card
@@ -373,6 +379,8 @@ import DonorsList from '../common/list/DonorsList';
 import CustomReadonlyField from './CustomReadonlyField';
 import handleProjectActions from '@/components/mixins/handleProjectActions';
 import ListElement from '@/components/project/ListElement';
+import find from 'lodash/find';
+import orderBy from 'lodash/orderBy';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
 
@@ -410,6 +418,7 @@ export default {
       getCapabilityCategories: 'projects/getCapabilityCategories',
       getCapabilitySubcategories: 'projects/getCapabilitySubcategories',
       unicef_regions: 'system/getUnicefRegions',
+      linkTypes: 'system/getLinkTypes',
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices'
     }),
@@ -455,6 +464,9 @@ export default {
     goalArea () {
       const result = this.goalAreas.find(r => r.id === this.project.goal_area);
       return result || {};
+    },
+    orderedLinkList () {
+      return orderBy(this.project.links, ['link_type'], ['asc']);
     }
   },
   mounted () {
@@ -464,6 +476,10 @@ export default {
     ...mapActions({
       loadOffice: 'offices/loadOffice'
     }),
+    getLinkHeader (link_type) {
+      const type = find(this.linkTypes, (t) => t.id === link_type);
+      return type ? `${type.name} URL` : link_type;
+    },
     customFieldsName (name) {
       return this.$gettext('{name} custom fields', { name });
     }
