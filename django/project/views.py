@@ -4,7 +4,7 @@ from collections import OrderedDict
 from django.db import transaction
 from django.db.models import QuerySet
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
@@ -598,6 +598,8 @@ class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSe
 
 
 class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericViewSet):
+    serializer_class = PortfolioDetailsSerializer
+
     def _check_input_and_permissions(self, request, *args, **kwargs):
         # check if portfolio exists
         portfolio = get_object_or_400(Portfolio, "No such portfolio", id=kwargs.get("pk"))
@@ -697,7 +699,10 @@ class ProjectPortfolioListViewSet(ListModelMixin, GenericViewSet):
 
 
 class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericViewSet):
+    serializer_class = ReviewScoreBriefSerializer
+
     def get_project_and_portfolio(self):
+        # TODO: Add Message field to this API call
         portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
 
         pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
@@ -733,8 +738,11 @@ class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, Retr
                                           GenericViewSet):
     serializer_class = ProjectPortfolioStateManagerSerializer
 
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            return ProjectPortfolioState.objects.all()
-        else:
-            return ProjectPortfolioState.objects.filter(reviewed=False)
+    def get_object(self):
+        pps = get_object_or_400(ProjectPortfolioState, pk=self.kwargs.get('pk'))
+        self.check_object_permissions(self.request, pps)
+
+        if self.request.method == 'POST' and pps.approved:
+            raise PermissionDenied("Approved project reviews may not be edited")
+
+        return pps
