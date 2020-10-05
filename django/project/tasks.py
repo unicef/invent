@@ -50,6 +50,46 @@ def exclude_specific_project_stages(projects, filter_key_prefix='draft'):
     return projects
 
 
+@app.task(name="project_review_requested_notification")
+def project_review_requested_notification():
+    """
+    Sends notification if a project needs review by an user
+    """
+    from project.models import ReviewScore
+    from user.models import UserProfile
+
+    incomplete_reviews = ReviewScore.objects.filter(complete=False).filter(
+        modified__lt=timezone.now() - timezone.timedelta(days=settings.NOTIFICATION_PROJECT_REVIEW_DAYS))
+
+    if not incomplete_reviews:  # pragma: no cover
+        return
+
+    # limit number of mails sent
+    if not settings.EMAIL_SENDING_PRODUCTION:
+        reviews = ReviewScore.objects.filter(id=incomplete_reviews.first().id)
+
+    for review in reviews:
+        try:
+            profile = UserProfile.objects.get(id=review.reviewer)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            subject = _("One of your requested project reviews has not been completed yet")
+            details = _('The following project review has been incomplete for 30 days, '
+                        'Please consider reviewing it: ')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='reminder_project_review_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'reviewscore': review,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )
+
+
 @app.task(name="project_still_in_draft_notification")
 def project_still_in_draft_notification():
     """

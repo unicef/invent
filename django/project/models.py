@@ -595,3 +595,5 @@ class ReviewScore(BaseScore):
 
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')
+
+    # TODO: hook up notification to on_create
