@@ -33,9 +33,13 @@ class Command(BaseCommand, TestProjectData):
         pp.pprint('Creating users if needed')
         profiles_list = []
         for user_data in users:
-            user_db, created = User.objects.get_or_create(username=user_data['email'], password='1234YabbaDabba')
-            userprofile_db, created = UserProfile.objects.get_or_create(
-                user=user_db, name=user_data['name'], global_portfolio_owner=user_data['role'] == "GPO")
+            user_db, created = User.objects.get_or_create(username=user_data['email'])
+            user_db.password = '1234YabbaDabba'
+            user_db.save()
+            userprofile_db, created = UserProfile.objects.get_or_create(user=user_db)
+            userprofile_db.name = user_data['name']
+            userprofile_db.global_portfolio_owner = user_data['role'] == "GPO"
+            userprofile_db.save()
             pp.pprint(f"{user_data['email']}, created: {created}")
             profiles_list.append(userprofile_db)
         return profiles_list
@@ -81,6 +85,7 @@ class Command(BaseCommand, TestProjectData):
                 if 'psa' in review:
                     user_score.psa.set(portfolio.problem_statements.filter(name__in=review['psa']))
                 user_score.psa_comment = review['psa_comment'] if 'psa_comment' in review else None
+                user_score.save()
             if 'scores' in proj_data:
                 pps.approved = approved
                 pps.psa.set(portfolio.problem_statements.filter(name__in=proj_data['scores']['psa']))
@@ -93,6 +98,7 @@ class Command(BaseCommand, TestProjectData):
                 pps.ps = proj_data['scores']['ps']
                 pps.impact = proj_data['scores']['impact']
                 pps.scale_phase = proj_data['scores']['scale_phase']
+                pps.save()
 
     def create_portfolios(self, portfolios):
         for p_data in portfolios:
@@ -102,6 +108,7 @@ class Command(BaseCommand, TestProjectData):
             portfolio.icon = p_data['icon']
             managers = UserProfile.objects.filter(name__in=p_data['managers'])
             portfolio.managers.set(managers)
+            portfolio.save()
             for p_s in p_data['problem_statements']:
                 ps, created = ProblemStatement.objects.get_or_create(
                     name=p_s['name'], description=p_s['description'], portfolio=portfolio)
