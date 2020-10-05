@@ -5,6 +5,7 @@ import { apiReadParser, apiWriteParser, APIError } from "../utilities/api";
 export const state = () => ({
   loading: false,
   name: "",
+  projectName: "",
   description: "",
   status: "DR",
   icon: null,
@@ -57,6 +58,10 @@ export const state = () => ({
   portfolios: [],
   portfolio: {},
   projects: [],
+  // review and score
+  review: {},
+  problemStatements: [],
+  loadingScore: false,
   // dashboard of portfolio manager interctions
   tabs: [
     { id: 1, name: "Inventory", icon: "folder", total: 18 },
@@ -66,14 +71,28 @@ export const state = () => ({
   tab: 1,
   dialogReview: false,
   dialogScore: false,
+  dialogError: false,
   currentProjectId: null,
   currentPortfolioId: null,
   // tooltip display on actions
   back: 0,
   forward: 1,
   // error handling
-  errorDisplay: false,
-  errorMessage: ""
+  dialogError: false,
+  errorMessage: "",
+  // question type
+  questionType: [
+    "psa",
+    "rnci",
+    "ratp",
+    "ra",
+    "ee",
+    "nst",
+    "nc",
+    "ps",
+    "impact",
+    "scale_phase"
+  ]
 });
 
 export const getters = {
@@ -170,6 +189,10 @@ export const actions = {
   async getProjects({ state, commit, dispatch }, id) {
     try {
       const { data } = await this.$axios.get(`api/portfolio/${id}/`);
+      commit("SET_VALUE", {
+        key: "problemStatements",
+        val: data.problem_statements
+      });
       commit("SET_NAME", data.name);
       const results = await Promise.all([
         this.$axios.get(`api/portfolio/${id}/projects/inventory/`),
@@ -182,6 +205,7 @@ export const actions = {
         val: id
       });
       // set the projects of the portfolio by tab filter
+      // console.log(results[1].data.results);
       commit("SET_VALUE", {
         key: "projects",
         val: results[state.tab - 1].data.results.map(i => {
@@ -189,35 +213,7 @@ export const actions = {
           return {
             ...i,
             favorite: Math.random() >= 0.5,
-            reviewers: [
-              { name: "Kyle Jacons", completed: Math.random() >= 0.5 },
-              { name: "Rosa Bennet", completed: Math.random() >= 0.5 }
-            ],
-            scores: {
-              completed: Math.random() >= 0.5
-            },
-            modified: "2020-05-15T11:30:06.422583Z",
-            organisation: 56,
-            country: 163,
-            country_office: 1,
-            implementation_overview: "asdasdasdasdasdasdmasdmamsd",
-            contact_name: "Health",
-            contact_email: "lamas.alonso@gmail.com",
-            platforms: [52],
-            health_focus_areas: [31, 32],
-            hsc_challenges: [2],
-            region: 1,
-            donors: [20],
-            approved: null,
-            goal_area: 1,
-            result_area: null,
-            field_office: 1,
-            capability_levels: [],
-            capability_categories: [],
-            capability_subcategories: [],
-            innovation_categories: null,
-            country_answers: {},
-            donor_answers: { "20": {} }
+            ...i.project_data
           };
         })
       });
@@ -246,6 +242,7 @@ export const actions = {
         ]
       });
     } catch (e) {
+      // console.log(e.response.data);
       console.error("portfolio/loadPortfolioProjects failed");
     }
   },
@@ -263,10 +260,7 @@ export const actions = {
         key: "errorMessage",
         val: e.response.data.project
       });
-      commit("SET_VALUE", { key: "errorDisplay", val: true });
-      setTimeout(() => {
-        commit("SET_VALUE", { key: "errorDisplay", val: false });
-      }, 3200);
+      commit("SET_VALUE", { key: "dialogError", val: true });
     }
   },
   // review actions
@@ -277,9 +271,41 @@ export const actions = {
   },
   // score actions
   async addScore({ state, commit, dispatch }, { id, data }) {
-    console.log(`this add a score to project ${id}`);
-    commit("SET_VALUE", { key: "dialogReview", val: false });
-    // todo: add api integration
+    try {
+      console.log(`this add a score to project review ${id}`);
+      // fix from elemnt ui "" default setup
+      let officialScore = {};
+      for (const [key, value] of Object.entries(data)) {
+        officialScore[key] = value === "" ? null : value;
+      }
+      commit("SET_VALUE", { key: "loadingScore", val: true });
+      await this.$axios.post(`/api/project-review/manager/${id}/`, {
+        ...officialScore
+      });
+      // update portfolio
+      dispatch("getProjects", state.currentPortfolioId);
+      // interface setters
+      commit("SET_VALUE", { key: "loadingScore", val: false });
+      commit("SET_VALUE", { key: "dialogScore", val: false });
+    } catch (e) {
+      console.log(e.response.data);
+    }
+  },
+  async getManagerScore({ state, commit, dispatch }, { id, name }) {
+    console.log(`this will give us the score for review id ${id}`);
+    try {
+      const { data } = await this.$axios.get(
+        `api/project-review/manager/${id}/`
+      );
+      commit("SET_VALUE", { key: "projectName", val: name });
+      commit("SET_VALUE", {
+        key: "review",
+        val: { ...data }
+      });
+      commit("SET_VALUE", { key: "dialogScore", val: true });
+    } catch (e) {
+      console.log(e.response.data);
+    }
   },
   // state interaction handlers
   setCurrentProjectId({ commit }, val) {
@@ -290,6 +316,9 @@ export const actions = {
   },
   setScoreDialog({ commit }, val) {
     commit("SET_VALUE", { key: "dialogScore", val });
+  },
+  setErrorDialog({ commit }, val) {
+    commit("SET_VALUE", { key: "dialogError", val });
   },
   async resetPortfolio({ commit }) {
     commit("SET_NAME", "");

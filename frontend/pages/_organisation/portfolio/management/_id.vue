@@ -1,15 +1,6 @@
 <template>
   <section class="portfolio-area">
     <div class="content-area">
-      <transition name="el-zoom-in-top">
-        <el-alert
-          v-show="errorDisplay"
-          class="alert-portfolio"
-          :title="errorMessage"
-          type="error"
-          show-icon
-        />
-      </transition>
       <div class="tabs-wrapper">
         <div class="title">
           <nuxt-link
@@ -32,9 +23,7 @@
             @click="setTab(item.id)"
           >
             <fa :icon="item.icon" />
-            <translate>
-              {{ `${item.name}` }}
-            </translate>
+            {{ $gettext(item.name) | translate }}
             {{ ` (${item.total})` }}
           </p>
         </div>
@@ -48,10 +37,11 @@
         </el-row>
       </div>
     </div>
-
     <aside class="filter-area">
       <advanced-search />
     </aside>
+    <!-- dialogs -->
+    <error />
   </section>
 </template>
 
@@ -61,12 +51,15 @@ import MainTable from "@/components/portfolio/dashboard/MainTable";
 import TableTopActions from "@/components/portfolio/dashboard/TableTopActions";
 import { mapState, mapGetters, mapActions } from "vuex";
 import debounce from "lodash/debounce";
+// dialogs
+import Error from "@/components/portfolio/dashboard/dialog/Error";
 
 export default {
   components: {
     AdvancedSearch,
     MainTable,
-    TableTopActions
+    TableTopActions,
+    Error,
   },
   async fetch({ store, query, error, params }) {
     store.dispatch("landing/resetSearch");
@@ -74,7 +67,7 @@ export default {
     await Promise.all([
       store.dispatch("projects/loadUserProjects"),
       store.dispatch("projects/loadProjectStructure"),
-      store.dispatch("portfolio/getProjects", params.id)
+      store.dispatch("portfolio/getProjects", params.id),
     ]);
     await store.dispatch("dashboard/setSearchOptions", query);
     try {
@@ -83,31 +76,31 @@ export default {
       console.log(e);
       error({
         statusCode: 404,
-        message: "Unable to process the search with the current parameters"
+        message: "Unable to process the search with the current parameters",
       });
     }
     // todo: integration should handle the status to refill data of projects
   },
   computed: {
     ...mapState({
-      tabs: state => state.portfolio.tabs,
-      tab: state => state.portfolio.tab,
-      name: state => state.portfolio.name,
-      errorDisplay: state => state.portfolio.errorDisplay,
-      errorMessage: state => state.portfolio.errorMessage
+      tabs: (state) => state.portfolio.tabs,
+      tab: (state) => state.portfolio.tab,
+      name: (state) => state.portfolio.name,
+      errorDisplay: (state) => state.portfolio.errorDisplay,
+      errorMessage: (state) => state.portfolio.errorMessage,
     }),
     ...mapGetters({
       searchParameters: "dashboard/getSearchParameters",
-      dashboardSection: "dashboard/getDashboardSection"
-    })
+      dashboardSection: "dashboard/getDashboardSection",
+    }),
   },
   watch: {
     searchParameters: {
       immediate: false,
       handler(query) {
         this.searchParameterChanged(query);
-      }
-    }
+      },
+    },
   },
   mounted() {
     if (window) {
@@ -121,9 +114,9 @@ export default {
     ...mapActions({
       loadProjectList: "dashboard/loadProjectList",
       setSavedFilters: "dashboard/setSavedFilters",
-      setTab: "portfolio/setTab"
+      setTab: "portfolio/setTab",
     }),
-    searchParameterChanged: debounce(function(query) {
+    searchParameterChanged: debounce(function (query) {
       if (this.dashboardSection === "list") {
         this.$router.replace({ ...this.$route, query });
         this.load();
@@ -133,8 +126,8 @@ export default {
       this.$nuxt.$loading.start();
       await this.loadProjectList();
       this.$nuxt.$loading.finish();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -148,6 +141,7 @@ export default {
   );
 
   .content-area {
+    overflow-y: scroll;
     > div {
       background-color: #fbfaf8;
     }

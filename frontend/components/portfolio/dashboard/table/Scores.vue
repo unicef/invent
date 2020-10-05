@@ -1,10 +1,11 @@
 <template>
   <div>
-    <p @click="handleScore(id)" class="assing mb-10">
+    <p @click="handleScore()" class="assing mb-10">
       <fa icon="list" />
-      <translate>Change / view score</translate>
+      <translate v-if="tab === 2">Change / view score</translate>
+      <translate v-if="tab === 3">View score</translate>
     </p>
-    <p v-if="scores.completed" class="complete uppercase">
+    <p v-if="scores.reviewed && tab === 2" class="complete uppercase">
       <translate>Completed</translate>
     </p>
   </div>
@@ -15,26 +16,27 @@ import { mapActions } from "vuex";
 
 export default {
   props: {
-    id: {
-      type: Number,
-      required: true
-    },
     scores: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    tab: {
+      type: Number,
+      required: true,
+    },
   },
-
   methods: {
     ...mapActions({
-      setScoreDialog: "portfolio/setScoreDialog",
-      setCurrentProjectId: "portfolio/setCurrentProjectId"
+      getManagerScore: "portfolio/getManagerScore",
     }),
-    handleScore(id) {
-      this.setScoreDialog(true);
-      this.setCurrentProjectId(id);
-    }
-  }
+    handleScore() {
+      this.getManagerScore({ id: this.scores.id, name: this.name });
+    },
+  },
 };
 </script>
 

@@ -15,7 +15,8 @@ export const state = () => ({
   unicef_regions: [],
   partner_types: [],
   link_types: [],
-  donorsLibrary: {}
+  donorsLibrary: {},
+  review_questions: {}
 });
 
 export const getters = {
@@ -25,7 +26,8 @@ export const getters = {
   getUserProfilesNoFilter: state => {
     return state.profiles;
   },
-  getUserProfileDetails: (state, getters) => id => getters.getUserProfiles.find(u => u.id === id),
+  getUserProfileDetails: (state, getters) => id =>
+    getters.getUserProfiles.find(u => u.id === id),
   getSearchResult: state => {
     const search = state.projectSearch ? state.projectSearch : [];
     return search.map(s => {
@@ -37,7 +39,7 @@ export const getters = {
   getLanguages: state => {
     return state.languages
       .map(l => ({ ...l, flag: `/static/flags/${l.flag}` }))
-      .filter(l => l.code !== 'ar');
+      .filter(l => l.code !== "ar");
   },
 
   getLanguageDetails: (state, getters) => code => {
@@ -61,7 +63,10 @@ export const getters = {
   getThematicOverview: state => {
     const th = state.thematic_overview;
     return th.categories
-      ? th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }))
+      ? th.categories.map(cat => ({
+          ...cat,
+          domains: th.sub_categories.filter(sb => sb.category === cat.id)
+        }))
       : [];
   },
   getDomainsForThematic: (state, getters) => {
@@ -75,7 +80,8 @@ export const getters = {
         domains: domains
           .filter(d => d.axis === a.id)
           .map(df => ({ name: df.name }))
-      }))];
+      }))
+    ];
   },
   getSubLevelTypes: state => {
     return [...state.sub_level_types.map(t => ({ ...t }))];
@@ -88,89 +94,101 @@ export const getters = {
     return o ? { ...o } : undefined;
   },
   getDonors: state => state.donors,
-  getDonorDetails: state => id => ({ ...state.donors.find(d => d.id === id), ...state.donorsLibrary[id] }),
+  getDonorDetails: state => id => ({
+    ...state.donors.find(d => d.id === id),
+    ...state.donorsLibrary[id]
+  }),
   getRegions: state => state.regions,
-  getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) }),
+  getRegionDetails: state => id => ({
+    ...state.regions.find(r => r.id === id)
+  }),
   getUnicefRegions: state => state.unicef_regions,
   getLinkTypes: state => state.link_types,
   getPartnerTypes: state => state.partner_types
 };
 
 export const actions = {
-
-  async loadUserProfiles ({ commit, state }, force = false) {
+  async loadUserProfiles({ commit, state }, force = false) {
     try {
       if (!state.profiles || state.profiles.length === 0 || force) {
-        const { data } = await this.$axios.get('/api/userprofiles/');
-        commit('SET_USER_PROFILES', data);
+        const { data } = await this.$axios.get("/api/userprofiles/");
+        commit("SET_USER_PROFILES", data);
       }
     } catch (e) {
-      console.error('system/loadUserProfiles failed');
+      console.error("system/loadUserProfiles failed");
     }
   },
 
-  async loadStaticData ({ commit, dispatch }) {
+  async loadStaticData({ commit, dispatch }) {
     try {
-      const { data } = await this.$axios.get('/api/static-data/');
-      commit('SET_AXIS', data.axis);
-      commit('SET_DATA', { key: 'partner_types', value: data.partner_types });
-      commit('SET_DATA', { key: 'link_types', value: data.link_types });
-      commit('SET_DOMAINS', data.domains);
-      commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
-      commit('SET_LANGUAGES', data.languages);
-      commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
-      commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
-      commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
-      commit('SET_REGIONS', data.unicef_regions);
-      commit('SET_DATA', { key: 'unicef_regions', value: data.unicef_regions });
-      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, { root: true });
+      const { data } = await this.$axios.get("/api/static-data/");
+      commit("SET_AXIS", data.axis);
+      commit("SET_DATA", { key: "partner_types", value: data.partner_types });
+      commit("SET_DATA", { key: "link_types", value: data.link_types });
+      commit("SET_DATA", {
+        key: "review_questions",
+        value: data.review_questions
+      });
+      commit("SET_DOMAINS", data.domains);
+      commit("SET_LANDING_PAGE_DEFAULTS", data.landing_page_defaults);
+      commit("SET_LANGUAGES", data.languages);
+      commit("SET_THEMATIC_OVERVIEW", data.thematic_overview);
+      commit("SET_TOOLKIT_QUESTIONS", data.toolkit_questions);
+      commit("SET_SUB_LEVEL_TYPES", data.sub_level_types);
+      commit("SET_REGIONS", data.unicef_regions);
+      commit("SET_DATA", { key: "unicef_regions", value: data.unicef_regions });
+      dispatch("dashboard/setDashboardColumns", data.dashboard_columns, {
+        root: true
+      });
     } catch (e) {
-      console.error('system/loadStaticData failed');
+      console.error("system/loadStaticData failed");
     }
   },
 
-  async loadOrganisations ({ commit, rootGetters }) {
-    const profile = rootGetters['user/getProfile'];
+  async loadOrganisations({ commit, rootGetters }) {
+    const profile = rootGetters["user/getProfile"];
     if (profile) {
       try {
         const { data } = await this.$axios.get(`/api/organisations/`);
-        commit('SET_SYSTEM_ORGANISATIONS', data);
+        commit("SET_SYSTEM_ORGANISATIONS", data);
       } catch (e) {
-        console.error('system/loadOrganisations failed');
+        console.error("system/loadOrganisations failed");
       }
     }
   },
-  async loadDonors ({ commit }) {
+  async loadDonors({ commit }) {
     try {
       const { data } = await this.$axios.get(`/api/landing-donor/`);
-      commit('SET_DONORS', data);
+      commit("SET_DONORS", data);
     } catch (e) {
-      console.error('system/loadDonors failed');
+      console.error("system/loadDonors failed");
     }
   },
-  async loadDonorDetails ({ commit, state }, id) {
+  async loadDonorDetails({ commit, state }, id) {
     if (id && !state.donorsLibrary[id]) {
       try {
         const { data } = await this.$axios.get(`/api/landing-donor/${id}/`);
-        commit('SET_DONOR_DETAILS', { id, data });
+        commit("SET_DONOR_DETAILS", { id, data });
       } catch (e) {
-        console.error('system/loadDonorDetails failed');
+        console.error("system/loadDonorDetails failed");
       }
     }
   },
-  async addOrganisation ({ dispatch, getters }, name) {
+  async addOrganisation({ dispatch, getters }, name) {
     try {
-      await this.$axios.post('/api/organisations/', { name });
+      await this.$axios.post("/api/organisations/", { name });
     } catch (e) {
-      console.error('system/addOrganisation failed');
+      console.error("system/addOrganisation failed");
     } finally {
-      await dispatch('loadOrganisations');
+      await dispatch("loadOrganisations");
     }
     const org = getters.getOrganisations.find(o => o.name === name);
     if (org) {
       return Promise.resolve(org);
     } else {
-      const error = new Error('Organisation saving / fetching failed, could not find the organisation');
+      const error = new Error(
+        "Organisation saving / fetching failed, could not find the organisation"
+      );
       return Promise.reject(error);
     }
   }

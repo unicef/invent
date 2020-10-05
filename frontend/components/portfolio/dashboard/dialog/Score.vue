@@ -1,143 +1,317 @@
 <template>
   <el-dialog
-    :title="$gettext('Scoring: Nutrition Information System') | translate"
     :visible="dialogScore"
     modal
     width="1240px"
     height="1086px"
+    custom-class="dialog-score"
     @close="setScoreDialog(false)"
+    @open="handleScoreFeed()"
   >
-    <el-table :data="score" style="width: 100%" border>
+    <template slot="title">
+      <span class="el-dialog__title">
+        <translate :parameters="{ name }">
+          Scoring: {name}
+        </translate>
+      </span>
+      <button type="button" aria-label="Close" class="el-dialog__headerbtn">
+        <i class="el-dialog__close el-icon el-icon-close"></i>
+      </button>
+    </template>
+    <el-table :data="scoreTable" style="width: 100%" border>
       <el-table-column
         fixed
         prop="question"
-        label="Questions"
+        :label="$gettext('Questions') | translate"
         width="250"
         label-class-name="score-general-header"
+        class-name="question"
       >
+        <template slot-scope="scope">
+          <div class="content">
+            <el-popover
+              ref="question"
+              placement="right"
+              :title="$gettext('Question Description') | translate"
+              width="360"
+              trigger="hover"
+              popper-class="score-popover"
+            >
+              <template>
+                <p>{{ scope.row.question.text }}</p>
+              </template>
+            </el-popover>
+            <p>{{ scope.row.question.name }}</p>
+            <fa class="question-icon" :icon="['fas', 'question-circle']" v-popover:question />
+          </div>
+        </template>
       </el-table-column>
+      <!-- reviewers -->
       <el-table-column
-        prop="user"
-        label="User"
-        width="250"
+        v-for="reviewer in reviewersName"
+        :key="reviewer"
+        :label="reviewer"
+        :prop="reviewer"
+        width="240"
         label-class-name="score-general-header"
+        class-name="user-row"
       >
+        <template slot-scope="scope">
+          <template v-if="scope.row.type === 'psa'">
+            <psa-list
+              v-if="Array.isArray(scope.row[reviewer][scope.row.type]) && scope.row[reviewer][scope.row.type].length"
+              :items="scope.row[reviewer][scope.row.type]"
+            />
+            <p v-else class="na psa">N/A</p>
+          </template>
+          <p v-else-if="scope.row[reviewer][scope.row.type]" class="user-score">{{ scope.row[reviewer][scope.row.type] }}</p>
+          <p v-else class="na">N/A</p>
+          <el-popover
+            v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+            placement="right"
+            :title="$gettext('Comment') | translate"
+            width="360"
+            trigger="hover"
+            popper-class="score-popover"
+          >
+            <template>
+              <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
+            </template>
+            <fa
+              slot="reference"
+              v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+              class="comment-icon"
+              :icon="['fas', 'comment-alt']"
+            />
+          </el-popover>
+        </template>
+      </el-table-column>
+      <!-- fake columns (if needed)  -->
+      <el-table-column
+        v-for="example in examples"
+        :key="example"
+        :label="$gettext(example) | translate"
+        width="240"
+        label-class-name="score-general-header"
+        class-name="user-row"
+      >
+        <template slot-scope="scope">
+          <template v-if="scope.row.type === 'psa'">
+            <p class="na psa">N/A</p>
+          </template>
+          <p v-else class="na">N/A</p>
+        </template>
+      </el-table-column>
+      <!-- reviewers -->
       </el-table-column>
       <el-table-column
         prop="average"
         label="Average"
-        width="250"
-        label-class-name="score-general-header"
+        width="85"
+        label-class-name="score-average"
       >
-      </el-table-column>
-      <el-table-column
-        prop="score"
-        label="score"
-        width="305"
-        label-class-name="score-general-header"
-      >
+        <template slot-scope="scope">
+          <p class="average">{{ scope.row.average }}</p>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
-        label="Official Score"
+        :label="$gettext('Official Score') | translate"
         width="305"
-        label-class-name="score-header"
-        class-name="score-content"
+        label-class-name="score-official"
+        class-name="score-content score"
       >
         <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="deleteRow(scope.$index, score)"
-            type="text"
-            size="small"
-          >
-            Remove
-          </el-button>
+          <div :class="`content ${scope.row.type === 'psa' ? '' : 'center'}`">
+            <template v-if="review.reviewed">
+              <template v-if="scope.row.type === 'psa'">
+                <psa-list
+                  :items="score[scope.row.type]"
+                />
+              </template>
+              <template v-else>
+                <p class="statement">{{ score[scope.row.type] === null ? 'N/A' : score[scope.row.type] }}</p>
+              </template>
+            </template>
+            <template v-else>
+              <el-popover
+                ref="guidance"
+                placement="left"
+                :title="$gettext('Scoring Guidance') | translate"
+                width="360"
+                trigger="hover"
+                popper-class="score-popover left"
+              >
+                <template>
+                  <p>{{ scope.row.question.guidance }}</p>
+                </template>
+              </el-popover>
+              <el-select
+                v-if="scope.row.type === 'psa'"
+                v-model="score[scope.row.type]"
+                class="select-psa"
+                multiple
+                filterable
+                clearable
+                :disabled="review.reviewed"
+              >
+                <el-option
+                  v-if="scope.row.type === 'psa'"
+                  v-for="i in problemStatements"
+                  :key="i.id"
+                  :label="i.name"
+                  :value="i.id"
+                />
+              </el-select>
+              <el-select
+                v-else
+                v-model="score[scope.row.type]"
+                clearable
+                :disabled="review.reviewed"
+              >
+                <el-option
+                  v-for="i in points"
+                  :key="i"
+                  :label="i"
+                  :value="i"
+                />
+              </el-select>
+              <fa class="question-icon" :icon="['fas', 'question-circle']" v-popover:guidance />
+            </template>
+          </div>
         </template>
       </el-table-column>
     </el-table>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="setScoreDialog(false)" text>
-        Cancel
-      </el-button>
-      <el-button type="primary" @click="handleSubmit">
-        <translate>Submit Score</translate>
-      </el-button>
-    </span>
+    <template v-if="!review.reviewed">
+      <span slot="footer" class="dialog-footer">
+        <el-button type="info" @click="setScoreDialog(false)" text>
+          <translate>Cancel</translate>
+        </el-button>
+        <el-button type="primary" :loading="loadingScore" :disabled="disabled" @click="handleScoreSubmit">
+          <translate>Submit Score</translate>
+        </el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
+import PsaList from "@/components/portfolio/dashboard/table/PsaList";
 
 export default {
+  components: {
+    PsaList,
+  },
   data() {
     return {
-      // todo: nature of data is confusing and needs to be ask for it
-      score: [
-        {
-          question: "Question 1",
-          user: "Tom",
-          average: 1,
-          score: "N/A"
-        },
-        {
-          question: "Question 2",
-          user: "Chris",
-          average: 3,
-          score: "N/A"
-        },
-        {
-          question: "Question 3",
-          user: "Orsi",
-          average: 2,
-          score: "N/A"
-        },
-        {
-          question: "Question 4",
-          user: "Daniel",
-          average: 5,
-          score: "N/A"
-        },
-        {
-          question: "Question 5",
-          user: "David",
-          average: 4,
-          score: "N/A"
-        },
-        {
-          question: "Question 6",
-          user: "Elsa",
-          average: 2,
-          score: "N/A"
-        },
-        {
-          question: "Question 7",
-          user: "Kyle",
-          average: 3,
-          score: "N/A"
-        }
-      ]
+      points: [1, 2, 3, 4, 5],
+      score: {
+        psa: [],
+        rnci: null,
+        ratp: null,
+        ra: null,
+        ee: null,
+        nst: null,
+        nc: null,
+        ps: null,
+        impact: null,
+        scale_phase: null,
+      },
     };
   },
   computed: {
     ...mapState({
-      dialogScore: average => average.portfolio.dialogScore,
-      currentProjectId: average => average.portfolio.currentProjectId
-    })
+      dialogScore: (state) => state.portfolio.dialogScore,
+      reviewQuestions: (state) => state.system.review_questions,
+      name: (state) => state.portfolio.projectName,
+      review: (state) => state.portfolio.review,
+      loadingScore: (state) => state.portfolio.loadingScore,
+      problemStatements: (state) => state.portfolio.problemStatements,
+      questionType: (state) => state.portfolio.questionType,
+    }),
+    disabled() {
+      if (this.review.reviewed) {
+        return true;
+      }
+      if (this.score.impact === null || this.score.impact === "") {
+        return true;
+      }
+      if (this.score.scale_phase === null || this.score.scale_phase === "") {
+        return true;
+      }
+      return (
+        Object.values(this.score)
+          .filter((i) => i !== null)
+          .filter((i) => i !== "").length === 1 &&
+        Object.values(this.score).filter((i) => Array.isArray(i) && i.length)
+          .length == 0
+      );
+    },
+    scoreTable() {
+      return this.questionType.map((type) => {
+        // will generate custom reviwers rows
+        let reviewers = [];
+        if (this.review.review_scores) {
+          this.review.review_scores.map((i) => {
+            reviewers[i.reviewer.name] = {
+              [type]: i[type],
+              [`${type}_comment`]: i[`${type}_comment`],
+            };
+          });
+        }
+        // will return the custom score table
+        return {
+          question: this.reviewQuestions[type],
+          type,
+          ...reviewers,
+          average: this.review.averages && this.review.averages[type],
+        };
+      });
+    },
+    reviewersName() {
+      if (this.review.review_scores) {
+        return this.review.review_scores.map((i) => i.reviewer.name);
+      }
+      return [];
+    },
+    examples() {
+      switch (this.reviewersName.length) {
+        case 0:
+          return ["example user 1", "example user 2"];
+          break;
+        case 1:
+          return ["example user 1"];
+          break;
+        default:
+          return [];
+          break;
+      }
+    },
   },
   methods: {
     ...mapActions({
       setScoreDialog: "portfolio/setScoreDialog",
-      addScore: "portfolio/addScore"
+      addScore: "portfolio/addScore",
     }),
-    handleSubmit() {
-      // todo: transform and add data
-      this.addScore({ id: this.currentProjectId, data: {} });
+    handleScoreSubmit() {
+      this.addScore({ id: this.review.id, data: { ...this.score } });
     },
-    deleteRow(index, rows) {
-      rows.splice(index, 1);
-    }
-  }
+    handleScoreFeed() {
+      this.score = {
+        psa: this.review.psa,
+        rnci: this.review.rnci,
+        ratp: this.review.ratp,
+        ra: this.review.ra,
+        ee: this.review.ee,
+        nst: this.review.nst,
+        nc: this.review.nc,
+        ps: this.review.ps,
+        impact: this.review.impact,
+        scale_phase: this.review.scale_phase,
+      };
+    },
+  },
 };
 </script>
 
@@ -145,20 +319,143 @@ export default {
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
-.dialog-footer {
-  display: flex;
-  justify-content: space-between;
+.score-popover.el-popover {
+  padding: 0 !important;
+  margin-left: 14px !important;
+  &.left {
+    margin-left: 0px !important;
+    margin-right: 14px !important;
+  }
+  .el-popover__title {
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    line-height: 23px;
+    padding: 20px;
+    border-bottom: 1px solid #eae6e2;
+  }
+  p {
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 21px;
+    padding: 17px 20px 23px;
+  }
+  .popper__arrow {
+    display: inline;
+  }
 }
-.score-content {
-  background-color: #eae6e1;
-}
-.score-header {
-  background-color: #374ea2 !important;
-}
-.score-general-header {
-  border-right: 1px solid @colorWhite;
-}
-.cell.score-general-header {
-  border-right: 1px solid transparent;
+
+.dialog-score {
+  .el-dialog__body {
+    padding: 40px 60px 60px 60px;
+  }
+  .dialog-footer {
+    display: flex;
+    justify-content: space-between;
+  }
+  .score-content {
+    background-color: #e8f6fd;
+  }
+  .score-average {
+    background-color: #a8a8a9 !important;
+  }
+  .average {
+    font-size: 14px;
+    text-align: center;
+    margin: 18px 0 !important;
+  }
+  .score-official {
+    background-color: #374ea2 !important;
+  }
+  .score-general-header {
+    border-right: 1px solid @colorWhite;
+  }
+  .cell.score-general-header {
+    border-right: 1px solid transparent;
+  }
+  .el-table__row:nth-last-child(2),
+  .el-table__row:nth-last-child(1) {
+    .question {
+      background-color: #e8f6fd;
+    }
+  }
+  .el-table td {
+    &.question,
+    &.score {
+      padding: 16.5px 12px !important;
+      .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        &.center {
+          justify-content: center;
+          .question-icon {
+            margin-left: 12px;
+          }
+        }
+        .statement {
+          text-align: center;
+          font-weight: 100 !important;
+          margin: 12px 0;
+          width: 100%;
+        }
+        p {
+          margin-bottom: 0px !important;
+          font-size: 14px !important;
+          font-weight: bold !important;
+          letter-spacing: 0 !important;
+          line-height: 21px !important;
+          min-width: 207px;
+        }
+        input {
+          width: 90px;
+        }
+        .select-psa {
+          input {
+            width: 250px;
+          }
+        }
+        .question-icon {
+          cursor: pointer;
+          color: #a8a8a9;
+          font-size: 18px;
+          &:hover {
+            color: @colorTextPrimary;
+          }
+        }
+      }
+    }
+    &.user-row {
+      .user-score {
+        // display: inline-block;
+        font-size: 14px;
+        letter-spacing: 0;
+        line-height: 21px;
+        text-align: center;
+        margin: 17px 0;
+      }
+      .na {
+        text-align: center;
+        color: #a8a8a9;
+        font-size: 14px;
+        letter-spacing: 0;
+        line-height: 21px;
+        margin: 17px 0;
+        &.psa {
+          margin-top: 0;
+        }
+      }
+      .comment-icon {
+        position: absolute;
+        top: 29px;
+        right: 35%;
+        cursor: pointer;
+        color: @colorBrandPrimary;
+        font-size: 18px;
+        &:hover {
+          color: @colorTextPrimary;
+        }
+      }
+    }
+  }
 }
 </style>
