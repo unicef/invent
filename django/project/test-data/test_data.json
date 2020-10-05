@@ -1,0 +1,155 @@
+{
+  "general": {
+    "organisation": "Test org",
+    "d1": "T Donor 1",
+    "d2": "T Donor 2"
+  },
+ "users": [
+  {
+    "name": "Havelock Vetinary",
+    "email": "the.patrician@discworld.co.uk",
+    "role": "GPO"
+  },
+  {
+    "name": "Samuel Vimes",
+    "email": "old.stoneface@discworld.co.uk",
+    "role": "User"
+  },
+  {
+    "name": "Carrot Ironfoundersson",
+    "email": "carrot@discworld.co.uk",
+    "role": "User"
+  },
+  {
+    "name": "Frederick Colon",
+    "email": "colon@discworld.co.uk",
+    "role": "User"
+  },
+  {
+   "name": "Delphine Angua von Überwald",
+   "email": "angua@discworld.co.uk",
+   "role": "User"
+   },
+  {
+   "name": "Moist von Lipwig",
+   "email": "golden.hat@discworld.co.uk",
+   "role": "User"
+  }
+],
+  "projects": [
+    {"name":  "Improve hygienic access to goblins"},
+    {"name":  "Koom Valley celebrations"},
+    {"name":  "City watch ballista upgrade"},
+    {"name":  "Clacks system 2nd generation"},
+    {"name":  "Battle bread museum restoration"},
+    {"name":  "Improve pie access to clowns befallen of hard times"},
+    {"name":  "The underground tunnel network"},
+    {"name":  "Close the old Treacle mine"},
+    {"name":  "Brass bridge polishing"},
+    {"name":  "Fix pothole dug for Windle Poons"},
+    {"name":  "Black ribbonner awareness month"},
+    {"name":  "Fund extensive city renovation by raising taxes"}
+  ],
+  "portfolios": [
+    {
+      "name": "The Undertaking",
+      "description": "The Undertaking is Vetinari's grand plan to take Ankh-Morpork into the future. \nBy improving the sewage system and installing a series of underground tunnels in which the dwarfs will lay tracks, for trade and possibly people as well.",
+      "managers": ["Havelock Vetinary", "Moist von Lipwig"],
+      "icon": "UT",
+      "problem_statements": [
+        {
+          "name": "Development is slowing down",
+          "description": "Lorem ipsum"
+        },
+        {
+          "name": "Commuting takes too much time",
+          "description": "Lorem ipsum"
+        },
+        {
+          "name": "Infrastructure is decayed",
+          "description": "Lorem ipsum"
+        }
+      ],
+      "projects_in_review": [
+        {
+          "name": "Fund extensive city renovation by raising taxes",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Development is slowing down"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }
+          ]
+        },
+        {
+          "name":  "Close the old Treacle mine",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Infrastructure is decayed"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }],
+          "scores": {
+              "psa": [
+                "Infrastructure is decayed"
+              ],
+              "rnci": 5,
+              "ratp": 3,
+              "ra": 4,
+              "ee": 2,
+              "nst": 5,
+              "ps": 3,
+              "impact": 5,
+              "scale_phase": 2
+          }
+        }
+      ],
+      "projects_approved": [
+        {
+          "name":  "Fix pothole dug for Windle Poons",
+          "scores": {
+              "psa": [
+                "Commuting takes too much time"
+              ],
+              "rnci": 5,
+              "ratp": 5,
+              "ra": 5,
+              "ee": 5,
+              "nst": 5,
+              "ps": 5,
+              "impact": 5,
+              "scale_phase": 2
+          }
+        }
+      ]
+    }
+  ]
+}
