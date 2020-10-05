@@ -44,27 +44,36 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('20')"
+        v-if="selectedColumns.includes('20') && tab === 2"
         :resizable="false"
         :label="$gettext('Questionnaires Assigned') | translate"
         sortable="custom"
-        prop="reviewers"
+        prop="review_states"
         width="511"
       >
         <template slot-scope="scope">
-          <reviewers :id="scope.row.id" :items="scope.row.reviewers" />
+          <reviewers
+            v-if="scope.row.review_states"
+            :id="scope.row.id"
+            :items="scope.row.review_states.review_scores"
+          />
         </template>
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('30')"
+        v-if="(selectedColumns.includes('30') && tab === 2) || (selectedColumns.includes('30') && tab === 3)"
         :resizable="false"
         :label="$gettext('Scoring') | translate"
         prop="scores"
         width="221"
       >
         <template slot-scope="scope">
-          <scores :id="scope.row.id" :scores="scope.row.scores" />
+          <scores
+            v-if="scope.row.review_states"
+            :scores="scope.row.review_states"
+            :name="scope.row.name"
+            :tab="tab"
+          />
         </template>
       </el-table-column>
 
@@ -352,7 +361,7 @@ import Scores from "@/components/portfolio/dashboard/table/Scores";
 // dialogs
 import Review from "@/components/portfolio/dashboard/dialog/Review";
 import Score from "@/components/portfolio/dashboard/dialog/Score";
-import PlatformsList from '@/components/project/PlatformsList';
+import PlatformsList from "@/components/project/PlatformsList";
 
 import { setTimeout } from "timers";
 
@@ -373,20 +382,21 @@ export default {
     Scores,
     Review,
     PlatformsList,
-    Score
+    Score,
   },
   data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
       localSort: null,
-      favorite: this.$gettext("Add to Favorites")
+      favorite: this.$gettext("Add to Favorites"),
     };
   },
   computed: {
     ...mapState({
-      offices: state => state.offices.offices,
-      projects: state => state.portfolio.projects
+      offices: (state) => state.offices.offices,
+      projects: (state) => state.portfolio.projects,
+      tab: (state) => state.portfolio.tab,
     }),
     ...mapGetters({
       projectsList: "dashboard/getProjectsList",
@@ -398,19 +408,19 @@ export default {
       donorColumns: "dashboard/getDonorColumns",
       getCapabilityLevels: "projects/getCapabilityLevels",
       getCapabilityCategories: "projects/getCapabilityCategories",
-      getCapabilitySubcategories: "projects/getCapabilitySubcategories"
+      getCapabilitySubcategories: "projects/getCapabilitySubcategories",
     }),
     ...mapGettersActions({
       pageSize: ["dashboard", "getPageSize", "setPageSize", 0],
       currentPage: ["dashboard", "getCurrentPage", "setCurrentPage", 0],
-      sorting: ["dashboard", "getSorting", "setSorting", 0]
+      sorting: ["dashboard", "getSorting", "setSorting", 0],
     }),
     paginationOrderStr() {
       const loc = this.$i18n.locale;
       return loc === "ar"
         ? "sizes, next, slot, prev"
         : "sizes, prev, slot, next";
-    }
+    },
   },
   watch: {
     selectAll: {
@@ -422,7 +432,7 @@ export default {
             this.$refs.mainTable.toggleAllSelection();
           }
         }
-      }
+      },
     },
     selectedColumns: {
       immediate: false,
@@ -433,7 +443,7 @@ export default {
             this.alignFixedTableWidthForRTL();
           }, 50);
         });
-      }
+      },
     },
     sorting: {
       immediate: false,
@@ -441,8 +451,8 @@ export default {
         if (current !== this.localSort) {
           this.fixSorting(current);
         }
-      }
-    }
+      },
+    },
   },
   mounted() {
     if (this.offices.length === 0) {
@@ -463,13 +473,13 @@ export default {
   methods: {
     ...mapActions({
       setSelectedRows: "dashboard/setSelectedRows",
-      loadOffices: "offices/loadOffices"
+      loadOffices: "offices/loadOffices",
     }),
     customHeaderRenderer(h, { column, $index }) {
       return h("span", { attrs: { title: column.label } }, column.label);
     },
     selectHandler(selection) {
-      this.setSelectedRows(selection.map(s => s.id));
+      this.setSelectedRows(selection.map((s) => s.id));
     },
     rowClassCalculator({ row }) {
       return this.selectedRows.includes(row.id) ? "Selected" : "NotSelected";
@@ -527,13 +537,13 @@ export default {
       }
     },
     countryOffice(id) {
-      const office = this.offices.find(obj => obj.id === id);
+      const office = this.offices.find((obj) => obj.id === id);
       return office ? office.name : "N/A";
     },
     handleFavorite(id) {
       console.log(`this will mark or unmark ${id}`);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -542,7 +552,7 @@ export default {
 @import "~assets/style/mixins.less";
 
 .MainTable {
-  margin: 0 40px;
+  margin: 0 40px 120px;
   max-height: calc(
     100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
       @appFooterHeight - 93px
@@ -623,9 +633,9 @@ export default {
     }
 
     td {
-      min-height: 58px;
       padding: 10px 16px 10px 12px;
       > .cell {
+        min-height: 37px;
         line-height: 17px;
         word-break: normal;
         padding: 0;
