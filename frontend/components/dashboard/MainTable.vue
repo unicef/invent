@@ -307,7 +307,7 @@ import CurrentPage from "@/components/dashboard/CurrentPage";
 import FieldOfficeItem from "@/components/project/FieldOfficeItem";
 import CapabilitiesList from "@/components/project/CapabilitiesList";
 import { setTimeout } from "timers";
-import PlatformsList from '@/components/project/PlatformsList';
+import PlatformsList from "@/components/project/PlatformsList";
 
 export default {
   components: {
@@ -322,18 +322,18 @@ export default {
     CapabilitiesList,
     GoalAreaItem,
     ResultAreaItem,
-    PlatformsList
+    PlatformsList,
   },
   data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
-      localSort: null
+      localSort: null,
     };
   },
   computed: {
     ...mapState({
-      offices: state => state.offices.offices
+      offices: (state) => state.offices.offices,
     }),
     ...mapGetters({
       projectsList: "dashboard/getProjectsList",
@@ -345,19 +345,19 @@ export default {
       donorColumns: "dashboard/getDonorColumns",
       getCapabilityLevels: "projects/getCapabilityLevels",
       getCapabilityCategories: "projects/getCapabilityCategories",
-      getCapabilitySubcategories: "projects/getCapabilitySubcategories"
+      getCapabilitySubcategories: "projects/getCapabilitySubcategories",
     }),
     ...mapGettersActions({
       pageSize: ["dashboard", "getPageSize", "setPageSize", 0],
       currentPage: ["dashboard", "getCurrentPage", "setCurrentPage", 0],
-      sorting: ["dashboard", "getSorting", "setSorting", 0]
+      sorting: ["dashboard", "getSorting", "setSorting", 0],
     }),
     paginationOrderStr() {
       const loc = this.$i18n.locale;
       return loc === "ar"
         ? "sizes, next, slot, prev"
         : "sizes, prev, slot, next";
-    }
+    },
   },
   watch: {
     selectAll: {
@@ -369,7 +369,7 @@ export default {
             this.$refs.mainTable.toggleAllSelection();
           }
         }
-      }
+      },
     },
     selectedColumns: {
       immediate: false,
@@ -380,7 +380,7 @@ export default {
             this.alignFixedTableWidthForRTL();
           }, 50);
         });
-      }
+      },
     },
     sorting: {
       immediate: false,
@@ -388,8 +388,8 @@ export default {
         if (current !== this.localSort) {
           this.fixSorting(current);
         }
-      }
-    }
+      },
+    },
   },
   mounted() {
     if (this.offices.length === 0) {
@@ -410,13 +410,13 @@ export default {
   methods: {
     ...mapActions({
       setSelectedRows: "dashboard/setSelectedRows",
-      loadOffices: "offices/loadOffices"
+      loadOffices: "offices/loadOffices",
     }),
     customHeaderRenderer(h, { column, $index }) {
       return h("span", { attrs: { title: column.label } }, column.label);
     },
     selectHandler(selection) {
-      this.setSelectedRows(selection.map(s => s.id));
+      this.setSelectedRows(selection.map((s) => s.id));
     },
     rowClassCalculator({ row }) {
       return this.selectedRows.includes("row".id) ? "Selected" : "NotSelected";
@@ -474,10 +474,10 @@ export default {
       }
     },
     countryOffice(id) {
-      const office = this.offices.find(obj => obj.id === id);
+      const office = this.offices.find((obj) => obj.id === id);
       return office ? office.name : "N/A";
-    }
-  }
+    },
+  },
 };
 </script>
 

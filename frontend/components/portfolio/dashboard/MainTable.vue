@@ -552,7 +552,7 @@ export default {
 @import "~assets/style/mixins.less";
 
 .MainTable {
-  margin: 0 40px;
+  margin: 0 40px 120px;
   max-height: calc(
     100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
       @appFooterHeight - 93px
@@ -633,9 +633,9 @@ export default {
     }
 
     td {
-      min-height: 58px;
       padding: 10px 16px 10px 12px;
       > .cell {
+        min-height: 37px;
         line-height: 17px;
         word-break: normal;
         padding: 0;
