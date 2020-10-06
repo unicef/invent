@@ -1,32 +1,17 @@
 <template>
   <div class="ProjectBar">
     <div class="ProjectBarWrapper">
-      <el-row
-        type="flex"
-        justify="space-between"
-      >
-        <el-col
-          :span="12"
-          class="ProjectName"
-        >
+      <el-row type="flex" justify="space-between">
+        <el-col :span="12" class="ProjectName">
           <div>
             {{ project.name }}
             <project-legend :id="project.id" />
           </div>
         </el-col>
 
-        <el-col
-          :span="12"
-          class="ProjectInfo"
-        >
-          <el-row
-            type="flex"
-            justify="end"
-          >
-            <el-col
-              :span="8"
-              class="InfoSection"
-            >
+        <el-col :span="12" class="ProjectInfo">
+          <el-row type="flex" justify="end">
+            <el-col :span="8" class="InfoSection">
               <div class="Label">
                 <translate>Last Updated</translate>
               </div>
@@ -34,10 +19,7 @@
                 {{ modified }}
               </div>
             </el-col>
-            <el-col
-              :span="8"
-              class="InfoSection"
-            >
+            <el-col :span="8" class="InfoSection">
               <div class="Label">
                 <translate>Organisation</translate>
               </div>
@@ -45,10 +27,7 @@
                 <organisation-item :id="project.organisation" />
               </div>
             </el-col>
-            <el-col
-              :span="8"
-              class="InfoSection"
-            >
+            <el-col :span="8" class="InfoSection">
               <div class="Label">
                 <translate>Contact person</translate>
               </div>
@@ -69,22 +48,37 @@
       <div class="ProjectMenu">
         <nuxt-link
           v-if="isTeam"
-          :class="{'Active': isProjectActive}"
-          :to="localePath({name: 'organisation-initiatives-id-edit', params: {id, organisation: $route.params.organisation}})"
+          :class="{ Active: isProjectActive }"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id-edit',
+              params: { id, organisation: $route.params.organisation },
+            })
+          "
         >
           <translate>Initiative</translate>
         </nuxt-link>
         <nuxt-link
           v-if="isViewer && !isTeam"
-          :class="{'Active': isProjectActive}"
-          :to="localePath({name: 'organisation-initiatives-id', params: {id, organisation: $route.params.organisation}})"
+          :class="{ Active: isProjectActive }"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id',
+              params: { id, organisation: $route.params.organisation },
+            })
+          "
         >
           <translate>Initiative</translate>
         </nuxt-link>
         <nuxt-link
           v-if="anon"
-          :class="{'Active': isProjectActive}"
-          :to="localePath({name: 'organisation-initiatives-id-published', params: {id, organisation: $route.params.organisation}})"
+          :class="{ Active: isProjectActive }"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id-published',
+              params: { id, organisation: $route.params.organisation },
+            })
+          "
         >
           <translate>Initiative</translate>
         </nuxt-link>
@@ -111,10 +105,10 @@
 </template>
 
 <script>
-import { format } from "date-fns";
-import { mapGetters } from "vuex";
-import OrganisationItem from "./OrganisationItem";
-import ProjectLegend from "./ProjectLegend";
+import { format } from 'date-fns'
+import { mapGetters } from 'vuex'
+import OrganisationItem from './OrganisationItem'
+import ProjectLegend from './ProjectLegend'
 
 export default {
   components: {
@@ -123,65 +117,63 @@ export default {
   },
   computed: {
     ...mapGetters({
-      draft: "project/getProjectData",
-      published: "project/getPublished",
-      user: "user/getProfile",
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
+      user: 'user/getProfile',
     }),
     project() {
-      return this.published && this.published.name
-        ? this.published
-        : this.draft;
+      return this.published && this.published.name ? this.published : this.draft
     },
     id() {
-      return +this.$route.params.id;
+      return +this.$route.params.id
     },
     route() {
-      return this.$route.name.split("__")[0];
+      return this.$route.name.split('__')[0]
     },
     isProjectActive() {
       return (
-        this.route === "organisation-initiatives-id-published" ||
-        this.route === "organisation-initiatives-id-edit" ||
-        this.route === "organisation-initiatives-id"
-      );
+        this.route === 'organisation-initiatives-id-published' ||
+        this.route === 'organisation-initiatives-id-edit' ||
+        this.route === 'organisation-initiatives-id'
+      )
     },
     isUpdateScoreActive() {
-      return this.route === "organisation-initiatives-id-toolkit";
+      return this.route === 'organisation-initiatives-id-toolkit'
     },
     isScorecardActive() {
-      return this.route === "organisation-initiatives-id-toolkit-scorecard";
+      return this.route === 'organisation-initiatives-id-toolkit-scorecard'
     },
     isTeam() {
       if (this.user) {
-        return this.user.member.includes(+this.$route.params.id);
+        return this.user.member.includes(+this.$route.params.id)
       }
-      return false;
+      return false
     },
     isViewer() {
       if (this.user) {
         return (
           this.user.is_superuser ||
           this.user.viewer.includes(+this.$route.params.id)
-        );
+        )
       }
-      return true;
+      return true
     },
     anon() {
-      return !this.isViewer && !this.isTeam;
+      return !this.isViewer && !this.isTeam
     },
     modified() {
       if (this.project) {
-        return format(this.project.modified, "DD-MM-YYYY");
+        return format(this.project.modified, 'DD-MM-YYYY')
       }
-      return null;
+      return null
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .ProjectBar {
   background-color: @colorWhite;
@@ -266,7 +258,7 @@ export default {
       }
 
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         bottom: -1px;
         left: 0;

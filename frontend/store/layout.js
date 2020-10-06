@@ -4,41 +4,42 @@ export const state = () => ({
   saveFiltersDialogState: null,
   sendEmailDialogState: null,
   showEmptyProfileWarning: false,
-  editSubLevelDialogState: null
-});
+  editSubLevelDialogState: null,
+})
 
 export const getters = {
-  getDigitalHealthInterventionsDialogState: state => state.digitalHealthInterventionsDialogState,
-  getDashboardFiltersDialogState: state => state.dashboardFiltersDialogState,
-  getSaveFiltersDialogState: state => state.saveFiltersDialogState,
-  getSendEmailDialogState: state => state.sendEmailDialogState,
-  getShowEmptyProfileWarning: state => state.showEmptyProfileWarning,
-  getEditSubLevelDialogState: state => state.editSubLevelDialogState
-};
+  getDigitalHealthInterventionsDialogState: (state) =>
+    state.digitalHealthInterventionsDialogState,
+  getDashboardFiltersDialogState: (state) => state.dashboardFiltersDialogState,
+  getSaveFiltersDialogState: (state) => state.saveFiltersDialogState,
+  getSendEmailDialogState: (state) => state.sendEmailDialogState,
+  getShowEmptyProfileWarning: (state) => state.showEmptyProfileWarning,
+  getEditSubLevelDialogState: (state) => state.editSubLevelDialogState,
+}
 
 export const actions = {
-  setDigitalHealthInterventionsDialogState ({ commit }, value) {
-    commit('SET_DATA', { type: 'digitalHealthInterventionsDialogState', value });
+  setDigitalHealthInterventionsDialogState({ commit }, value) {
+    commit('SET_DATA', { type: 'digitalHealthInterventionsDialogState', value })
   },
-  setDashboardFiltersDialogState ({ commit }, value) {
-    commit('SET_DATA', { type: 'dashboardFiltersDialogState', value });
+  setDashboardFiltersDialogState({ commit }, value) {
+    commit('SET_DATA', { type: 'dashboardFiltersDialogState', value })
   },
-  setSaveFiltersDialogState ({ commit }, value) {
-    commit('SET_DATA', { type: 'saveFiltersDialogState', value });
+  setSaveFiltersDialogState({ commit }, value) {
+    commit('SET_DATA', { type: 'saveFiltersDialogState', value })
   },
-  setSendEmailDialogState ({ commit }, value) {
-    commit('SET_DATA', { type: 'sendEmailDialogState', value });
+  setSendEmailDialogState({ commit }, value) {
+    commit('SET_DATA', { type: 'sendEmailDialogState', value })
   },
-  setShowEmptyProfileWarning ({ commit }, value) {
-    commit('SET_DATA', { type: 'showEmptyProfileWarning', value });
+  setShowEmptyProfileWarning({ commit }, value) {
+    commit('SET_DATA', { type: 'showEmptyProfileWarning', value })
   },
-  setEditSubLevelDialogState ({ commit }, value) {
-    commit('SET_DATA', { type: 'editSubLevelDialogState', value });
-  }
-};
+  setEditSubLevelDialogState({ commit }, value) {
+    commit('SET_DATA', { type: 'editSubLevelDialogState', value })
+  },
+}
 
 export const mutations = {
   SET_DATA: (state, { type, value }) => {
-    state[type] = value;
-  }
-};
+    state[type] = value
+  },
+}

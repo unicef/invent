@@ -15,18 +15,18 @@
 </template>
 
 <script>
-import ProjectForm from "../../../../../components/project/ProjectForm";
+import ProjectForm from '../../../../../components/project/ProjectForm'
 
 export default {
   components: {
     ProjectForm,
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .EditProject {
   .DraftLabel {

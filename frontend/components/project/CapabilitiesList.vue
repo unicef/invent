@@ -1,15 +1,9 @@
 <template>
   <div class="CapabilitiesList">
     <ul>
-      <li
-        v-for="item in selected"
-        :key="item.id"
-      >
+      <li v-for="item in selected" :key="item.id">
         <span v-if="showIcon">
-          <fa
-            icon="check"
-            size="xs"
-          />
+          <fa icon="check" size="xs" />
         </span>
         <span>{{ item.name }}</span>
       </li>
@@ -21,43 +15,43 @@
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: null
+      default: null,
     },
     goalArea: {
       type: Number,
-      required: true
+      required: true,
     },
     valuesFunction: {
       type: Function,
-      required: true
+      required: true,
     },
     showIcon: {
       type: Boolean,
-      defaultL: false
-    }
+      defaultL: false,
+    },
   },
-  data () {
+  data() {
     return {
-      open: false
-    };
+      open: false,
+    }
   },
   computed: {
-    items () {
-      return this.valuesFunction(this.goalArea);
+    items() {
+      return this.valuesFunction(this.goalArea)
     },
-    selected () {
+    selected() {
       if (this.value && Array.isArray(this.value)) {
-        return this.items.filter(i => this.value.some(v => v === i.id));
+        return this.items.filter((i) => this.value.some((v) => v === i.id))
       }
-      return [];
-    }
-  }
-};
+      return []
+    },
+  },
+}
 </script>
 
 <style lang="less">

@@ -25,68 +25,68 @@ export default {
   computed: {
     pureRoute() {
       if (this.$route && this.$route.name) {
-        return this.$route.name.split("___")[0];
+        return this.$route.name.split('___')[0]
       }
-      return null;
+      return null
     },
     subPageName() {
       const noSubPage = {
         organisation: true,
-        "organisation-login": true,
-        "organisation-signup": true,
-        "organisation-reset-key": true,
-        "organisation-portfolio-management-new": false,
-        "organisation-portfolio-management-id": true,
-      };
+        'organisation-login': true,
+        'organisation-signup': true,
+        'organisation-reset-key': true,
+        'organisation-portfolio-management-new': false,
+        'organisation-portfolio-management-id': true,
+      }
       const pages = {
-        "organisation-edit-profile": this.$gettext("Admin"),
-        "organisation-admin-country": this.$gettext("Admin"),
-        "organisation-admin-donor": this.$gettext("Admin"),
-        "organisation-admin-import": this.$gettext("Admin"),
-        "organisation-admin-import-id": this.$gettext("Admin"),
-        "organisation-dashboard": this.$gettext("Dashboard"),
-        "organisation-dashboard-list": this.$gettext("Dashboard"),
-        "organisation-initiatives": this.$gettext("My initiatives"),
-        "organisation-initiatives-id-published": this.$gettext(
-          "Published Initiative"
+        'organisation-edit-profile': this.$gettext('Admin'),
+        'organisation-admin-country': this.$gettext('Admin'),
+        'organisation-admin-donor': this.$gettext('Admin'),
+        'organisation-admin-import': this.$gettext('Admin'),
+        'organisation-admin-import-id': this.$gettext('Admin'),
+        'organisation-dashboard': this.$gettext('Dashboard'),
+        'organisation-dashboard-list': this.$gettext('Dashboard'),
+        'organisation-initiatives': this.$gettext('My initiatives'),
+        'organisation-initiatives-id-published': this.$gettext(
+          'Published Initiative'
         ),
-        "organisation-initiatives-id-edit": this.$gettext("Edit Initiative"),
-        "organisation-initiatives-id": this.$gettext("Drafted Initiative"),
-        "organisation-cms": this.$gettext("Planning and Guidance"),
-        "organisation-initiatives-create": this.$gettext("New Initiative"),
-        "organisation-initiatives-id-assessment": this.$gettext("Assessment"),
-        "organisation-initiatives-id-toolkit": this.$gettext("Toolkit"),
-        "organisation-initiatives-id-toolkit-scorecard": this.$gettext(
-          "Toolkit"
+        'organisation-initiatives-id-edit': this.$gettext('Edit Initiative'),
+        'organisation-initiatives-id': this.$gettext('Drafted Initiative'),
+        'organisation-cms': this.$gettext('Planning and Guidance'),
+        'organisation-initiatives-create': this.$gettext('New Initiative'),
+        'organisation-initiatives-id-assessment': this.$gettext('Assessment'),
+        'organisation-initiatives-id-toolkit': this.$gettext('Toolkit'),
+        'organisation-initiatives-id-toolkit-scorecard': this.$gettext(
+          'Toolkit'
         ),
-        "organisation-inventory": this.$gettext("TIIP Inventory"),
-        "organisation-portfolio-innovation": this.$gettext(
-          "Innovation Portfolio"
+        'organisation-inventory': this.$gettext('TIIP Inventory'),
+        'organisation-portfolio-innovation': this.$gettext(
+          'Innovation Portfolio'
         ),
-        "organisation-portfolio-management": this.$gettext("Portfolio Manager"),
-        "organisation-portfolio-management-new": this.$gettext(
-          "Create a new portfolio"
+        'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
+        'organisation-portfolio-management-new': this.$gettext(
+          'Create a new portfolio'
         ),
-        "organisation-portfolio-management-id": this.$gettext("Edit portfolio"),
-        "organisation-portfolio-management-edit-id": this.$gettext(
-          "Edit portfolio"
+        'organisation-portfolio-management-id': this.$gettext('Edit portfolio'),
+        'organisation-portfolio-management-edit-id': this.$gettext(
+          'Edit portfolio'
         ),
-      };
-      const match = pages[this.pureRoute];
+      }
+      const match = pages[this.pureRoute]
       if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
         console.warn(
           `Potential missing subpage key for breadcrumb ${this.pureRoute}`
-        );
+        )
       }
-      return match;
+      return match
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 .Breadcrumb {
   width: auto;
   height: @actionBarHeight;

@@ -160,161 +160,161 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import FormAPIErrorsMixin from "./mixins/FormAPIErrorsMixin.js";
+import { mapActions, mapGetters } from 'vuex'
+import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin.js'
 
 export default {
   mixins: [FormAPIErrorsMixin],
 
   data() {
     return {
-      username: "",
-      password: "",
-      email: "",
+      username: '',
+      password: '',
+      email: '',
       showForgotten: false,
       successfulReset: false,
       rules: {
         username: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "blur"
+            message: this.$gettext('This field is required'),
+            trigger: 'blur',
           },
           {
-            type: "email",
-            message: this.$gettext("Has to be a valid email address"),
-            trigger: "blur"
+            type: 'email',
+            message: this.$gettext('Has to be a valid email address'),
+            trigger: 'blur',
           },
-          { validator: this.validatorGenerator("username") }
+          { validator: this.validatorGenerator('username') },
         ],
         password: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "blur"
+            message: this.$gettext('This field is required'),
+            trigger: 'blur',
           },
-          { validator: this.validatorGenerator("password") }
-        ]
+          { validator: this.validatorGenerator('password') },
+        ],
       },
       forgettenPasswordRules: {
         email: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "blur"
+            message: this.$gettext('This field is required'),
+            trigger: 'blur',
           },
           {
-            type: "email",
-            message: this.$gettext("Has to be a valid email address"),
-            trigger: "blur"
+            type: 'email',
+            message: this.$gettext('Has to be a valid email address'),
+            trigger: 'blur',
           },
-          { validator: this.validatorGenerator("email") }
-        ]
-      }
-    };
+          { validator: this.validatorGenerator('email') },
+        ],
+      },
+    }
   },
   computed: {
     ...mapGetters({
-      profile: "user/getProfile"
-    })
+      profile: 'user/getProfile',
+    }),
   },
   methods: {
     ...mapActions({
-      login: "user/doLogin",
-      resetPassword: "user/resetPassword",
-      setSelectedCountry: "dashboard/setSelectedCountry"
+      login: 'user/doLogin',
+      resetPassword: 'user/resetPassword',
+      setSelectedCountry: 'dashboard/setSelectedCountry',
     }),
     handleRoutingErrors(e) {
       this.$alert(
         this.$gettext(
-          "An error occured during login, please reload the page and try again"
+          'An error occured during login, please reload the page and try again'
         ),
-        this.$gettext("Warning"),
+        this.$gettext('Warning'),
         {
-          confirmButtonText: this.$gettext("OK")
+          confirmButtonText: this.$gettext('OK'),
         }
-      );
+      )
       if (this.$sentry) {
         this.$sentry.captureMessage(
-          "Un-caught validation error in project page",
+          'Un-caught validation error in project page',
           {
-            level: "warning",
+            level: 'warning',
             extra: {
-              e
-            }
+              e,
+            },
           }
-        );
+        )
       }
     },
     async loginLocal() {
-      this.$nuxt.$loading.start("loginLoader");
-      this.deleteFormAPIErrors();
+      this.$nuxt.$loading.start('loginLoader')
+      this.deleteFormAPIErrors()
       try {
-        await this.$refs.loginForm.validate();
+        await this.$refs.loginForm.validate()
         await this.login({
           username: this.username,
-          password: this.password
-        });
+          password: this.password,
+        })
       } catch (e) {
         if (e) {
-          this.setFormAPIErrors(e);
-          this.$refs.loginForm.validate(() => {});
+          this.setFormAPIErrors(e)
+          this.$refs.loginForm.validate(() => {})
         }
-        this.$nuxt.$loading.finish("loginLoader");
-        return;
+        this.$nuxt.$loading.finish('loginLoader')
+        return
       }
       try {
         if (this.profile.country) {
-          this.setSelectedCountry(this.profile.country);
+          this.setSelectedCountry(this.profile.country)
         }
         if (this.$route.query && this.$route.query.next) {
-          const path = this.$route.query.next;
-          const query = { ...this.$route.query, next: undefined };
-          this.$router.push({ path, query });
+          const path = this.$route.query.next
+          const query = { ...this.$route.query, next: undefined }
+          this.$router.push({ path, query })
         } else {
           this.$router.push(
             this.localePath({
-              name: "organisation-dashboard-list",
+              name: 'organisation-dashboard-list',
               params: this.$route.params,
-              query: { country: [this.profile.country] }
+              query: { country: [this.profile.country] },
             })
-          );
+          )
         }
       } catch (e) {
-        this.handleRoutingErrors(e);
+        this.handleRoutingErrors(e)
       }
-      this.$nuxt.$loading.finish("loginLoader");
+      this.$nuxt.$loading.finish('loginLoader')
     },
 
     toForgotten() {
-      this.email = this.username;
-      this.showForgotten = true;
+      this.email = this.username
+      this.showForgotten = true
     },
 
     forgotEmail() {
-      this.deleteFormAPIErrors();
-      this.$refs.forgotForm.validate(async valid => {
+      this.deleteFormAPIErrors()
+      this.$refs.forgotForm.validate(async (valid) => {
         if (valid) {
           try {
             await this.resetPassword({
-              email: this.email
-            });
-            this.showForgotten = false;
-            this.successfulReset = true;
+              email: this.email,
+            })
+            this.showForgotten = false
+            this.successfulReset = true
           } catch (err) {
-            this.setFormAPIErrors(err);
-            this.$refs.loginForm.validate(() => {});
+            this.setFormAPIErrors(err)
+            this.$refs.loginForm.validate(() => {})
           }
         }
-      });
-    }
-  }
-};
+      })
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../assets/style/variables.less";
-@import "../assets/style/mixins.less";
+@import '../assets/style/variables.less';
+@import '../assets/style/mixins.less';
 
 .LoginComponent {
   width: @cardSizeSmall;

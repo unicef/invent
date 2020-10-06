@@ -1,25 +1,16 @@
 <template>
   <div class="SearchBox">
-    <el-row
-      type="flex"
-      class="SearchInput"
-    >
+    <el-row type="flex" class="SearchInput">
       <el-col>
         <el-input
           v-model="searchString"
           :placeholder="$gettext('Type something...') | translate"
         >
-          <fa
-            slot="prepend"
-            icon="search"
-          />
+          <fa slot="prepend" icon="search" />
         </el-input>
       </el-col>
     </el-row>
-    <el-row
-      type="flex"
-      class="SearchOptions"
-    >
+    <el-row type="flex" class="SearchOptions">
       <el-col class="SearchOptionsHeader">
         <el-button
           type="text"
@@ -28,18 +19,16 @@
           @click="toggleOptionsVisibility"
         >
           <translate>Select fields to include in your search</translate>
-          <fa
-            v-show="optionsVisible"
-            icon="caret-up"
-          />
-          <fa
-            v-show="!optionsVisible"
-            icon="caret-down"
-          />
+          <fa v-show="optionsVisible" icon="caret-up" />
+          <fa v-show="!optionsVisible" icon="caret-down" />
         </el-button>
         <el-tooltip
           v-model="showSearchBoxTooltip"
-          :content="$gettext('By selecting these fields, you will limit the search to only data included in these fields. If you want a broader search, leave these fields blank and all project data will be searched.') | translate"
+          :content="
+            $gettext(
+              'By selecting these fields, you will limit the search to only data included in these fields. If you want a broader search, leave these fields blank and all project data will be searched.'
+            ) | translate
+          "
           effect="dark"
           placement="left"
           popper-class="SearchBoxTooltip"
@@ -56,36 +45,21 @@
       </el-col>
 
       <transition name="slide-fade">
-        <el-col
-          v-show="optionsVisible"
-          class="SearchOptionsBody"
-        >
+        <el-col v-show="optionsVisible" class="SearchOptionsBody">
           <el-checkbox-group
             v-model="selectedOptions"
             class="OnePerRow CheckboxSmall"
           >
-            <el-checkbox
-              label="name"
-              class="CheckboxSmall"
-            >
+            <el-checkbox label="name" class="CheckboxSmall">
               <translate>Initiative Name</translate>
             </el-checkbox>
-            <el-checkbox
-              label="overview"
-              class="CheckboxSmall"
-            >
+            <el-checkbox label="overview" class="CheckboxSmall">
               Overview of the <translate>digital health</translate>
             </el-checkbox>
-            <el-checkbox
-              label="partner"
-              class="CheckboxSmall"
-            >
+            <el-checkbox label="partner" class="CheckboxSmall">
               <translate>Implementing Partners</translate>
             </el-checkbox>
-            <el-checkbox
-              label="donor"
-              class="CheckboxSmall"
-            >
+            <el-checkbox label="donor" class="CheckboxSmall">
               <translate>Investors</translate>
             </el-checkbox>
           </el-checkbox-group>
@@ -96,38 +70,38 @@
 </template>
 
 <script>
-import { mapGettersActions } from "../../utilities/form.js";
+import { mapGettersActions } from '../../utilities/form.js'
 
 export default {
   data() {
     return {
       optionsVisible: false,
       showSearchBoxTooltip: false,
-    };
+    }
   },
   computed: {
     ...mapGettersActions({
       searchString: [
-        "dashboard",
-        "getSearchString",
-        "setSearchString",
+        'dashboard',
+        'getSearchString',
+        'setSearchString',
         300,
         true,
       ],
-      selectedOptions: ["dashboard", "getSearchIn", "setSearchIn", 0],
+      selectedOptions: ['dashboard', 'getSearchIn', 'setSearchIn', 0],
     }),
   },
   methods: {
     toggleOptionsVisibility() {
-      this.optionsVisible = !this.optionsVisible;
+      this.optionsVisible = !this.optionsVisible
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .SearchBox {
   .SearchInput {

@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="general"
-    class="GeneralOverview"
-  >
+  <div id="general" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('General overview') | translate"
@@ -14,9 +11,7 @@
         :publish-rule="publishRules.name"
       >
         <template slot="label">
-          <translate key="project-name">
-            Intiative Name
-          </translate>
+          <translate key="project-name"> Intiative Name </translate>
           <form-hint>
             <translate key="project-name-hint">
               If this is your first time uploading a project, a sample data form
@@ -43,9 +38,7 @@
         :publish-rule="publishRules.country_office"
       >
         <template slot="label">
-          <translate key="country_office">
-            Unicef Office
-          </translate>
+          <translate key="country_office"> Unicef Office </translate>
         </template>
         <country-office-select
           v-model="country_office"
@@ -57,18 +50,14 @@
 
       <custom-required-form-item>
         <template slot="label">
-          <translate key="country">
-            Country
-          </translate>
+          <translate key="country"> Country </translate>
         </template>
         {{ countryOfOffice }}
       </custom-required-form-item>
 
       <custom-required-form-item>
         <template slot="label">
-          <translate key="region">
-            Region
-          </translate>
+          <translate key="region"> Region </translate>
         </template>
         {{ selectedRegion }}
       </custom-required-form-item>
@@ -84,21 +73,14 @@
 
       <custom-required-form-item>
         <template slot="label">
-          <translate key="field-offices">
-            Field Office
-          </translate>
+          <translate key="field-offices"> Field Office </translate>
         </template>
-        <FieldOfficeSelector
-          v-model="field_office"
-          :office="country_office"
-        />
+        <FieldOfficeSelector v-model="field_office" :office="country_office" />
       </custom-required-form-item>
 
       <custom-required-form-item v-if="modified">
         <template slot="label">
-          <translate key="updated">
-            Last updated
-          </translate>
+          <translate key="updated"> Last updated </translate>
         </template>
         {{ lastUpdated }}
       </custom-required-form-item>
@@ -113,9 +95,7 @@
             Please provide a brief overview of the initiative.
           </translate>
           <form-hint>
-            <translate key="overview-hint">
-              -
-            </translate>
+            <translate key="overview-hint"> - </translate>
           </form-hint>
         </template>
 
@@ -130,10 +110,14 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate>The short description provides a clear understanding of the purpose and target group to a reader
-              who does not know anything about the initiative. It should include the technology or innovation, programme
-              function and target beneficiary. eg. Text-based behaviour change communication messages on maternal health
-              for midwives. </translate>
+            <translate
+              >The short description provides a clear understanding of the
+              purpose and target group to a reader who does not know anything
+              about the initiative. It should include the technology or
+              innovation, programme function and target beneficiary. eg.
+              Text-based behaviour change communication messages on maternal
+              health for midwives.
+            </translate>
           </p>
         </span>
       </custom-required-form-item>
@@ -165,16 +149,15 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate>Describe what the technology aims to achieve, detailing the
+            <translate
+              >Describe what the technology aims to achieve, detailing the
               users, the reasons for deploying the system, and current and
-              future phases of deployment.</translate>
+              future phases of deployment.</translate
+            >
           </p>
         </span>
       </custom-required-form-item>
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
+      <el-row :gutter="20" type="flex">
         <el-col :span="12">
           <custom-required-form-item
             :error="errors.first('start_date')"
@@ -182,9 +165,7 @@
             :publish-rule="publishRules.start_date"
           >
             <template slot="label">
-              <translate key="start-date">
-                Initiative start date
-              </translate>
+              <translate key="start-date"> Initiative start date </translate>
               <form-hint>
                 <translate key="start-date-hint">
                   When did the overall project, not just the digital health
@@ -213,9 +194,7 @@
             :publish-rule="publishRules.end_date"
           >
             <template slot="label">
-              <translate key="end-date">
-                Initiative end date
-              </translate>
+              <translate key="end-date"> Initiative end date </translate>
               <form-hint>
                 <translate key="end-date-hint">
                   When will the overall project be completed. If your project is
@@ -251,7 +230,8 @@
             </translate>
             <form-hint>
               <translate key="team-hint">
-                Initiative editors can change and update all project information.
+                Initiative editors can change and update all project
+                information.
               </translate>
             </form-hint>
           </template>
@@ -271,12 +251,13 @@
         >
           <template slot="label">
             <translate key="viewers">
-              Add team members (viewers)--can receive notification that initiative
-              has been added
+              Add team members (viewers)--can receive notification that
+              initiative has been added
             </translate>
             <form-hint>
               <translate key="viewers-hint">
-                Initiative viewers will be able to view the full initiative details.
+                Initiative viewers will be able to view the full initiative
+                details.
               </translate>
             </form-hint>
           </template>
@@ -294,17 +275,17 @@
 </template>
 
 <script>
-import { isAfter, format } from "date-fns";
-import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
-import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
-import CollapsibleCard from "../CollapsibleCard";
-import TeamSelector from "../TeamSelector";
-import FieldOfficeSelector from "../FieldOfficeSelector";
-import CountryOfficeSelect from "../../common/CountryOfficeSelect";
-import FormHint from "../FormHint";
-import { mapGettersActions } from "../../../utilities/form";
-import { mapGetters, mapState } from "vuex";
-import CustomRequiredFormTeamItem from "@/components/proxy/CustomRequiredFormTeamItem";
+import { isAfter, format } from 'date-fns'
+import { mapGetters, mapState } from 'vuex'
+import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import CollapsibleCard from '../CollapsibleCard'
+import TeamSelector from '../TeamSelector'
+import FieldOfficeSelector from '../FieldOfficeSelector'
+import CountryOfficeSelect from '../../common/CountryOfficeSelect'
+import FormHint from '../FormHint'
+import { mapGettersActions } from '../../../utilities/form'
 
 export default {
   components: {
@@ -322,29 +303,29 @@ export default {
       office: (state) => state.offices.office,
     }),
     ...mapGetters({
-      unicef_regions: "system/getUnicefRegions",
-      getCountryDetails: "countries/getCountryDetails",
-      modified: "project/getModified",
-      regionalOffices: "projects/getRegionalOffices",
+      unicef_regions: 'system/getUnicefRegions',
+      getCountryDetails: 'countries/getCountryDetails',
+      modified: 'project/getModified',
+      regionalOffices: 'projects/getRegionalOffices',
     }),
     ...mapGettersActions({
-      name: ["project", "getName", "setName", 0],
-      country: ["project", "getCountry", "setCountry", 0],
-      country_office: ["project", "getCountryOffice", "setCountryOffice", 0],
-      overview: ["project", "getOverview", "setOverview", 0],
+      name: ['project', 'getName', 'setName', 0],
+      country: ['project', 'getCountry', 'setCountry', 0],
+      country_office: ['project', 'getCountryOffice', 'setCountryOffice', 0],
+      overview: ['project', 'getOverview', 'setOverview', 0],
       implementation_overview: [
-        "project",
-        "getImplementationOverview",
-        "setImplementationOverview",
+        'project',
+        'getImplementationOverview',
+        'setImplementationOverview',
         0,
       ],
-      start_date: ["project", "getStartDate", "setStartDate", 0],
-      end_date: ["project", "getEndDate", "setEndDate", 0],
-      contact_name: ["project", "getContactName", "setContactName", 0],
-      contact_email: ["project", "getContactEmail", "setContactEmail", 0],
-      team: ["project", "getTeam", "setTeam", 0],
-      viewers: ["project", "getViewers", "setViewers", 0],
-      field_office: ["project", "getFieldOffice", "setFieldOffice", 0],
+      start_date: ['project', 'getStartDate', 'setStartDate', 0],
+      end_date: ['project', 'getEndDate', 'setEndDate', 0],
+      contact_name: ['project', 'getContactName', 'setContactName', 0],
+      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
+      team: ['project', 'getTeam', 'setTeam', 0],
+      viewers: ['project', 'getViewers', 'setViewers', 0],
+      field_office: ['project', 'getFieldOffice', 'setFieldOffice', 0],
     }),
     endDateError() {
       if (
@@ -353,62 +334,60 @@ export default {
         this.end_date &&
         isAfter(this.start_date, this.end_date)
       ) {
-        return this.$gettext("End date must be after Start date");
+        return this.$gettext('End date must be after Start date')
       }
-      return "";
+      return ''
     },
     selectedRegion() {
-      const office = this.offices.find((obj) => obj.id === this.country_office);
+      const office = this.offices.find((obj) => obj.id === this.country_office)
       if (office) {
-        const result = this.unicef_regions.find(
-          (uf) => uf.id === office.region
-        );
-        return (result && result.name) || "N/A";
+        const result = this.unicef_regions.find((uf) => uf.id === office.region)
+        return (result && result.name) || 'N/A'
       }
-      return "N/A";
+      return 'N/A'
     },
     countryOfOffice() {
-      const office = this.offices.find((obj) => obj.id === this.country_office);
-      return office ? this.getCountryDetails(office.country).name : "N/A";
+      const office = this.offices.find((obj) => obj.id === this.country_office)
+      return office ? this.getCountryDetails(office.country).name : 'N/A'
     },
     regionalOffice() {
       const office = this.regionalOffices.find(
         (obj) => obj.id === this.office.regional_office
-      );
-      return office ? office.name : "";
+      )
+      return office ? office.name : ''
     },
     lastUpdated() {
-      return format(new Date(this.modified), "DD/MM/YYYY HH:mm");
+      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm')
     },
   },
   methods: {
     async validate() {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate(),
-        Promise.resolve(this.endDateError === ""),
-      ]);
-      console.log("General overview published validation", validations);
-      return validations.reduce((a, c) => a && c, true);
+        Promise.resolve(this.endDateError === ''),
+      ])
+      console.log('General overview published validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft() {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
-        this.$validator.validate("name"),
-        this.$validator.validate("country_office"),
-        this.$validator.validate("contact_email"),
-        this.$validator.validate("team"),
-      ]);
-      console.log("General overview draft validation", validations);
-      return validations.reduce((a, c) => a && c, true);
+        this.$validator.validate('name'),
+        this.$validator.validate('country_office'),
+        this.$validator.validate('contact_email'),
+        this.$validator.validate('team'),
+      ])
+      console.log('General overview draft validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .GeneralOverview {
   .CountrySelector,

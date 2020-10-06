@@ -1,5 +1,5 @@
-import _template from './Axis.html';
-import AxisController from './AxisController';
+import _template from './Axis.html'
+import AxisController from './AxisController'
 
 const axisComponent = {
   controller: AxisController.axisFactory(),
@@ -9,8 +9,8 @@ const axisComponent = {
   bindings: {
     axisIndex: '<',
     showCurrent: '@',
-    domainIndex: '<'
-  }
-};
+    domainIndex: '<',
+  },
+}
 
-export default axisComponent;
+export default axisComponent

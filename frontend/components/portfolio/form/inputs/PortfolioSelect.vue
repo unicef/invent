@@ -17,48 +17,46 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-
 export default {
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change',
   },
   props: {
     value: {
       type: [Number, Array, String],
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
       default: false,
-      required: false
+      required: false,
     },
     multiple: {
       type: Boolean,
       default: false,
-      required: false
+      required: false,
     },
     placeholder: {
       type: String,
-      default: ""
+      default: '',
     },
     items: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     innerValue: {
       get() {
-        return this.value;
+        return this.value
       },
       set(value) {
-        this.$emit("change", value);
-      }
-    }
-  }
-};
+        this.$emit('change', value)
+      },
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped></style>

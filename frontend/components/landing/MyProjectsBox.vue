@@ -1,10 +1,6 @@
 <template>
   <div class="MyProjectsBox">
-    <el-row
-      type="flex"
-      align="middle"
-      class="ProjectsBoxHeadline"
-    >
+    <el-row type="flex" align="middle" class="ProjectsBoxHeadline">
       <el-col>
         <h2><translate>My Initiatives</translate></h2>
         <h6>
@@ -22,7 +18,12 @@
     >
       <el-col>
         <nuxt-link
-          :to="localePath({name: 'organisation-initiatives', params: $route.params })"
+          :to="
+            localePath({
+              name: 'organisation-initiatives',
+              params: $route.params,
+            })
+          "
           tag="button"
           class="el-button el-button--default el-button--medium"
         >
@@ -34,24 +35,24 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
-import UserProjectsList from "../common/UserProjectsList";
+import UserProjectsList from '../common/UserProjectsList'
 export default {
   components: {
     UserProjectsList,
   },
   computed: {
     ...mapGetters({
-      userProjecList: "projects/getUserProjectList",
+      userProjecList: 'projects/getUserProjectList',
     }),
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .MyProjectsBox {
   height: 100%;
@@ -64,7 +65,7 @@ export default {
     background-color: @colorBrandPrimary;
 
     &::after {
-      content: "";
+      content: '';
       z-index: 100;
       position: absolute;
       top: 100%;

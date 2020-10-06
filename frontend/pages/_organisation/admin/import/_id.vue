@@ -14,9 +14,7 @@
         :headers="rawImport.header_mapping"
         :publish="!rawImport.draft"
       >
-        <template
-          v-slot:default="{globalErrors, rules, nameMapping}"
-        >
+        <template #default="{ globalErrors, rules, nameMapping }">
           <div class="SavedSwitch">
             <el-switch
               v-model="showSaved"
@@ -32,32 +30,32 @@
                 :custom-fields-lib="customFieldsLib"
                 :name-mapping="nameMapping"
               >
-                <el-button
-                  type="primary"
-                  size="small"
-                  @click="saveAll"
-                >
-                  <translate>
-                    Save All
-                  </translate>
+                <el-button type="primary" size="small" @click="saveAll">
+                  <translate> Save All </translate>
                 </el-button>
               </import-headers>
               <div class="Rows">
                 <template v-if="showSaved">
                   <import-row
-                    v-for="(row) in saved"
+                    v-for="row in saved"
                     :key="row.id"
                     :row="row"
                     class="Row"
                   >
-                    <template v-slot:default="{data}">
-                      <div
-                        class="Column Thin"
-                      >
+                    <template #default="{ data }">
+                      <div class="Column Thin">
                         <el-button-group>
                           <a
                             v-if="row.project"
-                            :href="localePath({name: 'organisation-initiatives-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
+                            :href="
+                              localePath({
+                                name: 'organisation-initiatives-id-edit',
+                                params: {
+                                  id: row.project,
+                                  organisation: $route.params.organisation,
+                                },
+                              })
+                            "
                             target="_blank"
                             class="el-button el-button--info el-button--mini"
                           >
@@ -65,9 +63,7 @@
                           </a>
                         </el-button-group>
                       </div>
-                      <template
-                        v-for="header in rawImport.header_mapping"
-                      >
+                      <template v-for="header in rawImport.header_mapping">
                         <SmartCell
                           :key="row.id + header.title"
                           :value="data[header.title]"
@@ -91,13 +87,25 @@
                   :custom-fields-lib="customFieldsLib"
                   class="Row"
                 >
-                  <template v-slot:default="{errors, valid, handleValidation, data, original, rowSave, scrollToError}">
-                    <div
-                      class="Column Thin"
-                    >
+                  <template
+                    #default="{
+                      errors,
+                      valid,
+                      handleValidation,
+                      data,
+                      original,
+                      rowSave,
+                      scrollToError,
+                    }"
+                  >
+                    <div class="Column Thin">
                       <div class="ButtonList">
                         <el-button
-                          :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
+                          :type="
+                            globalErrors.length > 0 || !valid
+                              ? 'warning'
+                              : 'success'
+                          "
                           size="mini"
                           class="SaveButton"
                           @click="singleRowSave(rowSave, valid, scrollToError)"
@@ -114,9 +122,7 @@
                         </el-button>
                       </div>
                     </div>
-                    <template
-                      v-for="header in rawImport.header_mapping"
-                    >
+                    <template v-for="header in rawImport.header_mapping">
                       <SmartCell
                         :key="row.id + header.title"
                         :value="data[header.title]"
@@ -129,8 +135,16 @@
                         :sub-levels="subLevels"
                         :custom-fields-lib="customFieldsLib"
                         :name-mapping="nameMapping"
-                        @change="updateValue({row: index, key:header.title, value:$event})"
-                        @openDialog="$refs.dialog.openDialog(index, header.title, $event)"
+                        @change="
+                          updateValue({
+                            row: index,
+                            key: header.title,
+                            value: $event,
+                          })
+                        "
+                        @openDialog="
+                          $refs.dialog.openDialog(index, header.title, $event)
+                        "
                       />
                     </template>
                     <div class="Column" />
@@ -146,17 +160,17 @@
 </template>
 
 <script>
-import debounce from "lodash/debounce";
-import { mapGetters, mapActions } from "vuex";
-import ImportHeaders from "@/components/admin/import/ImportHeaders";
-import ImportValidation from "@/components/admin/import/ImportValidation";
-import ImportRow from "@/components/admin/import/ImportRow";
-import SmartCell from "@/components/admin/import/SmartCell";
-import ImportDialog from "@/components/admin/import/ImportDialog";
-import ImportDetails from "@/components/admin/import/ImportDetails";
+import debounce from 'lodash/debounce'
+import { mapGetters, mapActions } from 'vuex'
+import ImportHeaders from '@/components/admin/import/ImportHeaders'
+import ImportValidation from '@/components/admin/import/ImportValidation'
+import ImportRow from '@/components/admin/import/ImportRow'
+import SmartCell from '@/components/admin/import/SmartCell'
+import ImportDialog from '@/components/admin/import/ImportDialog'
+import ImportDetails from '@/components/admin/import/ImportDetails'
 
 export default {
-  name: "ImportDetail",
+  name: 'ImportDetail',
   components: {
     ImportValidation,
     ImportHeaders,
@@ -165,189 +179,189 @@ export default {
     ImportDialog,
     ImportDetails,
   },
+  async asyncData({ params, app: { $axios }, store }) {
+    const { data } = await $axios.get(`/api/projects/import/${params.id}/`)
+    await store.dispatch('countries/loadCountryDetails', data.country)
+    await store.dispatch('system/loadDonorDetails', data.donor)
+    return {
+      rawImport: data,
+    }
+  },
   data() {
     return {
       showSaved: false,
-    };
+    }
+  },
+  async fetch({ store }) {
+    await Promise.all([
+      store.dispatch('system/loadUserProfiles'),
+      store.dispatch('system/loadDonors'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('system/loadStaticData'),
+      store.dispatch('system/loadOrganisations'),
+      store.dispatch('countries/loadMapData'),
+    ])
   },
   computed: {
     ...mapGetters({
-      getCountryDetails: "countries/getCountryDetails",
-      getDonorDetails: "system/getDonorDetails",
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails',
     }),
     selectedCountry() {
       if (this.rawImport) {
-        return this.getCountryDetails(this.rawImport.country);
+        return this.getCountryDetails(this.rawImport.country)
       }
-      return {};
+      return {}
     },
     selectedDonor() {
       if (this.rawImport) {
-        return this.getDonorDetails(this.rawImport.donor);
+        return this.getDonorDetails(this.rawImport.donor)
       }
-      return {};
+      return {}
     },
     countryFieldsLib() {
       if (this.selectedCountry) {
         return this.selectedCountry.country_questions.reduce((a, c) => {
-          a[`MOH Q.: ${c.question}`] = c;
-          return a;
-        }, {});
+          a[`MOH Q.: ${c.question}`] = c
+          return a
+        }, {})
       }
-      return {};
+      return {}
     },
     donorFieldsLib() {
       if (this.selectedDonor) {
         return this.selectedDonor.donor_questions.reduce((a, c) => {
-          a[`INV Q.: ${c.question}`] = c;
-          return a;
-        }, {});
+          a[`INV Q.: ${c.question}`] = c
+          return a
+        }, {})
       }
-      return {};
+      return {}
     },
     customFieldsLib() {
-      return { ...this.donorFieldsLib, ...this.countryFieldsLib };
+      return { ...this.donorFieldsLib, ...this.countryFieldsLib }
     },
     subLevels() {
-      const nationalLevel = { id: "National Level", name: "National Level" };
+      const nationalLevel = { id: 'National Level', name: 'National Level' }
       if (this.selectedCountry) {
-        return [nationalLevel, ...this.selectedCountry.districts];
+        return [nationalLevel, ...this.selectedCountry.districts]
       }
-      return [nationalLevel];
+      return [nationalLevel]
     },
     saved() {
-      return this.rawImport.rows.filter((r) => r.project);
+      return this.rawImport.rows.filter((r) => r.project)
     },
     rows() {
-      return this.rawImport.rows.filter((r) => !r.project);
+      return this.rawImport.rows.filter((r) => !r.project)
     },
-  },
-  async asyncData({ params, app: { $axios }, store }) {
-    const { data } = await $axios.get(`/api/projects/import/${params.id}/`);
-    await store.dispatch("countries/loadCountryDetails", data.country);
-    await store.dispatch("system/loadDonorDetails", data.donor);
-    return {
-      rawImport: data,
-    };
-  },
-  async fetch({ store }) {
-    await Promise.all([
-      store.dispatch("system/loadUserProfiles"),
-      store.dispatch("system/loadDonors"),
-      store.dispatch("projects/loadProjectStructure"),
-      store.dispatch("system/loadStaticData"),
-      store.dispatch("system/loadOrganisations"),
-      store.dispatch("countries/loadMapData"),
-    ]);
   },
   methods: {
     ...mapActions({
-      refreshProfile: "user/refreshProfile",
+      refreshProfile: 'user/refreshProfile',
     }),
     updateValue({ row, key, value }) {
-      const originalRow = this.rows[row];
-      this.$set(originalRow.data, key, value);
-      this.saveUpdatedValue(originalRow);
+      const originalRow = this.rows[row]
+      this.$set(originalRow.data, key, value)
+      this.saveUpdatedValue(originalRow)
     },
     saveUpdatedValue: debounce(function (row) {
-      this.patchRow(row);
+      this.patchRow(row)
     }, 1000),
     async patchRow(row) {
-      return this.$axios.patch(`/api/projects/import-row/${row.id}/`, {
+      return await this.$axios.patch(`/api/projects/import-row/${row.id}/`, {
         ...row,
         id: undefined,
-      });
+      })
     },
     async deleteRow(row, index) {
       try {
         await this.$confirm(
           this.$gettext(
-            "Note that once this column is deleted, you cannot recover the data."
+            'Note that once this column is deleted, you cannot recover the data.'
           ),
-          this.$gettext("Row Delete"),
+          this.$gettext('Row Delete'),
           {
-            confirmButtonText: this.$gettext("OK"),
-            cancelButtonText: this.$gettext("Cancel"),
-            type: "warning",
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning',
           }
-        );
-        await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
-        this.rawImport.rows.splice(index, 1);
+        )
+        await this.$axios.delete(`/api/projects/import-row/${row.id}/`)
+        this.rawImport.rows.splice(index, 1)
       } catch (e) {
         this.$message({
-          type: "info",
-          message: this.$gettext("Delete canceled"),
-        });
+          type: 'info',
+          message: this.$gettext('Delete canceled'),
+        })
       }
     },
     async singleRowSave(doSave, valid, scrollToError) {
-      let newRow = null;
+      let newRow = null
       if (valid) {
         try {
           await this.$confirm(
             this.$gettext(
-              "Note that once you have saved this project, it will be uploaded to the DHA. You can access all of your saved Projects from your My Initiatives page."
+              'Note that once you have saved this project, it will be uploaded to the DHA. You can access all of your saved Projects from your My Initiatives page.'
             ),
-            this.$gettext("Save Initiative"),
+            this.$gettext('Save Initiative'),
             {
-              confirmButtonText: this.$gettext("OK"),
-              cancelButtonText: this.$gettext("Cancel"),
-              type: "warning",
+              confirmButtonText: this.$gettext('OK'),
+              cancelButtonText: this.$gettext('Cancel'),
+              type: 'warning',
             }
-          );
-          this.$nuxt.$loading.start("save");
-          newRow = await this.doSingleRowSave(doSave, true);
-          await this.refreshProfile();
-          this.$nuxt.$loading.finish("save");
+          )
+          this.$nuxt.$loading.start('save')
+          newRow = await this.doSingleRowSave(doSave, true)
+          await this.refreshProfile()
+          this.$nuxt.$loading.finish('save')
         } catch (e) {
-          this.$nuxt.$loading.finish("save");
+          this.$nuxt.$loading.finish('save')
           this.$message({
-            type: "info",
-            message: this.$gettext("Saving Cancelled"),
-          });
-          return;
+            type: 'info',
+            message: this.$gettext('Saving Cancelled'),
+          })
+          return
         }
         try {
           await this.$confirm(
             this.$gettext(
-              "Your project has been successfully saved as a draft, you can go to your project page or keep working on the import interface"
+              'Your project has been successfully saved as a draft, you can go to your project page or keep working on the import interface'
             ),
-            this.$gettext("Success!"),
+            this.$gettext('Success!'),
             {
-              confirmButtonText: this.$gettext("Initiative page"),
-              cancelButtonText: this.$gettext("Keep working"),
-              type: "info",
+              confirmButtonText: this.$gettext('Initiative page'),
+              cancelButtonText: this.$gettext('Keep working'),
+              type: 'info',
             }
-          );
-          const id = newRow.project;
+          )
+          const id = newRow.project
           this.$router.push(
             this.localePath({
-              name: "organisation-initiatives-id-edit",
+              name: 'organisation-initiatives-id-edit',
               params: { id, organisation: this.$route.params.organisation },
             })
-          );
+          )
         } catch (e) {
-          console.log("stay");
+          console.log('stay')
         }
       } else {
-        scrollToError();
+        scrollToError()
       }
     },
     async doSingleRowSave(doSave, nested) {
       try {
-        const { country, country_office, donor, draft } = this.rawImport;
-        const newRow = await doSave(country, donor, !draft, country_office);
-        await this.patchRow(newRow);
-        return newRow;
+        const { country, country_office, donor, draft } = this.rawImport
+        const newRow = await doSave(country, donor, !draft, country_office)
+        await this.patchRow(newRow)
+        return newRow
       } catch (e) {
-        console.error(e);
+        console.error(e)
         if (e.response && e.response.data) {
-          this.$alert(JSON.stringify(e.response.data), "Error", {
-            confirmButtonText: "OK",
-          });
+          this.$alert(JSON.stringify(e.response.data), 'Error', {
+            confirmButtonText: 'OK',
+          })
         }
         if (nested) {
-          throw e;
+          throw e
         }
       }
     },
@@ -355,66 +369,66 @@ export default {
       try {
         await this.$confirm(
           this.$gettext(
-            "Note that once you have saved these initiatives, they will be uploaded to the DHA. You can access all saved initiatives from your My Initiatives page."
+            'Note that once you have saved these initiatives, they will be uploaded to the DHA. You can access all saved initiatives from your My Initiatives page.'
           ),
-          this.$gettext("Save all initiatives"),
+          this.$gettext('Save all initiatives'),
           {
-            confirmButtonText: this.$gettext("OK"),
-            cancelButtonText: this.$gettext("Cancel"),
-            type: "warning",
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning',
           }
-        );
-        this.doSaveAll();
+        )
+        this.doSaveAll()
       } catch (e) {
         this.$message({
-          type: "info",
-          message: this.$gettext("Saving all initiatives has been cancelled"),
-        });
+          type: 'info',
+          message: this.$gettext('Saving all initiatives has been cancelled'),
+        })
       }
     },
     async doSaveAll() {
-      this.$nuxt.$loading.start("saveAll");
+      this.$nuxt.$loading.start('saveAll')
       const toSave = this.$refs.row.filter(
         (r) => r.valid && r.row && !r.row.project
-      );
+      )
       try {
         for (const p of toSave) {
-          await this.doSingleRowSave(p.save, true);
+          await this.doSingleRowSave(p.save, true)
         }
-        await this.refreshProfile();
+        await this.refreshProfile()
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
-      this.$nuxt.$loading.finish("saveAll");
+      this.$nuxt.$loading.finish('saveAll')
       try {
         await this.$confirm(
           this.$gettext(
-            "Your initiatives have been successfully saved as a draft, you can go to your project inbox or keep working on the import interface"
+            'Your initiatives have been successfully saved as a draft, you can go to your project inbox or keep working on the import interface'
           ),
-          this.$gettext("Success!"),
+          this.$gettext('Success!'),
           {
-            confirmButtonText: this.$gettext("Initiative inbox"),
-            cancelButtonText: this.$gettext("Keep working"),
-            type: "info",
+            confirmButtonText: this.$gettext('Initiative inbox'),
+            cancelButtonText: this.$gettext('Keep working'),
+            type: 'info',
           }
-        );
+        )
         this.$router.push(
           this.localePath({
-            name: "organisation-initiatives",
+            name: 'organisation-initiatives',
             params: this.$route.params,
           })
-        );
+        )
       } catch (e) {
-        console.log("stay");
+        console.log('stay')
       }
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .AdminImportPage {
   min-width: @appWidthMinLimit;

@@ -146,11 +146,10 @@ export default {
     type: {
       type: String,
       default: null,
-      validator: (value) => ["G", "CA", "SCA", "D", "DA", "SDA"],
+      validator: (value) => ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'],
     },
   },
-};
+}
 </script>
 
-<style>
-</style>
+<style></style>

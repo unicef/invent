@@ -14,39 +14,39 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      visible: true
-    };
+      visible: true,
+    }
   },
   computed: {
     ...mapGetters({
-      landingPageDefaults: "system/getLandingPageDefaults",
-      activeCountry: "landing/getActiveCountry",
-      landingData: "landing/getLandingPageData"
+      landingPageDefaults: 'system/getLandingPageDefaults',
+      activeCountry: 'landing/getActiveCountry',
+      landingData: 'landing/getLandingPageData',
     }),
     showWelcomeBox() {
-      return this.visible && !this.activeCountry;
+      return this.visible && !this.activeCountry
     },
     welcomeText() {
       return this.landingData
         ? this.landingData.cover_text
-        : this.landingPageDefaults.cover_text;
-    }
+        : this.landingPageDefaults.cover_text
+    },
   },
   methods: {
     closeWelcomeBox() {
-      this.visible = false;
-    }
-  }
-};
+      this.visible = false
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .WelcomeBox-holder {
   .WelcomeBox {

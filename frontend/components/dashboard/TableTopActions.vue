@@ -7,38 +7,26 @@
   >
     <el-col class="TableExportOptions">
       <el-row type="flex">
-        <el-button
-          size="small"
-          @click="toggleSelectAll"
-        >
-          <translate
-            v-show="!allSelected"
-            :parameters="{total}"
-          >
+        <el-button size="small" @click="toggleSelectAll">
+          <translate v-show="!allSelected" :parameters="{ total }">
             Select all {total} initiatives
           </translate>
-          <translate
-            v-show="allSelected"
-            :parameters="{total}"
-          >
+          <translate v-show="allSelected" :parameters="{ total }">
             Deselect all {total} initiatives
           </translate>
         </el-button>
 
         <div class="Separator" />
         <list-export :projects="rowToExport">
-          <template #default="{parsed}">
+          <template #default="{ parsed }">
             <xlsx-workbook>
-              <xlsx-sheet
-                :collection="parsed"
-                sheet-name="export"
-              />
+              <xlsx-sheet :collection="parsed" sheet-name="export" />
               <xlsx-download
                 disable-wrapper-click
-                :options="{bookType: exportType.toLowerCase()}"
+                :options="{ bookType: exportType.toLowerCase() }"
                 :filename="`export.${exportType.toLowerCase()}`"
               >
-                <template #default="{download}">
+                <template #default="{ download }">
                   <el-button
                     :disabled="selectedRows.length === 0"
                     type="primary"
@@ -51,7 +39,7 @@
                       <translate>Export selected</translate>
                     </span>
                     <span v-show="selected">
-                      <translate :parameters="{selected}">
+                      <translate :parameters="{ selected }">
                         Export {selected} selected
                       </translate>
                     </span>
@@ -61,22 +49,10 @@
             </xlsx-workbook>
           </template>
         </list-export>
-        <el-select
-          v-model="exportType"
-          size="small"
-        >
-          <el-option
-            label="CSV"
-            value="CSV"
-          />
-          <el-option
-            label="XLSX"
-            value="XLSX"
-          />
-          <el-option
-            label="PDF"
-            value="PDF"
-          />
+        <el-select v-model="exportType" size="small">
+          <el-option label="CSV" value="CSV" />
+          <el-option label="XLSX" value="XLSX" />
+          <el-option label="PDF" value="PDF" />
         </el-select>
 
         <template v-if="showEmailButton">
@@ -89,13 +65,8 @@
             @click="openMailDialog"
           >
             <fa icon="envelope" />
-            <translate v-show="selected === 0">
-              Contact selected
-            </translate>
-            <translate
-              v-show="selected > 0"
-              :parameters="{selected}"
-            >
+            <translate v-show="selected === 0"> Contact selected </translate>
+            <translate v-show="selected > 0" :parameters="{ selected }">
               Contact {selected} selected
             </translate>
           </el-button>
@@ -105,10 +76,7 @@
     </el-col>
 
     <el-col class="TableLegend">
-      <el-row
-        type="flex"
-        align="middle"
-      >
+      <el-row type="flex" align="middle">
         <project-legend
           :compact-mode="viewportSize < 1440"
           force-star
@@ -144,7 +112,7 @@
               <li
                 v-for="c in selectedColumns"
                 :key="c.id"
-                :class="['Item', {'Selected': c.selected}]"
+                :class="['Item', { Selected: c.selected }]"
                 @click="c.selected = !c.selected"
               >
                 <fa icon="check" />
@@ -152,10 +120,7 @@
               </li>
             </ul>
             <div class="CustomPopoverActions">
-              <el-row
-                type="flex"
-                align="middle"
-              >
+              <el-row type="flex" align="middle">
                 <el-col>
                   <el-button
                     type="text"
@@ -186,12 +151,11 @@
 </template>
 
 <script>
-import { XlsxWorkbook, XlsxSheet, XlsxDownload } from "vue-xlsx";
-import ProjectLegend from "../common/ProjectLegend";
-import PdfExport from "./PdfExport";
-import ListExport from "@/components/dashboard/ListExport";
-
-import { mapGetters, mapActions } from "vuex";
+import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
+import ListExport from '@/components/dashboard/ListExport'
+import { mapGetters, mapActions } from 'vuex'
+import ProjectLegend from '../common/ProjectLegend'
+import PdfExport from './PdfExport'
 
 export default {
   components: {
@@ -204,115 +168,116 @@ export default {
   },
   data() {
     return {
-      exportType: "XLSX",
+      exportType: 'XLSX',
       columnSelectorOpen: false,
       selectedColumns: [],
       viewportSize: 2000,
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      columns: "dashboard/getAvailableColumns",
-      selectedCol: "dashboard/getSelectedColumns",
-      selectedRows: "dashboard/getSelectedRows",
-      allSelected: "dashboard/getSelectAll",
-      total: "dashboard/getTotal",
-      user: "user/getProfile",
-      projects: "dashboard/getProjectsBucket",
-      dashboardId: "dashboard/getDashboardId",
-      dashboardType: "dashboard/getDashboardType",
+      columns: 'dashboard/getAvailableColumns',
+      selectedCol: 'dashboard/getSelectedColumns',
+      selectedRows: 'dashboard/getSelectedRows',
+      allSelected: 'dashboard/getSelectAll',
+      total: 'dashboard/getTotal',
+      user: 'user/getProfile',
+      projects: 'dashboard/getProjectsBucket',
+      dashboardId: 'dashboard/getDashboardId',
+      dashboardType: 'dashboard/getDashboardType',
     }),
     settingsTitle() {
-      return `${this.$gettext("main fields")} (${this.selectedCol.length}/${
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${
         this.columns.length
-      })`;
+      })`
     },
     selected() {
-      return this.allSelected ? this.total : this.selectedRows.length;
+      return this.allSelected ? this.total : this.selectedRows.length
     },
     rowToExport() {
       return this.allSelected
         ? this.projects
         : this.projects.filter((p) =>
             this.selectedRows.some((sr) => sr === p.id)
-          );
+          )
     },
     showEmailButton() {
-      const allowed = ["CA", "SCA", "D", "DA", "SDA"];
+      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA']
       if (this.user) {
         return (
           allowed.includes(this.user.account_type) || this.user.is_superuser
-        );
+        )
       }
-      return false;
+      return false
     },
   },
   mounted() {
     this.$nextTick(() => {
-      this.setViewport();
-      window.addEventListener("resize", this.setViewport);
-    });
+      this.setViewport()
+      window.addEventListener('resize', this.setViewport)
+    })
   },
   beforeDestroy() {
+    // eslint-disable-next-line
     if (process.client) {
-      window.removeEventListener("resize", this.setViewport);
+      window.removeEventListener('resize', this.setViewport)
     }
   },
   methods: {
     ...mapActions({
-      setSelectedColumns: "dashboard/setSelectedColumns",
-      setSelectAll: "dashboard/setSelectAll",
-      setSendEmailDialogState: "layout/setSendEmailDialogState",
-      loadProjectsBucket: "dashboard/loadProjectsBucket",
-      setSelectedRows: "dashboard/setSelectedRows",
+      setSelectedColumns: 'dashboard/setSelectedColumns',
+      setSelectAll: 'dashboard/setSelectAll',
+      setSendEmailDialogState: 'layout/setSendEmailDialogState',
+      loadProjectsBucket: 'dashboard/loadProjectsBucket',
+      setSelectedRows: 'dashboard/setSelectedRows',
     }),
     setViewport() {
       if (process.client && window) {
-        this.viewportSize = window.innerWidth;
+        this.viewportSize = window.innerWidth
       }
     },
     popperOpenHandler() {
-      this.selectedColumns = [...this.columns.map((s) => ({ ...s }))];
+      this.selectedColumns = [...this.columns.map((s) => ({ ...s }))]
     },
     updateColumns() {
       this.setSelectedColumns(
         this.selectedColumns.filter((s) => s.selected).map((s) => s.id)
-      );
-      this.columnSelectorOpen = false;
+      )
+      this.columnSelectorOpen = false
     },
     async toggleSelectAll() {
       if (!this.allSelected) {
-        await this.loadProjectsBucket();
-        this.setSelectAll(true);
+        await this.loadProjectsBucket()
+        this.setSelectAll(true)
       } else {
-        this.setSelectAll(false);
-        this.setSelectedRows([]);
+        this.setSelectAll(false)
+        this.setSelectedRows([])
       }
     },
     exportRows(xlsxDownloadFunction) {
-      this.$nuxt.$loading.start("pdf");
-      window.setTimeout(async () => {
-        if (this.exportType === "PDF") {
-          this.$refs.pdfExport.printPdf();
+      this.$nuxt.$loading.start('pdf')
+      window.setTimeout(() => {
+        if (this.exportType === 'PDF') {
+          this.$refs.pdfExport.printPdf()
         } else {
-          xlsxDownloadFunction();
+          xlsxDownloadFunction()
         }
-        this.$nuxt.$loading.finish("pdf");
-      }, 500);
+        this.$nuxt.$loading.finish('pdf')
+      }, 500)
     },
     async openMailDialog() {
       if (this.allSelected) {
-        await this.loadProjectsBucket();
+        await this.loadProjectsBucket()
       }
-      this.setSendEmailDialogState(true);
+      this.setSendEmailDialogState(true)
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .TableTopActions {
   width: calc(100vw - @advancedSearchWidth);

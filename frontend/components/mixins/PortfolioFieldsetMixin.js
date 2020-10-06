@@ -2,15 +2,15 @@ export default {
   props: {
     usePublishRules: {
       type: Boolean,
-      default: false
+      default: false,
     },
     draftRules: {
       type: Object,
-      required: true
+      required: true,
     },
     publishRules: {
       type: Object,
-      required: true
-    }
-  }
-};
+      required: true,
+    },
+  },
+}

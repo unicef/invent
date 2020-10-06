@@ -5,21 +5,12 @@
     <div class="MColumns">
       <div class="MColumn">
         <div class="Yaxis">
-          <span
-            v-for="text in left"
-            :key="text"
-          >{{ text }}</span>
+          <span v-for="text in left" :key="text">{{ text }}</span>
         </div>
         <div class="Xaxis">
-          <span
-            v-for="text in bottom"
-            :key="text"
-          >{{ text }}</span>
+          <span v-for="text in bottom" :key="text">{{ text }}</span>
         </div>
-        <div
-          class="Elements"
-          :style="matrixStyle"
-        >
+        <div class="Elements" :style="matrixStyle">
           <matrix-element
             v-for="(element, index) in elements"
             :key="`${element.x}_${element.y}`"
@@ -32,24 +23,17 @@
         </div>
       </div>
       <div class="MColumn">
-        <div
-          v-if="active"
-          class="Overlay"
-        >
-          <div
-            class="el-icon-close"
-            @click="activeIndex = undefined"
-          />
+        <div v-if="active" class="Overlay">
+          <div class="el-icon-close" @click="activeIndex = undefined" />
           <div class="ListTitle">
             <h4>List of initiatives ({{ active.projects.length }})</h4>
-            <p>{{ leftText }}: {{ active.y }}&nbsp; &nbsp; {{ bottomText }}: {{ active.x }}</p>
+            <p>
+              {{ leftText }}: {{ active.y }}&nbsp; &nbsp; {{ bottomText }}:
+              {{ active.x }}
+            </p>
           </div>
           <div class="List">
-            <el-scrollbar
-              class="Scroll"
-              :native="false"
-              :noresize="false"
-            >
+            <el-scrollbar class="Scroll" :native="false" :noresize="false">
               <div
                 v-for="project in active.projects"
                 :key="project.id"
@@ -64,10 +48,21 @@
         </div>
         <div class="Content">
           <h4>Summary</h4>
-          <p>Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet. Gallia est omnis divisa in partes tres, quarum. Pellentesque habitant morbi tristique senectus et netus. Donec sed odio operae, eu vulputate felis rhoncus. Curabitur est gravida et libero vitae dictum. Cum ceteris in veneratione tui montes, nascetur mus. Ab illo tempore, ab est sed immemorabili. Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Qui ipsorum lingua Celtae, nostra Galli appellantur.</p>
+          <p>
+            Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis
+            lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id
+            facit quod lex prohibet. Gallia est omnis divisa in partes tres,
+            quarum. Pellentesque habitant morbi tristique senectus et netus.
+            Donec sed odio operae, eu vulputate felis rhoncus. Curabitur est
+            gravida et libero vitae dictum. Cum ceteris in veneratione tui
+            montes, nascetur mus. Ab illo tempore, ab est sed immemorabili.
+            Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+            tempor incidunt ut labore et dolore magna aliqua. Qui ipsorum lingua
+            Celtae, nostra Galli appellantur.
+          </p>
           <h4>Contact Person</h4>
           <p>
-            Edson Monterio <br>
+            Edson Monterio <br />
             <a href="mailto:emonterio@unicef.org">emonterio@unicef.org</a>
           </p>
         </div>
@@ -77,9 +72,9 @@
 </template>
 
 <script>
-import MatrixElement from "@/components/portfolio/Matrix-element";
+import MatrixElement from '@/components/portfolio/Matrix-element'
 export default {
-  name: "Matrix",
+  name: 'Matrix',
   components: {
     MatrixElement,
   },
@@ -98,7 +93,7 @@ export default {
     },
     color: {
       type: String,
-      default: "",
+      default: '',
     },
     top: {
       type: Boolean,
@@ -106,61 +101,61 @@ export default {
     },
     bgColor: {
       type: String,
-      default: "",
+      default: '',
     },
     bgImage: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
     return {
       activeIndex: undefined,
-    };
+    }
   },
   computed: {
     leftText() {
-      return this.removeBracets(this.left[1]);
+      return this.removeBracets(this.left[1])
     },
     bottomText() {
-      return this.removeBracets(this.bottom[1]);
+      return this.removeBracets(this.bottom[1])
     },
     active() {
       return this.activeIndex !== undefined
         ? this.elements[this.activeIndex]
-        : undefined;
+        : undefined
     },
     matrixStyle() {
       if (this.bgImage) {
-        return `background-image: url(${this.bgImage})`;
+        return `background-image: url(${this.bgImage})`
       }
       if (this.bgColor) {
-        return `background-color: ${this.bgColor}`;
+        return `background-color: ${this.bgColor}`
       }
-      return "";
+      return ''
     },
   },
   methods: {
     removeBracets(text) {
-      return text.replace(/.\(.*\)/, "");
+      return text.replace(/.\(.*\)/, '')
     },
     getPath(project) {
       return this.localePath({
-        name: "organisation-initiatives-id-published",
-        params: { organisation: "-", id: project.id },
-      });
+        name: 'organisation-initiatives-id-published',
+        params: { organisation: '-', id: project.id },
+      })
     },
     getState(index) {
       if (this.activeIndex === undefined) {
-        return "normal";
+        return 'normal'
       }
       if (this.activeIndex === index) {
-        return "active";
+        return 'active'
       }
-      return "inactive";
+      return 'inactive'
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>
@@ -250,7 +245,7 @@ export default {
           }
         }
         &:after {
-          content: "";
+          content: '';
           border-top: 20px solid transparent;
           border-bottom: 20px solid transparent;
           position: absolute;
@@ -342,7 +337,7 @@ export default {
     position: absolute;
     width: 11px;
     height: 10px;
-    background-image: url("/arrowhead-tl.svg");
+    background-image: url('/arrowhead-tl.svg');
   }
   .ArrowTop {
     left: 0;

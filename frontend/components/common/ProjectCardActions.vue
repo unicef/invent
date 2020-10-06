@@ -1,12 +1,17 @@
 <template>
   <div class="ProjectCardActions">
-    <el-row
-      type="flex"
-      justify="end"
-    >
+    <el-row type="flex" justify="end">
       <el-col v-if="showViewDraft">
         <nuxt-link
-          :to="localePath({name: 'organisation-initiatives-id', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id',
+              params: {
+                id: project.id,
+                organisation: $route.params.organisation,
+              },
+            })
+          "
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
@@ -15,7 +20,15 @@
       </el-col>
       <el-col v-if="showViewPublished">
         <nuxt-link
-          :to="localePath({name: 'organisation-initiatives-id-published', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id-published',
+              params: {
+                id: project.id,
+                organisation: $route.params.organisation,
+              },
+            })
+          "
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
@@ -24,7 +37,15 @@
       </el-col>
       <el-col v-if="showEditDraft">
         <nuxt-link
-          :to="localePath({name: 'organisation-initiatives-id-edit', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id-edit',
+              params: {
+                id: project.id,
+                organisation: $route.params.organisation,
+              },
+            })
+          "
           class="NuxtLink IconLeft"
         >
           <fa icon="edit" />
@@ -33,7 +54,15 @@
       </el-col>
       <el-col v-if="isSuperUser">
         <nuxt-link
-          :to="localePath({name: 'organisation-initiatives-id-assessment', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id-assessment',
+              params: {
+                id: project.id,
+                organisation: $route.params.organisation,
+              },
+            })
+          "
           class="NuxtLink IconLeft"
         >
           <fa icon="tachometer-alt" />
@@ -44,7 +73,12 @@
         <nuxt-link
           to=""
           class="NuxtLink IconLeft Danger"
-          @click.native="handleClickUnPublish({ name: 'organisation-initiatives' }, project.id)"
+          @click.native="
+            handleClickUnPublish(
+              { name: 'organisation-initiatives' },
+              project.id
+            )
+          "
         >
           <fa icon="times-circle" />
           <translate>Unpublish</translate>
@@ -55,7 +89,7 @@
 </template>
 
 <script>
-import handleProjectActions from "@/components/mixins/handleProjectActions";
+import handleProjectActions from '@/components/mixins/handleProjectActions'
 
 export default {
   mixins: [handleProjectActions],
@@ -71,24 +105,24 @@ export default {
   },
   computed: {
     isSuperUser() {
-      return this.user && this.user.is_superuser;
+      return this.user && this.user.is_superuser
     },
     showViewDraft() {
-      return this.forceShow || this.project.isViewer || this.project.isMember;
+      return this.forceShow || this.project.isViewer || this.project.isMember
     },
     showEditDraft() {
-      return this.forceShow || this.project.isMember;
+      return this.forceShow || this.project.isMember
     },
     showViewPublished() {
-      return this.forceShow || this.project.isPublished;
+      return this.forceShow || this.project.isPublished
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .ProjectCardActions {
   .el-row {

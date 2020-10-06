@@ -2,48 +2,46 @@
   <div class="FieldOfficeItem">
     <span v-if="selected">{{ selected.name }}</span>
     <span v-else class="muted">
-      <translate>
-        N/A
-      </translate>
+      <translate> N/A </translate>
     </span>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change',
   },
   props: {
     value: {
       type: Number,
-      default: null
+      default: null,
     },
     office: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
-      open: false
-    };
+      open: false,
+    }
   },
   computed: {
     ...mapGetters({
-      items: "projects/getFieldOffices"
+      items: 'projects/getFieldOffices',
     }),
     filtered() {
-      return this.items.filter(i => i.country_office_id === this.office);
+      return this.items.filter((i) => i.country_office_id === this.office)
     },
     selected() {
-      return this.filtered.find(f => this.value === f.id);
-    }
-  }
-};
+      return this.filtered.find((f) => this.value === f.id)
+    },
+  },
+}
 </script>
 
 <style lang="less">

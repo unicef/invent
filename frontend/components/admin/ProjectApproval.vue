@@ -1,9 +1,6 @@
 <template>
   <div class="ProjectApprovalTable">
-    <el-row
-      type="flex"
-      class="Actions"
-    >
+    <el-row type="flex" class="Actions">
       <el-col class="Download">
         <el-button
           :disabled="rowSelection.length === 0"
@@ -20,31 +17,13 @@
             <div class="Separator" />
           </el-col>
           <el-col>
-            <span class="Label">
-              Approved:
-            </span>
+            <span class="Label"> Approved: </span>
           </el-col>
           <el-col>
             <el-checkbox-group v-model="filters">
-              <el-checkbox
-                :label="true"
-                border
-                size="small"
-              >
-                Yes
-              </el-checkbox>
-              <el-checkbox
-                :label="false"
-                border
-                size="small"
-              >
-                No
-              </el-checkbox>
-              <el-checkbox
-                :label="null"
-                border
-                size="small"
-              >
+              <el-checkbox :label="true" border size="small"> Yes </el-checkbox>
+              <el-checkbox :label="false" border size="small"> No </el-checkbox>
+              <el-checkbox :label="null" border size="small">
                 Pending
               </el-checkbox>
             </el-checkbox-group>
@@ -58,11 +37,7 @@
       size="medium"
       @selection-change="selectionHandler"
     >
-      <el-table-column
-        type="selection"
-        align="center"
-        width="46"
-      />
+      <el-table-column type="selection" align="center" width="46" />
 
       <el-table-column
         :label="$gettext('Initiative') | translate"
@@ -77,10 +52,7 @@
         prop="user"
       >
         <template slot-scope="scope">
-          <user-item
-            :id="getUserId(scope.row)"
-            show-organisation
-          />
+          <user-item :id="getUserId(scope.row)" show-organisation />
         </template>
       </el-table-column>
       <el-table-column
@@ -93,15 +65,9 @@
           <approval-tag :value="scope.row.approved" />
         </template>
       </el-table-column>
-      <el-table-column
-        label="Actions"
-        width="120px"
-      >
+      <el-table-column label="Actions" width="120px">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="openDetails(scope.row.id)"
-          >
+          <el-button size="mini" @click="openDetails(scope.row.id)">
             Details
           </el-button>
         </template>
@@ -111,12 +77,12 @@
 </template>
 
 <script>
-import Papa from "papaparse";
-import { format } from "date-fns";
-import { uriDownloader } from "../../utilities/dom";
-import { mapGetters, mapActions } from "vuex";
-import ApprovalTag from "./ApprovalTag";
-import UserItem from "../common/UserItem";
+import Papa from 'papaparse'
+import { format } from 'date-fns'
+import { mapGetters, mapActions } from 'vuex'
+import { uriDownloader } from '../../utilities/dom'
+import UserItem from '../common/UserItem'
+import ApprovalTag from './ApprovalTag'
 
 export default {
   components: {
@@ -127,72 +93,72 @@ export default {
     return {
       filters: [true, false, null],
       rowSelection: [],
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      list: "admin/approval/getList",
-      getUserDetails: "system/getUserProfileDetails",
+      list: 'admin/approval/getList',
+      getUserDetails: 'system/getUserProfileDetails',
     }),
     filteredList() {
       return this.list.filter(
         (i) =>
           this.filters.length === 0 ||
           this.filters.some((f) => f === i.approved)
-      );
+      )
     },
     parsedList() {
       return this.rowSelection.map((i) => {
-        const user = this.getUserDetails(this.getUserId(i));
+        const user = this.getUserDetails(this.getUserId(i))
         const approved =
           i.approved === true
-            ? this.$gettext("Yes")
+            ? this.$gettext('Yes')
             : i.approved === false
-            ? this.$gettext("No")
-            : this.$gettext("Pending");
+            ? this.$gettext('No')
+            : this.$gettext('Pending')
         return {
           project_id: i.project,
           project_name: i.project_name,
-          user: user ? user.name : "",
+          user: user ? user.name : '',
           approved,
-          modified: format(i.modified, "YYYY-MM-DD HH:mm"),
-        };
-      });
+          modified: format(i.modified, 'YYYY-MM-DD HH:mm'),
+        }
+      })
     },
   },
   methods: {
     ...mapActions({
-      openDetails: "admin/approval/setCurrentElement",
+      openDetails: 'admin/approval/setCurrentElement',
     }),
     getUserId(row) {
-      const history = row.history;
+      const history = row.history
       if (history && history.length > 0) {
-        const first = history[0];
+        const first = history[0]
         if (first && first.history_user__userprofile) {
-          return first.history_user__userprofile;
+          return first.history_user__userprofile
         }
-        return row.legacy_approved_by;
+        return row.legacy_approved_by
       }
     },
     filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
+      const property = column.property
+      return row[property] === value
     },
     selectionHandler(selection) {
-      this.rowSelection = selection;
+      this.rowSelection = selection
     },
     csvExport() {
-      const csv = Papa.unparse(this.parsedList, { delimiter: ";" });
-      const toDownload = `data:text/csv;charset=utf-8,${csv}`;
-      uriDownloader(toDownload, "project-approval-export.csv");
+      const csv = Papa.unparse(this.parsedList, { delimiter: ';' })
+      const toDownload = `data:text/csv;charset=utf-8,${csv}`
+      uriDownloader(toDownload, 'project-approval-export.csv')
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .ProjectApprovalTable {
   .Actions {

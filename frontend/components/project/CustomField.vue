@@ -4,22 +4,13 @@
     :label="question"
     class="CustomField"
   >
-    <div
-      v-show="isPrivate"
-      class="PrivateBadge"
-    >
+    <div v-show="isPrivate" class="PrivateBadge">
       <el-tooltip
         effect="dark"
         placement="right"
         content="This field is hidden from public"
       >
-        <el-tag
-          :key="1"
-          size="mini"
-          type="danger"
-        >
-          Private field
-        </el-tag>
+        <el-tag :key="1" size="mini" type="danger"> Private field </el-tag>
       </el-tooltip>
     </div>
 
@@ -61,151 +52,153 @@
         popper-class="CustomFieldSelectorDropdown"
         class="CustomFieldSelector"
       >
-        <el-option
-          v-for="opt in options"
-          :key="opt"
-          :value="opt"
-        />
+        <el-option v-for="opt in options" :key="opt" :value="opt" />
       </el-select>
     </template>
   </el-form-item>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters, mapActions } from 'vuex'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
 export default {
   mixins: [VeeValidationMixin],
   props: {
     type: {
       type: Number,
-      required: true
+      required: true,
     },
     id: {
       type: Number,
-      required: true
+      required: true,
     },
     question: {
       type: String,
-      required: true
+      required: true,
     },
     options: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     isRequired: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isPrivate: {
       type: Boolean,
-      default: false
+      default: false,
     },
     doValidation: {
       type: Boolean,
-      default: false
+      default: false,
     },
     donorId: {
       type: Number,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     ...mapGetters({
       getCountryAnswerDetails: 'project/getCountryAnswerDetails',
-      getDonorsAnswerDetails: 'project/getDonorsAnswerDetails'
+      getDonorsAnswerDetails: 'project/getDonorsAnswerDetails',
     }),
-    answer () {
-      const saved = !this.donorId ? this.getCountryAnswerDetails(this.id) : this.getDonorsAnswerDetails(this.id);
-      return saved || {
-        question_id: this.id,
-        answer: null
-      };
+    answer() {
+      const saved = !this.donorId
+        ? this.getCountryAnswerDetails(this.id)
+        : this.getDonorsAnswerDetails(this.id)
+      return (
+        saved || {
+          question_id: this.id,
+          answer: null,
+        }
+      )
     },
-    value () {
-      return this.answer.answer;
+    value() {
+      return this.answer.answer
     },
     innerValue: {
-      get () {
+      get() {
         if (this.value && Array.isArray(this.value) && this.value.length > 0) {
-          return this.type === 5 ? this.value : this.value[0];
+          return this.type === 5 ? this.value : this.value[0]
         }
-        return this.type === 5 ? [] : null;
+        return this.type === 5 ? [] : null
       },
-      set (answer) {
-        answer = Array.isArray(answer) ? answer : [answer];
+      set(answer) {
+        answer = Array.isArray(answer) ? answer : [answer]
         if (!this.donorId) {
-          this.setCountryAnswer({ ...this.answer, answer });
+          this.setCountryAnswer({ ...this.answer, answer })
         } else {
-          this.setDonorAnswer({ ...this.answer, answer });
+          this.setDonorAnswer({ ...this.answer, answer })
         }
-      }
+      },
     },
-    localRules () {
+    localRules() {
       return {
         required: this.isRequired && this.doValidation,
-        numeric: this.type === 2 && this.doValidation
-      };
-    }
+        numeric: this.type === 2 && this.doValidation,
+      }
+    },
   },
   watch: {
     customCountryErrors: {
       immediate: true,
-      handler (errors) {
+      handler(errors) {
         if (!this.donorId) {
-          this.findCountryError(errors);
+          this.findCountryError(errors)
         }
-      }
+      },
     },
     customDonorsErrors: {
       immediate: true,
-      handler (errors) {
+      handler(errors) {
         if (this.donorId) {
-          this.findDonorError(errors);
+          this.findDonorError(errors)
         }
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapActions({
       setCountryAnswer: 'project/setCountryAnswer',
-      setDonorAnswer: 'project/setDonorAnswer'
+      setDonorAnswer: 'project/setDonorAnswer',
     }),
-    addErrorToBag (error) {
-      const firsElement = error[Object.keys(error)[0]];
-      const msg = firsElement ? firsElement[0] : null;
+    addErrorToBag(error) {
+      const firsElement = error[Object.keys(error)[0]]
+      const msg = firsElement ? firsElement[0] : null
       if (msg) {
         this.errors.add({
           field: 'answer',
           scope: 'custom_question_' + this.id,
-          msg
-        });
+          msg,
+        })
       }
     },
-    findCountryError (errors) {
+    findCountryError(errors) {
       if (errors && errors.length > this.index - 1) {
-        const error = errors[this.index];
+        const error = errors[this.index]
         if (error) {
-          this.addErrorToBag(error);
+          this.addErrorToBag(error)
         }
       }
     },
-    findDonorError (errors) {
-      const error = errors.find(e => e.index === this.index && e.donor_id === this.donorId);
+    findDonorError(errors) {
+      const error = errors.find(
+        (e) => e.index === this.index && e.donor_id === this.donorId
+      )
       if (error) {
-        this.addErrorToBag(error.error);
+        this.addErrorToBag(error.error)
       }
     },
-    validate () {
-      return this.$validator.validate();
-    }
-  }
-};
+    validate() {
+      return this.$validator.validate()
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -228,5 +221,4 @@ export default {
     width: 100%;
   }
 }
-
 </style>

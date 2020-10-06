@@ -4,16 +4,12 @@
       <h2><translate>My Initiatives</translate></h2>
       <p>
         <translate>Here are all of the initiatives you are a</translate>
-        <fa
-          icon="star"
-          class="Owner"
-        />
-        <b><translate>Member</translate></b>&nbsp;<translate>or</translate>
-        <fa
-          icon="eye"
-          class="Viewer"
-        />
-        <b><translate>Viewer</translate></b>&nbsp;<translate>of.</translate>
+        <fa icon="star" class="Owner" />
+        <b><translate>Member</translate></b
+        >&nbsp;<translate>or</translate>
+        <fa icon="eye" class="Viewer" />
+        <b><translate>Viewer</translate></b
+        >&nbsp;<translate>of.</translate>
       </p>
     </div>
     <user-project-list />
@@ -21,9 +17,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
-import UserProjectList from "../../../components/common/UserProjectsList";
+import UserProjectList from '../../../components/common/UserProjectsList'
 
 export default {
   components: {
@@ -32,12 +28,12 @@ export default {
   computed: {
     ...mapGetters({}),
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "../../../assets/style/variables.less";
-@import "../../../assets/style/mixins.less";
+@import '../../../assets/style/variables.less';
+@import '../../../assets/style/mixins.less';
 
 .MyProjects {
   .PageTitle {

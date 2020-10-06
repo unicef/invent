@@ -114,7 +114,7 @@
             <div class="RequestCount">
               <translate
                 :parameters="{
-                  num: superadminSelection.length - superAdmins.length
+                  num: superadminSelection.length - superAdmins.length,
                 }"
               >
                 {num} new request(s)
@@ -275,303 +275,303 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import CollapsibleCard from "../project/CollapsibleCard";
-import DhaQuestionaire from "../admin/DhaQuestionaire";
-import FileUpload from "../common/FileUpload";
-import DonorSelect from "../common/DonorSelect";
-import { mapGettersActions } from "../../utilities/form";
+import { mapGetters, mapActions } from 'vuex'
+import CollapsibleCard from '../project/CollapsibleCard'
+import DhaQuestionaire from '../admin/DhaQuestionaire'
+import FileUpload from '../common/FileUpload'
+import DonorSelect from '../common/DonorSelect'
+import { mapGettersActions } from '../../utilities/form'
 
 export default {
-  name: "CountryAdministrator",
+  name: 'CountryAdministrator',
 
   components: {
     CollapsibleCard,
     DhaQuestionaire,
     FileUpload,
-    DonorSelect
+    DonorSelect,
   },
 
   data() {
     return {
-      selectedPersona: "D",
-      logoError: "",
-      coverError: "",
+      selectedPersona: 'D',
+      logoError: '',
+      coverError: '',
       flagForKeepingPartnerLogosError: false,
-      partnerLogosError: "",
+      partnerLogosError: '',
       rules: {
         logo: [
           {
             validator: (rule, value, callback) => {
               if (this.logoError) {
-                callback(new Error(this.logoError));
+                callback(new Error(this.logoError))
               } else {
-                callback();
+                callback()
               }
-            }
-          }
+            },
+          },
         ],
         cover: [
           {
             validator: (rule, value, callback) => {
               if (this.coverError) {
-                callback(new Error(this.coverError));
+                callback(new Error(this.coverError))
               } else {
-                callback();
+                callback()
               }
-            }
-          }
+            },
+          },
         ],
         partnerLogos: [
           {
             validator: (rule, value, callback) => {
               if (this.partnerLogosError) {
-                callback(new Error(this.partnerLogosError));
+                callback(new Error(this.partnerLogosError))
               } else {
-                callback();
+                callback()
               }
-            }
-          }
-        ]
-      }
-    };
+            },
+          },
+        ],
+      },
+    }
   },
 
   computed: {
     ...mapGettersActions({
-      coverText: ["admin/donor", "getCoverText", "setCoverText"],
-      footerTitle: ["admin/donor", "getFooterTitle", "setFooterTitle"],
-      footerText: ["admin/donor", "getFooterText", "setFooterText"]
+      coverText: ['admin/donor', 'getCoverText', 'setCoverText'],
+      footerTitle: ['admin/donor', 'getFooterTitle', 'setFooterTitle'],
+      footerText: ['admin/donor', 'getFooterText', 'setFooterText'],
     }),
 
     ...mapGetters({
-      donor: "admin/donor/getData",
-      userSelection: "admin/donor/getUserSelection",
-      adminSelection: "admin/donor/getAdminSelection",
-      superadminSelection: "admin/donor/getSuperadminSelection",
-      userProfile: "user/getProfile"
+      donor: 'admin/donor/getData',
+      userSelection: 'admin/donor/getUserSelection',
+      adminSelection: 'admin/donor/getAdminSelection',
+      superadminSelection: 'admin/donor/getSuperadminSelection',
+      userProfile: 'user/getProfile',
     }),
 
     notSDA() {
       return (
-        this.userProfile.account_type === "DA" && !this.userProfile.is_superuser
-      );
+        this.userProfile.account_type === 'DA' && !this.userProfile.is_superuser
+      )
     },
 
     logo: {
       get() {
-        if (typeof this.donor.logo === "string") {
+        if (typeof this.donor.logo === 'string') {
           return [
             {
               url: this.donor.logo,
-              name: ("" + this.donor.logo).split("/").pop()
-            }
-          ];
+              name: ('' + this.donor.logo).split('/').pop(),
+            },
+          ]
         } else if (!this.donor.logo) {
-          return [];
+          return []
         } else {
-          return [this.donor.logo];
+          return [this.donor.logo]
         }
       },
       set([value]) {
-        this.setDataField({ field: "logo", data: value });
-      }
+        this.setDataField({ field: 'logo', data: value })
+      },
     },
 
     cover: {
       get() {
-        if (typeof this.donor.cover === "string") {
+        if (typeof this.donor.cover === 'string') {
           return [
             {
               url: this.donor.cover,
-              name: ("" + this.donor.cover).split("/").pop()
-            }
-          ];
+              name: ('' + this.donor.cover).split('/').pop(),
+            },
+          ]
         } else if (!this.donor.cover) {
-          return [];
+          return []
         } else {
-          return [this.donor.cover];
+          return [this.donor.cover]
         }
       },
       set([value]) {
-        this.setDataField({ field: "cover", data: value });
-      }
+        this.setDataField({ field: 'cover', data: value })
+      },
     },
 
     partnerLogos: {
       get() {
-        return this.donor.partner_logos.map(rawLogo => {
+        return this.donor.partner_logos.map((rawLogo) => {
           if (rawLogo.raw || rawLogo.uid) {
-            return rawLogo;
+            return rawLogo
           } else if (rawLogo.image) {
             return {
               url: rawLogo.image,
-              name: ("" + rawLogo.image).split("/").pop(),
-              id: rawLogo.id
-            };
+              name: ('' + rawLogo.image).split('/').pop(),
+              id: rawLogo.id,
+            }
           }
-        });
+        })
       },
       set(value) {
-        this.setDataField({ field: "partner_logos", data: value });
-      }
+        this.setDataField({ field: 'partner_logos', data: value })
+      },
     },
 
     users: {
       get() {
-        return this.donor.users || [];
+        return this.donor.users || []
       },
       set(value) {
-        this.setDataField({ field: "users", data: value });
-      }
+        this.setDataField({ field: 'users', data: value })
+      },
     },
 
     admins: {
       get() {
-        return this.donor.admins || [];
+        return this.donor.admins || []
       },
       set(value) {
-        this.setDataField({ field: "admins", data: value });
-      }
+        this.setDataField({ field: 'admins', data: value })
+      },
     },
 
     superAdmins: {
       get() {
-        return this.donor.super_admins || [];
+        return this.donor.super_admins || []
       },
       set(value) {
-        this.setDataField({ field: "super_admins", data: value });
-      }
+        this.setDataField({ field: 'super_admins', data: value })
+      },
     },
 
     donorId: {
       get() {
-        return this.donor.id || this.userProfile.donor;
+        return this.donor.id || this.userProfile.donor
       },
       async set(value) {
-        this.setId(value);
-        await this.fetchData();
-      }
+        this.setId(value)
+        await this.fetchData()
+      },
     },
     transferTitles() {
-      return [this.$gettext("New requests"), this.$gettext("Approved")];
-    }
+      return [this.$gettext('New requests'), this.$gettext('Approved')]
+    },
   },
 
   watch: {
     logo(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
-        return;
+        return
       }
 
       const filteredArray = [
-        ...this.logo.filter(image => {
+        ...this.logo.filter((image) => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
-        })
-      ];
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
+        }),
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.logo = filteredArray;
+        this.logo = filteredArray
         this.logoError =
-          "Wrong image format, you can only upload .jpg and .png files";
+          'Wrong image format, you can only upload .jpg and .png files'
       } else {
-        this.logoError = "";
+        this.logoError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
+      this.$refs.countryInfo.validate(() => {})
     },
 
     cover(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
-        return;
+        return
       }
 
       const filteredArray = [
-        ...this.cover.filter(image => {
+        ...this.cover.filter((image) => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
-        })
-      ];
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
+        }),
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.cover = filteredArray;
+        this.cover = filteredArray
         this.coverError =
-          "Wrong image format, you can only upload .jpg and .png files";
+          'Wrong image format, you can only upload .jpg and .png files'
       } else {
-        this.coverError = "";
+        this.coverError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
+      this.$refs.countryInfo.validate(() => {})
     },
 
     partnerLogos(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       const filteredArray = [
-        ...this.partnerLogos.filter(image => {
+        ...this.partnerLogos.filter((image) => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
-        })
-      ];
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
+        }),
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.partnerLogos = filteredArray;
+        this.partnerLogos = filteredArray
         this.partnerLogosError =
-          "Wrong image format, you can only upload .jpg and .png files";
-        this.flagForKeepingPartnerLogosError = true;
+          'Wrong image format, you can only upload .jpg and .png files'
+        this.flagForKeepingPartnerLogosError = true
       } else if (this.flagForKeepingPartnerLogosError) {
-        this.flagForKeepingPartnerLogosError = false;
-        return;
+        this.flagForKeepingPartnerLogosError = false
+        return
       } else {
-        this.partnerLogosError = "";
+        this.partnerLogosError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
-    }
+      this.$refs.countryInfo.validate(() => {})
+    },
   },
 
   methods: {
     ...mapActions({
-      setDataField: "admin/donor/setDataField",
-      saveChanges: "admin/donor/saveChanges",
-      setId: "admin/donor/setId",
-      fetchData: "admin/donor/fetchData"
+      setDataField: 'admin/donor/setDataField',
+      saveChanges: 'admin/donor/saveChanges',
+      setId: 'admin/donor/setId',
+      fetchData: 'admin/donor/fetchData',
     }),
 
     selectPersona(selected) {
-      this.selectedPersona = selected;
+      this.selectedPersona = selected
     },
 
     setDonorId(value) {
-      this.donorId = value;
+      this.donorId = value
     },
     save() {
       if (this.$refs.customQuestions.allSaved) {
-        this.saveChanges();
+        this.saveChanges()
       } else {
-        this.$alert("Your questionnaire is not completely saved", "Warning", {
-          confirmButtonText: "Ok"
-        });
+        this.$alert('Your questionnaire is not completely saved', 'Warning', {
+          confirmButtonText: 'Ok',
+        })
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .CountryAdmin {
   margin-bottom: 60px;
@@ -739,7 +739,7 @@ export default {
   }
 }
 
-[dir="rtl"] {
+[dir='rtl'] {
   .CountryAdmin {
     .UserManagement {
       .AdminPersonaChooser {

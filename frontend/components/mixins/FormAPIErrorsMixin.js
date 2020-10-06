@@ -1,67 +1,71 @@
 const formAPIErrorsMixin = {
-
-  data () {
+  data() {
     return {
-      formAPIErrors: {}
-    };
+      formAPIErrors: {},
+    }
   },
 
   methods: {
-    deleteFormAPIErrors () {
-      this.formAPIErrors = {};
+    deleteFormAPIErrors() {
+      this.formAPIErrors = {}
     },
 
-    setFormAPIErrors (error) {
+    setFormAPIErrors(error) {
       if (error.response && error.response.data) {
-        this.formAPIErrors = error.response.data;
+        this.formAPIErrors = error.response.data
       } else {
-        console.error('Failed to associate API error: ', error);
+        console.error('Failed to associate API error: ', error)
       }
     },
 
-    validatorGenerator (prop) {
+    validatorGenerator(prop) {
       return (rule, value, callback) => {
         if (this.formAPIErrors[prop] && this.formAPIErrors[prop].length) {
           const error = {
             message: this.formAPIErrors[prop][0],
-            field: rule.fullField
-          };
-          callback(error);
+            field: rule.fullField,
+          }
+          callback(error)
         } else {
-          callback();
+          callback()
         }
-      };
+      }
     },
-    collectionValidatorGenerator (prop) {
+    collectionValidatorGenerator(prop) {
       return (rule, value, callback) => {
-        const parts = rule.field.split('.');
-        prop = parts[0];
-        const index = +parts[1];
+        const parts = rule.field.split('.')
+        prop = parts[0]
+        const index = +parts[1]
         if (this.formAPIErrors[prop] && this.formAPIErrors[prop][index]) {
-          const firstError = this.formAPIErrors[prop][index][Object.keys(this.formAPIErrors[prop][index])[0]];
+          const firstError = this.formAPIErrors[prop][index][
+            Object.keys(this.formAPIErrors[prop][index])[0]
+          ]
           if (firstError && firstError.length) {
             const error = {
               message: firstError[0],
-              field: rule.fullField
-            };
-            callback(error);
-            return;
+              field: rule.fullField,
+            }
+            callback(error)
+            return
           }
         }
-        callback();
-      };
-    }
+        callback()
+      }
+    },
   },
 
   computed: {
-    nonFieldErrors () {
-      if (this.formAPIErrors.non_field_errors && this.formAPIErrors.non_field_errors.length) {
-        return this.formAPIErrors.non_field_errors[0];
+    nonFieldErrors() {
+      if (
+        this.formAPIErrors.non_field_errors &&
+        this.formAPIErrors.non_field_errors.length
+      ) {
+        return this.formAPIErrors.non_field_errors[0]
       } else {
-        return '';
+        return ''
       }
-    }
-  }
-};
+    },
+  },
+}
 
-export default formAPIErrorsMixin;
+export default formAPIErrorsMixin

@@ -21,50 +21,48 @@
 </template>
 
 <script>
-import difference from 'lodash/difference';
-import SelectorDialogColumn from '../SelectorDialogColumn';
-import SelectorDialogCategory from '../SelectorDialogCategory';
-import { mapGetters } from 'vuex';
+import difference from 'lodash/difference'
+import { mapGetters } from 'vuex'
+import SelectorDialogColumn from '../SelectorDialogColumn'
+import SelectorDialogCategory from '../SelectorDialogCategory'
 
 export default {
   components: {
     SelectorDialogColumn,
-    SelectorDialogCategory
+    SelectorDialogCategory,
   },
   props: {
     selected: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     ...mapGetters({
-      healthSystemChallenges: 'projects/getHscChallenges'
+      healthSystemChallenges: 'projects/getHscChallenges',
     }),
-    allIds () {
+    allIds() {
       return this.healthSystemChallenges.reduce((a, c) => {
-        return [...a, ...c.challenges.map(h => h.id)];
-      }, []);
+        return [...a, ...c.challenges.map((h) => h.id)]
+      }, [])
     },
-    catSelected (category) {
-      return difference(this.allIds, this.selected).length === 0;
-    }
+    catSelected(category) {
+      return difference(this.allIds, this.selected).length === 0
+    },
   },
   methods: {
-    filterChange (value) {
-      this.$emit('update:selected', [...value]);
+    filterChange(value) {
+      this.$emit('update:selected', [...value])
     },
-    toggleAll (value) {
+    toggleAll(value) {
       if (value) {
-        this.$emit('update:selected', [...this.allIds]);
+        this.$emit('update:selected', [...this.allIds])
       } else {
-        this.$emit('update:selected', []);
+        this.$emit('update:selected', [])
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>
