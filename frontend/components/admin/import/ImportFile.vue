@@ -13,7 +13,7 @@
       </p>
       <p>
         <translate>
-          When importing your projects
+          When importing your initiatives
         </translate>
         <xlsx-workbook>
           <xlsx-sheet
@@ -42,7 +42,7 @@
       </p>
       <p>
         <translate>
-          If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
+          If you have more than one investor, we recommend that you go back to your initiatives once uploaded and add the correct investors.
         </translate>
       </p>
       <p>
@@ -150,13 +150,20 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-import CountryOfficeSelect from '@/components/common/CountryOfficeSelect';
-import FormHint from '@/components/common/FormHint';
-import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
-import { importTemplate, nameMapping } from '@/utilities/import';
-import { draftRules } from '@/utilities/projects';
-import get from 'lodash/get';
+import { mapActions, mapState } from "vuex";
+import CountryOfficeSelect from "@/components/common/CountryOfficeSelect";
+import FormHint from "@/components/common/FormHint";
+import {
+  XlsxRead,
+  XlsxSheets,
+  XlsxJson,
+  XlsxWorkbook,
+  XlsxSheet,
+  XlsxDownload,
+} from "vue-xlsx";
+import { importTemplate, nameMapping } from "@/utilities/import";
+import { draftRules } from "@/utilities/projects";
+import get from "lodash/get";
 
 export default {
   components: {
@@ -167,62 +174,75 @@ export default {
     FormHint,
     XlsxWorkbook,
     XlsxSheet,
-    XlsxDownload
+    XlsxDownload,
   },
-  data () {
+  data() {
     return {
       country_office: null,
       donor: 20,
-      isDraftOrPublish: 'draft',
+      isDraftOrPublish: "draft",
       inputFile: null,
       selectedSheet: null,
-      parsed: null
+      parsed: null,
     };
   },
   computed: {
-    ...mapState('system', {
-      systemDicts: state => state
+    ...mapState("system", {
+      systemDicts: (state) => state,
     }),
-    ...mapState('projects', {
-      projectDicts: state => state.projectStructure
+    ...mapState("projects", {
+      projectDicts: (state) => state.projectStructure,
     }),
     ...mapState({
-      offices: state => state.offices.offices
+      offices: (state) => state.offices.offices,
     }),
-    finalImportTemplate () {
-      const unicefCustomQuestions = get(this, 'systemDicts.donorsLibrary.20.donor_questions');
-      return importTemplate.map(i => {
+    finalImportTemplate() {
+      const unicefCustomQuestions = get(
+        this,
+        "systemDicts.donorsLibrary.20.donor_questions"
+      );
+      return importTemplate.map((i) => {
         const row = {
-          ...i
+          ...i,
         };
-        unicefCustomQuestions.forEach(q => {
-          row[q.question] = q.options.join('|');
+        unicefCustomQuestions.forEach((q) => {
+          row[q.question] = q.options.join("|");
         });
         return row;
       });
     },
-    fieldsData () {
+    fieldsData() {
       const flatHFA = this.projectDicts.health_focus_areas.reduce((a, c) => {
-        const innerNames = c.health_focus_areas.map(i => i.name);
+        const innerNames = c.health_focus_areas.map((i) => i.name);
         return a.concat(innerNames);
       }, []);
       const flatHSC = this.projectDicts.hsc_challenges.reduce((a, c) => {
-        const innerNames = c.challenges.map(i => i.challenge);
+        const innerNames = c.challenges.map((i) => i.challenge);
         return a.concat(innerNames);
       }, []);
-      const flatPlatforms = this.projectDicts.technology_platforms.map(p => p.name);
+      const flatPlatforms = this.projectDicts.technology_platforms.map(
+        (p) => p.name
+      );
       const flathDHI = this.projectDicts.strategies.reduce((a, c) => {
         const innerValue = c.subGroups.reduce((innerA, innerC) => {
-          return innerA.concat(innerC.strategies.map(s => s.name));
+          return innerA.concat(innerC.strategies.map((s) => s.name));
         }, []);
         return a.concat(innerValue);
       }, []);
-      const flatGoalAreas = this.projectDicts.goal_areas.map(p => p.name);
-      const flatFieldOffices = this.projectDicts.field_offices.map(p => p.name);
-      const flatResultAreas = this.projectDicts.result_areas.map(p => p.name);
-      const flatCapabilityLevels = this.projectDicts.capability_levels.map(p => p.name);
-      const flatCapabilityCategories = this.projectDicts.capability_categories.map(p => p.name);
-      const flatCapabilitySubcategories = this.projectDicts.capability_subcategories.map(p => p.name);
+      const flatGoalAreas = this.projectDicts.goal_areas.map((p) => p.name);
+      const flatFieldOffices = this.projectDicts.field_offices.map(
+        (p) => p.name
+      );
+      const flatResultAreas = this.projectDicts.result_areas.map((p) => p.name);
+      const flatCapabilityLevels = this.projectDicts.capability_levels.map(
+        (p) => p.name
+      );
+      const flatCapabilityCategories = this.projectDicts.capability_categories.map(
+        (p) => p.name
+      );
+      const flatCapabilitySubcategories = this.projectDicts.capability_subcategories.map(
+        (p) => p.name
+      );
       return [
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
@@ -233,10 +253,10 @@ export default {
         [nameMapping.result_area, ...flatResultAreas],
         [nameMapping.capability_levels, ...flatCapabilityLevels],
         [nameMapping.capability_categories, ...flatCapabilityCategories],
-        [nameMapping.capability_subcategories, ...flatCapabilitySubcategories]
+        [nameMapping.capability_subcategories, ...flatCapabilitySubcategories],
       ];
     },
-    draftRequiredFields () {
+    draftRequiredFields() {
       const rules = draftRules();
       const requireds = [];
       for (const rule in rules) {
@@ -246,63 +266,78 @@ export default {
       }
       return requireds;
     },
-    templateSheets () {
+    templateSheets() {
       return [
-        { name: 'Import Example', data: this.finalImportTemplate },
-        { name: 'Fields', data: this.fieldsData },
-        { name: 'Draft required fields', data: this.draftRequiredFields }
+        { name: "Import Example", data: this.finalImportTemplate },
+        { name: "Fields", data: this.fieldsData },
+        { name: "Draft required fields", data: this.draftRequiredFields },
       ];
-    }
+    },
   },
   methods: {
     ...mapActions({
-      addDataToQueue: 'admin/import/addDataToQueue'
+      addDataToQueue: "admin/import/addDataToQueue",
     }),
-    onChange (event) {
+    onChange(event) {
       this.inputFile = event.target.files ? event.target.files[0] : null;
     },
-    async save () {
-      this.$nuxt.$loading.start('importXLSX');
+    async save() {
+      this.$nuxt.$loading.start("importXLSX");
       const importData = {
         filename: this.inputFile.name,
         country_office: this.country_office,
-        country: this.offices.find(obj => obj.id === this.country_office).country,
+        country: this.offices.find((obj) => obj.id === this.country_office)
+          .country,
         donor: this.donor,
         sheet_name: this.selectedSheet,
-        header_mapping: Object.keys(this.parsed[0]).map(title => ({ selected: null, title })),
-        draft: this.isDraftOrPublish === 'draft',
+        header_mapping: Object.keys(this.parsed[0]).map((title) => ({
+          selected: null,
+          title,
+        })),
+        draft: this.isDraftOrPublish === "draft",
         rows: [
           {
-            data: this.parsed
-          }
-        ]
+            data: this.parsed,
+          },
+        ],
       };
       try {
         const importItem = await this.addDataToQueue(importData);
-        this.$nuxt.$loading.finish('importXLSX');
-        this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }));
+        this.$nuxt.$loading.finish("importXLSX");
+        this.$router.push(
+          this.localePath({
+            name: "organisation-admin-import-id",
+            params: { ...this.$route.params, id: importItem.id },
+            query: undefined,
+          })
+        );
       } catch {
-        this.$nuxt.$loading.finish('importXLSX');
+        this.$nuxt.$loading.finish("importXLSX");
         await this.$alert(
-          this.$gettext('Note that all import files need to have a unique name. Please re-name the file and upload it again.'),
-          this.$gettext('Error'),
+          this.$gettext(
+            "Note that all import files need to have a unique name. Please re-name the file and upload it again."
+          ),
+          this.$gettext("Error"),
           {
-            confirmButtonText: 'OK',
-            type: 'warning'
-          });
+            confirmButtonText: "OK",
+            type: "warning",
+          }
+        );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less">
 .ImportFile {
-  .SheetSelector, .DonorSelector, .CountrySelector{
+  .SheetSelector,
+  .DonorSelector,
+  .CountrySelector {
     width: 100%;
   }
 
-  .XLSXTemplate{
+  .XLSXTemplate {
     color: blue;
     text-decoration: underline;
   }

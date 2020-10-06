@@ -183,7 +183,7 @@
           >
             <template slot="label">
               <translate key="start-date">
-                Project start date
+                Initiative start date
               </translate>
               <form-hint>
                 <translate key="start-date-hint">
@@ -214,7 +214,7 @@
           >
             <template slot="label">
               <translate key="end-date">
-                Project end date
+                Initiative end date
               </translate>
               <form-hint>
                 <translate key="end-date-hint">
@@ -246,12 +246,12 @@
         >
           <template slot="label">
             <translate key="team">
-              Add team members (editors)--can modify entry on Add New Project
+              Add team members (editors)--can modify entry on Add New Initiative
               page
             </translate>
             <form-hint>
               <translate key="team-hint">
-                Project editors can change and update all project information.
+                Initiative editors can change and update all project information.
               </translate>
             </form-hint>
           </template>
@@ -271,12 +271,12 @@
         >
           <template slot="label">
             <translate key="viewers">
-              Add team members (viewers)--can receive notification that project
+              Add team members (viewers)--can receive notification that initiative
               has been added
             </translate>
             <form-hint>
               <translate key="viewers-hint">
-                Project viewers will be able to view the full project details.
+                Initiative viewers will be able to view the full initiative details.
               </translate>
             </form-hint>
           </template>
@@ -294,17 +294,17 @@
 </template>
 
 <script>
-import { isAfter, format } from 'date-fns';
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import CollapsibleCard from '../CollapsibleCard';
-import TeamSelector from '../TeamSelector';
-import FieldOfficeSelector from '../FieldOfficeSelector';
-import CountryOfficeSelect from '../../common/CountryOfficeSelect';
-import FormHint from '../FormHint';
-import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters, mapState } from 'vuex';
-import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
+import { isAfter, format } from "date-fns";
+import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
+import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
+import CollapsibleCard from "../CollapsibleCard";
+import TeamSelector from "../TeamSelector";
+import FieldOfficeSelector from "../FieldOfficeSelector";
+import CountryOfficeSelect from "../../common/CountryOfficeSelect";
+import FormHint from "../FormHint";
+import { mapGettersActions } from "../../../utilities/form";
+import { mapGetters, mapState } from "vuex";
+import CustomRequiredFormTeamItem from "@/components/proxy/CustomRequiredFormTeamItem";
 
 export default {
   components: {
@@ -313,92 +313,96 @@ export default {
     TeamSelector,
     FieldOfficeSelector,
     FormHint,
-    CustomRequiredFormTeamItem
+    CustomRequiredFormTeamItem,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapState({
-      offices: state => state.offices.offices,
-      office: state => state.offices.office
+      offices: (state) => state.offices.offices,
+      office: (state) => state.offices.office,
     }),
     ...mapGetters({
-      unicef_regions: 'system/getUnicefRegions',
-      getCountryDetails: 'countries/getCountryDetails',
-      modified: 'project/getModified',
-      regionalOffices: 'projects/getRegionalOffices'
+      unicef_regions: "system/getUnicefRegions",
+      getCountryDetails: "countries/getCountryDetails",
+      modified: "project/getModified",
+      regionalOffices: "projects/getRegionalOffices",
     }),
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 0],
-      country: ['project', 'getCountry', 'setCountry', 0],
-      country_office: ['project', 'getCountryOffice', 'setCountryOffice', 0],
-      overview: ['project', 'getOverview', 'setOverview', 0],
+      name: ["project", "getName", "setName", 0],
+      country: ["project", "getCountry", "setCountry", 0],
+      country_office: ["project", "getCountryOffice", "setCountryOffice", 0],
+      overview: ["project", "getOverview", "setOverview", 0],
       implementation_overview: [
-        'project',
-        'getImplementationOverview',
-        'setImplementationOverview',
-        0
+        "project",
+        "getImplementationOverview",
+        "setImplementationOverview",
+        0,
       ],
-      start_date: ['project', 'getStartDate', 'setStartDate', 0],
-      end_date: ['project', 'getEndDate', 'setEndDate', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
-      team: ['project', 'getTeam', 'setTeam', 0],
-      viewers: ['project', 'getViewers', 'setViewers', 0],
-      field_office: ['project', 'getFieldOffice', 'setFieldOffice', 0]
+      start_date: ["project", "getStartDate", "setStartDate", 0],
+      end_date: ["project", "getEndDate", "setEndDate", 0],
+      contact_name: ["project", "getContactName", "setContactName", 0],
+      contact_email: ["project", "getContactEmail", "setContactEmail", 0],
+      team: ["project", "getTeam", "setTeam", 0],
+      viewers: ["project", "getViewers", "setViewers", 0],
+      field_office: ["project", "getFieldOffice", "setFieldOffice", 0],
     }),
-    endDateError () {
+    endDateError() {
       if (
         this.usePublishRules &&
         this.start_date &&
         this.end_date &&
         isAfter(this.start_date, this.end_date)
       ) {
-        return this.$gettext('End date must be after Start date');
+        return this.$gettext("End date must be after Start date");
       }
-      return '';
+      return "";
     },
-    selectedRegion () {
-      const office = this.offices.find(obj => obj.id === this.country_office);
+    selectedRegion() {
+      const office = this.offices.find((obj) => obj.id === this.country_office);
       if (office) {
-        const result = this.unicef_regions.find(uf => uf.id === office.region);
-        return (result && result.name) || 'N/A';
+        const result = this.unicef_regions.find(
+          (uf) => uf.id === office.region
+        );
+        return (result && result.name) || "N/A";
       }
-      return 'N/A';
+      return "N/A";
     },
-    countryOfOffice () {
-      const office = this.offices.find(obj => obj.id === this.country_office);
-      return office ? this.getCountryDetails(office.country).name : 'N/A';
+    countryOfOffice() {
+      const office = this.offices.find((obj) => obj.id === this.country_office);
+      return office ? this.getCountryDetails(office.country).name : "N/A";
     },
-    regionalOffice () {
-      const office = this.regionalOffices.find(obj => obj.id === this.office.regional_office);
-      return office ? office.name : '';
+    regionalOffice() {
+      const office = this.regionalOffices.find(
+        (obj) => obj.id === this.office.regional_office
+      );
+      return office ? office.name : "";
     },
-    lastUpdated () {
-      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
-    }
+    lastUpdated() {
+      return format(new Date(this.modified), "DD/MM/YYYY HH:mm");
+    },
   },
   methods: {
-    async validate () {
+    async validate() {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
-        Promise.resolve(this.endDateError === '')
+        Promise.resolve(this.endDateError === ""),
       ]);
-      console.log('General overview published validation', validations);
+      console.log("General overview published validation", validations);
       return validations.reduce((a, c) => a && c, true);
     },
-    async validateDraft () {
+    async validateDraft() {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
-        this.$validator.validate('name'),
-        this.$validator.validate('country_office'),
-        this.$validator.validate('contact_email'),
-        this.$validator.validate('team')
+        this.$validator.validate("name"),
+        this.$validator.validate("country_office"),
+        this.$validator.validate("contact_email"),
+        this.$validator.validate("team"),
       ]);
-      console.log('General overview draft validation', validations);
+      console.log("General overview draft validation", validations);
       return validations.reduce((a, c) => a && c, true);
-    }
-  }
+    },
+  },
 };
 </script>
 

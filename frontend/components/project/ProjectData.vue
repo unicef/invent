@@ -65,14 +65,14 @@
             <el-col :span="12">
               <simple-field
                 :content="project.start_date"
-                :header="$gettext('Project start date') | translate"
+                :header="$gettext('Initiative start date') | translate"
                 date
               />
             </el-col>
             <el-col :span="12">
               <simple-field
                 :content="project.end_date"
-                :header="$gettext('Project end date') | translate"
+                :header="$gettext('Initiative end date') | translate"
                 date
               />
             </el-col>
@@ -353,7 +353,7 @@
       </el-col>
       <el-col :span="6">
         <project-navigation
-          @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-projects-id-edit', params: { ...$route.params } }, $route.params.id)"
+          @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-initiatives-id-edit', params: { ...$route.params } }, $route.params.id)"
           @handleClickLatest="handleClickLatest($route.params.id)"
         />
       </el-col>
@@ -362,27 +362,27 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
-import ProjectNavigation from './ProjectNavigation';
-import CollapsibleCard from './CollapsibleCard';
-import SimpleField from './SimpleField';
-import OrganisationItem from '../common/OrganisationItem';
-import CountryItem from '../common/CountryItem';
-import TeamList from './TeamList';
-import PlatformsList from './PlatformsList';
-import FieldOfficeItem from './FieldOfficeItem';
-import DhiList from './DhiList';
-import CapabilitiesList from './CapabilitiesList';
-import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
-import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
-import DonorsList from '../common/list/DonorsList';
-import CustomReadonlyField from './CustomReadonlyField';
-import handleProjectActions from '@/components/mixins/handleProjectActions';
-import ListElement from '@/components/project/ListElement';
-import find from 'lodash/find';
-import orderBy from 'lodash/orderBy';
+import { format } from "date-fns";
+import ProjectNavigation from "./ProjectNavigation";
+import CollapsibleCard from "./CollapsibleCard";
+import SimpleField from "./SimpleField";
+import OrganisationItem from "../common/OrganisationItem";
+import CountryItem from "../common/CountryItem";
+import TeamList from "./TeamList";
+import PlatformsList from "./PlatformsList";
+import FieldOfficeItem from "./FieldOfficeItem";
+import DhiList from "./DhiList";
+import CapabilitiesList from "./CapabilitiesList";
+import HealthFocusAreasList from "../common/list/HealthFocusAreasList";
+import HealthSystemChallengesList from "../common/list/HealthSystemChallengesList";
+import DonorsList from "../common/list/DonorsList";
+import CustomReadonlyField from "./CustomReadonlyField";
+import handleProjectActions from "@/components/mixins/handleProjectActions";
+import ListElement from "@/components/project/ListElement";
+import find from "lodash/find";
+import orderBy from "lodash/orderBy";
 
-import { mapGetters, mapState, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions } from "vuex";
 
 export default {
   components: {
@@ -400,223 +400,233 @@ export default {
     DonorsList,
     CustomReadonlyField,
     CapabilitiesList,
-    ListElement
+    ListElement,
   },
   mixins: [handleProjectActions],
   computed: {
     ...mapState({
-      office: state => state.offices.office
+      office: (state) => state.offices.office,
     }),
     ...mapGetters({
-      draft: 'project/getProjectData',
-      published: 'project/getPublished',
-      getCountryDetails: 'countries/getCountryDetails',
-      getDonorDetails: 'system/getDonorDetails',
-      resultAreas: 'projects/getResultAreas',
-      goalAreas: 'projects/getGoalAreas',
-      getCapabilityLevels: 'projects/getCapabilityLevels',
-      getCapabilityCategories: 'projects/getCapabilityCategories',
-      getCapabilitySubcategories: 'projects/getCapabilitySubcategories',
-      unicef_regions: 'system/getUnicefRegions',
-      linkTypes: 'system/getLinkTypes',
-      modified: 'project/getModified',
-      regionalOffices: 'projects/getRegionalOffices'
+      draft: "project/getProjectData",
+      published: "project/getPublished",
+      getCountryDetails: "countries/getCountryDetails",
+      getDonorDetails: "system/getDonorDetails",
+      resultAreas: "projects/getResultAreas",
+      goalAreas: "projects/getGoalAreas",
+      getCapabilityLevels: "projects/getCapabilityLevels",
+      getCapabilityCategories: "projects/getCapabilityCategories",
+      getCapabilitySubcategories: "projects/getCapabilitySubcategories",
+      unicef_regions: "system/getUnicefRegions",
+      linkTypes: "system/getLinkTypes",
+      modified: "project/getModified",
+      regionalOffices: "projects/getRegionalOffices",
     }),
-    route () {
-      return this.$route.name.split('__')[0];
+    route() {
+      return this.$route.name.split("__")[0];
     },
-    isDraft () {
-      return this.route === 'organisation-projects-id';
+    isDraft() {
+      return this.route === "organisation-initiatives-id";
     },
-    project () {
+    project() {
       return this.isDraft ? this.draft : this.published;
     },
-    country () {
+    country() {
       if (this.project.country) {
         return this.getCountryDetails(this.project.country);
       }
       return null;
     },
-    selectedRegion () {
+    selectedRegion() {
       if (this.office) {
-        const result = this.unicef_regions.find(uf => uf.id === this.office.region);
-        return (result && result.name) || 'N/A';
+        const result = this.unicef_regions.find(
+          (uf) => uf.id === this.office.region
+        );
+        return (result && result.name) || "N/A";
       }
-      return 'N/A';
+      return "N/A";
     },
-    selectedRegionOffice () {
+    selectedRegionOffice() {
       if (this.office) {
-        const office = this.regionalOffices.find(obj => obj.id === this.office.regional_office);
-        return office ? office.name : '';
+        const office = this.regionalOffices.find(
+          (obj) => obj.id === this.office.regional_office
+        );
+        return office ? office.name : "";
       }
-      return '';
+      return "";
     },
-    lastUpdated () {
-      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
+    lastUpdated() {
+      return format(new Date(this.modified), "DD/MM/YYYY HH:mm");
     },
-    donors () {
-      return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+    donors() {
+      return this.project.donors
+        .map((d) => this.getDonorDetails(d))
+        .filter((d) => d.donor_questions && d.donor_questions.length > 0);
     },
-    resultArea () {
-      const result = this.resultAreas.find(r => r.id === this.project.result_area);
+    resultArea() {
+      const result = this.resultAreas.find(
+        (r) => r.id === this.project.result_area
+      );
       return result || {};
     },
-    goalArea () {
-      const result = this.goalAreas.find(r => r.id === this.project.goal_area);
+    goalArea() {
+      const result = this.goalAreas.find(
+        (r) => r.id === this.project.goal_area
+      );
       return result || {};
     },
-    orderedLinkList () {
-      return orderBy(this.project.links, ['link_type'], ['asc']);
-    }
+    orderedLinkList() {
+      return orderBy(this.project.links, ["link_type"], ["asc"]);
+    },
   },
-  mounted () {
+  mounted() {
     this.loadOffice(this.project.country_office);
   },
   methods: {
     ...mapActions({
-      loadOffice: 'offices/loadOffice'
+      loadOffice: "offices/loadOffice",
     }),
-    getLinkHeader (link_type) {
+    getLinkHeader(link_type) {
       const type = find(this.linkTypes, (t) => t.id === link_type);
       return type ? `${type.name} URL` : link_type;
     },
-    customFieldsName (name) {
-      return this.$gettext('{name} custom fields', { name });
-    }
-  }
+    customFieldsName(name) {
+      return this.$gettext("{name} custom fields", { name });
+    },
+  },
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .ProjectData {
-    .limitPageWidth();
+.ProjectData {
+  .limitPageWidth();
 
-    .Loader {
-      display: block;
-      margin: 0 auto 80px;
-    }
+  .Loader {
+    display: block;
+    margin: 0 auto 80px;
+  }
 
-    > .el-row {
-      > .el-col {
-        // form fieldsets
-        &:first-child {
-          width: calc(100% - @projectAsideNavWidth - 20px);
-          margin-right: 20px;
-        }
-
-        // aside navigation
-        &:last-child {
-          width: @projectAsideNavWidth;
-        }
-      }
-    }
-
-    .ContentContainer {
-      padding-bottom: 20px;
-    }
-
-    .CollapsibleCard {
-      .SimpleField {
-        margin-bottom: 40px;
-        font-size: @fontSizeBase;
-        line-height: 20px;
-
-        .Header {
-          margin-bottom: 10px;
-          font-size: @fontSizeMedium;
-          font-weight: 700;
-        }
-
-        .Content {
-          ul {
-            li {
-              .svg-inline--fa {
-                display: none;
-              }
-            }
-          }
-        }
-
-        .SubLevelItem {
-          box-sizing: border-box;
-          width: 100%;
-          margin-top: 10px;
-          margin-bottom: 10px;
-          margin-left: 3px;
-          padding-left: 30px;
-          border-left: 5px solid @colorGrayLight;
-
-          .SimpleField {
-            margin: 0 !important;
-
-            .Header {
-              font-size: @fontSizeBase !important;
-            }
-          }
-
-          .CoverageField {
-            .SimpleField {
-              margin: 20px 0 0 !important;
-            }
-          }
-        }
-
-        .CountryItem {
-          .CountryFlag {
-            display: none;
-          }
-
-          .CountryName {
-            margin: 0;
-            font-size: @fontSizeBase;
-            font-weight: 400;
-          }
-        }
-
-        .PlatformList {
-          .Header {
-            font-size: @fontSizeBase;
-          }
-
-          .Content {
-            .SimpleField {
-              margin-top: 20px;
-            }
-          }
-        }
-
-        .StandardsList {
-          li {
-            a {
-              display: block;
-              margin: 5px 0 20px;
-              color: @colorBrandPrimary;
-              text-decoration: none;
-              transition: @transitionAll;
-
-              &:hover {
-                color: @colorBrandPrimaryLight;
-                text-decoration: underline;
-              }
-            }
-
-            &:last-child {
-              a {
-                margin-bottom: 0;
-              }
-            }
-          }
-        }
+  > .el-row {
+    > .el-col {
+      // form fieldsets
+      &:first-child {
+        width: calc(100% - @projectAsideNavWidth - 20px);
+        margin-right: 20px;
       }
 
-      .GrayArea {
-        .svg-inline--fa {
-          margin-right: 8px;
-        }
+      // aside navigation
+      &:last-child {
+        width: @projectAsideNavWidth;
       }
     }
   }
+
+  .ContentContainer {
+    padding-bottom: 20px;
+  }
+
+  .CollapsibleCard {
+    .SimpleField {
+      margin-bottom: 40px;
+      font-size: @fontSizeBase;
+      line-height: 20px;
+
+      .Header {
+        margin-bottom: 10px;
+        font-size: @fontSizeMedium;
+        font-weight: 700;
+      }
+
+      .Content {
+        ul {
+          li {
+            .svg-inline--fa {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .SubLevelItem {
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 3px;
+        padding-left: 30px;
+        border-left: 5px solid @colorGrayLight;
+
+        .SimpleField {
+          margin: 0 !important;
+
+          .Header {
+            font-size: @fontSizeBase !important;
+          }
+        }
+
+        .CoverageField {
+          .SimpleField {
+            margin: 20px 0 0 !important;
+          }
+        }
+      }
+
+      .CountryItem {
+        .CountryFlag {
+          display: none;
+        }
+
+        .CountryName {
+          margin: 0;
+          font-size: @fontSizeBase;
+          font-weight: 400;
+        }
+      }
+
+      .PlatformList {
+        .Header {
+          font-size: @fontSizeBase;
+        }
+
+        .Content {
+          .SimpleField {
+            margin-top: 20px;
+          }
+        }
+      }
+
+      .StandardsList {
+        li {
+          a {
+            display: block;
+            margin: 5px 0 20px;
+            color: @colorBrandPrimary;
+            text-decoration: none;
+            transition: @transitionAll;
+
+            &:hover {
+              color: @colorBrandPrimaryLight;
+              text-decoration: underline;
+            }
+          }
+
+          &:last-child {
+            a {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .GrayArea {
+      .svg-inline--fa {
+        margin-right: 8px;
+      }
+    }
+  }
+}
 </style>

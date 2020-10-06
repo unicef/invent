@@ -68,7 +68,7 @@
                   "
                   class="HeaderBtn"
                 >
-                  <translate>TIIP Inventory</translate>
+                  <translate>Inventory</translate>
                 </nuxt-link>
               </div>
               <!-- organisation-dashboard-list -->
@@ -84,22 +84,7 @@
                   "
                   class="HeaderBtn"
                 >
-                  <translate>Innovation Portfolio</translate>
-                </nuxt-link>
-              </div>
-              <div>
-                <nuxt-link
-                  key="myProjectsBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-projects',
-                      params: $route.params
-                    })
-                  "
-                  exact
-                  class="HeaderBtn"
-                >
-                  <translate>My Projects</translate>
+                  <translate>Innovation Portfolios</translate>
                 </nuxt-link>
               </div>
               <div>
@@ -115,6 +100,21 @@
                   class="HeaderBtn"
                 >
                   <translate>Portfolio Manager</translate>
+                </nuxt-link>
+              </div>
+              <div>
+                <nuxt-link
+                  key="myProjectsBtn"
+                  :to="
+                    localePath({
+                      name: 'organisation-initiatives',
+                      params: $route.params
+                    })
+                  "
+                  exact
+                  class="HeaderBtn"
+                >
+                  <translate>My Initiatives</translate>
                 </nuxt-link>
               </div>
               <!-- <div>
@@ -135,14 +135,14 @@
                   key="newProjectBtn"
                   :to="
                     localePath({
-                      name: 'organisation-projects-create',
+                      name: 'organisation-initiatives-create',
                       params: $route.params
                     })
                   "
                   class="HeaderBtn"
                 >
                   <fa icon="plus-circle" size="lg" />
-                  <translate>New Project</translate>
+                  <translate>New initiative</translate>
                 </nuxt-link>
               </div>
               <user-dropdown />
@@ -205,27 +205,27 @@ import ToolkitDialogWrapper from "./ToolkitDialogWrapper";
 
 export default {
   directives: {
-    "scroll-class": VueScrollClass
+    "scroll-class": VueScrollClass,
   },
   components: {
     LanguageSelector,
     UserDropdown,
-    ToolkitDialogWrapper
+    ToolkitDialogWrapper,
   },
   props: {
     errorPage: {
       type: Boolean,
-      default: false
+      default: false,
     },
     auth: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
       user: "user/getProfile",
-      landingData: "landing/getLandingPageData"
+      landingData: "landing/getLandingPageData",
     }),
     customOrganisation() {
       return this.landingData !== null;
@@ -247,8 +247,8 @@ export default {
     },
     isSuperUser() {
       return this.user && this.user.is_superuser;
-    }
-  }
+    },
+  },
 };
 </script>
 

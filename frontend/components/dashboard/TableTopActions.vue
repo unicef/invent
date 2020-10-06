@@ -15,13 +15,13 @@
             v-show="!allSelected"
             :parameters="{total}"
           >
-            Select all {total} projects
+            Select all {total} initiatives
           </translate>
           <translate
             v-show="allSelected"
             :parameters="{total}"
           >
-            Deselect all {total} projects
+            Deselect all {total} initiatives
           </translate>
         </el-button>
 
@@ -186,12 +186,12 @@
 </template>
 
 <script>
-import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
-import ProjectLegend from '../common/ProjectLegend';
-import PdfExport from './PdfExport';
-import ListExport from '@/components/dashboard/ListExport';
+import { XlsxWorkbook, XlsxSheet, XlsxDownload } from "vue-xlsx";
+import ProjectLegend from "../common/ProjectLegend";
+import PdfExport from "./PdfExport";
+import ListExport from "@/components/dashboard/ListExport";
 
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -200,77 +200,87 @@ export default {
     XlsxWorkbook,
     XlsxSheet,
     XlsxDownload,
-    ListExport
+    ListExport,
   },
-  data () {
+  data() {
     return {
-      exportType: 'XLSX',
+      exportType: "XLSX",
       columnSelectorOpen: false,
       selectedColumns: [],
-      viewportSize: 2000
+      viewportSize: 2000,
     };
   },
   computed: {
     ...mapGetters({
-      columns: 'dashboard/getAvailableColumns',
-      selectedCol: 'dashboard/getSelectedColumns',
-      selectedRows: 'dashboard/getSelectedRows',
-      allSelected: 'dashboard/getSelectAll',
-      total: 'dashboard/getTotal',
-      user: 'user/getProfile',
-      projects: 'dashboard/getProjectsBucket',
-      dashboardId: 'dashboard/getDashboardId',
-      dashboardType: 'dashboard/getDashboardType'
+      columns: "dashboard/getAvailableColumns",
+      selectedCol: "dashboard/getSelectedColumns",
+      selectedRows: "dashboard/getSelectedRows",
+      allSelected: "dashboard/getSelectAll",
+      total: "dashboard/getTotal",
+      user: "user/getProfile",
+      projects: "dashboard/getProjectsBucket",
+      dashboardId: "dashboard/getDashboardId",
+      dashboardType: "dashboard/getDashboardType",
     }),
-    settingsTitle () {
-      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
+    settingsTitle() {
+      return `${this.$gettext("main fields")} (${this.selectedCol.length}/${
+        this.columns.length
+      })`;
     },
-    selected () {
+    selected() {
       return this.allSelected ? this.total : this.selectedRows.length;
     },
-    rowToExport () {
-      return this.allSelected ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+    rowToExport() {
+      return this.allSelected
+        ? this.projects
+        : this.projects.filter((p) =>
+            this.selectedRows.some((sr) => sr === p.id)
+          );
     },
-    showEmailButton () {
-      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
+    showEmailButton() {
+      const allowed = ["CA", "SCA", "D", "DA", "SDA"];
       if (this.user) {
-        return allowed.includes(this.user.account_type) || this.user.is_superuser;
+        return (
+          allowed.includes(this.user.account_type) || this.user.is_superuser
+        );
       }
       return false;
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       this.setViewport();
-      window.addEventListener('resize', this.setViewport);
+      window.addEventListener("resize", this.setViewport);
     });
   },
-  beforeDestroy () {
+  beforeDestroy() {
     if (process.client) {
-      window.removeEventListener('resize', this.setViewport);
+      window.removeEventListener("resize", this.setViewport);
     }
   },
   methods: {
     ...mapActions({
-      setSelectedColumns: 'dashboard/setSelectedColumns',
-      setSelectAll: 'dashboard/setSelectAll',
-      setSendEmailDialogState: 'layout/setSendEmailDialogState',
-      loadProjectsBucket: 'dashboard/loadProjectsBucket',
-      setSelectedRows: 'dashboard/setSelectedRows'
+      setSelectedColumns: "dashboard/setSelectedColumns",
+      setSelectAll: "dashboard/setSelectAll",
+      setSendEmailDialogState: "layout/setSendEmailDialogState",
+      loadProjectsBucket: "dashboard/loadProjectsBucket",
+      setSelectedRows: "dashboard/setSelectedRows",
     }),
-    setViewport () {
+    setViewport() {
       if (process.client && window) {
         this.viewportSize = window.innerWidth;
       }
     },
-    popperOpenHandler () {
-      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
+    popperOpenHandler() {
+      this.selectedColumns = [...this.columns.map((s) => ({ ...s }))];
     },
-    updateColumns () {
-      this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
+    updateColumns() {
+      this.setSelectedColumns(
+        this.selectedColumns.filter((s) => s.selected).map((s) => s.id)
+      );
       this.columnSelectorOpen = false;
     },
-    async toggleSelectAll () {
+    async toggleSelectAll() {
       if (!this.allSelected) {
         await this.loadProjectsBucket();
         this.setSelectAll(true);
@@ -279,131 +289,132 @@ export default {
         this.setSelectedRows([]);
       }
     },
-    exportRows (xlsxDownloadFunction) {
-      this.$nuxt.$loading.start('pdf');
+    exportRows(xlsxDownloadFunction) {
+      this.$nuxt.$loading.start("pdf");
       window.setTimeout(async () => {
-        if (this.exportType === 'PDF') {
+        if (this.exportType === "PDF") {
           this.$refs.pdfExport.printPdf();
         } else {
           xlsxDownloadFunction();
         }
-        this.$nuxt.$loading.finish('pdf');
+        this.$nuxt.$loading.finish("pdf");
       }, 500);
     },
-    async openMailDialog () {
+    async openMailDialog() {
       if (this.allSelected) {
         await this.loadProjectsBucket();
       }
       this.setSendEmailDialogState(true);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .TableTopActions {
-    width: calc(100vw - @advancedSearchWidth);
-    min-width: @appWidthMinLimit - @advancedSearchWidth;
-    max-width: @appWidthMaxLimit - @advancedSearchWidth;
-    height: @tableTopActionsHeight;
-    padding: 0 40px;
+.TableTopActions {
+  width: calc(100vw - @advancedSearchWidth);
+  min-width: @appWidthMinLimit - @advancedSearchWidth;
+  max-width: @appWidthMaxLimit - @advancedSearchWidth;
+  height: @tableTopActionsHeight;
+  padding: 0 40px;
 
-    .Separator {
-      .SeparatorStyle();
-      height: 32px;
-      margin: 0 20px;
-    }
+  .Separator {
+    .SeparatorStyle();
+    height: 32px;
+    margin: 0 20px;
+  }
 
-    .TableExportOptions {
-      width: 100%;
+  .TableExportOptions {
+    width: 100%;
 
-      .el-button {
-        &.is-disabled {
-          + .el-select {
-            display: none;
-          }
+    .el-button {
+      &.is-disabled {
+        + .el-select {
+          display: none;
         }
-      }
-
-      .el-select {
-        width: 100px;
-        margin-left: 10px;
       }
     }
 
-    .TableLegend {
-      width: auto;
-      height: 32px;
-
-      .ProjectLegend {
-        font-size: @fontSizeSmall;
-        color: @colorTextSecondary;
-        white-space: nowrap;
-
-        .svg-inline--fa {
-          position: relative;
-          vertical-align: middle;
-          height: 14px;
-          margin-left: 20px;
-          margin-right: 6px;
-          color: @colorTextSecondary;
-          font-size: 12px;
-
-          &.fa-star {
-            top: -1px;
-            font-size: 11px;
-          }
-        }
-      }
-
-      .ShowLegendButton {
-        color: @colorTextSecondary;
-
-        .svg-inline--fa {
-          height: 12px;
-          margin-left: 0;
-          color: @colorTextSecondary;
-        }
-      }
-
-      .TableSettingsButton {}
+    .el-select {
+      width: 100px;
+      margin-left: 10px;
     }
   }
 
-  .TableSettingsDropdown {
-    transform: translate(10px, -30px);
+  .TableLegend {
+    width: auto;
+    height: 32px;
+
+    .ProjectLegend {
+      font-size: @fontSizeSmall;
+      color: @colorTextSecondary;
+      white-space: nowrap;
+
+      .svg-inline--fa {
+        position: relative;
+        vertical-align: middle;
+        height: 14px;
+        margin-left: 20px;
+        margin-right: 6px;
+        color: @colorTextSecondary;
+        font-size: 12px;
+
+        &.fa-star {
+          top: -1px;
+          font-size: 11px;
+        }
+      }
+    }
+
+    .ShowLegendButton {
+      color: @colorTextSecondary;
+
+      .svg-inline--fa {
+        height: 12px;
+        margin-left: 0;
+        color: @colorTextSecondary;
+      }
+    }
+
+    .TableSettingsButton {
+    }
   }
+}
 
-  .TableLegendDropdown {
-    transform: translate(10px, -30px);
+.TableSettingsDropdown {
+  transform: translate(10px, -30px);
+}
 
-    .ProjectLegendContent {
-      padding: 8px 12px 12px;
+.TableLegendDropdown {
+  transform: translate(10px, -30px);
+
+  .ProjectLegendContent {
+    padding: 8px 12px 12px;
+
+    > span {
+      position: relative;
+      display: block;
+
+      .svg-inline--fa {
+        position: absolute;
+        top: 3px;
+        left: 0;
+        height: 14px;
+        margin-right: 6px;
+
+        &.fa-handshake {
+          left: -1px;
+        }
+      }
 
       > span {
-        position: relative;
-        display: block;
-
-        .svg-inline--fa {
-          position: absolute;
-          top: 3px;
-          left: 0;
-          height: 14px;
-          margin-right: 6px;
-
-          &.fa-handshake {
-            left: -1px;
-          }
-        }
-
-        > span {
-          margin-left: 20px;
-          font-size: @fontSizeSmall
-        }
+        margin-left: 20px;
+        font-size: @fontSizeSmall;
       }
     }
   }
+}
 </style>

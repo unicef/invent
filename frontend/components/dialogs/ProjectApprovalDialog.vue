@@ -2,7 +2,7 @@
   <el-dialog
     v-if="visible"
     :visible.sync="visible"
-    :title="$gettext('Project Approval') | translate"
+    :title="$gettext('Initiative Approval') | translate"
     :modal="mini"
     :top="top"
     :width="width"
@@ -132,7 +132,7 @@
             type="text"
             @click="goToProject"
           >
-            <translate>See Project</translate>
+            <translate>See Initiative</translate>
           </el-button>
           <el-button
             v-show="mini"
@@ -157,99 +157,115 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { format } from 'date-fns';
+import { mapGetters, mapActions } from "vuex";
+import { format } from "date-fns";
 
-import ApprovalTag from '../admin/ApprovalTag';
-import UserItem from '../common/UserItem';
+import ApprovalTag from "../admin/ApprovalTag";
+import UserItem from "../common/UserItem";
 
 export default {
   components: {
     ApprovalTag,
-    UserItem
+    UserItem,
   },
-  data () {
+  data() {
     return {
       mini: false,
       form: {
         approved: null,
-        reason: null
+        reason: null,
       },
-      activeTab: 'form',
+      activeTab: "form",
       rules: {
         reason: [
-          { required: true, message: this.$gettext('This is required'), trigger: 'blur' }
-        ]
-      }
+          {
+            required: true,
+            message: this.$gettext("This is required"),
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   computed: {
     ...mapGetters({
-      currentProject: 'admin/approval/getCurrentElement',
-      currentElementDetails: 'admin/approval/getCurrentElementDetails'
+      currentProject: "admin/approval/getCurrentElement",
+      currentElementDetails: "admin/approval/getCurrentElementDetails",
     }),
     visible: {
-      get () {
+      get() {
         return this.currentProject !== null;
       },
-      set () {
+      set() {
         this.setCurrentElement(null);
-      }
+      },
     },
-    top () {
-      return this.mini ? '12px' : '10vh';
+    top() {
+      return this.mini ? "12px" : "10vh";
     },
-    width () {
-      return this.mini ? '60vw' : '80vw';
+    width() {
+      return this.mini ? "60vw" : "80vw";
     },
-    history () {
+    history() {
       if (this.currentElementDetails) {
         return this.currentElementDetails.history;
       }
       return [];
     },
-    approvedBy () {
+    approvedBy() {
       if (this.currentElementDetails) {
-        return this.history && this.history[0] && this.history[0].history_user__userprofile
+        return this.history &&
+          this.history[0] &&
+          this.history[0].history_user__userprofile
           ? this.history[0].history_user__userprofile
           : this.currentElementDetails.legacy_approved_by;
       }
       return null;
-    }
+    },
   },
   methods: {
     ...mapActions({
-      setCurrentElement: 'admin/approval/setCurrentElement',
-      updateProjectApproval: 'admin/approval/updateProjectApproval'
+      setCurrentElement: "admin/approval/setCurrentElement",
+      updateProjectApproval: "admin/approval/updateProjectApproval",
     }),
-    loadCurrent () {
+    loadCurrent() {
       this.form = {
-        approved: this.currentElementDetails ? this.currentElementDetails.approved : null,
-        reason: this.currentElementDetails ? this.currentElementDetails.reason : ''
+        approved: this.currentElementDetails
+          ? this.currentElementDetails.approved
+          : null,
+        reason: this.currentElementDetails
+          ? this.currentElementDetails.reason
+          : "",
       };
     },
-    dateFormat (row, column, value) {
-      return format(value, 'YYYY-MM-DD HH:mm');
+    dateFormat(row, column, value) {
+      return format(value, "YYYY-MM-DD HH:mm");
     },
-    cancel () {
+    cancel() {
       this.visible = null;
       if (this.mini) {
         this.goToCountryAdmin();
       }
     },
-    goToProject () {
+    goToProject() {
       this.mini = true;
       const id = this.currentElementDetails.project;
-      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id } });
+      const path = this.localePath({
+        name: "organisation-initiatives-id-published",
+        params: { ...this.$route.params, id },
+      });
       this.$router.push(path);
     },
-    goToCountryAdmin () {
+    goToCountryAdmin() {
       this.mini = false;
-      const path = this.localePath({ name: 'organisation-admin-country', params: this.$route.params });
+      const path = this.localePath({
+        name: "organisation-admin-country",
+        params: this.$route.params,
+      });
       this.$router.push(path);
     },
-    apply () {
-      this.$refs.approvalForm.validate(async valid => {
+    apply() {
+      this.$refs.approvalForm.validate(async (valid) => {
         if (valid) {
           try {
             await this.updateProjectApproval(this.form);
@@ -260,30 +276,32 @@ export default {
           } catch (e) {
             console.log(e);
             this.$alert(
-              this.$gettext('An error occured while saving the data'),
-              this.$gettext('Warning'),
+              this.$gettext("An error occured while saving the data"),
+              this.$gettext("Warning"),
               {
-                confirmButtonText: this.$gettext('Ok')
+                confirmButtonText: this.$gettext("Ok"),
               }
             );
           }
         } else {
-          this.$message.error(this.$gettext('Please fill all the required fields'));
+          this.$message.error(
+            this.$gettext("Please fill all the required fields")
+          );
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .ProjectApprovalDialog {
-    .el-form,
-    .el-form-item {
-      margin: 20px 0;
-    }
+.ProjectApprovalDialog {
+  .el-form,
+  .el-form-item {
+    margin: 20px 0;
   }
+}
 </style>

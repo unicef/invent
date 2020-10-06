@@ -2,7 +2,7 @@
   <div class="MainTable">
     <el-table
       ref="mainTable"
-      :data="projectsList"
+      :data="initiativesList"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       :stripe="false"
@@ -22,7 +22,7 @@
       <el-table-column
         v-if="selectedColumns.includes('1')"
         :resizable="false"
-        :label="$gettext('Project Name') | translate"
+        :label="$gettext('Initiative Name') | translate"
         fixed
         sortable="custom"
         prop="project__name"
@@ -336,7 +336,7 @@ export default {
       offices: (state) => state.offices.offices,
     }),
     ...mapGetters({
-      projectsList: "dashboard/getProjectsList",
+      initiativesList: "dashboard/getProjectsList",
       selectedColumns: "dashboard/getSelectedColumns",
       selectedRows: "dashboard/getSelectedRows",
       selectAll: "dashboard/getSelectAll",

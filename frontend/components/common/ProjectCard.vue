@@ -66,45 +66,45 @@ export default {
   components: {
     ProjectLegend,
     CountryItem,
-    OrganisationItem
+    OrganisationItem,
   },
   props: {
     project: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     foundIn: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     showCountry: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showOrganisation: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showFoundIn: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showVerified: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hideBorders: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showArrowOnOver: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      hovered: false
+      hovered: false,
     };
   },
   computed: {
@@ -126,19 +126,19 @@ export default {
         org: this.$gettext("Organisation"),
         overview: this.$gettext("Implementation Overview"),
         partner: this.$gettext("Partners"),
-        region: this.$gettext("Region")
+        region: this.$gettext("Region"),
       };
       if (this.foundIn && this.showFoundIn) {
-        return this.foundIn.map(f => nameMApping[f]).join(",");
+        return this.foundIn.map((f) => nameMApping[f]).join(",");
       }
       return "";
-    }
+    },
   },
   methods: {
     goToProject() {
       const path = this.localePath({
-        name: "organisation-projects-id-published",
-        params: { ...this.$route.params, id: this.project.id }
+        name: "organisation-initiatives-id-published",
+        params: { ...this.$route.params, id: this.project.id },
       });
       this.$router.push(path);
     },
@@ -147,8 +147,8 @@ export default {
     },
     mouseLeaveHandler() {
       this.hovered = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
