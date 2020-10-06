@@ -150,7 +150,7 @@
                 <translate
                   >If you are part of an investor group that is providing either
                   financial or in-kind support to project activities, the DHA
-                  can be used to help organize and connect all of your projects.
+                  can be used to help organize and connect all of your initiatives.
                   By joining your investor page, you will see information that
                   is private to your organization. If your group is not listed
                   below, send an email to digitalhealthatlas@gmail.com to add
@@ -417,7 +417,7 @@ export default {
     LanguageSelect,
     CountrySelect,
     DonorSelect,
-    UserPrivileges
+    UserPrivileges,
   },
   mixins: [FormAPIErrorsMixin],
   data() {
@@ -429,12 +429,12 @@ export default {
         language: null,
         country: null,
         account_type: null,
-        donor: null
+        donor: null,
       },
       isCountryUser: false,
       isDonorUser: false,
       changeApprovedUserRole: false,
-      donorFilters: ["unicef"]
+      donorFilters: ["unicef"],
     };
   },
 
@@ -442,7 +442,7 @@ export default {
     ...mapGetters({
       profile: "user/getProfile",
       user: "user/getUser",
-      donors: "system/getDonors"
+      donors: "system/getDonors",
     }),
 
     userTypeRequested() {
@@ -465,48 +465,48 @@ export default {
           {
             required: true,
             message: this.$gettext("This field is required"),
-            trigger: "change"
+            trigger: "change",
           },
-          { validator: this.validatorGenerator("name") }
+          { validator: this.validatorGenerator("name") },
         ],
         organisation: [
           {
             required: true,
             message: this.$gettext("This field is required"),
-            trigger: "change"
+            trigger: "change",
           },
-          { validator: this.validatorGenerator("organisation") }
+          { validator: this.validatorGenerator("organisation") },
         ],
         language: [
           {
             required: true,
             message: this.$gettext("This field is required"),
-            trigger: "change"
+            trigger: "change",
           },
-          { validator: this.validatorGenerator("language") }
+          { validator: this.validatorGenerator("language") },
         ],
         country: [
           {
             required: true,
             message: this.$gettext("This field is required"),
-            trigger: "change"
+            trigger: "change",
           },
-          { validator: this.validatorGenerator("country") }
+          { validator: this.validatorGenerator("country") },
         ],
         donor: [
           {
             required: this.isDonorRequired,
             message: this.$gettext("This field is required"),
-            trigger: "change"
+            trigger: "change",
           },
-          { validator: this.validatorGenerator("donor") }
-        ]
+          { validator: this.validatorGenerator("donor") },
+        ],
       };
-    }
+    },
   },
 
   watch: {
-    isCountryUser: function(newVal, oldVal) {
+    isCountryUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
         this.isDonorUser = false;
         if (!["G", "CA", "SCA"].includes(this.innerProfile.account_type)) {
@@ -516,7 +516,7 @@ export default {
         this.innerProfile.account_type = "I";
       }
     },
-    isDonorUser: function(newVal, oldVal) {
+    isDonorUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
         this.isCountryUser = false;
         if (!["D", "DA", "SDA"].includes(this.innerProfile.account_type)) {
@@ -530,8 +530,8 @@ export default {
       immediate: true,
       handler(profile) {
         this.innerProfile = { ...profile, organisation: 56 };
-      }
-    }
+      },
+    },
   },
 
   mounted() {
@@ -541,7 +541,7 @@ export default {
 
   methods: {
     ...mapActions({
-      updateUserProfile: "user/updateUserProfile"
+      updateUserProfile: "user/updateUserProfile",
     }),
 
     dismissChanges() {
@@ -552,7 +552,7 @@ export default {
     submit() {
       this.deleteFormAPIErrors();
       this.changeApprovedUserRole = false;
-      this.$refs.editProfileForm.validate(async valid => {
+      this.$refs.editProfileForm.validate(async (valid) => {
         if (valid) {
           try {
             const isFirstSave = !this.profile.country;
@@ -561,7 +561,7 @@ export default {
             this.$message({
               message: this.$gettext("Profile succesfully updated"),
               type: "success",
-              showClose: true
+              showClose: true,
             });
             if (isFirstSave) {
               this.routeToDashboard(this.innerProfile.language);
@@ -575,7 +575,7 @@ export default {
             this.$message({
               message: this.$gettext("Profile update error"),
               type: "error",
-              showClose: true
+              showClose: true,
             });
           }
         }
@@ -597,8 +597,8 @@ export default {
     },
     changingUserRole() {
       this.changeApprovedUserRole = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -79,7 +79,7 @@ export default {
         message: "Unable to process the search with the current parameters",
       });
     }
-    // todo: integration should handle the status to refill data of projects
+    // todo: integration should handle the status to refill data of initiatives
   },
   computed: {
     ...mapState({

@@ -22,7 +22,7 @@
       <el-table-column
         v-if="selectedColumns.includes('1')"
         :resizable="false"
-        :label="$gettext('Project Name') | translate"
+        :label="$gettext('Initiative Name') | translate"
         fixed
         sortable="custom"
         prop="project__name"

@@ -65,7 +65,7 @@
       />
 
       <el-table-column
-        :label="$gettext('Project') | translate"
+        :label="$gettext('Initiative') | translate"
         sortable
         prop="project_name"
         class-name="ProjectName"
@@ -111,51 +111,60 @@
 </template>
 
 <script>
-import Papa from 'papaparse';
-import { format } from 'date-fns';
-import { uriDownloader } from '../../utilities/dom';
-import { mapGetters, mapActions } from 'vuex';
-import ApprovalTag from './ApprovalTag';
-import UserItem from '../common/UserItem';
+import Papa from "papaparse";
+import { format } from "date-fns";
+import { uriDownloader } from "../../utilities/dom";
+import { mapGetters, mapActions } from "vuex";
+import ApprovalTag from "./ApprovalTag";
+import UserItem from "../common/UserItem";
 
 export default {
   components: {
     ApprovalTag,
-    UserItem
+    UserItem,
   },
-  data () {
+  data() {
     return {
       filters: [true, false, null],
-      rowSelection: []
+      rowSelection: [],
     };
   },
   computed: {
     ...mapGetters({
-      list: 'admin/approval/getList',
-      getUserDetails: 'system/getUserProfileDetails'
+      list: "admin/approval/getList",
+      getUserDetails: "system/getUserProfileDetails",
     }),
-    filteredList () {
-      return this.list.filter(i => this.filters.length === 0 || this.filters.some(f => f === i.approved));
+    filteredList() {
+      return this.list.filter(
+        (i) =>
+          this.filters.length === 0 ||
+          this.filters.some((f) => f === i.approved)
+      );
     },
-    parsedList () {
+    parsedList() {
       return this.rowSelection.map((i) => {
         const user = this.getUserDetails(this.getUserId(i));
-        const approved = i.approved === true ? this.$gettext('Yes') : i.approved === false ? this.$gettext('No') : this.$gettext('Pending');
+        const approved =
+          i.approved === true
+            ? this.$gettext("Yes")
+            : i.approved === false
+            ? this.$gettext("No")
+            : this.$gettext("Pending");
         return {
           project_id: i.project,
           project_name: i.project_name,
-          user: user ? user.name : '',
+          user: user ? user.name : "",
           approved,
-          modified: format(i.modified, 'YYYY-MM-DD HH:mm')
+          modified: format(i.modified, "YYYY-MM-DD HH:mm"),
         };
       });
-    }
+    },
   },
   methods: {
     ...mapActions({
-      openDetails: 'admin/approval/setCurrentElement'
+      openDetails: "admin/approval/setCurrentElement",
     }),
-    getUserId (row) {
+    getUserId(row) {
       const history = row.history;
       if (history && history.length > 0) {
         const first = history[0];
@@ -165,28 +174,27 @@ export default {
         return row.legacy_approved_by;
       }
     },
-    filterHandler (value, row, column) {
-      const property = column['property'];
+    filterHandler(value, row, column) {
+      const property = column["property"];
       return row[property] === value;
     },
-    selectionHandler (selection) {
+    selectionHandler(selection) {
       this.rowSelection = selection;
     },
-    csvExport () {
-      const csv = Papa.unparse(this.parsedList, { delimiter: ';' });
+    csvExport() {
+      const csv = Papa.unparse(this.parsedList, { delimiter: ";" });
       const toDownload = `data:text/csv;charset=utf-8,${csv}`;
-      uriDownloader(toDownload, 'project-approval-export.csv');
-    }
-  }
+      uriDownloader(toDownload, "project-approval-export.csv");
+    },
+  },
 };
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
 .ProjectApprovalTable {
-
   .Actions {
     margin: 0 0 20px;
 
@@ -228,7 +236,8 @@ export default {
   }
 
   .el-table {
-    th, td {
+    th,
+    td {
       // vertical-align: top;
     }
 

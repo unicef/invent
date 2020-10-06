@@ -10,7 +10,7 @@
     <el-row type="flex">
       <el-col>
         <nuxt-link
-          :to="localePath({name: 'organisation-projects-create', params: $route.params})"
+          :to="localePath({name: 'organisation-initiatives-create', params: $route.params})"
           tag="button"
           class="el-button el-button--primary el-button--medium"
         >
@@ -31,29 +31,26 @@
 </template>
 
 <script>
-export default {
-
-};
+export default {};
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .EmptyProjectList {
-    text-align: center;
+.EmptyProjectList {
+  text-align: center;
 
-    img {
-      margin: 20px 0 40px;
-    }
-
-    p {
-      margin: 20px 0 60px;
-      font-size: @fontSizeSmall;
-      line-height: 18px;
-      font-weight: 700;
-      color: @colorTextSecondary;
-    }
+  img {
+    margin: 20px 0 40px;
   }
 
+  p {
+    margin: 20px 0 60px;
+    font-size: @fontSizeSmall;
+    line-height: 18px;
+    font-weight: 700;
+    color: @colorTextSecondary;
+  }
+}
 </style>

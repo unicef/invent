@@ -6,7 +6,7 @@
     >
       <el-col v-if="showViewDraft">
         <nuxt-link
-          :to="localePath({name: 'organisation-projects-id', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="localePath({name: 'organisation-initiatives-id', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
@@ -15,7 +15,7 @@
       </el-col>
       <el-col v-if="showViewPublished">
         <nuxt-link
-          :to="localePath({name: 'organisation-projects-id-published', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="localePath({name: 'organisation-initiatives-id-published', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
@@ -24,7 +24,7 @@
       </el-col>
       <el-col v-if="showEditDraft">
         <nuxt-link
-          :to="localePath({name: 'organisation-projects-id-edit', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="localePath({name: 'organisation-initiatives-id-edit', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="edit" />
@@ -33,7 +33,7 @@
       </el-col>
       <el-col v-if="isSuperUser">
         <nuxt-link
-          :to="localePath({name: 'organisation-projects-id-assessment', params: {id: project.id, organisation: $route.params.organisation}})"
+          :to="localePath({name: 'organisation-initiatives-id-assessment', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="tachometer-alt" />
@@ -44,7 +44,7 @@
         <nuxt-link
           to=""
           class="NuxtLink IconLeft Danger"
-          @click.native="handleClickUnPublish({ name: 'organisation-projects' }, project.id)"
+          @click.native="handleClickUnPublish({ name: 'organisation-initiatives' }, project.id)"
         >
           <fa icon="times-circle" />
           <translate>Unpublish</translate>
@@ -55,59 +55,58 @@
 </template>
 
 <script>
-import handleProjectActions from '@/components/mixins/handleProjectActions';
+import handleProjectActions from "@/components/mixins/handleProjectActions";
 
 export default {
   mixins: [handleProjectActions],
   props: {
     project: {
       type: Object,
-      required: true
+      required: true,
     },
     forceShow: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    isSuperUser () {
+    isSuperUser() {
       return this.user && this.user.is_superuser;
     },
-    showViewDraft () {
+    showViewDraft() {
       return this.forceShow || this.project.isViewer || this.project.isMember;
     },
-    showEditDraft () {
+    showEditDraft() {
       return this.forceShow || this.project.isMember;
     },
-    showViewPublished () {
+    showViewPublished() {
       return this.forceShow || this.project.isPublished;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .ProjectCardActions {
-    .el-row {
-      .el-col {
-        width: auto;
-      }
-    }
-
-    .NuxtLink {
-      margin-left: 40px;
-      line-height: 24px;
-    }
-
-    .Danger {
-      color: @colorDanger;
-      &:hover {
-        color: @colorDanger;
-      }
+.ProjectCardActions {
+  .el-row {
+    .el-col {
+      width: auto;
     }
   }
 
+  .NuxtLink {
+    margin-left: 40px;
+    line-height: 24px;
+  }
+
+  .Danger {
+    color: @colorDanger;
+    &:hover {
+      color: @colorDanger;
+    }
+  }
+}
 </style>

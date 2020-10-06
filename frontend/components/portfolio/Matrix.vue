@@ -41,7 +41,7 @@
             @click="activeIndex = undefined"
           />
           <div class="ListTitle">
-            <h4>List of projects ({{ active.projects.length }})</h4>
+            <h4>List of initiatives ({{ active.projects.length }})</h4>
             <p>{{ leftText }}: {{ active.y }}&nbsp; &nbsp; {{ bottomText }}: {{ active.x }}</p>
           </div>
           <div class="List">
@@ -77,84 +77,89 @@
 </template>
 
 <script>
-import MatrixElement from '@/components/portfolio/Matrix-element';
+import MatrixElement from "@/components/portfolio/Matrix-element";
 export default {
-  name: 'Matrix',
+  name: "Matrix",
   components: {
-    MatrixElement
+    MatrixElement,
   },
   props: {
     elements: {
       type: Array,
-      required: true
+      required: true,
     },
     left: {
       type: Array,
-      required: true
+      required: true,
     },
     bottom: {
       type: Array,
-      required: true
+      required: true,
     },
     color: {
       type: String,
-      default: ''
+      default: "",
     },
     top: {
       type: Boolean,
-      default: false
+      default: false,
     },
     bgColor: {
       type: String,
-      default: ''
+      default: "",
     },
     bgImage: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
-  data () {
+  data() {
     return {
-      activeIndex: undefined
+      activeIndex: undefined,
     };
   },
   computed: {
-    leftText () {
+    leftText() {
       return this.removeBracets(this.left[1]);
     },
-    bottomText () {
+    bottomText() {
       return this.removeBracets(this.bottom[1]);
     },
-    active () {
-      return this.activeIndex !== undefined ? this.elements[this.activeIndex] : undefined;
+    active() {
+      return this.activeIndex !== undefined
+        ? this.elements[this.activeIndex]
+        : undefined;
     },
-    matrixStyle () {
+    matrixStyle() {
       if (this.bgImage) {
         return `background-image: url(${this.bgImage})`;
       }
       if (this.bgColor) {
         return `background-color: ${this.bgColor}`;
       }
-      return '';
-    }
+      return "";
+    },
   },
   methods: {
-    removeBracets (text) {
-      return text.replace(/.\(.*\)/, '');
+    removeBracets(text) {
+      return text.replace(/.\(.*\)/, "");
     },
-    getPath (project) {
-      return this.localePath({ name: 'organisation-projects-id-published', params: { organisation: '-', id: project.id } });
+    getPath(project) {
+      return this.localePath({
+        name: "organisation-initiatives-id-published",
+        params: { organisation: "-", id: project.id },
+      });
     },
-    getState (index) {
+    getState(index) {
       if (this.activeIndex === undefined) {
-        return 'normal';
+        return "normal";
       }
       if (this.activeIndex === index) {
-        return 'active';
+        return "active";
       }
-      return 'inactive';
-    }
-  }
+      return "inactive";
+    },
+  },
 };
 </script>
 
@@ -178,12 +183,12 @@ export default {
       top: 40px;
     }
     .Xaxis {
-      Top: 0;
-      Bottom: initial;
+      top: 0;
+      bottom: initial;
     }
     .MColumns > .MColumn:first-child {
       border-bottom: 0 solid transparent;
-      border-top: 1px solid #A8A8A9;
+      border-top: 1px solid #a8a8a9;
     }
     .ArrowRight {
       top: 40px;
@@ -205,8 +210,8 @@ export default {
       flex: 0 0 600px;
       width: 600px;
       height: 600px;
-      border-left: 1px solid #A8A8A9;
-      border-bottom: 1px solid #A8A8A9;
+      border-left: 1px solid #a8a8a9;
+      border-bottom: 1px solid #a8a8a9;
     }
     .MColumn + .MColumn {
       position: relative;
@@ -217,7 +222,7 @@ export default {
         font-weight: normal;
       }
       a {
-        color: #1CABE2;
+        color: #1cabe2;
         text-decoration: none;
       }
       p {
@@ -233,7 +238,7 @@ export default {
         width: 100%;
         height: 100%;
         background-color: white;
-        box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.12);
+        box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.12);
         .ListTitle {
           padding: 30px 20px 30px 40px;
           h4 {
@@ -245,7 +250,7 @@ export default {
           }
         }
         &:after {
-          content:"";
+          content: "";
           border-top: 20px solid transparent;
           border-bottom: 20px solid transparent;
           position: absolute;
@@ -262,7 +267,7 @@ export default {
           padding: 10px;
           font-size: 16px;
           position: absolute;
-          color: #A8A8A9;
+          color: #a8a8a9;
           cursor: pointer;
           &:hover {
             color: black;
@@ -277,14 +282,14 @@ export default {
           text-transform: uppercase;
         }
         .List {
-          border-top: 1px solid #EAE6E1;
+          border-top: 1px solid #eae6e1;
           padding-top: 24px;
           .ListLink {
             a {
               text-decoration: none;
             }
             padding: 0 40px 24px 40px;
-            color: #1CABE2;
+            color: #1cabe2;
             font-size: 16px;
             font-weight: bold;
             letter-spacing: 0;
@@ -302,7 +307,8 @@ export default {
     height: 560px;
     //background-image: url('/bg-ambition_matrix.svg');
   }
-  .Yaxis, .Xaxis {
+  .Yaxis,
+  .Xaxis {
     position: absolute;
     display: flex;
     flex-direction: row;
@@ -311,9 +317,9 @@ export default {
     line-height: 40px;
     span {
       text-transform: uppercase;
-      color: #A8A8A9;
+      color: #a8a8a9;
     }
-    span:first-child + span{
+    span:first-child + span {
       color: #404041;
     }
   }
@@ -331,11 +337,12 @@ export default {
     left: 40px;
     bottom: 0;
   }
-  .ArrowTop, .ArrowRight {
+  .ArrowTop,
+  .ArrowRight {
     position: absolute;
     width: 11px;
     height: 10px;
-    background-image: url('/arrowhead-tl.svg');
+    background-image: url("/arrowhead-tl.svg");
   }
   .ArrowTop {
     left: 0;

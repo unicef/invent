@@ -68,7 +68,7 @@
               label="name"
               class="CheckboxSmall"
             >
-              <translate>Project Name</translate>
+              <translate>Initiative Name</translate>
             </el-checkbox>
             <el-checkbox
               label="overview"
@@ -96,79 +96,86 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form.js';
+import { mapGettersActions } from "../../utilities/form.js";
 
 export default {
-  data () {
+  data() {
     return {
       optionsVisible: false,
-      showSearchBoxTooltip: false
+      showSearchBoxTooltip: false,
     };
   },
   computed: {
     ...mapGettersActions({
-      searchString: ['dashboard', 'getSearchString', 'setSearchString', 300, true],
-      selectedOptions: ['dashboard', 'getSearchIn', 'setSearchIn', 0]
-    })
+      searchString: [
+        "dashboard",
+        "getSearchString",
+        "setSearchString",
+        300,
+        true,
+      ],
+      selectedOptions: ["dashboard", "getSearchIn", "setSearchIn", 0],
+    }),
   },
   methods: {
-    toggleOptionsVisibility () {
+    toggleOptionsVisibility() {
       this.optionsVisible = !this.optionsVisible;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .SearchBox {
-    .SearchInput {}
+.SearchBox {
+  .SearchInput {
+  }
 
-    .SearchOptions {
-      flex-direction: column;
+  .SearchOptions {
+    flex-direction: column;
 
-      .SearchOptionsHeader {
-        margin: 10px 0 0;
+    .SearchOptionsHeader {
+      margin: 10px 0 0;
 
-        .el-button--text {
-          padding: 0;
-        }
-
-        .el-tooltip {
-          float: right;
-          margin-top: 2px;
-        }
+      .el-button--text {
+        padding: 0;
       }
 
-      .SearchOptionsBody {
-        margin-top: 5px;
-
-        .el-checkbox {
-          margin: 5px 0 0;
-          padding: 0;
-        }
+      .el-tooltip {
+        float: right;
+        margin-top: 2px;
       }
     }
 
-    .slide-fade-enter-active {
-      transition: @transitionAll;
-    }
+    .SearchOptionsBody {
+      margin-top: 5px;
 
-    .slide-fade-leave-active {
-      transition: @transitionAll;
+      .el-checkbox {
+        margin: 5px 0 0;
+        padding: 0;
+      }
     }
+  }
 
-    .slide-fade-enter,
+  .slide-fade-enter-active {
+    transition: @transitionAll;
+  }
+
+  .slide-fade-leave-active {
+    transition: @transitionAll;
+  }
+
+  .slide-fade-enter,
     .slide-fade-leave-to
     /* .slide-fade-leave-active below version 2.1.8 */ {
-      transform: translateY(-10px);
-      opacity: 0;
-    }
+    transform: translateY(-10px);
+    opacity: 0;
   }
+}
 
-  .SearchBoxTooltip {
-    max-width: @advancedSearchWidth;
-  }
+.SearchBoxTooltip {
+  max-width: @advancedSearchWidth;
+}
 </style>

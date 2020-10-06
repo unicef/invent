@@ -20,8 +20,8 @@
           <div class="SavedSwitch">
             <el-switch
               v-model="showSaved"
-              active-text="Show saved projects"
-              inactive-text="Hide saved projects"
+              active-text="Show saved initiatives"
+              inactive-text="Hide saved initiatives"
             />
           </div>
           <div class="ExportDataTable">
@@ -57,7 +57,7 @@
                         <el-button-group>
                           <a
                             v-if="row.project"
-                            :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
+                            :href="localePath({name: 'organisation-initiatives-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
                             target="_blank"
                             class="el-button el-button--info el-button--mini"
                           >
@@ -146,48 +146,48 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce';
-import { mapGetters, mapActions } from 'vuex';
-import ImportHeaders from '@/components/admin/import/ImportHeaders';
-import ImportValidation from '@/components/admin/import/ImportValidation';
-import ImportRow from '@/components/admin/import/ImportRow';
-import SmartCell from '@/components/admin/import/SmartCell';
-import ImportDialog from '@/components/admin/import/ImportDialog';
-import ImportDetails from '@/components/admin/import/ImportDetails';
+import debounce from "lodash/debounce";
+import { mapGetters, mapActions } from "vuex";
+import ImportHeaders from "@/components/admin/import/ImportHeaders";
+import ImportValidation from "@/components/admin/import/ImportValidation";
+import ImportRow from "@/components/admin/import/ImportRow";
+import SmartCell from "@/components/admin/import/SmartCell";
+import ImportDialog from "@/components/admin/import/ImportDialog";
+import ImportDetails from "@/components/admin/import/ImportDetails";
 
 export default {
-  name: 'ImportDetail',
+  name: "ImportDetail",
   components: {
     ImportValidation,
     ImportHeaders,
     ImportRow,
     SmartCell,
     ImportDialog,
-    ImportDetails
+    ImportDetails,
   },
-  data () {
+  data() {
     return {
-      showSaved: false
+      showSaved: false,
     };
   },
   computed: {
     ...mapGetters({
-      getCountryDetails: 'countries/getCountryDetails',
-      getDonorDetails: 'system/getDonorDetails'
+      getCountryDetails: "countries/getCountryDetails",
+      getDonorDetails: "system/getDonorDetails",
     }),
-    selectedCountry () {
+    selectedCountry() {
       if (this.rawImport) {
         return this.getCountryDetails(this.rawImport.country);
       }
       return {};
     },
-    selectedDonor () {
+    selectedDonor() {
       if (this.rawImport) {
         return this.getDonorDetails(this.rawImport.donor);
       }
       return {};
     },
-    countryFieldsLib () {
+    countryFieldsLib() {
       if (this.selectedCountry) {
         return this.selectedCountry.country_questions.reduce((a, c) => {
           a[`MOH Q.: ${c.question}`] = c;
@@ -196,7 +196,7 @@ export default {
       }
       return {};
     },
-    donorFieldsLib () {
+    donorFieldsLib() {
       if (this.selectedDonor) {
         return this.selectedDonor.donor_questions.reduce((a, c) => {
           a[`INV Q.: ${c.question}`] = c;
@@ -205,46 +205,46 @@ export default {
       }
       return {};
     },
-    customFieldsLib () {
+    customFieldsLib() {
       return { ...this.donorFieldsLib, ...this.countryFieldsLib };
     },
-    subLevels () {
-      const nationalLevel = { id: 'National Level', name: 'National Level' };
+    subLevels() {
+      const nationalLevel = { id: "National Level", name: "National Level" };
       if (this.selectedCountry) {
         return [nationalLevel, ...this.selectedCountry.districts];
       }
       return [nationalLevel];
     },
-    saved () {
-      return this.rawImport.rows.filter(r => r.project);
+    saved() {
+      return this.rawImport.rows.filter((r) => r.project);
     },
-    rows () {
-      return this.rawImport.rows.filter(r => !r.project);
-    }
+    rows() {
+      return this.rawImport.rows.filter((r) => !r.project);
+    },
   },
-  async asyncData ({ params, app: { $axios }, store }) {
+  async asyncData({ params, app: { $axios }, store }) {
     const { data } = await $axios.get(`/api/projects/import/${params.id}/`);
-    await store.dispatch('countries/loadCountryDetails', data.country);
-    await store.dispatch('system/loadDonorDetails', data.donor);
+    await store.dispatch("countries/loadCountryDetails", data.country);
+    await store.dispatch("system/loadDonorDetails", data.donor);
     return {
-      rawImport: data
+      rawImport: data,
     };
   },
-  async fetch ({ store }) {
+  async fetch({ store }) {
     await Promise.all([
-      store.dispatch('system/loadUserProfiles'),
-      store.dispatch('system/loadDonors'),
-      store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('system/loadStaticData'),
-      store.dispatch('system/loadOrganisations'),
-      store.dispatch('countries/loadMapData')
+      store.dispatch("system/loadUserProfiles"),
+      store.dispatch("system/loadDonors"),
+      store.dispatch("projects/loadProjectStructure"),
+      store.dispatch("system/loadStaticData"),
+      store.dispatch("system/loadOrganisations"),
+      store.dispatch("countries/loadMapData"),
     ]);
   },
   methods: {
     ...mapActions({
-      refreshProfile: 'user/refreshProfile'
+      refreshProfile: "user/refreshProfile",
     }),
-    updateValue ({ row, key, value }) {
+    updateValue({ row, key, value }) {
       const originalRow = this.rows[row];
       this.$set(originalRow.data, key, value);
       this.saveUpdatedValue(originalRow);
@@ -252,81 +252,98 @@ export default {
     saveUpdatedValue: debounce(function (row) {
       this.patchRow(row);
     }, 1000),
-    async patchRow (row) {
-      return this.$axios.patch(`/api/projects/import-row/${row.id}/`, { ...row, id: undefined });
+    async patchRow(row) {
+      return this.$axios.patch(`/api/projects/import-row/${row.id}/`, {
+        ...row,
+        id: undefined,
+      });
     },
-    async deleteRow (row, index) {
+    async deleteRow(row, index) {
       try {
         await this.$confirm(
-          this.$gettext('Note that once this column is deleted, you cannot recover the data.'),
-          this.$gettext('Row Delete'),
+          this.$gettext(
+            "Note that once this column is deleted, you cannot recover the data."
+          ),
+          this.$gettext("Row Delete"),
           {
-            confirmButtonText: this.$gettext('OK'),
-            cancelButtonText: this.$gettext('Cancel'),
-            type: 'warning'
-          });
+            confirmButtonText: this.$gettext("OK"),
+            cancelButtonText: this.$gettext("Cancel"),
+            type: "warning",
+          }
+        );
         await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
         this.rawImport.rows.splice(index, 1);
       } catch (e) {
         this.$message({
-          type: 'info',
-          message: this.$gettext('Delete canceled')
+          type: "info",
+          message: this.$gettext("Delete canceled"),
         });
       }
     },
-    async singleRowSave (doSave, valid, scrollToError) {
+    async singleRowSave(doSave, valid, scrollToError) {
       let newRow = null;
       if (valid) {
         try {
           await this.$confirm(
-            this.$gettext('Note that once you have saved this project, it will be uploaded to the DHA. You can access all of your saved Projects from your My Projects page.'),
-            this.$gettext('Save Project'),
+            this.$gettext(
+              "Note that once you have saved this project, it will be uploaded to the DHA. You can access all of your saved Projects from your My Initiatives page."
+            ),
+            this.$gettext("Save Initiative"),
             {
-              confirmButtonText: this.$gettext('OK'),
-              cancelButtonText: this.$gettext('Cancel'),
-              type: 'warning'
-            });
-          this.$nuxt.$loading.start('save');
+              confirmButtonText: this.$gettext("OK"),
+              cancelButtonText: this.$gettext("Cancel"),
+              type: "warning",
+            }
+          );
+          this.$nuxt.$loading.start("save");
           newRow = await this.doSingleRowSave(doSave, true);
           await this.refreshProfile();
-          this.$nuxt.$loading.finish('save');
+          this.$nuxt.$loading.finish("save");
         } catch (e) {
-          this.$nuxt.$loading.finish('save');
+          this.$nuxt.$loading.finish("save");
           this.$message({
-            type: 'info',
-            message: this.$gettext('Saving Cancelled')
+            type: "info",
+            message: this.$gettext("Saving Cancelled"),
           });
           return;
         }
         try {
           await this.$confirm(
-            this.$gettext('Your project has been successfully saved as a draft, you can go to your project page or keep working on the import interface'),
-            this.$gettext('Success!'),
+            this.$gettext(
+              "Your project has been successfully saved as a draft, you can go to your project page or keep working on the import interface"
+            ),
+            this.$gettext("Success!"),
             {
-              confirmButtonText: this.$gettext('Project page'),
-              cancelButtonText: this.$gettext('Keep working'),
-              type: 'info'
-            });
+              confirmButtonText: this.$gettext("Initiative page"),
+              cancelButtonText: this.$gettext("Keep working"),
+              type: "info",
+            }
+          );
           const id = newRow.project;
-          this.$router.push(this.localePath({ name: 'organisation-projects-id-edit', params: { id, organisation: this.$route.params.organisation } }));
+          this.$router.push(
+            this.localePath({
+              name: "organisation-initiatives-id-edit",
+              params: { id, organisation: this.$route.params.organisation },
+            })
+          );
         } catch (e) {
-          console.log('stay');
+          console.log("stay");
         }
       } else {
         scrollToError();
       }
     },
-    async doSingleRowSave (doSave, nested) {
+    async doSingleRowSave(doSave, nested) {
       try {
-        const { country, country_office, donor, draft } = this.rawImport
+        const { country, country_office, donor, draft } = this.rawImport;
         const newRow = await doSave(country, donor, !draft, country_office);
         await this.patchRow(newRow);
         return newRow;
       } catch (e) {
         console.error(e);
         if (e.response && e.response.data) {
-          this.$alert(JSON.stringify(e.response.data), 'Error', {
-            confirmButtonText: 'OK'
+          this.$alert(JSON.stringify(e.response.data), "Error", {
+            confirmButtonText: "OK",
           });
         }
         if (nested) {
@@ -334,27 +351,32 @@ export default {
         }
       }
     },
-    async saveAll () {
+    async saveAll() {
       try {
         await this.$confirm(
-          this.$gettext('Note that once you have saved these projects, they will be uploaded to the DHA. You can access all saved projects from your My Projects page.'),
-          this.$gettext('Save all projects'),
+          this.$gettext(
+            "Note that once you have saved these initiatives, they will be uploaded to the DHA. You can access all saved initiatives from your My Initiatives page."
+          ),
+          this.$gettext("Save all initiatives"),
           {
-            confirmButtonText: this.$gettext('OK'),
-            cancelButtonText: this.$gettext('Cancel'),
-            type: 'warning'
-          });
+            confirmButtonText: this.$gettext("OK"),
+            cancelButtonText: this.$gettext("Cancel"),
+            type: "warning",
+          }
+        );
         this.doSaveAll();
       } catch (e) {
         this.$message({
-          type: 'info',
-          message: this.$gettext('Saving all projects has been cancelled')
+          type: "info",
+          message: this.$gettext("Saving all initiatives has been cancelled"),
         });
       }
     },
-    async doSaveAll () {
-      this.$nuxt.$loading.start('saveAll');
-      const toSave = this.$refs.row.filter(r => r.valid && r.row && !r.row.project);
+    async doSaveAll() {
+      this.$nuxt.$loading.start("saveAll");
+      const toSave = this.$refs.row.filter(
+        (r) => r.valid && r.row && !r.row.project
+      );
       try {
         for (const p of toSave) {
           await this.doSingleRowSave(p.save, true);
@@ -363,22 +385,30 @@ export default {
       } catch (e) {
         console.log(e);
       }
-      this.$nuxt.$loading.finish('saveAll');
+      this.$nuxt.$loading.finish("saveAll");
       try {
         await this.$confirm(
-          this.$gettext('Your projects have been successfully saved as a draft, you can go to your project inbox or keep working on the import interface'),
-          this.$gettext('Success!'),
+          this.$gettext(
+            "Your initiatives have been successfully saved as a draft, you can go to your project inbox or keep working on the import interface"
+          ),
+          this.$gettext("Success!"),
           {
-            confirmButtonText: this.$gettext('Project inbox'),
-            cancelButtonText: this.$gettext('Keep working'),
-            type: 'info'
-          });
-        this.$router.push(this.localePath({ name: 'organisation-projects', params: this.$route.params }));
+            confirmButtonText: this.$gettext("Initiative inbox"),
+            cancelButtonText: this.$gettext("Keep working"),
+            type: "info",
+          }
+        );
+        this.$router.push(
+          this.localePath({
+            name: "organisation-initiatives",
+            params: this.$route.params,
+          })
+        );
       } catch (e) {
-        console.log('stay');
+        console.log("stay");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -388,7 +418,9 @@ export default {
 
 .AdminImportPage {
   min-width: @appWidthMinLimit;
-  min-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight);
+  min-height: calc(
+    100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight
+  );
   padding: 40px 40px;
   box-sizing: border-box;
   overflow: auto;
@@ -414,10 +446,10 @@ export default {
   .ExportDataTable {
     width: 100%;
     margin: 0;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     font-size: @fontSizeSmall;
     line-height: 16px;
-    box-shadow: inset 0 0 5px 1px rgba(0,0,0,.12);
+    box-shadow: inset 0 0 5px 1px rgba(0, 0, 0, 0.12);
 
     .Container {
       overflow: auto;
@@ -435,7 +467,7 @@ export default {
           flex-direction: row;
 
           &:last-child {
-              border-right: 0;
+            border-right: 0;
 
             .Column {
               border-bottom: 0;
@@ -486,7 +518,8 @@ export default {
         display: inline-flex;
         width: 100%;
 
-        .SaveButton, .DeleteButton {
+        .SaveButton,
+        .DeleteButton {
           margin-left: 0px;
           color: white;
         }
@@ -494,5 +527,4 @@ export default {
     }
   }
 }
-
 </style>

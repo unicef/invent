@@ -3,10 +3,10 @@
     <div class="left">
       <el-button size="small" type="text" @click="toggleSelectAll">
         <translate v-show="!allSelected" :parameters="{ total }">
-          Select all {total} projects
+          Select all {total} initiatives
         </translate>
         <translate v-show="allSelected" :parameters="{ total }">
-          Deselect all {total} projects
+          Deselect all {total} initiatives
         </translate>
       </el-button>
       <list-export :projects="rowToExport">
@@ -143,7 +143,7 @@ export default {
     XlsxWorkbook,
     XlsxSheet,
     XlsxDownload,
-    ListExport
+    ListExport,
   },
   data() {
     return {
@@ -152,18 +152,18 @@ export default {
       moveTo: [
         this.$gettext("Move to Inventory"),
         this.$gettext("Move to Review"),
-        this.$gettext("Move to Porfolio")
+        this.$gettext("Move to Porfolio"),
       ],
       // settings
       columnSelectorOpen: false,
-      selectedColumns: []
+      selectedColumns: [],
     };
   },
   computed: {
     ...mapState({
-      tab: state => state.portfolio.tab,
-      back: state => state.portfolio.back,
-      forward: state => state.portfolio.forward
+      tab: (state) => state.portfolio.tab,
+      back: (state) => state.portfolio.back,
+      forward: (state) => state.portfolio.forward,
     }),
     ...mapGetters({
       selectedRows: "dashboard/getSelectedRows",
@@ -175,7 +175,7 @@ export default {
       // dashboardType: "dashboard/getDashboardType",
       // settings
       columns: "dashboard/getAvailableColumns",
-      selectedCol: "dashboard/getSelectedColumns"
+      selectedCol: "dashboard/getSelectedColumns",
     }),
     selected() {
       return this.allSelected ? this.total : this.selectedRows.length;
@@ -186,14 +186,16 @@ export default {
     rowToExport() {
       return this.allSelected
         ? this.projects
-        : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+        : this.projects.filter((p) =>
+            this.selectedRows.some((sr) => sr === p.id)
+          );
     },
     // settings
     settingsTitle() {
       return `${this.$gettext("main fields")} (${this.selectedCol.length}/${
         this.columns.length
       })`;
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -202,7 +204,7 @@ export default {
       setSelectedRows: "dashboard/setSelectedRows",
       moveToState: "portfolio/moveToState",
       // settings
-      setSelectedColumns: "dashboard/setSelectedColumns"
+      setSelectedColumns: "dashboard/setSelectedColumns",
     }),
     async toggleSelectAll() {
       if (!this.allSelected) {
@@ -232,14 +234,14 @@ export default {
           await this.moveToState({
             type: "remove-project",
             project: this.selectedRows,
-            tab
+            tab,
           });
           break;
         case 2:
           await this.moveToState({
             type: "disapprove-project",
             project: this.selectedRows,
-            tab
+            tab,
           });
           break;
         default:
@@ -253,14 +255,14 @@ export default {
           await this.moveToState({
             type: "add-project",
             project: this.selectedRows,
-            tab
+            tab,
           });
           break;
         case 3:
           await this.moveToState({
             type: "approve-project",
             project: this.selectedRows,
-            tab
+            tab,
           });
           break;
         default:
@@ -269,15 +271,15 @@ export default {
     },
     // settings
     popperOpenHandler() {
-      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
+      this.selectedColumns = [...this.columns.map((s) => ({ ...s }))];
     },
     updateColumns() {
       this.setSelectedColumns(
-        this.selectedColumns.filter(s => s.selected).map(s => s.id)
+        this.selectedColumns.filter((s) => s.selected).map((s) => s.id)
       );
       this.columnSelectorOpen = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

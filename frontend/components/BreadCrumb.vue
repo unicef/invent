@@ -36,7 +36,7 @@ export default {
         "organisation-signup": true,
         "organisation-reset-key": true,
         "organisation-portfolio-management-new": false,
-        "organisation-portfolio-management-id": true
+        "organisation-portfolio-management-id": true,
       };
       const pages = {
         "organisation-edit-profile": this.$gettext("Admin"),
@@ -46,17 +46,19 @@ export default {
         "organisation-admin-import-id": this.$gettext("Admin"),
         "organisation-dashboard": this.$gettext("Dashboard"),
         "organisation-dashboard-list": this.$gettext("Dashboard"),
-        "organisation-projects": this.$gettext("My Projects"),
-        "organisation-projects-id-published": this.$gettext(
-          "Published Project"
+        "organisation-initiatives": this.$gettext("My initiatives"),
+        "organisation-initiatives-id-published": this.$gettext(
+          "Published Initiative"
         ),
-        "organisation-projects-id-edit": this.$gettext("Edit Project"),
-        "organisation-projects-id": this.$gettext("Drafted Project"),
+        "organisation-initiatives-id-edit": this.$gettext("Edit Initiative"),
+        "organisation-initiatives-id": this.$gettext("Drafted Initiative"),
         "organisation-cms": this.$gettext("Planning and Guidance"),
-        "organisation-projects-create": this.$gettext("New Project"),
-        "organisation-projects-id-assessment": this.$gettext("Assessment"),
-        "organisation-projects-id-toolkit": this.$gettext("Toolkit"),
-        "organisation-projects-id-toolkit-scorecard": this.$gettext("Toolkit"),
+        "organisation-initiatives-create": this.$gettext("New Initiative"),
+        "organisation-initiatives-id-assessment": this.$gettext("Assessment"),
+        "organisation-initiatives-id-toolkit": this.$gettext("Toolkit"),
+        "organisation-initiatives-id-toolkit-scorecard": this.$gettext(
+          "Toolkit"
+        ),
         "organisation-inventory": this.$gettext("TIIP Inventory"),
         "organisation-portfolio-innovation": this.$gettext(
           "Innovation Portfolio"
@@ -68,7 +70,7 @@ export default {
         "organisation-portfolio-management-id": this.$gettext("Edit portfolio"),
         "organisation-portfolio-management-edit-id": this.$gettext(
           "Edit portfolio"
-        )
+        ),
       };
       const match = pages[this.pureRoute];
       if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
@@ -77,8 +79,8 @@ export default {
         );
       }
       return match;
-    }
-  }
+    },
+  },
 };
 </script>
 

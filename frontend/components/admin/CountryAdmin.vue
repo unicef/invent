@@ -67,13 +67,13 @@
           />
         </el-form-item>
 
-        <el-form-item :label="$gettext('Project approval process') | translate">
+        <el-form-item :label="$gettext('Initiative approval process') | translate">
           <el-checkbox v-model="projectApproval" :disabled="notSCA">
             <translate v-if="projectApproval" key="used-country">
-              Used for projects in country
+              Used for initiatives in country
             </translate>
             <translate v-if="!projectApproval" key="not-used-country">
-              Not used for projects in country
+              Not used for initiatives in country
             </translate>
           </el-checkbox>
         </el-form-item>
@@ -93,7 +93,7 @@
 
     <collapsible-card
       v-if="projectApproval"
-      :title="$gettext('Project Approval') | translate"
+      :title="$gettext('Initiative Approval') | translate"
       class="ProjectApproval"
     >
       <project-approval />
@@ -231,7 +231,7 @@
                     </li>
                     <li>
                       <translate key="ca-list-item-6">
-                        Can approve projects if the project approval feature is
+                        Can approve initiatives if the initiative approval feature is
                         active
                       </translate>
                     </li>
@@ -288,7 +288,7 @@
                     </li>
                     <li>
                       <translate key="sca-list-item-6">
-                        Can approve projects if the project approval feature is
+                        Can approve initiatives if the initiative approval feature is
                         active
                       </translate>
                     </li>
@@ -364,7 +364,7 @@ export default {
     DhaQuestionaire,
     FileUpload,
     CountrySelect,
-    ProjectApproval
+    ProjectApproval,
   },
 
   data() {
@@ -383,8 +383,8 @@ export default {
               } else {
                 callback();
               }
-            }
-          }
+            },
+          },
         ],
         cover: [
           {
@@ -394,8 +394,8 @@ export default {
               } else {
                 callback();
               }
-            }
-          }
+            },
+          },
         ],
         partnerLogos: [
           {
@@ -405,10 +405,10 @@ export default {
               } else {
                 callback();
               }
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     };
   },
 
@@ -420,8 +420,8 @@ export default {
       projectApproval: [
         "admin/country",
         "getProjectApproval",
-        "setProjectApproval"
-      ]
+        "setProjectApproval",
+      ],
     }),
 
     ...mapGetters({
@@ -429,7 +429,7 @@ export default {
       userSelection: "admin/country/getUserSelection",
       adminSelection: "admin/country/getAdminSelection",
       superadminSelection: "admin/country/getSuperadminSelection",
-      userProfile: "user/getProfile"
+      userProfile: "user/getProfile",
     }),
 
     notSCA() {
@@ -446,8 +446,8 @@ export default {
           return [
             {
               url: this.country.logo,
-              name: ("" + this.country.logo).split("/").pop()
-            }
+              name: ("" + this.country.logo).split("/").pop(),
+            },
           ];
         } else if (!this.country.logo) {
           return [];
@@ -457,7 +457,7 @@ export default {
       },
       set([value]) {
         this.setDataField({ field: "logo", data: value });
-      }
+      },
     },
 
     cover: {
@@ -466,8 +466,8 @@ export default {
           return [
             {
               url: this.country.cover,
-              name: ("" + this.country.cover).split("/").pop()
-            }
+              name: ("" + this.country.cover).split("/").pop(),
+            },
           ];
         } else if (!this.country.cover) {
           return [];
@@ -477,26 +477,26 @@ export default {
       },
       set([value]) {
         this.setDataField({ field: "cover", data: value });
-      }
+      },
     },
 
     partnerLogos: {
       get() {
-        return this.country.partner_logos.map(rawLogo => {
+        return this.country.partner_logos.map((rawLogo) => {
           if (rawLogo.raw || rawLogo.uid) {
             return rawLogo;
           } else if (rawLogo.image) {
             return {
               url: rawLogo.image,
               name: ("" + rawLogo.image).split("/").pop(),
-              id: rawLogo.id
+              id: rawLogo.id,
             };
           }
         });
       },
       set(value) {
         this.setDataField({ field: "partner_logos", data: value });
-      }
+      },
     },
 
     users: {
@@ -505,7 +505,7 @@ export default {
       },
       set(value) {
         this.setDataField({ field: "users", data: value });
-      }
+      },
     },
 
     admins: {
@@ -514,7 +514,7 @@ export default {
       },
       set(value) {
         this.setDataField({ field: "admins", data: value });
-      }
+      },
     },
 
     superAdmins: {
@@ -523,7 +523,7 @@ export default {
       },
       set(value) {
         this.setDataField({ field: "super_admins", data: value });
-      }
+      },
     },
 
     countryId: {
@@ -534,11 +534,11 @@ export default {
         this.setId(value);
         await this.fetchData();
         await this.loadGeoJSON();
-      }
+      },
     },
     transferTitles() {
       return [this.$gettext("New requests"), this.$gettext("Approved")];
-    }
+    },
   },
 
   watch: {
@@ -549,14 +549,14 @@ export default {
       }
 
       const filteredArray = [
-        ...this.logo.filter(image => {
+        ...this.logo.filter((image) => {
           return (
             !image.raw ||
             (image.raw && image.raw.name.endsWith(".jpg")) ||
             (image.raw && image.raw.name.endsWith(".jpeg")) ||
             (image.raw && image.raw.name.endsWith(".png"))
           );
-        })
+        }),
       ];
 
       if (newArr.length !== filteredArray.length) {
@@ -577,14 +577,14 @@ export default {
       }
 
       const filteredArray = [
-        ...this.cover.filter(image => {
+        ...this.cover.filter((image) => {
           return (
             !image.raw ||
             (image.raw && image.raw.name.endsWith(".jpg")) ||
             (image.raw && image.raw.name.endsWith(".jpeg")) ||
             (image.raw && image.raw.name.endsWith(".png"))
           );
-        })
+        }),
       ];
 
       if (newArr.length !== filteredArray.length) {
@@ -601,14 +601,14 @@ export default {
     partnerLogos(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       const filteredArray = [
-        ...this.partnerLogos.filter(image => {
+        ...this.partnerLogos.filter((image) => {
           return (
             !image.raw ||
             (image.raw && image.raw.name.endsWith(".jpg")) ||
             (image.raw && image.raw.name.endsWith(".jpeg")) ||
             (image.raw && image.raw.name.endsWith(".png"))
           );
-        })
+        }),
       ];
 
       if (newArr.length !== filteredArray.length) {
@@ -624,7 +624,7 @@ export default {
         this.partnerLogosError = "";
       }
       this.$refs.countryInfo.validate(() => {});
-    }
+    },
   },
 
   methods: {
@@ -633,7 +633,7 @@ export default {
       saveChanges: "admin/country/saveChanges",
       setId: "admin/country/setId",
       fetchData: "admin/country/fetchData",
-      loadGeoJSON: "admin/map/loadGeoJSON"
+      loadGeoJSON: "admin/map/loadGeoJSON",
     }),
 
     selectPersona(selected) {
@@ -651,11 +651,11 @@ export default {
           confirmButtonText: "Ok",
           callback: () => {
             this.$refs.customQuestions.$el.scrollIntoView();
-          }
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
