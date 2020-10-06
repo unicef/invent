@@ -65,7 +65,7 @@ class MapsToolkitController {
 
   handleChangeAxis(axisId) {
     const path = window.$nuxt.$root.localePath({
-      name: 'organisation-projects-id-toolkit',
+      name: 'organisation-initiatives-id-toolkit',
       params: window.$nuxt.$route.params,
       query: { axisId, domainId: 0 },
     })
@@ -76,7 +76,7 @@ class MapsToolkitController {
 
   handleChangeDomain(axisId, domainId) {
     const path = window.$nuxt.$root.localePath({
-      name: 'organisation-projects-id-toolkit',
+      name: 'organisation-initiatives-id-toolkit',
       params: window.$nuxt.$route.params,
       query: { axisId, domainId },
     })
@@ -187,7 +187,7 @@ class MapsToolkitController {
   goToScorecard() {
     const axisId = this.axisId
     const path = window.$nuxt.$root.localePath({
-      name: 'organisation-projects-id-toolkit-scorecard',
+      name: 'organisation-initiatives-id-toolkit-scorecard',
       params: window.$nuxt.$route.params,
       query: { axisId },
     })

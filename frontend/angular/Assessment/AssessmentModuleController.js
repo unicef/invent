@@ -161,7 +161,7 @@ class AssessmentModuleController {
   handleChangeDomain(axisId, domainId) {
     if (this.project.isMember || this.project.isViewer) {
       const path = window.$nuxt.$root.localePath({
-        name: 'organisation-projects-id-toolkit',
+        name: 'organisation-initiatives-id-toolkit',
         params: window.$nuxt.$route.params,
         query: { axisId, domainId },
       })
@@ -172,7 +172,7 @@ class AssessmentModuleController {
   handleChangeAxis(axisId) {
     if (this.project.isMember || this.project.isViewer) {
       const path = window.$nuxt.$root.localePath({
-        name: 'organisation-projects-id-toolkit',
+        name: 'organisation-initiatives-id-toolkit',
         params: window.$nuxt.$route.params,
         query: { axisId, domainId: 0 },
       })

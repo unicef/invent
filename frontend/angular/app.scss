@@ -1,6 +1,6 @@
-@import "../../node_modules/angular-material/dist/angular-material.scss";
-@import "./variables";
-@import "./mixins";
+@import '../node_modules/angular-material/dist/angular-material.scss';
+@import './variables';
+@import './mixins';
 
 /* GENERAL
    ============================= */
@@ -11,7 +11,7 @@
   html,
   textarea,
   input {
-    font-family: "Univers", Arial, sans-serif;
+    font-family: 'Univers', Arial, sans-serif;
   }
 
   button,
@@ -562,7 +562,7 @@
         position: absolute;
         top: 0;
         left: 0;
-        content: "error_outline";
+        content: 'error_outline';
 
         @include md-icon(20px);
       }
