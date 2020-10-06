@@ -4,7 +4,7 @@
     :visible="dialogReview"
     modal
     width="610px"
-    @close="setReviewDialog(false)"
+    @close="resetForm(false)"
   >
     <div class="content">
       <p class="label"><translate>Send Questionnaires to:</translate></p>
@@ -33,8 +33,8 @@
     </div>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="setReviewDialog(false)" text>Cancel</el-button>
-      <el-button type="primary" @click="handleSubmit">
+      <el-button @click="resetForm(false)" text>Cancel</el-button>
+      <el-button type="primary" :loading="loadingAddReviewers" :disabled="disabled" @click="handleSubmit">
         <translate>Send</translate>
       </el-button>
     </span>
@@ -47,39 +47,48 @@ import PortfolioSelect from "@/components/portfolio/form/inputs/PortfolioSelect"
 
 export default {
   components: {
-    PortfolioSelect
+    PortfolioSelect,
   },
   data() {
     return {
       reviewers: [],
-      message: ""
+      message: "",
     };
   },
   computed: {
     ...mapState({
-      dialogReview: state => state.portfolio.dialogReview,
-      currentProjectId: state => state.portfolio.currentProjectId
+      dialogReview: (state) => state.portfolio.dialogReview,
+      currentProjectId: (state) => state.portfolio.currentProjectId,
+      loadingAddReviewers: (state) => state.portfolio.loadingAddReviewers,
     }),
     ...mapGetters({
-      reviewersList: "system/getUserProfilesNoFilter"
-    })
+      reviewersList: "system/getUserProfilesNoFilter",
+    }),
+    disabled() {
+      if (this.reviewers.length > 0) {
+        return false;
+      }
+      return true;
+    },
   },
   methods: {
     ...mapActions({
       setReviewDialog: "portfolio/setReviewDialog",
-      addReview: "portfolio/addReview"
+      addReview: "portfolio/addReview",
     }),
+    resetForm(val) {
+      this.setReviewDialog(val);
+      this.reviewers = [];
+      this.message = "";
+    },
     handleSubmit() {
-      // todo: add data
       this.addReview({
         id: this.currentProjectId,
-        data: {
-          reviewers: this.reviewers,
-          message: this.message
-        }
+        reviewers: this.reviewers,
+        message: this.message,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

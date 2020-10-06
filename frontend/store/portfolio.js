@@ -62,6 +62,8 @@ export const state = () => ({
   review: {},
   problemStatements: [],
   loadingScore: false,
+  // add reviewer
+  loadingAddReviewers: false,
   // dashboard of portfolio manager interctions
   tabs: [
     { id: 1, name: "Inventory", icon: "folder", total: 18 },
@@ -264,15 +266,28 @@ export const actions = {
     }
   },
   // review actions
-  async addReview({ state, commit, dispatch }, { id, data }) {
-    console.log(`this add a review to project ${id}`);
-    commit("SET_VALUE", { key: "dialogReview", val: false });
-    // todo: add api integration
+  async addReview({ state, commit, dispatch }, { id, message, reviewers }) {
+    try {
+      commit("SET_VALUE", { key: "loadingAddReviewers", val: true });
+      await this.$axios.post(
+        `/api/portfolio/${state.currentPortfolioId}/${id}/`,
+        {
+          userprofile: reviewers,
+          message: message
+        }
+      );
+      // update portfolio
+      dispatch("getProjects", state.currentPortfolioId);
+      // interface setters
+      commit("SET_VALUE", { key: "loadingAddReviewers", val: false });
+      commit("SET_VALUE", { key: "dialogReview", val: false });
+    } catch (e) {
+      console.log(e.response.data);
+    }
   },
   // score actions
   async addScore({ state, commit, dispatch }, { id, data }) {
     try {
-      console.log(`this add a score to project review ${id}`);
       // fix from elemnt ui "" default setup
       let officialScore = {};
       for (const [key, value] of Object.entries(data)) {
@@ -292,7 +307,6 @@ export const actions = {
     }
   },
   async getManagerScore({ state, commit, dispatch }, { id, name }) {
-    console.log(`this will give us the score for review id ${id}`);
     try {
       const { data } = await this.$axios.get(
         `api/project-review/manager/${id}/`
