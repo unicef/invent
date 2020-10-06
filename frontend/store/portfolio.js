@@ -288,7 +288,6 @@ export const actions = {
   // score actions
   async addScore({ state, commit, dispatch }, { id, data }) {
     try {
-      console.log(`this add a score to project review ${id}`);
       // fix from elemnt ui "" default setup
       let officialScore = {};
       for (const [key, value] of Object.entries(data)) {
@@ -308,7 +307,6 @@ export const actions = {
     }
   },
   async getManagerScore({ state, commit, dispatch }, { id, name }) {
-    console.log(`this will give us the score for review id ${id}`);
     try {
       const { data } = await this.$axios.get(
         `api/project-review/manager/${id}/`
