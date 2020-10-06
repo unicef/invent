@@ -15,22 +15,22 @@
 </template>
 
 <script>
-import { fetchProjectData } from "@/utilities/projects";
-import ProjectData from "@/components/project/ProjectData";
+import { fetchProjectData } from '@/utilities/projects'
+import ProjectData from '@/components/project/ProjectData'
 export default {
   components: {
     ProjectData,
   },
   fetch({ store, params, error }) {
-    store.dispatch("landing/resetSearch");
-    return fetchProjectData(store, params, error);
+    store.dispatch('landing/resetSearch')
+    return fetchProjectData(store, params, error)
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "../../../../assets/style/variables.less";
-@import "../../../../assets/style/mixins.less";
+@import '../../../../assets/style/variables.less';
+@import '../../../../assets/style/mixins.less';
 
 .ProjectDraftView {
   .DraftLabel {

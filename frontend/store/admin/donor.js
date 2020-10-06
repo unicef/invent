@@ -1,4 +1,4 @@
-import * as sharedStoreModule from '../../utilities/CountryDonorSharedStore.js';
+import * as sharedStoreModule from '../../utilities/CountryDonorSharedStore.js'
 
 export const state = () => ({
   id: null,
@@ -7,17 +7,17 @@ export const state = () => ({
   editableData: {},
   userSelection: [],
   adminSelection: [],
-  superadminSelection: []
-});
+  superadminSelection: [],
+})
 
 export const getters = {
-  ...sharedStoreModule.getters()
-};
+  ...sharedStoreModule.getters(),
+}
 
 export const actions = {
-  ...sharedStoreModule.actions()
-};
+  ...sharedStoreModule.actions(),
+}
 
 export const mutations = {
-  ...sharedStoreModule.mutations()
-};
+  ...sharedStoreModule.mutations(),
+}

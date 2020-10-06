@@ -5,17 +5,13 @@
 </template>
 
 <script>
-
 export default {
-  components: {
+  components: {},
+  mounted() {
+    const mapsToolkitFactory = require('../../../../../angular/MapsToolkit/mapsToolkitFactory')
+    mapsToolkitFactory.factory()
   },
-  mounted () {
-    const mapsToolkitFactory = require('../../../../../angular/MapsToolkit/mapsToolkitFactory');
-    mapsToolkitFactory.factory();
-  }
-};
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

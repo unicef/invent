@@ -63,7 +63,7 @@
                     localePath({
                       name: 'organisation-inventory',
                       params: $route.params,
-                      query: {}
+                      query: {},
                     })
                   "
                   class="HeaderBtn"
@@ -79,7 +79,7 @@
                     localePath({
                       name: 'organisation-portfolio-innovation',
                       params: $route.params,
-                      query: {}
+                      query: {},
                     })
                   "
                   class="HeaderBtn"
@@ -94,7 +94,7 @@
                     localePath({
                       name: 'organisation-portfolio-management',
                       params: $route.params,
-                      query: {}
+                      query: {},
                     })
                   "
                   class="HeaderBtn"
@@ -108,7 +108,7 @@
                   :to="
                     localePath({
                       name: 'organisation-initiatives',
-                      params: $route.params
+                      params: $route.params,
                     })
                   "
                   exact
@@ -136,7 +136,7 @@
                   :to="
                     localePath({
                       name: 'organisation-initiatives-create',
-                      params: $route.params
+                      params: $route.params,
                     })
                   "
                   class="HeaderBtn"
@@ -177,7 +177,7 @@
                 :to="
                   localePath({
                     name: 'organisation',
-                    params: { organisation: '-' }
+                    params: { organisation: '-' },
                   })
                 "
               >
@@ -196,21 +196,21 @@
 </template>
 
 <script>
-import VueScrollClass from "vue-scroll-class";
-import { mapGetters } from "vuex";
+import VueScrollClass from 'vue-scroll-class'
+import { mapGetters } from 'vuex'
 
-import LanguageSelector from "./LanguageSelector";
-import UserDropdown from "./UserDropdown";
-import ToolkitDialogWrapper from "./ToolkitDialogWrapper";
+import LanguageSelector from './LanguageSelector'
+import UserDropdown from './UserDropdown'
+// import ToolkitDialogWrapper from './ToolkitDialogWrapper'
 
 export default {
   directives: {
-    "scroll-class": VueScrollClass,
+    'scroll-class': VueScrollClass,
   },
   components: {
     LanguageSelector,
     UserDropdown,
-    ToolkitDialogWrapper,
+    // ToolkitDialogWrapper,
   },
   props: {
     errorPage: {
@@ -224,32 +224,32 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: "user/getProfile",
-      landingData: "landing/getLandingPageData",
+      user: 'user/getProfile',
+      landingData: 'landing/getLandingPageData',
     }),
     customOrganisation() {
-      return this.landingData !== null;
+      return this.landingData !== null
     },
     countrySpecific() {
-      return this.customOrganisation && this.landingData.code.length === 2;
+      return this.customOrganisation && this.landingData.code.length === 2
     },
     organisationLogo() {
       if (this.landingData) {
-        return this.landingData.logo_url;
+        return this.landingData.logo_url
       }
-      return null;
+      return null
     },
     countryFlag() {
       if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
-      return null;
+      return null
     },
     isSuperUser() {
-      return this.user && this.user.is_superuser;
+      return this.user && this.user.is_superuser
     },
   },
-};
+}
 </script>
 
 <style lang="less">

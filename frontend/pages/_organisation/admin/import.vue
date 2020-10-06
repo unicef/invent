@@ -7,10 +7,8 @@
 <script>
 export default {
   components: {},
-  middleware: ['importRestriction']
-};
+  middleware: ['importRestriction'],
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

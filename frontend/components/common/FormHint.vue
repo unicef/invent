@@ -1,17 +1,11 @@
 <template>
   <div class="FormHint">
     <div class="Trigger">
-      <slot /> <fa
-        class="HintToggle"
-        icon="question-circle"
-        @click="show = !show"
-      />
+      <slot />
+      <fa class="HintToggle" icon="question-circle" @click="show = !show" />
     </div>
     <transition name="el-zoom-in-top">
-      <div
-        v-if="show"
-        class="Hint"
-      >
+      <div v-if="show" class="Hint">
         <slot name="hint" />
       </div>
     </transition>
@@ -20,12 +14,12 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      show: false
-    };
-  }
-};
+      show: false,
+    }
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -35,12 +29,10 @@ export default {
 
   .HintToggle {
     cursor: pointer;
-   }
+  }
 
   .Hint {
     margin-top: -10px;
   }
-
 }
-
 </style>

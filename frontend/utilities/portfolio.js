@@ -1,72 +1,72 @@
 export const portfolioFields = () => ({
-  name: "",
-  description: "",
-  status: "",
+  name: '',
+  description: '',
+  status: '',
   icon: null,
   managers: [],
-  statements: []
-});
+  statements: [],
+})
 
 export const draftRules = () => {
   return {
     name: {
       required: true,
       min: 1,
-      max: 80
+      max: 80,
     },
     description: {
       required: true,
-      max: 1000
+      max: 1000,
     },
     status: {
-      required: false
+      required: false,
     },
     icon: {
-      required: true
+      required: true,
     },
     managers: {
-      required: false
+      required: false,
     },
     statements: {
-      required: false
+      required: false,
     },
     statementName: {
-      required: false
+      required: false,
     },
     statementDescription: {
-      required: false
-    }
-  };
-};
+      required: false,
+    },
+  }
+}
 
 export const publishRules = () => {
   return {
     name: {
       required: true,
       min: 1,
-      max: 80
+      max: 80,
     },
     description: {
       required: true,
-      max: 1000
+      max: 1000,
     },
     status: {
-      required: false
+      required: false,
     },
     icon: {
-      required: true
+      required: true,
     },
     managers: {
-      required: false
+      required: false,
     },
     statements: {
-      required: false
+      required: false,
     },
     statementName: {
-      required: false
+      required: false,
     },
     statementDescription: {
-      required: false
-    }
-  };
-};
+      required: false,
+    },
+  }
+}

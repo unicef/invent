@@ -1,6 +1,6 @@
 <template>
   <ul class="psa-list">
-    <li v-for="item in statements(items)">
+    <li v-for="(item, i) in statements(items)" :key="i">
       <fa class="triangle-icon" :icon="['fas', 'caret-right']" />
       {{ item.name }}
     </li>
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -24,10 +24,10 @@ export default {
   },
   methods: {
     statements(arr) {
-      return this.problemStatements.filter((i) => arr.includes(i.id));
+      return this.problemStatements.filter((i) => arr.includes(i.id))
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>

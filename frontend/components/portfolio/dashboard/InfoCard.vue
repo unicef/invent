@@ -18,13 +18,13 @@
 
 <script>
 export default {
-  methods: {}
-};
+  methods: {},
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .portfolio-main-info {
   display: flex;
@@ -49,7 +49,7 @@ export default {
   }
   div:first-child {
     width: calc(1239px - 735px);
-    background-image: url("~static/dashboard-info.jpg");
+    background-image: url('~static/dashboard-info.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;

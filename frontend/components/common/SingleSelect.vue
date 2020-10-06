@@ -16,42 +16,44 @@
 </template>
 
 <script>
-import reject from 'lodash/reject';
+import reject from 'lodash/reject'
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Number,
-      default: null
+      default: null,
     },
     source: {
       type: String,
-      required: true
+      required: true,
     },
     reject: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
-    sourceList () {
-      return reject(this.$store.getters[this.source], ({ id }) => this.reject.includes(id));
-    }
+    sourceList() {
+      return reject(this.$store.getters[this.source], ({ id }) =>
+        this.reject.includes(id)
+      )
+    },
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
-    }
-  }
-};
+    changeHandler(value) {
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .Selector {
   width: 100%;

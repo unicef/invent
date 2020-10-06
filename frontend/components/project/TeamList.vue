@@ -15,38 +15,38 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
   props: {
     value: {
       type: Array,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
-      profiles: "system/getUserProfilesNoFilter"
+      profiles: 'system/getUserProfilesNoFilter',
     }),
     team() {
       if (this.value) {
-        return this.profiles.filter(p => this.value.includes(p.id) && p.name);
+        return this.profiles.filter((p) => this.value.includes(p.id) && p.name)
       }
-      return [];
+      return []
     },
     unknown() {
       return this.profiles.filter(
-        p => this.value.includes(p.id) && p.name === null
-      ).length;
-    }
-  }
-};
+        (p) => this.value.includes(p.id) && p.name === null
+      ).length
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .TeamList {
   width: 100%;

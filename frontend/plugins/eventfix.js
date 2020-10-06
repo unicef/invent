@@ -1,1 +1,1 @@
-require('default-passive-events');
+require('default-passive-events')

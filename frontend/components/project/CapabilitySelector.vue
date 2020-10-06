@@ -1,4 +1,5 @@
-Go<template>
+Go
+<template>
   <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select from list') | translate"
@@ -21,49 +22,49 @@ Go<template>
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: null
+      default: null,
     },
     goalArea: {
       type: Number,
-      default: null
+      default: null,
     },
     valuesFunction: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
   $_veeValidate: {
-    value () {
-      return this.value;
+    value() {
+      return this.value
     },
-    events: 'change'
+    events: 'change',
   },
-  data () {
+  data() {
     return {
-      open: false
-    };
+      open: false,
+    }
   },
   computed: {
-    items () {
-      return this.valuesFunction(this.goalArea);
-    }
+    items() {
+      return this.valuesFunction(this.goalArea)
+    },
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
+    changeHandler(value) {
+      this.$emit('change', value)
     },
-    toggleHandler (value) {
+    toggleHandler(value) {
       if (value) {
-        this.open = value;
+        this.open = value
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -71,6 +72,5 @@ export default {
   width: 100%;
 }
 .CapabilitySelectorDropdown {
-
 }
 </style>

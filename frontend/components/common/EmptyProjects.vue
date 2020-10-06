@@ -3,14 +3,19 @@
     <el-row type="flex">
       <el-col>
         <div class="SquareWrapper">
-          <img src="~assets/img/icons-all.svg">
+          <img src="~assets/img/icons-all.svg" />
         </div>
       </el-col>
     </el-row>
     <el-row type="flex">
       <el-col>
         <nuxt-link
-          :to="localePath({name: 'organisation-initiatives-create', params: $route.params})"
+          :to="
+            localePath({
+              name: 'organisation-initiatives-create',
+              params: $route.params,
+            })
+          "
           tag="button"
           class="el-button el-button--primary el-button--medium"
         >
@@ -22,7 +27,7 @@
       <el-col>
         <p>
           <translate>to include your project in the inventory</translate>
-          <br>
+          <br />
           <translate>and begin tracking your performance</translate>
         </p>
       </el-col>
@@ -31,12 +36,12 @@
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .EmptyProjectList {
   text-align: center;

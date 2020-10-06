@@ -15,31 +15,31 @@
 </template>
 
 <script>
-import { fetchProjectData } from "@/utilities/projects";
-import ProjectData from "@/components/project/ProjectData";
+import { fetchProjectData } from '@/utilities/projects'
+import ProjectData from '@/components/project/ProjectData'
 export default {
   components: {
     ProjectData,
   },
   async fetch({ store, params, error }) {
-    store.dispatch("landing/resetSearch");
-    await fetchProjectData(store, params, error);
+    store.dispatch('landing/resetSearch')
+    await fetchProjectData(store, params, error)
     if (
       !store.state.project.published ||
       store.state.project.published.name === null
     ) {
       error({
         statusCode: 404,
-        message: "Initiative is not published",
-      });
+        message: 'Initiative is not published',
+      })
     }
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .ProjectPublishedView {
   .CollapsibleCard {

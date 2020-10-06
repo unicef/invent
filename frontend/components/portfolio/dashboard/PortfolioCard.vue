@@ -29,7 +29,7 @@
             :to="
               localePath({
                 name: 'organisation-portfolio-management-id',
-                params: { id: item.id }
+                params: { id: item.id },
               })
             "
           >
@@ -39,7 +39,7 @@
             :to="
               localePath({
                 name: 'organisation-portfolio-management-edit-id',
-                params: { id: item.id }
+                params: { id: item.id },
               })
             "
           >
@@ -53,24 +53,24 @@
 
 <script>
 export default {
+  components: {},
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  components: {},
   methods: {
     path(icon) {
-      return icon === "breast_feeding" || icon === "mother_and_baby";
-    }
-  }
-};
+      return icon === 'breast_feeding' || icon === 'mother_and_baby'
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 .portfolio-card {
   width: 400px;
   height: 240px;

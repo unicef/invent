@@ -1,10 +1,7 @@
 <template>
   <div class="SubLevelItem">
     <el-row>
-      <simple-field
-        :header="levelName"
-        :content="subLevel.name"
-      />
+      <simple-field :header="levelName" :content="subLevel.name" />
     </el-row>
     <el-row>
       <coverage-field :coverage="localCoverageData" />
@@ -13,54 +10,57 @@
 </template>
 
 <script>
-
-import SimpleField from './SimpleField';
-import CoverageField from './CoverageField';
+import SimpleField from './SimpleField'
+import CoverageField from './CoverageField'
 
 export default {
   components: {
     SimpleField,
-    CoverageField
+    CoverageField,
   },
   props: {
     levelName: {
       type: String,
-      required: true
+      required: true,
     },
     subLevels: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     coverage: {
       type: [String, Number],
-      default: null
+      default: null,
     },
     coverageData: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   computed: {
-    subLevel () {
-      const level = this.subLevels.find(s => s.id === this.coverage || s.name === this.coverage);
+    subLevel() {
+      const level = this.subLevels.find(
+        (s) => s.id === this.coverage || s.name === this.coverage
+      )
       if (level) {
-        return level;
+        return level
       }
-      console.error('Misisng sub level, probable corrupt map data');
-      return {};
+      console.error('Misisng sub level, probable corrupt map data')
+      return {}
     },
-    localCoverageData () {
-      return this.coverageData[this.coverage];
-    }
-  }
-};
+    localCoverageData() {
+      return this.coverageData[this.coverage]
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-.SubLevelItem {}
+.SubLevelItem {
+}
 
-.SubLevelItemDropdown {}
+.SubLevelItemDropdown {
+}
 </style>

@@ -4,10 +4,8 @@
 
 <script>
 export default {
-  middleware: ['defaultOrg']
-};
+  middleware: ['defaultOrg'],
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="technology"
-    class="TechnologyOverview"
-  >
+  <div id="technology" class="TechnologyOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Technology overview') | translate"
@@ -118,48 +115,55 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
-import { mapGettersActions } from '../../../utilities/form';
-import CollapsibleCard from '../CollapsibleCard';
-import LicenseSelector from '../LicenseSelector';
+import { mapGettersActions } from '../../../utilities/form'
+import CollapsibleCard from '../CollapsibleCard'
+import LicenseSelector from '../LicenseSelector'
 
 export default {
   components: {
     CollapsibleCard,
-    LicenseSelector
+    LicenseSelector,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],
+      implementation_dates: [
+        'project',
+        'getImplementationDates',
+        'setImplementationDates',
+        0,
+      ],
       licenses: ['project', 'getLicenses', 'setLicenses', 0],
       repository: ['project', 'getRepository', 'setRepository', 0],
-      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 0],
-      wiki: ['project', 'getWiki', 'setWiki', 0]
-    })
+      mobile_application: [
+        'project',
+        'getMobileApplication',
+        'setMobileApplication',
+        0,
+      ],
+      wiki: ['project', 'getWiki', 'setWiki', 0],
+    }),
   },
   methods: {
-    async validate () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate()
-      ]);
-      return validations.reduce((a, c) => a && c, true);
-    }
-  }
-};
+    async validate() {
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      return validations.reduce((a, c) => a && c, true)
+    },
+  },
+}
 </script>
 
 <style lang="less">
- @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .TechnologyOverview {
-    .Date {
-      width: 50% !important;
-    }
+.TechnologyOverview {
+  .Date {
+    width: 50% !important;
   }
-
+}
 </style>

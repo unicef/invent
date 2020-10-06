@@ -12,27 +12,25 @@ export default {
   props: {
     value: {
       type: null,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    propsAndAttrs () {
-      return { ...this.$props, ...this.$attrs };
+    propsAndAttrs() {
+      return { ...this.$props, ...this.$attrs }
     },
-    listeners () {
-      return { ...this.$listeners };
-    }
+    listeners() {
+      return { ...this.$listeners }
+    },
   },
   methods: {
-    checkValue (value) {
+    checkValue(value) {
       if (!(value && value instanceof Date && value.toJSON())) {
-        this.$emit('input', null);
+        this.$emit('input', null)
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

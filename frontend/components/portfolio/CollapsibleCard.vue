@@ -25,28 +25,28 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      open: true
-    };
+      open: true,
+    }
   },
   methods: {
     toggleCard() {
-      this.open = !this.open;
+      this.open = !this.open
     },
     expandCard() {
-      this.open = true;
-    }
-  }
-};
+      this.open = true
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .CollapsibleCard {
   margin: 0 0 20px;

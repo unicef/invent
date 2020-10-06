@@ -1,7 +1,7 @@
 <template>
   <div class="DashboardFiltersHeader">
     <span class="ProjectToShow">
-      <translate :parameters="{total}">
+      <translate :parameters="{ total }">
         {total} project(s) to show
       </translate>
     </span>
@@ -12,50 +12,49 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      total: 'dashboard/getTotal'
-    })
-  }
-};
+      total: 'dashboard/getTotal',
+    }),
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .DashboardFiltersHeader {
-    background-color: @colorBrandPrimaryDark;
-    transform: translateX(40px);
+.DashboardFiltersHeader {
+  background-color: @colorBrandPrimaryDark;
+  transform: translateX(40px);
 
-    .ProjectToShow {
-      display: inline-block;
-      box-sizing: border-box;
-      padding-left: 20px;
-      width: @advancedSearchWidth - @actionBarHeight;
-      color: @colorWhite;
-      font-size: @fontSizeBase;
-      font-weight: 700;
-      line-height: @actionBarHeight;
+  .ProjectToShow {
+    display: inline-block;
+    box-sizing: border-box;
+    padding-left: 20px;
+    width: @advancedSearchWidth - @actionBarHeight;
+    color: @colorWhite;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+    line-height: @actionBarHeight;
 
-      .svg-inline--fa {
-        margin-right: 4px;
-      }
-    }
-
-    .ToggleFiltersButton {
-      width: @actionBarHeight;
-      height: @actionBarHeight;
-      padding: 0;
-      border: 0;
-      background-color: @colorBrandPrimaryDark;
-
-      &:hover {
-        background-color: lighten(@colorBrandPrimaryDark, 10%);
-      }
+    .svg-inline--fa {
+      margin-right: 4px;
     }
   }
 
+  .ToggleFiltersButton {
+    width: @actionBarHeight;
+    height: @actionBarHeight;
+    padding: 0;
+    border: 0;
+    background-color: @colorBrandPrimaryDark;
+
+    &:hover {
+      background-color: lighten(@colorBrandPrimaryDark, 10%);
+    }
+  }
+}
 </style>

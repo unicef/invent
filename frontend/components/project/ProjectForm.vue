@@ -1,10 +1,6 @@
 <template>
   <div class="NewProjectForm">
-    <el-form
-      ref="projectForm"
-      label-position="top"
-      @submit.native.prevent
-    >
+    <el-form ref="projectForm" label-position="top" @submit.native.prevent>
       <el-row type="flex">
         <el-col :span="18">
           <general-overview
@@ -79,17 +75,17 @@
 </template>
 
 <script>
-import { publishRules, draftRules } from "@/utilities/projects";
-import ProjectNavigation from "./ProjectNavigation";
-import GeneralOverview from "./sections/GeneralOverview";
-import focalOverview from "./sections/FocalOverview";
-import Categorization from "@/components/project/sections/Categorization";
-import Technology from "@/components/project/sections/Technology";
-import ImplementationOverview from "./sections/ImplementationOverview";
-import Stages from "@/components/project/sections/Stages";
-import Partners from "@/components/project/sections/Partners";
-import DonorCustom from "./sections/DonorCustom";
-import { mapGetters, mapActions } from "vuex";
+import { publishRules, draftRules } from '@/utilities/projects'
+import Categorization from '@/components/project/sections/Categorization'
+import Technology from '@/components/project/sections/Technology'
+import Stages from '@/components/project/sections/Stages'
+import Partners from '@/components/project/sections/Partners'
+import { mapGetters, mapActions } from 'vuex'
+import ProjectNavigation from './ProjectNavigation'
+import GeneralOverview from './sections/GeneralOverview'
+import focalOverview from './sections/FocalOverview'
+import ImplementationOverview from './sections/ImplementationOverview'
+import DonorCustom from './sections/DonorCustom'
 
 export default {
   components: {
@@ -104,7 +100,7 @@ export default {
     Technology,
   },
   $_veeValidate: {
-    validator: "new",
+    validator: 'new',
   },
   data() {
     return {
@@ -112,127 +108,127 @@ export default {
       createdElements: 0,
       usePublishRules: false,
       apiErrors: {},
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      project: "project/getProjectData",
-      countryAnswers: "project/getCountryAnswers",
-      donorAnswers: "project/getDonorsAnswers",
+      project: 'project/getProjectData',
+      countryAnswers: 'project/getCountryAnswers',
+      donorAnswers: 'project/getDonorsAnswers',
     }),
     isDraft() {
-      return this.$route.name.includes("organisation-initiatives-id-edit");
+      return this.$route.name.includes('organisation-initiatives-id-edit')
     },
     isNewProject() {
-      return this.$route.name.includes("organisation-initiatives-create");
+      return this.$route.name.includes('organisation-initiatives-create')
     },
-    draftRules: draftRules,
-    publishRules: publishRules,
+    draftRules,
+    publishRules,
     rules() {
-      return this.usePublishRules ? this.publishRules : this.draftRules;
+      return this.usePublishRules ? this.publishRules : this.draftRules
     },
   },
   mounted() {
     if (this.$route.query.reloadDataFromStorage) {
       this.$nextTick(() => {
-        this.$nuxt.$loading.start();
+        this.$nuxt.$loading.start()
         try {
           const stored = JSON.parse(
-            window.localStorage.getItem("rescuedProject")
-          );
-          this.initProjectState(stored);
+            window.localStorage.getItem('rescuedProject')
+          )
+          this.initProjectState(stored)
         } catch (e) {
           this.$alert(
-            this.$gettext("Failed to restore auto-saved project"),
-            this.$gettext("Warning"),
+            this.$gettext('Failed to restore auto-saved project'),
+            this.$gettext('Warning'),
             {
-              confirmButtonText: this.$gettext("OK"),
+              confirmButtonText: this.$gettext('OK'),
             }
-          );
+          )
         }
-        window.localStorage.removeItem("rescuedProject");
-        this.$router.replace({ ...this.$route, query: undefined });
-        this.$nuxt.$loading.finish();
-      });
+        window.localStorage.removeItem('rescuedProject')
+        this.$router.replace({ ...this.$route, query: undefined })
+        this.$nuxt.$loading.finish()
+      })
     }
   },
   methods: {
     ...mapActions({
-      createProject: "project/createProject",
-      saveDraft: "project/saveDraft",
-      discardDraft: "project/discardDraft",
-      publishProject: "project/publishProject",
-      setLoading: "project/setLoading",
-      initProjectState: "project/initProjectState",
+      createProject: 'project/createProject',
+      saveDraft: 'project/saveDraft',
+      discardDraft: 'project/discardDraft',
+      publishProject: 'project/publishProject',
+      setLoading: 'project/setLoading',
+      initProjectState: 'project/initProjectState',
     }),
     digitalHealthInterventionsValidator(rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter(
         (dhi) => dhi.platform === value && dhi.id
-      );
+      )
       if (ownDhi.length === 0) {
         const error = {
           message: this.$gettext(
-            "Please select one or more Digital Health Intervetions for this Software"
+            'Please select one or more Digital Health Intervetions for this Software'
           ),
           field: rule.fullField,
-        };
-        callback(error);
+        }
+        callback(error)
       } else {
-        callback();
+        callback()
       }
     },
     async unCaughtErrorHandler(errors) {
       if (this.$sentry) {
         this.$sentry.captureMessage(
-          "Un-caught validation error in project page",
+          'Un-caught validation error in project page',
           {
-            level: "error",
+            level: 'error',
             extra: {
               apiErrors: this.apiErrors,
               errors,
             },
           }
-        );
+        )
       }
 
       try {
         await this.$confirm(
           this.$gettext(
-            "There was an un-caught validation error an automatic report has been submitted"
+            'There was an un-caught validation error an automatic report has been submitted'
           ),
-          this.$gettext("Warning"),
+          this.$gettext('Warning'),
           {
-            confirmButtonText: this.$gettext("Recover & Reload"),
-            cancelButtonText: this.$gettext("Discard changes"),
+            confirmButtonText: this.$gettext('Recover & Reload'),
+            cancelButtonText: this.$gettext('Discard changes'),
           }
-        );
+        )
         const project = {
           ...this.project,
           country_custom_answers: this.countryAnswers,
           donor_custom_answers: this.donorAnswers,
-        };
-        const toStore = JSON.stringify(project);
-        window.localStorage.setItem("rescuedProject", toStore);
+        }
+        const toStore = JSON.stringify(project)
+        window.localStorage.setItem('rescuedProject', toStore)
         const newUrl =
           window.location.origin +
           this.$route.path +
-          `?reloadDataFromStorage=true`;
-        window.location.href = newUrl;
+          `?reloadDataFromStorage=true`
+        window.location.href = newUrl
       } catch (e) {
-        console.log("User declined the option to save, just reloading");
-        window.location.reload(true);
+        console.log('User declined the option to save, just reloading')
+        window.location.reload(true)
       }
     },
     handleErrorMessages() {
       this.$nextTick(() => {
-        const errors = [...this.$el.querySelectorAll(".is-error")];
-        const visibleErrors = errors.filter((e) => e.offsetParent !== null);
+        const errors = [...this.$el.querySelectorAll('.is-error')]
+        const visibleErrors = errors.filter((e) => e.offsetParent !== null)
         if (visibleErrors && visibleErrors.length > 0) {
-          visibleErrors[0].scrollIntoView();
+          visibleErrors[0].scrollIntoView()
         } else {
-          this.unCaughtErrorHandler(errors);
+          this.unCaughtErrorHandler(errors)
         }
-      });
+      })
     },
     async validate() {
       const validations = await Promise.all([
@@ -243,31 +239,31 @@ export default {
         this.$refs.implementationOverview.validate(),
         this.$refs.donorCustom.validate(),
         this.$refs.stages.validate(),
-      ]);
-      console.log("root validations", validations);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      console.log('root validations', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     clearValidation() {
-      this.apiErrors = {};
-      this.$refs.generalOverview.clear();
-      this.$refs.focalOverview.clear();
-      this.$refs.categorization.clear();
-      this.$refs.technology.clear();
-      this.$refs.stages.clear();
-      this.$refs.partners.clear();
-      this.$refs.implementationOverview.clear();
-      this.$refs.donorCustom.clear();
+      this.apiErrors = {}
+      this.$refs.generalOverview.clear()
+      this.$refs.focalOverview.clear()
+      this.$refs.categorization.clear()
+      this.$refs.technology.clear()
+      this.$refs.stages.clear()
+      this.$refs.partners.clear()
+      this.$refs.implementationOverview.clear()
+      this.$refs.donorCustom.clear()
     },
     async doSaveDraft() {
-      this.clearValidation();
-      this.usePublishRules = false;
-      this.$nextTick(async () => {
-        const valid = await this.$refs.generalOverview.validateDraft();
-        const focal = await this.$refs.focalOverview.validateDraft();
-        const categorization = await this.$refs.categorization.validateDraft();
-        const technology = await this.$refs.technology.validateDraft();
-        const stages = await this.$refs.stages.validateDraft();
-        const partners = await this.$refs.partners.validateDraft();
+      this.clearValidation()
+      this.usePublishRules = false
+      await this.$nextTick(async () => {
+        const valid = await this.$refs.generalOverview.validateDraft()
+        const focal = await this.$refs.focalOverview.validateDraft()
+        const categorization = await this.$refs.categorization.validateDraft()
+        const technology = await this.$refs.technology.validateDraft()
+        const stages = await this.$refs.stages.validateDraft()
+        const partners = await this.$refs.partners.validateDraft()
         if (
           valid &&
           focal &&
@@ -278,99 +274,99 @@ export default {
         ) {
           try {
             if (this.isNewProject) {
-              const id = await this.createProject();
+              const id = await this.createProject()
               const localised = this.localePath({
-                name: "organisation-initiatives-id-edit",
+                name: 'organisation-initiatives-id-edit',
                 params: { ...this.$route.params, id },
-              });
-              this.$router.push(localised);
+              })
+              this.$router.push(localised)
             } else if (this.isDraft) {
-              await this.saveDraft(this.$route.params.id);
-              location.reload();
+              await this.saveDraft(this.$route.params.id)
+              location.reload()
             }
             this.$alert(
-              this.$gettext("Your draft has been saved successfully"),
-              this.$gettext("Congratulation"),
+              this.$gettext('Your draft has been saved successfully'),
+              this.$gettext('Congratulation'),
               {
-                confirmButtonText: this.$gettext("Close"),
+                confirmButtonText: this.$gettext('Close'),
               }
-            );
-            return;
+            )
+            return
           } catch (e) {
             if (e.response) {
-              this.apiErrors = e.response.data;
+              this.apiErrors = e.response.data
             } else {
-              console.error(e);
+              console.error(e)
             }
-            this.setLoading(false);
+            this.setLoading(false)
           }
         }
-        this.handleErrorMessages();
-      });
+        this.handleErrorMessages()
+      })
     },
     async doDiscardDraft() {
       try {
         await this.$confirm(
           this.$gettext(
-            "The current draft will be overwritten by the published version"
+            'The current draft will be overwritten by the published version'
           ),
-          this.$gettext("Attention"),
+          this.$gettext('Attention'),
           {
-            confirmButtonText: this.$gettext("Ok"),
-            cancelButtonText: this.$gettext("Cancel"),
-            type: "warning",
+            confirmButtonText: this.$gettext('Ok'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning',
           }
-        );
-        await this.discardDraft(this.$route.params.id);
+        )
+        await this.discardDraft(this.$route.params.id)
         this.$message({
-          type: "success",
-          message: this.$gettext("Draft overriden with published version"),
-        });
+          type: 'success',
+          message: this.$gettext('Draft overriden with published version'),
+        })
       } catch (e) {
-        this.setLoading(false);
+        this.setLoading(false)
         this.$message({
-          type: "info",
-          message: this.$gettext("Action cancelled"),
-        });
+          type: 'info',
+          message: this.$gettext('Action cancelled'),
+        })
       }
     },
     async doPublishProject() {
-      this.clearValidation();
-      this.usePublishRules = true;
-      this.$nextTick(async () => {
-        const valid = await this.validate();
+      this.clearValidation()
+      this.usePublishRules = true
+      await this.$nextTick(async () => {
+        const valid = await this.validate()
         if (valid) {
           try {
-            await this.publishProject(this.$route.params.id);
+            await this.publishProject(this.$route.params.id)
             const localised = this.localePath({
-              name: "organisation-initiatives-id-published",
+              name: 'organisation-initiatives-id-published',
               params: { ...this.$route.params },
-            });
-            this.$router.push(localised);
+            })
+            this.$router.push(localised)
             this.$alert(
-              this.$gettext("Your draft has been published successfully"),
-              this.$gettext("Congratulation"),
+              this.$gettext('Your draft has been published successfully'),
+              this.$gettext('Congratulation'),
               {
-                confirmButtonText: this.$gettext("Close"),
+                confirmButtonText: this.$gettext('Close'),
               }
-            );
-            return;
+            )
+            return
           } catch (e) {
-            console.log(e);
-            this.setLoading(false);
-            this.apiErrors = e.response.data;
+            console.log(e)
+            this.setLoading(false)
+            this.apiErrors = e.response.data
           }
         }
-        this.handleErrorMessages();
-      });
+        this.handleErrorMessages()
+      })
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .NewProjectForm {
   .limitPageWidth();

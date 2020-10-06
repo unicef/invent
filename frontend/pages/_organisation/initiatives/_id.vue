@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ProjectBar from "@/components/common/ProjectBar";
-import { mapGetters } from "vuex";
+import ProjectBar from '@/components/common/ProjectBar'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -15,14 +15,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getProjectDetails: "projects/getUserProjectDetails",
-      profile: "user/getProfile",
+      getProjectDetails: 'projects/getUserProjectDetails',
+      profile: 'user/getProfile',
     }),
     currentProject() {
-      return this.getProjectDetails(+this.$route.params.id);
+      return this.getProjectDetails(+this.$route.params.id)
     },
     route() {
-      return this.$route.name.split("__")[0];
+      return this.$route.name.split('__')[0]
     },
   },
   watch: {
@@ -33,28 +33,27 @@ export default {
           (!project.draft || !project.draft.name) &&
           this.profile &&
           !this.profile.is_superuser &&
-          this.route !== "organisation-initiatives-id-published"
+          this.route !== 'organisation-initiatives-id-published'
         ) {
           this.$alert(
-            this.$gettext("You are not authorized to access this view"),
-            this.$gettext("Warning"),
+            this.$gettext('You are not authorized to access this view'),
+            this.$gettext('Warning'),
             {
-              confirmButtonText: "OK",
+              confirmButtonText: 'OK',
               callback: () => {
                 const path = this.localePath({
-                  name: "organisation-initiatives-id-published",
+                  name: 'organisation-initiatives-id-published',
                   params: this.$route.params,
-                });
-                this.$router.replace(path);
+                })
+                this.$router.replace(path)
               },
             }
-          );
+          )
         }
       },
     },
   },
-};
+}
 </script>
 
-<style>
-</style>
+<style></style>

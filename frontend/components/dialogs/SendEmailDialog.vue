@@ -8,9 +8,7 @@
     width="70vw"
     custom-class="SendEmailDialog"
   >
-    <el-form
-      @submit.native.prevent
-    >
+    <el-form @submit.native.prevent>
       <el-form-item :label="emailAddressString(rows)">
         <el-input
           ref="emailArea"
@@ -23,25 +21,15 @@
       </el-form-item>
     </el-form>
     <span slot="footer">
-      <el-row
-        type="flex"
-        align="center"
-      >
+      <el-row type="flex" align="center">
         <el-col class="SecondaryButtons">
-          <el-button
-            type="text"
-            class="IconLeft"
-            @click="copy"
-          >
+          <el-button type="text" class="IconLeft" @click="copy">
             <fa icon="clone" />
             <translate>Copy to clipboard</translate>
           </el-button>
         </el-col>
         <el-col class="PrimaryButtons">
-          <el-button
-            type="primary"
-            @click="send"
-          >
+          <el-button type="primary" @click="send">
             <translate>Send email(s)</translate>
           </el-button>
         </el-col>
@@ -51,9 +39,9 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form.js';
-import { mapGetters } from 'vuex';
-import uniqBy from 'lodash/uniqBy';
+import { mapGetters } from 'vuex'
+import uniqBy from 'lodash/uniqBy'
+import { mapGettersActions } from '../../utilities/form.js'
 
 export default {
   computed: {
@@ -61,46 +49,59 @@ export default {
       projects: 'dashboard/getProjectsBucket',
       profile: 'user/getProfile',
       selectAll: 'dashboard/getSelectAll',
-      selectedRows: 'dashboard/getSelectedRows'
+      selectedRows: 'dashboard/getSelectedRows',
     }),
     ...mapGettersActions({
-      visible: ['layout', 'getSendEmailDialogState', 'setSendEmailDialogState', 0]
+      visible: [
+        'layout',
+        'getSendEmailDialogState',
+        'setSendEmailDialogState',
+        0,
+      ],
     }),
-    addresses () {
-      let projects = this.projects;
+    addresses() {
+      let projects = this.projects
       if (this.selectedRows && !this.selectAll) {
-        projects = this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+        projects = this.projects.filter((p) =>
+          this.selectedRows.some((sr) => sr === p.id)
+        )
       }
-      return uniqBy(projects, 'contact_email');
+      return uniqBy(projects, 'contact_email')
     },
-    rows () {
-      return this.addresses ? this.addresses.length : 1;
+    rows() {
+      return this.addresses ? this.addresses.length : 1
     },
-    selectable () {
-      return this.addresses ? this.addresses.map(a => `${a.contact_name} <${a.contact_email}>`).join('\n') : null;
-    }
+    selectable() {
+      return this.addresses
+        ? this.addresses
+            .map((a) => `${a.contact_name} <${a.contact_email}>`)
+            .join('\n')
+        : null
+    },
   },
   methods: {
-    emailAddressString (rows) {
-      return this.$gettext('Email addresses ({rows})', { rows });
+    emailAddressString(rows) {
+      return this.$gettext('Email addresses ({rows})', { rows })
     },
-    copy () {
-      const area = this.$refs.emailArea.$el.querySelectorAll('textarea')[0];
-      area.select();
-      document.execCommand('copy');
+    copy() {
+      const area = this.$refs.emailArea.$el.querySelectorAll('textarea')[0]
+      area.select()
+      document.execCommand('copy')
       this.$message({
-        message: this.$gettext('Email address(es) successfully copied in your clipboard'),
-        type: 'success'
-      });
+        message: this.$gettext(
+          'Email address(es) successfully copied in your clipboard'
+        ),
+        type: 'success',
+      })
     },
-    send () {
-      const mailto = `mailto:${this.profile.email}?bcc=${this.addresses.map(a => a.contact_email).join(',')}`;
-      window.open(mailto);
-    }
-  }
-};
+    send() {
+      const mailto = `mailto:${this.profile.email}?bcc=${this.addresses
+        .map((a) => a.contact_email)
+        .join(',')}`
+      window.open(mailto)
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

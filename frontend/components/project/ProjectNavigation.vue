@@ -1,31 +1,22 @@
 <template>
-  <div
-    v-scroll-class:FixedNavigation="266"
-    class="ProjectNavigation"
-  >
+  <div v-scroll-class:FixedNavigation="266" class="ProjectNavigation">
     <el-card :body-style="{ padding: '0px' }">
-      <div
-        v-if="!isNewProject"
-        class="SwitchProjectStatus"
-      >
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-        >
-          <div class="SwitchLabel">
-            Switch view:
-          </div>
+      <div v-if="!isNewProject" class="SwitchProjectStatus">
+        <el-row type="flex" justify="space-between" align="middle">
+          <div class="SwitchLabel">Switch view:</div>
           <el-button-group class="SwitchButtons">
             <el-button
-              :class="['DraftButton', {'Active': isDraft || isReadOnlyDraft}]"
+              :class="['DraftButton', { Active: isDraft || isReadOnlyDraft }]"
               :disabled="isDraft || anon"
               @click="goToDraft"
             >
               <translate>Draft</translate>
             </el-button>
             <el-button
-              :class="['PublishedButton', {'Active': isPublished && published.name}]"
+              :class="[
+                'PublishedButton',
+                { Active: isPublished && published.name },
+              ]"
               :disabled="isPublished || !published.name"
               @click="goToPublished"
             >
@@ -37,66 +28,48 @@
 
       <div class="Stepper">
         <ul>
-          <li :class="{active: active === 'general'}">
-            <el-button
-              type="text"
-              @click="scrollTo('general')"
-            >
+          <li :class="{ active: active === 'general' }">
+            <el-button type="text" @click="scrollTo('general')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
               <translate>General</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'implementation'}">
-            <el-button
-              type="text"
-              @click="scrollTo('implementation')"
-            >
+          <li :class="{ active: active === 'implementation' }">
+            <el-button type="text" @click="scrollTo('implementation')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
               <translate>Implementation</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'stages'}">
-            <el-button
-              type="text"
-              @click="scrollTo('stages')"
-            >
+          <li :class="{ active: active === 'stages' }">
+            <el-button type="text" @click="scrollTo('stages')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
               <translate>Stages</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'partners'}">
-            <el-button
-              type="text"
-              @click="scrollTo('partners')"
-            >
+          <li :class="{ active: active === 'partners' }">
+            <el-button type="text" @click="scrollTo('partners')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
               <translate>Partners</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'categorization'}">
-            <el-button
-              type="text"
-              @click="scrollTo('categorization')"
-            >
+          <li :class="{ active: active === 'categorization' }">
+            <el-button type="text" @click="scrollTo('categorization')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
               <translate>Categorization</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'technology'}">
-            <el-button
-              type="text"
-              @click="scrollTo('technology')"
-            >
+          <li :class="{ active: active === 'technology' }">
+            <el-button type="text" @click="scrollTo('technology')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -105,12 +78,9 @@
           </li>
           <li
             v-show="showDonorFieldsLink"
-            :class="{active: active === 'donorcustom'}"
+            :class="{ active: active === 'donorcustom' }"
           >
-            <el-button
-              type="text"
-              @click="scrollTo('donorcustom')"
-            >
+            <el-button type="text" @click="scrollTo('donorcustom')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -120,10 +90,7 @@
         </ul>
       </div>
 
-      <div
-        v-if="isTeam || isNewProject"
-        class="NavigationActions"
-      >
+      <div v-if="isTeam || isNewProject" class="NavigationActions">
         <el-button
           v-if="isDraft"
           :disabled="!!loading"
@@ -131,11 +98,7 @@
           size="medium"
           @click="$emit('publishProject')"
         >
-          <fa
-            v-show="loading === 'publish'"
-            icon="spinner"
-            spin
-          />
+          <fa v-show="loading === 'publish'" icon="spinner" spin />
           <translate>Publish</translate>
         </el-button>
 
@@ -143,15 +106,11 @@
           v-if="isNewProject || isDraft"
           :type="isNewProject ? 'primary' : 'text'"
           :size="isNewProject ? 'medium' : ''"
-          :class="['SaveDraft', {'NewProject': isNewProject, 'Draft': isDraft }]"
+          :class="['SaveDraft', { NewProject: isNewProject, Draft: isDraft }]"
           :disabled="!!loading"
           @click="$emit('saveDraft')"
         >
-          <fa
-            v-show="loading === 'draft'"
-            icon="spinner"
-            spin
-          />
+          <fa v-show="loading === 'draft'" icon="spinner" spin />
           <translate>Save draft</translate>
         </el-button>
 
@@ -162,11 +121,7 @@
           class="DiscardDraft DeleteButton"
           @click="$emit('discardDraft')"
         >
-          <fa
-            v-show="loading === 'discard'"
-            icon="spinner"
-            spin
-          />
+          <fa v-show="loading === 'discard'" icon="spinner" spin />
           <translate>Discard draft</translate>
         </el-button>
 
@@ -178,7 +133,8 @@
           :hide-after="parseInt(3200, 10)"
         >
           <div slot="content">
-            {{ $gettext('This action will update the timestamp') | translate }}<br>
+            {{ $gettext('This action will update the timestamp') | translate
+            }}<br />
             {{ $gettext('of the project to the current date.') | translate }}
           </div>
           <el-button
@@ -187,11 +143,7 @@
             size="medium"
             @click="$emit('handleClickLatest')"
           >
-            <fa
-              v-show="loading === 'latest'"
-              icon="spinner"
-              spin
-            />
+            <fa v-show="loading === 'latest'" icon="spinner" spin />
             <translate>Publish as latest</translate>
             <fa icon="question-circle" />
           </el-button>
@@ -205,11 +157,7 @@
           class="button--danger"
           @click="$emit('handleClickUnPublish')"
         >
-          <fa
-            v-show="loading === 'unpublish'"
-            icon="spinner"
-            spin
-          />
+          <fa v-show="loading === 'unpublish'" icon="spinner" spin />
           <translate>Unpublish</translate>
         </el-button>
 
@@ -239,40 +187,40 @@
 </template>
 
 <script>
-import VueScrollClass from "vue-scroll-class";
-import { mapGetters } from "vuex";
+import VueScrollClass from 'vue-scroll-class'
+import { mapGetters } from 'vuex'
 
 export default {
   directives: {
-    "scroll-class": VueScrollClass,
+    'scroll-class': VueScrollClass,
   },
   computed: {
     ...mapGetters({
-      loading: "project/getLoading",
-      user: "user/getProfile",
-      getCountryDetails: "countries/getCountryDetails",
-      getDonorDetails: "system/getDonorDetails",
-      draft: "project/getProjectData",
-      published: "project/getPublished",
+      loading: 'project/getLoading',
+      user: 'user/getProfile',
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails',
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
     }),
     active() {
-      const hash = this.$route.hash;
-      return hash ? hash.replace("#", "") : "general";
+      const hash = this.$route.hash
+      return hash ? hash.replace('#', '') : 'general'
     },
     route() {
-      return this.$route.name.split("__")[0];
+      return this.$route.name.split('__')[0]
     },
     isNewProject() {
-      return this.route === "organisation-initiatives-create";
+      return this.route === 'organisation-initiatives-create'
     },
     isPublished() {
-      return this.route === "organisation-initiatives-id-published";
+      return this.route === 'organisation-initiatives-id-published'
     },
     isDraft() {
-      return this.route === "organisation-initiatives-id-edit";
+      return this.route === 'organisation-initiatives-id-edit'
     },
     isReadOnlyDraft() {
-      return this.route === "organisation-initiatives-id";
+      return this.route === 'organisation-initiatives-id'
     },
     anon() {
       if (this.user) {
@@ -281,111 +229,109 @@ export default {
           ![...this.user.member, ...this.user.viewer].includes(
             +this.$route.params.id
           )
-        );
+        )
       }
-      return true;
+      return true
     },
     isTeam() {
       if (this.user) {
-        return this.user.member.includes(+this.$route.params.id);
+        return this.user.member.includes(+this.$route.params.id)
       }
-      return false;
+      return false
     },
     project() {
       return this.isDraft || this.isReadOnlyDraft || this.isNewProject
         ? this.draft
-        : this.published;
+        : this.published
     },
     showCountryFieldsLink() {
-      const country = this.getCountryDetails(this.project.country);
+      const country = this.getCountryDetails(this.project.country)
       if (country) {
-        return (
-          country.country_questions && country.country_questions.length > 0
-        );
+        return country.country_questions && country.country_questions.length > 0
       }
-      return false;
+      return false
     },
     showDonorFieldsLink() {
       if (this.project && this.project.donors) {
         for (const donor of this.project.donors) {
-          const details = this.getDonorDetails(donor);
+          const details = this.getDonorDetails(donor)
           if (
             details &&
             details.donor_questions &&
             details.donor_questions.length > 0
           ) {
-            return true;
+            return true
           }
         }
       }
-      return false;
+      return false
     },
   },
   mounted() {
-    window.addEventListener("resize", this.setNavigationBoxLeftStyle);
-    window.addEventListener("scroll", this.setNavigationBoxLeftStyle);
+    window.addEventListener('resize', this.setNavigationBoxLeftStyle)
+    window.addEventListener('scroll', this.setNavigationBoxLeftStyle)
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.setNavigationBoxLeftStyle);
-    window.removeEventListener("scroll", this.setNavigationBoxLeftStyle);
+    window.removeEventListener('resize', this.setNavigationBoxLeftStyle)
+    window.removeEventListener('scroll', this.setNavigationBoxLeftStyle)
   },
   methods: {
     scrollTo(where) {
-      window.location.hash = "";
+      window.location.hash = ''
       this.$nextTick(() => {
-        this.$router.replace(`#${where}`);
-      });
+        this.$router.replace(`#${where}`)
+      })
     },
     goToDraft() {
       const name = this.isTeam
-        ? "organisation-initiatives-id-edit"
-        : "organisation-initiatives-id";
+        ? 'organisation-initiatives-id-edit'
+        : 'organisation-initiatives-id'
       const localised = this.localePath({
         name,
         params: { ...this.$route.params },
-      });
-      this.$router.push(localised);
+      })
+      this.$router.push(localised)
     },
     goToPublished() {
       const localised = this.localePath({
-        name: "organisation-initiatives-id-published",
+        name: 'organisation-initiatives-id-published',
         params: { ...this.$route.params },
-      });
-      this.$router.push(localised);
+      })
+      this.$router.push(localised)
     },
     goToDashboard() {
       const localised = this.localePath({
-        name: "organisation-dashboard-list",
+        name: 'organisation-dashboard-list',
         params: { ...this.$route.params },
-      });
-      this.$router.push(localised);
+      })
+      this.$router.push(localised)
     },
     setNavigationBoxLeftStyle() {
-      const leftSide = document.querySelector("#general");
-      const lang = this.$nuxt.$i18n.locale;
-      const rtl = lang === "ar";
+      const leftSide = document.querySelector('#general')
+      const lang = this.$nuxt.$i18n.locale
+      const rtl = lang === 'ar'
 
       if (leftSide) {
         if (rtl) {
-          const generalLeftPos = leftSide.getBoundingClientRect().left;
+          const generalLeftPos = leftSide.getBoundingClientRect().left
           if (generalLeftPos) {
-            this.$el.style.left = `${generalLeftPos - 320}px`;
+            this.$el.style.left = `${generalLeftPos - 320}px`
           }
         } else {
-          const generalRightPos = leftSide.getBoundingClientRect().right;
+          const generalRightPos = leftSide.getBoundingClientRect().right
           if (generalRightPos) {
-            this.$el.style.left = `${generalRightPos + 20}px`;
+            this.$el.style.left = `${generalRightPos + 20}px`
           }
         }
       }
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .button--danger {
   background-color: white !important;
@@ -469,7 +415,7 @@ export default {
 
       &::after {
         z-index: 1;
-        content: "";
+        content: '';
         position: absolute;
         top: 15px;
         left: 45px;
