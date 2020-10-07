@@ -1,58 +1,50 @@
 <template>
-  <div
-    v-if="user"
-    class="UserItem"
-  >
+  <div v-if="user" class="UserItem">
     <span class="Name">
       {{ user.name }}
     </span>
-    <span
-      v-if="showOrganisation"
-      class="Organisation"
-    >
+    <span v-if="showOrganisation" class="Organisation">
       <organisation-item :id="user.organisation" />
     </span>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import OrganisationItem from '../common/OrganisationItem';
+import { mapGetters } from 'vuex'
+import OrganisationItem from '../common/OrganisationItem'
 
 export default {
   components: {
-    OrganisationItem
+    OrganisationItem,
   },
   props: {
     id: {
       type: Number,
-      default: null
+      default: null,
     },
     showOrganisation: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      getUserDetails: 'system/getUserProfileDetails'
+      getUserDetails: 'system/getUserProfileDetails',
     }),
-    user () {
+    user() {
       if (this.id) {
-        return this.getUserDetails(this.id);
+        return this.getUserDetails(this.id)
       }
-      return null;
-    }
-  }
-};
+      return null
+    },
+  },
+}
 </script>
 
 <style lang="less">
-
 .UserItem {
   .Organisation {
     font-size: 12px;
   }
 }
-
 </style>

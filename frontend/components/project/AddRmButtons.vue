@@ -28,34 +28,33 @@ export default {
   props: {
     showRm: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showAdd: {
       type: Boolean,
-      default: true
-    }
-  }
-};
+      default: true,
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .AddRmButtons {
-    padding-left: 30px;
+.AddRmButtons {
+  padding-left: 30px;
 
-    .el-button {
-      margin-left: 0;
-    }
-
-    .DeleteButton {
-      margin-right: 20px;
-    }
-
-    .svg-inline--fa {
-      width: 16px;
-    }
+  .el-button {
+    margin-left: 0;
   }
 
+  .DeleteButton {
+    margin-right: 20px;
+  }
+
+  .svg-inline--fa {
+    width: 16px;
+  }
+}
 </style>

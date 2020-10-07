@@ -20,52 +20,52 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
   $_veeValidate: {
     value() {
-      return this.value;
+      return this.value
     },
-    events: "change|blur"
+    events: 'change|blur',
   },
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      donors: "system/getDonors"
+      donors: 'system/getDonors',
     }),
     internalValue() {
-      return this.value.filter(v => v !== 20);
+      return this.value.filter((v) => v !== 20)
     },
     filteredDonors() {
-      return this.donors.filter(d => d.id !== 20);
-    }
+      return this.donors.filter((d) => d.id !== 20)
+    },
   },
   methods: {
     changeHandler(value) {
-      this.$emit("change", value);
-    }
-  }
-};
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .DonorSelector {
   width: 100%;
@@ -79,11 +79,11 @@ export default {
     color: @colorGray;
 
     &::before {
-      content: "(";
+      content: '(';
     }
 
     &::after {
-      content: ")";
+      content: ')';
     }
   }
 }

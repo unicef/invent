@@ -67,13 +67,15 @@
           />
         </el-form-item>
 
-        <el-form-item :label="$gettext('Project approval process') | translate">
+        <el-form-item
+          :label="$gettext('Initiative approval process') | translate"
+        >
           <el-checkbox v-model="projectApproval" :disabled="notSCA">
             <translate v-if="projectApproval" key="used-country">
-              Used for projects in country
+              Used for initiatives in country
             </translate>
             <translate v-if="!projectApproval" key="not-used-country">
-              Not used for projects in country
+              Not used for initiatives in country
             </translate>
           </el-checkbox>
         </el-form-item>
@@ -93,7 +95,7 @@
 
     <collapsible-card
       v-if="projectApproval"
-      :title="$gettext('Project Approval') | translate"
+      :title="$gettext('Initiative Approval') | translate"
       class="ProjectApproval"
     >
       <project-approval />
@@ -147,7 +149,7 @@
             <div class="RequestCount">
               <translate
                 :parameters="{
-                  num: superadminSelection.length - superAdmins.length
+                  num: superadminSelection.length - superAdmins.length,
                 }"
               >
                 {num} new request(s)
@@ -231,8 +233,8 @@
                     </li>
                     <li>
                       <translate key="ca-list-item-6">
-                        Can approve projects if the project approval feature is
-                        active
+                        Can approve initiatives if the initiative approval
+                        feature is active
                       </translate>
                     </li>
                   </ul>
@@ -288,8 +290,8 @@
                     </li>
                     <li>
                       <translate key="sca-list-item-6">
-                        Can approve projects if the project approval feature is
-                        active
+                        Can approve initiatives if the initiative approval
+                        feature is active
                       </translate>
                     </li>
                     <li>
@@ -345,18 +347,17 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import CollapsibleCard from "../project/CollapsibleCard";
-import VueMapCustomizer from "../admin/VueMapCustomizer";
-import DhaQuestionaire from "../admin/DhaQuestionaire";
-import FileUpload from "../common/FileUpload";
-import CountrySelect from "../common/CountrySelect";
-import ProjectApproval from "./ProjectApproval";
-
-import { mapGettersActions } from "../../utilities/form";
+import { mapGetters, mapActions } from 'vuex'
+import CollapsibleCard from '../project/CollapsibleCard'
+import VueMapCustomizer from '../admin/VueMapCustomizer'
+import DhaQuestionaire from '../admin/DhaQuestionaire'
+import FileUpload from '../common/FileUpload'
+import CountrySelect from '../common/CountrySelect'
+import { mapGettersActions } from '../../utilities/form'
+import ProjectApproval from './ProjectApproval'
 
 export default {
-  name: "CountryAdministrator",
+  name: 'CountryAdministrator',
 
   components: {
     CollapsibleCard,
@@ -364,304 +365,304 @@ export default {
     DhaQuestionaire,
     FileUpload,
     CountrySelect,
-    ProjectApproval
+    ProjectApproval,
   },
 
   data() {
     return {
-      selectedPersona: "G",
-      logoError: "",
-      coverError: "",
+      selectedPersona: 'G',
+      logoError: '',
+      coverError: '',
       flagForKeepingPartnerLogosError: false,
-      partnerLogosError: "",
+      partnerLogosError: '',
       rules: {
         logo: [
           {
             validator: (rule, value, callback) => {
               if (this.logoError) {
-                callback(new Error(this.logoError));
+                callback(new Error(this.logoError))
               } else {
-                callback();
+                callback()
               }
-            }
-          }
+            },
+          },
         ],
         cover: [
           {
             validator: (rule, value, callback) => {
               if (this.coverError) {
-                callback(new Error(this.coverError));
+                callback(new Error(this.coverError))
               } else {
-                callback();
+                callback()
               }
-            }
-          }
+            },
+          },
         ],
         partnerLogos: [
           {
             validator: (rule, value, callback) => {
               if (this.partnerLogosError) {
-                callback(new Error(this.partnerLogosError));
+                callback(new Error(this.partnerLogosError))
               } else {
-                callback();
+                callback()
               }
-            }
-          }
-        ]
-      }
-    };
+            },
+          },
+        ],
+      },
+    }
   },
 
   computed: {
     ...mapGettersActions({
-      coverText: ["admin/country", "getCoverText", "setCoverText"],
-      footerTitle: ["admin/country", "getFooterTitle", "setFooterTitle"],
-      footerText: ["admin/country", "getFooterText", "setFooterText"],
+      coverText: ['admin/country', 'getCoverText', 'setCoverText'],
+      footerTitle: ['admin/country', 'getFooterTitle', 'setFooterTitle'],
+      footerText: ['admin/country', 'getFooterText', 'setFooterText'],
       projectApproval: [
-        "admin/country",
-        "getProjectApproval",
-        "setProjectApproval"
-      ]
+        'admin/country',
+        'getProjectApproval',
+        'setProjectApproval',
+      ],
     }),
 
     ...mapGetters({
-      country: "admin/country/getData",
-      userSelection: "admin/country/getUserSelection",
-      adminSelection: "admin/country/getAdminSelection",
-      superadminSelection: "admin/country/getSuperadminSelection",
-      userProfile: "user/getProfile"
+      country: 'admin/country/getData',
+      userSelection: 'admin/country/getUserSelection',
+      adminSelection: 'admin/country/getAdminSelection',
+      superadminSelection: 'admin/country/getSuperadminSelection',
+      userProfile: 'user/getProfile',
     }),
 
     notSCA() {
       return (
         this.userProfile &&
-        this.userProfile.account_type === "CA" &&
+        this.userProfile.account_type === 'CA' &&
         !this.userProfile.is_superuser
-      );
+      )
     },
 
     logo: {
       get() {
-        if (typeof this.country.logo === "string") {
+        if (typeof this.country.logo === 'string') {
           return [
             {
               url: this.country.logo,
-              name: ("" + this.country.logo).split("/").pop()
-            }
-          ];
+              name: ('' + this.country.logo).split('/').pop(),
+            },
+          ]
         } else if (!this.country.logo) {
-          return [];
+          return []
         } else {
-          return [this.country.logo];
+          return [this.country.logo]
         }
       },
       set([value]) {
-        this.setDataField({ field: "logo", data: value });
-      }
+        this.setDataField({ field: 'logo', data: value })
+      },
     },
 
     cover: {
       get() {
-        if (typeof this.country.cover === "string") {
+        if (typeof this.country.cover === 'string') {
           return [
             {
               url: this.country.cover,
-              name: ("" + this.country.cover).split("/").pop()
-            }
-          ];
+              name: ('' + this.country.cover).split('/').pop(),
+            },
+          ]
         } else if (!this.country.cover) {
-          return [];
+          return []
         } else {
-          return [this.country.cover];
+          return [this.country.cover]
         }
       },
       set([value]) {
-        this.setDataField({ field: "cover", data: value });
-      }
+        this.setDataField({ field: 'cover', data: value })
+      },
     },
 
     partnerLogos: {
       get() {
-        return this.country.partner_logos.map(rawLogo => {
+        return this.country.partner_logos.map((rawLogo) => {
           if (rawLogo.raw || rawLogo.uid) {
-            return rawLogo;
+            return rawLogo
           } else if (rawLogo.image) {
             return {
               url: rawLogo.image,
-              name: ("" + rawLogo.image).split("/").pop(),
-              id: rawLogo.id
-            };
+              name: ('' + rawLogo.image).split('/').pop(),
+              id: rawLogo.id,
+            }
           }
-        });
+        })
       },
       set(value) {
-        this.setDataField({ field: "partner_logos", data: value });
-      }
+        this.setDataField({ field: 'partner_logos', data: value })
+      },
     },
 
     users: {
       get() {
-        return this.country.users || [];
+        return this.country.users || []
       },
       set(value) {
-        this.setDataField({ field: "users", data: value });
-      }
+        this.setDataField({ field: 'users', data: value })
+      },
     },
 
     admins: {
       get() {
-        return this.country.admins || [];
+        return this.country.admins || []
       },
       set(value) {
-        this.setDataField({ field: "admins", data: value });
-      }
+        this.setDataField({ field: 'admins', data: value })
+      },
     },
 
     superAdmins: {
       get() {
-        return this.country.super_admins || [];
+        return this.country.super_admins || []
       },
       set(value) {
-        this.setDataField({ field: "super_admins", data: value });
-      }
+        this.setDataField({ field: 'super_admins', data: value })
+      },
     },
 
     countryId: {
       get() {
-        return this.country.id;
+        return this.country.id
       },
       async set(value) {
-        this.setId(value);
-        await this.fetchData();
-        await this.loadGeoJSON();
-      }
+        this.setId(value)
+        await this.fetchData()
+        await this.loadGeoJSON()
+      },
     },
     transferTitles() {
-      return [this.$gettext("New requests"), this.$gettext("Approved")];
-    }
+      return [this.$gettext('New requests'), this.$gettext('Approved')]
+    },
   },
 
   watch: {
     logo(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
-        return;
+        return
       }
 
       const filteredArray = [
-        ...this.logo.filter(image => {
+        ...this.logo.filter((image) => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
-        })
-      ];
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
+        }),
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.logo = filteredArray;
+        this.logo = filteredArray
         this.logoError = this.$gettext(
-          "Wrong image format, you can only upload .jpg and .png files"
-        );
+          'Wrong image format, you can only upload .jpg and .png files'
+        )
       } else {
-        this.logoError = "";
+        this.logoError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
+      this.$refs.countryInfo.validate(() => {})
     },
 
     cover(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
-        return;
+        return
       }
 
       const filteredArray = [
-        ...this.cover.filter(image => {
+        ...this.cover.filter((image) => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
-        })
-      ];
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
+        }),
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.cover = filteredArray;
+        this.cover = filteredArray
         this.coverError = this.$gettext(
-          "Wrong image format, you can only upload .jpg and .png files"
-        );
+          'Wrong image format, you can only upload .jpg and .png files'
+        )
       } else {
-        this.coverError = "";
+        this.coverError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
+      this.$refs.countryInfo.validate(() => {})
     },
 
     partnerLogos(newArr, oldArr) {
       // Handles error message placing for wrong image formats
       const filteredArray = [
-        ...this.partnerLogos.filter(image => {
+        ...this.partnerLogos.filter((image) => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
-        })
-      ];
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
+        }),
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.partnerLogos = filteredArray;
+        this.partnerLogos = filteredArray
         this.partnerLogosError = this.$gettext(
-          "Wrong image format, you can only upload .jpg and .png files"
-        );
-        this.flagForKeepingPartnerLogosError = true;
+          'Wrong image format, you can only upload .jpg and .png files'
+        )
+        this.flagForKeepingPartnerLogosError = true
       } else if (this.flagForKeepingPartnerLogosError) {
-        this.flagForKeepingPartnerLogosError = false;
-        return;
+        this.flagForKeepingPartnerLogosError = false
+        return
       } else {
-        this.partnerLogosError = "";
+        this.partnerLogosError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
-    }
+      this.$refs.countryInfo.validate(() => {})
+    },
   },
 
   methods: {
     ...mapActions({
-      setDataField: "admin/country/setDataField",
-      saveChanges: "admin/country/saveChanges",
-      setId: "admin/country/setId",
-      fetchData: "admin/country/fetchData",
-      loadGeoJSON: "admin/map/loadGeoJSON"
+      setDataField: 'admin/country/setDataField',
+      saveChanges: 'admin/country/saveChanges',
+      setId: 'admin/country/setId',
+      fetchData: 'admin/country/fetchData',
+      loadGeoJSON: 'admin/map/loadGeoJSON',
     }),
 
     selectPersona(selected) {
-      this.selectedPersona = selected;
+      this.selectedPersona = selected
     },
 
     setCountryId(selected) {
-      this.countryId = selected;
+      this.countryId = selected
     },
     save() {
       if (this.$refs.customQuestions.allSaved) {
-        this.saveChanges();
+        this.saveChanges()
       } else {
-        this.$alert("Your questionnaire is not completely saved", "Warning", {
-          confirmButtonText: "Ok",
+        this.$alert('Your questionnaire is not completely saved', 'Warning', {
+          confirmButtonText: 'Ok',
           callback: () => {
-            this.$refs.customQuestions.$el.scrollIntoView();
-          }
-        });
+            this.$refs.customQuestions.$el.scrollIntoView()
+          },
+        })
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .CountryAdmin {
   margin-bottom: 60px;
@@ -841,7 +842,7 @@ export default {
   }
 }
 
-[dir="rtl"] {
+[dir='rtl'] {
   .CountryAdmin {
     .UserManagement {
       .AdminPersonaChooser {

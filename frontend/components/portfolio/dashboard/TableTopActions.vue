@@ -3,14 +3,14 @@
     <div class="left">
       <el-button size="small" type="text" @click="toggleSelectAll">
         <translate v-show="!allSelected" :parameters="{ total }">
-          Select all {total} projects
+          Select all {total} initiatives
         </translate>
         <translate v-show="allSelected" :parameters="{ total }">
-          Deselect all {total} projects
+          Deselect all {total} initiatives
         </translate>
       </el-button>
       <list-export :projects="rowToExport">
-        <template #default="{parsed}">
+        <template #default="{ parsed }">
           <xlsx-workbook>
             <xlsx-sheet :collection="parsed" sheet-name="export" />
             <xlsx-download
@@ -18,7 +18,7 @@
               :options="{ bookType: exportType.toLowerCase() }"
               :filename="`export.${exportType.toLowerCase()}`"
             >
-              <template #default="{download}">
+              <template #default="{ download }">
                 <el-button
                   :disabled="selectedRows.length === 0"
                   type="text"
@@ -131,159 +131,161 @@
 </template>
 
 <script>
-import { XlsxWorkbook, XlsxSheet, XlsxDownload } from "vue-xlsx";
-import PdfExport from "@/components/dashboard/PdfExport";
-import ListExport from "@/components/dashboard/ListExport";
+import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
+// import PdfExport from '@/components/dashboard/PdfExport'
+import ListExport from '@/components/dashboard/ListExport'
 
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    PdfExport,
+    // PdfExport,
     XlsxWorkbook,
     XlsxSheet,
     XlsxDownload,
-    ListExport
+    ListExport,
   },
   data() {
     return {
-      exportType: "XLSX",
+      exportType: 'XLSX',
       viewportSize: 2000,
       moveTo: [
-        this.$gettext("Move to Inventory"),
-        this.$gettext("Move to Review"),
-        this.$gettext("Move to Porfolio")
+        this.$gettext('Move to Inventory'),
+        this.$gettext('Move to Review'),
+        this.$gettext('Move to Porfolio'),
       ],
       // settings
       columnSelectorOpen: false,
-      selectedColumns: []
-    };
+      selectedColumns: [],
+    }
   },
   computed: {
     ...mapState({
-      tab: state => state.portfolio.tab,
-      back: state => state.portfolio.back,
-      forward: state => state.portfolio.forward
+      tab: (state) => state.portfolio.tab,
+      back: (state) => state.portfolio.back,
+      forward: (state) => state.portfolio.forward,
     }),
     ...mapGetters({
-      selectedRows: "dashboard/getSelectedRows",
-      allSelected: "dashboard/getSelectAll",
-      total: "portfolio/getTotal",
+      selectedRows: 'dashboard/getSelectedRows',
+      allSelected: 'dashboard/getSelectAll',
+      total: 'portfolio/getTotal',
       // user: "user/getProfile",
-      projects: "dashboard/getProjectsBucket",
+      projects: 'dashboard/getProjectsBucket',
       // dashboardId: "dashboard/getDashboardId",
       // dashboardType: "dashboard/getDashboardType",
       // settings
-      columns: "dashboard/getAvailableColumns",
-      selectedCol: "dashboard/getSelectedColumns"
+      columns: 'dashboard/getAvailableColumns',
+      selectedCol: 'dashboard/getSelectedColumns',
     }),
     selected() {
-      return this.allSelected ? this.total : this.selectedRows.length;
+      return this.allSelected ? this.total : this.selectedRows.length
     },
     disabled() {
-      return this.selectedRows.length === 0;
+      return this.selectedRows.length === 0
     },
     rowToExport() {
       return this.allSelected
         ? this.projects
-        : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+        : this.projects.filter((p) =>
+            this.selectedRows.some((sr) => sr === p.id)
+          )
     },
     // settings
     settingsTitle() {
-      return `${this.$gettext("main fields")} (${this.selectedCol.length}/${
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${
         this.columns.length
-      })`;
-    }
+      })`
+    },
   },
   methods: {
     ...mapActions({
-      setSelectAll: "dashboard/setSelectAll",
-      loadProjectsBucket: "dashboard/loadProjectsBucket",
-      setSelectedRows: "dashboard/setSelectedRows",
-      moveToState: "portfolio/moveToState",
+      setSelectAll: 'dashboard/setSelectAll',
+      loadProjectsBucket: 'dashboard/loadProjectsBucket',
+      setSelectedRows: 'dashboard/setSelectedRows',
+      moveToState: 'portfolio/moveToState',
       // settings
-      setSelectedColumns: "dashboard/setSelectedColumns"
+      setSelectedColumns: 'dashboard/setSelectedColumns',
     }),
     async toggleSelectAll() {
       if (!this.allSelected) {
-        await this.loadProjectsBucket();
-        this.setSelectAll(true);
+        await this.loadProjectsBucket()
+        this.setSelectAll(true)
       } else {
-        this.setSelectAll(false);
-        this.setSelectedRows([]);
+        this.setSelectAll(false)
+        this.setSelectedRows([])
       }
     },
     exportRows(xlsxDownloadFunction) {
-      this.$nuxt.$loading.start("pdf");
-      window.setTimeout(async () => {
-        if (this.exportType === "PDF") {
-          this.$refs.pdfExport.printPdf();
+      this.$nuxt.$loading.start('pdf')
+      window.setTimeout(() => {
+        if (this.exportType === 'PDF') {
+          this.$refs.pdfExport.printPdf()
         } else {
-          xlsxDownloadFunction();
+          xlsxDownloadFunction()
         }
-        this.$nuxt.$loading.finish("pdf");
-      }, 500);
+        this.$nuxt.$loading.finish('pdf')
+      }, 500)
     },
     // back and forward values
     async handleClickBack() {
-      const tab = this.tab - 1;
+      const tab = this.tab - 1
       switch (tab) {
         case 1:
           await this.moveToState({
-            type: "remove-project",
+            type: 'remove-project',
             project: this.selectedRows,
-            tab
-          });
-          break;
+            tab,
+          })
+          break
         case 2:
           await this.moveToState({
-            type: "disapprove-project",
+            type: 'disapprove-project',
             project: this.selectedRows,
-            tab
-          });
-          break;
+            tab,
+          })
+          break
         default:
-          break;
+          break
       }
     },
     async handleClickForward() {
-      const tab = this.tab + 1;
+      const tab = this.tab + 1
       switch (tab) {
         case 2:
           await this.moveToState({
-            type: "add-project",
+            type: 'add-project',
             project: this.selectedRows,
-            tab
-          });
-          break;
+            tab,
+          })
+          break
         case 3:
           await this.moveToState({
-            type: "approve-project",
+            type: 'approve-project',
             project: this.selectedRows,
-            tab
-          });
-          break;
+            tab,
+          })
+          break
         default:
-          break;
+          break
       }
     },
     // settings
     popperOpenHandler() {
-      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
+      this.selectedColumns = [...this.columns.map((s) => ({ ...s }))]
     },
     updateColumns() {
       this.setSelectedColumns(
-        this.selectedColumns.filter(s => s.selected).map(s => s.id)
-      );
-      this.columnSelectorOpen = false;
-    }
-  }
-};
+        this.selectedColumns.filter((s) => s.selected).map((s) => s.id)
+      )
+      this.columnSelectorOpen = false
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .actions {
   display: flex;

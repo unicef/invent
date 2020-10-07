@@ -1,5 +1,5 @@
-import ExperiencesListController from './ExperiencesListController';
-import _template from './ExperiencesList.html';
+import ExperiencesListController from './ExperiencesListController'
+import _template from './ExperiencesList.html'
 
 const component = {
   template: _template,
@@ -8,8 +8,8 @@ const component = {
   name: 'cmsExperiencesList',
   bindings: {
     domainId: '<',
-    axisId: '<'
-  }
-};
+    axisId: '<',
+  },
+}
 
-export default component;
+export default component

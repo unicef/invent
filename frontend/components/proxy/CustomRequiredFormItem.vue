@@ -7,21 +7,11 @@
     <template slot="label">
       <slot name="label" />
       <template v-if="!row">
-        <span
-          v-show="draftRequired"
-          class="Required DraftRequired"
-        >
-          <span>
-            *
-          </span>
+        <span v-show="draftRequired" class="Required DraftRequired">
+          <span> * </span>
         </span>
-        <span
-          v-show="publishRequired"
-          class="Required PublishRequired"
-        >
-          <span>
-            *
-          </span>
+        <span v-show="publishRequired" class="Required PublishRequired">
+          <span> * </span>
         </span>
       </template>
     </template>
@@ -35,37 +25,37 @@ export default {
   props: {
     draftRule: {
       type: Object,
-      default: null
+      default: null,
     },
     publishRule: {
       type: Object,
-      default: null
+      default: null,
     },
     row: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    propsAndAttrs () {
-      return { ...this.$props, ...this.$attrs };
+    propsAndAttrs() {
+      return { ...this.$props, ...this.$attrs }
     },
-    listeners () {
-      return { ...this.$listeners };
+    listeners() {
+      return { ...this.$listeners }
     },
-    draftRequired () {
-      return this.draftRule && this.draftRule.required;
+    draftRequired() {
+      return this.draftRule && this.draftRule.required
     },
-    publishRequired () {
-      return this.publishRule && this.publishRule.required;
-    }
-  }
-};
+    publishRequired() {
+      return this.publishRule && this.publishRule.required
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 .CustomRequiredFormItem {
   &.row-input {
     display: flex;

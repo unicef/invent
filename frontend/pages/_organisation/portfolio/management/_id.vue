@@ -46,13 +46,13 @@
 </template>
 
 <script>
-import AdvancedSearch from "@/components/dashboard/AdvancedSearch";
-import MainTable from "@/components/portfolio/dashboard/MainTable";
-import TableTopActions from "@/components/portfolio/dashboard/TableTopActions";
-import { mapState, mapGetters, mapActions } from "vuex";
-import debounce from "lodash/debounce";
+import AdvancedSearch from '@/components/dashboard/AdvancedSearch'
+import MainTable from '@/components/portfolio/dashboard/MainTable'
+import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import debounce from 'lodash/debounce'
 // dialogs
-import Error from "@/components/portfolio/dashboard/dialog/Error";
+import Error from '@/components/portfolio/dashboard/dialog/Error'
 
 export default {
   components: {
@@ -62,24 +62,24 @@ export default {
     Error,
   },
   async fetch({ store, query, error, params }) {
-    store.dispatch("landing/resetSearch");
-    store.dispatch("dashboard/setDashboardSection", "list");
+    store.dispatch('landing/resetSearch')
+    store.dispatch('dashboard/setDashboardSection', 'list')
     await Promise.all([
-      store.dispatch("projects/loadUserProjects"),
-      store.dispatch("projects/loadProjectStructure"),
-      store.dispatch("portfolio/getProjects", params.id),
-    ]);
-    await store.dispatch("dashboard/setSearchOptions", query);
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('portfolio/getProjects', params.id),
+    ])
+    await store.dispatch('dashboard/setSearchOptions', query)
     try {
-      await store.dispatch("dashboard/loadProjectList");
+      await store.dispatch('dashboard/loadProjectList')
     } catch (e) {
-      console.log(e);
+      console.log(e)
       error({
         statusCode: 404,
-        message: "Unable to process the search with the current parameters",
-      });
+        message: 'Unable to process the search with the current parameters',
+      })
     }
-    // todo: integration should handle the status to refill data of projects
+    // todo: integration should handle the status to refill data of initiatives
   },
   computed: {
     ...mapState({
@@ -90,50 +90,50 @@ export default {
       errorMessage: (state) => state.portfolio.errorMessage,
     }),
     ...mapGetters({
-      searchParameters: "dashboard/getSearchParameters",
-      dashboardSection: "dashboard/getDashboardSection",
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection',
     }),
   },
   watch: {
     searchParameters: {
       immediate: false,
       handler(query) {
-        this.searchParameterChanged(query);
+        this.searchParameterChanged(query)
       },
     },
   },
   mounted() {
     if (window) {
-      const savedFilters = window.localStorage.getItem("savedFilters");
+      const savedFilters = window.localStorage.getItem('savedFilters')
       if (savedFilters) {
-        this.setSavedFilters(JSON.parse(savedFilters));
+        this.setSavedFilters(JSON.parse(savedFilters))
       }
     }
   },
   methods: {
     ...mapActions({
-      loadProjectList: "dashboard/loadProjectList",
-      setSavedFilters: "dashboard/setSavedFilters",
-      setTab: "portfolio/setTab",
+      loadProjectList: 'dashboard/loadProjectList',
+      setSavedFilters: 'dashboard/setSavedFilters',
+      setTab: 'portfolio/setTab',
     }),
     searchParameterChanged: debounce(function (query) {
-      if (this.dashboardSection === "list") {
-        this.$router.replace({ ...this.$route, query });
-        this.load();
+      if (this.dashboardSection === 'list') {
+        this.$router.replace({ ...this.$route, query })
+        this.load()
       }
     }, 100),
     async load() {
-      this.$nuxt.$loading.start();
-      await this.loadProjectList();
-      this.$nuxt.$loading.finish();
+      this.$nuxt.$loading.start()
+      await this.loadProjectList()
+      this.$nuxt.$loading.finish()
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .portfolio-area {
   height: calc(

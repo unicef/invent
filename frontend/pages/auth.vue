@@ -3,85 +3,82 @@
     <div class="AuthComponent">
       <div>
         <el-button type="primary" size="large" @click="loginStart">
-          <translate>
-            Login
-          </translate>
+          <translate> Login </translate>
         </el-button>
         <p>
-          <translate>
-            You must have a UNICEF account to log in.
-          </translate>
+          <translate> You must have a UNICEF account to log in. </translate>
         </p>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
     ...mapGetters({
-      profile: "user/getProfile"
-    })
+      profile: 'user/getProfile',
+    }),
   },
   async mounted() {
+    // eslint-disable-next-line
     if (!process.server) {
-      const storedNext = localStorage.getItem("next");
-      const next = this.$route.query.next;
-      localStorage.removeItem("next");
-      if (next && next !== "/") {
-        localStorage.setItem("next", next);
+      const storedNext = localStorage.getItem('next')
+      const next = this.$route.query.next
+      localStorage.removeItem('next')
+      if (next && next !== '/') {
+        localStorage.setItem('next', next)
       }
       if (window.location.hash) {
-        const codeMatch = window.location.hash.match(/#code=(.*)&session/);
-        window.history.replaceState(null, null, " ");
+        const codeMatch = window.location.hash.match(/#code=(.*)&session/)
+        window.history.replaceState(null, null, ' ')
         if (codeMatch.length > 1) {
-          const code = codeMatch[1];
+          const code = codeMatch[1]
           this.$nextTick(() => {
-            this.$nuxt.$loading.start("loginLoader");
-          });
+            this.$nuxt.$loading.start('loginLoader')
+          })
           try {
-            await this.login({ code });
+            await this.login({ code })
           } catch (e) {
-            this.$nuxt.$loading.finish("loginLoader");
-            return;
+            this.$nuxt.$loading.finish('loginLoader')
+            return
           }
           try {
             if (this.profile.country) {
-              this.setSelectedCountry(this.profile.country);
+              this.setSelectedCountry(this.profile.country)
             }
             if (storedNext) {
-              this.$router.push(storedNext);
+              this.$router.push(storedNext)
             } else {
               // this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: { organisation: '-' } }));
               this.$router.push(
-                this.localePath({ name: "", params: { organisation: "-" } })
-              );
+                this.localePath({ name: '', params: { organisation: '-' } })
+              )
             }
           } catch (e) {
-            console.error(e);
+            console.error(e)
           }
-          this.$nuxt.$loading.finish("loginLoader");
+          this.$nuxt.$loading.finish('loginLoader')
         }
       }
     }
   },
   methods: {
     ...mapActions({
-      login: "user/doLogin",
-      setSelectedCountry: "dashboard/setSelectedCountry"
+      login: 'user/doLogin',
+      setSelectedCountry: 'dashboard/setSelectedCountry',
     }),
     loginStart() {
-      window.location.href = process.env.loginUrl;
-    }
-  }
-};
+      window.location.href = process.env.loginUrl
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../assets/style/variables.less";
-@import "../assets/style/mixins.less";
+@import '../assets/style/variables.less';
+@import '../assets/style/mixins.less';
 
 .AuthComponent {
   text-align: center;

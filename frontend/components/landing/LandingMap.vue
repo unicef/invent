@@ -1,5 +1,5 @@
 <template>
-  <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}]">
+  <div :class="['DhaMap', 'LandingMap', { Searched: isSearched }]">
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -9,9 +9,7 @@
         @zoomend="zoomChangeHandler"
         @leaflet:load="setMapReady(true)"
       >
-        <l-tilelayer
-          :url="tileServer"
-        />
+        <l-tilelayer :url="tileServer" />
 
         <custom-marker-cluster
           ref="markerCluster"
@@ -43,40 +41,37 @@
         />
         <world-zoom-button />
 
-        <l-control-zoom
-          position="bottomright"
-        />
+        <l-control-zoom position="bottomright" />
       </l-map>
     </no-ssr>
   </div>
 </template>
 
 <script>
+import NoSSR from 'vue-no-ssr'
+import MapMixin from '../mixins/MapMixin'
 
-import MapMixin from '../mixins/MapMixin';
-
-import NoSSR from 'vue-no-ssr';
-import CountryCenterMarker from '../common/map/CountryCenterMarker';
-import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
-import WorldZoomButton from '../common/map/WorldZoomButton';
+import CountryCenterMarker from '../common/map/CountryCenterMarker'
+import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay'
+import WorldZoomButton from '../common/map/WorldZoomButton'
 
 export default {
   components: {
     'no-ssr': NoSSR,
     CountryCenterMarker,
     CountryDetailsOverlay,
-    WorldZoomButton
+    WorldZoomButton,
   },
-  mixins: [MapMixin]
-};
+  mixins: [MapMixin],
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .LandingMap {
-    height: @landingMapHeight;
-    min-height: @landingMapMinHeight;
-  }
+.LandingMap {
+  height: @landingMapHeight;
+  min-height: @landingMapMinHeight;
+}
 </style>

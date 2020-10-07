@@ -29,202 +29,208 @@
 </template>
 
 <script>
-import SubLevelMarker from './SubLevelMarker';
-import CountryCenterMarker from './CountryCenterMarker';
-import GeoJsonLayer from './GeoJsonLayer';
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+import SubLevelMarker from './SubLevelMarker'
+import CountryCenterMarker from './CountryCenterMarker'
+import GeoJsonLayer from './GeoJsonLayer'
 
 export default {
   components: {
     CountryCenterMarker,
     SubLevelMarker,
-    GeoJsonLayer
+    GeoJsonLayer,
   },
   props: {
     selectedCountry: {
       type: Number,
-      default: null
+      default: null,
     },
     geoJson: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     subLevelPins: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     mapReady: {
       type: Boolean,
-      default: false
+      default: false,
     },
     activeSubLevel: {
       type: String,
-      default: null
+      default: null,
     },
     nationalLevelCoverage: {
       type: Boolean,
-      default: true
+      default: true,
     },
     nationalProjects: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     selectedCountryPin: {
       type: Object,
-      default: null
+      default: null,
     },
     subNationalProjects: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
-  data () {
+  data() {
     return {
       markerIcons: {},
-      countryCenterIcon: {}
-    };
+      countryCenterIcon: {},
+    }
   },
   computed: {
     ...mapGetters({
-      getSubLevelDetails: 'countries/getSubLevelDetails'
+      getSubLevelDetails: 'countries/getSubLevelDetails',
     }),
-    subLevelPinsAndMapReady () {
+    subLevelPinsAndMapReady() {
       if (this.subLevelPins && this.mapReady) {
-        return this.subLevelPins;
+        return this.subLevelPins
       }
-      return undefined;
+      return undefined
     },
-    activeSubLevelPinsAndMapReady () {
+    activeSubLevelPinsAndMapReady() {
       if (this.activeSubLevel && this.mapReady) {
-        return this.activeSubLevel;
+        return this.activeSubLevel
       }
-      return undefined;
+      return undefined
     },
-    nationalLevelCoverageAndNationalProjects () {
+    nationalLevelCoverageAndNationalProjects() {
       if (this.nationalLevelCoverage && this.nationalProjects) {
-        return this.nationalProjects;
+        return this.nationalProjects
       }
-      return undefined;
-    }
+      return undefined
+    },
   },
   watch: {
     subLevelPinsAndMapReady: {
       immdieate: true,
-      handler (pins) {
-        this.iconsGenerator();
-        this.countryCenterIcon = this.countryCenterIconGenerator();
-      }
+      handler(pins) {
+        this.iconsGenerator()
+        this.countryCenterIcon = this.countryCenterIconGenerator()
+      },
     },
     activeSubLevelPinsAndMapReady: {
       immdieate: true,
-      handler (subLevel, old) {
+      handler(subLevel, old) {
         if (old) {
-          this.markerIcons[old] = this.iconGenerator(old, false);
+          this.markerIcons[old] = this.iconGenerator(old, false)
         }
         if (subLevel) {
-          this.markerIcons[subLevel] = this.iconGenerator(subLevel, true);
+          this.markerIcons[subLevel] = this.iconGenerator(subLevel, true)
         }
-      }
+      },
     },
     subNationalProjects: {
       immediate: false,
-      handler () {
+      handler() {
         if (!this.nationalLevelCoverage) {
-          this.iconsGenerator();
+          this.iconsGenerator()
         }
-      }
+      },
     },
     nationalLevelCoverageAndNationalProjects: {
       immediate: false,
-      handler () {
-        this.countryCenterIcon = this.countryCenterIconGenerator();
-      }
-    }
+      handler() {
+        this.countryCenterIcon = this.countryCenterIconGenerator()
+      },
+    },
   },
-  mounted () {
+  mounted() {
     if (this.mapReady) {
-      this.iconsGenerator();
-      this.countryCenterIcon = this.countryCenterIconGenerator();
+      this.iconsGenerator()
+      this.countryCenterIcon = this.countryCenterIconGenerator()
     }
   },
   methods: {
-    activeCountryUpdateHanlder (country) {
-      this.$emit('update:activeCountry', country);
+    activeCountryUpdateHanlder(country) {
+      this.$emit('update:activeCountry', country)
     },
-    iconGenerator (id, isActive) {
-      const subLevel = this.getSubLevelDetails(id);
-      let amount = 0;
+    iconGenerator(id, isActive) {
+      const subLevel = this.getSubLevelDetails(id)
+      let amount = 0
       if (this.subNationalProjects && subLevel) {
-        const filtered = this.subNationalProjects.filter(sn => sn.coverage.some(c => c.district === id || c.district === subLevel.name));
-        amount = filtered ? filtered.length : 0;
+        const filtered = this.subNationalProjects.filter((sn) =>
+          sn.coverage.some(
+            (c) => c.district === id || c.district === subLevel.name
+          )
+        )
+        amount = filtered ? filtered.length : 0
       }
 
-      const markerClasses = ['DistrictCenterIcon'];
+      const markerClasses = ['DistrictCenterIcon']
       if (isActive) {
-        markerClasses.push('ActiveDistrict');
+        markerClasses.push('ActiveDistrict')
       }
       if (amount === 0) {
-        markerClasses.push('EmptyMarker');
+        markerClasses.push('EmptyMarker')
       }
+      // eslint-disable-next-line
       return L.divIcon({
         className: markerClasses.join(' '),
         html: `<span>${amount}</span>`,
         iconSize: [27, 44],
-        iconAnchor: [13.5, 44]
-      });
+        iconAnchor: [13.5, 44],
+      })
     },
-    iconsGenerator () {
-      const icons = {};
-      this.subLevelPins.forEach(cp => {
-        icons[cp.id] = this.iconGenerator(cp.id);
-      });
-      this.markerIcons = icons;
+    iconsGenerator() {
+      const icons = {}
+      this.subLevelPins.forEach((cp) => {
+        icons[cp.id] = this.iconGenerator(cp.id)
+      })
+      this.markerIcons = icons
     },
-    countryCenterIconGenerator () {
-      const projects = this.nationalProjects.length;
-      const markerClasses = ['CountryCenterIcon', 'ActiveCountry'];
+    countryCenterIconGenerator() {
+      const projects = this.nationalProjects.length
+      const markerClasses = ['CountryCenterIcon', 'ActiveCountry']
       if (projects === 0) {
-        markerClasses.push('EmptyMarker');
+        markerClasses.push('EmptyMarker')
       }
+      // eslint-disable-next-line
       return L.divIcon({
         className: markerClasses.join(' '),
         html: `<span>${projects}</span>`,
         iconSize: [27, 44],
-        iconAnchor: [13.5, 44]
-      });
+        iconAnchor: [13.5, 44],
+      })
     },
-    markerClickHandler (id) {
-      this.$emit('update:activeCountry', this.selectedCountry);
-      this.$emit('update:activeSubLevel', id);
-    }
-  }
-};
+    markerClickHandler(id) {
+      this.$emit('update:activeCountry', this.selectedCountry)
+      this.$emit('update:activeSubLevel', id)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../../assets/style/variables.less";
-  @import "../../../assets/style/mixins.less";
+@import '../../../assets/style/variables.less';
+@import '../../../assets/style/mixins.less';
 
-  .DistrictCenterIcon {
-    background-image: url('~assets/img/pins/pin-with-counter.svg');
+.DistrictCenterIcon {
+  background-image: url('~assets/img/pins/pin-with-counter.svg');
 
-    &.ActiveDistrict {
-      background-image: url('~assets/img/pins/pin-with-counter-active.svg');
-    }
-
-     &.EmptyMarker {
-        display: none;
-        pointer-events: none;
-      }
-
-     span {
-      display: inline-block;
-      width: 27px;
-      margin-top: 4px;
-      color: @colorWhite;
-      font-size: @fontSizeSmall;
-      font-weight: 700;
-      text-align: center;
-    }
+  &.ActiveDistrict {
+    background-image: url('~assets/img/pins/pin-with-counter-active.svg');
   }
+
+  &.EmptyMarker {
+    display: none;
+    pointer-events: none;
+  }
+
+  span {
+    display: inline-block;
+    width: 27px;
+    margin-top: 4px;
+    color: @colorWhite;
+    font-size: @fontSizeSmall;
+    font-weight: 700;
+    text-align: center;
+  }
+}
 </style>

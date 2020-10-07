@@ -1,5 +1,5 @@
-import DashboardWidgetController from './DashboardWidgetController';
-import _template from './DashboardWidget.html';
+import DashboardWidgetController from './DashboardWidgetController'
+import _template from './DashboardWidget.html'
 
 const component = {
   template: _template,
@@ -7,8 +7,8 @@ const component = {
   controllerAs: 'vm',
   name: 'cmsDashboardWidget',
   bindings: {
-    scores: '<'
-  }
-};
+    scores: '<',
+  },
+}
 
-export default component;
+export default component

@@ -1,9 +1,6 @@
 <template>
   <div class="CoverageFieldset">
-    <el-row
-      :gutter="20"
-      type="flex"
-    >
+    <el-row :gutter="20" type="flex">
       <el-col :span="8">
         <custom-required-form-item
           :error="errors.first('health_workers', scope)"
@@ -16,7 +13,9 @@
             </translate>
             <form-hint>
               <translate key="health-workers-hint">
-                Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.
+                Health workers include all recognized health professionals
+                directly accessing the software. If there are no users of this
+                type, put 0.
               </translate>
             </form-hint>
           </template>
@@ -47,7 +46,9 @@
             </translate>
             <form-hint>
               <translate key="facilities-hint">
-                Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.
+                Health facilities using the system refers to all facilities that
+                have direct access to the software. If there are no users of
+                this type, put 0.
               </translate>
             </form-hint>
           </template>
@@ -78,7 +79,9 @@
             </translate>
             <form-hint>
               <translate key="facilities-hint">
-                Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.
+                Client users refers to all care recipients who have direct
+                access to the software. If there are no users of this type, put
+                0.
               </translate>
             </form-hint>
           </template>
@@ -101,104 +104,104 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import FormHint from './FormHint';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
+import FormHint from './FormHint'
 
 export default {
   components: {
-    FormHint
+    FormHint,
   },
   mixins: [VeeValidationMixin],
   props: {
     disabled: {
       type: Boolean,
-      default: true
+      default: true,
     },
     healthWorkers: {
       type: [Number, String],
-      default: null
+      default: null,
     },
     clients: {
       type: [Number, String],
-      default: null
+      default: null,
     },
     facilities: {
       type: [Number, String],
-      default: null
+      default: null,
     },
     isNlc: {
       type: Boolean,
-      default: false
+      default: false,
     },
     scope: {
       type: String,
-      default: null
+      default: null,
     },
     draftRules: {
       type: Object,
-      default: null
+      default: null,
     },
     publishRules: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
       country: 'project/getCountry',
-      getFacilities: 'countries/getCountryFacilityList'
+      getFacilities: 'countries/getCountryFacilityList',
     }),
-    hasFacilityList () {
-      return !!this.getFacilities(this.country).length;
+    hasFacilityList() {
+      return !!this.getFacilities(this.country).length
     },
-    disableFacilities () {
+    disableFacilities() {
       if (this.isNlc) {
-        return false;
+        return false
       }
-      return !!(this.disabled || this.hasFacilityList);
+      return !!(this.disabled || this.hasFacilityList)
     },
     localHealthWorkers: {
-      get () {
-        return this.healthWorkers;
+      get() {
+        return this.healthWorkers
       },
-      set (value) {
-        this.$emit('update:healthWorkers', value);
-      }
+      set(value) {
+        this.$emit('update:healthWorkers', value)
+      },
     },
     localClients: {
-      get () {
-        return this.clients;
+      get() {
+        return this.clients
       },
-      set (value) {
-        this.$emit('update:clients', value);
-      }
+      set(value) {
+        this.$emit('update:clients', value)
+      },
     },
     localFacilities: {
-      get () {
-        return this.facilities;
+      get() {
+        return this.facilities
       },
-      set (value) {
-        this.$emit('update:facilities', value);
-      }
-    }
+      set(value) {
+        this.$emit('update:facilities', value)
+      },
+    },
   },
   methods: {
-    async validate () {
-      return this.$validator.validate();
-    }
-  }
-};
+    validate() {
+      return this.$validator.validate()
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .CoverageFieldset {
-    .el-form-item__label {
-      line-height: 20px;
-      height: 50px;
-    }
+.CoverageFieldset {
+  .el-form-item__label {
+    line-height: 20px;
+    height: 50px;
   }
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['DhaMap', 'DashboardMap', {'Searched': isSearched}]">
+  <div :class="['DhaMap', 'DashboardMap', { Searched: isSearched }]">
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -9,9 +9,7 @@
         @zoomend="zoomChangeHandler"
         @leaflet:load="setMapReady(true)"
       >
-        <l-tilelayer
-          :url="tileServer"
-        />
+        <l-tilelayer :url="tileServer" />
 
         <custom-marker-cluster
           ref="markerCluster"
@@ -41,29 +39,27 @@
         />
         <world-zoom-button />
 
-        <l-control-zoom
-          position="bottomright"
-        />
+        <l-control-zoom position="bottomright" />
       </l-map>
     </no-ssr>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import MapMixin from '../mixins/MapMixin';
+import { mapGetters, mapActions } from 'vuex'
+import NoSSR from 'vue-no-ssr'
+import MapMixin from '../mixins/MapMixin'
 
-import NoSSR from 'vue-no-ssr';
-import CountryCenterMarker from '../common/map/CountryCenterMarker';
-import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
-import WorldZoomButton from '../common/map/WorldZoomButton';
+import CountryCenterMarker from '../common/map/CountryCenterMarker'
+import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay'
+import WorldZoomButton from '../common/map/WorldZoomButton'
 
 export default {
   components: {
     'no-ssr': NoSSR,
     CountryCenterMarker,
     CountryDetailsOverlay,
-    WorldZoomButton
+    WorldZoomButton,
   },
   mixins: [MapMixin],
   computed: {
@@ -80,8 +76,8 @@ export default {
       nationalProjects: 'dashboard/getSelectedCountryNationalProjects',
       mapProjects: 'dashboard/getProjectsMap',
       currentZoom: 'dashboard/getCurrentZoom',
-      getSearched: 'dashboard/getSearched'
-    })
+      getSearched: 'dashboard/getSearched',
+    }),
   },
   methods: {
     ...mapActions({
@@ -89,17 +85,17 @@ export default {
       setMapReady: 'dashboard/setMapReady',
       setSelectedCountry: 'dashboard/setSelectedCountry',
       setActiveCountry: 'dashboard/setActiveCountry',
-      setActiveTab: 'dashboard/setProjectBoxActiveTab'
-    })
-  }
-};
+      setActiveTab: 'dashboard/setProjectBoxActiveTab',
+    }),
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .DashboardMap {
-    height: 80vh;
-  }
+.DashboardMap {
+  height: 80vh;
+}
 </style>

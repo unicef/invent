@@ -2,20 +2,15 @@
   <el-dialog
     v-if="visible"
     :visible.sync="visible"
-    :title="$gettext('Project Approval') | translate"
+    :title="$gettext('Initiative Approval') | translate"
     :modal="mini"
     :top="top"
     :width="width"
     custom-class="ProjectApprovalDialog"
     @open="loadCurrent"
   >
-    <el-tabs
-      v-model="activeTab"
-    >
-      <el-tab-pane
-        :label="$gettext('Update') | translate"
-        name="form"
-      >
+    <el-tabs v-model="activeTab">
+      <el-tab-pane :label="$gettext('Update') | translate" name="form">
         <el-form
           ref="approvalForm"
           :model="form"
@@ -28,42 +23,18 @@
             :label="$gettext('Approved') | translate"
             prop="approved"
           >
-            <el-select
-              v-model="form.approved"
-              placeholder="Select"
-            >
-              <el-option
-                :value="true"
-                label="Yes"
-              />
-              <el-option
-                :value="false"
-                label="No"
-              />
-              <el-option
-                :value="null"
-                label="Pending"
-              />
+            <el-select v-model="form.approved" placeholder="Select">
+              <el-option :value="true" label="Yes" />
+              <el-option :value="false" label="No" />
+              <el-option :value="null" label="Pending" />
             </el-select>
           </el-form-item>
-          <el-form-item
-            :label="$gettext('Reason') "
-            prop="reason"
-          >
-            <el-input
-              v-model="form.reason"
-              :rows="3"
-              type="textarea"
-            />
+          <el-form-item :label="$gettext('Reason')" prop="reason">
+            <el-input v-model="form.reason" :rows="3" type="textarea" />
           </el-form-item>
 
-          <el-form-item
-            :label="$gettext('User') | translate"
-          >
-            <user-item
-              :id="approvedBy"
-              show-organisation
-            />
+          <el-form-item :label="$gettext('User') | translate">
+            <user-item :id="approvedBy" show-organisation />
             <span class="Hint">
               <translate>Administrator that approved the project </translate>
             </span>
@@ -71,15 +42,8 @@
         </el-form>
       </el-tab-pane>
 
-      <el-tab-pane
-        :label="$gettext('History') | translate"
-        name="history"
-      >
-        <el-table
-          :data="history"
-          border
-          style="width: 100%"
-        >
+      <el-tab-pane :label="$gettext('History') | translate" name="history">
+        <el-table :data="history" border style="width: 100%">
           <el-table-column
             :label="$gettext('Date/Time') | translate"
             :formatter="dateFormat"
@@ -115,30 +79,15 @@
     </el-tabs>
 
     <span slot="footer">
-      <el-row
-        type="flex"
-        align="center"
-      >
+      <el-row type="flex" align="center">
         <el-col class="SecondaryButtons">
-          <el-button
-            type="text"
-            class="CancelButton"
-            @click="cancel"
-          >
+          <el-button type="text" class="CancelButton" @click="cancel">
             <translate>Cancel</translate>
           </el-button>
-          <el-button
-            v-show="!mini"
-            type="text"
-            @click="goToProject"
-          >
-            <translate>See Project</translate>
+          <el-button v-show="!mini" type="text" @click="goToProject">
+            <translate>See Initiative</translate>
           </el-button>
-          <el-button
-            v-show="mini"
-            type="text"
-            @click="goToCountryAdmin"
-          >
+          <el-button v-show="mini" type="text" @click="goToCountryAdmin">
             <translate>Back to admin</translate>
           </el-button>
         </el-col>
@@ -157,133 +106,151 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { format } from 'date-fns';
+import { mapGetters, mapActions } from 'vuex'
+import { format } from 'date-fns'
 
-import ApprovalTag from '../admin/ApprovalTag';
-import UserItem from '../common/UserItem';
+import ApprovalTag from '../admin/ApprovalTag'
+import UserItem from '../common/UserItem'
 
 export default {
   components: {
     ApprovalTag,
-    UserItem
+    UserItem,
   },
-  data () {
+  data() {
     return {
       mini: false,
       form: {
         approved: null,
-        reason: null
+        reason: null,
       },
       activeTab: 'form',
       rules: {
         reason: [
-          { required: true, message: this.$gettext('This is required'), trigger: 'blur' }
-        ]
-      }
-    };
+          {
+            required: true,
+            message: this.$gettext('This is required'),
+            trigger: 'blur',
+          },
+        ],
+      },
+    }
   },
   computed: {
     ...mapGetters({
       currentProject: 'admin/approval/getCurrentElement',
-      currentElementDetails: 'admin/approval/getCurrentElementDetails'
+      currentElementDetails: 'admin/approval/getCurrentElementDetails',
     }),
     visible: {
-      get () {
-        return this.currentProject !== null;
+      get() {
+        return this.currentProject !== null
       },
-      set () {
-        this.setCurrentElement(null);
-      }
+      set() {
+        this.setCurrentElement(null)
+      },
     },
-    top () {
-      return this.mini ? '12px' : '10vh';
+    top() {
+      return this.mini ? '12px' : '10vh'
     },
-    width () {
-      return this.mini ? '60vw' : '80vw';
+    width() {
+      return this.mini ? '60vw' : '80vw'
     },
-    history () {
+    history() {
       if (this.currentElementDetails) {
-        return this.currentElementDetails.history;
+        return this.currentElementDetails.history
       }
-      return [];
+      return []
     },
-    approvedBy () {
+    approvedBy() {
       if (this.currentElementDetails) {
-        return this.history && this.history[0] && this.history[0].history_user__userprofile
+        return this.history &&
+          this.history[0] &&
+          this.history[0].history_user__userprofile
           ? this.history[0].history_user__userprofile
-          : this.currentElementDetails.legacy_approved_by;
+          : this.currentElementDetails.legacy_approved_by
       }
-      return null;
-    }
+      return null
+    },
   },
   methods: {
     ...mapActions({
       setCurrentElement: 'admin/approval/setCurrentElement',
-      updateProjectApproval: 'admin/approval/updateProjectApproval'
+      updateProjectApproval: 'admin/approval/updateProjectApproval',
     }),
-    loadCurrent () {
+    loadCurrent() {
       this.form = {
-        approved: this.currentElementDetails ? this.currentElementDetails.approved : null,
-        reason: this.currentElementDetails ? this.currentElementDetails.reason : ''
-      };
-    },
-    dateFormat (row, column, value) {
-      return format(value, 'YYYY-MM-DD HH:mm');
-    },
-    cancel () {
-      this.visible = null;
-      if (this.mini) {
-        this.goToCountryAdmin();
+        approved: this.currentElementDetails
+          ? this.currentElementDetails.approved
+          : null,
+        reason: this.currentElementDetails
+          ? this.currentElementDetails.reason
+          : '',
       }
     },
-    goToProject () {
-      this.mini = true;
-      const id = this.currentElementDetails.project;
-      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id } });
-      this.$router.push(path);
+    dateFormat(row, column, value) {
+      return format(value, 'YYYY-MM-DD HH:mm')
     },
-    goToCountryAdmin () {
-      this.mini = false;
-      const path = this.localePath({ name: 'organisation-admin-country', params: this.$route.params });
-      this.$router.push(path);
+    cancel() {
+      this.visible = null
+      if (this.mini) {
+        this.goToCountryAdmin()
+      }
     },
-    apply () {
-      this.$refs.approvalForm.validate(async valid => {
+    goToProject() {
+      this.mini = true
+      const id = this.currentElementDetails.project
+      const path = this.localePath({
+        name: 'organisation-initiatives-id-published',
+        params: { ...this.$route.params, id },
+      })
+      this.$router.push(path)
+    },
+    goToCountryAdmin() {
+      this.mini = false
+      const path = this.localePath({
+        name: 'organisation-admin-country',
+        params: this.$route.params,
+      })
+      this.$router.push(path)
+    },
+    apply() {
+      this.$refs.approvalForm.validate(async (valid) => {
         if (valid) {
           try {
-            await this.updateProjectApproval(this.form);
-            this.visible = null;
+            await this.updateProjectApproval(this.form)
+            this.visible = null
             if (this.mini) {
-              this.goToCountryAdmin();
+              this.goToCountryAdmin()
             }
           } catch (e) {
-            console.log(e);
+            console.log(e)
             this.$alert(
               this.$gettext('An error occured while saving the data'),
               this.$gettext('Warning'),
               {
-                confirmButtonText: this.$gettext('Ok')
+                confirmButtonText: this.$gettext('Ok'),
               }
-            );
+            )
           }
         } else {
-          this.$message.error(this.$gettext('Please fill all the required fields'));
+          this.$message.error(
+            this.$gettext('Please fill all the required fields')
+          )
         }
-      });
-    }
-  }
-};
+      })
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .ProjectApprovalDialog {
-    .el-form,
-    .el-form-item {
-      margin: 20px 0;
-    }
+.ProjectApprovalDialog {
+  .el-form,
+  .el-form-item {
+    margin: 20px 0;
   }
+}
 </style>

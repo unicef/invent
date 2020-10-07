@@ -19,47 +19,47 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: [Number, String],
-      default: null
+      default: null,
     },
     office: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
-      open: false
-    };
+      open: false,
+    }
   },
   computed: {
     ...mapGetters({
-      items: 'projects/getFieldOffices'
+      items: 'projects/getFieldOffices',
     }),
-    filtered () {
-      return this.items.filter(i => i.country_office_id === this.office);
-    }
+    filtered() {
+      return this.items.filter((i) => i.country_office_id === this.office)
+    },
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
+    changeHandler(value) {
+      this.$emit('change', value)
     },
-    toggleHandler (value) {
+    toggleHandler(value) {
       if (value) {
-        this.open = value;
+        this.open = value
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="less">

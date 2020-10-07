@@ -54,133 +54,145 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
-import CoverageFieldset from './CoverageFieldset';
-import FacilitySelector from './FacilitySelector';
-
-import { mapGettersActions } from '../../utilities/form';
+import { mapGettersActions } from '../../utilities/form'
+import CoverageFieldset from './CoverageFieldset'
+import FacilitySelector from './FacilitySelector'
 
 export default {
   components: {
     CoverageFieldset,
-    FacilitySelector
+    FacilitySelector,
   },
   mixins: [VeeValidationMixin],
   props: {
     index: {
       type: [Number],
-      default: null
+      default: null,
     },
     levelName: {
       type: String,
-      required: true
+      required: true,
     },
     subLevels: {
       type: Array,
-      required: true
+      required: true,
     },
     coverage: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     scope: {
       type: String,
-      required: true
+      required: true,
     },
     draftRules: {
       type: Object,
-      default: null
+      default: null,
     },
     publishRules: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGettersActions({
-      coverageData: ['project', 'getCoverageData', 'setCoverageData', 0]
+      coverageData: ['project', 'getCoverageData', 'setCoverageData', 0],
     }),
     subLevel: {
-      get () {
-        return this.coverage[this.index];
+      get() {
+        return this.coverage[this.index]
       },
-      set (value) {
-        const cov = [...this.coverage];
-        cov[this.index] = value;
-        this.$emit('update:coverage', cov);
-      }
+      set(value) {
+        const cov = [...this.coverage]
+        cov[this.index] = value
+        this.$emit('update:coverage', cov)
+      },
     },
-    availableSubLevels () {
-      return this.subLevels.filter(tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel);
+    availableSubLevels() {
+      return this.subLevels.filter(
+        (tp) =>
+          !this.coverage.some((s) => s === tp.id) || tp.id === this.subLevel
+      )
     },
-    localCoverageData () {
-      return this.coverageData[this.subLevel];
+    localCoverageData() {
+      return this.coverageData[this.subLevel]
     },
     facilitiesList: {
-      get () {
-        const facilitiesList = this.localCoverageData ? this.localCoverageData.facilities_list : [];
-        return facilitiesList || [];
+      get() {
+        const facilitiesList = this.localCoverageData
+          ? this.localCoverageData.facilities_list
+          : []
+        return facilitiesList || []
       },
-      set (value) {
-        const coverage = { facilities_list: [...value], facilities: value.length };
-        this.coverageData = { coverage, subLevel: this.subLevel };
-      }
+      set(value) {
+        const coverage = {
+          facilities_list: [...value],
+          facilities: value.length,
+        }
+        this.coverageData = { coverage, subLevel: this.subLevel }
+      },
     },
     healthWorkers: {
-      get () {
-        return this.localCoverageData ? this.localCoverageData.health_workers : null;
+      get() {
+        return this.localCoverageData
+          ? this.localCoverageData.health_workers
+          : null
       },
-      set (value) {
-        const coverage = { health_workers: value };
-        this.coverageData = { coverage, subLevel: this.subLevel };
-      }
+      set(value) {
+        const coverage = { health_workers: value }
+        this.coverageData = { coverage, subLevel: this.subLevel }
+      },
     },
     clients: {
-      get () {
-        return this.localCoverageData ? this.localCoverageData.clients : null;
+      get() {
+        return this.localCoverageData ? this.localCoverageData.clients : null
       },
-      set (value) {
-        const coverage = { clients: value };
-        this.coverageData = { coverage, subLevel: this.subLevel };
-      }
+      set(value) {
+        const coverage = { clients: value }
+        this.coverageData = { coverage, subLevel: this.subLevel }
+      },
     },
     facilities: {
-      get () {
-        return this.localCoverageData ? this.localCoverageData.facilities : null;
+      get() {
+        return this.localCoverageData ? this.localCoverageData.facilities : null
       },
-      set (value) {
-        const coverage = { facilities: value };
-        this.coverageData = { coverage, subLevel: this.subLevel };
-      }
-    }
+      set(value) {
+        const coverage = { facilities: value }
+        this.coverageData = { coverage, subLevel: this.subLevel }
+      },
+    },
   },
   methods: {
-    clear () {
-      this.errors.clear();
-      this.$validator.clear();
-      this.$refs.coverageFieldset.clear();
-      this.$refs.facilitySelector.clear();
+    clear() {
+      this.errors.clear()
+      this.$validator.clear()
+      this.$refs.coverageFieldset.clear()
+      this.$refs.facilitySelector.clear()
     },
-    async validate () {
+    async validate() {
       const validations = await Promise.all([
         this.$validator.validate(),
         this.$refs.coverageFieldset.validate(),
-        this.$refs.facilitySelector.validate()
-      ]);
-      console.log(`sub national level deployment item ${this.scope}`, validations);
-      return validations.reduce((a, c) => a && c, true);
-    }
-  }
-};
+        this.$refs.facilitySelector.validate(),
+      ])
+      console.log(
+        `sub national level deployment item ${this.scope}`,
+        validations
+      )
+      return validations.reduce((a, c) => a && c, true)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .SubNationalLevelDeployementRegion {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+.SubNationalLevelDeployementRegion {
+  width: 100%;
+  margin-bottom: 20px;
+}
 </style>

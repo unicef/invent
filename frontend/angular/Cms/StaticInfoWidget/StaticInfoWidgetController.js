@@ -1,12 +1,12 @@
 class StaticInfoWidgetController {
-  static factory () {
-    require('./StaticInfoWidget.scss');
-    function staticInfoWidgetController () {
-      return new StaticInfoWidgetController();
+  static factory() {
+    require('./StaticInfoWidget.scss')
+    function staticInfoWidgetController() {
+      return new StaticInfoWidgetController()
     }
-    staticInfoWidgetController.$inject = [];
-    return staticInfoWidgetController;
+    staticInfoWidgetController.$inject = []
+    return staticInfoWidgetController
   }
 }
 
-export default StaticInfoWidgetController;
+export default StaticInfoWidgetController

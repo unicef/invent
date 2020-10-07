@@ -18,15 +18,13 @@
               :to="
                 localePath({
                   name: 'organisation-edit-profile',
-                  params: $route.params
+                  params: $route.params,
                 })
               "
               class="ActionBarLink"
               tag="div"
             >
-              <translate key="my-profile">
-                My profile
-              </translate>
+              <translate key="my-profile"> My profile </translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -35,15 +33,13 @@
               :to="
                 localePath({
                   name: 'organisation-admin-country',
-                  params: $route.params
+                  params: $route.params,
                 })
               "
               class="ActionBarLink"
               tag="div"
             >
-              <translate key="country-admin">
-                Country admin
-              </translate>
+              <translate key="country-admin"> Country admin </translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -52,15 +48,13 @@
               :to="
                 localePath({
                   name: 'organisation-admin-donor',
-                  params: $route.params
+                  params: $route.params,
                 })
               "
               class="ActionBarLink"
               tag="div"
             >
-              <translate key="donor-admin">
-                Investor admin
-              </translate>
+              <translate key="donor-admin"> Investor admin </translate>
             </nuxt-link>
           </el-col>
         </el-row>
@@ -74,15 +68,13 @@
                 localePath({
                   name: 'organisation-dashboard-list',
                   params: $route.params,
-                  query: $route.query
+                  query: $route.query,
                 })
               "
               :class="['ActionBarLink', { Active: isListSubRoute }]"
               tag="div"
             >
-              <translate key="list-view">
-                List view
-              </translate>
+              <translate key="list-view"> List view </translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -91,15 +83,13 @@
                 localePath({
                   name: 'organisation-dashboard',
                   params: $route.params,
-                  query: $route.query
+                  query: $route.query,
                 })
               "
               :class="['ActionBarLink', { Active: isMapSubRoute }]"
               tag="div"
             >
-              <translate key="map-view">
-                Map view
-              </translate>
+              <translate key="map-view"> Map view </translate>
             </nuxt-link>
           </el-col>
         </el-row>
@@ -129,11 +119,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import SearchComponent from "@/components/common/SearchComponent.vue";
-import PersonaSelector from "@/components/dashboard/PersonaSelector";
-import PortfolioFiltersHeader from "@/components/portfolio/dashboard/PortfolioFiltersHeader";
-import BreadCrumb from "@/components/BreadCrumb";
+import { mapGetters } from 'vuex'
+import SearchComponent from '@/components/common/SearchComponent.vue'
+import PersonaSelector from '@/components/dashboard/PersonaSelector'
+import PortfolioFiltersHeader from '@/components/portfolio/dashboard/PortfolioFiltersHeader'
+import BreadCrumb from '@/components/BreadCrumb'
 import DashboardFiltersHeader from '@/components/dashboard/DashboardFiltersHeader'
 
 export default {
@@ -142,57 +132,57 @@ export default {
     PersonaSelector,
     PortfolioFiltersHeader,
     DashboardFiltersHeader,
-    BreadCrumb
+    BreadCrumb,
   },
   computed: {
     ...mapGetters({
-      userProfile: "user/getProfile"
+      userProfile: 'user/getProfile',
     }),
     isAdmin() {
       return (
-        this.$route.path.includes("/admin") ||
-        this.$route.path.endsWith("/edit-profile")
-      );
+        this.$route.path.includes('/admin') ||
+        this.$route.path.endsWith('/edit-profile')
+      )
     },
     allowCountryAdmin() {
       if (this.userProfile) {
         return (
-          (["CA", "SCA"].includes(this.userProfile.account_type) &&
+          (['CA', 'SCA'].includes(this.userProfile.account_type) &&
             this.userProfile.account_type_approved) ||
           this.userProfile.is_superuser
-        );
+        )
       }
-      return false;
+      return false
     },
     allowDonorAdmin() {
       if (this.userProfile) {
         return (
-          (["DA", "SDA"].includes(this.userProfile.account_type) &&
+          (['DA', 'SDA'].includes(this.userProfile.account_type) &&
             this.userProfile.account_type_approved) ||
           this.userProfile.is_superuser
-        );
+        )
       }
-      return false;
+      return false
     },
     isDashboard() {
-      return this.$route.path.includes("/dashboard");
+      return this.$route.path.includes('/dashboard')
     },
     isPortfolioEdit() {
-      return this.$route.name.includes("organisation-portfolio-management-id");
+      return this.$route.name.includes('organisation-portfolio-management-id')
     },
     isMapSubRoute() {
-      return this.$route.name.includes("organisation-dashboard___");
+      return this.$route.name.includes('organisation-dashboard___')
     },
     isListSubRoute() {
-      return this.$route.name.includes("organisation-dashboard-list___");
-    }
-  }
-};
+      return this.$route.name.includes('organisation-dashboard-list___')
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .ActionBar {
   background-color: @colorBrandPrimary;
@@ -264,7 +254,7 @@ export default {
     }
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       bottom: 0;
       left: 0;

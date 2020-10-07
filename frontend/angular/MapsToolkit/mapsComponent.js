@@ -1,6 +1,6 @@
-import MapsToolkitController from './MapsToolkitController';
-import _template from './MapsToolkitModule.html';
-import './MapsToolkit.scss';
+import MapsToolkitController from './MapsToolkitController'
+import _template from './MapsToolkitModule.html'
+import './MapsToolkit.scss'
 
 const hssComponent = {
   controller: MapsToolkitController.mapsControllerFactory(),
@@ -8,8 +8,8 @@ const hssComponent = {
   controllerAs: 'vm',
   name: 'mapsToolkit',
   bindings: {
-    viewMode: '@'
-  }
-};
+    viewMode: '@',
+  },
+}
 
-export default hssComponent;
+export default hssComponent

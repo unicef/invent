@@ -1,21 +1,21 @@
 export const fetchProjectData = async (store, params, error) => {
   try {
-    await store.dispatch('projects/setCurrentProject', params.id);
+    await store.dispatch('projects/setCurrentProject', params.id)
     await Promise.all([
       store.dispatch('project/loadProject', params.id),
-      store.dispatch('projects/loadProjectStructure')
-    ]);
+      store.dispatch('projects/loadProjectStructure'),
+    ])
   } catch (e) {
-    console.warn('loadProjectData failed', e);
+    console.warn('loadProjectData failed', e)
     error({
       response: {
         status: 404,
-        statusText: 'This project does not exist'
-      }
-    });
-    return Promise.reject(e);
+        statusText: 'This project does not exist',
+      },
+    })
+    return Promise.reject(e)
   }
-};
+}
 
 export const projectFields = () => ({
   name: null,
@@ -63,8 +63,8 @@ export const projectFields = () => ({
   cpd: [],
   phase: null,
   partners: [],
-  links: []
-});
+  links: [],
+})
 
 export const draftRules = () => {
   return {
@@ -75,175 +75,172 @@ export const draftRules = () => {
     cbd: {},
     partner_name: {
       required: true,
-      max: 100
+      max: 100,
     },
     partner_email: {
       email: true,
       required: true,
-      max: 100
+      max: 100,
     },
     partner_website: {
       url: { require_protocol: true },
-      max: 100
+      max: 100,
     },
     link_website: {
       url: { require_protocol: true },
-      max: 100
+      max: 100,
     },
     wbs: {
-      max: 30
+      max: 30,
     },
     unicef_sector: {
-      required: false
+      required: false,
     },
     regional_priorities: {
-      required: false
+      required: false,
     },
     hardware: {
-      required: false
+      required: false,
     },
     nontech: {
-      required: false
+      required: false,
     },
     functions: {
-      required: false
+      required: false,
     },
     name: {
       required: true,
       min: 1,
-      max: 128
+      max: 128,
     },
     country_office: {
-      required: true
+      required: true,
     },
     organisation: {
       required: false,
-      max: 128
+      max: 128,
     },
     contact_name: {
-      max: 256
+      max: 256,
     },
     contact_email: {
-      email: true
+      email: true,
     },
     team: {
       required: true,
-      min: 1
+      min: 1,
     },
     implementation_overview: {
-      max: 1024
+      max: 1024,
     },
     overview: {
-      max: 300
+      max: 300,
     },
     program_targets: {
-      max: 1024
+      max: 1024,
     },
     program_targets_achieved: {
-      max: 1024
+      max: 1024,
     },
     current_achievements: {
-      max: 2048
+      max: 2048,
     },
     awp: {
-      max: 500
+      max: 500,
     },
     total_budget_narrative: {
-      max: 500
+      max: 500,
     },
     funding_needs: {
-      max: 500
+      max: 500,
     },
     partnership_needs: {
-      max: 500
-    }
-  };
-};
+      max: 500,
+    },
+  }
+}
 export const publishRules = () => {
   return {
     phase: {
-      required: true
+      required: true,
     },
     unicef_sector: {
-      required: true
+      required: true,
     },
     regional_priorities: {
-      required: false
+      required: false,
     },
     hardware: {
-      required: false
+      required: false,
     },
     nontech: {
-      required: false
+      required: false,
     },
     functions: {
-      required: false
+      required: false,
     },
     name: {
       required: true,
       min: 1,
-      max: 128
+      max: 128,
     },
     overview: {
       required: true,
       min: 1,
-      max: 300
+      max: 300,
     },
     organisation: {
       required: true,
-      max: 128
+      max: 128,
     },
     country_office: {
-      required: true
+      required: true,
     },
     geographic_scope: {
-      max: 1024
+      max: 1024,
     },
     start_date: {
-      required: true
+      required: true,
     },
     end_date: {
-      required: false
+      required: false,
     },
     contact_name: {
       required: true,
-      max: 256
+      max: 256,
     },
     contact_email: {
       email: true,
-      required: true
+      required: true,
     },
     team: {
-      required: true
+      required: true,
     },
     goal_area: {
-      required: true
+      required: true,
     },
-    capability_levels: {
-    },
-    capability_categories: {
-    },
-    capability_subcategories: {
-    },
+    capability_levels: {},
+    capability_categories: {},
+    capability_subcategories: {},
     platforms: {
-      required: true
+      required: true,
     },
     strategies: {
       required: true,
-      min: 1
+      min: 1,
     },
     health_focus_areas: {
       required: true,
-      min: 1
+      min: 1,
     },
     hsc_challenges: {
       required: true,
-      min: 1
+      min: 1,
     },
     donors: {
-      required: false
+      required: false,
     },
     implementation_dates: {},
-    licenses: {}
-  };
-};
+    licenses: {},
+  }
+}
