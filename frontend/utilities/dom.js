@@ -11,8 +11,8 @@ export const blobDownloader = (data, name, callback) => {
     const blobDownload = new Blob([data])
     window.navigator.msSaveBlob(blobDownload, name)
   } else {
-    const downloadUrl = window.URL.createObjectURL(data)
-    downloadLinkManager(downloadUrl, name)
+    const download_url = window.URL.createObjectURL(data)
+    downloadLinkManager(download_url, name)
   }
   if (callback) {
     callback()
@@ -20,8 +20,8 @@ export const blobDownloader = (data, name, callback) => {
 }
 
 export const uriDownloader = (data, name) => {
-  const downloadUrl = encodeURI(data)
-  downloadLinkManager(downloadUrl, name)
+  const download_url = encodeURI(data)
+  downloadLinkManager(download_url, name)
 }
 
 export const uuidv4 = () => {
