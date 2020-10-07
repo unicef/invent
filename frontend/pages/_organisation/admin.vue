@@ -6,19 +6,17 @@
 
 <script>
 // NOTE: This is only a router view wrapper, for common fetches
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
-  components: {
+  components: {},
+  fetch({ store }) {
+    store.dispatch('landing/resetSearch')
   },
   computed: {
-    ...mapGetters({})
+    ...mapGetters({}),
   },
-  async fetch ({ store }) {
-    store.dispatch('landing/resetSearch');
-  }
-};
+}
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>

@@ -6,31 +6,29 @@
 
 <script>
 export default {
-  components: {
-  },
+  components: {},
   props: {
     value: {
       type: Number,
-      required: true
+      required: true,
     },
     source: {
       type: String,
-      default: 'getTechnologyPlatforms'
+      default: 'getTechnologyPlatforms',
     },
     root: {
       type: String,
-      default: 'projects'
-    }
+      default: 'projects',
+    },
   },
   computed: {
-    selected () {
-      const value = this.value;
-      const list = this.$store.getters[`${this.root}/${this.source}`];
-      return list ? list.find(e => e.id === value) : {};
-    }
-  }
-};
+    selected() {
+      const value = this.value
+      const list = this.$store.getters[`${this.root}/${this.source}`]
+      return list ? list.find((e) => e.id === value) : {}
+    },
+  },
+}
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>

@@ -17,43 +17,44 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: String,
-      default: null
+      default: null,
     },
     size: {
       type: String,
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   computed: {
     ...mapGetters({
-      languages: 'system/getLanguages'
-    })
+      languages: 'system/getLanguages',
+    }),
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
-    }
-  }
-};
+    changeHandler(value) {
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .LanguageSelectorDropdown {
-    width: auto;
-    margin: 4px 0 8px;
-  }
+.LanguageSelectorDropdown {
+  width: auto;
+  margin: 4px 0 8px;
+}
 
-  .LanguageSelectorPopper {}
+.LanguageSelectorPopper {
+}
 </style>

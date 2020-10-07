@@ -1,5 +1,5 @@
-import DetailElementController from './DetailElementController';
-import _template from './DetailElement.html';
+import DetailElementController from './DetailElementController'
+import _template from './DetailElement.html'
 
 const component = {
   template: _template,
@@ -7,8 +7,8 @@ const component = {
   controllerAs: 'vm',
   name: 'cmsDetailElement',
   bindings: {
-    item: '<'
-  }
-};
+    item: '<',
+  },
+}
 
-export default component;
+export default component

@@ -12,35 +12,35 @@
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: [String, Date],
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     internalValue: {
-      get () {
-        return this.value instanceof Date ? this.value.toJSON() : this.value;
+      get() {
+        return this.value instanceof Date ? this.value.toJSON() : this.value
       },
-      set (value) {
-        this.$emit('change', value ? value.toJSON() : null);
-      }
-    }
-  }
-};
+      set(value) {
+        this.$emit('change', value ? value.toJSON() : null)
+      },
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  .ImportDatePicker {
-    &.el-date-editor {
-      width: 200px;
-    }
+.ImportDatePicker {
+  &.el-date-editor {
+    width: 200px;
   }
+}
 </style>

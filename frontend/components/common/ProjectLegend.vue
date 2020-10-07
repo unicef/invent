@@ -42,78 +42,76 @@
 </template>
 
 <script>
-import ProjectLegendContent from './ProjectLegendContent';
+import ProjectLegendContent from './ProjectLegendContent'
 
 export default {
   components: {
-    ProjectLegendContent
+    ProjectLegendContent,
   },
   props: {
     id: {
       type: Number,
-      default: null
+      default: null,
     },
     donors: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     country: {
       type: Number,
-      default: null
+      default: null,
     },
     forceStar: {
       type: Boolean,
-      default: false
+      default: false,
     },
     forceEye: {
       type: Boolean,
-      default: false
+      default: false,
     },
     forceHandshake: {
       type: Boolean,
-      default: false
+      default: false,
     },
     forceGlobe: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showLabel: {
       type: Boolean,
-      default: false
+      default: false,
     },
     compactMode: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  computed: {
-  }
-};
+  computed: {},
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .ProjectLegend {
-    opacity: 1;
-    transition: @transitionFade;
+.ProjectLegend {
+  opacity: 1;
+  transition: @transitionFade;
 
-    .OwnerIcon {
-      color: @colorOwner;
-    }
-
-    .ViewerIcon {
-      color: @colorViewer;
-    }
-
-    .DonorIcon {
-      color: @colorDonor;
-    }
-
-    .CountryAdminIcon {
-      color: @colorCountryAdmin;
-    }
+  .OwnerIcon {
+    color: @colorOwner;
   }
 
+  .ViewerIcon {
+    color: @colorViewer;
+  }
+
+  .DonorIcon {
+    color: @colorDonor;
+  }
+
+  .CountryAdminIcon {
+    color: @colorCountryAdmin;
+  }
+}
 </style>

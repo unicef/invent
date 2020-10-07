@@ -9,19 +9,19 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      total: "dashboard/getTotal"
-    })
-  }
-};
+      total: 'dashboard/getTotal',
+    }),
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .header {
   display: flex;

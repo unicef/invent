@@ -24,10 +24,10 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: null
-    }
-  }
-};
+      default: null,
+    },
+  },
+}
 </script>
 
 <style lang="less">

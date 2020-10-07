@@ -5,14 +5,13 @@
 </template>
 
 <script>
-import DhaLogin from '../../components/DhaLogin';
+import DhaLogin from '../../components/DhaLogin'
 
 export default {
   components: {
-    DhaLogin
-  }
-};
+    DhaLogin,
+  },
+}
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>

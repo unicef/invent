@@ -5,10 +5,7 @@
       <translate>No options added yet</translate>
     </p>
     <ul>
-      <li
-        v-for="(option, index) in options"
-        :key="index"
-      >
+      <li v-for="(option, index) in options" :key="index">
         <fa icon="check-circle" />
         <span class="Option">
           {{ option }}
@@ -27,13 +24,13 @@
     </ul>
     <el-tooltip
       :disabled="!disabled"
-      :content="$gettext('Unable to add or remove options on saved questions') | translate"
+      :content="
+        $gettext('Unable to add or remove options on saved questions')
+          | translate
+      "
       placement="top"
     >
-      <el-row
-        type="flex"
-        align="middle"
-      >
+      <el-row type="flex" align="middle">
         <el-col :span="16">
           <el-input
             ref="input"
@@ -59,87 +56,86 @@
 </template>
 
 <script>
-
 export default {
-
   props: {
     options: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
-  data () {
+  data() {
     return {
-      inputField: ''
-    };
+      inputField: '',
+    }
   },
   methods: {
-    removeOption (index) {
-      this.options.splice(index, 1);
+    removeOption(index) {
+      // eslint-disable-next-line
+      this.options.splice(index, 1)
     },
-    addOption () {
-      this.options.push(this.inputField);
-      this.inputField = '';
-      this.$refs.input.focus();
-    }
-  }
-};
+    addOption() {
+      // eslint-disable-next-line
+      this.options.push(this.inputField)
+      this.inputField = ''
+      this.$refs.input.focus()
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .ListOfOptions {
-    margin-bottom: 10px;
+.ListOfOptions {
+  margin-bottom: 10px;
 
-    h6 {
+  h6 {
+    font-size: @fontSizeBase;
+    margin: 30px 0 10px;
+
+    + p {
       font-size: @fontSizeBase;
-      margin: 30px 0 10px;
-
-      + p {
-        font-size: @fontSizeBase;
-        color: @colorGray;
-        margin: 20px 0;
-      }
-    }
-
-    .AddOption {
-      margin-left: 20px;
-    }
-
-    .RemoveOption {
-      padding: 0;
-    }
-
-    .Option {
-      margin: 0 10px 0 5px;
-    }
-
-    ul {
-      list-style-type: none;
-      display: block;
+      color: @colorGray;
       margin: 20px 0;
-      padding: 0 15px;
-
-      li {
-        display: flex;
-        align-items: center;
-        margin: 0 0 10px;
-        font-size: @fontSizeBase;
-      }
-
-      .svg-inline--fa {
-        width: 14px;
-        height: 14px;
-        padding: 1px;
-      }
     }
   }
 
+  .AddOption {
+    margin-left: 20px;
+  }
+
+  .RemoveOption {
+    padding: 0;
+  }
+
+  .Option {
+    margin: 0 10px 0 5px;
+  }
+
+  ul {
+    list-style-type: none;
+    display: block;
+    margin: 20px 0;
+    padding: 0 15px;
+
+    li {
+      display: flex;
+      align-items: center;
+      margin: 0 0 10px;
+      font-size: @fontSizeBase;
+    }
+
+    .svg-inline--fa {
+      width: 14px;
+      height: 14px;
+      padding: 1px;
+    }
+  }
+}
 </style>

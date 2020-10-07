@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import VeeValidate from 'vee-validate';
+import Vue from 'vue'
+import VeeValidate from 'vee-validate'
 
 // Needed this, because encountered: https://github.com/ElemeFE/element/issues/4720
 const config = {
@@ -15,8 +15,8 @@ const config = {
   // i18nRootKey: 'validations', // the nested key under which the validation messages will be located
   inject: false,
   locale: 'en',
-  strict: false
+  strict: false,
   // validity: false,
-};
+}
 
-Vue.use(VeeValidate, config);
+Vue.use(VeeValidate, config)

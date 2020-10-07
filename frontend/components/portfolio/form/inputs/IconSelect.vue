@@ -1,9 +1,9 @@
 <template>
   <div
-    v-model="innerValue"
+    :value="innerValue"
     v-bind="{ ...$props, ...$attrs }"
-    v-on="{ ...$listeners }"
     class="icon-select"
+    v-on="{ ...$listeners }"
   >
     <div v-if="!$attrs.value" class="dropdown" @click="open = true">
       <span><translate>Choose icon</translate></span>
@@ -41,51 +41,51 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   model: {
-    prop: "value",
-    event: "change"
-  },
-  computed: {
-    ...mapState({
-      items: state => state.portfolio.icons
-    }),
-    innerValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit("change", value);
-      }
-    }
+    prop: 'value',
+    event: 'change',
   },
   data() {
     return {
-      open: false
-    };
+      open: false,
+    }
+  },
+  computed: {
+    ...mapState({
+      items: (state) => state.portfolio.icons,
+    }),
+    innerValue: {
+      get() {
+        return this.value
+      },
+      set(value) {
+        this.$emit('change', value)
+      },
+    },
   },
   mounted() {},
   methods: {
     handleDropdownClick(val) {
-      this.innerValue = val;
-      this.open = false;
+      this.innerValue = val
+      this.open = false
     },
     handleRemoveIcon() {
-      this.innerValue = null;
+      this.innerValue = null
     },
     path(icon) {
       // check if the typography needs path drawing
-      return icon === "breast_feeding" || icon === "mother_and_baby";
-    }
-  }
-};
+      return icon === 'breast_feeding' || icon === 'mother_and_baby'
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .icon-select {
   position: relative;

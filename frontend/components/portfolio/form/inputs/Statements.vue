@@ -7,9 +7,7 @@
       </div>
       <custom-required-form-item row>
         <template slot="label">
-          <translate key="portfolio-statement-name">
-            Name
-          </translate>
+          <translate key="portfolio-statement-name"> Name </translate>
         </template>
         <el-input
           :value="item.name"
@@ -33,51 +31,51 @@
         />
       </custom-required-form-item>
     </div>
-    <p @click="handleAddStatement" class="add">
+    <p class="add" @click="handleAddStatement">
       <fa icon="plus" /><translate>Add new statement</translate>
     </p>
   </div>
 </template>
 
 <script>
-import cloneDeep from "lodash/cloneDeep";
-import { mapState, mapMutations } from "vuex";
+import cloneDeep from 'lodash/cloneDeep'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   computed: {
     ...mapState({
-      statements: state => state.portfolio.statements
-    })
+      statements: (state) => state.portfolio.statements,
+    }),
   },
 
   methods: {
     ...mapMutations({
-      setStatements: "portfolio/SET_STATEMENTS"
+      setStatements: 'portfolio/SET_STATEMENTS',
     }),
     handleAddStatement() {
-      this.setStatements([...this.statements, { name: "", description: "" }]);
+      this.setStatements([...this.statements, { name: '', description: '' }])
     },
     handleRemoveStatement(idx) {
-      const outputArray = [];
+      const outputArray = []
       for (let i = 0; i < this.statements.length; i++) {
         if (idx !== i) {
-          outputArray.push(this.statements[i]);
+          outputArray.push(this.statements[i])
         }
       }
-      this.setStatements(outputArray);
+      this.setStatements(outputArray)
     },
     handleInput(val, key, idx) {
-      let resultArr = cloneDeep(this.statements);
-      resultArr[idx][key] = val;
-      this.setStatements(resultArr);
-    }
-  }
-};
+      const resultArr = cloneDeep(this.statements)
+      resultArr[idx][key] = val
+      this.setStatements(resultArr)
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .statements {
   position: relative;

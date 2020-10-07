@@ -1,14 +1,7 @@
 <template>
   <div>
-    <div
-      v-if="errors"
-      class="GlobalErrors"
-    >
-      <el-tag
-        v-for="error in errors"
-        :key="error"
-        type="danger"
-      >
+    <div v-if="errors" class="GlobalErrors">
+      <el-tag v-for="error in errors" :key="error" type="danger">
         <fa icon="exclamation" />
         {{ error }}
       </el-tag>
@@ -22,70 +15,69 @@
 </template>
 
 <script>
-import { draftRules, publishRules } from '@/utilities/projects';
-import { nameMapping } from '@/utilities/import';
+import { draftRules, publishRules } from '@/utilities/projects'
+import { nameMapping } from '@/utilities/import'
 
 export default {
   props: {
     headers: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     publish: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    internalDraftRules () {
-      return { ...draftRules() };
+    internalDraftRules() {
+      return { ...draftRules() }
     },
-    internalPublishRules () {
-      const standardRules = publishRules();
+    internalPublishRules() {
+      const standardRules = publishRules()
       return {
         ...standardRules,
         strategies: undefined,
         digitalHealthInterventions: standardRules.strategies,
-        ...standardRules.national_level_deployment
-      };
+        ...standardRules.national_level_deployment,
+      }
     },
-    validationRules () {
-      const rules = this.publish ? this.internalPublishRules : this.internalDraftRules;
+    validationRules() {
+      const rules = this.publish
+        ? this.internalPublishRules
+        : this.internalDraftRules
       return {
         ...rules,
         team: undefined,
         viewers: undefined,
         country: undefined,
         country_office: undefined,
-        donors: undefined
-      };
+        donors: undefined,
+      }
     },
-    nameMapping () {
+    nameMapping() {
       return {
-        ...nameMapping
-      };
+        ...nameMapping,
+      }
     },
-    errors () {
-      const result = [];
-      const draftRequireds = [];
+    errors() {
+      const result = []
+      const draftRequireds = []
       for (const key in this.validationRules) {
         if (this.validationRules[key] && this.validationRules[key].required) {
-          draftRequireds.push(key);
+          draftRequireds.push(key)
         }
       }
-      draftRequireds.forEach(dr => {
-        if (!this.headers.some(h => h.selected === dr)) {
-          const name = this.nameMapping[dr] || dr;
-          result.push(`Please select ${name} column`);
+      draftRequireds.forEach((dr) => {
+        if (!this.headers.some((h) => h.selected === dr)) {
+          const name = this.nameMapping[dr] || dr
+          result.push(`Please select ${name} column`)
         }
-      });
-      return result;
-    }
-  }
-
-};
+      })
+      return result
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

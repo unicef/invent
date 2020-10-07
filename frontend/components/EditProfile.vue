@@ -62,10 +62,10 @@
             <div
               v-if="
                 !innerProfile.account_type_approved ||
-                  changeApprovedUserRole ||
-                  !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(
-                    innerProfile.account_type
-                  )
+                changeApprovedUserRole ||
+                !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(
+                  innerProfile.account_type
+                )
               "
             >
               <h5 v-if="!userTypeRequested">
@@ -150,11 +150,12 @@
                 <translate
                   >If you are part of an investor group that is providing either
                   financial or in-kind support to project activities, the DHA
-                  can be used to help organize and connect all of your projects.
-                  By joining your investor page, you will see information that
-                  is private to your organization. If your group is not listed
-                  below, send an email to digitalhealthatlas@gmail.com to add
-                  them to the list.</translate
+                  can be used to help organize and connect all of your
+                  initiatives. By joining your investor page, you will see
+                  information that is private to your organization. If your
+                  group is not listed below, send an email to
+                  digitalhealthatlas@gmail.com to add them to the
+                  list.</translate
                 >
               </p>
 
@@ -216,10 +217,10 @@
             <div
               v-if="
                 innerProfile.account_type_approved &&
-                  ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(
-                    innerProfile.account_type
-                  ) &&
-                  !changeApprovedUserRole
+                ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(
+                  innerProfile.account_type
+                ) &&
+                !changeApprovedUserRole
               "
             >
               <h5 class="RoleAccepted">
@@ -403,21 +404,21 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import FormAPIErrorsMixin from "./mixins/FormAPIErrorsMixin";
-import OrganisationSelect from "./common/OrganisationSelect";
-import LanguageSelect from "./common/LanguageSelect";
-import CountrySelect from "./common/CountrySelect";
-import DonorSelect from "./common/DonorSelect";
-import UserPrivileges from "./UserPrivileges";
+import { mapGetters, mapActions } from 'vuex'
+import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin'
+import OrganisationSelect from './common/OrganisationSelect'
+import LanguageSelect from './common/LanguageSelect'
+import CountrySelect from './common/CountrySelect'
+// import DonorSelect from './common/DonorSelect'
+import UserPrivileges from './UserPrivileges'
 
 export default {
   components: {
     OrganisationSelect,
     LanguageSelect,
     CountrySelect,
-    DonorSelect,
-    UserPrivileges
+    // DonorSelect,
+    UserPrivileges,
   },
   mixins: [FormAPIErrorsMixin],
   data() {
@@ -429,182 +430,182 @@ export default {
         language: null,
         country: null,
         account_type: null,
-        donor: null
+        donor: null,
       },
       isCountryUser: false,
       isDonorUser: false,
       changeApprovedUserRole: false,
-      donorFilters: ["unicef"]
-    };
+      donorFilters: ['unicef'],
+    }
   },
 
   computed: {
     ...mapGetters({
-      profile: "user/getProfile",
-      user: "user/getUser",
-      donors: "system/getDonors"
+      profile: 'user/getProfile',
+      user: 'user/getUser',
+      donors: 'system/getDonors',
     }),
 
     userTypeRequested() {
       return (
         this.profile &&
-        this.profile.account_type !== "I" &&
+        this.profile.account_type !== 'I' &&
         !this.profile.account_type_approved
-      );
+      )
     },
     isDonorRequired() {
       return (
         this.innerProfile &&
         this.innerProfile.account_type &&
-        ["D", "DA", "SDA"].includes(this.innerProfile.account_type)
-      );
+        ['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)
+      )
     },
     rules() {
       return {
         name: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change',
           },
-          { validator: this.validatorGenerator("name") }
+          { validator: this.validatorGenerator('name') },
         ],
         organisation: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change',
           },
-          { validator: this.validatorGenerator("organisation") }
+          { validator: this.validatorGenerator('organisation') },
         ],
         language: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change',
           },
-          { validator: this.validatorGenerator("language") }
+          { validator: this.validatorGenerator('language') },
         ],
         country: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change',
           },
-          { validator: this.validatorGenerator("country") }
+          { validator: this.validatorGenerator('country') },
         ],
         donor: [
           {
             required: this.isDonorRequired,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change',
           },
-          { validator: this.validatorGenerator("donor") }
-        ]
-      };
-    }
+          { validator: this.validatorGenerator('donor') },
+        ],
+      }
+    },
   },
 
   watch: {
-    isCountryUser: function(newVal, oldVal) {
+    isCountryUser(newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isDonorUser = false;
-        if (!["G", "CA", "SCA"].includes(this.innerProfile.account_type)) {
-          this.innerProfile.account_type = "G";
+        this.isDonorUser = false
+        if (!['G', 'CA', 'SCA'].includes(this.innerProfile.account_type)) {
+          this.innerProfile.account_type = 'G'
         }
       } else if (!newVal && !this.isDonorUser) {
-        this.innerProfile.account_type = "I";
+        this.innerProfile.account_type = 'I'
       }
     },
-    isDonorUser: function(newVal, oldVal) {
+    isDonorUser(newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isCountryUser = false;
-        if (!["D", "DA", "SDA"].includes(this.innerProfile.account_type)) {
-          this.innerProfile.account_type = "D";
+        this.isCountryUser = false
+        if (!['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)) {
+          this.innerProfile.account_type = 'D'
         }
       } else if (!newVal && !this.isCountryUser) {
-        this.innerProfile.account_type = "I";
+        this.innerProfile.account_type = 'I'
       }
     },
     profile: {
       immediate: true,
       handler(profile) {
-        this.innerProfile = { ...profile, organisation: 56 };
-      }
-    }
+        this.innerProfile = { ...profile, organisation: 56 }
+      },
+    },
   },
 
   mounted() {
-    this.isCountryUser = ["G", "CA", "SCA"].includes(this.profile.account_type);
-    this.isDonorUser = ["D", "DA", "SDA"].includes(this.profile.account_type);
+    this.isCountryUser = ['G', 'CA', 'SCA'].includes(this.profile.account_type)
+    this.isDonorUser = ['D', 'DA', 'SDA'].includes(this.profile.account_type)
   },
 
   methods: {
     ...mapActions({
-      updateUserProfile: "user/updateUserProfile"
+      updateUserProfile: 'user/updateUserProfile',
     }),
 
     dismissChanges() {
-      this.innerProfile = { ...this.profile, organisation: 56 };
-      this.$router.go(-1);
+      this.innerProfile = { ...this.profile, organisation: 56 }
+      this.$router.go(-1)
     },
 
     submit() {
-      this.deleteFormAPIErrors();
-      this.changeApprovedUserRole = false;
-      this.$refs.editProfileForm.validate(async valid => {
+      this.deleteFormAPIErrors()
+      this.changeApprovedUserRole = false
+      this.$refs.editProfileForm.validate(async (valid) => {
         if (valid) {
           try {
-            const isFirstSave = !this.profile.country;
-            await this.updateUserProfile(this.innerProfile);
-            window.scrollTo(0, 0);
+            const isFirstSave = !this.profile.country
+            await this.updateUserProfile(this.innerProfile)
+            window.scrollTo(0, 0)
             this.$message({
-              message: this.$gettext("Profile succesfully updated"),
-              type: "success",
-              showClose: true
-            });
+              message: this.$gettext('Profile succesfully updated'),
+              type: 'success',
+              showClose: true,
+            })
             if (isFirstSave) {
-              this.routeToDashboard(this.innerProfile.language);
+              this.routeToDashboard(this.innerProfile.language)
             } else {
-              this.changeLocale(this.innerProfile.language);
+              this.changeLocale(this.innerProfile.language)
             }
           } catch (err) {
-            console.log("ERR:", err);
-            this.setFormAPIErrors(err);
-            this.$refs.editProfileForm.validate(() => {});
+            console.log('ERR:', err)
+            this.setFormAPIErrors(err)
+            this.$refs.editProfileForm.validate(() => {})
             this.$message({
-              message: this.$gettext("Profile update error"),
-              type: "error",
-              showClose: true
-            });
+              message: this.$gettext('Profile update error'),
+              type: 'error',
+              showClose: true,
+            })
           }
         }
-      });
+      })
     },
     changeLocale(locale) {
       if (locale !== this.$i18n.locale) {
-        const name = this.$route.name.split("___")[0];
-        const path = this.localePath({ ...this.$route, name }, locale);
-        this.$router.replace(path);
+        const name = this.$route.name.split('___')[0]
+        const path = this.localePath({ ...this.$route, name }, locale)
+        this.$router.replace(path)
       }
     },
     routeToDashboard(locale) {
       const path = this.localePath(
-        { name: "organisation-dashboard-list", params: this.$route.params },
+        { name: 'organisation-dashboard-list', params: this.$route.params },
         locale
-      );
-      this.$router.push(path);
+      )
+      this.$router.push(path)
     },
     changingUserRole() {
-      this.changeApprovedUserRole = true;
-    }
-  }
-};
+      this.changeApprovedUserRole = true
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .EditProfile {
   margin-bottom: 80px;
@@ -717,11 +718,11 @@ export default {
 
         &.IconGovernmentUser {
           top: 46%;
-          background-image: url("~static/icon-role-government.svg");
+          background-image: url('~static/icon-role-government.svg');
         }
 
         &.IconInvestorUser {
-          background-image: url("~static/icon-role-investor.svg");
+          background-image: url('~static/icon-role-investor.svg');
         }
       }
 

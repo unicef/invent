@@ -8,20 +8,12 @@
         <slot name="header" />
       </template>
     </div>
-    <div
-      v-show="!missingContent"
-      class="Content"
-    >
+    <div v-show="!missingContent" class="Content">
       <template v-if="showContent">
         <span v-if="!link">
           {{ processedContent }}
         </span>
-        <a
-          v-if="link"
-          :href="formattedLink"
-          target="_blank"
-          class="TextLink"
-        >
+        <a v-if="link" :href="formattedLink" target="_blank" class="TextLink">
           {{ formattedLink }}
         </a>
       </template>
@@ -29,63 +21,58 @@
         <slot />
       </template>
     </div>
-    <div
-      v-show="missingContent"
-      class="Empty"
-    >
+    <div v-show="missingContent" class="Empty">
       <translate>N/A</translate>
     </div>
   </div>
 </template>
 
 <script>
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 
 export default {
   props: {
     header: {
       type: String,
-      default: null
+      default: null,
     },
     content: {
       type: [String, Number, Date],
-      default: null
+      default: null,
     },
     date: {
       type: Boolean,
-      default: false
+      default: false,
     },
     link: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    showContent () {
-      return this.content !== null && this.content !== undefined;
+    showContent() {
+      return this.content !== null && this.content !== undefined
     },
-    missingContent () {
-      return !this.$slots.default && !this.content;
+    missingContent() {
+      return !this.$slots.default && !this.content
     },
-    processedContent () {
+    processedContent() {
       if (this.date) {
-        return format(this.content, 'DD/MM/YYYY');
+        return format(this.content, 'DD/MM/YYYY')
       }
-      return this.content;
+      return this.content
     },
-    formattedLink () {
+    formattedLink() {
       if (this.content) {
         if (!this.content.match(/^[a-zA-Z]+:\/\//)) {
-          return 'http://' + this.content;
+          return 'http://' + this.content
         }
-        return this.content;
+        return this.content
       }
-      return null;
-    }
-  }
-};
+      return null
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

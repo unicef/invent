@@ -24,30 +24,30 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
-      healthSystemChallenges: 'projects/getHscChallenges'
-    })
+      healthSystemChallenges: 'projects/getHscChallenges',
+    }),
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
-    }
-  }
-};
+    changeHandler(value) {
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -55,6 +55,5 @@ export default {
   width: 100%;
 }
 .HealthSystemChallengesSelectorDropdown {
-
 }
 </style>
