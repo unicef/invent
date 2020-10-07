@@ -72,9 +72,9 @@ export const getters = {
   getDomainsForThematic: (state, getters) => {
     const axis = getters.getAxis
     const domains = getters.getDomains
-    const thematicSpecific = getters.getThematicOverview
+    const thematic_specific = getters.getThematicOverview
     return [
-      ...thematicSpecific.map((t) => ({ name: t.name, domains: t.domains })),
+      ...thematic_specific.map((t) => ({ name: t.name, domains: t.domains })),
       ...axis.map((a) => ({
         name: a.name,
         domains: domains

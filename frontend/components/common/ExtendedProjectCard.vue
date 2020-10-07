@@ -1,14 +1,17 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }" class="ExtendedProjectCard rounded">
+  <el-card
+    :body-style="{ padding: '0px' }"
+    class="extended-project-card rounded"
+  >
     <div>
-      <el-row type="flex" align="center" class="FirstRow">
-        <el-col :span="15" class="ProjectName">
-          <el-row class="FirstSubRow">
+      <el-row type="flex" align="center" class="first-row">
+        <el-col :span="15" class="project-name">
+          <el-row class="first-sub-row">
             <el-col>
               {{ projectData.name }}
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" class="SecondSubRow">
+          <el-row type="flex" justify="start" class="second-sub-row">
             <el-col>
               <country-item :id="projectData.country" :show-flag="true" />
             </el-col>
@@ -18,7 +21,7 @@
           </el-row>
         </el-col>
 
-        <el-col :span="4" class="ProjectMeta">
+        <el-col :span="4" class="project-meta">
           <div class="Donors">
             <div>
               {{ donors }}
@@ -26,7 +29,7 @@
             <span><translate>Investor(s)</translate></span>
           </div>
         </el-col>
-        <el-col :span="4" class="ProjectMeta">
+        <el-col :span="4" class="project-meta">
           <div class="LastChange">
             <div>
               {{ lastChange }}
@@ -41,18 +44,18 @@
         type="flex"
         justify="space-between"
         align="center"
-        class="SecondRow"
+        class="second-row"
       >
         <el-col>
-          <div v-if="!project.isPublished" class="ProjectStatus Draft">
+          <div v-if="!project.isPublished" class="project-status Draft">
             <translate key="draft"> Draft </translate>
           </div>
-          <div v-if="project.isPublished" class="ProjectStatus Published">
+          <div v-if="project.isPublished" class="project-status Published">
             <translate key="published"> Published </translate>
           </div>
           <div
             v-if="projectData.approved"
-            class="ProjectStatus ApprovedByCountry"
+            class="project-status approved-by-country"
           >
             <translate key="approved"> Approved by MOH </translate>
           </div>
@@ -113,25 +116,25 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-.ExtendedProjectCard {
-  max-width: @cardSizeMedium;
+.extended-project-card {
+  // max-width: @cardSizeMedium;
   margin: 0 auto 20px;
 
-  .FirstRow {
+  .first-row {
     position: relative;
     padding: 20px 50px 20px 30px;
 
-    .FirstSubRow {
+    .first-sub-row {
       margin-bottom: 16px;
       font-size: @fontSizeLarger;
       font-weight: 700;
       color: @colorTextPrimary;
     }
 
-    .SecondSubRow {
+    .second-sub-row {
       .el-col {
         &:first-child {
           width: auto;
@@ -178,12 +181,12 @@ export default {
       }
     }
 
-    .ProjectName {
+    .project-name {
       width: 100%;
       padding-right: 40px;
     }
 
-    .ProjectMeta {
+    .project-meta {
       min-width: 140px;
       max-width: 2000px;
       border-left: 1px solid @colorGrayLight;
@@ -220,11 +223,11 @@ export default {
     }
   }
 
-  .SecondRow {
+  .second-row {
     padding: 16px 30px;
-    background-color: @colorBrandBlueLight;
+    background-color: #e8f6fd;
 
-    .ProjectStatus {
+    .project-status {
       display: inline-block;
       height: 24px;
       margin-right: 10px;
@@ -245,12 +248,9 @@ export default {
         background-color: @colorPublished;
       }
 
-      &.ApprovedByCountry {
+      &.approved-by-country {
         background-color: @colorApproved;
       }
-    }
-
-    .ProjectCardActions {
     }
   }
 }

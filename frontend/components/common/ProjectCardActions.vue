@@ -1,5 +1,5 @@
 <template>
-  <div class="ProjectCardActions">
+  <div class="project-card-actions">
     <el-row type="flex" justify="end">
       <el-col v-if="showViewDraft">
         <nuxt-link
@@ -12,7 +12,7 @@
               },
             })
           "
-          class="NuxtLink IconLeft"
+          class="nuxt-link IconLeft"
         >
           <fa icon="arrow-right" />
           <translate>View Draft</translate>
@@ -29,7 +29,7 @@
               },
             })
           "
-          class="NuxtLink IconLeft"
+          class="nuxt-link IconLeft"
         >
           <fa icon="arrow-right" />
           <translate>View Published</translate>
@@ -46,7 +46,7 @@
               },
             })
           "
-          class="NuxtLink IconLeft"
+          class="nuxt-link IconLeft"
         >
           <fa icon="edit" />
           <translate>Edit Draft</translate>
@@ -63,7 +63,7 @@
               },
             })
           "
-          class="NuxtLink IconLeft"
+          class="nuxt-link IconLeft"
         >
           <fa icon="tachometer-alt" />
           <translate>Assessment</translate>
@@ -72,7 +72,7 @@
       <el-col v-if="project.isPublished">
         <nuxt-link
           to=""
-          class="NuxtLink IconLeft Danger"
+          class="nuxt-link IconLeft danger"
           @click.native="
             handleClickUnPublish(
               { name: 'organisation-initiatives' },
@@ -120,23 +120,26 @@ export default {
 }
 </script>
 
-<style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+<style lang="less" scoped>
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-.ProjectCardActions {
+.project-card-actions {
   .el-row {
     .el-col {
       width: auto;
     }
   }
 
-  .NuxtLink {
-    margin-left: 40px;
-    line-height: 24px;
+  .nuxt-link {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: -0.2px;
+    line-height: 18px;
+    margin-left: 30px;
   }
 
-  .Danger {
+  .danger {
     color: @colorDanger;
     &:hover {
       color: @colorDanger;

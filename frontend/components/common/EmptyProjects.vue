@@ -1,5 +1,5 @@
 <template>
-  <div class="EmptyProjectList">
+  <div class="empty-project-list">
     <el-row type="flex">
       <el-col>
         <div class="SquareWrapper">
@@ -40,10 +40,10 @@ export default {}
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-.EmptyProjectList {
+.empty-project-list {
   text-align: center;
 
   img {
