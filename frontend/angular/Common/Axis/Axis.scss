@@ -2,7 +2,6 @@
 @import '../../mixins';
 
 axis {
-
   md-card {
     color: $text-primary;
     background-color: $color-white;
@@ -48,13 +47,14 @@ axis {
       }
 
       ::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         right: -9px;
         width: 9px;
         height: 50px;
-        background: transparent url("./images/after-white.svg") 100% center no-repeat;
+        background: transparent url('./images/after-white.svg') 100% center
+          no-repeat;
         z-index: 50;
       }
     }
@@ -69,29 +69,31 @@ axis {
         background-color: $color-white;
 
         &:not(:nth-child(5))::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           right: -9px;
           width: 9px;
           height: 50px;
-          background: transparent url("./images/after-white.svg") 100% center no-repeat;
+          background: transparent url('./images/after-white.svg') 100% center
+            no-repeat;
           z-index: 40;
         }
       }
 
       &.nodata {
         color: $text-secondary;
-        background: #E0E0E0;
+        background: #e0e0e0;
 
         &:not(:nth-child(5))::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           right: -9px;
           width: 9px;
           height: 50px;
-          background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+          background: transparent url('./images/after-grey.svg') 100% center
+            no-repeat;
           z-index: 40;
         }
       }
@@ -183,48 +185,51 @@ axis {
       background: $color-white !important;
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         right: -9px;
         width: 9px;
         height: 50px;
-        background: transparent url("./images/after-white.svg") 100% center no-repeat !important;
+        background: transparent url('./images/after-white.svg') 100% center
+          no-repeat !important;
         z-index: 200;
       }
     }
 
     .domains.gotdata {
-      background-color: #E0E0E0;
+      background-color: #e0e0e0;
 
       &:not(:nth-child(5))::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         right: -9px;
         width: 9px;
         height: 50px;
-        background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+        background: transparent url('./images/after-grey.svg') 100% center
+          no-repeat;
         z-index: 200;
       }
     }
 
     .domains.nodata {
       &:nth-child(5)::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         right: -9px;
         width: 9px;
         height: 50px;
-        background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+        background: transparent url('./images/after-grey.svg') 100% center
+          no-repeat;
         z-index: 200;
       }
     }
   }
 }
 
-[dir="rtl"] {
+[dir='rtl'] {
   .label {
     padding-top: 5px;
     padding-right: 15px;
@@ -234,30 +239,31 @@ axis {
   .axis-domains {
     .axis {
       ::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         right: auto;
         left: -9px;
         width: 9px;
         height: 50px;
-        background: transparent url("./images/after-white.svg") 100% center no-repeat;
+        background: transparent url('./images/after-white.svg') 100% center
+          no-repeat;
         transform: rotate(180deg);
         z-index: 50;
       }
     }
     .domains {
       &.gotdata {
-
         &:not(:nth-child(5))::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           right: auto;
           left: -9px;
           width: 9px;
           height: 50px;
-          background: transparent url("./images/after-white.svg") 100% center no-repeat;
+          background: transparent url('./images/after-white.svg') 100% center
+            no-repeat;
           transform: rotate(180deg);
           z-index: 40;
         }
@@ -265,14 +271,15 @@ axis {
 
       &.nodata {
         &:not(:nth-child(5))::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0px;
           right: auto;
           left: -9px;
           width: 9px;
           height: 50px;
-          background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+          background: transparent url('./images/after-grey.svg') 100% center
+            no-repeat;
           transform: rotate(180deg);
           z-index: 40;
         }
@@ -281,16 +288,16 @@ axis {
 
     .showCurrent {
       .active {
-
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           right: auto;
           left: -9px;
           width: 9px;
           height: 50px;
-          background: transparent url("./images/after-white.svg") 100% center no-repeat !important;
+          background: transparent url('./images/after-white.svg') 100% center
+            no-repeat !important;
           transform: rotate(180deg);
           z-index: 200;
         }
@@ -298,14 +305,15 @@ axis {
 
       .domains.gotdata {
         &:not(:nth-child(5))::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           right: auto;
           left: -9px;
           width: 9px;
           height: 50px;
-          background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+          background: transparent url('./images/after-grey.svg') 100% center
+            no-repeat;
           transform: rotate(180deg);
           z-index: 200;
         }
@@ -313,14 +321,15 @@ axis {
 
       .domains.nodata {
         &:nth-child(5)::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           right: auto;
           left: -9px;
           width: 9px;
           height: 50px;
-          background: transparent url("./images/after-grey.svg") 100% center no-repeat;
+          background: transparent url('./images/after-grey.svg') 100% center
+            no-repeat;
           transform: rotate(180deg);
           z-index: 200;
         }

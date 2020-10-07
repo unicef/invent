@@ -1,8 +1,6 @@
 <template>
   <div class="ProjectData">
-    <el-row
-      type="flex"
-    >
+    <el-row type="flex">
       <el-col :span="18">
         <collapsible-card
           id="general"
@@ -23,10 +21,7 @@
           />
 
           <simple-field :header="$gettext('Country') | translate">
-            <country-item
-              :id="project.country"
-              :show-flag="false"
-            />
+            <country-item :id="project.country" :show-flag="false" />
           </simple-field>
 
           <simple-field
@@ -39,9 +34,7 @@
             :content="selectedRegionOffice"
           />
 
-          <simple-field
-            :header="$gettext('Field Office') | translate"
-          >
+          <simple-field :header="$gettext('Field Office') | translate">
             <FieldOfficeItem
               :value="project.field_office"
               :office="office.id"
@@ -65,14 +58,14 @@
             <el-col :span="12">
               <simple-field
                 :content="project.start_date"
-                :header="$gettext('Project start date') | translate"
+                :header="$gettext('Initiative start date') | translate"
                 date
               />
             </el-col>
             <el-col :span="12">
               <simple-field
                 :content="project.end_date"
-                :header="$gettext('Project end date') | translate"
+                :header="$gettext('Initiative end date') | translate"
                 date
               />
             </el-col>
@@ -122,17 +115,25 @@
           />
 
           <template v-if="goalArea && goalArea.id && goalArea.id === 1">
-            <simple-field :header="$gettext('What is the health capability area(s) addressed? What are the Health System Challenges addressed by the Digital Health Intervention?') | translate">
-              <DhiList
-                :values="project.dhis"
-              />
+            <simple-field
+              :header="
+                $gettext(
+                  'What is the health capability area(s) addressed? What are the Health System Challenges addressed by the Digital Health Intervention?'
+                ) | translate
+              "
+            >
+              <DhiList :values="project.dhis" />
             </simple-field>
 
-            <simple-field :header="$gettext('Health focus area(s)') | translate">
+            <simple-field
+              :header="$gettext('Health focus area(s)') | translate"
+            >
               <health-focus-areas-list :value="project.health_focus_areas" />
             </simple-field>
 
-            <simple-field :header="$gettext('Health System Challenges (HSC)') | translate">
+            <simple-field
+              :header="$gettext('Health System Challenges (HSC)') | translate"
+            >
               <health-system-challenges-list :value="project.hsc_challenges" />
             </simple-field>
           </template>
@@ -162,9 +163,7 @@
           </template>
 
           <simple-field :header="$gettext('Software') | translate">
-            <platforms-list
-              :platforms="project.platforms"
-            />
+            <platforms-list :platforms="project.platforms" />
           </simple-field>
 
           <simple-field :header="$gettext('Investor(s)') | translate">
@@ -183,11 +182,14 @@
             :content="project.current_achievements"
             :header="$gettext('Current Achievements') | translate"
           />
-          <simple-field :header="$gettext('In Country programme document (CPD) and annual work plan') | translate">
-            <platforms-list
-              :platforms="project.cpd"
-              source="getCpd"
-            />
+          <simple-field
+            :header="
+              $gettext(
+                'In Country programme document (CPD) and annual work plan'
+              ) | translate
+            "
+          >
+            <platforms-list :platforms="project.cpd" source="getCpd" />
           </simple-field>
           <simple-field
             :content="project.awp"
@@ -197,22 +199,14 @@
             :header="$gettext('Work Breakdown Structure (WBS)') | translate"
           >
             <ul>
-              <li
-                v-for="wbs in project.wbs"
-                :key="wbs"
-              >
+              <li v-for="wbs in project.wbs" :key="wbs">
                 <span>{{ wbs }}</span>
               </li>
             </ul>
           </simple-field>
-          <simple-field
-            :header="$gettext('Total Budget') | translate"
-          >
+          <simple-field :header="$gettext('Total Budget') | translate">
             {{ project.total_budget }}
-            <list-element
-              :value="project.currency"
-              source="getCurrencies"
-            />
+            <list-element :value="project.currency" source="getCurrencies" />
           </simple-field>
           <simple-field
             :content="project.total_budget_narrative"
@@ -227,7 +221,7 @@
             :header="$gettext('Partnership Needs') | translate"
           />
           <simple-field
-            v-for="{link_url, link_type} in orderedLinkList"
+            v-for="{ link_url, link_type } in orderedLinkList"
             :key="'link_type' + link_type"
             :content="link_url"
             :header="getLinkHeader(link_type)"
@@ -238,13 +232,8 @@
           id="stages"
           :title="$gettext('4. Stages') | translate"
         >
-          <simple-field
-            :header="$gettext('Phase of Initiative') | translate"
-          >
-            <list-element
-              :value="project.phase"
-              source="getPhases"
-            />
+          <simple-field :header="$gettext('Phase of Initiative') | translate">
+            <list-element :value="project.phase" source="getPhases" />
           </simple-field>
         </collapsible-card>
 
@@ -257,9 +246,7 @@
             :key="partner.partner_type"
             class="Partners"
           >
-            <simple-field
-              :header="partner.partner_name"
-            >
+            <simple-field :header="partner.partner_name">
               <ul>
                 <li>
                   <translate>Partner Type</translate>:
@@ -271,11 +258,15 @@
                 </li>
                 <li>
                   <translate>Partner Email</translate>:
-                  <a :href="`mailto:${partner.partner_email}`">{{ partner.partner_email }}</a>
+                  <a :href="`mailto:${partner.partner_email}`">{{
+                    partner.partner_email
+                  }}</a>
                 </li>
                 <li>
                   <translate>Partner Website</translate>:
-                  <a :href="`mailto:${partner.partner_website}`">{{ partner.partner_website }}</a>
+                  <a :href="`mailto:${partner.partner_website}`">{{
+                    partner.partner_website
+                  }}</a>
                 </li>
               </ul>
             </simple-field>
@@ -310,19 +301,28 @@
           id="technology"
           :title="$gettext('7. Technology') | translate"
         >
-          <simple-field :header="$gettext('Hardware Platform(s) and Physical Product(s)') | translate">
+          <simple-field
+            :header="
+              $gettext('Hardware Platform(s) and Physical Product(s)')
+                | translate
+            "
+          >
             <platforms-list
               :platforms="project.hardware"
               source="getHardware"
             />
           </simple-field>
-          <simple-field :header="$gettext('Programme Innovation(s) and Non-Technology Platform(s)') | translate">
-            <platforms-list
-              :platforms="project.nontech"
-              source="getNontech"
-            />
+          <simple-field
+            :header="
+              $gettext('Programme Innovation(s) and Non-Technology Platform(s)')
+                | translate
+            "
+          >
+            <platforms-list :platforms="project.nontech" source="getNontech" />
           </simple-field>
-          <simple-field :header="$gettext('Function(s) of Platform') | translate">
+          <simple-field
+            :header="$gettext('Function(s) of Platform') | translate"
+          >
             <platforms-list
               :platforms="project.functions"
               source="getFunctions"
@@ -330,10 +330,7 @@
           </simple-field>
         </collapsible-card>
 
-        <div
-          v-if="donors && donors.length >0"
-          id="donorcustom"
-        >
+        <div v-if="donors && donors.length > 0" id="donorcustom">
           <collapsible-card
             v-for="donor in donors"
             :key="donor.id"
@@ -353,7 +350,15 @@
       </el-col>
       <el-col :span="6">
         <project-navigation
-          @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-projects-id-edit', params: { ...$route.params } }, $route.params.id)"
+          @handleClickUnPublish="
+            handleClickUnPublish(
+              {
+                name: 'organisation-initiatives-id-edit',
+                params: { ...$route.params },
+              },
+              $route.params.id
+            )
+          "
           @handleClickLatest="handleClickLatest($route.params.id)"
         />
       </el-col>
@@ -362,27 +367,26 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
-import ProjectNavigation from './ProjectNavigation';
-import CollapsibleCard from './CollapsibleCard';
-import SimpleField from './SimpleField';
-import OrganisationItem from '../common/OrganisationItem';
-import CountryItem from '../common/CountryItem';
-import TeamList from './TeamList';
-import PlatformsList from './PlatformsList';
-import FieldOfficeItem from './FieldOfficeItem';
-import DhiList from './DhiList';
-import CapabilitiesList from './CapabilitiesList';
-import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
-import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
-import DonorsList from '../common/list/DonorsList';
-import CustomReadonlyField from './CustomReadonlyField';
-import handleProjectActions from '@/components/mixins/handleProjectActions';
-import ListElement from '@/components/project/ListElement';
-import find from 'lodash/find';
-import orderBy from 'lodash/orderBy';
-
-import { mapGetters, mapState, mapActions } from 'vuex';
+import { format } from 'date-fns'
+import handleProjectActions from '@/components/mixins/handleProjectActions'
+import ListElement from '@/components/project/ListElement'
+import find from 'lodash/find'
+import orderBy from 'lodash/orderBy'
+import { mapGetters, mapState, mapActions } from 'vuex'
+import OrganisationItem from '../common/OrganisationItem'
+import CountryItem from '../common/CountryItem'
+import HealthFocusAreasList from '../common/list/HealthFocusAreasList'
+import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
+import DonorsList from '../common/list/DonorsList'
+import ProjectNavigation from './ProjectNavigation'
+import CollapsibleCard from './CollapsibleCard'
+import SimpleField from './SimpleField'
+import TeamList from './TeamList'
+import PlatformsList from './PlatformsList'
+import FieldOfficeItem from './FieldOfficeItem'
+import DhiList from './DhiList'
+import CapabilitiesList from './CapabilitiesList'
+import CustomReadonlyField from './CustomReadonlyField'
 
 export default {
   components: {
@@ -400,12 +404,12 @@ export default {
     DonorsList,
     CustomReadonlyField,
     CapabilitiesList,
-    ListElement
+    ListElement,
   },
   mixins: [handleProjectActions],
   computed: {
     ...mapState({
-      office: state => state.offices.office
+      office: (state) => state.offices.office,
     }),
     ...mapGetters({
       draft: 'project/getProjectData',
@@ -420,203 +424,211 @@ export default {
       unicef_regions: 'system/getUnicefRegions',
       linkTypes: 'system/getLinkTypes',
       modified: 'project/getModified',
-      regionalOffices: 'projects/getRegionalOffices'
+      regionalOffices: 'projects/getRegionalOffices',
     }),
-    route () {
-      return this.$route.name.split('__')[0];
+    route() {
+      return this.$route.name.split('__')[0]
     },
-    isDraft () {
-      return this.route === 'organisation-projects-id';
+    isDraft() {
+      return this.route === 'organisation-initiatives-id'
     },
-    project () {
-      return this.isDraft ? this.draft : this.published;
+    project() {
+      return this.isDraft ? this.draft : this.published
     },
-    country () {
+    country() {
       if (this.project.country) {
-        return this.getCountryDetails(this.project.country);
+        return this.getCountryDetails(this.project.country)
       }
-      return null;
+      return null
     },
-    selectedRegion () {
+    selectedRegion() {
       if (this.office) {
-        const result = this.unicef_regions.find(uf => uf.id === this.office.region);
-        return (result && result.name) || 'N/A';
+        const result = this.unicef_regions.find(
+          (uf) => uf.id === this.office.region
+        )
+        return (result && result.name) || 'N/A'
       }
-      return 'N/A';
+      return 'N/A'
     },
-    selectedRegionOffice () {
+    selectedRegionOffice() {
       if (this.office) {
-        const office = this.regionalOffices.find(obj => obj.id === this.office.regional_office);
-        return office ? office.name : '';
+        const office = this.regionalOffices.find(
+          (obj) => obj.id === this.office.regional_office
+        )
+        return office ? office.name : ''
       }
-      return '';
+      return ''
     },
-    lastUpdated () {
-      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm');
+    lastUpdated() {
+      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm')
     },
-    donors () {
-      return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+    donors() {
+      return this.project.donors
+        .map((d) => this.getDonorDetails(d))
+        .filter((d) => d.donor_questions && d.donor_questions.length > 0)
     },
-    resultArea () {
-      const result = this.resultAreas.find(r => r.id === this.project.result_area);
-      return result || {};
+    resultArea() {
+      const result = this.resultAreas.find(
+        (r) => r.id === this.project.result_area
+      )
+      return result || {}
     },
-    goalArea () {
-      const result = this.goalAreas.find(r => r.id === this.project.goal_area);
-      return result || {};
+    goalArea() {
+      const result = this.goalAreas.find((r) => r.id === this.project.goal_area)
+      return result || {}
     },
-    orderedLinkList () {
-      return orderBy(this.project.links, ['link_type'], ['asc']);
-    }
+    orderedLinkList() {
+      return orderBy(this.project.links, ['link_type'], ['asc'])
+    },
   },
-  mounted () {
-    this.loadOffice(this.project.country_office);
+  mounted() {
+    this.loadOffice(this.project.country_office)
   },
   methods: {
     ...mapActions({
-      loadOffice: 'offices/loadOffice'
+      loadOffice: 'offices/loadOffice',
     }),
-    getLinkHeader (link_type) {
-      const type = find(this.linkTypes, (t) => t.id === link_type);
-      return type ? `${type.name} URL` : link_type;
+    getLinkHeader(link_type) {
+      const type = find(this.linkTypes, (t) => t.id === link_type)
+      return type ? `${type.name} URL` : link_type
     },
-    customFieldsName (name) {
-      return this.$gettext('{name} custom fields', { name });
-    }
-  }
-};
+    customFieldsName(name) {
+      return this.$gettext('{name} custom fields', { name })
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .ProjectData {
-    .limitPageWidth();
+.ProjectData {
+  .limitPageWidth();
 
-    .Loader {
-      display: block;
-      margin: 0 auto 80px;
-    }
+  .Loader {
+    display: block;
+    margin: 0 auto 80px;
+  }
 
-    > .el-row {
-      > .el-col {
-        // form fieldsets
-        &:first-child {
-          width: calc(100% - @projectAsideNavWidth - 20px);
-          margin-right: 20px;
-        }
-
-        // aside navigation
-        &:last-child {
-          width: @projectAsideNavWidth;
-        }
-      }
-    }
-
-    .ContentContainer {
-      padding-bottom: 20px;
-    }
-
-    .CollapsibleCard {
-      .SimpleField {
-        margin-bottom: 40px;
-        font-size: @fontSizeBase;
-        line-height: 20px;
-
-        .Header {
-          margin-bottom: 10px;
-          font-size: @fontSizeMedium;
-          font-weight: 700;
-        }
-
-        .Content {
-          ul {
-            li {
-              .svg-inline--fa {
-                display: none;
-              }
-            }
-          }
-        }
-
-        .SubLevelItem {
-          box-sizing: border-box;
-          width: 100%;
-          margin-top: 10px;
-          margin-bottom: 10px;
-          margin-left: 3px;
-          padding-left: 30px;
-          border-left: 5px solid @colorGrayLight;
-
-          .SimpleField {
-            margin: 0 !important;
-
-            .Header {
-              font-size: @fontSizeBase !important;
-            }
-          }
-
-          .CoverageField {
-            .SimpleField {
-              margin: 20px 0 0 !important;
-            }
-          }
-        }
-
-        .CountryItem {
-          .CountryFlag {
-            display: none;
-          }
-
-          .CountryName {
-            margin: 0;
-            font-size: @fontSizeBase;
-            font-weight: 400;
-          }
-        }
-
-        .PlatformList {
-          .Header {
-            font-size: @fontSizeBase;
-          }
-
-          .Content {
-            .SimpleField {
-              margin-top: 20px;
-            }
-          }
-        }
-
-        .StandardsList {
-          li {
-            a {
-              display: block;
-              margin: 5px 0 20px;
-              color: @colorBrandPrimary;
-              text-decoration: none;
-              transition: @transitionAll;
-
-              &:hover {
-                color: @colorBrandPrimaryLight;
-                text-decoration: underline;
-              }
-            }
-
-            &:last-child {
-              a {
-                margin-bottom: 0;
-              }
-            }
-          }
-        }
+  > .el-row {
+    > .el-col {
+      // form fieldsets
+      &:first-child {
+        width: calc(100% - @projectAsideNavWidth - 20px);
+        margin-right: 20px;
       }
 
-      .GrayArea {
-        .svg-inline--fa {
-          margin-right: 8px;
-        }
+      // aside navigation
+      &:last-child {
+        width: @projectAsideNavWidth;
       }
     }
   }
+
+  .ContentContainer {
+    padding-bottom: 20px;
+  }
+
+  .CollapsibleCard {
+    .SimpleField {
+      margin-bottom: 40px;
+      font-size: @fontSizeBase;
+      line-height: 20px;
+
+      .Header {
+        margin-bottom: 10px;
+        font-size: @fontSizeMedium;
+        font-weight: 700;
+      }
+
+      .Content {
+        ul {
+          li {
+            .svg-inline--fa {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .SubLevelItem {
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 3px;
+        padding-left: 30px;
+        border-left: 5px solid @colorGrayLight;
+
+        .SimpleField {
+          margin: 0 !important;
+
+          .Header {
+            font-size: @fontSizeBase !important;
+          }
+        }
+
+        .CoverageField {
+          .SimpleField {
+            margin: 20px 0 0 !important;
+          }
+        }
+      }
+
+      .CountryItem {
+        .CountryFlag {
+          display: none;
+        }
+
+        .CountryName {
+          margin: 0;
+          font-size: @fontSizeBase;
+          font-weight: 400;
+        }
+      }
+
+      .PlatformList {
+        .Header {
+          font-size: @fontSizeBase;
+        }
+
+        .Content {
+          .SimpleField {
+            margin-top: 20px;
+          }
+        }
+      }
+
+      .StandardsList {
+        li {
+          a {
+            display: block;
+            margin: 5px 0 20px;
+            color: @colorBrandPrimary;
+            text-decoration: none;
+            transition: @transitionAll;
+
+            &:hover {
+              color: @colorBrandPrimaryLight;
+              text-decoration: underline;
+            }
+          }
+
+          &:last-child {
+            a {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .GrayArea {
+      .svg-inline--fa {
+        margin-right: 8px;
+      }
+    }
+  }
+}
 </style>

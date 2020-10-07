@@ -1,13 +1,15 @@
 <template>
-  <div :class="['SelectorDialogCategory', {'NoParent': !hideHeader && !alwaysExpandCategory}]">
+  <div
+    :class="[
+      'SelectorDialogCategory',
+      { NoParent: !hideHeader && !alwaysExpandCategory },
+    ]"
+  >
     <div
       v-show="!hideHeader"
-      :class="['CategoryName', {'Opened': categoryToggled}]"
+      :class="['CategoryName', { Opened: categoryToggled }]"
     >
-      <el-button
-        type="text"
-        @click="toggleCategory"
-      >
+      <el-button type="text" @click="toggleCategory">
         <fa
           v-show="!categoryToggled && !alwaysExpandCategory"
           icon="angle-right"
@@ -46,107 +48,113 @@
 </template>
 
 <script>
-
 export default {
   model: {
     prop: 'values',
-    event: 'change'
+    event: 'change',
   },
   props: {
     categorySelectable: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     category: {
       type: [Object, Array],
-      required: true
+      required: true,
     },
     childName: {
       type: String,
-      default: null
+      default: null,
     },
     values: {
       type: Array,
-      required: true
+      required: true,
     },
     nameProp: {
       type: String,
-      default: 'name'
+      default: 'name',
     },
     hideHeader: {
       type: Boolean,
-      default: false
+      default: false,
     },
     alwaysExpandCategory: {
       type: Boolean,
-      default: false
+      default: false,
     },
     expandCollapse: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
-      categoryToggled: false
-    };
+      categoryToggled: false,
+    }
   },
   computed: {
-    categoryShown () {
-      return this.hideHeader || this.categoryToggled || this.alwaysExpandCategory;
+    categoryShown() {
+      return (
+        this.hideHeader || this.categoryToggled || this.alwaysExpandCategory
+      )
     },
-    items () {
+    items() {
       if (this.childName) {
-        return this.category[this.childName];
+        return this.category[this.childName]
       }
-      return this.category;
+      return this.category
     },
-    headerChecked () {
+    headerChecked() {
       return this.items.reduce((c, n) => {
-        return c && this.values.includes(n.id);
-      }, true);
-    }
+        return c && this.values.includes(n.id)
+      }, true)
+    },
   },
   methods: {
-    filterChange (item) {
+    filterChange(item) {
       if (this.values.includes(item)) {
-        this.$emit('change', this.values.filter(v => v !== item));
+        this.$emit(
+          'change',
+          this.values.filter((v) => v !== item)
+        )
       } else {
-        this.$emit('change', [...this.values, item]);
+        this.$emit('change', [...this.values, item])
       }
     },
-    toggleCategory () {
-      this.categoryToggled = !this.categoryToggled;
+    toggleCategory() {
+      this.categoryToggled = !this.categoryToggled
     },
-    selectAll () {
-      this.$emit('change', [...this.values, ...this.items.map(i => i.id)]);
+    selectAll() {
+      this.$emit('change', [...this.values, ...this.items.map((i) => i.id)])
     },
-    deSelectAll () {
-      this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
+    deSelectAll() {
+      this.$emit(
+        'change',
+        this.values.filter((v) => !this.items.map((i) => i.id).includes(v))
+      )
     },
-    selectAllCategory () {
-      this.categoryToggled = true;
+    selectAllCategory() {
+      this.categoryToggled = true
       if (!this.headerChecked) {
-        this.selectAll();
+        this.selectAll()
       } else {
-        this.deSelectAll();
+        this.deSelectAll()
       }
     },
-    getItemName (item) {
-      return item[this.nameProp];
-    }
-  }
-};
+    getItemName(item) {
+      return item[this.nameProp]
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .SelectorDialogCategory {
   .CategoryName {
-
     &.Opened {
       .el-button {
         color: @colorTextPrimary;
@@ -198,11 +206,11 @@ export default {
   }
 
   .slide-fade-enter-active {
-    transition: all .1s ease;
+    transition: all 0.1s ease;
   }
 
   .slide-fade-leave-active {
-    transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
   }
 
   .slide-fade-enter, .slide-fade-leave-to
@@ -211,5 +219,4 @@ export default {
     opacity: 0;
   }
 }
-
 </style>

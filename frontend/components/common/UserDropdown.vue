@@ -45,7 +45,7 @@
             :to="
               localePath({
                 name: 'organisation-edit-profile',
-                params: $route.params
+                params: $route.params,
               })
             "
             @click.native="closePopover"
@@ -62,7 +62,7 @@
             :to="
               localePath({
                 name: 'organisation-admin-country',
-                params: $route.params
+                params: $route.params,
               })
             "
             @click.native="closePopover"
@@ -79,7 +79,7 @@
             :to="
               localePath({
                 name: 'organisation-admin-donor',
-                params: $route.params
+                params: $route.params,
               })
             "
             @click.native="closePopover"
@@ -96,7 +96,7 @@
             :to="
               localePath({
                 name: 'organisation-admin-import',
-                params: $route.params
+                params: $route.params,
               })
             "
             @click.native="closePopover"
@@ -122,72 +122,72 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import LanguageSelect from "./LanguageSelect";
-import CountryItem from "./CountryItem";
+import { mapGetters, mapActions } from 'vuex'
+import LanguageSelect from './LanguageSelect'
+import CountryItem from './CountryItem'
 
 export default {
   components: {
     LanguageSelect,
-    CountryItem
+    CountryItem,
   },
   data() {
     return {
-      shown: false
-    };
+      shown: false,
+    }
   },
   computed: {
     ...mapGetters({
-      user: "user/getProfile"
+      user: 'user/getProfile',
     }),
     isSuperUser() {
-      return this.user && this.user.is_superuser;
+      return this.user && this.user.is_superuser
     },
     isUserCA() {
       return (
         (this.user.account_type_approved &&
-          ["CA", "SCA"].includes(this.user.account_type)) ||
+          ['CA', 'SCA'].includes(this.user.account_type)) ||
         this.isSuperUser
-      );
+      )
     },
     isUserDA() {
       return (
         (this.user.account_type_approved &&
-          ["DA", "SDA"].includes(this.user.account_type)) ||
+          ['DA', 'SDA'].includes(this.user.account_type)) ||
         this.isSuperUser
-      );
+      )
     },
     currentLanguage: {
       get() {
-        return this.$i18n.locale;
+        return this.$i18n.locale
       },
       set(value) {
         // for now on language switch we need a full page change
-        const path = this.switchLocalePath(value);
-        window.location.href = path;
-        this.shown = false;
-      }
-    }
+        const path = this.switchLocalePath(value)
+        window.location.href = path
+        this.shown = false
+      },
+    },
   },
   methods: {
     ...mapActions({
-      doLogout: "user/doLogout"
+      doLogout: 'user/doLogout',
     }),
     closePopover() {
-      this.shown = false;
+      this.shown = false
     },
     logout() {
-      this.closePopover();
-      this.doLogout();
-      this.$router.push(this.localePath({ name: "auth" }));
-    }
-  }
-};
+      this.closePopover()
+      this.doLogout()
+      this.$router.push(this.localePath({ name: 'auth' }))
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .UserDropdownPopper {
   transform: translate(10px, -30px);

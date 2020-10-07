@@ -1,38 +1,44 @@
-import uniqBy from 'lodash/uniqBy';
+import uniqBy from 'lodash/uniqBy'
 
 export default {
-  data () {
+  data() {
     return {
       options: [],
-      query: ''
-    };
+      query: '',
+    }
   },
   computed: {
-    optionsAndValues () {
+    optionsAndValues() {
       // const result = [...this.options].sort((a, b) => a.email.localeCompare(b.email));
-      const result = [...this.options].sort();
+      const result = [...this.options].sort()
 
       if (this.value) {
         if (Array.isArray(this.value) && this.value.length > 0) {
-          result.push(...this.items.filter(p => this.value.some(v => v === p.id)));
+          result.push(
+            ...this.items.filter((p) => this.value.some((v) => v === p.id))
+          )
         } else {
-          result.push(...this.items.filter(p => p.id === +this.value));
+          result.push(...this.items.filter((p) => p.id === +this.value))
         }
       }
-      return uniqBy(result, 'id');
-    }
+      return uniqBy(result, 'id')
+    },
   },
   methods: {
-    filterList (query) {
-      this.query = query;
+    filterList(query) {
+      this.query = query
       if (query) {
-        this.options = this.items.filter(p => this.filter(p.name ? p.name : p.email, query) || (p.email ? this.filter(p.email, query) : false));
+        this.options = this.items.filter(
+          (p) =>
+            this.filter(p.name ? p.name : p.email, query) ||
+            (p.email ? this.filter(p.email, query) : false)
+        )
       } else {
-        this.options = [];
+        this.options = []
       }
     },
-    filter (val, query) {
-      return val.toLowerCase().startsWith(query.toLowerCase());
-    }
-  }
-};
+    filter(val, query) {
+      return val.toLowerCase().startsWith(query.toLowerCase())
+    },
+  },
+}

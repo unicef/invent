@@ -10,9 +10,7 @@
   >
     <template slot="title">
       <span class="el-dialog__title">
-        <translate :parameters="{ name }">
-          Scoring: {name}
-        </translate>
+        <translate :parameters="{ name }"> Scoring: {name} </translate>
       </span>
       <button type="button" aria-label="Close" class="el-dialog__headerbtn">
         <i class="el-dialog__close el-icon el-icon-close"></i>
@@ -37,12 +35,14 @@
               trigger="hover"
               popper-class="score-popover"
             >
-              <template>
-                <p>{{ scope.row.question.text }}</p>
-              </template>
+              <p>{{ scope.row.question.text }}</p>
             </el-popover>
             <p>{{ scope.row.question.name }}</p>
-            <fa class="question-icon" :icon="['fas', 'question-circle']" v-popover:question />
+            <fa
+              v-popover:question
+              class="question-icon"
+              :icon="['fas', 'question-circle']"
+            />
           </div>
         </template>
       </el-table-column>
@@ -59,12 +59,17 @@
         <template slot-scope="scope">
           <template v-if="scope.row.type === 'psa'">
             <psa-list
-              v-if="Array.isArray(scope.row[reviewer][scope.row.type]) && scope.row[reviewer][scope.row.type].length"
+              v-if="
+                Array.isArray(scope.row[reviewer][scope.row.type]) &&
+                scope.row[reviewer][scope.row.type].length
+              "
               :items="scope.row[reviewer][scope.row.type]"
             />
             <p v-else class="na psa">N/A</p>
           </template>
-          <p v-else-if="scope.row[reviewer][scope.row.type]" class="user-score">{{ scope.row[reviewer][scope.row.type] }}</p>
+          <p v-else-if="scope.row[reviewer][scope.row.type]" class="user-score">
+            {{ scope.row[reviewer][scope.row.type] }}
+          </p>
           <p v-else class="na">N/A</p>
           <el-popover
             v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
@@ -74,12 +79,10 @@
             trigger="hover"
             popper-class="score-popover"
           >
-            <template>
-              <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
-            </template>
+            <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
             <fa
-              slot="reference"
               v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+              slot="reference"
               class="comment-icon"
               :icon="['fas', 'comment-alt']"
             />
@@ -103,7 +106,6 @@
         </template>
       </el-table-column>
       <!-- reviewers -->
-      </el-table-column>
       <el-table-column
         prop="average"
         label="Average"
@@ -125,12 +127,16 @@
           <div :class="`content ${scope.row.type === 'psa' ? '' : 'center'}`">
             <template v-if="review.reviewed">
               <template v-if="scope.row.type === 'psa'">
-                <psa-list
-                  :items="score[scope.row.type]"
-                />
+                <psa-list :items="score[scope.row.type]" />
               </template>
               <template v-else>
-                <p class="statement">{{ score[scope.row.type] === null ? 'N/A' : score[scope.row.type] }}</p>
+                <p class="statement">
+                  {{
+                    score[scope.row.type] === null
+                      ? 'N/A'
+                      : score[scope.row.type]
+                  }}
+                </p>
               </template>
             </template>
             <template v-else>
@@ -142,9 +148,7 @@
                 trigger="hover"
                 popper-class="score-popover left"
               >
-                <template>
-                  <p>{{ scope.row.question.guidance }}</p>
-                </template>
+                <p>{{ scope.row.question.guidance }}</p>
               </el-popover>
               <el-select
                 v-if="scope.row.type === 'psa'"
@@ -156,7 +160,6 @@
                 :disabled="review.reviewed"
               >
                 <el-option
-                  v-if="scope.row.type === 'psa'"
                   v-for="i in problemStatements"
                   :key="i.id"
                   :label="i.name"
@@ -169,14 +172,13 @@
                 clearable
                 :disabled="review.reviewed"
               >
-                <el-option
-                  v-for="i in points"
-                  :key="i"
-                  :label="i"
-                  :value="i"
-                />
+                <el-option v-for="i in points" :key="i" :label="i" :value="i" />
               </el-select>
-              <fa class="question-icon" :icon="['fas', 'question-circle']" v-popover:guidance />
+              <fa
+                v-popover:guidance
+                class="question-icon"
+                :icon="['fas', 'question-circle']"
+              />
             </template>
           </div>
         </template>
@@ -184,10 +186,15 @@
     </el-table>
     <template v-if="!review.reviewed">
       <span slot="footer" class="dialog-footer">
-        <el-button type="info" @click="setScoreDialog(false)" text>
+        <el-button type="info" text @click="setScoreDialog(false)">
           <translate>Cancel</translate>
         </el-button>
-        <el-button type="primary" :loading="loadingScore" :disabled="disabled" @click="handleScoreSubmit">
+        <el-button
+          type="primary"
+          :loading="loadingScore"
+          :disabled="disabled"
+          @click="handleScoreSubmit"
+        >
           <translate>Submit Score</translate>
         </el-button>
       </span>
@@ -196,8 +203,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import PsaList from "@/components/portfolio/dashboard/table/PsaList";
+import { mapState, mapActions } from 'vuex'
+import PsaList from '@/components/portfolio/dashboard/table/PsaList'
 
 export default {
   components: {
@@ -218,7 +225,7 @@ export default {
         impact: null,
         scale_phase: null,
       },
-    };
+    }
   },
   computed: {
     ...mapState({
@@ -232,33 +239,33 @@ export default {
     }),
     disabled() {
       if (this.review.reviewed) {
-        return true;
+        return true
       }
-      if (this.score.impact === null || this.score.impact === "") {
-        return true;
+      if (this.score.impact === null || this.score.impact === '') {
+        return true
       }
-      if (this.score.scale_phase === null || this.score.scale_phase === "") {
-        return true;
+      if (this.score.scale_phase === null || this.score.scale_phase === '') {
+        return true
       }
       return (
         Object.values(this.score)
           .filter((i) => i !== null)
-          .filter((i) => i !== "").length === 1 &&
+          .filter((i) => i !== '').length === 1 &&
         Object.values(this.score).filter((i) => Array.isArray(i) && i.length)
-          .length == 0
-      );
+          .length === 0
+      )
     },
     scoreTable() {
       return this.questionType.map((type) => {
         // will generate custom reviwers rows
-        let reviewers = [];
+        const reviewers = []
         if (this.review.review_scores) {
           this.review.review_scores.map((i) => {
             reviewers[i.reviewer.name] = {
               [type]: i[type],
               [`${type}_comment`]: i[`${type}_comment`],
-            };
-          });
+            }
+          })
         }
         // will return the custom score table
         return {
@@ -266,36 +273,33 @@ export default {
           type,
           ...reviewers,
           average: this.review.averages && this.review.averages[type],
-        };
-      });
+        }
+      })
     },
     reviewersName() {
       if (this.review.review_scores) {
-        return this.review.review_scores.map((i) => i.reviewer.name);
+        return this.review.review_scores.map((i) => i.reviewer.name)
       }
-      return [];
+      return []
     },
     examples() {
       switch (this.reviewersName.length) {
         case 0:
-          return ["example user 1", "example user 2"];
-          break;
+          return ['example user 1', 'example user 2']
         case 1:
-          return ["example user 1"];
-          break;
+          return ['example user 1']
         default:
-          return [];
-          break;
+          return []
       }
     },
   },
   methods: {
     ...mapActions({
-      setScoreDialog: "portfolio/setScoreDialog",
-      addScore: "portfolio/addScore",
+      setScoreDialog: 'portfolio/setScoreDialog',
+      addScore: 'portfolio/addScore',
     }),
     handleScoreSubmit() {
-      this.addScore({ id: this.review.id, data: { ...this.score } });
+      this.addScore({ id: this.review.id, data: { ...this.score } })
     },
     handleScoreFeed() {
       this.score = {
@@ -309,15 +313,15 @@ export default {
         ps: this.review.ps,
         impact: this.review.impact,
         scale_phase: this.review.scale_phase,
-      };
+      }
     },
   },
-};
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .score-popover.el-popover {
   padding: 0 !important;

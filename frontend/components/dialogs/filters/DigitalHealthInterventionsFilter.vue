@@ -1,8 +1,6 @@
 <template>
   <div class="DigitalHealthInterventionsFilter">
-    <el-row
-      type="flex"
-    >
+    <el-row type="flex">
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
@@ -42,55 +40,53 @@
 </template>
 
 <script>
-import difference from 'lodash/difference';
-import SelectorDialogColumn from '../SelectorDialogColumn';
-import SelectorDialogCategory from '../SelectorDialogCategory';
-import { mapGetters } from 'vuex';
+import difference from 'lodash/difference'
+import { mapGetters } from 'vuex'
+import SelectorDialogColumn from '../SelectorDialogColumn'
+import SelectorDialogCategory from '../SelectorDialogCategory'
 
 export default {
   components: {
     SelectorDialogColumn,
-    SelectorDialogCategory
+    SelectorDialogCategory,
   },
   props: {
     selected: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     childSelection: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      digitalHealthInterventions: 'projects/getDigitalHealthInterventions'
-    })
+      digitalHealthInterventions: 'projects/getDigitalHealthInterventions',
+    }),
   },
   methods: {
-    catSelected (category) {
-      const ids = this.categoryIds(category);
-      return difference(ids, this.selected).length === 0;
+    catSelected(category) {
+      const ids = this.categoryIds(category)
+      return difference(ids, this.selected).length === 0
     },
-    categoryIds (category) {
-      return category.subGroups.map(s => s.id);
+    categoryIds(category) {
+      return category.subGroups.map((s) => s.id)
     },
-    filterChange (value) {
-      this.$emit('update:selected', [...value]);
+    filterChange(value) {
+      this.$emit('update:selected', [...value])
     },
-    toggleAll (value, category) {
-      const categoryIds = this.categoryIds(category);
-      const filtered = this.selected.filter(s => !categoryIds.includes(s));
+    toggleAll(value, category) {
+      const categoryIds = this.categoryIds(category)
+      const filtered = this.selected.filter((s) => !categoryIds.includes(s))
       if (value) {
-        this.$emit('update:selected', [...filtered, ...categoryIds]);
+        this.$emit('update:selected', [...filtered, ...categoryIds])
       } else {
-        this.$emit('update:selected', filtered);
+        this.$emit('update:selected', filtered)
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -33,74 +33,76 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
 export default {
   components: {},
   mixins: [VeeValidationMixin],
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     scope: {
       type: String,
-      default: null
+      default: null,
     },
     draftRules: {
       type: Object,
-      default: null
+      default: null,
     },
     publishRules: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
       loading: false,
-      result: []
-    };
+      result: [],
+    }
   },
   computed: {
     ...mapGetters({
       country: 'project/getCountry',
-      getFacilities: 'countries/getCountryFacilityList'
+      getFacilities: 'countries/getCountryFacilityList',
     }),
-    facilities () {
-      return this.getFacilities(this.country);
+    facilities() {
+      return this.getFacilities(this.country)
     },
     innerValue: {
-      get () {
-        return this.value;
+      get() {
+        return this.value
       },
-      set (value) {
-        this.$emit('change', value);
-      }
-    }
+      set(value) {
+        this.$emit('change', value)
+      },
+    },
   },
   methods: {
-    search (query) {
+    search(query) {
       if (query) {
-        this.loading = true;
-        this.result = this.facilities.filter(f => f.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 100);
-        this.loading = false;
+        this.loading = true
+        this.result = this.facilities
+          .filter((f) => f.name.toLowerCase().startsWith(query.toLowerCase()))
+          .slice(0, 100)
+        this.loading = false
       }
     },
-    async validate () {
-      return this.$validator.validate();
-    }
-  }
-};
+    async validate() {
+      return await this.$validator.validate()
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -108,7 +110,7 @@ export default {
   width: 100%;
 }
 .FacilitySelectorDropdown {
-   .OrganisationItem {
+  .OrganisationItem {
     display: inline;
   }
 }

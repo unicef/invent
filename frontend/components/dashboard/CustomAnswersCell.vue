@@ -1,27 +1,18 @@
 <template>
   <div class="CustomAnswersCell">
     <ul v-if="type > 3">
-      <li
-        v-for="(v, index) in limited"
-        :key="index"
-      >
+      <li v-for="(v, index) in limited" :key="index">
         <span>
-          <fa
-            icon="check"
-            size="xs"
-          />
+          <fa icon="check" size="xs" />
         </span>
         <span>{{ v }}</span>
       </li>
       <li v-show="excluded > 0">
         <span>
-          <fa
-            icon="check"
-            size="xs"
-          />
+          <fa icon="check" size="xs" />
         </span>
         <span>
-          <translate :parameters="{excluded}">
+          <translate :parameters="{ excluded }">
             ... {excluded} more
           </translate>
         </span>
@@ -38,50 +29,54 @@ export default {
   props: {
     row: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     id: {
       type: Number,
-      default: null
+      default: null,
     },
     type: {
       type: Number,
-      default: null
+      default: null,
     },
     donorId: {
       type: Number,
-      default: null
+      default: null,
     },
     limit: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
-    source () {
-      return this.donorId ? 'donor_answers' : 'country_answers';
+    source() {
+      return this.donorId ? 'donor_answers' : 'country_answers'
     },
-    values () {
+    values() {
       if (this.id && this.row && this.row[this.source]) {
-        const module = this.row[this.source];
+        const module = this.row[this.source]
         if (this.donorId) {
-          return module[this.donorId] && module[this.donorId][this.id] ? module[this.donorId][this.id] : [];
+          return module[this.donorId] && module[this.donorId][this.id]
+            ? module[this.donorId][this.id]
+            : []
         }
-        return module[this.id] ? module[this.id] : [];
+        return module[this.id] ? module[this.id] : []
       }
-      return [];
+      return []
     },
-    limited () {
-      return this.limit && this.values.length > this.limit ? this.values.slice(0, this.limit) : this.values;
+    limited() {
+      return this.limit && this.values.length > this.limit
+        ? this.values.slice(0, this.limit)
+        : this.values
     },
-    excluded () {
+    excluded() {
       if (this.values && this.limited) {
-        return this.values.length - this.limited.length;
+        return this.values.length - this.limited.length
       }
-      return 0;
-    }
-  }
-};
+      return 0
+    },
+  },
+}
 </script>
 
 <style lang="less">

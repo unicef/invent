@@ -20,50 +20,49 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
   name: 'MultiSelector',
   model: {
     prop: 'platforms',
-    event: 'change'
+    event: 'change',
   },
   $_veeValidate: {
-    value () {
-      return this.platform;
-    }
+    value() {
+      return this.platform
+    },
   },
   props: {
     platforms: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     source: {
       type: String,
-      required: true
+      required: true,
     },
     placeholder: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   computed: {
-    sourceList () {
-      return this.$store.getters['projects/' + this.source];
-    }
+    sourceList() {
+      return this.$store.getters['projects/' + this.source]
+    },
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
-    }
-  }
-};
+    changeHandler(value) {
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  //@import "../../assets/style/variables.less";
-  //@import "../../assets/style/mixins.less";
+//@import "../../assets/style/variables.less";
+//@import "../../assets/style/mixins.less";
 
-  .PlatformSelector {
-    width: 100%;
-  }
+.PlatformSelector {
+  width: 100%;
+}
 </style>

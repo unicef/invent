@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="OrganisationItem"
-  >
+  <div class="OrganisationItem">
     <span v-if="organisation">
       {{ organisation.name }}
     </span>
@@ -12,33 +10,32 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
   props: {
     id: {
       type: [String, Number],
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
-      getOrganisationDetails: 'system/getOrganisationDetails'
+      getOrganisationDetails: 'system/getOrganisationDetails',
     }),
-    organisation () {
+    organisation() {
       if (this.id) {
-        const id = parseInt(this.id, 10);
-        return this.getOrganisationDetails(id);
+        const id = parseInt(this.id, 10)
+        return this.getOrganisationDetails(id)
       }
-      return null;
-    }
-  }
-};
+      return null
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
-
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 </style>

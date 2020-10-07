@@ -1,14 +1,11 @@
 <template>
   <div class="SubNationalLevelDeployment ItemIndent">
-    <div
-      v-if="countrySubLevelNames.first"
-      class="FirstSubLevel"
-    >
+    <div v-if="countrySubLevelNames.first" class="FirstSubLevel">
       <div class="CoverageSubtitle">
         <fa icon="map-marker-alt" />
         <translate
           key="firstSubLevel"
-          :parameters="{name: countrySubLevelNames.first}"
+          :parameters="{ name: countrySubLevelNames.first }"
         >
           If subnational, which {name} does your project cover?
         </translate>
@@ -45,15 +42,12 @@
         </el-col>
       </el-row>
     </div>
-    <div
-      v-if="countrySubLevelNames.second"
-      class="SecondSubLevel"
-    >
+    <div v-if="countrySubLevelNames.second" class="SecondSubLevel">
       <div class="CoverageSubtitle">
         <fa icon="map-marker-alt" />
         <translate
           key="secondSubLevel"
-          :parameters="{name: countrySubLevelNames.first}"
+          :parameters="{ name: countrySubLevelNames.first }"
         >
           If subnational, which {name} does your project cover?
         </translate>
@@ -93,112 +87,125 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../utilities/form';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters } from 'vuex'
+import { mapGettersActions } from '../../utilities/form'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
-import SubNationalLevelDeploymentItem from './SubNationalLevelDeploymentItem';
-import AddRmButtons from './AddRmButtons';
+import SubNationalLevelDeploymentItem from './SubNationalLevelDeploymentItem'
+import AddRmButtons from './AddRmButtons'
 
 export default {
   components: {
     SubNationalLevelDeploymentItem,
-    AddRmButtons
+    AddRmButtons,
   },
   mixins: [VeeValidationMixin],
   props: {
     draftRules: {
       type: Object,
-      default: null
+      default: null,
     },
     publishRules: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
       country: 'project/getCountry',
       getCountrySubLevelNames: 'countries/getCountrySubLevelNames',
       getCountryFirstSubLevel: 'countries/getCountryFirstSubLevel',
-      getCountrySecondSubLevel: 'countries/getCountrySecondSubLevel'
+      getCountrySecondSubLevel: 'countries/getCountrySecondSubLevel',
     }),
     ...mapGettersActions({
       coverage: ['project', 'getCoverage', 'setCoverage', 0],
       coverageData: ['project', 'getCoverageData', 'setCoverageData', 0],
-      coverageSecondLevel: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel', 0]
+      coverageSecondLevel: [
+        'project',
+        'getCoverageSecondLevel',
+        'setCoverageSecondLevel',
+        0,
+      ],
     }),
-    countrySubLevelNames () {
-      return this.getCountrySubLevelNames(this.country);
+    countrySubLevelNames() {
+      return this.getCountrySubLevelNames(this.country)
     },
-    countryFirstSubLevel () {
-      const result = this.getCountryFirstSubLevel(this.country);
-      return result || [];
+    countryFirstSubLevel() {
+      const result = this.getCountryFirstSubLevel(this.country)
+      return result || []
     },
-    countrySecondSubLevel () {
-      const result = this.getCountrySecondSubLevel(this.country);
-      return result || [];
-    }
+    countrySecondSubLevel() {
+      const result = this.getCountrySecondSubLevel(this.country)
+      return result || []
+    },
   },
   methods: {
-    async validate () {
-      const validators = await Promise.all(this.$refs.firstSubLevel.map(s => s.validate()));
+    async validate() {
+      const validators = await Promise.all(
+        this.$refs.firstSubLevel.map((s) => s.validate())
+      )
       if (this.countrySubLevelNames.second) {
-        validators.push(...await Promise.all(this.$refs.secondSubLevel.map(s => s.validate())));
+        validators.push(
+          ...(await Promise.all(
+            this.$refs.secondSubLevel.map((s) => s.validate())
+          ))
+        )
       }
-      console.log('sub natioal level deployment', validators);
-      return validators.reduce((a, c) => a && c, true);
+      console.log('sub natioal level deployment', validators)
+      return validators.reduce((a, c) => a && c, true)
     },
-    clear () {
-      this.errors.clear();
-      this.$refs.firstSubLevel.clear();
+    clear() {
+      this.errors.clear()
+      this.$refs.firstSubLevel.clear()
       if (this.countrySubLevelNames.second) {
-        this.$refs.secondSubLeve.clear();
+        this.$refs.secondSubLeve.clear()
       }
     },
-    addCoverage () {
-      this.coverage = [...this.coverage, null];
+    addCoverage() {
+      this.coverage = [...this.coverage, null]
     },
-    rmCoverage (index, id) {
-      this.coverage = this.coverage.filter((c, i) => i !== index);
+    rmCoverage(index, id) {
+      this.coverage = this.coverage.filter((c, i) => i !== index)
       if (id) {
-        this.coverageData = { subLevel: id, coverage: undefined };
+        this.coverageData = { subLevel: id, coverage: undefined }
       }
     },
-    addCoverageSecondLevel () {
-      this.coverageSecondLevel = [...this.coverageSecondLevel, null];
+    addCoverageSecondLevel() {
+      this.coverageSecondLevel = [...this.coverageSecondLevel, null]
     },
-    rmCoverageSecondLevel (index, id) {
-      this.coverageSecondLevel = this.coverageSecondLevel.filter((c, i) => i !== index);
+    rmCoverageSecondLevel(index, id) {
+      this.coverageSecondLevel = this.coverageSecondLevel.filter(
+        (c, i) => i !== index
+      )
       if (id) {
-        this.coverageData = { subLevel: id, coverage: undefined };
+        this.coverageData = { subLevel: id, coverage: undefined }
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .SubNationalLevelDeployment {
-    width: 100%;
+.SubNationalLevelDeployment {
+  width: 100%;
 
-    .CoverageWrapper {
-      margin-top: 30px;
-      padding-top: 15px;
-      border-top: 1px solid @colorGrayLight;
-    }
-
-    .CoverageSubtitle + .CoverageWrapper {
-      margin: 0;
-      padding: 0;
-      border: 0;
-    }
-
-    .AddRmButtons {
-      margin-top: 49px;
-    }
+  .CoverageWrapper {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid @colorGrayLight;
   }
+
+  .CoverageSubtitle + .CoverageWrapper {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .AddRmButtons {
+    margin-top: 49px;
+  }
+}
 </style>

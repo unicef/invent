@@ -1,13 +1,10 @@
 <template>
   <div
-    v-if="countryQuestions && countryQuestions.length >0"
+    v-if="countryQuestions && countryQuestions.length > 0"
     id="countrycustom"
     class="CountryCustom"
   >
-    <collapsible-card
-      ref="collapsible"
-      :title="customFieldsName(country.name)"
-    >
+    <collapsible-card ref="collapsible" :title="customFieldsName(country.name)">
       <custom-field
         v-for="(field, index) in countryQuestions"
         :id="field.id"
@@ -27,59 +24,61 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import { mapGetters } from 'vuex';
-import CollapsibleCard from '../CollapsibleCard';
-import CustomField from '../CustomField';
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import CollapsibleCard from '../CollapsibleCard'
+import CustomField from '../CustomField'
 
 export default {
   components: {
     CollapsibleCard,
-    CustomField
+    CustomField,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGetters({
       getCountryDetails: 'countries/getCountryDetails',
-      projectCountry: 'project/getCountry'
+      projectCountry: 'project/getCountry',
     }),
-    country () {
+    country() {
       if (this.projectCountry) {
-        return this.getCountryDetails(this.projectCountry);
+        return this.getCountryDetails(this.projectCountry)
       }
-      return null;
+      return null
     },
-    countryQuestions () {
+    countryQuestions() {
       if (this.country) {
-        return this.country.country_questions;
+        return this.country.country_questions
       }
-      return [];
-    }
+      return []
+    },
   },
   methods: {
-    customFieldsName (name) {
-      return this.$gettext('{name} custom fields', { name });
+    customFieldsName(name) {
+      return this.$gettext('{name} custom fields', { name })
     },
-    async validate () {
+    async validate() {
       if (this.$refs.collapsible) {
-        this.$refs.collapsible.expandCard();
+        this.$refs.collapsible.expandCard()
       }
       if (this.$refs.customQuestion) {
-        const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
-        console.log('Custom country questions validators', validations);
-        return validations.reduce((a, c) => a && c, true);
+        const validations = await Promise.all(
+          this.$refs.customQuestion.map((r) => r.validate())
+        )
+        console.log('Custom country questions validators', validations)
+        return validations.reduce((a, c) => a && c, true)
       }
-      return true;
-    }
-  }
-};
+      return true
+    },
+  },
+}
 </script>
 
 <style lang="less">
- @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .CountryCustom {}
-
+.CountryCustom {
+}
 </style>

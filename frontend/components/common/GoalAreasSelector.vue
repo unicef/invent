@@ -18,51 +18,51 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Number,
-      default: null
+      default: null,
     },
     placeholder: {
       type: String,
-      default: null
+      default: null,
     },
     clearable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
-      open: false
-    };
+      open: false,
+    }
   },
   computed: {
     ...mapGetters({
-      items: 'projects/getGoalAreas'
+      items: 'projects/getGoalAreas',
     }),
-    realPlaceholder () {
-      return this.placeholder || this.$gettext('Select from list');
-    }
+    realPlaceholder() {
+      return this.placeholder || this.$gettext('Select from list')
+    },
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
+    changeHandler(value) {
+      this.$emit('change', value)
     },
-    toggleHandler (value) {
+    toggleHandler(value) {
       if (value) {
-        this.open = value;
+        this.open = value
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -70,6 +70,5 @@ export default {
   width: 100%;
 }
 .GoalAreasSelectorDropdown {
-
 }
 </style>

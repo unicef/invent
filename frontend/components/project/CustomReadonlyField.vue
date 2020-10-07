@@ -1,7 +1,5 @@
 <template>
-  <simple-field
-    :header="question"
-  >
+  <simple-field :header="question">
     <template v-if="type < 5">
       <span v-show="value">
         {{ value }}
@@ -12,10 +10,7 @@
     </template>
     <template v-if="type === 5">
       <ul>
-        <li
-          v-for="v in value"
-          :key="v"
-        >
+        <li v-for="v in value" :key="v">
           <span v-show="v">
             {{ v }}
           </span>
@@ -29,61 +24,68 @@
 </template>
 
 <script>
-import SimpleField from './SimpleField';
-
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+import SimpleField from './SimpleField'
 
 export default {
   components: {
-    SimpleField
+    SimpleField,
   },
   props: {
     type: {
       type: Number,
-      required: true
+      required: true,
     },
     id: {
       type: Number,
-      required: true
+      required: true,
     },
     question: {
       type: String,
-      required: true
+      required: true,
     },
     donorId: {
       type: Number,
-      default: null
+      default: null,
     },
     isDraft: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      getPublishedCountryAnswerDetails: 'project/getPublishedCountryAnswerDetails',
+      getPublishedCountryAnswerDetails:
+        'project/getPublishedCountryAnswerDetails',
       getCountryAnswerDetails: 'project/getCountryAnswerDetails',
       getDonorsAnswerDetails: 'project/getDonorsAnswerDetails',
-      getPublishedDonorsAnswerDetails: 'project/getPublishedDonorsAnswerDetails'
+      getPublishedDonorsAnswerDetails:
+        'project/getPublishedDonorsAnswerDetails',
     }),
-    answer () {
-      let detailsFunction = () => null;
+    answer() {
+      let detailsFunction = () => null
       if (!this.donorId) {
-        detailsFunction = this.isDraft ? this.getCountryAnswerDetails : this.getPublishedCountryAnswerDetails;
+        detailsFunction = this.isDraft
+          ? this.getCountryAnswerDetails
+          : this.getPublishedCountryAnswerDetails
       } else {
-        detailsFunction = this.isDraft ? this.getPublishedDonorsAnswerDetails : this.getPublishedDonorsAnswerDetails;
+        detailsFunction = this.isDraft
+          ? this.getPublishedDonorsAnswerDetails
+          : this.getPublishedDonorsAnswerDetails
       }
-      const saved = detailsFunction(this.id);
-      return saved || {
-        question_id: this.id,
-        answer: []
-      };
+      const saved = detailsFunction(this.id)
+      return (
+        saved || {
+          question_id: this.id,
+          answer: [],
+        }
+      )
     },
-    value () {
-      return this.type === 5 ? this.answer.answer : this.answer.answer[0];
-    }
-  }
-};
+    value() {
+      return this.type === 5 ? this.answer.answer : this.answer.answer[0]
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -94,5 +96,4 @@ export default {
     width: 100%;
   }
 }
-
 </style>
