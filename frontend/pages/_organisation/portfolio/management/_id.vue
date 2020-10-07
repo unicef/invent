@@ -1,33 +1,21 @@
 <template>
   <section class="portfolio-area">
     <div class="content-area">
-      <div class="tabs-wrapper">
-        <div class="title">
+      <tabs :tabs="tabs" :tab="tab" @handleTab="setTab">
+        <template slot="title">
           <nuxt-link
             :to="localePath({ name: 'organisation-portfolio-management' })"
           >
             <fa icon="angle-left" size="sm" />
             <translate>Back</translate>
           </nuxt-link>
-          <h2>
+          <h2 class="translate">
             <translate :parameters="{ name }">
               Edit `{name}` portfolio
             </translate>
           </h2>
-        </div>
-        <div class="tabs">
-          <p
-            v-for="item in tabs"
-            :key="item.id"
-            :class="`${item.id === tab && 'active'}`"
-            @click="setTab(item.id)"
-          >
-            <fa :icon="item.icon" />
-            {{ $gettext(item.name) | translate }}
-            {{ ` (${item.total})` }}
-          </p>
-        </div>
-      </div>
+        </template>
+      </tabs>
       <div class="DashboardListView">
         <el-row>
           <table-top-actions />
@@ -49,6 +37,7 @@
 import AdvancedSearch from '@/components/dashboard/AdvancedSearch'
 import MainTable from '@/components/portfolio/dashboard/MainTable'
 import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
+import Tabs from '@/components/common/Tabs'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
 // dialogs
@@ -60,6 +49,7 @@ export default {
     MainTable,
     TableTopActions,
     Error,
+    Tabs,
   },
   async fetch({ store, query, error, params }) {
     store.dispatch('landing/resetSearch')
@@ -142,64 +132,9 @@ export default {
 
   .content-area {
     overflow-y: scroll;
-    > div {
-      background-color: #fbfaf8;
-    }
     .alert-portfolio {
       position: absolute;
       background-color: #fce9e8;
-    }
-    .tabs-wrapper {
-      height: 158px;
-      background-color: @colorWhite;
-      & > div {
-        background-color: @colorWhite;
-      }
-      padding: 0 43px;
-      .title {
-        display: flex;
-        align-items: center;
-        margin-top: 50px;
-        margin-bottom: 25px;
-        h2 {
-          transform: translateX(-25px);
-          margin: 0;
-          color: @colorBrandPrimary;
-          font-size: 36px;
-          letter-spacing: -1px;
-          line-height: 45px;
-          font-weight: 100;
-          flex-grow: 2;
-          text-align: center;
-        }
-        a {
-          text-decoration: none;
-          z-index: 1;
-        }
-      }
-      .tabs {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        p {
-          cursor: pointer;
-          color: @colorBrandGrayDark;
-          font-size: 14px;
-          text-transform: uppercase;
-          letter-spacing: 0;
-          line-height: 18px;
-          padding-bottom: 17px;
-          margin: 0 15px;
-          border-bottom: 3px solid transparent;
-          svg {
-            margin-right: 8px;
-          }
-          &.active {
-            color: @colorTextPrimary;
-            border-bottom: 3px solid @colorBrandPrimary;
-          }
-        }
-      }
     }
   }
 }

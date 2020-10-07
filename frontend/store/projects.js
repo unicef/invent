@@ -8,6 +8,13 @@ export const state = () => ({
   projectStructure: {},
   currentProjectToolkitVersions: [],
   currentProjectCoverageVersions: [],
+  // initiatives tabs
+  tabs: [
+    { id: 1, name: 'My initiatives', icon: 'star', total: 18 },
+    { id: 2, name: 'My reviews', icon: 'comment-alt', total: 50 },
+    { id: 3, name: 'My favorites', icon: 'heart', total: 25 },
+  ],
+  tab: 1,
 })
 
 const getTodayString = () => {
@@ -296,9 +303,18 @@ export const actions = {
   resetProjectsData({ commit }) {
     commit('RESET_PROJECTS_DATA')
   },
+  setTab({ state, commit, dispatch }, val) {
+    console.log(`moving to ${val}`)
+    commit('SET_VALUE', { key: 'tab', val })
+    // update initiatives/projects by tab click
+    // dispatch('getProjects', state.currentPortfolioId)
+  },
 }
 
 export const mutations = {
+  SET_VALUE(state, { key, val }) {
+    state[key] = val
+  },
   SET_USER_PROJECT_LIST: (state, projects) => {
     state.userProjects = projects
   },

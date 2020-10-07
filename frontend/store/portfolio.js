@@ -60,7 +60,7 @@ export const state = () => ({
   loadingScore: false,
   // add reviewer
   loadingAddReviewers: false,
-  // dashboard of portfolio manager interctions
+  // dashboard of portfolio manager interactions
   tabs: [
     { id: 1, name: 'Inventory', icon: 'folder', total: 18 },
     { id: 2, name: 'For review', icon: 'eye', total: 50 },
