@@ -31,7 +31,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
     PortfolioDetailsSerializer, PortfolioUpdateSerializer, PortfolioCreateSerializer, ProjectInPortfolioSerializer, \
     ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, ProjectPortfolioStateManagerSerializer
-
+from user.serializers import UserProfileListSerializer
 
 class ProjectPublicViewSet(ViewSet):
     def project_structure(self, request):
@@ -746,3 +746,50 @@ class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, Retr
             raise PermissionDenied("Approved project reviews may not be edited")
 
         return pps
+
+
+class FavoriteProjectsResultsSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class ProjectFavoritesViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    pagination_class = FavoriteProjectsResultsSetPagination
+    serializer_class = ProjectDraftSerializer  # TODO: Is this the right one?
+    filter_backends = (OrderingFilter,)
+    ordering_fields = ('id', 'name',)
+    ordering = ('id',)
+
+    def get_queryset(self):
+        return Project.objects.filter(favorited_by=self.request.user.userprofile)
+
+
+class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, ViewSet):
+    @staticmethod
+    def add(request, *args, **kwargs):
+        """
+        Adds the projects in the POST request's body to the user's favorite projects
+        """
+        profile = get_object_or_400(UserProfile, "No such userprofile", pk=request.user.userprofile.id)
+        if 'projects' not in request.data:
+            raise ValidationError({'projects': 'Project data is missing'})
+        profile.favorite_projects.add(*request.data['projects'])
+        profile.save()
+
+        data_serializer = UserProfileListSerializer(profile)
+        return Response(data_serializer.data, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def remove(request, *args, **kwargs):
+        """
+        Removes the projects in the POST request's body to the user's favorite projects
+        """
+        profile = get_object_or_400(UserProfile, "No such userprofile", pk=request.user.userprofile.id)
+        if 'projects' not in request.data:
+            raise ValidationError({'projects': 'Project data is missing'})
+        profile.favorite_projects.remove(*request.data['projects'])
+        profile.save()
+
+        data_serializer = UserProfileListSerializer(profile)
+        return Response(data_serializer.data, status=status.HTTP_200_OK)

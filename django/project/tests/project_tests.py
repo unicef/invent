@@ -938,3 +938,37 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']["partners"], new_partners)
         self.assertEqual(len(response.json()['published']["partners"]), 6)
+
+    def test_favorite_projects(self):
+        # create 5 projects
+        project_ids = list()
+        for _ in range(5):
+            project_id = self.create_new_project()[0]
+            project_ids.append(project_id)
+        project_country_offices = Project.objects.filter(pk__in=project_ids).values_list('country_office', flat=True)
+        # create test user
+        user_x_pr_id, user_x_client, user_x_key = self.create_user('train@choochoo.com', '12345789TIZ', '12345789TIZ')
+        url_list = reverse('favorite-projects-list')
+        response = user_x_client.get(url_list)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 0)
+        # add projects to the user's favorite list
+        url_add = reverse('favorite-projects-add')
+        projects_to_add = project_ids[:3]
+        response = user_x_client.post(url_add, {'projects': projects_to_add}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['favorite_projects']), set(project_ids[:3]))
+        # remove projects from the user's favorite list
+        projects_to_remove = project_ids[2:]  # we remove project_ids[3] from the favorite projects
+        url_remove = reverse('favorite-projects-remove')
+        response = user_x_client.post(url_remove, {'projects': projects_to_remove}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['favorite_projects']), set(project_ids[:2]))
+        # check the favorite projects list output
+        response = user_x_client.get(url_list)
+        self.assertEqual(response.status_code, 200)
+        import ipdb
+        ipdb.set_trace()
+
+
+

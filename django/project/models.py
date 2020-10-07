@@ -66,6 +66,8 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
+    # added here to avoid circular imports
+    favorited_by = models.ManyToManyField(UserProfile, related_name='favorite_projects', blank=True)
 
     def __str__(self):  # pragma: no cover
         return self.name

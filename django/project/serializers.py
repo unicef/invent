@@ -134,7 +134,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.data = validated_data
         instance.draft = validated_data
         instance.make_public_id(validated_data['country'])
-
         instance.save()
 
         return instance
