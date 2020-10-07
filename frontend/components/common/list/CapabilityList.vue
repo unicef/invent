@@ -1,14 +1,8 @@
 <template>
   <div class="HealthFocusAreasList">
     <ul>
-      <li
-        v-for="item in selected"
-        :key="item.id"
-      >
-        <list-action
-          v-if="actions"
-          @click="$emit('delete', item.id)"
-        />
+      <li v-for="item in selected" :key="item.id">
+        <list-action v-if="actions" @click="$emit('delete', item.id)" />
         <span> {{ item.name }} </span>
       </li>
     </ul>
@@ -16,50 +10,55 @@
 </template>
 
 <script>
-import ListAction from './ListAction';
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+import ListAction from './ListAction'
 export default {
   components: {
-    ListAction
+    ListAction,
   },
   props: {
     value: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     actions: {
       type: Boolean,
-      default: false
+      default: false,
     },
     limit: {
       type: Number,
-      default: null
+      default: null,
     },
     goalArea: {
       type: Number,
-      required: true
+      required: true,
     },
     type: {
       type: String,
       required: true,
-      validator: value => ['capabilityLevels', 'capabilityCategories', 'capabilitySubcategories'].includes(value)
-    }
+      validator: (value) =>
+        [
+          'capabilityLevels',
+          'capabilityCategories',
+          'capabilitySubcategories',
+        ].includes(value),
+    },
   },
   computed: {
     ...mapGetters({
       capabilityLevels: 'projects/getCapabilityLevels',
       capabilityCategories: 'projects/getCapabilityCategories',
-      capabilitySubcategories: 'projects/getCapabilitySubcategories'
+      capabilitySubcategories: 'projects/getCapabilitySubcategories',
     }),
-    items () {
-      return this[this.type](this.goalArea);
+    items() {
+      return this[this.type](this.goalArea)
     },
-    selected () {
-      const result = this.items.filter(h => this.value.includes(h.id));
-      return this.limit ? result.slice(0, this.limit) : result;
-    }
-  }
-};
+    selected() {
+      const result = this.items.filter((h) => this.value.includes(h.id))
+      return this.limit ? result.slice(0, this.limit) : result
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -67,6 +66,5 @@ export default {
   width: 100%;
 }
 .HealthFocusAreasSelectorDropdown {
-
 }
 </style>

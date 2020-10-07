@@ -12,9 +12,7 @@
         row
       >
         <template slot="label">
-          <translate key="managers">
-            Add/remove manager(s)
-          </translate>
+          <translate key="managers"> Add/remove manager(s) </translate>
         </template>
         <portfolio-select
           v-model="managers"
@@ -31,49 +29,49 @@
 </template>
 
 <script>
-import { mapGettersActions } from "@/utilities/form";
-import { mapGetters, mapState } from "vuex";
-import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
-import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
-import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
-import PortfolioSelect from "@/components/portfolio/form/inputs/PortfolioSelect";
+import { mapGettersActions } from '@/utilities/form'
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin'
+import PortfolioFieldsetMixin from '@/components/mixins/PortfolioFieldsetMixin'
+import CollapsibleCard from '@/components/portfolio/CollapsibleCard'
+import PortfolioSelect from '@/components/portfolio/form/inputs/PortfolioSelect'
 
 export default {
   components: {
     CollapsibleCard,
-    PortfolioSelect
+    PortfolioSelect,
   },
   mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   computed: {
     ...mapGetters({
-      managerList: "system/getUserProfilesNoFilter"
+      managerList: 'system/getUserProfilesNoFilter',
     }),
     ...mapGettersActions({
-      managers: ["portfolio", "getManagers", "setManagers", 0]
-    })
+      managers: ['portfolio', 'getManagers', 'setManagers', 0],
+    }),
   },
   methods: {
     async validate() {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([this.$validator.validate()]);
-      console.log("Add/remove manager(s) published validation", validations);
-      return validations.reduce((a, c) => a && c, true);
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      console.log('Add/remove manager(s) published validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft() {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
-        this.$validator.validate("managers")
-      ]);
-      console.log("Add/remove manager(s) draft validation", validations);
-      return validations.reduce((a, c) => a && c, true);
-    }
-  }
-};
+        this.$validator.validate('managers'),
+      ])
+      console.log('Add/remove manager(s) draft validation', validations)
+      return validations.reduce((a, c) => a && c, true)
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .PortfolioManagers {
   .portfolio-select {

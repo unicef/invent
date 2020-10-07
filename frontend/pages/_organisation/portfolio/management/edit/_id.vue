@@ -18,35 +18,35 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import NewPortfolioForm from "@/components/portfolio/form/NewPortfolioForm";
+import { mapState } from 'vuex'
+import NewPortfolioForm from '@/components/portfolio/form/NewPortfolioForm'
 
 export default {
   components: {
-    NewPortfolioForm
-  },
-  async fetch({ store, params }) {
-    await store.dispatch("portfolio/getPortfolioDetails", params.id);
+    NewPortfolioForm,
   },
   data() {
     return {
-      fixedName: ""
-    };
+      fixedName: '',
+    }
   },
-  mounted() {
-    this.fixedName = this.name;
+  async fetch({ store, params }) {
+    await store.dispatch('portfolio/getPortfolioDetails', params.id)
   },
   computed: {
     ...mapState({
-      name: state => state.portfolio.name
-    })
-  }
-};
+      name: (state) => state.portfolio.name,
+    }),
+  },
+  mounted() {
+    this.fixedName = this.name
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .portfolio {
   display: flex;

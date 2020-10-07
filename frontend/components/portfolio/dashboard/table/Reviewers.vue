@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="item in items" class="reviewers">
+    <div v-for="(item, i) in items" :key="i" class="reviewers">
       <div :class="`${item.complete && 'complete'}`">
         <p>
           <b>{{ item.reviewer.name }}</b>
@@ -13,7 +13,7 @@
         </p>
       </div>
     </div>
-    <p @click="handleReview(id)" class="assing">
+    <p class="assing" @click="handleReview(id)">
       <fa icon="plus" />
       <translate>Assign Reviewers</translate>
     </p>
@@ -21,35 +21,35 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 
 export default {
   props: {
     id: {
       type: Number,
-      required: true
+      required: true,
     },
     items: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     ...mapActions({
-      setReviewDialog: "portfolio/setReviewDialog",
-      setCurrentProjectId: "portfolio/setCurrentProjectId"
+      setReviewDialog: 'portfolio/setReviewDialog',
+      setCurrentProjectId: 'portfolio/setCurrentProjectId',
     }),
     handleReview(id) {
-      this.setReviewDialog(true);
-      this.setCurrentProjectId(id);
-    }
-  }
-};
+      this.setReviewDialog(true)
+      this.setCurrentProjectId(id)
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .reviewers {
   display: flex;

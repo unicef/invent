@@ -5,17 +5,15 @@
 </template>
 
 <script>
-import DhaVerify from '../../../../components/DhaVerify';
+import DhaVerify from '../../../../components/DhaVerify'
 
 export default {
-
   components: { DhaVerify },
 
-  async fetch ({ params, store }) {
-    await store.dispatch('user/verifyEmail', params.key);
-  }
-};
+  async fetch({ params, store }) {
+    await store.dispatch('user/verifyEmail', params.key)
+  },
+}
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>

@@ -5,20 +5,16 @@
 </template>
 
 <script>
-
 export default {
-  components: {
+  components: {},
+  fetch({ store }) {
+    store.dispatch('landing/resetSearch')
   },
-  fetch ({ store }) {
-    store.dispatch('landing/resetSearch');
+  mounted() {
+    const cmsFactory = require('../../angular/Cms/cmsFactory')
+    cmsFactory.cmsFactory()
   },
-  mounted () {
-    const cmsFactory = require('../../angular/Cms/cmsFactory');
-    cmsFactory.cmsFactory();
-  }
-};
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,1 +1,1 @@
-import '../vue.config.js';
+import '../vue.config.js'

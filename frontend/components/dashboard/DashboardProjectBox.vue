@@ -13,62 +13,64 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
-import MapProjectsBox from '../common/map/MapProjectsBox';
+import MapProjectsBox from '../common/map/MapProjectsBox'
 
 export default {
   components: {
-    MapProjectsBox
+    MapProjectsBox,
   },
-  props: {
-  },
+  props: {},
   computed: {
     ...mapGetters({
       getActiveCountry: 'dashboard/getActiveCountry',
       selectedCountry: 'dashboard/getSelectedCountry',
       getActiveTab: 'dashboard/getProjectBoxActiveTab',
       activeSubLevel: 'dashboard/getActiveSubLevel',
-      currentSubNationalProjects: 'dashboard/getSelectedCountryCurrentSubLevelProjects',
+      currentSubNationalProjects:
+        'dashboard/getSelectedCountryCurrentSubLevelProjects',
       filteredProjects: 'dashboard/getActiveTabProjects',
-      nationalProjects: 'dashboard/getSelectedCountryNationalProjects'
+      nationalProjects: 'dashboard/getSelectedCountryNationalProjects',
     }),
     activeCountry: {
-      get () {
-        return this.getActiveCountry;
+      get() {
+        return this.getActiveCountry
       },
-      set (value) {
-        this.setActiveCountry(value);
-      }
+      set(value) {
+        this.setActiveCountry(value)
+      },
     },
     activeTab: {
-      get () {
-        return this.getActiveTab;
+      get() {
+        return this.getActiveTab
       },
-      set (value) {
-        this.setActiveTab(value);
-      }
-    }
+      set(value) {
+        this.setActiveTab(value)
+      },
+    },
   },
   methods: {
     ...mapActions({
       setActiveCountry: 'dashboard/setActiveCountry',
-      setActiveTab: 'dashboard/setProjectBoxActiveTab'
-    })
-  }
-};
+      setActiveTab: 'dashboard/setProjectBoxActiveTab',
+    }),
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .DashboardProjectsBox {
-    .MapProjectBox {
-      .el-tabs__content {
-        max-height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 156px);
-        overflow-y: auto;
-      }
+.DashboardProjectsBox {
+  .MapProjectBox {
+    .el-tabs__content {
+      max-height: calc(
+        100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 156px
+      );
+      overflow-y: auto;
     }
   }
+}
 </style>

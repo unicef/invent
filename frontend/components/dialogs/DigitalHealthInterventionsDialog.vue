@@ -9,10 +9,7 @@
     custom-class="SelectDHIDialog"
     @open="loadCurrentSelection"
   >
-    <el-row
-      type="flex"
-      class="DHIMainCategories"
-    >
+    <el-row type="flex" class="DHIMainCategories">
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
@@ -36,31 +33,17 @@
     </el-row>
 
     <span slot="footer">
-      <el-row
-        type="flex"
-        align="center"
-      >
+      <el-row type="flex" align="center">
         <el-col class="SecondaryButtons">
-          <el-button
-            type="text"
-            class="CancelButton"
-            @click="cancel"
-          >
+          <el-button type="text" class="CancelButton" @click="cancel">
             <translate>Cancel</translate>
           </el-button>
-          <el-button
-            type="text"
-            class="DeleteButton"
-            @click="clearAll"
-          >
+          <el-button type="text" class="DeleteButton" @click="clearAll">
             <translate>Clear All</translate>
           </el-button>
         </el-col>
         <el-col class="PrimaryButtons">
-          <el-button
-            type="primary"
-            @click="apply"
-          >
+          <el-button type="primary" @click="apply">
             <translate>Confirm</translate>
           </el-button>
         </el-col>
@@ -70,122 +53,121 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import SelectorDialogColumn from './SelectorDialogColumn';
-import SelectorDialogCategory from './SelectorDialogCategory';
+import { mapGetters, mapActions } from 'vuex'
+import SelectorDialogColumn from './SelectorDialogColumn'
+import SelectorDialogCategory from './SelectorDialogCategory'
 
 export default {
   components: {
     SelectorDialogColumn,
-    SelectorDialogCategory
+    SelectorDialogCategory,
   },
-  data () {
+  data() {
     return {
       currentSelection: [],
-      expand: []
-    };
+      expand: [],
+    }
   },
   computed: {
     ...mapGetters({
       selectedPlatform: 'layout/getDigitalHealthInterventionsDialogState',
       digitalHealthInterventions: 'projects/getDigitalHealthInterventions',
-      selectedDHI: 'project/getDigitalHealthInterventions'
+      selectedDHI: 'project/getDigitalHealthInterventions',
     }),
-    savedSelection () {
+    savedSelection() {
       return this.selectedDHi
-        .filter(dhi => dhi.platform === this.selectedPlatform)
-        .map(dhi => dhi.id);
+        .filter((dhi) => dhi.platform === this.selectedPlatform)
+        .map((dhi) => dhi.id)
     },
     visible: {
-      get () {
-        return this.selectedPlatform !== null;
+      get() {
+        return this.selectedPlatform !== null
       },
-      set () {
-        this.setDigitalHealthInterventionsDialogState(null);
-      }
-    }
+      set() {
+        this.setDigitalHealthInterventionsDialogState(null)
+      },
+    },
   },
   methods: {
     ...mapActions({
-      setDigitalHealthInterventionsDialogState: 'layout/setDigitalHealthInterventionsDialogState',
-      setDigitalHealthInterventions: 'project/setDigitalHealthInterventions'
+      setDigitalHealthInterventionsDialogState:
+        'layout/setDigitalHealthInterventionsDialogState',
+      setDigitalHealthInterventions: 'project/setDigitalHealthInterventions',
     }),
 
-    loadCurrentSelection () {
-      this.currentSelection = [...this.selectedDHI];
+    loadCurrentSelection() {
+      this.currentSelection = [...this.selectedDHI]
     },
-    clearAll () {
-      this.currentSelection = [];
+    clearAll() {
+      this.currentSelection = []
     },
-    cancel () {
-      this.setDigitalHealthInterventionsDialogState(null);
+    cancel() {
+      this.setDigitalHealthInterventionsDialogState(null)
     },
-    handleToggleExpand (category, expand) {
+    handleToggleExpand(category, expand) {
       if (this.expand.includes(category) && !expand) {
-        this.expand = this.expand.filter(val => val !== category);
-      } else {
-        if (expand) {
-          this.expand = [...this.expand, category];
-        }
+        this.expand = this.expand.filter((val) => val !== category)
+      } else if (expand) {
+        this.expand = [...this.expand, category]
       }
     },
-    apply () {
-      const selected = this.currentSelection.map(id => ({
+    apply() {
+      const selected = this.currentSelection.map((id) => ({
         platform: this.selectedPlatform,
-        id
-      }));
+        id,
+      }))
       const filtered = this.selectedDHi.filter(
-        dhi => dhi.platform !== this.selectedPlatform
-      );
-      this.setDigitalHealthInterventions([...filtered, ...selected]);
-      this.setDigitalHealthInterventionsDialogState(null);
-    }
-  }
-};
+        (dhi) => dhi.platform !== this.selectedPlatform
+      )
+      this.setDigitalHealthInterventions([...filtered, ...selected])
+      this.setDigitalHealthInterventionsDialogState(null)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .SelectDHIDialog {
-    max-width: @appWidthMaxLimit * 0.9;
-    height: 80vh;
-    margin-top: 0;
-    margin-bottom: 0;
+.SelectDHIDialog {
+  max-width: @appWidthMaxLimit * 0.9;
+  height: 80vh;
+  margin-top: 0;
+  margin-bottom: 0;
 
-    .el-dialog__body {
-      padding: 0;
-      height: calc(80vh - (@dialogHeaderFooterHeight*2));
-    }
+  .el-dialog__body {
+    padding: 0;
+    height: calc(80vh - (@dialogHeaderFooterHeight*2));
+  }
 
-    .DHIMainCategories {
-      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+  .DHIMainCategories {
+    height: calc(80vh - (@dialogHeaderFooterHeight*2));
 
-      > .el-col {
-        overflow: hidden;
-        border-right: 1px solid @colorGrayLight;
+    > .el-col {
+      overflow: hidden;
+      border-right: 1px solid @colorGrayLight;
 
-        .Main {
-          .Item {
-            .el-checkbox__label {
-              font-size: @fontSizeSmall;
-              line-height: 16px;
-            }
+      .Main {
+        .Item {
+          .el-checkbox__label {
+            font-size: @fontSizeSmall;
+            line-height: 16px;
           }
         }
+      }
 
-        &:last-child {
-          border: 0;
+      &:last-child {
+        border: 0;
 
-          .SelectorDialogColumn {
-            .Header {
-              width: calc(90vw / 4);
-              max-width: calc((@appWidthMaxLimit * 0.9) / 4);
-            }
+        .SelectorDialogColumn {
+          .Header {
+            width: calc(90vw / 4);
+            max-width: calc((@appWidthMaxLimit * 0.9) / 4);
           }
         }
       }
     }
   }
+}
 </style>

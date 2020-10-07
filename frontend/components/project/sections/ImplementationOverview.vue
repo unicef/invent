@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="implementation"
-    class="ImplementationOverview"
-  >
+  <div id="implementation" class="ImplementationOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
@@ -14,9 +11,7 @@
         :publish-rule="publishRules.goal_area"
       >
         <template slot="label">
-          <translate key="unicef-goal">
-            Goal Area
-          </translate>
+          <translate key="unicef-goal"> Goal Area </translate>
         </template>
 
         <GoalAreasSelector
@@ -34,9 +29,7 @@
         :publish-rule="publishRules.result_area"
       >
         <template slot="label">
-          <translate key="result-area">
-            Result Area
-          </translate>
+          <translate key="result-area"> Result Area </translate>
         </template>
 
         <ResultAreasSelector
@@ -172,7 +165,10 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate>Please provide information on the metrics for success of the initiative. </translate>
+            <translate
+              >Please provide information on the metrics for success of the
+              initiative.
+            </translate>
           </p>
         </span>
       </custom-required-form-item>
@@ -199,7 +195,10 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate>Please provide information on the successes the intiative has achieved to date. </translate>
+            <translate
+              >Please provide information on the successes the intiative has
+              achieved to date.
+            </translate>
           </p>
         </span>
       </custom-required-form-item>
@@ -228,7 +227,10 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate>Provide the number of individuals reached by this initiative to date</translate>
+            <translate
+              >Provide the number of individuals reached by this initiative to
+              date</translate
+            >
           </p>
         </span>
       </custom-required-form-item>
@@ -255,7 +257,12 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate>Please provide information about the realisation of the initiative's objectives at the time of entry. This could include number of target population reached, partnerships, funding secured, spin-off initiatives, etc.</translate>
+            <translate
+              >Please provide information about the realisation of the
+              initiative's objectives at the time of entry. This could include
+              number of target population reached, partnerships, funding
+              secured, spin-off initiatives, etc.</translate
+            >
           </p>
         </span>
       </custom-required-form-item>
@@ -287,7 +294,8 @@
       >
         <template slot="label">
           <translate key="awp">
-            Please input wich outcomes or activities the initiative serves in the Annual Work Plan.
+            Please input wich outcomes or activities the initiative serves in
+            the Annual Work Plan.
           </translate>
         </template>
 
@@ -301,10 +309,7 @@
         />
       </custom-required-form-item>
 
-      <el-row
-        v-for="(wbsItem, index) in wbs"
-        :key="index"
-      >
+      <el-row v-for="(wbsItem, index) in wbs" :key="index">
         <el-col :span="16">
           <custom-required-form-item
             :error="errors.first('wbs')"
@@ -327,10 +332,7 @@
             />
           </custom-required-form-item>
         </el-col>
-        <el-col
-          :span="8"
-          class="btContainer"
-        >
+        <el-col :span="8" class="btContainer">
           <add-rm-buttons
             :show-add="isLastAndExist(wbs, index)"
             :show-rm="wbs.length > 1"
@@ -341,10 +343,7 @@
       </el-row>
 
       <el-row>
-        <el-col
-          :span="16"
-          class="BudgetSection"
-        >
+        <el-col :span="16" class="BudgetSection">
           <custom-required-form-item
             :error="errors.first('total_budget')"
             :draft-rule="draftRules.total_budget"
@@ -369,7 +368,10 @@
             <span class="Hint">
               <fa icon="info-circle" />
               <p>
-                <translate>Please provide the total estimated budget from inception to scale. </translate>
+                <translate
+                  >Please provide the total estimated budget from inception to
+                  scale.
+                </translate>
               </p>
             </span>
           </custom-required-form-item>
@@ -381,9 +383,7 @@
             :publish-rule="publishRules.currency"
           >
             <template slot="label">
-              <translate key="currency-label">
-                Currency
-              </translate>
+              <translate key="currency-label"> Currency </translate>
             </template>
 
             <single-select
@@ -424,9 +424,7 @@
         :publish-rule="publishRules.funding_needs"
       >
         <template slot="label">
-          <translate key="funding_needs">
-            Funding Needs
-          </translate>
+          <translate key="funding_needs"> Funding Needs </translate>
         </template>
 
         <character-count-input
@@ -445,9 +443,7 @@
         :publish-rule="publishRules.partnership_needs"
       >
         <template slot="label">
-          <translate key="partnership_needs">
-            Partnership Needs
-          </translate>
+          <translate key="partnership_needs"> Partnership Needs </translate>
         </template>
 
         <character-count-input
@@ -467,9 +463,7 @@
         :draft-rule="draftRules.link_website"
         :publish-rule="publishRules.link_website"
       >
-        <template slot="label">
-          {{ linkType.name }} URL
-        </template>
+        <template slot="label"> {{ linkType.name }} URL </template>
 
         <character-count-input
           v-validate="rules.link_website"
@@ -479,39 +473,35 @@
           data-vv-as="Link Website"
           @input="setLinkWebsite($event, index)"
         />
-        <span
-          v-if="index === 0"
-          class="Hint"
-        >
+        <span v-if="index === 0" class="Hint">
           <fa icon="info-circle" />
           <p>
             <translate>URL format: https://invent.unicef.org</translate>
           </p>
         </span>
       </custom-required-form-item>
-
     </collapsible-card>
   </div>
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import GoalAreasSelector from '@/components/common/GoalAreasSelector'
+import ResultAreasSelector from '@/components/common/ResultAreasSelector'
+import SingleSelect from '@/components/common/SingleSelect'
+import MultiSelector from '@/components/project/MultiSelector'
+import AddRmButtons from '@/components/project/AddRmButtons'
+import { mapGetters } from 'vuex'
+import findIndex from 'lodash/findIndex'
+import find from 'lodash/find'
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
-import CollapsibleCard from '../CollapsibleCard';
-import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
-import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
-import GoalAreasSelector from '@/components/common/GoalAreasSelector';
-import ResultAreasSelector from '@/components/common/ResultAreasSelector';
-import CapabilitySelector from '../CapabilitySelector';
-import PlatformSelector from '../PlatformSelector';
-import SingleSelect from '@/components/common/SingleSelect';
-import MultiSelector from '@/components/project/MultiSelector';
-import AddRmButtons from '@/components/project/AddRmButtons';
-import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters } from 'vuex';
-import findIndex from 'lodash/findIndex';
-import find from 'lodash/find';
+import CollapsibleCard from '../CollapsibleCard'
+import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector'
+import HealthFocusAreasSelector from '../HealthFocusAreasSelector'
+import CapabilitySelector from '../CapabilitySelector'
+import PlatformSelector from '../PlatformSelector'
+import { mapGettersActions } from '../../../utilities/form'
 
 export default {
   components: {
@@ -524,7 +514,7 @@ export default {
     PlatformSelector,
     AddRmButtons,
     MultiSelector,
-    SingleSelect // ,
+    SingleSelect, // ,
     // DigitalHealthInterventionsSelector,
     // DonorSelector,
     // FormHint
@@ -537,20 +527,45 @@ export default {
       getCapabilityLevelsItems: 'projects/getCapabilityLevels',
       getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
       getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories',
-      getLinkTypes: 'system/getPartnerTypes'
+      getLinkTypes: 'system/getPartnerTypes',
     }),
     ...mapGettersActions({
       goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],
       result_area: ['project', 'getResultArea', 'setResultArea', 0],
       program_targets: ['project', 'getProgramTargets', 'setProgramTargets', 0],
-      program_targets_achieved: ['project', 'getProgramTargetsAchieved', 'setProgramTargetsAchieved', 0],
-      current_achievements: ['project', 'getCurrentAchievements', 'setCurrentAchievements', 0],
+      program_targets_achieved: [
+        'project',
+        'getProgramTargetsAchieved',
+        'setProgramTargetsAchieved',
+        0,
+      ],
+      current_achievements: [
+        'project',
+        'getCurrentAchievements',
+        'setCurrentAchievements',
+        0,
+      ],
       awp: ['project', 'getAwp', 'setAwp', 0],
       cpd: ['project', 'getCpd', 'setCpd', 0],
-      total_budget_narrative: ['project', 'getTotalBudgetNarrative', 'setTotalBudgetNarrative', 0],
+      total_budget_narrative: [
+        'project',
+        'getTotalBudgetNarrative',
+        'setTotalBudgetNarrative',
+        0,
+      ],
       funding_needs: ['project', 'getFundingNeeds', 'setFundingNeeds', 0],
-      partnership_needs: ['project', 'getPartnershipNeeds', 'setPartnershipNeeds', 0],
-      target_group_reached: ['project', 'getTargetGroupReached', 'setTargetGroupReached', 0],
+      partnership_needs: [
+        'project',
+        'getPartnershipNeeds',
+        'setPartnershipNeeds',
+        0,
+      ],
+      target_group_reached: [
+        'project',
+        'getTargetGroupReached',
+        'setTargetGroupReached',
+        0,
+      ],
       currency: ['project', 'getCurrency', 'setCurrency', 0],
       total_budget: ['project', 'getTotalBudget', 'setTotalBudget', 0],
       links: ['project', 'getLinks', 'setLinks', 0],
@@ -559,87 +574,86 @@ export default {
         'project',
         'getCapabilityLevels',
         'setCapabilityLevels',
-        0
+        0,
       ],
       capability_categories: [
         'project',
         'getCapabilityCategories',
         'setCapabilityCategories',
-        0
+        0,
       ],
       capability_subcategories: [
         'project',
         'getCapabilitySubcategories',
         'setCapabilitySubcategories',
-        0
+        0,
       ],
       platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
       digitalHealthInterventions: [
         'project',
         'getDigitalHealthInterventions',
         'setDigitalHealthInterventions',
-        0
+        0,
       ],
       health_focus_areas: [
         'project',
         'getHealthFocusAreas',
         'setHealthFocusAreas',
-        0
+        0,
       ],
       hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
-      donors: ['project', 'getDonors', 'setDonors', 0]
+      donors: ['project', 'getDonors', 'setDonors', 0],
     }),
-    shoDHAFields () {
-      return this.goal_area === 1;
-    }
+    shoDHAFields() {
+      return this.goal_area === 1
+    },
   },
   methods: {
-    setLinkWebsite (url, index) {
-      const links = [...this.links];
-      const linkIndex = findIndex(links, (l) => l.link_type === index);
+    setLinkWebsite(url, index) {
+      const links = [...this.links]
+      const linkIndex = findIndex(links, (l) => l.link_type === index)
       const data = {
         link_url: url,
-        link_type: index
-      };
-      if (linkIndex !== -1) {
-        links[linkIndex] = data;
-      } else {
-        links.push(data);
+        link_type: index,
       }
-      this.links = links;
+      if (linkIndex !== -1) {
+        links[linkIndex] = data
+      } else {
+        links.push(data)
+      }
+      this.links = links
     },
-    getLinkWebsite (index) {
-      const link = find(this.links, (l) => l.link_type === index);
-      return link ? link.link_url : '';
+    getLinkWebsite(index) {
+      const link = find(this.links, (l) => l.link_type === index)
+      return link ? link.link_url : ''
     },
-    async validate () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([this.$validator.validate(
-      )]);
-      console.log('Implementation overview validations', validations);
-      return validations.reduce((a, c) => a && c, true);
+    async validate() {
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      console.log('Implementation overview validations', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
-    isLastAndExist (collection, index) {
-      return !!(collection.length - 1 === index && collection[index]);
+    isLastAndExist(collection, index) {
+      return !!(collection.length - 1 === index && collection[index])
     },
-    addDhi () {
-      this.wbs = [...this.wbs, null];
+    addDhi() {
+      this.wbs = [...this.wbs, null]
     },
-    rmDhi (index) {
-      this.wbs = this.wbs.filter((p, i) => i !== index);
+    rmDhi(index) {
+      this.wbs = this.wbs.filter((p, i) => i !== index)
     },
-    setWbsItem (index, value) {
-      const wbs = [...this.wbs];
-      wbs[index] = value;
-      this.wbs = wbs;
-    }
-  }
-};
+    setWbsItem(index, value) {
+      const wbs = [...this.wbs]
+      wbs[index] = value
+      this.wbs = wbs
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .ImplementationOverview {
   .DigitalHealthIntervention {

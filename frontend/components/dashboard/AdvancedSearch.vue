@@ -50,7 +50,9 @@
             :goal-area="selectedGoal"
             :limit="4"
             actions
-            @delete="deleteFromCollection($event, 'selectedCapabilityCategories')"
+            @delete="
+              deleteFromCollection($event, 'selectedCapabilityCategories')
+            "
           />
         </filter-item>
         <filter-item
@@ -65,7 +67,9 @@
             :goal-area="selectedGoal"
             :limit="4"
             actions
-            @delete="deleteFromCollection($event, 'selectedCapabilitySubcategories')"
+            @delete="
+              deleteFromCollection($event, 'selectedCapabilitySubcategories')
+            "
           />
         </filter-item>
       </template>
@@ -128,21 +132,21 @@
 </template>
 
 <script>
-import { mapGettersActions } from '@/utilities/form';
+import { mapGettersActions } from '@/utilities/form'
 
-import FilterPresetsActions from '@/components/dashboard/FilterPresetsActions';
-import SearchBox from '@/components/dashboard/SearchBox';
-import CountryFilters from '@/components/dashboard/CountryFilters';
-import FilterItem from '@/components/dashboard/FilterItem';
-import DhiCategoriesList from '@/components/common/list/DhiCategoriesList';
-import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
-import HealthSystemChallengesList from '@/components/common/list/HealthSystemChallengesList';
-import CapabilityList from '@/components/common/list/CapabilityList';
-import SimplePlatformList from '@/components/common/list/SimplePlatformList';
-import GoalAreasSelector from '@/components/common/GoalAreasSelector';
-import ResultAreasSelector from '@/components/common/ResultAreasSelector';
-import MultiSelector from '@/components/project/MultiSelector';
-import { mapGetters } from 'vuex';
+import FilterPresetsActions from '@/components/dashboard/FilterPresetsActions'
+import SearchBox from '@/components/dashboard/SearchBox'
+import CountryFilters from '@/components/dashboard/CountryFilters'
+import FilterItem from '@/components/dashboard/FilterItem'
+import DhiCategoriesList from '@/components/common/list/DhiCategoriesList'
+import HfaCategoriesList from '@/components/common/list/HfaCategoriesList'
+import HealthSystemChallengesList from '@/components/common/list/HealthSystemChallengesList'
+import CapabilityList from '@/components/common/list/CapabilityList'
+import SimplePlatformList from '@/components/common/list/SimplePlatformList'
+import GoalAreasSelector from '@/components/common/GoalAreasSelector'
+import ResultAreasSelector from '@/components/common/ResultAreasSelector'
+import MultiSelector from '@/components/project/MultiSelector'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -157,71 +161,101 @@ export default {
     CapabilityList,
     GoalAreasSelector,
     ResultAreasSelector,
-    MultiSelector
+    MultiSelector,
   },
   computed: {
     ...mapGetters({
-      goalAreas: 'projects/getGoalAreas'
+      goalAreas: 'projects/getGoalAreas',
     }),
     ...mapGettersActions({
       selectedGoal: ['dashboard', 'getSelectedGoal', 'setSelectedGoal', 0],
-      selectedResult: ['dashboard', 'getSelectedResult', 'setSelectedResult', 0],
+      selectedResult: [
+        'dashboard',
+        'getSelectedResult',
+        'setSelectedResult',
+        0,
+      ],
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
-      selectedCapabilityLevels: ['dashboard', 'getSelectedCapabilityLevels', 'setSelectedCapabilityLevels', 0],
-      selectedCapabilityCategories: ['dashboard', 'getSelectedCapabilityCategories', 'setSelectedCapabilityCategories', 0],
-      selectedCapabilitySubcategories: ['dashboard', 'getSelectedCapabilitySubcategories', 'setSelectedCapabilitySubcategories', 0],
-      selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0],
-      innovationCategories: ['dashboard', 'getInnovationCategories', 'setInnovationCategories', 0]
+      selectedCapabilityLevels: [
+        'dashboard',
+        'getSelectedCapabilityLevels',
+        'setSelectedCapabilityLevels',
+        0,
+      ],
+      selectedCapabilityCategories: [
+        'dashboard',
+        'getSelectedCapabilityCategories',
+        'setSelectedCapabilityCategories',
+        0,
+      ],
+      selectedCapabilitySubcategories: [
+        'dashboard',
+        'getSelectedCapabilitySubcategories',
+        'setSelectedCapabilitySubcategories',
+        0,
+      ],
+      selectedPlatforms: [
+        'dashboard',
+        'getSelectedPlatforms',
+        'setSelectedPlatforms',
+        0,
+      ],
+      innovationCategories: [
+        'dashboard',
+        'getInnovationCategories',
+        'setInnovationCategories',
+        0,
+      ],
     }),
-    selectedGoalAreaDetails () {
+    selectedGoalAreaDetails() {
       if (this.selectedGoal) {
-        return this.goalAreas.find(g => g.id === this.selectedGoal);
+        return this.goalAreas.find((g) => g.id === this.selectedGoal)
       }
-      return null;
-    }
+      return null
+    },
   },
   methods: {
-    deleteFromCollection (id, collectionName) {
-      this[collectionName] = this[collectionName].filter(item => item !== id);
-    }
-  }
-};
-
+    deleteFromCollection(id, collectionName) {
+      this[collectionName] = this[collectionName].filter((item) => item !== id)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .AdvancedSearch {
-    box-sizing: border-box;
-    width: @advancedSearchWidth;
-    // TODO
-    min-height: 100%;
-    border-left: 1px solid @colorGrayLight;
-    background-color: @colorWhite;
+.AdvancedSearch {
+  box-sizing: border-box;
+  width: @advancedSearchWidth;
+  // TODO
+  min-height: 100%;
+  border-left: 1px solid @colorGrayLight;
+  background-color: @colorWhite;
 
-    // search filters blocks
-    > div {
-      padding: 20px;
-      border-bottom: 1px solid @colorGrayLight;
+  // search filters blocks
+  > div {
+    padding: 20px;
+    border-bottom: 1px solid @colorGrayLight;
 
-      &:last-child {
-        border: 0;
-      }
+    &:last-child {
+      border: 0;
     }
-    .MultiSelectorFilter {
-      margin: 10px 0;
-    }
-
-    .UnicefSingleSelection {
-      .el-select:first-child {
-        margin-bottom: 10px;
-      }
-    }
-
-    .FilterSwitches {}
   }
+  .MultiSelectorFilter {
+    margin: 10px 0;
+  }
+
+  .UnicefSingleSelection {
+    .el-select:first-child {
+      margin-bottom: 10px;
+    }
+  }
+
+  .FilterSwitches {
+  }
+}
 </style>

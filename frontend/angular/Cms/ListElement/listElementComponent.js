@@ -1,5 +1,5 @@
-import ListElementController from './ListElementController';
-import _template from './ListElement.html';
+import ListElementController from './ListElementController'
+import _template from './ListElement.html'
 
 const component = {
   template: _template,
@@ -7,8 +7,8 @@ const component = {
   controllerAs: 'vm',
   name: 'cmsListElement',
   bindings: {
-    item: '<'
-  }
-};
+    item: '<',
+  },
+}
 
-export default component;
+export default component

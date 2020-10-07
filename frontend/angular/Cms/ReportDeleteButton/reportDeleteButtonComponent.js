@@ -1,5 +1,5 @@
-import ReportDeleteButtonController from './ReportDeleteButtonController';
-import _template from './ReportDeleteButton.html';
+import ReportDeleteButtonController from './ReportDeleteButtonController'
+import _template from './ReportDeleteButton.html'
 
 const component = {
   template: _template,
@@ -8,8 +8,8 @@ const component = {
   name: 'cmsReportDeleteButton',
   bindings: {
     item: '<',
-    type: '@?'
-  }
-};
+    type: '@?',
+  },
+}
 
-export default component;
+export default component

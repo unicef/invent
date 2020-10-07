@@ -12,36 +12,36 @@
 </template>
 
 <script>
-
 export default {
-  components: {
-  },
+  components: {},
   props: {
     pin: {
       type: Object,
-      required: true
+      required: true,
     },
     icon: {
       type: Object,
       required: false,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
-    return {};
+  data() {
+    return {}
   },
   methods: {
-    emitMarkerClick () {
-      this.$emit('marker-click', this.pin.id);
-    }
-  }
-};
+    emitMarkerClick() {
+      this.$emit('marker-click', this.pin.id)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-    .CountryViewBtn {}
-    .MouseEventSpy {}
+.CountryViewBtn {
+}
+.MouseEventSpy {
+}
 </style>

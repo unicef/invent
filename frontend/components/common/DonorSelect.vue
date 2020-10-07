@@ -16,41 +16,41 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change',
   },
   props: {
     value: {
       type: Number,
-      default: null
+      default: null,
     },
     filters: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     ...mapGetters({
-      getDonors: "system/getDonors"
+      getDonors: 'system/getDonors',
     }),
     donors() {
-      return this.getDonors.filter(i => !this.filters.includes(i.code));
-    }
+      return this.getDonors.filter((i) => !this.filters.includes(i.code))
+    },
   },
   methods: {
     changeHandler(value) {
-      this.$emit("change", value);
-    }
-  }
-};
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .DonorSelectorPopper {
   max-width: @advancedSearchWidth - 40px;

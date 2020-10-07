@@ -6,33 +6,32 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
-import SignupBox from './SignupBox';
-import MyProjectsBox from './MyProjectsBox';
+import SignupBox from './SignupBox'
+import MyProjectsBox from './MyProjectsBox'
 
 export default {
   components: {
     SignupBox,
-    MyProjectsBox
+    MyProjectsBox,
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/getProfile'
+      userProfile: 'user/getProfile',
     }),
-    isLoggedIn () {
-      return !!this.userProfile;
-    }
-  }
-};
+    isLoggedIn() {
+      return !!this.userProfile
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .CentralBox {
-    height: 100%;
-  }
-
+.CentralBox {
+  height: 100%;
+}
 </style>

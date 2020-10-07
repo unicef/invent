@@ -1,8 +1,8 @@
 export const nameMapping = {
-  name: 'Project Name',
+  name: 'Initiative Name',
   implementation_overview: 'Initiative Description',
-  start_date: 'Project Start Date',
-  end_date: 'Project End Date',
+  start_date: 'Initiative Start Date',
+  end_date: 'Initiative End Date',
   contact_name: 'Programme Focal Point Name',
   contact_email: 'Programme Focal Point Email',
   platforms: 'Software',
@@ -14,30 +14,33 @@ export const nameMapping = {
   capability_levels: 'Capability Levels',
   capability_categories: 'Capability Categories',
   capability_subcategories: 'Capability Subcategories',
-  field_office: 'Field Office'
-};
+  field_office: 'Field Office',
+}
 
 export const importTemplate = [
   {
-    'Project Name': 'MyProject',
+    'Initiative Name': 'MyProject',
     'Initiative Description': 'Narrative free text',
-    'Project Start Date': '01/01/2015',
-    'Project End Date': '01/01/2019',
+    'Initiative Start Date': '01/01/2015',
+    'Initiative End Date': '01/01/2019',
     'Programme Focal Point Name': 'Nico',
     'Programme Focal Point Email': 'nico@pulilab.com',
     Software: 'Bamboo',
-    'Digital Health Interventions': '3.4.1 Notify birth event|3.4.2 Register birth event',
-    'Health Focus Areas': 'Adolescents and communicable diseases|Other sexual and reproductive health',
-    'Health System Challenges': '1.1 Lack of population denominator|1.2 Delayed reporting of events',
+    'Digital Health Interventions':
+      '3.4.1 Notify birth event|3.4.2 Register birth event',
+    'Health Focus Areas':
+      'Adolescents and communicable diseases|Other sexual and reproductive health',
+    'Health System Challenges':
+      '1.1 Lack of population denominator|1.2 Delayed reporting of events',
     'Goal Area': '21. Survive and Thrive',
     'Result Area': '21-01 Maternal and newborn health',
-    'Field Office': 'According to selected country office'
+    'Field Office': 'According to selected country office',
   },
   {
-    'Project Name': 'MyProject2',
+    'Initiative Name': 'MyProject2',
     'Initiative Description': 'Narrative free text',
-    'Project Start Date': '04/22/2015',
-    'Project End Date': '03/22/2019',
+    'Initiative Start Date': '04/22/2015',
+    'Initiative End Date': '03/22/2019',
     'Programme Focal Point Name': 'Nico',
     'Programme Focal Point Email': 'nico@pulilab.com',
     Software: 'Bamboo',
@@ -46,6 +49,7 @@ export const importTemplate = [
     'Field Office': 'According to selected country office',
     'Capability Levels': '4. Interventions for data services',
     'Capability Categories': '1.3 Student to student communication',
-    'Capability Subcategories': '1.1.1 Transmit education event alerts to specific population group(s)'
-  }
-];
+    'Capability Subcategories':
+      '1.1.1 Transmit education event alerts to specific population group(s)',
+  },
+]

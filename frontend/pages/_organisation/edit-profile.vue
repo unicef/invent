@@ -5,23 +5,22 @@
 </template>
 
 <script>
-import EditProfile from '../../components/EditProfile.vue';
+import EditProfile from '../../components/EditProfile.vue'
 
 export default {
   components: {
-    EditProfile
+    EditProfile,
+  },
+  async fetch({ store, query, redirect }) {
+    if (query && query.missingProfile) {
+      store.dispatch('layout/setShowEmptyProfileWarning', true)
+      redirect({ ...this.$route, query: undefined })
+      return
+    }
+    await store.dispatch('system/loadDonors')
   },
   watchQuery: ['missingProfile'],
-  async fetch ({ store, query, redirect }) {
-    if (query && query.missingProfile) {
-      store.dispatch('layout/setShowEmptyProfileWarning', true);
-      redirect({ ...this.$route, query: undefined });
-      return;
-    }
-    await store.dispatch('system/loadDonors');
-  }
-};
+}
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>

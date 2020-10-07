@@ -18,57 +18,57 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: [Number, Array],
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     region: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
       countries: 'countries/getCountries',
-      countriesByRegion: 'countries/getCountriesByUnicefRegion'
+      countriesByRegion: 'countries/getCountriesByUnicefRegion',
     }),
-    filteredCountries () {
+    filteredCountries() {
       if (this.region === null) {
-        return this.countries;
+        return this.countries
       }
-      return this.countriesByRegion(this.region);
+      return this.countriesByRegion(this.region)
     },
     innerValue: {
-      get () {
-        return this.value;
+      get() {
+        return this.value
       },
-      set (value) {
-        this.$emit('change', value);
-      }
+      set(value) {
+        this.$emit('change', value)
+      },
     },
-    multiple () {
-      return Array.isArray(this.value);
-    }
-  }
-};
+    multiple() {
+      return Array.isArray(this.value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .CountrySelectorPopper {
-    max-width: @advancedSearchWidth - 40px;
-  }
+.CountrySelectorPopper {
+  max-width: @advancedSearchWidth - 40px;
+}
 </style>

@@ -11,9 +11,7 @@
         row
       >
         <template slot="label">
-          <translate key="portfolio-name">
-            Portfolio name
-          </translate>
+          <translate key="portfolio-name"> Portfolio name </translate>
         </template>
         <character-count-input
           v-model="name"
@@ -31,9 +29,7 @@
         row
       >
         <template slot="label">
-          <translate key="portfolio-description">
-            Description
-          </translate>
+          <translate key="portfolio-description"> Description </translate>
         </template>
 
         <character-count-input
@@ -59,9 +55,7 @@
         row
       >
         <template slot="label">
-          <translate key="status">
-            Status
-          </translate>
+          <translate key="status"> Status </translate>
         </template>
         <portfolio-select
           v-model="status"
@@ -84,9 +78,7 @@
         row
       >
         <template slot="label">
-          <translate key="icon">
-            Icon
-          </translate>
+          <translate key="icon"> Icon </translate>
         </template>
         <icon-select
           v-model="icon"
@@ -113,57 +105,57 @@
 </template>
 
 <script>
-import { mapGettersActions } from "@/utilities/form";
-import { mapGetters, mapState } from "vuex";
-import VeeValidationMixin from "@/components/mixins/VeeValidationMixin";
-import PortfolioFieldsetMixin from "@/components/mixins/PortfolioFieldsetMixin";
-import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
-import PortfolioSelect from "@/components/portfolio/form/inputs/PortfolioSelect";
-import IconSelect from "@/components/portfolio/form/inputs/IconSelect";
+import { mapGettersActions } from '@/utilities/form'
+import { mapState } from 'vuex'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin'
+import PortfolioFieldsetMixin from '@/components/mixins/PortfolioFieldsetMixin'
+import CollapsibleCard from '@/components/portfolio/CollapsibleCard'
+import PortfolioSelect from '@/components/portfolio/form/inputs/PortfolioSelect'
+import IconSelect from '@/components/portfolio/form/inputs/IconSelect'
 
 export default {
   components: {
     CollapsibleCard,
     IconSelect,
-    PortfolioSelect
+    PortfolioSelect,
   },
   mixins: [VeeValidationMixin, PortfolioFieldsetMixin],
   computed: {
     ...mapState({
-      statusList: state => state.portfolio.statusList
+      statusList: (state) => state.portfolio.statusList,
     }),
     ...mapGettersActions({
-      name: ["portfolio", "getName", "setName", 0],
-      description: ["portfolio", "getDescription", "setDescription", 0],
-      status: ["portfolio", "getStatus", "setStatus", 0],
-      icon: ["portfolio", "getIcon", "setIcon", 0]
-    })
+      name: ['portfolio', 'getName', 'setName', 0],
+      description: ['portfolio', 'getDescription', 'setDescription', 0],
+      status: ['portfolio', 'getStatus', 'setStatus', 0],
+      icon: ['portfolio', 'getIcon', 'setIcon', 0],
+    }),
   },
   methods: {
     async validate() {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([this.$validator.validate()]);
-      console.log("General settings published validation", validations);
-      return validations.reduce((a, c) => a && c, true);
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      console.log('General settings published validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft() {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
-        this.$validator.validate("name"),
-        this.$validator.validate("description"),
-        this.$validator.validate("status"),
-        this.$validator.validate("icon")
-      ]);
-      console.log("General settings draft validation", validations);
-      return validations.reduce((a, c) => a && c, true);
-    }
-  }
-};
+        this.$validator.validate('name'),
+        this.$validator.validate('description'),
+        this.$validator.validate('status'),
+        this.$validator.validate('icon'),
+      ])
+      console.log('General settings draft validation', validations)
+      return validations.reduce((a, c) => a && c, true)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .general-settings {
   .el-card {

@@ -1,15 +1,9 @@
 <template>
   <div class="ImportList">
     <el-row type="flex">
-      <el-col
-        v-if="queue && queue.length > 0"
-        :span="16"
-      >
+      <el-col v-if="queue && queue.length > 0" :span="16">
         <el-card class="box-card">
-          <div
-            slot="header"
-            class="clearfix"
-          >
+          <div slot="header" class="clearfix">
             <translate>Previous imports</translate>
           </div>
           <import-details
@@ -19,19 +13,14 @@
             type="flex"
           >
             <el-button @click="select(item)">
-              <translate>
-                Select
-              </translate>
+              <translate> Select </translate>
             </el-button>
           </import-details>
         </el-card>
       </el-col>
       <el-col :span="8">
         <el-card class="box-card">
-          <div
-            slot="header"
-            class="clearfix"
-          >
+          <div slot="header" class="clearfix">
             <translate>New Import</translate>
           </div>
           <import-file />
@@ -42,48 +31,53 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import ImportFile from '@/components/admin/import/ImportFile';
-import ImportDetails from '@/components/admin/import/ImportDetails';
+import { mapGetters } from 'vuex'
+import ImportFile from '@/components/admin/import/ImportFile'
+import ImportDetails from '@/components/admin/import/ImportDetails'
 
 export default {
   components: {
     ImportFile,
-    ImportDetails
+    ImportDetails,
   },
-  computed: {
-    ...mapGetters({
-      userProfile: 'user/getProfile',
-      queue: 'admin/import/getQueue',
-      getCountryDetails: 'countries/getCountryDetails',
-      dhi: 'projects/getDigitalHealthInterventions'
-    })
-  },
-  async fetch ({ store }) {
+  async fetch({ store }) {
     await Promise.all([
       store.dispatch('system/loadDonors'),
       store.dispatch('countries/loadMapData'),
       store.dispatch('admin/import/loadQueue'),
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('system/loadStaticData'),
-      store.dispatch('system/loadDonorDetails', 20)
-    ]);
+      store.dispatch('system/loadDonorDetails', 20),
+    ])
+  },
+  computed: {
+    ...mapGetters({
+      userProfile: 'user/getProfile',
+      queue: 'admin/import/getQueue',
+      getCountryDetails: 'countries/getCountryDetails',
+      dhi: 'projects/getDigitalHealthInterventions',
+    }),
   },
   methods: {
-    async select ({ id }) {
-      this.$nuxt.$loading.start();
-      await this.$nextTick();
-      this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: id }, query: undefined }));
-    }
-  }
-};
+    async select({ id }) {
+      this.$nuxt.$loading.start()
+      await this.$nextTick()
+      this.$router.push(
+        this.localePath({
+          name: 'organisation-admin-import-id',
+          params: { ...this.$route.params, id },
+          query: undefined,
+        })
+      )
+    },
+  },
+}
 </script>
 
 <style lang="less">
-.ImportList{
+.ImportList {
   .box-card {
     margin: 12px;
   }
 }
-
 </style>
