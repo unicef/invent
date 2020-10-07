@@ -1,17 +1,19 @@
 <template>
-  <el-card
-    :body-style="{ padding: '0px' }"
-    class="extended-project-card rounded"
-  >
+  <el-card :body-style="{ padding: '0px' }" class="ExtendedProjectCard rounded">
     <div>
-      <el-row type="flex" align="center" class="first-row">
-        <el-col :span="15" class="project-name">
-          <el-row class="first-sub-row">
+      <el-row
+        type="flex"
+        align="center"
+        class="FirstRow"
+        justify="space-between"
+      >
+        <el-col class="ProjectName">
+          <el-row class="FirstSubRow">
             <el-col>
               {{ projectData.name }}
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" class="second-sub-row">
+          <el-row type="flex" justify="start" class="SecondSubRow">
             <el-col>
               <country-item :id="projectData.country" :show-flag="true" />
             </el-col>
@@ -20,42 +22,39 @@
             </el-col>
           </el-row>
         </el-col>
-
-        <el-col :span="4" class="project-meta">
-          <div class="Donors">
-            <div>
-              {{ donors }}
+        <el-row type="flex" align="center" justify="flex-end">
+          <el-col class="ProjectMeta">
+            <div class="Donors">
+              <div>
+                {{ donors }}
+              </div>
+              <span><translate>Investor(s)</translate></span>
             </div>
-            <span><translate>Investor(s)</translate></span>
-          </div>
-        </el-col>
-        <el-col :span="4" class="project-meta">
-          <div class="LastChange">
-            <div>
-              {{ lastChange }}
+          </el-col>
+          <el-col class="ProjectMeta">
+            <div class="LastChange">
+              <div>
+                {{ lastChange }}
+              </div>
+              <span><translate>Last updated</translate></span>
             </div>
-            <span><translate>Updated on</translate></span>
-          </div>
-          <project-legend :id="id" />
-        </el-col>
+          </el-col>
+          <el-col>
+            <project-legend :id="id" />
+          </el-col>
+        </el-row>
       </el-row>
-
-      <el-row
-        type="flex"
-        justify="space-between"
-        align="center"
-        class="second-row"
-      >
+      <el-row type="flex" justify="space-between" class="SecondRow">
         <el-col>
-          <div v-if="!project.isPublished" class="project-status Draft">
+          <div v-if="!project.isPublished" class="ProjectStatus Draft">
             <translate key="draft"> Draft </translate>
           </div>
-          <div v-if="project.isPublished" class="project-status Published">
+          <div v-if="project.isPublished" class="ProjectStatus Published">
             <translate key="published"> Published </translate>
           </div>
           <div
             v-if="projectData.approved"
-            class="project-status approved-by-country"
+            class="ProjectStatus approved-by-country"
           >
             <translate key="approved"> Approved by MOH </translate>
           </div>
@@ -119,22 +118,22 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
-.extended-project-card {
+.ExtendedProjectCard {
   // max-width: @cardSizeMedium;
   margin: 0 auto 20px;
 
-  .first-row {
+  .FirstRow {
     position: relative;
-    padding: 20px 50px 20px 30px;
+    padding: 20px 30px 20px;
 
-    .first-sub-row {
+    .FirstSubRow {
       margin-bottom: 16px;
       font-size: @fontSizeLarger;
       font-weight: 700;
       color: @colorTextPrimary;
     }
 
-    .second-sub-row {
+    .SecondSubRow {
       .el-col {
         &:first-child {
           width: auto;
@@ -158,6 +157,7 @@ export default {
           width: auto;
           font-size: @fontSizeBase;
           font-weight: 400;
+          color: @colorBrandPrimary;
         }
       }
 
@@ -166,6 +166,7 @@ export default {
         padding-left: 21px;
         font-size: @fontSizeBase;
         font-weight: 400;
+        color: @colorBrandGrayDark!important;
 
         &::before {
           content: '';
@@ -181,20 +182,19 @@ export default {
       }
     }
 
-    .project-name {
+    .ProjectName {
       width: 100%;
       padding-right: 40px;
     }
 
-    .project-meta {
-      min-width: 140px;
-      max-width: 2000px;
+    .ProjectMeta {
+      // min-width: 140px;
       border-left: 1px solid @colorGrayLight;
+      padding: 0 24px 0px;
 
       .Donors,
       .LastChange {
-        padding: 0 20px;
-        text-align: center;
+        // text-align: center;
 
         > div {
           margin: 8px 0 12px;
@@ -213,9 +213,9 @@ export default {
     }
 
     .ProjectLegend {
-      position: absolute;
-      top: 26px;
-      right: 26px;
+      // position: absolute;
+      // top: 26px;
+      // right: 26px;
 
       .svg-inline--fa {
         font-size: 14px;
@@ -223,13 +223,16 @@ export default {
     }
   }
 
-  .second-row {
-    padding: 16px 30px;
+  .SecondRow {
+    height: 54px;
+    padding: 0 30px;
+    align-items: center;
     background-color: #e8f6fd;
 
-    .project-status {
+    .ProjectStatus {
       display: inline-block;
       height: 24px;
+      min-width: 86px;
       margin-right: 10px;
       padding: 0 10px;
       font-size: @fontSizeSmall - 1;
@@ -238,7 +241,7 @@ export default {
       text-transform: uppercase;
       color: @colorWhite;
       border-radius: 12px;
-
+      text-align: center;
       &.Draft {
         background-color: @colorDraft;
         color: @colorTextPrimary;

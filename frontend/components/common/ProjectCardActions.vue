@@ -1,5 +1,5 @@
 <template>
-  <div class="project-card-actions">
+  <div class="ProjectCardActions">
     <el-row type="flex" justify="end">
       <el-col v-if="showViewDraft">
         <nuxt-link
@@ -12,7 +12,7 @@
               },
             })
           "
-          class="nuxt-link IconLeft"
+          class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
           <translate>View Draft</translate>
@@ -29,7 +29,7 @@
               },
             })
           "
-          class="nuxt-link IconLeft"
+          class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
           <translate>View Published</translate>
@@ -46,7 +46,7 @@
               },
             })
           "
-          class="nuxt-link IconLeft"
+          class="NuxtLink IconLeft"
         >
           <fa icon="edit" />
           <translate>Edit Draft</translate>
@@ -63,7 +63,7 @@
               },
             })
           "
-          class="nuxt-link IconLeft"
+          class="NuxtLink IconLeft"
         >
           <fa icon="tachometer-alt" />
           <translate>Assessment</translate>
@@ -72,7 +72,7 @@
       <el-col v-if="project.isPublished">
         <nuxt-link
           to=""
-          class="nuxt-link IconLeft danger"
+          class="NuxtLink IconLeft danger"
           @click.native="
             handleClickUnPublish(
               { name: 'organisation-initiatives' },
@@ -120,18 +120,18 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
-.project-card-actions {
+.ProjectCardActions {
   .el-row {
     .el-col {
       width: auto;
     }
   }
 
-  .nuxt-link {
+  .NuxtLink {
     font-size: 14px;
     font-weight: bold;
     letter-spacing: -0.2px;
