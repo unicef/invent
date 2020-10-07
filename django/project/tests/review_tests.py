@@ -123,6 +123,14 @@ class ReviewTests(PortfolioSetup):
         self.pps.refresh_from_db()
         self.assertEqual(self.pps.reviewed, True)
         self.assertEqual(self.pps.approved, False)
+        # Edit the official review of the project
+        review_data_complete['nc'] = 4
+        response = self.user_3_client.post(url, review_data_complete, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.pps.refresh_from_db()
+        self.assertEqual(self.pps.nc, 4)
+        self.assertEqual(self.pps.reviewed, True)
+        self.assertEqual(self.pps.approved, False)
         # now reviewed, approve project
         url = reverse('portfolio-project-approve', kwargs={'pk': self.portfolio_id})
         project_data = {'project': [self.project_rev_id]}
@@ -130,7 +138,15 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.pps.refresh_from_db()
         self.assertEqual(self.pps.approved, True)
-
+        # try to modify the approved project
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': self.pps.id})
+        review_data_complete['nc'] = 3
+        response = self.user_3_client.post(url, review_data_complete, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.pps.refresh_from_db()
+        self.assertEqual(self.pps.nc, 4)
+        self.assertEqual(self.pps.reviewed, True)
+        self.assertEqual(self.pps.approved, True)
         # Moving project from approved to review state
         url = reverse('portfolio-project-disapprove', kwargs={'pk': self.portfolio_id})
         project_data = {'project': [self.project_rev_id]}
