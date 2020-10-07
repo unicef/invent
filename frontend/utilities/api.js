@@ -104,8 +104,8 @@ export const donorCustomFieldMapper = (collection) => {
 
 export const apiReadParser = (p) => {
   p = lib.parseCustomAnswers(p)
-  const donorCustomAnswers = lib.donorCustomFieldMapper(p.donorAnswers)
-  return { ...p, donorCustomAnswers }
+  const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers)
+  return { ...p, donor_custom_answers }
 }
 
 export const isNullUndefinedOrEmptyString = (value) =>
@@ -207,7 +207,7 @@ export const apiWriteParser = (
     const value = dataCleaner(p[key])
     result[key] = isEmpty(value) ? undefined : value
   }
-  const donorCustomAnswers = customDonorAnswerParser(
+  const donor_custom_answers = customDonorAnswerParser(
     donorsCustomAnswers,
     p.donors
   )
@@ -218,7 +218,7 @@ export const apiWriteParser = (
       donors_answers: undefined,
       modified: undefined,
     },
-    donorCustomAnswers,
+    donor_custom_answers,
   }
 }
 
@@ -268,11 +268,11 @@ export const customColumnsMapper = (columns, prefix) => {
 }
 
 export const parseCustomAnswers = (r) => {
-  const donorAnswers = {}
+  const donor_answers = {}
   if (r.donors) {
     r.donors.forEach((d) => {
-      donorAnswers[d] = {
-        ...(r.donorCustomAnswers ? r.donorCustomAnswers[d] : null),
+      donor_answers[d] = {
+        ...(r.donor_custom_answers ? r.donor_custom_answers[d] : null),
         ...(r.donor_custom_answers_private
           ? r.donor_custom_answers_private[d]
           : null),
@@ -285,10 +285,10 @@ export const parseCustomAnswers = (r) => {
       ...r.country_custom_answers,
       ...r.country_custom_answers_private,
     },
-    donorAnswers,
+    donor_answers,
     country_custom_answers: undefined,
     country_custom_answers_private: undefined,
-    donorCustomAnswers: undefined,
+    donor_custom_answers: undefined,
     donor_custom_answers_private: undefined,
   }
 }
