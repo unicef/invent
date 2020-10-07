@@ -8,31 +8,6 @@ from user.tests import create_profile_for_user
 
 
 class PortfolioSetup(TestProjectData, APITestCase):
-    def create_user(self, user_email, user_password1, user_password_2):
-        """
-        Create a test user with profile.
-        """
-        url = reverse("rest_register")
-        data = {
-            "email": user_email,
-            "password1": user_password1,
-            "password2": user_password_2}
-        response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-
-        create_profile_for_user(response)
-
-        # Log in the user.
-        url = reverse("api_token_auth")
-        data = {
-            "username": user_email,
-            "password": user_password1}
-        response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 200, response.json())
-        test_user_key = response.json().get("token")
-        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        user_profile_id = response.json().get('user_profile_id')
-        return user_profile_id, test_user_client, test_user_key
 
     def setUp(self):
         super().setUp()
