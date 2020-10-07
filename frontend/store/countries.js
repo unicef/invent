@@ -82,9 +82,9 @@ export const getters = {
     }
     return { ...allSubLevels.find((sb) => sb.id === id) }
   },
-  getCountriesByUnicefRegion: (state) => (unicefRegion) => {
+  getCountriesByUnicefRegion: (state) => (unicef_region) => {
     const filtered = state.countries.filter((country) => {
-      return country.unicef_region === unicefRegion
+      return country.unicef_region === unicef_region
     })
     return [...filtered.map((c) => ({ ...c }))]
   },

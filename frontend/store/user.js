@@ -53,10 +53,10 @@ export const actions = {
 
   async doSignup(
     { commit, dispatch },
-    { accountType, password1, password2, email }
+    { account_type, password1, password2, email }
   ) {
     const { data } = await this.$axios.post('/api/rest-auth/registration/', {
-      accountType,
+      account_type,
       password1,
       password2,
       email,
