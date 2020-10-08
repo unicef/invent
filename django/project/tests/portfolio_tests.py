@@ -1,10 +1,9 @@
 from django.urls import reverse
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APITestCase
 
 from project.models import Portfolio, ProblemStatement
 from project.tests.setup import TestProjectData
 from user.models import UserProfile
-from user.tests import create_profile_for_user
 
 
 class PortfolioSetup(TestProjectData, APITestCase):
