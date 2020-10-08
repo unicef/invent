@@ -15,6 +15,10 @@ export const state = () => ({
     { id: 3, name: 'My favorites', icon: 'heart', total: 25 },
   ],
   tab: 1,
+  // project review
+  loadingReview: false,
+  dialogReview: false,
+  currentProjectReview: {},
 })
 
 const getTodayString = () => {
@@ -308,6 +312,14 @@ export const actions = {
     commit('SET_VALUE', { key: 'tab', val })
     // update initiatives/projects by tab click
     // dispatch('getProjects', state.currentPortfolioId)
+  },
+  // state interaction handlers
+  setCurrentProjectReviewer({ commit }, val) {
+    commit('SET_VALUE', { key: 'currentProjectReview', val })
+  },
+  setReviewDialog({ commit }, val) {
+    console.log('hola')
+    commit('SET_VALUE', { key: 'dialogReview', val })
   },
 }
 
