@@ -1,9 +1,10 @@
 <template>
   <el-card :body-style="{ padding: '0px' }" class="ExtendedProjectCard rounded">
     <div>
+      <review-card-stripe v-if="type === 'review'" />
       <el-row
         type="flex"
-        align="center"
+        align="middle"
         class="FirstRow"
         justify="space-between"
       >
@@ -13,16 +14,13 @@
               {{ projectData.name }}
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" class="SecondSubRow">
-            <el-col>
-              <country-item :id="projectData.country" :show-flag="true" />
-            </el-col>
-            <el-col>
-              <organisation-item :id="projectData.organisation" />
-            </el-col>
+          <el-row type="flex" align="middle" class="SecondSubRow">
+            <country-item :id="projectData.country" :show-flag="true" />
+            <organisation-item :id="projectData.organisation" />
+            <organisation-item :id="projectData.organisation" />
           </el-row>
         </el-col>
-        <el-row type="flex" align="center" justify="flex-end">
+        <el-row type="flex" align="center" justify="end">
           <el-col class="ProjectMeta">
             <div class="Donors">
               <div>
@@ -71,6 +69,7 @@
 import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
 
+import ReviewCardStripe from '@/components/review/ReviewCardStripe'
 import CountryItem from './CountryItem'
 import OrganisationItem from './OrganisationItem'
 import ProjectCardActions from './ProjectCardActions'
@@ -82,11 +81,16 @@ export default {
     OrganisationItem,
     ProjectCardActions,
     ProjectLegend,
+    ReviewCardStripe,
   },
   props: {
     id: {
       type: Number,
       required: true,
+    },
+    type: {
+      type: String,
+      default: 'regular',
     },
   },
   computed: {
@@ -119,7 +123,6 @@ export default {
 @import '~assets/style/mixins.less';
 
 .ExtendedProjectCard {
-  // max-width: @cardSizeMedium;
   margin: 0 auto 20px;
 
   .FirstRow {
@@ -134,51 +137,12 @@ export default {
     }
 
     .SecondSubRow {
-      .el-col {
-        &:first-child {
-          width: auto;
-        }
-
-        &:last-child {
-          width: 100%;
-        }
-      }
-
-      .CountryItem {
-        .CountryFlag {
-          img {
-            height: 14px;
-            width: auto;
-            margin: 1px 0;
-          }
-        }
-
-        .CountryName {
-          width: auto;
-          font-size: @fontSizeBase;
-          font-weight: 400;
-          color: @colorBrandPrimary;
-        }
-      }
-
       .OrganisationItem {
-        position: relative;
-        padding-left: 21px;
         font-size: @fontSizeBase;
         font-weight: 400;
         color: @colorBrandGrayDark!important;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 10px;
-          transform: translateY(-50%);
-          display: inline-block;
-          width: 1px;
-          height: 14px;
-          background-color: @colorTextSecondary;
-        }
+        padding: 0px 12px;
+        border-left: 1px solid #ddd7d0;
       }
     }
 
@@ -194,8 +158,6 @@ export default {
 
       .Donors,
       .LastChange {
-        // text-align: center;
-
         > div {
           margin: 8px 0 12px;
           font-size: @fontSizeMedium;
@@ -213,10 +175,6 @@ export default {
     }
 
     .ProjectLegend {
-      // position: absolute;
-      // top: 26px;
-      // right: 26px;
-
       .svg-inline--fa {
         font-size: 14px;
       }

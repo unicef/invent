@@ -8,13 +8,16 @@
       v-for="project in limited"
       :id="project.id"
       :key="project.id"
+      :type="cardType"
     />
+    <review-dialog />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 
+import ReviewDialog from '@/components/review/ReviewDialog'
 import ExtendedProjectCard from '../common/ExtendedProjectCard'
 import EmptyProjects from './EmptyProjects'
 
@@ -22,6 +25,7 @@ export default {
   components: {
     EmptyProjects,
     ExtendedProjectCard,
+    ReviewDialog,
   },
   props: {
     limit: {
@@ -58,6 +62,9 @@ export default {
     },
     hasProjects() {
       return this.userProjecList.length > 0
+    },
+    cardType() {
+      return this.tab === 2 ? 'review' : 'regular'
     },
   },
 }
