@@ -33,6 +33,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, ProjectPortfolioStateManagerSerializer
 from user.serializers import UserProfileListSerializer
 
+
 class ProjectPublicViewSet(ViewSet):
     def project_structure(self, request):
         """

@@ -945,7 +945,6 @@ class ProjectTests(SetupTests):
         for _ in range(5):
             project_id = self.create_new_project()[0]
             project_ids.append(project_id)
-        project_country_offices = Project.objects.filter(pk__in=project_ids).values_list('country_office', flat=True)
         # create test user
         user_x_pr_id, user_x_client, user_x_key = self.create_user('train@choochoo.com', '12345789TIZ', '12345789TIZ')
         url_list = reverse('favorite-projects-list')
@@ -967,8 +966,3 @@ class ProjectTests(SetupTests):
         # check the favorite projects list output
         response = user_x_client.get(url_list)
         self.assertEqual(response.status_code, 200)
-        import ipdb
-        ipdb.set_trace()
-
-
-
