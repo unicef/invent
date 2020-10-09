@@ -708,12 +708,6 @@ class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, Retr
         return pps
 
 
-class FavoriteProjectsResultsSetPagination(PageNumberPagination):
-    page_size = 25
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-
-
 class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, ViewSet):
     @staticmethod
     def validate_input(request) -> Tuple[UserProfile, Project]:
