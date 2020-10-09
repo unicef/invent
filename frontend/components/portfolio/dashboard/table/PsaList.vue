@@ -1,6 +1,10 @@
 <template>
   <ul class="psa-list">
-    <li v-for="(item, i) in statements(items)" :key="i">
+    <li
+      v-for="(item, i) in statements(items)"
+      :key="i"
+      :class="`${big && 'big'}`"
+    >
       <fa class="triangle-icon" :icon="['fas', 'caret-right']" />
       {{ item.name }}
     </li>
@@ -8,19 +12,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   props: {
     items: {
       type: Array,
       required: true,
     },
-  },
-  computed: {
-    ...mapState({
-      problemStatements: (state) => state.portfolio.problemStatements,
-    }),
+    problemStatements: {
+      type: Array,
+      required: true,
+    },
+    big: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   methods: {
     statements(arr) {
@@ -41,6 +47,14 @@ export default {
     .triangle-icon {
       color: #a8a8a9;
       margin-right: 5px;
+    }
+    &.big {
+      font-size: 14px;
+      margin-bottom: 10px;
+      .triangle-icon {
+        margin-right: 8px;
+        font-size: 16px;
+      }
     }
   }
 }
