@@ -102,7 +102,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_favorite(obj):
-        return Project.objects.favorited_by(obj.user).values_list('id', flat=True)
+        return Project.objects.published_only().favorited_by(obj.user).values_list('id', flat=True)
 
     def validate(self, attrs):
         if attrs.get('account_type') in [UserProfile.DONOR, UserProfile.DONOR_ADMIN, UserProfile.SUPER_DONOR_ADMIN]:

@@ -757,40 +757,17 @@ class FavoriteProjectsResultsSetPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class ProjectFavoritesViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
-    pagination_class = FavoriteProjectsResultsSetPagination
-    # serializer_class = ProjectPublishedSerializer  # TODO: Is this the right one?
-    filter_backends = (OrderingFilter,)
-    ordering_fields = ('id', 'name',)
-    ordering = ('id',)
-
-    def get_queryset(self):
-        return Project.objects.filter(favorited_by=self.request.user.userprofile)
-
-    def list(self, request, *args, **kwargs):
-        """
-        Retrieves list of projects user's projects.
-        """
-        data = []
-        for project in self.get_queryset():
-            published = project.to_representation()
-            draft = project.to_representation(draft_mode=True)
-            data.append(project.to_response_dict(published=published, draft=draft))
-
-        return Response(data)
-
-
 class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, ViewSet):
     @staticmethod
     def validate_input(request) -> Tuple[UserProfile, Project]:
         profile = get_object_or_400(UserProfile, "No such userprofile", pk=request.user.userprofile.id)
 
         if 'project' not in request.data:
-            raise ValidationError({'project': 'Project data is missing'})
+            raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
 
         project = get_object_or_400(Project, "No such project", pk=request.data.get('project'))
         if not project.public_id:
-            raise ValidationError({'project': 'Only published projects can be favorited'})
+            raise ValidationError({'project': 'Only published projects can be favorited'})  # pragma: no cover
         return profile, project
 
     def add(self, request, *args, **kwargs):
