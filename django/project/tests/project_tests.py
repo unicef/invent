@@ -951,22 +951,32 @@ class ProjectTests(SetupTests):
         response = user_x_client.get(url_profile_details)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['favorite']), 0)
-        # add projects to the user's favorite list
+        # add projects[0] to the user's favorite list
         url_add = reverse('projects-add-favorite')
-        project_to_add = project_ids[3]
-        response = user_x_client.post(url_add, {'project': project_to_add}, format="json")
+        response = user_x_client.post(url_add, {'project': project_ids[0]}, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(set(response.json()['favorite_projects']), set(project_ids[:3]))
-        # remove projects from the user's favorite list
-        projects_to_remove = project_ids[2]  # we remove project_ids[3] from the favorite projects
-        url_remove = reverse('project-remove-favorite')
-        response = user_x_client.post(url_remove, {'projects': projects_to_remove}, format="json")
+        self.assertEqual(response.json()['favorite'], [project_ids[0]])
+        # add projects[1] to the user's favorite list
+        response = user_x_client.post(url_add, {'project': project_ids[1]}, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(set(response.json()['favorite_projects']), set(project_ids[:2]))
-        # check the favorite projects list output
+        self.assertEqual(response.json()['favorite'], [project_ids[0], project_ids[1]])
+        # add projects[2] to the user's favorite list
+        response = user_x_client.post(url_add, {'project': project_ids[2]}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['favorite'], project_ids[:3])
+        # unpublish projects[1]
+        url = reverse('project-unpublish', kwargs={'project_id': project_ids[1]})
+        response = self.test_user_client.put(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+        # expect the unpublished project to be removed from favorites
         response = user_x_client.get(url_profile_details)
         self.assertEqual(response.status_code, 200)
-        import ipdb
-        ipdb.set_trace()
+        self.assertEqual(response.json()['favorite'], [project_ids[0], project_ids[2]])
 
-        self.assertEqual(len(response.json()['favorite']), 0)
+        # remove project from the user's favorite list
+        url_remove = reverse('projects-remove-favorite')
+        response = user_x_client.post(url_remove, {'project': project_ids[0]}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['favorite'], [project_ids[2]])
