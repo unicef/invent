@@ -1,10 +1,10 @@
 <template>
   <div class="review-state">
     <div>
-      <p v-if="complete" class="completed">
+      <p v-if="complete" key="complete-info" class="completed">
         <fa icon="check-circle" /><translate>Reviewed</translate>
       </p>
-      <p v-else class="not-completed">
+      <p v-else key="not-complete-info" class="not-completed">
         <fa icon="comment-slash" /><translate>Unscored</translate>
       </p>
     </div>
@@ -25,6 +25,7 @@ export default {
     complete: {
       type: Boolean,
       required: true,
+      default: false,
     },
     portfolio: {
       type: String,

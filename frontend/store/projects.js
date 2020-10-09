@@ -19,6 +19,7 @@ export const state = () => ({
   loadingReview: false,
   dialogReview: false,
   currentProjectReview: {},
+  problemStatements: [],
 })
 
 const getTodayString = () => {
@@ -306,6 +307,74 @@ export const actions = {
   },
   resetProjectsData({ commit }) {
     commit('RESET_PROJECTS_DATA')
+  },
+  // get every project or initiative
+  getProjects({ state, commit, dispatch }, id) {
+    try {
+      commit('SET_VALUE', {
+        key: 'problemStatements',
+        val: [
+          { id: 1, name: 'statement 1' },
+          { id: 2, name: 'statement 2' },
+        ],
+      })
+      // const { data } = await this.$axios.get(`api/portfolio/${id}/`)
+      // commit('SET_VALUE', {
+      //   key: 'problemStatements',
+      //   val: data.problem_statements,
+      // })
+      // commit('SET_NAME', data.name)
+      // const results = await Promise.all([
+      //   this.$axios.get(`api/portfolio/${id}/projects/inventory/`),
+      //   this.$axios.get(`api/portfolio/${id}/projects/review/`),
+      //   this.$axios.get(`api/portfolio/${id}/projects/approved/`),
+      // ])
+      // // todo: pagination
+      // commit('SET_VALUE', {
+      //   key: 'currentPortfolioId',
+      //   val: id,
+      // })
+      // // set the projects of the portfolio by tab filter
+      // // console.log(results[1].data.results);
+      // commit('SET_VALUE', {
+      //   key: 'projects',
+      //   val: results[state.tab - 1].data.results.map((i) => {
+      //     // todo: set this attributes from api
+      //     return {
+      //       ...i,
+      //       favorite: Math.random() >= 0.5,
+      //       ...i.project_data,
+      //     }
+      //   }),
+      // })
+      // // update tab counts
+      // commit('SET_VALUE', {
+      //   key: 'tabs',
+      //   val: [
+      //     {
+      //       id: 1,
+      //       name: 'Inventory',
+      //       icon: 'folder',
+      //       total: results[0].data.count,
+      //     },
+      //     {
+      //       id: 2,
+      //       name: 'For review',
+      //       icon: 'eye',
+      //       total: results[1].data.count,
+      //     },
+      //     {
+      //       id: 3,
+      //       name: 'Portfolio',
+      //       icon: 'briefcase',
+      //       total: results[2].data.count,
+      //     },
+      //   ],
+      // })
+    } catch (e) {
+      // console.log(e.response.data);
+      console.error('portfolio/loadPortfolioProjects failed')
+    }
   },
   setTab({ state, commit, dispatch }, val) {
     console.log(`moving to ${val}`)
