@@ -1,40 +1,36 @@
 <template>
-  <div
-    v-if="donor"
-    class="DonorItem"
-  >
+  <div v-if="donor" class="DonorItem">
     {{ donor.name }}
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
   props: {
     id: {
       type: [String, Number],
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
-      getDonorDetails: 'system/getDonorDetails'
+      getDonorDetails: 'system/getDonorDetails',
     }),
-    donor () {
+    donor() {
       if (this.id) {
-        const id = parseInt(this.id, 10);
-        return this.getDonorDetails(id);
+        const id = parseInt(this.id, 10)
+        return this.getDonorDetails(id)
       }
-      return null;
-    }
-  }
-};
+      return null
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
-
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 </style>

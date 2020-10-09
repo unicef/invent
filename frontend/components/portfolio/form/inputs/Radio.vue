@@ -1,16 +1,12 @@
 <template>
   <div
-    :class="`Radio ${trueValue ? 'Selected' : ''} ${disabled ? 'Disabled' : ''}`"
+    :class="`Radio ${trueValue ? 'Selected' : ''} ${
+      disabled ? 'Disabled' : ''
+    }`"
     @click="update"
   >
-    <i
-      v-show="trueValue"
-      class="fas fa-check-circle"
-    />
-    <i
-      v-show="!trueValue"
-      class="far fa-circle"
-    />
+    <i v-show="trueValue" class="fas fa-check-circle" />
+    <i v-show="!trueValue" class="far fa-circle" />
     <span>
       <slot />
     </span>
@@ -23,27 +19,27 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    trueValue () {
-      return this.disabled ? false : this.value;
-    }
+    trueValue() {
+      return this.disabled ? false : this.value
+    },
   },
   methods: {
-    update () {
+    update() {
       if (this.disabled) {
-        return;
+        return
       }
-      this.$emit('update', !this.value);
-    }
-  }
-};
+      this.$emit('update', !this.value)
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -60,7 +56,8 @@ export default {
       font-weight: bold;
     }
   }
-  .fa-check-circle, .fa-circle {
+  .fa-check-circle,
+  .fa-circle {
     margin-top: 1px;
     position: absolute;
   }

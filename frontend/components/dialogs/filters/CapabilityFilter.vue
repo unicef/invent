@@ -18,60 +18,63 @@
 </template>
 
 <script>
-import difference from 'lodash/difference';
-import SelectorDialogColumn from '../SelectorDialogColumn';
-import SelectorDialogCategory from '../SelectorDialogCategory';
-import { mapGetters } from 'vuex';
+import difference from 'lodash/difference'
+import { mapGetters } from 'vuex'
+import SelectorDialogColumn from '../SelectorDialogColumn'
+import SelectorDialogCategory from '../SelectorDialogCategory'
 
 export default {
   components: {
     SelectorDialogColumn,
-    SelectorDialogCategory
+    SelectorDialogCategory,
   },
   props: {
     selected: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     goalArea: {
       type: Number,
-      required: true
+      required: true,
     },
     type: {
       type: String,
       required: true,
-      validator: value => ['capabilityLevels', 'capabilityCategories', 'capabilitySubcategories'].includes(value)
-    }
+      validator: (value) =>
+        [
+          'capabilityLevels',
+          'capabilityCategories',
+          'capabilitySubcategories',
+        ].includes(value),
+    },
   },
   computed: {
     ...mapGetters({
       capabilityLevels: 'projects/getCapabilityLevels',
       capabilityCategories: 'projects/getCapabilityCategories',
-      capabilitySubcategories: 'projects/getCapabilitySubcategories'
+      capabilitySubcategories: 'projects/getCapabilitySubcategories',
     }),
-    items () {
-      return this[this.type](this.goalArea);
+    items() {
+      return this[this.type](this.goalArea)
     },
-    catSelected () {
-      const ids = this.items.map(s => s.id);
-      return difference(ids, this.selected).length === 0;
-    }
+    catSelected() {
+      const ids = this.items.map((s) => s.id)
+      return difference(ids, this.selected).length === 0
+    },
   },
   methods: {
-    filterChange (value) {
-      this.$emit('update:selected', [...value]);
+    filterChange(value) {
+      this.$emit('update:selected', [...value])
     },
-    toggleAll (value) {
+    toggleAll(value) {
       if (value) {
-        this.$emit('update:selected', [...this.items.map(s => s.id)]);
+        this.$emit('update:selected', [...this.items.map((s) => s.id)])
       } else {
-        this.$emit('update:selected', []);
+        this.$emit('update:selected', [])
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

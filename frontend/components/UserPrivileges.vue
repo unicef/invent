@@ -40,7 +40,7 @@
       </li>
       <li>
         <translate key="ca-list-item-6">
-          Can approve projects if the project approval feature is active
+          Can approve initiatives if the iniciative approval feature is active
         </translate>
       </li>
     </template>
@@ -72,7 +72,7 @@
       </li>
       <li>
         <translate key="sca-list-item-6">
-          Can approve projects if the project approval feature is active
+          Can approve initiatives if the initiative approval feature is active
         </translate>
       </li>
       <li>
@@ -146,12 +146,10 @@ export default {
     type: {
       type: String,
       default: null,
-      validator: value => ['G', 'CA', 'SCA', 'D', 'DA', 'SDA']
-    }
-  }
-};
+      validator: (value) => ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'],
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

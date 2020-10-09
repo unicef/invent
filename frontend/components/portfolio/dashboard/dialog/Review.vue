@@ -25,16 +25,21 @@
       </el-select>
       <p class="label"><translate>Add Message:</translate></p>
       <el-input
+        v-model="message"
         type="textarea"
         :rows="8"
         :placeholder="$gettext('Type here...') | translate"
-        v-model="message"
       />
     </div>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="resetForm(false)" text>Cancel</el-button>
-      <el-button type="primary" :loading="loadingAddReviewers" :disabled="disabled" @click="handleSubmit">
+      <el-button text @click="resetForm(false)">Cancel</el-button>
+      <el-button
+        type="primary"
+        :loading="loadingAddReviewers"
+        :disabled="disabled"
+        @click="handleSubmit"
+      >
         <translate>Send</translate>
       </el-button>
     </span>
@@ -42,18 +47,14 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
-import PortfolioSelect from "@/components/portfolio/form/inputs/PortfolioSelect";
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 export default {
-  components: {
-    PortfolioSelect,
-  },
   data() {
     return {
       reviewers: [],
-      message: "",
-    };
+      message: '',
+    }
   },
   computed: {
     ...mapState({
@@ -62,39 +63,39 @@ export default {
       loadingAddReviewers: (state) => state.portfolio.loadingAddReviewers,
     }),
     ...mapGetters({
-      reviewersList: "system/getUserProfilesNoFilter",
+      reviewersList: 'system/getUserProfilesNoFilter',
     }),
     disabled() {
       if (this.reviewers.length > 0) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
   },
   methods: {
     ...mapActions({
-      setReviewDialog: "portfolio/setReviewDialog",
-      addReview: "portfolio/addReview",
+      setReviewDialog: 'portfolio/setReviewDialog',
+      addReview: 'portfolio/addReview',
     }),
     resetForm(val) {
-      this.setReviewDialog(val);
-      this.reviewers = [];
-      this.message = "";
+      this.setReviewDialog(val)
+      this.reviewers = []
+      this.message = ''
     },
     handleSubmit() {
       this.addReview({
         id: this.currentProjectId,
         reviewers: this.reviewers,
         message: this.message,
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .label {
   font-size: 14px;

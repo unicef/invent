@@ -61,45 +61,45 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      landingData: "landing/getLandingPageData",
-      landingPageDefaults: "system/getLandingPageDefaults"
+      landingData: 'landing/getLandingPageData',
+      landingPageDefaults: 'system/getLandingPageDefaults',
     }),
     countrySpecific() {
-      return this.landingData !== null;
+      return this.landingData !== null
     },
     title() {
       return this.countrySpecific
         ? this.landingData.footer_title
-        : this.landingPageDefaults.footer_title;
+        : this.landingPageDefaults.footer_title
     },
     permanentFooterText() {
-      return this.landingPageDefaults.permanent_footer;
+      return this.landingPageDefaults.permanent_footer
     },
     countryText() {
       if (this.countrySpecific) {
-        return this.landingData.footer_text;
+        return this.landingData.footer_text
       }
-      return null;
+      return null
     },
     partnerLogos() {
       if (this.countrySpecific) {
         return this.landingData.partner_logos.length > 0
           ? this.landingData.partner_logos
-          : null;
+          : null
       }
-      return null;
-    }
-  }
-};
+      return null
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .AboutSection {
   .limitPageWidth();

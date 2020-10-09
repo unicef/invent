@@ -1,5 +1,7 @@
 <template>
-  <div :class="['vue-django-feedback', 'main', 'container', 'right', {opened}]">
+  <div
+    :class="['vue-django-feedback', 'main', 'container', 'right', { opened }]"
+  >
     <button
       class="feedback-button"
       @click="togglePopUp()"
@@ -14,11 +16,12 @@
       </i>
     </button>
 
-    <div :class="['hint-container', {open: showHintContainer}]">
+    <div :class="['hint-container', { open: showHintContainer }]">
       <div>
         <div>
           <slot name="hint-text">
-            Click here if you are experiencing any issues or have suggestion for improving the website!
+            Click here if you are experiencing any issues or have suggestion for
+            improving the website!
           </slot>
         </div>
       </div>
@@ -30,31 +33,20 @@
           <span>?</span>
         </i>
         <h2>
-          <slot name="header-text">
-            Ask our experts!
-          </slot>
+          <slot name="header-text"> Ask our experts! </slot>
         </h2>
       </div>
 
-      <div
-        v-show="!submitted"
-        class="form-container"
-      >
-        <div
-          v-show="showUserBlock"
-          class="user-block"
-        >
+      <div v-show="!submitted" class="form-container">
+        <div v-show="showUserBlock" class="user-block">
           <div class="avatar">
             <img
               v-if="!showAvatarPlaceholder"
               :src="avatarUrl"
               class="avatar-img"
               alt="avatar"
-            >
-            <div
-              v-show="showAvatarPlaceholder"
-              class="avatar-placeholder"
-            >
+            />
+            <div v-show="showAvatarPlaceholder" class="avatar-placeholder">
               <i class="icon icon-avatar" />
             </div>
           </div>
@@ -70,23 +62,25 @@
 
         <div
           v-if="!showUserBlock"
-          :class="['input-container', 'input', 'name', {danger: errors.has('name')}]"
+          :class="[
+            'input-container',
+            'input',
+            'name',
+            { danger: errors.has('name') },
+          ]"
         >
           <label>
             {{ nameLabel }}
           </label>
           <input
             v-model="form.name"
-            v-validate="{required: true}"
+            v-validate="{ required: true }"
             name="name"
             type="text"
-          >
+          />
           <div class="feedback">
             <div class="errors">
-              <span
-                v-show="errors.has('name')"
-                class="error danger"
-              >
+              <span v-show="errors.has('name')" class="error danger">
                 {{ errors.first('name') }}
               </span>
             </div>
@@ -95,45 +89,51 @@
 
         <div
           v-if="!showUserBlock"
-          :class="['input-container', 'input', 'email', {danger: errors.has('email')}]"
+          :class="[
+            'input-container',
+            'input',
+            'email',
+            { danger: errors.has('email') },
+          ]"
         >
           <label>
             {{ emailLabel }}
           </label>
           <input
             v-model="form.email"
-            v-validate="{required: true, email: true}"
+            v-validate="{ required: true, email: true }"
             name="email"
             type="email"
-          >
+          />
           <div class="feedback">
             <div class="errors">
-              <span
-                v-show="errors.has('email')"
-                class="error danger"
-              >
+              <span v-show="errors.has('email')" class="error danger">
                 {{ errors.first('email') }}
               </span>
             </div>
           </div>
         </div>
 
-        <div :class="['input-container', 'input', 'subject', {danger: errors.has('subject')}]">
+        <div
+          :class="[
+            'input-container',
+            'input',
+            'subject',
+            { danger: errors.has('subject') },
+          ]"
+        >
           <label>
             {{ subjectLabel }}
           </label>
           <input
             v-model="form.subject"
-            v-validate="{required: true, max: limit.subjectLimit}"
+            v-validate="{ required: true, max: limit.subjectLimit }"
             name="subject"
             type="text"
-          >
+          />
           <div class="feedback">
             <div class="errors">
-              <span
-                v-show="errors.has('subject')"
-                class="error danger"
-              >
+              <span v-show="errors.has('subject')" class="error danger">
                 {{ errors.first('subject') }}
               </span>
             </div>
@@ -143,22 +143,26 @@
           </div>
         </div>
 
-        <div :class="['input-container', 'textarea', 'message', {danger: errors.has('message')}]">
+        <div
+          :class="[
+            'input-container',
+            'textarea',
+            'message',
+            { danger: errors.has('message') },
+          ]"
+        >
           <label>
             {{ messageLabel }}
           </label>
           <textarea
             v-model="form.message"
-            v-validate="{required: true, max: limit.messageLimit}"
+            v-validate="{ required: true, max: limit.messageLimit }"
             name="message"
             rows="3"
           />
           <div class="feedback">
             <div class="errors">
-              <span
-                v-show="errors.has('message')"
-                class="error danger"
-              >
+              <span v-show="errors.has('message')" class="error danger">
                 {{ errors.first('message') }}
               </span>
             </div>
@@ -169,22 +173,13 @@
         </div>
       </div>
 
-      <div
-        v-show="!submitted"
-        class="pop-up-controls"
-      >
+      <div v-show="!submitted" class="pop-up-controls">
         <div class="actions">
-          <button
-            :disabled="processing"
-            @click="submit()"
-          >
+          <button :disabled="processing" @click="submit()">
             {{ submitButtonText }}
           </button>
         </div>
-        <div
-          v-show="errors.any()"
-          class="error-info"
-        >
+        <div v-show="errors.any()" class="error-info">
           <i class="icon icon-danger">
             <span>!</span>
           </i>
@@ -192,36 +187,25 @@
         </div>
       </div>
 
-      <div
-        v-show="submitted"
-        class="message-container"
-      >
+      <div v-show="submitted" class="message-container">
         <h4>
-          <slot name="success-header">
-            Thank you!
-          </slot>
+          <slot name="success-header"> Thank you! </slot>
         </h4>
         <p>
           <slot name="success-message">
-            Your message has been successfully sent!
-            We will be back to you soon!
+            Your message has been successfully sent! We will be back to you
+            soon!
           </slot>
         </p>
       </div>
 
-      <div
-        v-show="apiError"
-        class="message-container"
-      >
+      <div v-show="apiError" class="message-container">
         <h4 class="error">
-          <slot name="error-header">
-            Sorry
-          </slot>
+          <slot name="error-header"> Sorry </slot>
         </h4>
         <p>
           <slot name="error-message">
-            There was a problem processing your ticket,
-            please try again
+            There was a problem processing your ticket, please try again
           </slot>
         </p>
       </div>
@@ -230,7 +214,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   name: 'VueDjangoFeedback',
@@ -238,58 +222,58 @@ export default {
   props: {
     apiUrl: {
       type: String,
-      default: '/api/tickets/'
+      default: '/api/tickets/',
     },
     authToken: {
       type: String,
-      default: null
+      default: null,
     },
     csrfToken: {
       type: String,
-      default: null
+      default: null,
     },
     meta: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     name: {
       type: String,
-      default: null
+      default: null,
     },
     email: {
       type: String,
-      default: null
+      default: null,
     },
     avatarUrl: {
       type: String,
-      default: null
+      default: null,
     },
     submitButtonText: {
       type: String,
-      default: 'Submit'
+      default: 'Submit',
     },
     globalErrorWarning: {
       type: String,
-      default: 'Error!'
+      default: 'Error!',
     },
     nameLabel: {
       type: String,
-      default: 'Your name'
+      default: 'Your name',
     },
     emailLabel: {
       type: String,
-      default: 'Your email'
+      default: 'Your email',
     },
     subjectLabel: {
       type: String,
-      default: 'Subject'
+      default: 'Subject',
     },
     messageLabel: {
       type: String,
-      default: 'Message / Question'
-    }
+      default: 'Message / Question',
+    },
   },
-  data () {
+  data() {
     return {
       opened: false,
       submitted: false,
@@ -300,27 +284,27 @@ export default {
         name: '',
         email: '',
         subject: '',
-        message: ''
+        message: '',
       },
       limit: {
         subjectLimit: 120,
-        messageLimit: 999
-      }
-    };
+        messageLimit: 999,
+      },
+    }
   },
   computed: {
-    showUserBlock () {
-      return !!(this.name && this.email);
+    showUserBlock() {
+      return !!(this.name && this.email)
     },
-    showAvatarPlaceholder () {
-      return !this.avatarUrl;
+    showAvatarPlaceholder() {
+      return !this.avatarUrl
     },
-    parsedMeta () {
-      let result = {};
+    parsedMeta() {
+      let result = {}
       try {
-        result = JSON.parse(this.meta);
+        result = JSON.parse(this.meta)
       } catch (e) {
-        console.warn('unable to parse the meta field', e);
+        console.warn('unable to parse the meta field', e)
       }
       return {
         ...result,
@@ -329,34 +313,34 @@ export default {
           platform: window.navigator.platform,
           appVersion: window.navigator.appVersion,
           product: window.navigator.product,
-          vendor: window.navigator.vendor
-        }
-      };
+          vendor: window.navigator.vendor,
+        },
+      }
     },
-    showHintContainer () {
-      return this.buttonHover && !this.opened;
-    }
+    showHintContainer() {
+      return this.buttonHover && !this.opened
+    },
   },
-  beforeCreate () {
-    this.axios = axios.create();
+  beforeCreate() {
+    this.axios = axios.create()
   },
   methods: {
-    togglePopUp () {
-      this.opened = !this.opened;
+    togglePopUp() {
+      this.opened = !this.opened
       if (!this.opened) {
-        this.form.name = '';
-        this.form.email = '';
-        this.form.subject = '';
-        this.form.message = '';
-        this.submitted = false;
-        this.apiError = false;
+        this.form.name = ''
+        this.form.email = ''
+        this.form.subject = ''
+        this.form.message = ''
+        this.submitted = false
+        this.apiError = false
       }
-      this.errors.clear();
+      this.errors.clear()
     },
-    async submit () {
-      await this.$validator.validateAll();
+    async submit() {
+      await this.$validator.validateAll()
       if (!this.errors.any()) {
-        this.processing = true;
+        this.processing = true
         try {
           const data = {
             email: this.email ? this.email : this.form.email,
@@ -364,33 +348,33 @@ export default {
             text: this.form.message,
             meta: {
               ...this.parsedMeta,
-              name: this.name ? this.name : this.form.name
-            }
-          };
-          const headers = {};
+              name: this.name ? this.name : this.form.name,
+            },
+          }
+          const headers = {}
           if (this.authToken) {
-            headers.Authorization = this.authToken;
+            headers.Authorization = this.authToken
           }
           if (this.csrfToken) {
-            headers['x-csrftoken'] = this.csrfToken;
+            headers['x-csrftoken'] = this.csrfToken
           }
-          await this.axios.post(this.apiUrl, data, { headers });
-          this.submitted = true;
-          this.apiError = false;
+          await this.axios.post(this.apiUrl, data, { headers })
+          this.submitted = true
+          this.apiError = false
         } catch (e) {
-          this.apiError = true;
-          console.warn(e);
+          this.apiError = true
+          console.warn(e)
         }
-        this.processing = false;
+        this.processing = false
       }
     },
-    handleMouseOver (status) {
-      this.buttonHover = status;
-    }
-  }
-};
+    handleMouseOver(status) {
+      this.buttonHover = status
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-  @import './main.less';
+@import './main.less';
 </style>

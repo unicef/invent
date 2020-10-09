@@ -1,27 +1,15 @@
 <template>
-  <div
-    v-if="user"
-    class="PersonaSelector"
-  >
+  <div v-if="user" class="PersonaSelector">
     <el-popover
       v-model="visible"
       placement="bottom-end"
       popper-class="CustomPopover PersonaSelectorPopover"
       trigger="click"
     >
-      <el-button
-        slot="reference"
-        type="text"
-        class="IconRight"
-      >
-        <translate key="view-as">
-          View as:
-        </translate>
+      <el-button slot="reference" type="text" class="IconRight">
+        <translate key="view-as"> View as: </translate>
         <div :class="['PersonaBox', personaClass]">
-          <fa
-            :icon="personaIcon"
-            class="PersonaIcon"
-          />
+          <fa :icon="personaIcon" class="PersonaIcon" />
           {{ persona }}
         </div>
         <fa icon="caret-down" />
@@ -32,12 +20,9 @@
             <fa icon="user" />
             <translate>Normal View</translate>
           </div>
-          <li
-            :class="{'Active': meActive}"
-            @click="setPersona('user')"
-          >
+          <li :class="{ Active: meActive }" @click="setPersona('user')">
             <fa icon="check" />
-            <translate :parameters="{name: user.name}">
+            <translate :parameters="{ name: user.name }">
               {name} (me)
             </translate>
           </li>
@@ -46,10 +31,7 @@
               <fa icon="handshake" />
               <translate>Investor View</translate>
             </div>
-            <li
-              :class="{'Active': donorActive}"
-              @click="setPersona('donor')"
-            >
+            <li :class="{ Active: donorActive }" @click="setPersona('donor')">
               <fa icon="check" />
               {{ donor }}
             </li>
@@ -60,13 +42,11 @@
               <translate>Country View</translate>
             </div>
             <li
-              :class="{'Active': countryActive}"
+              :class="{ Active: countryActive }"
               @click="setPersona('country')"
             >
               <fa icon="check" />
-              <translate :parameters="{country}">
-                {country} MoH
-              </translate>
+              <translate :parameters="{ country }"> {country} MoH </translate>
             </li>
           </template>
         </ul>
@@ -76,105 +56,119 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
-      visible: false
-    };
+      visible: false,
+    }
   },
   computed: {
     ...mapGetters({
       user: 'user/getProfile',
       getDonorDetails: 'system/getDonorDetails',
       getCountryDetails: 'countries/getCountryDetails',
-      dashBoardType: 'dashboard/getDashboardType'
+      dashBoardType: 'dashboard/getDashboardType',
     }),
-    meActive () {
-      return this.dashBoardType === 'user';
+    meActive() {
+      return this.dashBoardType === 'user'
     },
-    donorActive () {
-      return this.dashBoardType === 'donor';
+    donorActive() {
+      return this.dashBoardType === 'donor'
     },
-    countryActive () {
-      return this.dashBoardType === 'country';
+    countryActive() {
+      return this.dashBoardType === 'country'
     },
-    persona () {
-      const me = this.$gettext('Me');
-      return this.meActive ? me : this.countryActive ? this.country : this.donor;
+    persona() {
+      const me = this.$gettext('Me')
+      return this.meActive ? me : this.countryActive ? this.country : this.donor
     },
-    personaClass () {
-      return this.meActive ? 'Me' : this.countryActive ? 'Country' : 'Donor';
+    personaClass() {
+      return this.meActive ? 'Me' : this.countryActive ? 'Country' : 'Donor'
     },
-    personaIcon () {
-      return this.meActive ? 'user-circle' : this.countryActive ? 'globe-africa' : 'handshake';
+    personaIcon() {
+      return this.meActive
+        ? 'user-circle'
+        : this.countryActive
+        ? 'globe-africa'
+        : 'handshake'
     },
-    donor () {
+    donor() {
       if (this.user && this.user.donor) {
-        const donor = this.getDonorDetails(this.user.donor);
-        return donor ? donor.name : null;
+        const donor = this.getDonorDetails(this.user.donor)
+        return donor ? donor.name : null
       }
-      return null;
+      return null
     },
-    country () {
+    country() {
       if (this.user && this.user.country) {
-        const country = this.getCountryDetails(this.user.country);
-        return country ? country.name : null;
+        const country = this.getCountryDetails(this.user.country)
+        return country ? country.name : null
       }
-      return null;
+      return null
     },
-    showDonor () {
-      const donorTypes = ['D', 'DA', 'SDA'];
+    showDonor() {
+      const donorTypes = ['D', 'DA', 'SDA']
       if (this.user) {
-        return donorTypes.includes(this.user.account_type) || this.user.is_superuser;
+        return (
+          donorTypes.includes(this.user.account_type) || this.user.is_superuser
+        )
       }
-      return null;
+      return null
     },
-    showCountry () {
-      const countryTypes = ['G', 'CA', 'SCA'];
+    showCountry() {
+      const countryTypes = ['G', 'CA', 'SCA']
       if (this.user) {
-        return countryTypes.includes(this.user.account_type) || this.user.is_superuser;
+        return (
+          countryTypes.includes(this.user.account_type) ||
+          this.user.is_superuser
+        )
       }
-      return null;
-    }
+      return null
+    },
   },
   methods: {
     ...mapActions({
-      setDashboardType: 'dashboard/setDashboardType'
+      setDashboardType: 'dashboard/setDashboardType',
     }),
-    setPersona (type) {
-      const id = type === 'user' ? null : type === 'country' ? this.user.country : this.user.donor;
-      this.setDashboardType({ type, id });
-      this.visible = false;
-    }
-  }
-};
+    setPersona(type) {
+      const id =
+        type === 'user'
+          ? null
+          : type === 'country'
+          ? this.user.country
+          : this.user.donor
+      this.setDashboardType({ type, id })
+      this.visible = false
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .PersonaSelector {
-    text-align: right;
+.PersonaSelector {
+  text-align: right;
 
-    .PersonaBox {
-      display: inline;
-      line-height: @actionBarHeight;
+  .PersonaBox {
+    display: inline;
+    line-height: @actionBarHeight;
 
-      .PersonaIcon {
-        margin: 0 2px 0 8px;
-      }
-    }
-
-    .el-button--text {
-      padding: 0;
-      color: @colorWhite;
+    .PersonaIcon {
+      margin: 0 2px 0 8px;
     }
   }
 
-  .PersonaSelectorPopover {
-    transform: translate(10px, -35px);
+  .el-button--text {
+    padding: 0;
+    color: @colorWhite;
   }
+}
+
+.PersonaSelectorPopover {
+  transform: translate(10px, -35px);
+}
 </style>

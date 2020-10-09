@@ -14,18 +14,18 @@
 </template>
 
 <script>
-import NewPortfolioForm from "@/components/portfolio/form/NewPortfolioForm";
+import NewPortfolioForm from '@/components/portfolio/form/NewPortfolioForm'
 
 export default {
   components: {
-    NewPortfolioForm
-  }
-};
+    NewPortfolioForm,
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .portfolio {
   display: flex;

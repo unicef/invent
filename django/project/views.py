@@ -1,18 +1,17 @@
 import copy
 from collections import OrderedDict
+from typing import Tuple
 
 from django.db import transaction
 from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.exceptions import ValidationError, PermissionDenied
-from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
-from rest_framework.pagination import PageNumberPagination
 
 from country.models import Donor, FieldOffice, CountryOffice, RegionalOffice, Currency
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
@@ -29,11 +28,10 @@ from user.models import UserProfile
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
-    PortfolioDetailsSerializer, PortfolioUpdateSerializer, PortfolioCreateSerializer, ProjectInPortfolioSerializer, \
-    ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, ProjectPortfolioStateManagerSerializer
+    ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, \
+    ProjectPortfolioStateManagerSerializer, PortfolioSerializer, \
+    PortfolioStateChangeSerializer
 from user.serializers import UserProfileSerializer
-
-from typing import Tuple
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -587,21 +585,16 @@ class PortfolioUserListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
 
 class PortfolioCreateViewSet(GPOAccessMixin, CreateModelMixin, GenericViewSet):
-    serializer_class = PortfolioCreateSerializer
+    serializer_class = PortfolioSerializer
 
 
 class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericViewSet):
-    serializer_class = PortfolioUpdateSerializer
-    queryset = Portfolio.objects.all()
-
-
-class PortfolioDetailedViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
-    serializer_class = PortfolioDetailsSerializer
+    serializer_class = PortfolioSerializer
     queryset = Portfolio.objects.all()
 
 
 class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericViewSet):
-    serializer_class = PortfolioDetailsSerializer
+    serializer_class = PortfolioStateChangeSerializer
 
     def _check_input_and_permissions(self, request, *args, **kwargs):
         # check if portfolio exists
@@ -621,7 +614,7 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
         for project in projects:
             ProjectPortfolioState.objects.get_or_create(portfolio=portfolio, project=project)
 
-        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_201_CREATED)
+        return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_201_CREATED)
 
     def move_to_inventory(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
@@ -633,7 +626,7 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
         # Remove each review_state from portfolio
         for rev_state in review_states:
             rev_state.delete()
-        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
+        return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_200_OK)
 
     def approve(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
@@ -648,7 +641,7 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
             rev_state.approved = True
             rev_state.save()
 
-        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
+        return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_200_OK)
 
     def disapprove(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
@@ -662,43 +655,7 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
             rev_state.approved = False
             rev_state.save()
 
-        return Response(PortfolioDetailsSerializer(portfolio).data, status=status.HTTP_200_OK)
-
-
-class ProjectInPortfolioResultsSetPagination(PageNumberPagination):
-    page_size = 25
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-
-
-class ProjectPortfolioListViewSet(ListModelMixin, GenericViewSet):
-    serializer_class = ProjectInPortfolioSerializer
-    pagination_class = ProjectInPortfolioResultsSetPagination
-    filter_backends = (OrderingFilter,)
-    ordering_fields = ('id', 'name',)
-    ordering = ('id',)
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['kwargs'] = self.kwargs
-        return context
-
-    def get_queryset(self):
-        """
-        This view should return a list of all the projects in the current portfolio with the filtered review status
-        """
-        filter_param = self.kwargs.get('project_filter')
-        review_states = ProjectPortfolioState.objects.filter(portfolio=self.kwargs.get('pk'))
-        if filter_param == 'inventory':
-            return Project.objects.exclude(review_states__portfolio__id=self.kwargs.get('pk'))
-        elif filter_param == 'review':
-            not_approved_reviews = review_states.exclude(approved=True)
-            return Project.objects.filter(review_states__in=not_approved_reviews)
-        elif filter_param == 'approved':
-            approved_reviews = review_states.filter(approved=True)
-            return Project.objects.filter(review_states__in=approved_reviews)
-        else:
-            raise ValidationError({'project_filter': 'Allowed values are: [inventory|review|approved]'})
+        return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_200_OK)
 
 
 class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericViewSet):

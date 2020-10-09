@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import VuexGeolocation from 'vuex-geolocation';
+import Vue from 'vue'
+import VuexGeolocation from 'vuex-geolocation'
 
 export default ({ store }) => {
-  const vuexGeolocation = VuexGeolocation.sync(store);
-  Vue.use(vuexGeolocation);
-};
+  const vuexGeolocation = VuexGeolocation.sync(store)
+  Vue.use(vuexGeolocation)
+}

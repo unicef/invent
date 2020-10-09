@@ -1,33 +1,16 @@
 <template>
-  <el-card
-    :body-style="{ padding: '0px' }"
-    class="ExtendedProjectCard rounded"
-  >
+  <el-card :body-style="{ padding: '0px' }" class="ExtendedProjectCard rounded">
     <div>
-      <el-row
-        type="flex"
-        align="center"
-        class="FirstRow"
-      >
-        <el-col
-          :span="15"
-          class="ProjectName"
-        >
+      <el-row type="flex" align="center" class="FirstRow">
+        <el-col :span="15" class="ProjectName">
           <el-row class="FirstSubRow">
             <el-col>
               {{ projectData.name }}
             </el-col>
           </el-row>
-          <el-row
-            type="flex"
-            justify="start"
-            class="SecondSubRow"
-          >
+          <el-row type="flex" justify="start" class="SecondSubRow">
             <el-col>
-              <country-item
-                :id="projectData.country"
-                :show-flag="true"
-              />
+              <country-item :id="projectData.country" :show-flag="true" />
             </el-col>
             <el-col>
               <organisation-item :id="projectData.organisation" />
@@ -35,10 +18,7 @@
           </el-row>
         </el-col>
 
-        <el-col
-          :span="4"
-          class="ProjectMeta"
-        >
+        <el-col :span="4" class="ProjectMeta">
           <div class="Donors">
             <div>
               {{ donors }}
@@ -46,10 +26,7 @@
             <span><translate>Investor(s)</translate></span>
           </div>
         </el-col>
-        <el-col
-          :span="4"
-          class="ProjectMeta"
-        >
+        <el-col :span="4" class="ProjectMeta">
           <div class="LastChange">
             <div>
               {{ lastChange }}
@@ -67,36 +44,21 @@
         class="SecondRow"
       >
         <el-col>
-          <div
-            v-if="!project.isPublished"
-            class="ProjectStatus Draft"
-          >
-            <translate key="draft">
-              Draft
-            </translate>
+          <div v-if="!project.isPublished" class="ProjectStatus Draft">
+            <translate key="draft"> Draft </translate>
           </div>
-          <div
-            v-if="project.isPublished"
-            class="ProjectStatus Published"
-          >
-            <translate key="published">
-              Published
-            </translate>
+          <div v-if="project.isPublished" class="ProjectStatus Published">
+            <translate key="published"> Published </translate>
           </div>
           <div
             v-if="projectData.approved"
             class="ProjectStatus ApprovedByCountry"
           >
-            <translate key="approved">
-              Approved by MOH
-            </translate>
+            <translate key="approved"> Approved by MOH </translate>
           </div>
         </el-col>
         <el-col>
-          <project-card-actions
-            :project="project"
-            :force-show="false"
-          />
+          <project-card-actions :project="project" :force-show="false" />
         </el-col>
       </el-row>
     </div>
@@ -104,51 +66,55 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { format } from 'date-fns';
+import { mapGetters } from 'vuex'
+import { format } from 'date-fns'
 
-import CountryItem from './CountryItem';
-import OrganisationItem from './OrganisationItem';
-import ProjectCardActions from './ProjectCardActions';
-import ProjectLegend from './ProjectLegend';
+import CountryItem from './CountryItem'
+import OrganisationItem from './OrganisationItem'
+import ProjectCardActions from './ProjectCardActions'
+import ProjectLegend from './ProjectLegend'
 
 export default {
   components: {
     CountryItem,
     OrganisationItem,
     ProjectCardActions,
-    ProjectLegend
+    ProjectLegend,
   },
   props: {
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     ...mapGetters({
-      getUserProjectDetails: 'projects/getUserProjectDetails'
+      getUserProjectDetails: 'projects/getUserProjectDetails',
     }),
-    project () {
-      return this.getUserProjectDetails(this.id);
+    project() {
+      return this.getUserProjectDetails(this.id)
     },
-    projectData () {
-      return this.project.isPublished ? this.project.published : this.project.draft;
+    projectData() {
+      return this.project.isPublished
+        ? this.project.published
+        : this.project.draft
     },
-    donors () {
-      return this.projectData && this.projectData.donors ? this.projectData.donors.length : 0;
+    donors() {
+      return this.projectData && this.projectData.donors
+        ? this.projectData.donors.length
+        : 0
     },
-    lastChange () {
-      return format(this.projectData.modified, 'DD/MM/YYYY');
-    }
+    lastChange() {
+      return format(this.projectData.modified, 'DD/MM/YYYY')
+    },
   },
-  methods: {}
-};
+  methods: {},
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .ExtendedProjectCard {
   max-width: @cardSizeMedium;
@@ -199,7 +165,7 @@ export default {
         font-weight: 400;
 
         &::before {
-          content: "";
+          content: '';
           position: absolute;
           top: 50%;
           left: 10px;
@@ -284,8 +250,8 @@ export default {
       }
     }
 
-    .ProjectCardActions {}
+    .ProjectCardActions {
+    }
   }
 }
-
 </style>

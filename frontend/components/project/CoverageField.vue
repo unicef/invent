@@ -24,37 +24,36 @@
 </template>
 
 <script>
-import SimpleField from './SimpleField';
+import SimpleField from './SimpleField'
 export default {
   components: {
-    SimpleField
+    SimpleField,
   },
   props: {
     coverage: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   computed: {
-    cov () {
-      return this.coverage || {};
-    }
-  }
-};
+    cov() {
+      return this.coverage || {}
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .CoverageField {
-    .SimpleField {
-      margin: 10px 0 !important;
+.CoverageField {
+  .SimpleField {
+    margin: 10px 0 !important;
 
-      .Header {
-        font-size: @fontSizeBase !important;
-      }
+    .Header {
+      font-size: @fontSizeBase !important;
     }
   }
-
+}
 </style>

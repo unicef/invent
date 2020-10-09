@@ -9,35 +9,35 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import TitleCard from "@/components/portfolio/dashboard/TitleCard";
-import PortfolioCard from "@/components/portfolio/dashboard/PortfolioCard";
-import InfoCard from "@/components/portfolio/dashboard/InfoCard";
+import { mapState } from 'vuex'
+import TitleCard from '@/components/portfolio/dashboard/TitleCard'
+import PortfolioCard from '@/components/portfolio/dashboard/PortfolioCard'
+import InfoCard from '@/components/portfolio/dashboard/InfoCard'
 
 export default {
   components: {
     TitleCard,
     PortfolioCard,
-    InfoCard
+    InfoCard,
   },
   data() {
-    return {};
+    return {}
   },
-  async fetch({ store }) {
-    store.dispatch("portfolio/getPortfolios");
+  fetch({ store }) {
+    store.dispatch('portfolio/getPortfolios')
   },
   computed: {
     ...mapState({
-      items: state => state.portfolio.portfolios
-    })
+      items: (state) => state.portfolio.portfolios,
+    }),
   },
-  methods: {}
-};
+  methods: {},
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .portfolio-main {
   display: flex;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p @click="handleScore()" class="assing mb-10">
+    <p class="assing mb-10" @click="handleScore()">
       <fa icon="list" />
       <translate v-if="tab === 2">Change / view score</translate>
       <translate v-if="tab === 3">View score</translate>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -31,18 +31,18 @@ export default {
   },
   methods: {
     ...mapActions({
-      getManagerScore: "portfolio/getManagerScore",
+      getManagerScore: 'portfolio/getManagerScore',
     }),
     handleScore() {
-      this.getManagerScore({ id: this.scores.id, name: this.name });
+      this.getManagerScore({ id: this.scores.id, name: this.name })
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .complete {
   color: #0eb455;

@@ -4,29 +4,35 @@ module.exports = {
     browser: true,
     node: true,
     es6: true,
-    jest: true
-  },
-  globals: {
-    L: true
+    jest: true,
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
   },
   extends: [
-    'plugin:vue/recommended',
-    'standard'
+    '@nuxtjs',
+    'prettier',
+    'prettier/vue',
+    'plugin:prettier/recommended',
+    'plugin:nuxt/recommended',
   ],
-  // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
+  globals: {
+    _: true,
+  },
+  plugins: ['prettier', 'vue'],
   // add your custom rules here
   rules: {
-    camelcase: 0,
-    "indent": ["error", 2],
-    "arrow-parens": 0,
-    "one-var": 0,
-    semi: ["warn", "always"],
-    "eol-last": ["error", "always"]
-  }
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    camelcase: 'off',
+    'vue/custom-event-name-casing': 'off',
+  },
+  overrides: [
+    {
+      files: ['**/__tests__/*.{j,t}s?(x)'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 }

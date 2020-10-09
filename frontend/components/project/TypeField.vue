@@ -9,21 +9,19 @@ export default {
   props: {
     list: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     value: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
-    selected () {
-      return this.list[this.value];
-    }
-  }
-};
+    selected() {
+      return this.list[this.value]
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

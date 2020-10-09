@@ -1,10 +1,7 @@
 <template>
   <div class="PlatformList">
     <ul>
-      <li
-        v-for="p in selected"
-        :key="p.id"
-      >
+      <li v-for="p in selected" :key="p.id">
         <span>
           {{ p.name }}
         </span>
@@ -15,32 +12,33 @@
 
 <script>
 export default {
-  components: {
-  },
+  components: {},
   props: {
     platforms: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     source: {
       type: String,
-      default: 'getTechnologyPlatforms'
-    }
+      default: 'getTechnologyPlatforms',
+    },
   },
   computed: {
-    selected () {
-      const list = this.$store.getters[`projects/${this.source}`];
-      return list && this.platforms ? list.filter(tp => this.platforms.includes(tp.id)) : [];
-    }
-  }
-};
+    selected() {
+      const list = this.$store.getters[`projects/${this.source}`]
+      return list && this.platforms
+        ? list.filter((tp) => this.platforms.includes(tp.id))
+        : []
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  //@import "~assets/style/variables.less";
-  //@import "~assets/style/mixins.less";
+//@import "~assets/style/variables.less";
+//@import "~assets/style/mixins.less";
 
-  .PlatformList {
-    width: 100%;
-  }
+.PlatformList {
+  width: 100%;
+}
 </style>

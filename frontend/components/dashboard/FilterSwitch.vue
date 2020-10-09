@@ -6,15 +6,9 @@
     class="FilterSwitch"
   >
     <el-col class="SwitchComponent">
-      <el-row
-        type="flex"
-        align="middle"
-      >
+      <el-row type="flex" align="middle">
         <el-col class="SwitchHandler">
-          <el-switch
-            :value="value"
-            @change="switchChangeHandler"
-          />
+          <el-switch :value="value" @change="switchChangeHandler" />
         </el-col>
         <el-col class="SwitchLabel">
           {{ label }}
@@ -46,73 +40,72 @@
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      required: true
+      required: true,
     },
     tooltip: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
-      showTooltip: false
-    };
+      showTooltip: false,
+    }
   },
   methods: {
-    switchChangeHandler (value) {
-      this.$emit('change', value);
-    }
-  }
-};
+    switchChangeHandler(value) {
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .FilterSwitch {
-    margin-bottom: 10px;
+.FilterSwitch {
+  margin-bottom: 10px;
 
-    &:last-child {
-      margin: 0;
-    }
+  &:last-child {
+    margin: 0;
+  }
 
-    .SwitchComponent {
-      width: 100%;
+  .SwitchComponent {
+    width: 100%;
 
-      .SwitchHandler {
-        width: auto;
-        padding-right: 10px;
-      }
-
-      .SwitchLabel {
-        font-size: @fontSizeBase;
-        line-height: 19px;
-        color: @colorTextPrimary;
-      }
-    }
-
-    .SwitchTooltip {
+    .SwitchHandler {
       width: auto;
-      padding-left: 10px;
+      padding-right: 10px;
+    }
 
-      .el-button {
-        padding: 0;
-      }
+    .SwitchLabel {
+      font-size: @fontSizeBase;
+      line-height: 19px;
+      color: @colorTextPrimary;
     }
   }
 
-  .FilterSwitchTooltip {
-    max-width: @advancedSearchWidth;
-  }
+  .SwitchTooltip {
+    width: auto;
+    padding-left: 10px;
 
+    .el-button {
+      padding: 0;
+    }
+  }
+}
+
+.FilterSwitchTooltip {
+  max-width: @advancedSearchWidth;
+}
 </style>

@@ -21,27 +21,27 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   computed: {
     ...mapState({
-      profile: state => state.user.profile
-    })
+      profile: (state) => state.user.profile,
+    }),
   },
   methods: {
     handleLink() {
       this.$router.push(
-        this.localePath({ name: "organisation-portfolio-management-new" })
-      );
-    }
-  }
-};
+        this.localePath({ name: 'organisation-portfolio-management-new' })
+      )
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .portfolio-main-title {
   width: 100%;

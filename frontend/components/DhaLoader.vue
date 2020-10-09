@@ -1,9 +1,6 @@
 <template>
   <transition name="el-fade-in">
-    <div
-      v-if="show"
-      class="GlobalLoader"
-    >
+    <div v-if="show" class="GlobalLoader">
       <div>
         <div class="Loader">
           <div />
@@ -15,9 +12,8 @@
 </template>
 
 <script>
-
 export default {
-  data () {
+  data() {
     return {
       percent: 0,
       show: false,
@@ -27,143 +23,143 @@ export default {
       reversed: false,
       skipTimerCount: 0,
       continuous: false,
-      rtl: false
-    };
+      rtl: false,
+    }
   },
-  beforeDestroy () {
-    this.clear();
+  beforeDestroy() {
+    this.clear()
   },
   methods: {
-    clear () {
-      clearInterval(this._timer);
-      clearTimeout(this._throttle);
-      this._timer = null;
+    clear() {
+      clearInterval(this._timer)
+      clearTimeout(this._throttle)
+      this._timer = null
     },
-    start (id) {
+    start(id) {
       if (id) {
-        this._skipUntill = id;
+        this._skipUntill = id
       }
-      this.clear();
-      this.percent = 0;
-      this.reversed = false;
-      this.skipTimerCount = 0;
-      this.canSucceed = true;
+      this.clear()
+      this.percent = 0
+      this.reversed = false
+      this.skipTimerCount = 0
+      this.canSucceed = true
       if (this.throttle) {
-        this._throttle = setTimeout(() => this.startTimer(), this.throttle);
+        this._throttle = setTimeout(() => this.startTimer(), this.throttle)
       } else {
-        this.startTimer();
+        this.startTimer()
       }
-      return this;
+      return this
     },
-    set (num) {
-      this.show = true;
-      this.canSucceed = true;
-      this.percent = Math.min(100, Math.max(0, Math.floor(num)));
-      return this;
+    set(num) {
+      this.show = true
+      this.canSucceed = true
+      this.percent = Math.min(100, Math.max(0, Math.floor(num)))
+      return this
     },
-    get () {
-      return this.percent;
+    get() {
+      return this.percent
     },
-    increase (num) {
-      this.percent = Math.min(100, Math.floor(this.percent + num));
-      return this;
+    increase(num) {
+      this.percent = Math.min(100, Math.floor(this.percent + num))
+      return this
     },
-    decrease (num) {
-      this.percent = Math.max(0, Math.floor(this.percent - num));
-      return this;
+    decrease(num) {
+      this.percent = Math.max(0, Math.floor(this.percent - num))
+      return this
     },
-    pause () {
-      clearInterval(this._timer);
-      return this;
+    pause() {
+      clearInterval(this._timer)
+      return this
     },
-    resume () {
-      this.startTimer();
-      return this;
+    resume() {
+      this.startTimer()
+      return this
     },
-    finish (id) {
+    finish(id) {
       if (this._skipUntill && id !== this._skipUntill) {
-        return this;
+        return this
       }
-      this.percent = this.reversed ? 0 : 100;
-      this._skipUntill = null;
-      this.hide();
-      return this;
+      this.percent = this.reversed ? 0 : 100
+      this._skipUntill = null
+      this.hide()
+      return this
     },
-    hide () {
-      this.clear();
+    hide() {
+      this.clear()
       setTimeout(() => {
-        this.show = false;
+        this.show = false
         this.$nextTick(() => {
-          this.percent = 0;
-          this.reversed = false;
-        });
-      }, 500);
-      return this;
+          this.percent = 0
+          this.reversed = false
+        })
+      }, 500)
+      return this
     },
-    fail () {
-      this.canSucceed = false;
-      return this;
+    fail() {
+      this.canSucceed = false
+      return this
     },
-    startTimer () {
+    startTimer() {
       if (!this.show) {
-        this.show = true;
+        this.show = true
       }
       if (typeof this._cut === 'undefined') {
-        this._cut = 10000 / Math.floor(this.duration);
+        this._cut = 10000 / Math.floor(this.duration)
       }
       this._timer = setInterval(() => {
         if (this.skipTimerCount > 0) {
-          this.skipTimerCount--;
-          return;
+          this.skipTimerCount--
+          return
         }
         if (this.reversed) {
-          this.decrease(this._cut);
+          this.decrease(this._cut)
         } else {
-          this.increase(this._cut);
+          this.increase(this._cut)
         }
         if (this.continuous) {
           if (this.percent >= 100) {
-            this.skipTimerCount = 1;
-            this.reversed = !this.reversed;
+            this.skipTimerCount = 1
+            this.reversed = !this.reversed
           } else if (this.percent <= 0) {
-            this.skipTimerCount = 1;
-            this.reversed = !this.reversed;
+            this.skipTimerCount = 1
+            this.reversed = !this.reversed
           }
         }
-      }, 100);
-    }
-  }
-};
+      }, 100)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  .GlobalLoader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 5000;
-    background-color: rgba(255,255,255,.5);
+.GlobalLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 5000;
+  background-color: rgba(255, 255, 255, 0.5);
 
-    > div {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background-color: rgba(255,255,255,.9);
-      border-radius: 5px;
-      box-shadow: 0 4px 12px 0 rgba(0,0,0,.12);
-    }
-
-    p {
-      color: white;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-    }
+  > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.12);
   }
+
+  p {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+  }
+}
 </style>

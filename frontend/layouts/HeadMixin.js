@@ -1,25 +1,21 @@
 export default {
-  head () {
-    const i18nSeo = this.$nuxtI18nSeo();
+  head() {
+    const i18nSeo = this.$nuxtI18nSeo()
     return {
       htmlAttrs: {
         ...i18nSeo.htmlAttrs,
-        dir: this.$_headMixin_lngDirection
+        dir: this.$_headMixin_lngDirection,
       },
-      meta: [
-        ...i18nSeo.meta
-      ],
-      link: [
-        ...i18nSeo.link
-      ]
-    };
+      meta: [...i18nSeo.meta],
+      link: [...i18nSeo.link],
+    }
   },
   computed: {
-    $_headMixin_lngDirection () {
+    $_headMixin_lngDirection() {
       if (this.$i18n.locale === 'ar') {
-        return 'rtl';
+        return 'rtl'
       }
-      return 'ltr';
-    }
-  }
-};
+      return 'ltr'
+    },
+  },
+}

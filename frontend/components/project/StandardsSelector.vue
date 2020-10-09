@@ -1,9 +1,5 @@
 <template>
-  <el-checkbox-group
-    :value="value"
-    class="ThreePerRow"
-    @input="changeHandler"
-  >
+  <el-checkbox-group :value="value" class="ThreePerRow" @input="changeHandler">
     <el-checkbox
       v-for="standard in standards"
       :key="standard.id"
@@ -15,34 +11,33 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     ...mapGetters({
-      standards: 'projects/getInteroperabilityStandards'
-    })
+      standards: 'projects/getInteroperabilityStandards',
+    }),
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
-    }
-  }
-};
+    changeHandler(value) {
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
-
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 </style>

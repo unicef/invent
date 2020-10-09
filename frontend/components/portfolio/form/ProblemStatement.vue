@@ -10,35 +10,34 @@
 </template>
 
 <script>
-import { mapGettersActions } from "@/utilities/form";
-import CollapsibleCard from "@/components/portfolio/CollapsibleCard";
-import Statements from "@/components/portfolio/form/inputs/Statements";
+import CollapsibleCard from '@/components/portfolio/CollapsibleCard'
+import Statements from '@/components/portfolio/form/inputs/Statements'
 
 export default {
   components: {
     CollapsibleCard,
-    Statements
+    Statements,
   },
   methods: {
     async validate() {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([this.$validator.validate()]);
-      console.log("General settings published validation", validations);
-      return validations.reduce((a, c) => a && c, true);
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      console.log('General settings published validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft() {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
-        this.$validator.validate("statements")
-      ]);
-      console.log("General settings draft validation", validations);
-      return validations.reduce((a, c) => a && c, true);
-    }
-  }
-};
+        this.$validator.validate('statements'),
+      ])
+      console.log('General settings draft validation', validations)
+      return validations.reduce((a, c) => a && c, true)
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 </style>

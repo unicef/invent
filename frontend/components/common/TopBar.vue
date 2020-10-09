@@ -63,12 +63,12 @@
                     localePath({
                       name: 'organisation-inventory',
                       params: $route.params,
-                      query: {}
+                      query: {},
                     })
                   "
                   class="HeaderBtn"
                 >
-                  <translate>TIIP Inventory</translate>
+                  <translate>Inventory</translate>
                 </nuxt-link>
               </div>
               <!-- organisation-dashboard-list -->
@@ -79,27 +79,12 @@
                     localePath({
                       name: 'organisation-portfolio-innovation',
                       params: $route.params,
-                      query: {}
+                      query: {},
                     })
                   "
                   class="HeaderBtn"
                 >
-                  <translate>Innovation Portfolio</translate>
-                </nuxt-link>
-              </div>
-              <div>
-                <nuxt-link
-                  key="myProjectsBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-projects',
-                      params: $route.params
-                    })
-                  "
-                  exact
-                  class="HeaderBtn"
-                >
-                  <translate>My Projects</translate>
+                  <translate>Innovation Portfolios</translate>
                 </nuxt-link>
               </div>
               <div>
@@ -109,12 +94,27 @@
                     localePath({
                       name: 'organisation-portfolio-management',
                       params: $route.params,
-                      query: {}
+                      query: {},
                     })
                   "
                   class="HeaderBtn"
                 >
                   <translate>Portfolio Manager</translate>
+                </nuxt-link>
+              </div>
+              <div>
+                <nuxt-link
+                  key="myProjectsBtn"
+                  :to="
+                    localePath({
+                      name: 'organisation-initiatives',
+                      params: $route.params,
+                    })
+                  "
+                  exact
+                  class="HeaderBtn"
+                >
+                  <translate>My Initiatives</translate>
                 </nuxt-link>
               </div>
               <!-- <div>
@@ -135,14 +135,14 @@
                   key="newProjectBtn"
                   :to="
                     localePath({
-                      name: 'organisation-projects-create',
-                      params: $route.params
+                      name: 'organisation-initiatives-create',
+                      params: $route.params,
                     })
                   "
                   class="HeaderBtn"
                 >
                   <fa icon="plus-circle" size="lg" />
-                  <translate>New Project</translate>
+                  <translate>New initiative</translate>
                 </nuxt-link>
               </div>
               <user-dropdown />
@@ -177,7 +177,7 @@
                 :to="
                   localePath({
                     name: 'organisation',
-                    params: { organisation: '-' }
+                    params: { organisation: '-' },
                   })
                 "
               >
@@ -196,60 +196,60 @@
 </template>
 
 <script>
-import VueScrollClass from "vue-scroll-class";
-import { mapGetters } from "vuex";
+import VueScrollClass from 'vue-scroll-class'
+import { mapGetters } from 'vuex'
 
-import LanguageSelector from "./LanguageSelector";
-import UserDropdown from "./UserDropdown";
-import ToolkitDialogWrapper from "./ToolkitDialogWrapper";
+import LanguageSelector from './LanguageSelector'
+import UserDropdown from './UserDropdown'
+// import ToolkitDialogWrapper from './ToolkitDialogWrapper'
 
 export default {
   directives: {
-    "scroll-class": VueScrollClass
+    'scroll-class': VueScrollClass,
   },
   components: {
     LanguageSelector,
     UserDropdown,
-    ToolkitDialogWrapper
+    // ToolkitDialogWrapper,
   },
   props: {
     errorPage: {
       type: Boolean,
-      default: false
+      default: false,
     },
     auth: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      user: "user/getProfile",
-      landingData: "landing/getLandingPageData"
+      user: 'user/getProfile',
+      landingData: 'landing/getLandingPageData',
     }),
     customOrganisation() {
-      return this.landingData !== null;
+      return this.landingData !== null
     },
     countrySpecific() {
-      return this.customOrganisation && this.landingData.code.length === 2;
+      return this.customOrganisation && this.landingData.code.length === 2
     },
     organisationLogo() {
       if (this.landingData) {
-        return this.landingData.logo_url;
+        return this.landingData.logo_url
       }
-      return null;
+      return null
     },
     countryFlag() {
       if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
-      return null;
+      return null
     },
     isSuperUser() {
-      return this.user && this.user.is_superuser;
-    }
-  }
-};
+      return this.user && this.user.is_superuser
+    },
+  },
+}
 </script>
 
 <style lang="less">

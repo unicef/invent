@@ -15,38 +15,36 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: [Number, String],
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      regions: 'system/getRegions'
+      regions: 'system/getRegions',
     }),
     innerValue: {
-      get () {
-        return this.value;
+      get() {
+        return this.value
       },
-      set (value) {
-        this.$emit('change', value);
-      }
-    }
-  }
-};
+      set(value) {
+        this.$emit('change', value)
+      },
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>
