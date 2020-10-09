@@ -79,21 +79,16 @@ urlpatterns = [
             'get': 'list',
         }),
         name="project-map"),
-    path('projects/favorites/',
-         view=views.ProjectFavoritesViewSet.as_view({
-             'get': 'list'
-         }),
-         name="favorite-projects-list"),
     path('projects/favorites/add/',
          view=views.ProjectModifyFavoritesViewSet.as_view({
              'post': 'add'
          }),
-         name="favorite-projects-add"),
+         name="projects-add-favorite"),
     path('projects/favorites/remove/',
          view=views.ProjectModifyFavoritesViewSet.as_view({
              'post': 'remove'
          }),
-         name="favorite-projects-remove"),
+         name="projects-remove-favorite"),
     path(r'approvals/<int:country_id>/',
          view=views.ProjectApprovalViewSet.as_view({
              'get': 'list'

@@ -33,6 +33,9 @@ class ProjectManager(models.Manager):
         return self.filter(Q(team=user.userprofile)
                            | Q(viewers=user.userprofile)).distinct().order_by('id')
 
+    def favorited_by(self, user):
+        return self.filter(favorited_by=user.userprofile)
+
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
         return self.filter(data__organisation=organisation_id)
