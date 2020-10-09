@@ -34,6 +34,31 @@ class PortfolioSetup(TestProjectData, APITestCase):
         user_profile_id = response.json().get('user_profile_id')
         return user_profile_id, test_user_client, test_user_key
 
+    def move_project_to_portfolio(self, portfolio_id, project_id, expected_response_status=201, client=None):
+        if client is None:
+            client = self.user_3_client
+        url = reverse("portfolio-project-add", kwargs={"pk": portfolio_id})
+        request_data = {"project": [project_id]}
+
+        # check permissions with user_1_client, which is not allowed
+        response = client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, expected_response_status, response.json())
+        return response.json()
+
+    def review_and_approve_project(self, pps, scores, client=None):
+        if client is None:
+            client = self.user_3_client  # pragma: no cover
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': pps.id})
+        response = client.post(url, scores, format="json")
+        self.assertEqual(response.status_code, 200, f'{response.json()}')
+
+        project_id = pps.project.id
+
+        url = reverse('portfolio-project-approve', kwargs={'pk': pps.portfolio.id})
+        response = self.user_3_client.post(url, {'project': [project_id]}, format="json")
+        self.assertEqual(response.status_code, 200, f'{response.json()}')
+        return response.json()
+
     def setUp(self):
         super().setUp()
 
@@ -128,21 +153,6 @@ class PortfolioTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
 
-    def test_detailed_portfolio_view(self):
-        """
-        Any user should be able to view portfolio details
-        """
-        url = reverse('portfolio-detailed',
-                      kwargs={"pk": self.portfolio_id})
-        response = self.user_1_client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['id'], self.portfolio_id)
-        self.assertEqual(response.json()['managers'], [self.user_3_pr_id])
-        response_ps_ids = {ps['id'] for ps in response.json()['problem_statements']}
-        expected_ps_ids = {ps.id for ps in Portfolio.objects.get(id=self.portfolio_id).problem_statements.all()}
-        self.assertEqual(response_ps_ids, expected_ps_ids)
-
     def test_problem_statement_handling(self):
         """
         Managers need to be able to add, update and remove Problem Statements to existing portfolios
@@ -181,10 +191,9 @@ class PortfolioTests(PortfolioSetup):
         # create a brand new user to be a new manager
         user_4_pr_id, user_4_client, user_4_key = \
             self.create_user("the_new_guy@unicef.org", "123456hetNYOLC", "123456hetNYOLC")
-        # get the list of current managers on the portfolio
-        url = reverse('portfolio-detailed', kwargs={"pk": self.portfolio_id})
-        response = self.user_1_client.get(url)
-        managers = response.json()['managers']
+
+        portfolio = Portfolio.objects.get(id=self.portfolio_id)
+        managers = list(portfolio.managers.values_list('id', flat=True))
         managers.append(user_4_pr_id)
 
         url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})

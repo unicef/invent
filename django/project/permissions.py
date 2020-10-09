@@ -40,15 +40,10 @@ class IsGPOOrReadOnly(permissions.BasePermission):
 
 class IsGPOOrManagerPortfolio(permissions.BasePermission):
     """
-    GPOs and managers have full access to portfolios, others only read access
+    GPOs and managers have full access to portfolios
     """
 
     def has_object_permission(self, request, view, obj: Portfolio):
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS:
-            return True  # pragma: no cover
-
         return request.user.userprofile.global_portfolio_owner or obj.managers.filter(id=request.user.userprofile.id)
 
 
