@@ -21,67 +21,102 @@
       </div>
     </template>
     <!-- content -->
-    <div class="info-box">
-      <fa class="info-icon" icon="info-circle" />
-      <p>
-        <b><translate>Brief Text Comes Here</translate>{{ ` ` }}</b>
-        <translate>
-          — Contra legem facit qui id facit quod lex prohibet. At nos hinc
-          posthac, sitientis piros Afros. Fabio vel iudice vincam, sunt in culpa
-          qui officia. Ab illo tempore, ab est sed immemorabili. Nihil hic
-          munitissimus habendi senatus locus, nihil horum?
-        </translate>
-      </p>
-    </div>
-    <div
-      v-for="(question, idx) in questionType"
-      :key="question"
-      class="question"
-    >
-      <p class="label">
-        {{ `${idx + 1}/A: ` }}
-        <translate>{{ reviewQuestions[question].name }}</translate>
-      </p>
-      <p class="sub-label">
-        <translate>{{ reviewQuestions[question].text }}</translate>
-      </p>
-      <div class="select-box">
-        <el-select
-          v-if="question === 'psa'"
-          v-model="score[question]"
-          class="select-psa"
-          multiple
-          filterable
-          clearable
-        >
-          <el-option
-            v-for="i in problemStatements"
-            :key="i.id"
-            :label="i.name"
-            :value="i.id"
+    <!-- review view -->
+    <template v-if="currentProjectReview.reviewed">
+      <div
+        v-for="question in questionType"
+        :key="question"
+        class="question question-info"
+      >
+        <div class="score-line">
+          <p key="label" class="label">
+            <translate>{{ reviewQuestions[question].name }}</translate>
+          </p>
+          <div class="divider"></div>
+          <p v-if="question !== 'psa'" class="label">{{ score[question] }}</p>
+        </div>
+        <div v-if="question === 'psa'" class="statements-wrapper">
+          <psa-list
+            :items="score[question]"
+            :problem-statements="problemStatements"
+            big
           />
-        </el-select>
-        <el-select v-else v-model="score[question]" clearable>
-          <el-option v-for="i in points" :key="i" :label="i" :value="i" />
-        </el-select>
-        <info-popover
-          placement="right"
-          :title="$gettext('Scoring Guidance') | translate"
-          width="360"
-        >
-          <p>{{ reviewQuestions[question].guidance }}</p>
-        </info-popover>
+        </div>
+        <p key="comment" class="comment">
+          <template v-if="score[`${question}_comment`] === ''">
+            <translate>(no comment)</translate>
+          </template>
+          <template v-else>
+            <fa :icon="['fas', 'comment-alt']" />
+            <translate>{{ score[`${question}_comment`] }}</translate>
+          </template>
+        </p>
       </div>
-      <p class="label">
-        {{ `${idx + 1}/B: ` }}<translate>Add comment (optional)</translate>
-      </p>
-      <el-input
-        v-model="score[`${question}_comment`]"
-        type="textarea"
-        :rows="3"
-        :placeholder="$gettext('Type here...') | translate"
-      />
-    </div>
+    </template>
+    <!-- review form -->
+    <template v-else>
+      <div class="info-box">
+        <fa class="info-icon" icon="info-circle" />
+        <p>
+          <b><translate>Brief Text Comes Here</translate>{{ ` ` }}</b>
+          <translate>
+            — Contra legem facit qui id facit quod lex prohibet. At nos hinc
+            posthac, sitientis piros Afros. Fabio vel iudice vincam, sunt in
+            culpa qui officia. Ab illo tempore, ab est sed immemorabili. Nihil
+            hic munitissimus habendi senatus locus, nihil horum?
+          </translate>
+        </p>
+      </div>
+      <div
+        v-for="(question, idx) in questionType"
+        :key="question"
+        class="question"
+      >
+        <p class="label">
+          {{ `${idx + 1}/A: ` }}
+          <translate>{{ reviewQuestions[question].name }}</translate>
+        </p>
+        <p class="sub-label">
+          <translate>{{ reviewQuestions[question].text }}</translate>
+        </p>
+        <div class="select-box">
+          <el-select
+            v-if="question === 'psa'"
+            v-model="score[question]"
+            class="select-psa"
+            multiple
+            filterable
+            clearable
+          >
+            <el-option
+              v-for="i in problemStatements"
+              :key="i.id"
+              :label="i.name"
+              :value="i.id"
+            />
+          </el-select>
+          <el-select v-else v-model="score[question]" clearable>
+            <el-option v-for="i in points" :key="i" :label="i" :value="i" />
+          </el-select>
+          <info-popover
+            placement="right"
+            :title="$gettext('Scoring Guidance') | translate"
+            width="360"
+          >
+            <p>{{ reviewQuestions[question].guidance }}</p>
+          </info-popover>
+        </div>
+        <p class="label">
+          {{ `${idx + 1}/B: ` }}<translate>Add comment (optional)</translate>
+        </p>
+        <el-input
+          v-model="score[`${question}_comment`]"
+          type="textarea"
+          :rows="3"
+          :placeholder="$gettext('Type here...') | translate"
+        />
+      </div>
+    </template>
     <!-- footer -->
     <span
       v-if="!currentProjectReview.reviewed"
@@ -106,11 +141,13 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 
 import ReviewStateInfo from '@/components/review/ReviewStateInfo'
 import InfoPopover from '@/components/common/InfoPopover'
+import PsaList from '@/components/portfolio/dashboard/table/PsaList'
 
 export default {
   components: {
     ReviewStateInfo,
     InfoPopover,
+    PsaList,
   },
   data() {
     return {
@@ -206,10 +243,12 @@ export default {
         impact: 3,
         scale_phase: 4,
         psa_comment: 'new comment',
-        rnci_comment: 'new comment',
-        ratp_comment: 'new comment',
+        rnci_comment: '',
+        ratp_comment:
+          'Contra legem facit qui id facit quod lex prohibet. Me non paenitet nullum festiviorem excogitasse ad hoc. Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae. Sed haec quis possit intrepidus aestimare tellus. Idque Caesaris facere voluntate liceret: sese habere.',
         ra_comment: 'new comment',
-        ee_comment: 'new comment',
+        ee_comment:
+          'Contra legem facit qui id facit quod lex prohibet. Me non paenitet nullum festiviorem excogitasse ad hoc. Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae. Sed haec quis possit intrepidus aestimare tellus. Idque Caesaris facere voluntate liceret: sese habere.',
         nst_comment: 'new comment',
         nc_comment: 'new comment',
         ps_comment: 'new comment',
@@ -232,9 +271,6 @@ export default {
     max-height: 462px;
     overflow-y: scroll;
     padding: 40px 60px;
-    // &::-webkit-scrollbar {
-    //   display: none;
-    // }
   }
 }
 
@@ -278,6 +314,9 @@ export default {
   }
   .question {
     margin-top: 40px;
+    &.question-info {
+      margin: 0 0 30px;
+    }
     .label,
     .sub-label {
       font-size: 14px;
@@ -287,6 +326,32 @@ export default {
     }
     .label {
       font-weight: bold;
+    }
+    .score-line {
+      display: flex;
+      justify-content: space-between;
+      .divider {
+        flex-grow: 1;
+        height: 1px;
+        border-bottom: 1px solid #eae6e1;
+        align-self: flex-end;
+        margin: 0 10px 22px;
+      }
+    }
+    .statements-wrapper {
+      padding: 0 16px 15px;
+    }
+    .comment {
+      color: @colorBrandGrayDark;
+      font-size: 14px;
+      letter-spacing: 0;
+      line-height: 20px;
+      margin: 0;
+      padding: 0 16px;
+      svg {
+        color: #a8a8a9;
+        margin-right: 6px;
+      }
     }
     .select-box {
       display: flex;
