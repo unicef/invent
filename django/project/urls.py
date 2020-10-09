@@ -107,11 +107,6 @@ urlpatterns = [
         view=views.PortfolioUserListViewSet.as_view({
             'get': 'list'
         }), name="portfolio-list"),
-    path('portfolio/<int:pk>/',
-         view=views.PortfolioDetailedViewSet.as_view({
-             'get': 'retrieve'
-         }),
-         name="portfolio-detailed"),
     path('portfolio/<int:pk>/add-project/',
          view=views.PortfolioProjectChangeReviewStatusViewSet.as_view({
              'post': 'move_from_inventory_to_review'
@@ -128,11 +123,6 @@ urlpatterns = [
          view=views.PortfolioProjectChangeReviewStatusViewSet.as_view({
              'post': 'disapprove'
          }), name='portfolio-project-disapprove'),
-    path('portfolio/<int:pk>/projects/<str:project_filter>/',
-         view=views.ProjectPortfolioListViewSet.as_view({
-             'get': 'list'
-         }),
-         name="portfolio-project-list"),
     path('portfolio/<int:portfolio_id>/<int:project_id>/',
          view=views.PortfolioReviewAssignQuestionnaireViewSet.as_view({
              'post': 'create_questionnaire'

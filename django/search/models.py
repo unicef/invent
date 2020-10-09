@@ -43,9 +43,9 @@ class ProjectSearch(ExtendedModel):
         "cc": "capability_categories",  # eg: cc=1&cc=2
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
         "ic": "innovation_categories",  # eg: ic=1&ic=2
-        "portfolio": "project__review_states__portfolio",
-        "sp": "scale_phase",  # TODO: scale phase
-        "ps": "problem_statement",  # TODO: problem statements 
+        "portfolio": "project__review_states__portfolio",  # eg: portfolio=1
+        "sp": "project__review_states__scale_phase",  # eg: sp=1
+        "ps": "project__review_states__psa",  # eg: ps=1
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -114,7 +114,7 @@ class ProjectSearch(ExtendedModel):
                     elif field == "approved":
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
-                    elif field == "portfolio":
+                    elif field in ["portfolio", "sp", "ps"]:
                         lookup_param = "exact"
                         lookup = query_params.get(field)
 

@@ -430,15 +430,9 @@ class PortfolioListSerializer(serializers.ModelSerializer):
 
 
 class ProblemStatementSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ProblemStatement
         fields = ('id', 'name', 'description')
-
-
-class ProblemStatementUpdateSerializer(ProblemStatementSerializer):
-
-    class Meta(ProblemStatementSerializer.Meta):
         extra_kwargs = {
             "id": {
                 "read_only": False,
@@ -472,8 +466,8 @@ class ReviewScoreSerializer(serializers.ModelSerializer):
 
 
 class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
-    scale_phase = serializers.IntegerField(required=True)
-    impact = serializers.IntegerField(required=True)
+    impact = serializers.ChoiceField(required=True, choices=ProjectPortfolioState.BASE_CHOICES, allow_blank=False)
+    scale_phase = serializers.ChoiceField(required=True, choices=ProjectPortfolioState.SCALE_CHOICES, allow_blank=False)
     project = serializers.IntegerField(read_only=True, source='project.id')
     portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
     review_scores = ReviewScoreSerializer(many=True, read_only=True, required=False)
@@ -485,7 +479,7 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-        Override serializer to set 'reviewed' to True (also set scale phase based on input int)
+        Override serializer to set 'reviewed' to True
         """
         instance.reviewed = True
         instance = super().update(instance, validated_data)
@@ -508,28 +502,7 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
         }
 
 
-class PortfolioBaseSerializer(serializers.ModelSerializer):
-    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
-
-    class Meta:
-        model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements')
-
-
-class PortfolioDetailsSerializer(PortfolioBaseSerializer):
-    problem_statements = ProblemStatementSerializer(many=True, required=False, read_only=True)
-    review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
-    ambition_matrix = serializers.ReadOnlyField(source='get_ambition_matrix')
-    risk_impact_matrix = serializers.ReadOnlyField(source='get_risk_impact_matrix')
-    problem_statement_matrix = serializers.ReadOnlyField(source='get_problem_statement_matrix')
-
-    class Meta:
-        model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'problem_statements',
-                  'review_states', 'ambition_matrix', 'risk_impact_matrix', 'problem_statement_matrix')
-
-
-class PortfolioCreateSerializer(PortfolioBaseSerializer):
+class PortfolioSerializer(serializers.ModelSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False)
 
     class Meta:
@@ -551,13 +524,6 @@ class PortfolioCreateSerializer(PortfolioBaseSerializer):
         self._create_problem_statements(instance, problem_statements)
         instance.save()
         return instance
-
-
-class PortfolioUpdateSerializer(PortfolioBaseSerializer):
-    """
-    Used for update ONLY
-    """
-    problem_statements = ProblemStatementUpdateSerializer(many=True, required=False)
 
     def update(self, instance, validated_data):
         """
@@ -585,21 +551,12 @@ class PortfolioUpdateSerializer(PortfolioBaseSerializer):
         return instance
 
 
-class ProjectInPortfolioSerializer(serializers.ModelSerializer):
-    review_states = serializers.SerializerMethodField()
-    project_data = serializers.JSONField(source='data')
+class PortfolioStateChangeSerializer(PortfolioSerializer):
+    review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
 
     class Meta:
-        model = Project
-        fields = ('id', 'name', 'review_states', 'project_data')
-
-    def get_review_states(self, obj):
-        portfolio = self.context.get('kwargs').get('pk')
-        try:
-            pps = obj.review_states.get(portfolio=portfolio)
-            return ProjectPortfolioStateSerializer(pps).data
-        except ProjectPortfolioState.DoesNotExist:
-            return None
+        model = Portfolio
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'review_states')
 
 
 class ReviewScoreFillSerializer(serializers.ModelSerializer):
