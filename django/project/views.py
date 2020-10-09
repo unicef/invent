@@ -31,7 +31,9 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
     PortfolioDetailsSerializer, PortfolioUpdateSerializer, PortfolioCreateSerializer, ProjectInPortfolioSerializer, \
     ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, ProjectPortfolioStateManagerSerializer
-from user.serializers import UserProfileListSerializer
+from user.serializers import UserProfileSerializer
+
+from typing import Tuple
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -757,7 +759,7 @@ class FavoriteProjectsResultsSetPagination(PageNumberPagination):
 
 class ProjectFavoritesViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     pagination_class = FavoriteProjectsResultsSetPagination
-    serializer_class = ProjectDraftSerializer  # TODO: Is this the right one?
+    # serializer_class = ProjectPublishedSerializer  # TODO: Is this the right one?
     filter_backends = (OrderingFilter,)
     ordering_fields = ('id', 'name',)
     ordering = ('id',)
@@ -765,32 +767,52 @@ class ProjectFavoritesViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     def get_queryset(self):
         return Project.objects.filter(favorited_by=self.request.user.userprofile)
 
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieves list of projects user's projects.
+        """
+        data = []
+        for project in self.get_queryset():
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+
+        return Response(data)
+
 
 class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, ViewSet):
     @staticmethod
-    def add(request, *args, **kwargs):
-        """
-        Adds the projects in the POST request's body to the user's favorite projects
-        """
+    def validate_input(request) -> Tuple[UserProfile, Project]:
         profile = get_object_or_400(UserProfile, "No such userprofile", pk=request.user.userprofile.id)
-        if 'projects' not in request.data:
-            raise ValidationError({'projects': 'Project data is missing'})
-        profile.favorite_projects.add(*request.data['projects'])
+
+        if 'project' not in request.data:
+            raise ValidationError({'project': 'Project data is missing'})
+
+        project = get_object_or_400(Project, "No such project", pk=request.data.get('project'))
+        if not project.public_id:
+            raise ValidationError({'project': 'Only published projects can be favorited'})
+        return profile, project
+
+    def add(self, request, *args, **kwargs):
+        """
+        Adds the project in the POST request's body to the user's favorite projects
+        """
+        profile, project = self.validate_input(request)
+
+        profile.favorite_projects.add(project)
         profile.save()
 
-        data_serializer = UserProfileListSerializer(profile)
+        data_serializer = UserProfileSerializer(profile)
         return Response(data_serializer.data, status=status.HTTP_200_OK)
 
-    @staticmethod
-    def remove(request, *args, **kwargs):
+    def remove(self, request, *args, **kwargs):
         """
         Removes the projects in the POST request's body to the user's favorite projects
         """
-        profile = get_object_or_400(UserProfile, "No such userprofile", pk=request.user.userprofile.id)
-        if 'projects' not in request.data:
-            raise ValidationError({'projects': 'Project data is missing'})
-        profile.favorite_projects.remove(*request.data['projects'])
+        profile, project = self.validate_input(request)
+
+        profile.favorite_projects.remove(project)
         profile.save()
 
-        data_serializer = UserProfileListSerializer(profile)
+        data_serializer = UserProfileSerializer(profile)
         return Response(data_serializer.data, status=status.HTTP_200_OK)

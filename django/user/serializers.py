@@ -43,7 +43,7 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'modified', 'account_type', 'name', 'email', 'organisation', 'favorite_projects')
+        fields = ('id', 'modified', 'account_type', 'name', 'email', 'organisation')
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -60,6 +60,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     account_type_approved = serializers.SerializerMethodField()
     manager = serializers.SerializerMethodField(required=False)
     global_portfolio_owner = serializers.NullBooleanField(required=False)
+    favorite = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
@@ -98,6 +99,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         elif obj.account_type == UserProfile.SUPER_COUNTRY_ADMIN and obj.country:
             return obj in obj.country.super_admins.all()
         return False
+
+    @staticmethod
+    def get_favorite(obj):
+        return Project.objects.favorited_by(obj.user).values_list('id', flat=True)
 
     def validate(self, attrs):
         if attrs.get('account_type') in [UserProfile.DONOR, UserProfile.DONOR_ADMIN, UserProfile.SUPER_DONOR_ADMIN]:

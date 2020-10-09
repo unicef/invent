@@ -947,22 +947,26 @@ class ProjectTests(SetupTests):
             project_ids.append(project_id)
         # create test user
         user_x_pr_id, user_x_client, user_x_key = self.create_user('train@choochoo.com', '12345789TIZ', '12345789TIZ')
-        url_list = reverse('favorite-projects-list')
-        response = user_x_client.get(url_list)
+        url_profile_details = reverse("userprofile-detail", kwargs={"pk": user_x_pr_id})
+        response = user_x_client.get(url_profile_details)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 0)
+        self.assertEqual(len(response.json()['favorite']), 0)
         # add projects to the user's favorite list
-        url_add = reverse('favorite-projects-add')
-        projects_to_add = project_ids[:3]
-        response = user_x_client.post(url_add, {'projects': projects_to_add}, format="json")
+        url_add = reverse('projects-add-favorite')
+        project_to_add = project_ids[3]
+        response = user_x_client.post(url_add, {'project': project_to_add}, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(set(response.json()['favorite_projects']), set(project_ids[:3]))
         # remove projects from the user's favorite list
-        projects_to_remove = project_ids[2:]  # we remove project_ids[3] from the favorite projects
-        url_remove = reverse('favorite-projects-remove')
+        projects_to_remove = project_ids[2]  # we remove project_ids[3] from the favorite projects
+        url_remove = reverse('project-remove-favorite')
         response = user_x_client.post(url_remove, {'projects': projects_to_remove}, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(set(response.json()['favorite_projects']), set(project_ids[:2]))
         # check the favorite projects list output
-        response = user_x_client.get(url_list)
+        response = user_x_client.get(url_profile_details)
         self.assertEqual(response.status_code, 200)
+        import ipdb
+        ipdb.set_trace()
+
+        self.assertEqual(len(response.json()['favorite']), 0)
