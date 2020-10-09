@@ -1,19 +1,10 @@
 <template>
   <div class="HealthFocusAreasList">
     <ul>
-      <li
-        v-for="hfa in selected"
-        :key="hfa.id"
-      >
-        <list-action
-          v-if="actions"
-          @click="$emit('delete', hfa.id)"
-        />
+      <li v-for="hfa in selected" :key="hfa.id">
+        <list-action v-if="actions" @click="$emit('delete', hfa.id)" />
         <span v-if="showCheck">
-          <fa
-            icon="check"
-            size="xs"
-          />
+          <fa icon="check" size="xs" />
         </span>
         <span> {{ hfa.name }} </span>
       </li>
@@ -22,49 +13,53 @@
 </template>
 
 <script>
-import ListAction from './ListAction';
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+import ListAction from './ListAction'
 export default {
   components: {
-    ListAction
+    ListAction,
   },
   props: {
     value: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     actions: {
       type: Boolean,
-      default: false
+      default: false,
     },
     limit: {
       type: Number,
-      default: null
+      default: null,
     },
     valueIsChild: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showCheck: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      healthFocusAreas: 'projects/getHealthFocusAreas'
+      healthFocusAreas: 'projects/getHealthFocusAreas',
     }),
-    selected () {
-      let result = [];
+    selected() {
+      let result = []
       if (!this.valueIsChild) {
-        result = this.healthFocusAreas.filter(h => this.value.includes(h.id));
+        result = this.healthFocusAreas.filter((h) => this.value.includes(h.id))
       } else {
-        result = this.healthFocusAreas.filter(hfa => hfa.health_focus_areas.some(hfaInner => this.value.includes(hfaInner.id)));
+        result = this.healthFocusAreas.filter((hfa) =>
+          hfa.health_focus_areas.some((hfaInner) =>
+            this.value.includes(hfaInner.id)
+          )
+        )
       }
-      return this.limit ? result.slice(0, this.limit) : result;
-    }
-  }
-};
+      return this.limit ? result.slice(0, this.limit) : result
+    },
+  },
+}
 </script>
 
 <style lang="less">
@@ -72,6 +67,5 @@ export default {
   width: 100%;
 }
 .HealthFocusAreasSelectorDropdown {
-
 }
 </style>

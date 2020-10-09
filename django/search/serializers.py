@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+from project.models import ProjectPortfolioState
+from project.serializers import ProjectPortfolioStateSerializer
+
 
 class MapResultSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField(source="project_id")
@@ -49,3 +52,16 @@ class ListResultSerializer(serializers.Serializer):
 class PortfolioResultSerializer(ListResultSerializer):
     portfolio = serializers.ReadOnlyField(source="project__review_states__portfolio")
     portfolio_name = serializers.ReadOnlyField(source="project__review_states__portfolio__name")
+    scale_phase = serializers.ReadOnlyField(source="project__review_states__scale_phase")
+
+
+class PortfolioReviewSerializer(PortfolioResultSerializer):
+    review_states = serializers.SerializerMethodField()
+
+    def get_review_states(self, obj):
+        try:
+            pps = ProjectPortfolioState.objects.get(id=obj.get('project__review_states__id'))
+        except ProjectPortfolioState.DoesNotExist:  # pragma: no cover
+            return
+        else:
+            return ProjectPortfolioStateSerializer(pps).data

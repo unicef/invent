@@ -15,15 +15,15 @@
       </draggable>
     </div>
 
-    <el-row
-      type="flex"
-      align="middle"
-      class="QActionContainer"
-    >
+    <el-row type="flex" align="middle" class="QActionContainer">
       <el-col class="QActionsButtons">
         <el-tooltip
           :disabled="allSaved"
-          :content="$gettext('Before adding another question please save the previous one') | translate"
+          :content="
+            $gettext(
+              'Before adding another question please save the previous one'
+            ) | translate
+          "
           placement="top"
         >
           <span>
@@ -44,96 +44,100 @@
 </template>
 
 <script>
-import DhaQuestion from './DhaQuestion';
-import { mapGetters, mapActions } from 'vuex';
-import draggable from 'vuedraggable';
+import { mapGetters, mapActions } from 'vuex'
+import draggable from 'vuedraggable'
+import DhaQuestion from './DhaQuestion'
 
 export default {
-
   components: {
     DhaQuestion,
-    draggable
+    draggable,
   },
 
-  data () {
+  data() {
     return {
       from: null,
-      to: null
-    };
+      to: null,
+    }
   },
 
   computed: {
     ...mapGetters({
-      getQuestions: 'admin/questions/getQuestions'
+      getQuestions: 'admin/questions/getQuestions',
     }),
-    allSaved () {
-      return !!this.questions.reduce((a, c) => a && c.id, true);
+    allSaved() {
+      return !!this.questions.reduce((a, c) => a && c.id, true)
     },
-    draggableOptions () {
+    draggableOptions() {
       return {
         disabled: !this.allSaved,
-        handle: '.DDHandler'
-      };
+        handle: '.DDHandler',
+      }
     },
     questions: {
-      get () {
-        return this.getQuestions;
+      get() {
+        return this.getQuestions
       },
-      async set (newOrder) {
-        this.$nuxt.$loading.start();
+      async set(newOrder) {
+        this.$nuxt.$loading.start()
         try {
-          await this.processReOrder({ from: this.from, to: this.to, newOrder });
-          this.$message({ message: this.$gettext('New order saved'), type: 'success' });
+          await this.processReOrder({ from: this.from, to: this.to, newOrder })
+          this.$message({
+            message: this.$gettext('New order saved'),
+            type: 'success',
+          })
         } catch (e) {
-          this.$message.error(this.$gettext('An error occured while processing your request'));
+          this.$message.error(
+            this.$gettext('An error occured while processing your request')
+          )
         }
         setTimeout(() => {
-          this.$nuxt.$loading.finish();
-        }, 500);
-      }
-    }
+          this.$nuxt.$loading.finish()
+        }, 500)
+      },
+    },
   },
 
   methods: {
     ...mapActions({
       addQuestion: 'admin/questions/addQuestion',
-      processReOrder: 'admin/questions/processReOrder'
+      processReOrder: 'admin/questions/processReOrder',
     }),
-    moveHandler (evt, originalEvt) {
-      this.from = evt.draggedContext.index;
-      this.to = evt.draggedContext.futureIndex;
-      return true;
-    }
-  }
-};
+    moveHandler(evt, originalEvt) {
+      this.from = evt.draggedContext.index
+      this.to = evt.draggedContext.futureIndex
+      return true
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  // .QuestionnaireWrapper {}
+// .QuestionnaireWrapper {}
 
-  .QActionContainer {
-    .QActionsButtons {
-      width: 100%;
+.QActionContainer {
+  .QActionsButtons {
+    width: 100%;
 
-      .el-button {
-        margin: 0 20px;
-      }
+    .el-button {
+      margin: 0 20px;
     }
+  }
 
-    .QAlerts {
-      width: auto;
-      text-align: right;
+  .QAlerts {
+    width: auto;
+    text-align: right;
 
-      .el-alert {
-        .el-alert__title {
-          padding-right: 20px;
-          font-size: @fontSizeSmall;
-          white-space: nowrap;
-        }
+    .el-alert {
+      .el-alert__title {
+        padding-right: 20px;
+        font-size: @fontSizeSmall;
+        white-space: nowrap;
       }
     }
   }
+}
 </style>

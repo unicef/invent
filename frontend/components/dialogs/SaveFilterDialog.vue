@@ -24,24 +24,14 @@
     </el-form>
 
     <span slot="footer">
-      <el-row
-        type="flex"
-        align="center"
-      >
+      <el-row type="flex" align="center">
         <el-col class="SecondaryButtons">
-          <el-button
-            type="text"
-            class="CancelButton"
-            @click="cancel"
-          >
+          <el-button type="text" class="CancelButton" @click="cancel">
             <translate>Cancel</translate>
           </el-button>
         </el-col>
         <el-col class="PrimaryButtons">
-          <el-button
-            type="primary"
-            @click="apply"
-          >
+          <el-button type="primary" @click="apply">
             <translate>Save</translate>
           </el-button>
         </el-col>
@@ -51,72 +41,88 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: {
-  },
-  data () {
+  components: {},
+  data() {
     return {
       form: {
-        name: ''
+        name: '',
       },
       rules: {
         name: [
-          { required: true, message: this.$gettext('This is required'), trigger: 'blur' },
-          { validator: this.noDuplicate, trigger: 'change' }
-        ]
-      }
-    };
+          {
+            required: true,
+            message: this.$gettext('This is required'),
+            trigger: 'blur',
+          },
+          { validator: this.noDuplicate, trigger: 'change' },
+        ],
+      },
+    }
   },
   computed: {
     ...mapGetters({
       filterCategory: 'layout/getSaveFiltersDialogState',
-      savedFilters: 'dashboard/getSavedFilters'
+      savedFilters: 'dashboard/getSavedFilters',
     }),
     visible: {
-      get () {
-        return this.filterCategory !== null;
+      get() {
+        return this.filterCategory !== null
       },
-      set () {
-        this.setSaveFiltersDialogState(null);
-      }
-    }
+      set() {
+        this.setSaveFiltersDialogState(null)
+      },
+    },
   },
   methods: {
     ...mapActions({
       setSaveFiltersDialogState: 'layout/setSaveFiltersDialogState',
-      setSavedFilters: 'dashboard/setSavedFilters'
+      setSavedFilters: 'dashboard/setSavedFilters',
     }),
-    noDuplicate (rule, value, callback) {
-      const exist = this.savedFilters.find(s => s.name === value);
+    noDuplicate(rule, value, callback) {
+      const exist = this.savedFilters.find((s) => s.name === value)
       if (exist) {
-        callback(new Error(this.$gettext('A saved configuration with this name is already present')));
+        callback(
+          new Error(
+            this.$gettext(
+              'A saved configuration with this name is already present'
+            )
+          )
+        )
       } else {
-        callback();
+        callback()
       }
     },
-    cancel () {
-      this.setSaveFiltersDialogState(null);
+    cancel() {
+      this.setSaveFiltersDialogState(null)
     },
-    apply () {
-      const filters = [...this.savedFilters, { category: this.filterCategory, name: this.form.name, query: this.$route.query }];
-      this.setSavedFilters(filters);
-      this.setSaveFiltersDialogState(null);
-      this.form.name = '';
-    }
-  }
-};
+    apply() {
+      const filters = [
+        ...this.savedFilters,
+        {
+          category: this.filterCategory,
+          name: this.form.name,
+          query: this.$route.query,
+        },
+      ]
+      this.setSavedFilters(filters)
+      this.setSaveFiltersDialogState(null)
+      this.form.name = ''
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .SaveFiltersDialog {
-    .el-form,
-    .el-form-item {
-      margin: 20px 0;
-    }
+.SaveFiltersDialog {
+  .el-form,
+  .el-form-item {
+    margin: 20px 0;
   }
+}
 </style>

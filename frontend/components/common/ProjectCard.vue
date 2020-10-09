@@ -58,103 +58,103 @@
 </template>
 
 <script>
-import ProjectLegend from "./ProjectLegend";
-import CountryItem from "./CountryItem";
-import OrganisationItem from "./OrganisationItem";
+import ProjectLegend from './ProjectLegend'
+import CountryItem from './CountryItem'
+import OrganisationItem from './OrganisationItem'
 
 export default {
   components: {
     ProjectLegend,
     CountryItem,
-    OrganisationItem
+    OrganisationItem,
   },
   props: {
     project: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     foundIn: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     showCountry: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showOrganisation: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showFoundIn: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showVerified: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hideBorders: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showArrowOnOver: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      hovered: false
-    };
+      hovered: false,
+    }
   },
   computed: {
     cardShadow() {
-      return this.hideBorders ? "never" : "always";
+      return this.hideBorders ? 'never' : 'always'
     },
     showArrow() {
-      return this.hovered && this.showArrowOnOver;
+      return this.hovered && this.showArrowOnOver
     },
     verified() {
-      return this.showVerified && this.project.approved;
+      return this.showVerified && this.project.approved
     },
     found() {
       const nameMApping = {
-        country: this.$gettext("Country"),
-        donor: this.$gettext("Investor"),
-        loc: this.$gettext("Location"),
-        name: this.$gettext("Name"),
-        org: this.$gettext("Organisation"),
-        overview: this.$gettext("Implementation Overview"),
-        partner: this.$gettext("Partners"),
-        region: this.$gettext("Region")
-      };
-      if (this.foundIn && this.showFoundIn) {
-        return this.foundIn.map(f => nameMApping[f]).join(",");
+        country: this.$gettext('Country'),
+        donor: this.$gettext('Investor'),
+        loc: this.$gettext('Location'),
+        name: this.$gettext('Name'),
+        org: this.$gettext('Organisation'),
+        overview: this.$gettext('Implementation Overview'),
+        partner: this.$gettext('Partners'),
+        region: this.$gettext('Region'),
       }
-      return "";
-    }
+      if (this.foundIn && this.showFoundIn) {
+        return this.foundIn.map((f) => nameMApping[f]).join(',')
+      }
+      return ''
+    },
   },
   methods: {
     goToProject() {
       const path = this.localePath({
-        name: "organisation-projects-id-published",
-        params: { ...this.$route.params, id: this.project.id }
-      });
-      this.$router.push(path);
+        name: 'organisation-initiatives-id-published',
+        params: { ...this.$route.params, id: this.project.id },
+      })
+      this.$router.push(path)
     },
     mouseEnterHandler() {
-      this.hovered = true;
+      this.hovered = true
     },
     mouseLeaveHandler() {
-      this.hovered = false;
-    }
-  }
-};
+      this.hovered = false
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .ProjectCard {
   cursor: pointer;
@@ -237,7 +237,7 @@ export default {
       }
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 50%;
         right: 10px;

@@ -20,41 +20,41 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'platforms',
-    event: 'change'
+    event: 'change',
   },
   $_veeValidate: {
-    value () {
-      return this.platform;
-    }
+    value() {
+      return this.platform
+    },
   },
   props: {
     platforms: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     ...mapGetters({
-      technologyPlatforms: 'projects/getTechnologyPlatforms'
-    })
+      technologyPlatforms: 'projects/getTechnologyPlatforms',
+    }),
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
-    }
-  }
-};
+    changeHandler(value) {
+      this.$emit('change', value)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .PlatformSelector {
-    width: 100%;
-  }
+.PlatformSelector {
+  width: 100%;
+}
 </style>

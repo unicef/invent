@@ -17,67 +17,67 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change',
   },
   props: {
     value: {
       type: [Number, Array],
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
       default: false,
-      required: false
+      required: false,
     },
     multiple: {
       type: Boolean,
       default: false,
-      required: false
+      required: false,
     },
     regionFilter: {
       type: [Number, String],
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   computed: {
     ...mapState({
-      offices: state => state.offices.offices
+      offices: (state) => state.offices.offices,
     }),
     innerValue: {
       get() {
-        return this.value;
+        return this.value
       },
       set(value) {
-        this.$emit("change", value);
-      }
+        this.$emit('change', value)
+      },
     },
     officeList() {
       if (
         this.regionFilter === undefined ||
         this.regionFilter === null ||
-        typeof this.regionFilter !== "number"
+        typeof this.regionFilter !== 'number'
       ) {
-        return this.offices;
+        return this.offices
       }
       return this.offices
-        ? this.offices.filter(office => office.region === this.regionFilter)
-        : [];
-    }
+        ? this.offices.filter((office) => office.region === this.regionFilter)
+        : []
+    },
   },
   mounted() {
-    this.loadOffices();
+    this.loadOffices()
   },
   methods: {
     ...mapActions({
-      loadOffices: "offices/loadOffices"
-    })
-  }
-};
+      loadOffices: 'offices/loadOffices',
+    }),
+  },
+}
 </script>
 
 <style lang="less" scoped>

@@ -1,10 +1,7 @@
 <template>
   <div class="DHIList">
     <ul>
-      <li
-        v-for="p in selected"
-        :key="p.id"
-      >
+      <li v-for="p in selected" :key="p.id">
         <span>
           {{ p.name }}
         </span>
@@ -14,41 +11,40 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
-  components: {
-  },
+  components: {},
   props: {
     values: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     ...mapGetters({
-      dhis: 'projects/getDigitalHealthInterventions'
+      dhis: 'projects/getDigitalHealthInterventions',
     }),
-    flattened () {
+    flattened() {
       return this.dhis.reduce((a, c) => {
         const inner = c.subGroups.reduce((innerA, innerC) => {
-          return innerA.concat(innerC.strategies);
-        }, []);
-        return a.concat(inner);
-      }, []);
+          return innerA.concat(innerC.strategies)
+        }, [])
+        return a.concat(inner)
+      }, [])
     },
-    selected () {
-      return this.flattened.filter(tp => this.values.includes(tp.id));
-    }
-  }
-};
+    selected() {
+      return this.flattened.filter((tp) => this.values.includes(tp.id))
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .DHIList {
-    width: 100%;
-  }
+.DHIList {
+  width: 100%;
+}
 </style>

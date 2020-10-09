@@ -1,17 +1,11 @@
 <template>
-  <div
-    id="general"
-    class="GeneralOverview"
-  >
+  <div id="general" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Stages') | translate"
       show-legend
     >
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
+      <el-row :gutter="20" type="flex">
         <el-col :span="24">
           <custom-required-form-item
             :error="errors.first('phase')"
@@ -39,47 +33,43 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import CollapsibleCard from '../CollapsibleCard';
-import SingleSelect from '@/components/common/SingleSelect';
-import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters } from 'vuex';
+import SingleSelect from '@/components/common/SingleSelect'
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import CollapsibleCard from '../CollapsibleCard'
+import { mapGettersActions } from '../../../utilities/form'
 
 export default {
   components: {
     CollapsibleCard,
-    SingleSelect
+    SingleSelect,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGetters({
-      modified: 'project/getModified'
+      modified: 'project/getModified',
     }),
     ...mapGettersActions({
-      phase: ['project', 'getPhase', 'setPhase', 0]
-    })
+      phase: ['project', 'getPhase', 'setPhase', 0],
+    }),
   },
   methods: {
-    async validate () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate()
-      ]);
-      return validations.reduce((a, c) => a && c, true);
+    async validate() {
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      return validations.reduce((a, c) => a && c, true)
     },
-    async validateDraft () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate('phase')
-      ]);
-      return validations.reduce((a, c) => a && c, true);
-    }
-  }
-};
+    async validateDraft() {
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate('phase')])
+      return validations.reduce((a, c) => a && c, true)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 </style>

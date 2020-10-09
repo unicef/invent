@@ -52,195 +52,195 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { publishRules, draftRules } from "@/utilities/portfolio";
-import GeneralSettings from "@/components/portfolio/form/GeneralSettings";
-import Managers from "@/components/portfolio/form/Managers";
-import ProblemStatement from "@/components/portfolio/form/ProblemStatement";
+import { mapGetters, mapActions } from 'vuex'
+import { publishRules, draftRules } from '@/utilities/portfolio'
+import GeneralSettings from '@/components/portfolio/form/GeneralSettings'
+import Managers from '@/components/portfolio/form/Managers'
+import ProblemStatement from '@/components/portfolio/form/ProblemStatement'
 
 export default {
   components: {
     GeneralSettings,
     Managers,
-    ProblemStatement
+    ProblemStatement,
   },
   $_veeValidate: {
-    validator: "new"
+    validator: 'new',
   },
   props: {
     edit: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       readyElements: 0,
       createdElements: 0,
       usePublishRules: false,
-      apiErrors: {}
-    };
+      apiErrors: {},
+    }
   },
   computed: {
     ...mapGetters({
-      portfolio: "portfolio/getProjectData"
+      portfolio: 'portfolio/getProjectData',
     }),
-    draftRules: draftRules,
-    publishRules: publishRules,
+    draftRules,
+    publishRules,
     rules() {
-      return this.usePublishRules ? this.publishRules : this.draftRules;
-    }
+      return this.usePublishRules ? this.publishRules : this.draftRules
+    },
   },
   mounted() {},
+  beforeDestroy() {
+    this.resetPortfolio()
+  },
   methods: {
     ...mapActions({
-      createPortfolio: "portfolio/createPortfolio",
-      editPortfolio: "portfolio/editPortfolio",
-      resetPortfolio: "portfolio/resetPortfolio",
-      setLoading: "portfolio/setLoading"
+      createPortfolio: 'portfolio/createPortfolio',
+      editPortfolio: 'portfolio/editPortfolio',
+      resetPortfolio: 'portfolio/resetPortfolio',
+      setLoading: 'portfolio/setLoading',
     }),
     async unCaughtErrorHandler(errors) {
       // todo: change or tune in for portfolio
       if (this.$sentry) {
         this.$sentry.captureMessage(
-          "Un-caught validation error in portfolio page",
+          'Un-caught validation error in portfolio page',
           {
-            level: "error",
+            level: 'error',
             extra: {
               apiErrors: this.apiErrors,
-              errors
-            }
+              errors,
+            },
           }
-        );
+        )
       }
 
       try {
         await this.$confirm(
           this.$gettext(
-            "There was an un-caught validation error an automatic report has been submitted"
+            'There was an un-caught validation error an automatic report has been submitted'
           ),
-          this.$gettext("Warning"),
+          this.$gettext('Warning'),
           {
-            confirmButtonText: this.$gettext("Recover & Reload"),
-            cancelButtonText: this.$gettext("Discard changes")
+            confirmButtonText: this.$gettext('Recover & Reload'),
+            cancelButtonText: this.$gettext('Discard changes'),
           }
-        );
+        )
         const portfolio = {
-          ...this.portfolio
-        };
-        const toStore = JSON.stringify(portfolio);
-        window.localStorage.setItem("rescuedProject", toStore);
+          ...this.portfolio,
+        }
+        const toStore = JSON.stringify(portfolio)
+        window.localStorage.setItem('rescuedProject', toStore)
         const newUrl =
           window.location.origin +
           this.$route.path +
-          `?reloadDataFromStorage=true`;
-        window.location.href = newUrl;
+          `?reloadDataFromStorage=true`
+        window.location.href = newUrl
       } catch (e) {
-        console.log("User declined the option to save, just reloading");
-        window.location.reload(true);
+        console.log('User declined the option to save, just reloading')
+        window.location.reload(true)
       }
     },
     handleErrorMessages() {
       this.$nextTick(() => {
-        const errors = [...this.$el.querySelectorAll(".is-error")];
-        const visibleErrors = errors.filter(e => e.offsetParent !== null);
+        const errors = [...this.$el.querySelectorAll('.is-error')]
+        const visibleErrors = errors.filter((e) => e.offsetParent !== null)
         if (visibleErrors && visibleErrors.length > 0) {
-          visibleErrors[0].scrollIntoView();
+          visibleErrors[0].scrollIntoView()
         } else {
-          this.unCaughtErrorHandler(errors);
+          this.unCaughtErrorHandler(errors)
         }
-      });
+      })
     },
     async validate() {
       const validations = await Promise.all([
-        this.$refs.generalSettings.validate()
-      ]);
-      console.log("root validations", validations);
-      return validations.reduce((a, c) => a && c, true);
+        this.$refs.generalSettings.validate(),
+      ])
+      console.log('root validations', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     clearValidation() {
-      this.apiErrors = {};
-      this.$refs.generalSettings.clear();
+      this.apiErrors = {}
+      this.$refs.generalSettings.clear()
     },
     async handleCreate() {
-      this.clearValidation();
-      this.usePublishRules = false;
-      this.$nextTick(async () => {
-        const general = await this.$refs.generalSettings.validateDraft();
+      this.clearValidation()
+      this.usePublishRules = false
+      await this.$nextTick(async () => {
+        const general = await this.$refs.generalSettings.validateDraft()
         if (general) {
           try {
-            const id = await this.createPortfolio();
+            // const id = await this.createPortfolio()
             const localised = this.localePath({
-              name: "organisation-portfolio-management"
-            });
-            this.$router.push(localised);
+              name: 'organisation-portfolio-management',
+            })
+            this.$router.push(localised)
 
             this.$alert(
-              this.$gettext("Your portfolio has been created successfully"),
-              this.$gettext("Congratulation"),
+              this.$gettext('Your portfolio has been created successfully'),
+              this.$gettext('Congratulation'),
               {
-                confirmButtonText: this.$gettext("Close")
+                confirmButtonText: this.$gettext('Close'),
               }
-            );
-            return;
+            )
+            return
           } catch (e) {
             if (e.response) {
-              this.apiErrors = e.response.data;
+              this.apiErrors = e.response.data
             } else {
-              console.error(e);
+              console.error(e)
             }
           }
         }
-        this.handleErrorMessages();
-      });
+        this.handleErrorMessages()
+      })
     },
     async handleEdit() {
-      this.clearValidation();
-      this.usePublishRules = false;
-      this.$nextTick(async () => {
-        const general = await this.$refs.generalSettings.validateDraft();
+      this.clearValidation()
+      this.usePublishRules = false
+      await this.$nextTick(async () => {
+        const general = await this.$refs.generalSettings.validateDraft()
         if (general) {
           try {
-            const id = await this.editPortfolio(this.$route.params.id);
+            // const id = await this.editPortfolio(this.$route.params.id)
             const localised = this.localePath({
-              name: "organisation-portfolio-management"
-            });
-            this.$router.push(localised);
+              name: 'organisation-portfolio-management',
+            })
+            this.$router.push(localised)
 
             this.$alert(
-              this.$gettext("Your portfolio has been updated successfully"),
-              this.$gettext("Congratulation"),
+              this.$gettext('Your portfolio has been updated successfully'),
+              this.$gettext('Congratulation'),
               {
-                confirmButtonText: this.$gettext("Close")
+                confirmButtonText: this.$gettext('Close'),
               }
-            );
-            return;
+            )
+            return
           } catch (e) {
             if (e.response) {
-              this.apiErrors = e.response.data;
+              this.apiErrors = e.response.data
             } else {
-              console.error(e);
+              console.error(e)
             }
           }
         }
-        this.handleErrorMessages();
-      });
+        this.handleErrorMessages()
+      })
     },
     handleCancel() {
       this.$router.push(
-        this.localePath({ name: "organisation-portfolio-management" })
-      );
-    }
+        this.localePath({ name: 'organisation-portfolio-management' })
+      )
+    },
   },
-  beforeDestroy() {
-    this.resetPortfolio();
-  }
-};
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .action-form {
   margin-top: 60px;

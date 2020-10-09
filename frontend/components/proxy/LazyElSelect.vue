@@ -1,8 +1,5 @@
 <template>
-  <el-select
-    v-bind="propsAndAttrs"
-    v-on="listeners"
-  >
+  <el-select v-bind="propsAndAttrs" v-on="listeners">
     <template v-if="open">
       <slot />
     </template>
@@ -15,49 +12,47 @@ export default {
   props: {
     value: {
       type: null,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
-      open: false
-    };
+      open: false,
+    }
   },
   computed: {
-    propsAndAttrs () {
-      return { ...this.$props, ...this.$attrs };
+    propsAndAttrs() {
+      return { ...this.$props, ...this.$attrs }
     },
-    listeners () {
-      return { ...this.$listeners, 'visible-change': this.onVisibleChange };
-    }
+    listeners() {
+      return { ...this.$listeners, 'visible-change': this.onVisibleChange }
+    },
   },
   watch: {
     value: {
       immediate: false,
-      handler (value) {
+      handler(value) {
         if (!this.open && value) {
-          this.open = true;
+          this.open = true
         }
-      }
-    }
+      },
+    },
   },
-  mounted () {
+  mounted() {
     if (this.value) {
       window.requestAnimationFrame(() => {
-        this.open = true;
-      });
+        this.open = true
+      })
     }
   },
   methods: {
-    onVisibleChange (value) {
+    onVisibleChange(value) {
       if (value && !this.open) {
-        this.open = true;
+        this.open = true
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

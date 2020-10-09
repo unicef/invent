@@ -1,8 +1,5 @@
 <template>
-  <img
-    :class="['CountryFlag', {small}]"
-    :src="countryFlagUrl"
-  >
+  <img :class="['CountryFlag', { small }]" :src="countryFlagUrl" />
 </template>
 
 <script>
@@ -10,32 +7,32 @@ export default {
   props: {
     code: {
       type: String,
-      default: null
+      default: null,
     },
     small: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    countryFlagUrl () {
+    countryFlagUrl() {
       if (this.code) {
-        return `/static/flags/${this.code.toLowerCase()}.png`;
+        return `/static/flags/${this.code.toLowerCase()}.png`
       }
-      return null;
-    }
-  }
-};
+      return null
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .CountryFlag {
-    &.small {
-      height: 16px;
-      width: 24px;
-    }
+.CountryFlag {
+  &.small {
+    height: 16px;
+    width: 24px;
   }
+}
 </style>

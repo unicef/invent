@@ -15,43 +15,37 @@
         </translate>
       </p>
       <p>
-        <translate>
-          Please complete your scores and try again!
-        </translate>
+        <translate> Please complete your scores and try again! </translate>
       </p>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
-import PortfolioSelect from "@/components/portfolio/form/inputs/PortfolioSelect";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  components: {
-    PortfolioSelect
-  },
   data() {
     return {
       reviewers: [],
-      message: ""
-    };
+      message: '',
+    }
   },
   computed: {
     ...mapState({
-      dialogError: state => state.portfolio.dialogError
-    })
+      dialogError: (state) => state.portfolio.dialogError,
+    }),
   },
   methods: {
     ...mapActions({
-      setErrorDialog: "portfolio/setErrorDialog"
-    })
-  }
-};
+      setErrorDialog: 'portfolio/setErrorDialog',
+    }),
+  },
+}
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
+@import '~assets/style/variables.less';
 
 .error {
   .el-dialog__header .el-dialog__title {

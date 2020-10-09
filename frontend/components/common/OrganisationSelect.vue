@@ -20,57 +20,56 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import LightSelectMixin from '../mixins/LightSelectMixin.js';
+import { mapGetters, mapActions } from 'vuex'
+import LightSelectMixin from '../mixins/LightSelectMixin.js'
 
 export default {
-  components: {
-  },
+  components: {},
   mixins: [LightSelectMixin],
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: [String, Number],
-      default: null
+      default: null,
     },
     autoSave: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({
-      items: 'system/getOrganisations'
+      items: 'system/getOrganisations',
     }),
     innerValue: {
-      get () {
+      get() {
         if (isNaN(this.value)) {
-          return this.value;
+          return this.value
         }
-        return this.value ? +this.value : null;
+        return this.value ? +this.value : null
       },
-      set (value) {
-        this.$emit('change', value);
-        this.save(value);
-      }
-    }
+      set(value) {
+        this.$emit('change', value)
+        this.save(value)
+      },
+    },
   },
   methods: {
     ...mapActions({
-      addOrganisation: 'system/addOrganisation'
+      addOrganisation: 'system/addOrganisation',
     }),
-    async save (value) {
+    async save(value) {
       if (this.autoSave && !Number.isInteger(value)) {
-        this.$nuxt.$loading.start('organisation');
-        await this.addOrganisation(value);
-        this.$nuxt.$loading.finish('organisation');
+        this.$nuxt.$loading.start('organisation')
+        await this.addOrganisation(value)
+        this.$nuxt.$loading.finish('organisation')
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="less">

@@ -3,11 +3,11 @@
     slot="reference"
     v-outside="{
       exclude: [],
-      handler: 'onOutside'
+      handler: 'onOutside',
     }"
     v-paste="{
       exclude: [],
-      handler: 'onPaste'
+      handler: 'onPaste',
     }"
     :value="value"
     :placeholder="$gettext('Type and select a name') | translate"
@@ -16,172 +16,189 @@
     filterable
     remote
     class="TeamSelector"
-    :popper-class="optionsAndValues.length > value.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
+    :popper-class="
+      optionsAndValues.length > value.length
+        ? 'TeamSelectorDropdown'
+        : 'NoDisplay'
+    "
     @change="changeHandler"
     @keyup.enter.native="onEnter"
   >
     <el-option
       v-for="person in optionsAndValues"
       :key="person.id"
-      :label="`${person.name ? person.name + ', ': ''}${person.organisation ? getOrganisationDetails(person.organisation).name : ''} ${person.name ? '(' + person.email + ')' : person.email }` | truncate"
+      :label="
+        `${person.name ? person.name + ', ' : ''}${
+          person.organisation
+            ? getOrganisationDetails(person.organisation).name
+            : ''
+        } ${person.name ? '(' + person.email + ')' : person.email}` | truncate
+      "
       :value="person.id"
     >
-      <span style="float: left;">{{ person.name ? person.name : 'N/A' }}</span>
+      <span style="float: left">{{ person.name ? person.name : 'N/A' }}</span>
       <template v-if="person.organisation">
         <organisation-item :id="person.organisation" />
       </template>
-      <span class="email"><small>{{ person.email }}</small></span>
+      <span class="email"
+        ><small>{{ person.email }}</small></span
+      >
     </el-option>
   </lazy-el-select>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import LightSelectMixin from '../mixins/LightSelectMixin.js';
-import OrganisationItem from '../common/OrganisationItem';
-import validator from 'validator';
+import { mapGetters } from 'vuex'
+import validator from 'validator'
+import LightSelectMixin from '../mixins/LightSelectMixin.js'
+import OrganisationItem from '../common/OrganisationItem'
 
 export default {
   components: {
-    OrganisationItem
+    OrganisationItem,
   },
   filters: {
-    truncate (str) {
-      if (str.length > 50) return `${str.substr(0, 47)}...`;
-      return str;
-    }
+    truncate(str) {
+      if (str.length > 50) return `${str.substr(0, 47)}...`
+      return str
+    },
   },
   mixins: [LightSelectMixin],
   $_veeValidate: {
-    value () {
-      return this.value;
+    value() {
+      return this.value
     },
-    events: 'change|blur'
+    events: 'change|blur',
   },
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
-      invalidEmails: []
-    };
+      invalidEmails: [],
+    }
   },
   computed: {
     ...mapGetters({
       items: 'system/getUserProfilesNoFilter',
-      getOrganisationDetails: 'system/getOrganisationDetails'
-    })
+      getOrganisationDetails: 'system/getOrganisationDetails',
+    }),
   },
   methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
+    changeHandler(value) {
+      this.$emit('change', value)
     },
-    onOutside () {
-      this.emitEmails(this.validEmails(this.emailList(this.query)));
-      this.query = '';
-      this.errorMessage();
+    onOutside() {
+      this.emitEmails(this.validEmails(this.emailList(this.query)))
+      this.query = ''
+      this.errorMessage()
     },
-    onPaste (str, e) {
-      const emails = this.emailList(str);
-      const validEmails = this.validEmails(emails);
-      this.errorMessage();
+    onPaste(str, e) {
+      const emails = this.emailList(str)
+      const validEmails = this.validEmails(emails)
+      this.errorMessage()
 
       if (emails.length === validEmails.length) {
-        this.emitEmails(validEmails);
-        e.target.blur();
+        this.emitEmails(validEmails)
+        e.target.blur()
       }
     },
-    onEnter (e) {
-      this.emitEmails(this.validEmails(this.emailList(e.target.value)));
-      this.errorMessage();
+    onEnter(e) {
+      this.emitEmails(this.validEmails(this.emailList(e.target.value)))
+      this.errorMessage()
     },
-    emailList (str) {
-      return str.trim().replace(/ /g, '').split(',');
+    emailList(str) {
+      return str.trim().replace(/ /g, '').split(',')
     },
-    emitEmails (mails) {
-      mails.map(email => this.$emit('change', email));
+    emitEmails(mails) {
+      mails.map((email) => this.$emit('change', email))
     },
-    validEmails (mails) {
-      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email));
+    validEmails(mails) {
+      return mails.filter(
+        (email) => this.validateEmail(email) && !this.arrIncludes(email)
+      )
     },
-    arrIncludes (val) {
-      return this.value.includes(val);
+    arrIncludes(val) {
+      return this.value.includes(val)
     },
-    validateEmail (email) {
-      const valid = validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'));
+    validateEmail(email) {
+      const valid =
+        validator.isEmail(email) &&
+        (email.endsWith('unicef.org') || email.endsWith('pulilab.com'))
       if (!valid) {
-        this.invalidEmails = [...this.invalidEmails, email];
+        this.invalidEmails = [...this.invalidEmails, email]
       }
-      return valid;
+      return valid
     },
-    errorMessage () {
+    errorMessage() {
       if (this.invalidEmails.length > 0 && this.invalidEmails[0] !== '') {
         this.$message({
           dangerouslyUseHTMLString: true,
-          message: `<b>${this.invalidEmails.join(', ')}</b> ${this.$gettext(`cant't be added. Make sure email is part of unicef.org`)}`,
-          type: 'error'
-        });
+          message: `<b>${this.invalidEmails.join(', ')}</b> ${this.$gettext(
+            `cant't be added. Make sure email is part of unicef.org`
+          )}`,
+          type: 'error',
+        })
       }
-      this.invalidEmails = [];
-    }
-  }
-};
+      this.invalidEmails = []
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .TeamSelector {
-    width: 100%;
-    .el-select-dropdown__item.selected {
-      display: none;
-    }
-
-    &.el-select {
-      .el-tag{
-        &:hover {
-          background-color: white;
-          border-color: #B9B9B9;
-        }
-      }
-    }
-  }
-
-  .NoDisplay {
+.TeamSelector {
+  width: 100%;
+  .el-select-dropdown__item.selected {
     display: none;
   }
 
-  .TeamSelectorDropdown {
-    .OrganisationItem {
-      display: inline-block;
-      margin-left: 6px;
-      font-weight: 400;
-      color: @colorGray;
-
-      &::before {
-        content: "(";
-      }
-
-      &::after {
-        content: ")";
-      }
-    }
-    li {
-      height: 50px;
-      .email {
-        float: left;
-        width: 100%;
-        margin-top: -18px;
+  &.el-select {
+    .el-tag {
+      &:hover {
+        background-color: white;
+        border-color: #b9b9b9;
       }
     }
   }
+}
 
+.NoDisplay {
+  display: none;
+}
+
+.TeamSelectorDropdown {
+  .OrganisationItem {
+    display: inline-block;
+    margin-left: 6px;
+    font-weight: 400;
+    color: @colorGray;
+
+    &::before {
+      content: '(';
+    }
+
+    &::after {
+      content: ')';
+    }
+  }
+  li {
+    height: 50px;
+    .email {
+      float: left;
+      width: 100%;
+      margin-top: -18px;
+    }
+  }
+}
 </style>

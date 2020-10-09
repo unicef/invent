@@ -1,17 +1,11 @@
 <template>
-  <div
-    id="general"
-    class="GeneralOverview"
-  >
+  <div id="general" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Focal point overview') | translate"
       show-legend
     >
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
+      <el-row :gutter="20" type="flex">
         <el-col :span="12">
           <custom-required-form-item
             :error="errors.first('contact_name')"
@@ -24,7 +18,8 @@
               </translate>
               <form-hint>
                 <translate key="contact-name-hint">
-                  This is the individual who will be the lead point of contact for any queries through the DHA.
+                  This is the individual who will be the lead point of contact
+                  for any queries through the DHA.
                 </translate>
               </form-hint>
             </template>
@@ -65,48 +60,46 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import CollapsibleCard from '../CollapsibleCard';
-import FormHint from '../FormHint';
-import { mapGettersActions } from '../../../utilities/form';
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import CollapsibleCard from '../CollapsibleCard'
+import FormHint from '../FormHint'
+import { mapGettersActions } from '../../../utilities/form'
 
 export default {
   components: {
     CollapsibleCard,
-    FormHint
+    FormHint,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGetters({
-      modified: 'project/getModified'
+      modified: 'project/getModified',
     }),
     ...mapGettersActions({
       contact_name: ['project', 'getContactName', 'setContactName', 0],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0]
-    })
+      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
+    }),
   },
   methods: {
-    async validate () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate()
-      ]);
-      return validations.reduce((a, c) => a && c, true);
+    async validate() {
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      return validations.reduce((a, c) => a && c, true)
     },
-    async validateDraft () {
-      this.$refs.collapsible.expandCard();
+    async validateDraft() {
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
-        this.$validator.validate('contact_email')
-      ]);
-      return validations.reduce((a, c) => a && c, true);
-    }
-  }
-};
+        this.$validator.validate('contact_email'),
+      ])
+      return validations.reduce((a, c) => a && c, true)
+    },
+  },
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 </style>
