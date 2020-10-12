@@ -131,16 +131,45 @@ class ProjectPublicViewSet(ViewSet):
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
+    @staticmethod
+    def member_list(user):
+        data = []
+        for project in Project.objects.member_of(user):
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return data
+
+    @staticmethod
+    def favorite_list(userprofile):
+        data = []
+        for project in Project.objects.published_only().filter(favorited_by=userprofile):
+            published = project.to_representation()
+            data.append(project.to_response_dict(published=published, draft=None))
+        return data
+
+    @staticmethod
+    def review_list(userprofile):
+        data = []
+        qs = ReviewScore.objects.filter(reviewer=userprofile, portfolio_review__project__public_id__isnull=False)
+        for review_score in qs:
+            score = review_score.to_representation()
+            data.append(score)
+        return data
+
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
         """
-        data = []
-        for project in Project.objects.member_of(request.user):
-            published = project.to_representation()
-            draft = project.to_representation(draft_mode=True)
-            data.append(project.to_response_dict(published=published, draft=draft))
-
+        list_name = kwargs.get('list_name')
+        if list_name == 'member-of':
+            data = self.member_list(request.user)
+        elif list_name == 'favorite':
+            data = self.favorite_list(request.user.userprofile)
+        elif list_name == 'review':
+            data = self.review_list(request.user.userprofile)
+        else:
+            raise ValidationError({'list_name': 'Unknown list type'})  # pragma: no cover
         return Response(data)
 
 

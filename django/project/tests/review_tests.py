@@ -257,6 +257,11 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(resp_data['ee'], 1)
         self.assertEqual(resp_data['ra'], 5)
         self.assertEqual(resp_data['rnci_comment'], None)
+        url_rev_list = reverse("project-list", kwargs={'list_name': 'review'})
+        response = self.user_1_client.get(url_rev_list)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['project']['id'], self.project_rev_id)
 
     def test_portfolio_matrix_output(self):
         """

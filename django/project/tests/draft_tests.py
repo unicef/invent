@@ -91,7 +91,7 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.status_code, 200)
 
     def test_project_draft_merged_list(self):
-        url = reverse("project-list")
+        url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 3)
