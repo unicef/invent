@@ -39,10 +39,10 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-draft"),
-    url(r"^projects/member-of/$",
-        view=views.ProjectListViewSet.as_view({
-            'get': 'list'
-        }), name="project-list"),
+    path('projects/user-list/<str:list_name>',
+         view=views.ProjectListViewSet.as_view({
+             'get': 'list'
+         }), name="project-list"),
     url(r"^projects/structure/$",
         view=views.ProjectPublicViewSet.as_view({
             'get': 'project_structure'

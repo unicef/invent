@@ -248,7 +248,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json(), {'detail': 'Method "PUT" not allowed.'})
 
     def test_retrieve_project_list(self):
-        url = reverse("project-list")
+        url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]['published'].get("name"), "Test Project1")
@@ -346,7 +346,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['viewers'], [])
 
     def test_by_user_manager(self):
-        url = reverse("project-list")
+        url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]['published']['name'], "Test Project1")
@@ -660,7 +660,7 @@ class ProjectTests(SetupTests):
         self.assertTrue('start_date' not in response.json()['published'])
 
         # Only works for retrieve, the list won't list any project that are not his/her
-        url = reverse("project-list")
+        url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 0)
@@ -739,7 +739,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['draft']['name'], p_not_in_country.name)
 
         # Only works for retrieve, the list won't list any project that are not his/her
-        url = reverse("project-list")
+        url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 0)
@@ -951,6 +951,10 @@ class ProjectTests(SetupTests):
         response = user_x_client.get(url_profile_details)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['favorite']), 0)
+        # get user's favorite list
+        url_fav_list = reverse("project-list", kwargs={'list_name': 'favorite'})
+        response = user_x_client.get(url_fav_list)
+        self.assertEqual(len(response.json()), 0)
         # add projects[0] to the user's favorite list
         url_add = reverse('projects-add-favorite')
         response = user_x_client.post(url_add, {'project': project_ids[0]}, format="json")
@@ -964,6 +968,11 @@ class ProjectTests(SetupTests):
         response = user_x_client.post(url_add, {'project': project_ids[2]}, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['favorite'], project_ids[:3])
+        # check favorite list
+        response = user_x_client.get(url_fav_list)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(set([p['id'] for p in response.json()]), {project_ids[0], project_ids[1], project_ids[2]})
         # unpublish projects[1]
         url = reverse('project-unpublish', kwargs={'project_id': project_ids[1]})
         response = self.test_user_client.put(url, format='json')
@@ -974,9 +983,16 @@ class ProjectTests(SetupTests):
         response = user_x_client.get(url_profile_details)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['favorite'], [project_ids[0], project_ids[2]])
-
+        response = user_x_client.get(url_fav_list)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(set([p['id'] for p in response.json()]), {project_ids[0], project_ids[2]})
         # remove project from the user's favorite list
         url_remove = reverse('projects-remove-favorite')
         response = user_x_client.post(url_remove, {'project': project_ids[0]}, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['favorite'], [project_ids[2]])
+        response = user_x_client.get(url_fav_list)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual([p['id'] for p in response.json()], [project_ids[2]])
