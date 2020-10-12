@@ -97,6 +97,10 @@ export default {
 .ProjectLegend {
   opacity: 1;
   transition: @transitionFade;
+  padding-top: 7px;
+  width: 67px;
+  display: flex;
+  justify-content: flex-end;
 
   .OwnerIcon {
     color: @colorOwner;

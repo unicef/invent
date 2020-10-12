@@ -1,8 +1,6 @@
 <template>
-  <el-row v-if="country" type="flex" class="CountryItem">
-    <el-col class="CountryFlag">
-      <country-flag v-show="showFlag" :code="country.code" />
-    </el-col>
+  <el-row v-if="country" type="flex" align="middle" class="CountryItem">
+    <country-flag v-show="showFlag" :code="country.code" />
     <el-col class="CountryName">
       {{ country.name }}
     </el-col>
@@ -42,28 +40,23 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .CountryItem {
   .CountryFlag {
-    width: auto;
-
-    img {
-      width: 24px;
-      height: 14px;
-      box-shadow: 0 0 1px 1px @colorGrayLighter;
-    }
+    width: 24px;
+    height: 14px;
+    box-shadow: 0 0 1px 1px @colorGrayLighter;
   }
 
   .CountryName {
-    width: 100%;
-    margin-left: 10px;
-    font-size: @fontSizeMedium;
-    font-weight: 700;
+    width: auto;
+    margin: 0 12px;
+    font-size: @fontSizeBase;
+    font-weight: 400;
     line-height: 16px;
-    color: @colorTextPrimary;
-    white-space: nowrap;
+    color: @colorBrandPrimary;
   }
 }
 </style>
