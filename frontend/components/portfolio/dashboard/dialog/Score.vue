@@ -64,6 +64,7 @@
                 scope.row[reviewer][scope.row.type].length
               "
               :items="scope.row[reviewer][scope.row.type]"
+              :problem-statements="problemStatements"
             />
             <p v-else class="na psa">N/A</p>
           </template>
@@ -127,7 +128,10 @@
           <div :class="`content ${scope.row.type === 'psa' ? '' : 'center'}`">
             <template v-if="review.reviewed">
               <template v-if="scope.row.type === 'psa'">
-                <psa-list :items="score[scope.row.type]" />
+                <psa-list
+                  :items="score[scope.row.type]"
+                  :problem-statements="problemStatements"
+                />
               </template>
               <template v-else>
                 <p class="statement">

@@ -1,55 +1,42 @@
 <template>
-  <div class="MyProjects">
-    <div class="PageTitle">
-      <h2><translate>My Initiatives</translate></h2>
-      <p>
-        <translate>Here are all of the initiatives you are a</translate>
-        <fa icon="star" class="Owner" />
-        <b><translate>Member</translate></b
-        >&nbsp;<translate>or</translate>
-        <fa icon="eye" class="Viewer" />
-        <b><translate>Viewer</translate></b
-        >&nbsp;<translate>of.</translate>
-      </p>
-    </div>
+  <div>
+    <tabs :tabs="tabs" :tab="tab" @handleTab="setTab">
+      <template slot="title">
+        <h2>
+          <translate>My Initiatives</translate>
+        </h2>
+      </template>
+    </tabs>
     <user-project-list />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
-import UserProjectList from '../../../components/common/UserProjectsList'
+import UserProjectList from '@/components/common/UserProjectsList'
+import Tabs from '@/components/common/Tabs'
 
 export default {
   components: {
     UserProjectList,
+    Tabs,
   },
   computed: {
-    ...mapGetters({}),
+    ...mapState({
+      tabs: (state) => state.projects.tabs,
+      tab: (state) => state.projects.tab,
+    }),
+  },
+  methods: {
+    ...mapActions({
+      setTab: 'projects/setTab',
+    }),
   },
 }
 </script>
 
-<style lang="less">
-@import '../../../assets/style/variables.less';
-@import '../../../assets/style/mixins.less';
-
-.MyProjects {
-  .PageTitle {
-    .svg-inline--fa {
-      margin: 0 6px 0 10px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .Owner {
-      color: @colorOwner;
-    }
-
-    .Viewer {
-      color: @colorViewer;
-    }
-  }
-}
+<style lang="less" scoped>
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 </style>
