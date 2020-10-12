@@ -111,6 +111,7 @@ class PortfolioTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200, response.json())
         self.assertEqual(response.json()['id'], self.portfolio_id)
         self.assertEqual(response.json()['status'], Portfolio.STATUS_ACTIVE)
+        self.assertTrue(response.json()['problem_statements'])
 
         # Re-check the portfolio list as user #1
         url = reverse("portfolio-list-active")
