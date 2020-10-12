@@ -412,9 +412,22 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         return instance
 
 
+class ProblemStatementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProblemStatement
+        fields = ('id', 'name', 'description')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
+
 class PortfolioListSerializer(serializers.ModelSerializer):
     project_count = serializers.SerializerMethodField()
     managers = serializers.SerializerMethodField()
+    problem_statements = ProblemStatementSerializer(many=True)
 
     class Meta:
         model = Portfolio
@@ -427,18 +440,6 @@ class PortfolioListSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_managers(obj):
         return obj.managers.all().values_list('id', flat=True)
-
-
-class ProblemStatementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProblemStatement
-        fields = ('id', 'name', 'description')
-        extra_kwargs = {
-            "id": {
-                "read_only": False,
-                "required": False,
-            },
-        }
 
 
 class ReviewScoreBriefSerializer(serializers.ModelSerializer):
