@@ -124,7 +124,8 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         `cs` Capability Sucategories overlap eg: cs=1&cs=2  
         `ic` Innovation Categories overlap eg: ic=1&ic=2  
         `sp` Scale Phase in eg: sp=1  
-        `ps` Problem Statement   in eg: ps=1  
+        `ps` Problem Statement in eg: ps=1  
+        `portfolio`  Portfolio in eg: portfolio=1  
 
         ** FOUND IN FEATURE **
 
