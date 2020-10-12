@@ -120,6 +120,7 @@ class PortfolioTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)  # we forgot to activate the portfolio
         self.assertEqual(response.json()[0]['id'], self.portfolio_id)
+        self.assertTrue(response.json()[0]['problem_statements'])
 
         # Make the portfolio a draft again
         url = reverse("portfolio-update", kwargs={"pk": self.portfolio_id})
@@ -149,6 +150,7 @@ class PortfolioTests(PortfolioSetup):
         response = self.user_2_client.get(url)  # GMO users see all portfolios in this list
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
+        self.assertTrue(response.json()[0]['problem_statements'])
 
         response = self.user_3_client.get(url)  # Managers only see their own portfolios in this list
         self.assertEqual(response.status_code, 200)
