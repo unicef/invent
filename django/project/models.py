@@ -556,12 +556,12 @@ class BaseScore(ExtendedModel):
 
 class ProjectPortfolioState(BaseScore):
     SCALE_CHOICES = (
-        (1, _('Ideation')),
-        (2, _('Research & Development')),
-        (3, _('Proof of Concept')),
-        (4, _('Transition to Scale')),
-        (5, _('Scaling')),
-        (6, _('Sustainable Scale'))
+        (1, _('1 - Ideation')),
+        (2, _('2 - Research & Development')),
+        (3, _('3 - Proof of Concept')),
+        (4, _('4 - Transition to Scale')),
+        (5, _('5 - Scaling')),
+        (6, _('6 - Sustainable Scale'))
     )
 
     impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True, blank=True)
