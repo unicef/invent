@@ -42,8 +42,9 @@ export default {
         const parsed = {
           ...s,
           country: this.parseCountry(s.country),
-          country_office:
-            this.offices.find((obj) => obj.id === s.country_office).name || '',
+          country_office: s.country_office
+            ? this.offices.find((obj) => obj.id === s.country_office).name || ''
+            : '',
           investors: this.parseDonors(s.donors),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),

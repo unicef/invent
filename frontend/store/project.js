@@ -112,7 +112,6 @@ export const getters = {
     }
   },
   getPublishedDonorsAnswerDetails: (state, getters) => (id) => {
-    console.log(getters.getPublished.donor_custom_answers)
     return getters.getPublished.donor_custom_answers.find(
       (ca) => ca.question_id === id
     )
