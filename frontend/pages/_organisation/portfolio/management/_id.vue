@@ -57,7 +57,7 @@ export default {
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('portfolio/getProjects', params.id),
+      store.dispatch('portfolio/getPortfolioProjects', params.id),
     ])
     await store.dispatch('dashboard/setSearchOptions', query)
     try {
