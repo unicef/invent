@@ -172,7 +172,7 @@ export default {
         const general = await this.$refs.generalSettings.validateDraft()
         if (general) {
           try {
-            // const id = await this.createPortfolio()
+            await this.createPortfolio()
             const localised = this.localePath({
               name: 'organisation-portfolio-management',
             })
@@ -205,6 +205,7 @@ export default {
         if (general) {
           try {
             // const id = await this.editPortfolio(this.$route.params.id)
+            await this.editPortfolio(this.$route.params.id)
             const localised = this.localePath({
               name: 'organisation-portfolio-management',
             })
