@@ -17,8 +17,9 @@ export const state = () => ({
 })
 
 export const getters = {
-  getProjectData: (state, getters) => ({
+  getProjectData: (state, getters, rootState, rootGetters) => ({
     ...state,
+    organisation: rootGetters['system/getUnicefOrganisation'].id,
     donors: getters.getDonors,
     interoperability_links: getters.getInteroperabilityLinks,
     published: undefined,
@@ -83,9 +84,10 @@ export const getters = {
   getDigitalHealthInterventions: (state) => [...state.dhis],
   getHealthFocusAreas: (state) => state.health_focus_areas,
   getHscChallenges: (state) => state.hsc_challenges,
-  getDonors: (state) => {
-    const cleaned = state.donors.filter((d) => d !== 20)
-    return [20, ...cleaned]
+  getDonors: (state, getters, rootState, rootGetters) => {
+    const uniCode = rootGetters['system/getUnicefDonor'].id
+    const cleaned = state.donors.filter((d) => d !== uniCode)
+    return [uniCode, ...cleaned]
   },
   getDonorsAnswers: (state) =>
     state.donors_answers ? [...state.donors_answers] : [],
@@ -112,7 +114,6 @@ export const getters = {
     }
   },
   getPublishedDonorsAnswerDetails: (state, getters) => (id) => {
-    console.log(getters.getPublished.donor_custom_answers)
     return getters.getPublished.donor_custom_answers.find(
       (ca) => ca.question_id === id
     )
@@ -129,6 +130,7 @@ export const getters = {
 
 export const actions = {
   async loadProject({ commit, dispatch, rootGetters }, id) {
+    // const unicefId = rootGetters['system/getUnicefOrganisation'].id
     const userProject = rootGetters['projects/getUserProjectList'].find(
       (p) => p.id === id
     )
@@ -138,7 +140,7 @@ export const actions = {
         : await this.$axios.get(`/api/projects/${id}/`)
     commit('SET_ORIGINAL', Object.freeze(data))
     const clean = cleanState()
-    const donorsToFetch = new Set([20])
+    const donorsToFetch = new Set([rootGetters['system/getUnicefDonor'].id])
     if (data.draft) {
       const draft = { ...clean, ...apiReadParser(data.draft) }
       draft.donors.forEach((d) => donorsToFetch.add(d))
@@ -170,16 +172,17 @@ export const actions = {
     const clean = cleanState()
     const profile = rootGetters['user/getProfile']
     if (profile) {
+      const donor = rootGetters['system/getUnicefDonor'].id
       clean.country = profile.country
       clean.country_office = profile.country_office
       clean.team = [profile.id]
-      clean.organisation = 56
-      clean.donors = [20]
+      clean.organisation = rootGetters['system/getUnicefOrganisation'].id
+      clean.donors = [donor]
       await Promise.all([
         dispatch('countries/loadCountryDetails', profile.country, {
           root: true,
         }),
-        dispatch('system/loadDonorDetails', 20, { root: true }),
+        dispatch('system/loadDonorDetails', donor, { root: true }),
       ])
     }
     commit('INIT_PROJECT', clean)
@@ -383,10 +386,10 @@ export const actions = {
     commit('SET_VIEWERS', data.viewers)
     return dispatch('user/updateTeamViewers', { ...data, id }, { root: true })
   },
-  async createProject({ getters, dispatch }) {
+  async createProject({ getters, dispatch, rootGetters }) {
     dispatch('setLoading', 'draft')
     const draft = getters.getProjectData
-    draft.organisation = 56
+    draft.organisation = rootGetters['system/getUnicefOrganisation'].id
     const parsed = apiWriteParser(
       draft,
       getters.getAllCountryAnswers,
@@ -401,10 +404,10 @@ export const actions = {
     dispatch('setLoading', false)
     return data.id
   },
-  async saveDraft({ state, getters, dispatch }, id) {
+  async saveDraft({ state, getters, dispatch, rootGetters }, id) {
     dispatch('setLoading', 'draft')
     const draft = getters.getProjectData
-    draft.organisation = 56
+    draft.organisation = rootGetters['system/getUnicefOrganisation'].id
     const parsed = apiWriteParser(
       draft,
       getters.getAllCountryAnswers,
@@ -417,10 +420,10 @@ export const actions = {
     await dispatch('setProject', { data, id })
     dispatch('setLoading', false)
   },
-  async publishProject({ getters, dispatch, commit }, id) {
+  async publishProject({ getters, dispatch, commit, rootGetters }, id) {
     dispatch('setLoading', 'publish')
     const draft = getters.getProjectData
-    draft.organisation = 56
+    draft.organisation = rootGetters['system/getUnicefOrganisation'].id
     const parsed = apiWriteParser(
       draft,
       getters.getAllCountryAnswers,
@@ -563,7 +566,7 @@ export const mutations = {
   },
   INIT_PROJECT: (state, project) => {
     state.name = get(project, 'name', '')
-    state.organisation = get(project, 'organisation', 56)
+    state.organisation = get(project, 'organisation', null)
     state.country = get(project, 'country', null)
     state.country_office = get(project, 'country_office', null)
     state.modified = get(project, 'modified', null)

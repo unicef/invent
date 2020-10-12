@@ -1,3 +1,5 @@
+import find from 'lodash/find'
+
 export const state = () => ({
   profiles: [],
   search_filters: [],
@@ -105,6 +107,10 @@ export const getters = {
   getUnicefRegions: (state) => state.unicef_regions,
   getLinkTypes: (state) => state.link_types,
   getPartnerTypes: (state) => state.partner_types,
+  getUnicefDonor: (state) =>
+    find(state.donors, ({ name }) => name === 'UNICEF'),
+  getUnicefOrganisation: (state) =>
+    find(state.organisations, ({ name }) => name === 'UNICEF'),
 }
 
 export const actions = {
