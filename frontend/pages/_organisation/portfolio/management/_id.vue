@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import AdvancedSearch from '@/components/dashboard/AdvancedSearch'
+import AdvancedSearch from '@/components/search/AdvancedSearch'
 import MainTable from '@/components/portfolio/dashboard/MainTable'
 import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
 import Tabs from '@/components/common/Tabs'
@@ -54,10 +54,20 @@ export default {
   async fetch({ store, query, error, params }) {
     store.dispatch('landing/resetSearch')
     store.dispatch('dashboard/setDashboardSection', 'list')
+    store.commit('portfolio/SET_VALUE', {
+      key: 'currentPortfolioId',
+      val: params.id,
+    })
+    store.commit('portfolio/SET_VALUE', {
+      key: 'currentPortfolioId',
+      val: params.id,
+    })
+    store.commit('search/SET_SEARCH', { key: 'portfolio', val: params.id })
+
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('portfolio/getPortfolioProjects', params.id),
+      store.dispatch('portfolio/getPortfolioProjects'),
     ])
     await store.dispatch('dashboard/setSearchOptions', query)
     try {
