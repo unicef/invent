@@ -243,7 +243,7 @@
         >
           <div
             v-for="partner in project.partners"
-            :key="partner.partner_type"
+            :key="partner.email"
             class="Partners"
           >
             <simple-field :header="partner.partner_name">
