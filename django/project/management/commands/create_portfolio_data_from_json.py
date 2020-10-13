@@ -48,14 +48,20 @@ class Command(BaseCommand, TestProjectData):
     def create_projects(self, projects):
         projects_list = []
         for project_data in projects:
-            data = self.create_test_data(name=project_data['name'], new_country_only=True)
-            parsed_data = (data[0], data[1].id, data[2].id, data[3].id, data[4].id)
+            project_gen_data, org, country, country_office, d1, d2 = \
+                self.create_test_data(name=project_data['name'], new_country_only=True)
 
-            parsed_data[0]['project'].pop('date')
+            project_gen_data = project_gen_data['project']
+            project_gen_data['date'] = project_gen_data['date'].strftime("%m/%d/%Y, %H:%M:%S")
+            project_gen_data['country'] = country.id
+            project_gen_data['organisation'] = org.id
+            project_gen_data['country_office'] = country_office.id
 
             project, created = Project.objects.get_or_create(name=project_data['name'])
-            # project.draft = parsed_data
-            project.data = parsed_data
+            project_team = UserProfile.objects.filter(name__in=project_data['team'])
+
+            project.team.set(project_team)
+            project.data = project_gen_data
             project.make_public_id(self.country.id)
             project.approve()
             project.save()
@@ -112,6 +118,7 @@ class Command(BaseCommand, TestProjectData):
             portfolio.icon = p_data['icon']
             managers = UserProfile.objects.filter(name__in=p_data['managers'])
             portfolio.managers.set(managers)
+            portfolio.status = p_data['status']
             portfolio.save()
             for p_s in p_data['problem_statements']:
                 ps, created = ProblemStatement.objects.get_or_create(
