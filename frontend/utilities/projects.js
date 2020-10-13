@@ -19,7 +19,7 @@ export const fetchProjectData = async (store, params, error) => {
 
 export const projectFields = () => ({
   name: null,
-  organisation: 56,
+  organisation: null,
   country: null,
   country_office: null,
   modified: null,

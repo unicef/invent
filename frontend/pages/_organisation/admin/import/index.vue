@@ -47,8 +47,10 @@ export default {
       store.dispatch('admin/import/loadQueue'),
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('system/loadStaticData'),
-      store.dispatch('system/loadDonorDetails', 20),
-    ])
+    ]).then(function () {
+      const code = store.getters['system/getUnicefDonor'].id
+      store.dispatch('system/loadDonorDetails', code)
+    })
   },
   computed: {
     ...mapGetters({
