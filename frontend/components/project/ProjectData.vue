@@ -229,8 +229,8 @@
         </collapsible-card>
 
         <collapsible-card
-          id="stages"
-          :title="$gettext('4. Stages') | translate"
+          id="phase"
+          :title="$gettext('4. Phase') | translate"
         >
           <simple-field :header="$gettext('Phase of Initiative') | translate">
             <list-element :value="project.phase" source="getPhases" />
