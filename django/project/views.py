@@ -1,6 +1,5 @@
 import copy
 from collections import OrderedDict
-from typing import Tuple
 
 from django.db import transaction
 from django.db.models import QuerySet
@@ -30,7 +29,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
     ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, \
     ProjectPortfolioStateManagerSerializer, PortfolioSerializer, \
-    PortfolioStateChangeSerializer
+    PortfolioStateChangeSerializer, ReviewScoreDetailedSerializer
 from user.serializers import UserProfileSerializer
 
 
@@ -148,17 +147,6 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
             data.append(project.to_response_dict(published=published, draft=None))
         return data
 
-    @staticmethod
-    def review_list(userprofile):
-        data = []
-        qs = ReviewScore.objects.filter(reviewer=userprofile).\
-            exclude(portfolio_review__project__public_id__isnull=True).\
-            exclude(portfolio_review__project__public_id__exact='')
-        for review_score in qs:
-            score = review_score.to_representation()
-            data.append(score)
-        return data
-
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
@@ -169,7 +157,11 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         elif list_name == 'favorite':
             data = self.favorite_list(request.user.userprofile)
         elif list_name == 'review':
-            data = self.review_list(request.user.userprofile)
+            qs = ReviewScore.objects.filter(reviewer=request.user.userprofile). \
+                exclude(portfolio_review__project__public_id__isnull=True). \
+                exclude(portfolio_review__project__public_id__exact='')
+            data_serializer = ReviewScoreDetailedSerializer(qs.all(), many=True)
+            data = data_serializer.data
         else:
             raise ValidationError({'list_name': 'Unknown list type'})  # pragma: no cover
         return Response(data)
@@ -739,39 +731,25 @@ class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, Retr
         return pps
 
 
-class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, ViewSet):
-    @staticmethod
-    def validate_input(request) -> Tuple[UserProfile, Project]:
-        profile = get_object_or_400(UserProfile, "No such userprofile", pk=request.user.userprofile.id)
-
-        if 'project' not in request.data:
-            raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
-
-        project = get_object_or_400(Project, "No such project", pk=request.data.get('project'))
-        if not project.public_id:
-            raise ValidationError({'project': 'Only published projects can be favorited'})  # pragma: no cover
-        return profile, project
+class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    queryset = Project.objects.published_only()
 
     def add(self, request, *args, **kwargs):
         """
         Adds the project in the POST request's body to the user's favorite projects
         """
-        profile, project = self.validate_input(request)
+        self.request.user.userprofile.favorite_projects.add(self.get_object())
+        self.request.user.userprofile.save()
 
-        profile.favorite_projects.add(project)
-        profile.save()
-
-        data_serializer = UserProfileSerializer(profile)
+        data_serializer = UserProfileSerializer(self.request.user.userprofile)
         return Response(data_serializer.data, status=status.HTTP_200_OK)
 
     def remove(self, request, *args, **kwargs):
         """
         Removes the projects in the POST request's body to the user's favorite projects
         """
-        profile, project = self.validate_input(request)
+        self.request.user.userprofile.favorite_projects.remove(self.get_object())
+        self.request.user.userprofile.save()
 
-        profile.favorite_projects.remove(project)
-        profile.save()
-
-        data_serializer = UserProfileSerializer(profile)
+        data_serializer = UserProfileSerializer(self.request.user.userprofile)
         return Response(data_serializer.data, status=status.HTTP_200_OK)
