@@ -1,5 +1,5 @@
 <template>
-  <div id="Technology" class="GeneralOverview">
+  <div id="technology" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Technology') | translate"
