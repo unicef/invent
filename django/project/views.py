@@ -151,7 +151,9 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
     @staticmethod
     def review_list(userprofile):
         data = []
-        qs = ReviewScore.objects.filter(reviewer=userprofile, portfolio_review__project__public_id__isnull=False)
+        qs = ReviewScore.objects.filter(reviewer=userprofile).\
+            exclude(portfolio_review__project__public_id__isnull=True).\
+            exclude(portfolio_review__project__public_id__exact='')
         for review_score in qs:
             score = review_score.to_representation()
             data.append(score)
