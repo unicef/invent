@@ -19,7 +19,6 @@ from project.utils import remove_keys
 from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
 from django.db.models import Count, Case, When, IntegerField, F, Q
-from django.forms.models import model_to_dict
 
 
 class ProjectManager(models.Manager):
@@ -613,9 +612,8 @@ class ReviewScore(BaseScore):
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')
 
-    def to_representation(self):
-        data_dict = model_to_dict(self)
-        data_dict['portfolio'] = model_to_dict(self.portfolio_review.portfolio, exclude='managers')
-        data_dict['project'] = self.portfolio_review.project.to_representation()
+    def get_project_data(self):
+        return self.portfolio_review.project.to_representation()
 
-        return data_dict
+    def get_portfolio(self):
+        return self.portfolio_review.portfolio

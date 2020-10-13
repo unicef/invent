@@ -79,14 +79,14 @@ urlpatterns = [
             'get': 'list',
         }),
         name="project-map"),
-    path('projects/favorites/add/',
+    path('projects/favorites/add/<int:pk>',
          view=views.ProjectModifyFavoritesViewSet.as_view({
-             'post': 'add'
+             'put': 'add'
          }),
          name="projects-add-favorite"),
-    path('projects/favorites/remove/',
+    path('projects/favorites/remove/<int:pk>',
          view=views.ProjectModifyFavoritesViewSet.as_view({
-             'post': 'remove'
+             'put': 'remove'
          }),
          name="projects-remove-favorite"),
     path(r'approvals/<int:country_id>/',

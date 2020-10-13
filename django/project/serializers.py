@@ -571,3 +571,13 @@ class ReviewScoreFillSerializer(serializers.ModelSerializer):
         instance.complete = True
         instance = super().update(instance, validated_data)
         return instance
+
+
+class ReviewScoreDetailedSerializer(serializers.ModelSerializer):
+    project = serializers.ReadOnlyField(source='get_project_data')
+    portfolio = PortfolioSerializer(read_only=True, source='get_portfolio')
+    portfolio_review = ProjectPortfolioStateSerializer(read_only=True)
+
+    class Meta:
+        model = ReviewScore
+        fields = '__all__'

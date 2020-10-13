@@ -956,16 +956,18 @@ class ProjectTests(SetupTests):
         response = user_x_client.get(url_fav_list)
         self.assertEqual(len(response.json()), 0)
         # add projects[0] to the user's favorite list
-        url_add = reverse('projects-add-favorite')
-        response = user_x_client.post(url_add, {'project': project_ids[0]}, format="json")
+        url_add = reverse('projects-add-favorite', kwargs={'pk': project_ids[0]})
+        response = user_x_client.put(url_add, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['favorite'], [project_ids[0]])
         # add projects[1] to the user's favorite list
-        response = user_x_client.post(url_add, {'project': project_ids[1]}, format="json")
+        url_add = reverse('projects-add-favorite', kwargs={'pk': project_ids[1]})
+        response = user_x_client.put(url_add, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['favorite'], [project_ids[0], project_ids[1]])
         # add projects[2] to the user's favorite list
-        response = user_x_client.post(url_add, {'project': project_ids[2]}, format="json")
+        url_add = reverse('projects-add-favorite', kwargs={'pk': project_ids[2]})
+        response = user_x_client.put(url_add, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['favorite'], project_ids[:3])
         # check favorite list
@@ -988,8 +990,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(set([p['id'] for p in response.json()]), {project_ids[0], project_ids[2]})
         # remove project from the user's favorite list
-        url_remove = reverse('projects-remove-favorite')
-        response = user_x_client.post(url_remove, {'project': project_ids[0]}, format="json")
+        url_remove = reverse('projects-remove-favorite', kwargs={'pk': project_ids[0]})
+        response = user_x_client.put(url_remove, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['favorite'], [project_ids[2]])
         response = user_x_client.get(url_fav_list)
