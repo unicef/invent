@@ -1,14 +1,32 @@
 <template>
-  <div :class="`Matrix ${top !== false ? 'ShowOnTop' : ''}`">
+  <div
+    :class="`Matrix ${top !== false ? 'ShowOnTop' : ''} ${
+      noarrow !== false ? 'HideArrow' : ''
+    }`"
+  >
     <div class="ArrowRight" />
     <div class="ArrowTop" />
     <div class="MColumns">
       <div class="MColumn">
-        <div class="Yaxis">
-          <span v-for="text in left" :key="text">{{ text }}</span>
-        </div>
-        <div class="Xaxis">
-          <span v-for="text in bottom" :key="text">{{ text }}</span>
+        <div
+          v-for="{ labels, extra, name } in allAxis"
+          :key="name"
+          :class="name"
+        >
+          <span v-for="(text, index) in labels" :key="text">
+            {{ text }}
+            <el-tooltip
+              v-if="index === 1 && extra"
+              :content="extra"
+              effect="dark"
+              placement="bottom"
+              popper-class="SearchBoxTooltip"
+            >
+              <el-button type="text" class="MutedButton">
+                <fa icon="question-circle" />
+              </el-button>
+            </el-tooltip>
+          </span>
         </div>
         <div class="Elements" :style="matrixStyle">
           <matrix-element
@@ -91,11 +109,23 @@ export default {
       type: Array,
       required: true,
     },
+    extraBottom: {
+      type: String,
+      deafult: '',
+    },
+    extraLeft: {
+      type: String,
+      deafult: '',
+    },
     color: {
       type: String,
       default: '',
     },
     top: {
+      type: Boolean,
+      default: false,
+    },
+    noarrow: {
       type: Boolean,
       default: false,
     },
@@ -110,10 +140,25 @@ export default {
   },
   data() {
     return {
+      showBottomTooltip: false,
       activeIndex: undefined,
     }
   },
   computed: {
+    allAxis() {
+      return [
+        {
+          labels: this.left,
+          extra: this.extraLeft,
+          name: 'Yaxis',
+        },
+        {
+          labels: this.bottom,
+          extra: this.extraBottom,
+          name: 'Xaxis',
+        },
+      ]
+    },
     leftText() {
       return this.removeBracets(this.left[1])
     },
@@ -169,6 +214,12 @@ export default {
   &::v-deep .el-scrollbar__wrap {
     overflow-y: scroll;
     overflow-x: hidden;
+  }
+  &.HideArrow {
+    .ArrowRight,
+    .ArrowTop {
+      display: none !important;
+    }
   }
   &.ShowOnTop {
     .Elements {
@@ -324,6 +375,9 @@ export default {
     height: 540px;
     writing-mode: vertical-lr;
     transform: rotate(180deg);
+    .MutedButton {
+      transform: rotate(90deg);
+    }
   }
   .Xaxis {
     padding: 0 10px;

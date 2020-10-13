@@ -30,10 +30,12 @@
             <Matrix
               bg-color="#FCEFE8"
               color="#F26A21"
-              top
+              noarrow
               :elements="elements"
               :left="['high', 'risk', 'low']"
               :bottom="['low', 'impact (total global need)', 'high']"
+              extraBottom="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
+              extraLeft="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
             />
           </el-tab-pane>
           <el-tab-pane label="PROBLEM STATEMENT MATRIX" name="problem">
