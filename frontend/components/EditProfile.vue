@@ -426,7 +426,7 @@ export default {
       innerProfile: {
         name: null,
         // default code for unicef
-        organisation: 56,
+        organisation: this.unicefOrganisation.id,
         language: null,
         country: null,
         account_type: null,
@@ -444,6 +444,7 @@ export default {
       profile: 'user/getProfile',
       user: 'user/getUser',
       donors: 'system/getDonors',
+      unicefOrganisation: 'system/getUnicefOrganisation',
     }),
 
     userTypeRequested() {
@@ -530,7 +531,10 @@ export default {
     profile: {
       immediate: true,
       handler(profile) {
-        this.innerProfile = { ...profile, organisation: 56 }
+        this.innerProfile = {
+          ...profile,
+          organisation: this.unicefOrganisation.id,
+        }
       },
     },
   },
@@ -546,7 +550,10 @@ export default {
     }),
 
     dismissChanges() {
-      this.innerProfile = { ...this.profile, organisation: 56 }
+      this.innerProfile = {
+        ...this.profile,
+        organisation: this.unicefOrganisation.id,
+      }
       this.$router.go(-1)
     },
 
