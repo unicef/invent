@@ -27,6 +27,7 @@ class Command(BaseCommand, TestProjectData):
                                                  code=data_dict['d1'].lower().replace(' ', '_'))
         self.d2, _ = Donor.objects.get_or_create(name=data_dict['d2'],
                                                  code=data_dict['d2'].lower().replace(' ', '_'))
+        self.country, self.country_office = self.create_new_country_and_office(project_approval=False)
 
     @staticmethod
     def create_users(users):
@@ -53,7 +54,10 @@ class Command(BaseCommand, TestProjectData):
             parsed_data[0]['project'].pop('date')
 
             project, created = Project.objects.get_or_create(name=project_data['name'])
+            # project.draft = parsed_data
             project.data = parsed_data
+            project.make_public_id(self.country.id)
+            project.approve()
             project.save()
 
             projects_list.append(project)
