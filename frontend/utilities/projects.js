@@ -161,6 +161,26 @@ export const draftRules = () => {
 }
 export const publishRules = () => {
   return {
+    partner_name: {
+      required: true,
+      max: 100,
+    },
+    partner_email: {
+      email: true,
+      required: true,
+      max: 100,
+    },
+    partner_website: {
+      url: { require_protocol: true },
+      max: 100,
+    },
+    link_website: {
+      url: { require_protocol: true },
+      max: 100,
+    },
+    wbs: {
+      max: 30,
+    },
     phase: {
       required: true,
     },

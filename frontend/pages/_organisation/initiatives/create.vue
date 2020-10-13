@@ -24,6 +24,7 @@ export default {
   },
   async fetch({ store }) {
     await Promise.all([
+      store.dispatch('projects/loadProjectStructure'),
       store.dispatch('system/loadDonors'),
       store.dispatch('system/loadOrganisations'),
     ])
