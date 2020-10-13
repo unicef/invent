@@ -15,7 +15,6 @@
             </template>
             <single-select
               :value="partner ? partner.partner_type : null"
-              :reject="selectedType(partner ? partner.partner_type : null)"
               data-vv-name="partnerType"
               data-vv-as="Partner Type"
               source="system/getPartnerTypes"
@@ -150,11 +149,6 @@ export default {
       partners[index] = partners[index] ? { ...partners[index] } : {}
       partners[index][key] = value
       this.partners = partners
-    },
-    selectedType(partnerId) {
-      return this.partners
-        .filter((partner) => partner && partner.partner_type !== partnerId)
-        .map(({ partner_type }) => partner_type)
     },
   },
 }
