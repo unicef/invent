@@ -1,7 +1,7 @@
 <template>
   <lazy-el-select
-    :value="value"
-    :placeholder="$gettext('Select investor') | translate"
+    :value="`${value}`"
+    :placeholder="$gettext('Select from list') | translate"
     popper-class="SelectorPopper"
     class="Selector"
     @change="changeHandler"
@@ -10,7 +10,7 @@
       v-for="option in sourceList"
       :key="option.id"
       :label="option.name"
-      :value="option.id"
+      :value="`${option.id}`"
     />
   </lazy-el-select>
 </template>
@@ -25,7 +25,7 @@ export default {
   props: {
     value: {
       type: Number,
-      default: null,
+      default: 0,
     },
     source: {
       type: String,
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     changeHandler(value) {
-      this.$emit('change', value)
+      this.$emit('change', value * 1)
     },
   },
 }

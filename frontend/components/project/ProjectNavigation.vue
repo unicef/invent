@@ -44,12 +44,12 @@
               <translate>Implementation</translate>
             </el-button>
           </li>
-          <li :class="{ active: active === 'stages' }">
-            <el-button type="text" @click="scrollTo('stages')">
+          <li :class="{ active: active === 'phase' }">
+            <el-button type="text" @click="scrollTo('phase')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              <translate>Stages</translate>
+              <translate>Phase</translate>
             </el-button>
           </li>
           <li :class="{ active: active === 'partners' }">

@@ -390,6 +390,7 @@ export const actions = {
     dispatch('setLoading', 'draft')
     const draft = getters.getProjectData
     draft.organisation = rootGetters['system/getUnicefOrganisation'].id
+    draft.donors = [rootGetters['system/getUnicefDonor'].id]
     const parsed = apiWriteParser(
       draft,
       getters.getAllCountryAnswers,
@@ -408,6 +409,7 @@ export const actions = {
     dispatch('setLoading', 'draft')
     const draft = getters.getProjectData
     draft.organisation = rootGetters['system/getUnicefOrganisation'].id
+    draft.donors = [rootGetters['system/getUnicefDonor'].id]
     const parsed = apiWriteParser(
       draft,
       getters.getAllCountryAnswers,
@@ -424,6 +426,7 @@ export const actions = {
     dispatch('setLoading', 'publish')
     const draft = getters.getProjectData
     draft.organisation = rootGetters['system/getUnicefOrganisation'].id
+    draft.donors = [rootGetters['system/getUnicefDonor'].id]
     const parsed = apiWriteParser(
       draft,
       getters.getAllCountryAnswers,
