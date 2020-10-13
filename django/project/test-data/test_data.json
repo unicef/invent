@@ -34,28 +34,272 @@
    "name": "Moist von Lipwig",
    "email": "golden.hat@discworld.co.uk",
    "role": "User"
+  },
+  {
+   "name": "Adora Belle Dearheart",
+   "email": "spike@discworld.co.uk",
+   "role": "User"
   }
 ],
   "projects": [
-    {"name":  "Improve hygienic access to goblins"},
-    {"name":  "Koom Valley celebrations"},
-    {"name":  "City watch ballista upgrade"},
-    {"name":  "Clacks system 2nd generation"},
-    {"name":  "Battle bread museum restoration"},
-    {"name":  "Improve pie access to clowns befallen of hard times"},
-    {"name":  "The underground tunnel network"},
-    {"name":  "Close the old Treacle mine"},
-    {"name":  "Brass bridge polishing"},
-    {"name":  "Fix pothole dug for Windle Poons"},
-    {"name":  "Black ribbonner awareness month"},
-    {"name":  "Fund extensive city renovation by raising taxes"}
+    {
+      "name":  "Improve hygienic access to goblins",
+      "team": ["Delphine Angua von Überwald", "Adora Belle Dearheart"]},
+    {
+      "name":  "Koom Valley celebrations",
+      "team": ["Delphine Angua von Überwald", "Carrot Ironfoundersson"]
+    },
+    {
+      "name": "City watch ballista upgrade",
+      "team": ["Samuel Vimes", "Carrot Ironfoundersson"]
+    },
+    {
+      "name":  "Clacks system 2nd generation",
+      "team": ["Moist von Lipwig", "Adora Belle Dearheart"]
+    },
+    {
+      "name": "Battle bread museum restoration",
+      "team": ["Carrot Ironfoundersson"]
+    },
+    {
+      "name":  "Improve pie access to clowns befallen of hard times",
+      "team": ["Carrot Ironfoundersson"]
+    },
+    {
+      "name":  "The underground tunnel network",
+      "team": ["Havelock Vetinary"]
+    },
+    {
+      "name":  "Close the old Treacle mine",
+      "team": ["Havelock Vetinary"]
+    },
+    {
+      "name":  "Brass bridge polishing",
+      "team": ["Frederick Colon"]
+    },
+    {
+      "name":  "Fix pothole dug for Windle Poons",
+      "team": ["Frederick Colon"]
+    },
+    {
+      "name":  "Black ribbonner awareness month",
+      "team": ["Carrot Ironfoundersson"]
+    },
+    {
+      "name":  "Fund extensive city renovation by raising taxes",
+      "team": ["Havelock Vetinary"]
+    }
   ],
   "portfolios": [
+        {
+      "name": "Equal opportunities for all",
+      "description": "A well-rounded society needs to provide equality to all of its members.",
+      "managers": ["Havelock Vetinary", "Adora Belle Dearheart"],
+      "icon": "116",
+      "status": "ACT",
+      "problem_statements": [
+        {
+          "name": "Tension between dwarf and troll community",
+          "description": "Lorem ipsum"
+        },
+        {
+          "name": "Undead city members are being discriminated",
+          "description": "Lorem ipsum"
+        },
+        {
+          "name": "Nobody takes the Guild of Clowns seriously",
+          "description": "Lorem ipsum"
+        }
+      ],
+      "projects_in_review": [
+        {
+          "name": "Black ribbonner awareness month",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Undead city members are being discriminated"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "ee_comment": "Think through this!",
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }
+          ]
+        },
+        {
+          "name":  "Improve pie access to clowns befallen of hard times",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Nobody takes the Guild of Clowns seriously"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }],
+          "scores": {
+              "psa": [
+                "Nobody takes the Guild of Clowns seriously"
+              ],
+              "rnci": 5,
+              "ratp": 3,
+              "ra": 4,
+              "ee": 2,
+              "nst": 5,
+              "ps": 3,
+              "impact": 5,
+              "scale_phase": 2
+          }
+        }
+      ],
+      "projects_approved": [
+        {
+          "name":  "Koom Valley celebrations",
+          "scores": {
+              "psa": [
+                "Tension between dwarf and troll community"
+              ],
+              "rnci": 5,
+              "ratp": 5,
+              "ra": 5,
+              "ee": 5,
+              "nst": 5,
+              "ps": 5,
+              "impact": 5,
+              "scale_phase": 2
+          }
+        }
+      ]
+    },
     {
       "name": "The Undertaking",
       "description": "The Undertaking is Vetinari's grand plan to take Ankh-Morpork into the future. \nBy improving the sewage system and installing a series of underground tunnels in which the dwarfs will lay tracks, for trade and possibly people as well.",
       "managers": ["Havelock Vetinary", "Moist von Lipwig"],
-      "icon": "UT",
+      "icon": "72",
+      "status": "ACT",
+      "problem_statements": [
+        {
+          "name": "Development is slowing down",
+          "description": "Lorem ipsum"
+        },
+        {
+          "name": "Commuting takes too much time",
+          "description": "Lorem ipsum"
+        },
+        {
+          "name": "Infrastructure is decayed",
+          "description": "Lorem ipsum"
+        }
+      ],
+      "projects_in_review": [
+        {
+          "name": "Fund extensive city renovation by raising taxes",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Development is slowing down"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }
+          ]
+        },
+        {
+          "name":  "Close the old Treacle mine",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Infrastructure is decayed"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }],
+          "scores": {
+              "psa": [
+                "Infrastructure is decayed"
+              ],
+              "rnci": 5,
+              "ratp": 3,
+              "ra": 4,
+              "ee": 2,
+              "nst": 5,
+              "ps": 3,
+              "impact": 5,
+              "scale_phase": 2
+          }
+        }
+      ],
+      "projects_approved": [
+        {
+          "name":  "Fix pothole dug for Windle Poons",
+          "scores": {
+              "psa": [
+                "Commuting takes too much time"
+              ],
+              "rnci": 5,
+              "ratp": 5,
+              "ra": 5,
+              "ee": 5,
+              "nst": 5,
+              "ps": 5,
+              "impact": 5,
+              "scale_phase": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "The Undertaking (old version)",
+      "description": "The Undertaking is Vetinari's grand plan to take Ankh-Morpork into the future. \nBy improving the sewage system and installing a series of underground tunnels in which the dwarfs will lay tracks, for trade and possibly people as well.",
+      "managers": ["Havelock Vetinary", "Moist von Lipwig"],
+      "icon": "7",
+      "status": "ARC",
       "problem_statements": [
         {
           "name": "Development is slowing down",
@@ -151,5 +395,6 @@
         }
       ]
     }
+
   ]
 }
