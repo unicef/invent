@@ -39,7 +39,7 @@ import MainTable from '@/components/portfolio/dashboard/MainTable'
 import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
 import Tabs from '@/components/common/Tabs'
 import { mapState, mapGetters, mapActions } from 'vuex'
-import debounce from 'lodash/debounce'
+// import debounce from 'lodash/debounce'
 // dialogs
 import Error from '@/components/portfolio/dashboard/dialog/Error'
 
@@ -90,43 +90,43 @@ export default {
       errorMessage: (state) => state.portfolio.errorMessage,
     }),
     ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters',
-      dashboardSection: 'dashboard/getDashboardSection',
+      // searchParameters: 'dashboard/getSearchParameters',
+      // dashboardSection: 'dashboard/getDashboardSection',
     }),
   },
   watch: {
-    searchParameters: {
-      immediate: false,
-      handler(query) {
-        this.searchParameterChanged(query)
-      },
-    },
+    // searchParameters: {
+    //   immediate: false,
+    //   handler(query) {
+    //     this.searchParameterChanged(query)
+    //   },
+    // },
   },
   mounted() {
-    if (window) {
-      const savedFilters = window.localStorage.getItem('savedFilters')
-      if (savedFilters) {
-        this.setSavedFilters(JSON.parse(savedFilters))
-      }
-    }
+    // if (window) {
+    //   const savedFilters = window.localStorage.getItem('savedFilters')
+    //   if (savedFilters) {
+    //     this.setSavedFilters(JSON.parse(savedFilters))
+    //   }
+    // }
   },
   methods: {
     ...mapActions({
-      loadProjectList: 'dashboard/loadProjectList',
-      setSavedFilters: 'dashboard/setSavedFilters',
+      // loadProjectList: 'dashboard/loadProjectList',
+      // setSavedFilters: 'dashboard/setSavedFilters',
       setTab: 'portfolio/setTab',
     }),
-    searchParameterChanged: debounce(function (query) {
-      if (this.dashboardSection === 'list') {
-        this.$router.replace({ ...this.$route, query })
-        this.load()
-      }
-    }, 100),
-    async load() {
-      this.$nuxt.$loading.start()
-      await this.loadProjectList()
-      this.$nuxt.$loading.finish()
-    },
+    // searchParameterChanged: debounce(function (query) {
+    //   if (this.dashboardSection === 'list') {
+    //     this.$router.replace({ ...this.$route, query })
+    //     this.load()
+    //   }
+    // }, 100),
+    // async load() {
+    //   this.$nuxt.$loading.start()
+    //   await this.loadProjectList()
+    //   this.$nuxt.$loading.finish()
+    // },
   },
 }
 </script>

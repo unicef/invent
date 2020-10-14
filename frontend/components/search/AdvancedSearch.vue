@@ -1,72 +1,126 @@
 <template>
-  <div class="AdvancedSearch">
+  <div class="advanced-search">
     <filter-presets-actions />
     <search-box />
-    <!-- <country-filters />
-    <div class="UnicefSingleSelection">
-      <goal-areas-selector
-        v-model="selectedGoal"
+    <div>
+      <!--
+      partner -->
+      <filter-select
+        :value="region"
+        :items="regions"
+        :placeholder="$gettext('Region') | translate"
+        @change="handleSearch('region', $event)"
+      />
+      <filter-select
+        :value="co"
+        :items="offices"
+        multiple
+        :placeholder="$gettext('Country Office') | translate"
+        @change="handleSearch('co', $event)"
+      />
+      <filter-select
+        :value="ic"
+        :items="innovationCategories"
+        multiple
+        :placeholder="$gettext('Innovation Category') | translate"
+        @change="handleSearch('ic', $event)"
+      />
+      <!-- <filter-select
+        :value="partner"
+        :items="partners"
+        multiple
+        :placeholder="$gettext('Partners') | translate"
+        @change="handleSearch('partner', $event)"
+      /> -->
+      <filter-select
+        :value="goal"
+        :items="goalAreas"
+        multiple
         :placeholder="$gettext('Select Goal Area') | translate"
-        clearable
+        @change="handleSearch('goal', $event)"
       />
-      <multi-selector
-        v-model="innovationCategories"
-        class="MultiSelectorFilter"
-        source="getInnovationCategories"
-        :placeholder="$gettext('Select Innovation Categories') | translate"
-      />
-    </div> -->
+      <template v-if="portfolioPage === 'portfolio'">
+        <filter-select
+          :value="sp"
+          :items="scalePhases"
+          :placeholder="$gettext('Scale Phase') | translate"
+          @change="handleSearch('sp', $event)"
+        />
+        <filter-select
+          :value="ps"
+          :items="problemStatements"
+          multiple
+          :placeholder="$gettext('Problem Statement') | translate"
+          @change="handleSearch('ps', $event)"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { mapGettersActions } from '@/utilities/form'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import debounce from 'lodash/debounce'
 
 import FilterPresetsActions from '@/components/dashboard/FilterPresetsActions'
 import SearchBox from '@/components/search/SearchBox'
-// import CountryFilters from '@/components/dashboard/CountryFilters'
-// import GoalAreasSelector from '@/components/common/GoalAreasSelector'
-// import MultiSelector from '@/components/project/MultiSelector'
+import FilterSelect from '@/components/search/FilterSelect'
 
 export default {
   components: {
     FilterPresetsActions,
     SearchBox,
-    // CountryFilters,
-    // GoalAreasSelector,
-    // MultiSelector,
+    FilterSelect,
+  },
+  data() {
+    return {
+      scalePhases: [
+        { id: 1, value: '1' },
+        { id: 2, value: '2' },
+        { id: 3, value: '3' },
+        { id: 4, value: '4' },
+        { id: 5, value: '5' },
+      ],
+    }
   },
   computed: {
+    ...mapState({
+      // prefilter state
+      portfolioPage: (state) => state.search.filter.portfolio_page,
+      // filters
+      region: (state) => state.search.filter.region,
+      co: (state) => state.search.filter.co,
+      ic: (state) => state.search.filter.ic,
+      partner: (state) => state.search.filter.partner,
+      goal: (state) => state.search.filter.goal,
+      sp: (state) => state.search.filter.sp,
+      ps: (state) => state.search.filter.ps,
+      // list
+      offices: (state) => state.offices.offices,
+      problemStatements: (state) => state.portfolio.problemStatements,
+    }),
+
     ...mapGetters({
       goalAreas: 'projects/getGoalAreas',
+      regions: 'system/getRegions',
+      innovationCategories: 'projects/getInnovationCategories',
+      partners: 'project/getPartners',
     }),
-    ...mapGettersActions({
-      // selectedGoal: ['dashboard', 'getSelectedGoal', 'setSelectedGoal', 0],
-      // selectedResult: [
-      //   'dashboard',
-      //   'getSelectedResult',
-      //   'setSelectedResult',
-      //   0,
-      // ],
-      // innovationCategories: [
-      //   'dashboard',
-      //   'getInnovationCategories',
-      //   'setInnovationCategories',
-      //   0,
-      // ],
-    }),
-    selectedGoalAreaDetails() {
-      if (this.selectedGoal) {
-        return this.goalAreas.find((g) => g.id === this.selectedGoal)
-      }
-      return null
-    },
   },
   methods: {
-    // deleteFromCollection(id, collectionName) {
-    //   this[collectionName] = this[collectionName].filter((item) => item !== id)
-    // },
+    ...mapMutations({
+      setSearch: 'search/SET_SEARCH',
+    }),
+    ...mapActions({
+      getSearch: 'search/getSearch',
+    }),
+    handleSearch(key, val) {
+      this.setSearch({ key, val })
+      this.getSearchResults()
+    },
+    getSearchResults: debounce(function () {
+      this.getSearch()
+    }, 350),
   },
 }
 </script>
@@ -75,34 +129,29 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
-.AdvancedSearch {
+.advanced-search {
   box-sizing: border-box;
   width: @advancedSearchWidth;
-  // TODO
   min-height: 100%;
-  border-left: 1px solid @colorGrayLight;
+  border-left: 1px solid #eae6e1;
   background-color: @colorWhite;
-
-  .MultiSelectorFilter {
-    margin: 10px 0;
-  }
-  // search filters blocks
   > div {
     padding: 20px;
-    border-bottom: 1px solid @colorGrayLight;
-
+    border-bottom: 1px solid #eae6e1;
+    .el-select {
+      margin-bottom: 12px;
+      .el-select__tags {
+        overflow: hidden;
+      }
+    }
+    .el-input {
+      .el-input__inner {
+        border-color: #a8a8a9;
+      }
+    }
     &:last-child {
       border: 0;
     }
-  }
-
-  .UnicefSingleSelection {
-    .el-select:first-child {
-      margin-bottom: 10px;
-    }
-  }
-
-  .FilterSwitches {
   }
 }
 </style>

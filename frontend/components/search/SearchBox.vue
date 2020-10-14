@@ -1,6 +1,6 @@
 <template>
-  <div class="SearchBox">
-    <el-row type="flex" class="SearchInput">
+  <div class="search-box">
+    <el-row type="flex">
       <el-col>
         <el-input
           :value="q"
@@ -11,7 +11,7 @@
         </el-input>
       </el-col>
     </el-row>
-    <!-- <el-row type="flex" class="SearchOptions">
+    <el-row type="flex" class="search-options">
       <el-col class="SearchOptionsHeader">
         <el-button
           type="text"
@@ -66,13 +66,14 @@
           </el-checkbox-group>
         </el-col>
       </transition>
-    </el-row> -->
+    </el-row>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
+import { mapGettersActions } from '@/utilities/form.js'
 
 export default {
   data() {
@@ -84,6 +85,9 @@ export default {
   computed: {
     ...mapState({
       q: (state) => state.search.filter.q,
+    }),
+    ...mapGettersActions({
+      selectedOptions: ['dashboard', 'getSearchIn', 'setSearchIn', 0],
     }),
   },
   methods: {
@@ -111,8 +115,8 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
-.SearchBox {
-  .SearchOptions {
+.search-box {
+  .search-options {
     flex-direction: column;
 
     .SearchOptionsHeader {
@@ -136,6 +140,12 @@ export default {
         padding: 0;
       }
     }
+  }
+
+  .el-input.el-input-group .el-input-group__append,
+  .el-input.el-input-group .el-input-group__prepend {
+    color: #777779;
+    background-color: #f9f8f5;
   }
 
   .slide-fade-enter-active {
