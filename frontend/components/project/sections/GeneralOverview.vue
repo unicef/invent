@@ -224,14 +224,10 @@
           :publish-rule="publishRules.team"
         >
           <template slot="label">
-            <translate key="team">
-              Add team members (editors)--can modify entry on Add New Initiative
-              page
-            </translate>
+            <translate key="team"> Add team members (editors) </translate>
             <form-hint>
               <translate key="team-hint">
-                Initiative editors can change and update all project
-                information.
+                Editors can edit and publish initiatives
               </translate>
             </form-hint>
           </template>
@@ -242,6 +238,13 @@
             data-vv-name="team"
             data-vv-as="Team"
           />
+
+          <span class="Hint">
+            <fa icon="info-circle" />
+            <p>
+              <translate>Editors can edit and publish initiatives</translate>
+            </p>
+          </span>
         </custom-required-form-team-item>
         <custom-required-form-team-item
           v-model="viewers"
@@ -250,14 +253,10 @@
           :publish-rule="publishRules.viewers"
         >
           <template slot="label">
-            <translate key="viewers">
-              Add team members (viewers)--can receive notification that
-              initiative has been added
-            </translate>
+            <translate key="viewers"> Add team members (viewers) </translate>
             <form-hint>
               <translate key="viewers-hint">
-                Initiative viewers will be able to view the full initiative
-                details.
+                Viewers can view initiative drafts
               </translate>
             </form-hint>
           </template>
@@ -268,6 +267,13 @@
             data-vv-name="viewers"
             data-vv-as="Viewers"
           />
+
+          <span class="Hint">
+            <fa icon="info-circle" />
+            <p>
+              <translate>Viewers can view initiative drafts</translate>
+            </p>
+          </span>
         </custom-required-form-team-item>
       </div>
     </collapsible-card>

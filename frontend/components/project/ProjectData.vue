@@ -229,8 +229,8 @@
         </collapsible-card>
 
         <collapsible-card
-          id="stages"
-          :title="$gettext('4. Stages') | translate"
+          id="phase"
+          :title="$gettext('4. Phase') | translate"
         >
           <simple-field :header="$gettext('Phase of Initiative') | translate">
             <list-element :value="project.phase" source="getPhases" />
@@ -243,7 +243,7 @@
         >
           <div
             v-for="partner in project.partners"
-            :key="partner.partner_type"
+            :key="partner.email"
             class="Partners"
           >
             <simple-field :header="partner.partner_name">

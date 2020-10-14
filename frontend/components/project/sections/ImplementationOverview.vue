@@ -318,7 +318,7 @@
           >
             <template slot="label">
               <translate key="wbs">
-                Please add the relevant WBS number in the following format:
+                Please add the relevant WBS number:
               </translate>
             </template>
 

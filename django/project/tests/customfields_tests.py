@@ -505,6 +505,14 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
 
+        # answer 1 and 2 are present, there is an extra non existing donor
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id, answer=["answer1"]),
+                                                                dict(question_id=dq2.id, answer=["answer2"])],
+                                              str(999): [dict(question_id=333, answer=[])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200)
+
     def test_donor_answer_wrong_question_id(self):
         DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
         url = reverse("project-create",
