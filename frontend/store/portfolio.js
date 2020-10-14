@@ -163,6 +163,7 @@ export const actions = {
     dispatch('getPortfolioProjects')
     // reset on tab change the status selection
     dispatch('dashboard/setSelectedRows', [], { root: true })
+    dispatch('search/resetSearch', [], { root: true })
   },
   // portfolio actions
   async createPortfolio({ state, getters, dispatch }) {
