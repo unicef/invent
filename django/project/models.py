@@ -3,7 +3,7 @@ from collections import namedtuple
 
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
-from django.db import models
+from django.db import models, transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -596,4 +596,9 @@ class ReviewScore(BaseScore):
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')
 
-    # TODO: hook up notification to on_create
+
+@receiver(post_save, sender=ReviewScore)
+def on_create_notify(sender, instance, created, **kwargs):
+    if created:
+        from .tasks import project_review_requested_on_create_notification
+        transaction.on_commit(lambda: project_review_requested_on_create_notification.apply_async(args=instance))
