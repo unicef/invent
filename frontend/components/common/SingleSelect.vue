@@ -1,18 +1,20 @@
 <template>
-  <lazy-el-select
-    :value="value"
-    :placeholder="$gettext('Select investor') | translate"
-    popper-class="SelectorPopper"
-    class="Selector"
-    @change="changeHandler"
-  >
-    <el-option
-      v-for="option in sourceList"
-      :key="option.id"
-      :label="option.name"
-      :value="option.id"
-    />
-  </lazy-el-select>
+  <div>
+    <lazy-el-select
+      :value="realValue"
+      :placeholder="$gettext('Select from list') | translate"
+      popper-class="SelectorPopper"
+      class="Selector"
+      @change="changeHandler"
+    >
+      <el-option
+        v-for="option in sourceList"
+        :key="option.id"
+        :label="option.name"
+        :value="`${option.id}`"
+      />
+    </lazy-el-select>
+  </div>
 </template>
 
 <script>
@@ -25,7 +27,7 @@ export default {
   props: {
     value: {
       type: Number,
-      default: null,
+      default: 0,
     },
     source: {
       type: String,
@@ -37,6 +39,12 @@ export default {
     },
   },
   computed: {
+    realValue() {
+      if (this.value === null) {
+        return null
+      }
+      return this.value.toString()
+    },
     sourceList() {
       return reject(this.$store.getters[this.source], ({ id }) =>
         this.reject.includes(id)
@@ -45,7 +53,7 @@ export default {
   },
   methods: {
     changeHandler(value) {
-      this.$emit('change', value)
+      this.$emit('change', value * 1)
     },
   },
 }
