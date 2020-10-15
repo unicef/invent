@@ -41,45 +41,6 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
     search = ProjectSearch.search
     filter = ProjectSearch.filter
     found_in = ProjectSearch.found_in
-    map_values = [
-        "project_id",
-        "project__name",
-        "organisation_id",
-        "country_id",
-        "country_office_id",
-        "project__approval__approved"
-    ]
-    list_values = [
-        "project_id",
-        "project__name",
-        "project__modified",
-        "organisation_id",
-        "country_id",
-        "country_office_id",
-        "project__data__implementation_overview",
-        "project__data__contact_name",
-        "project__data__contact_email",
-        "project__data__platforms",
-        "project__data__health_focus_areas",
-        "project__data__hsc_challenges",
-        "country_office__region",
-        "donors",
-        "project__approval__approved",
-        # UNICEF fields
-        "project__data__goal_area",
-        "project__data__result_area",
-        "project__data__field_office",
-        "project__data__capability_levels",
-        "project__data__capability_categories",
-        "project__data__capability_subcategories",
-        "project__data__innovation_categories"
-    ]
-    portfolio_values = list_values + [
-        "project__review_states__portfolio",
-        "project__review_states__portfolio__name",
-        "project__review_states__scale_phase",
-        "project__review_states__id"
-    ]
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'project__modified', 'organisation__name',
                        'country__name', 'country_office__region')
