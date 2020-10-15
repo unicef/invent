@@ -125,6 +125,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         search_term = query_params.get('q')
         view_as = query_params.get('view_as')
         portfolio_page = query_params.get('portfolio_page')
+        portfolio = query_params.get('portfolio')
 
         if view_as and view_as == 'donor':
             donor_list = query_params.getlist('donor')
