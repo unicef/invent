@@ -1,16 +1,16 @@
 from rest_framework import serializers
 
 from project.models import ProjectPortfolioState
-from project.serializers import ProjectPortfolioStateSerializer
+from project.serializers import ProjectPortfolioStateSerializer, ProjectPortfolioStateManagerSerializer
 
 
 class MapResultSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField(source="project_id")
-    name = serializers.ReadOnlyField(source="project__name")
+    name = serializers.ReadOnlyField(source="project.name")
     organisation = serializers.ReadOnlyField(source="organisation_id")
     country = serializers.ReadOnlyField(source="country_id")
     country_office = serializers.ReadOnlyField(source="country_office_id")
-    approved = serializers.ReadOnlyField(source="project__approval__approved")
+    approved = serializers.ReadOnlyField(source="project.approval.approved")
 
 
 class ListResultSerializer(serializers.Serializer):
