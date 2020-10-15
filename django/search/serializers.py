@@ -42,8 +42,23 @@ class ListResultSerializer(serializers.Serializer):
     capability_subcategories = serializers.ReadOnlyField(source="project.data.capability_subcategories")
     innovation_categories = serializers.ReadOnlyField(source="project.data.innovation_categories")
 
+    def get_country_custom_answers(self, obj):
+        if self.context.get('has_country_permission'):
+            return obj.project.data.get('country_custom_answers')
+
+    def get_country_custom_answers_private(self, obj):
+        if self.context.get('has_country_permission'):
+            return obj.project.data.get('country_custom_answers_private')
+
+    def get_donor_custom_answers(self, obj):
+        if self.context.get('has_donor_permission'):
+            return obj.project.data.get('donor_custom_answers')
+
     def get_donor_custom_answers_private(self, obj):
-        private_fields = obj.get("project__data__donor_custom_answers_private")
+        if not self.context.get('has_donor_permission'):
+            return
+
+        private_fields = obj.project.data.get('donor_custom_answers_private')
         if private_fields and self.context['donor']:
             return {donor_id: private_fields[donor_id]
                     for donor_id in private_fields if donor_id == str(self.context['donor'].id)}
