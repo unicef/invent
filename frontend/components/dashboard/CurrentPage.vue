@@ -7,20 +7,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters({
-      total: 'dashboard/getTotal',
-      pageSize: 'dashboard/getPageSize',
-      currentPage: 'dashboard/getCurrentPage',
+    ...mapState({
+      total: (state) => state.portfolio.total,
+      pageSize: (state) => state.search.filter.page_size,
+      page: (state) => state.search.filter.page,
     }),
     min() {
-      return 1 + this.pageSize * (this.currentPage - 1)
+      return 1 + this.pageSize * (this.page - 1)
     },
     max() {
-      const max = this.pageSize * this.currentPage
+      const max = this.pageSize * this.page
       return max < this.total ? max : this.total
     },
   },
