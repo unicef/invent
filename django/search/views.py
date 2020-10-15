@@ -116,8 +116,8 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         """
         results = {}
         search_fields = set()
-        donor = country = None
-
+        donor = country = has_donor_permission = has_country_permission = None
+        
         query_params = request.query_params
 
         qs = self.get_queryset()
@@ -139,8 +139,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
                 raise ValidationError("No such donor.")
 
             if request.user.is_superuser or donor.user_in_groups(request.user.userprofile):
-                self.list_values.append('project__data__donor_custom_answers')
-                self.list_values.append('project__data__donor_custom_answers_private')
+                has_donor_permission = True
             else:
                 raise ValidationError("No access to donor.")
 
@@ -157,34 +156,31 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
                 raise ValidationError("No such country.")
 
             if request.user.is_superuser or country.user_in_groups(request.user.userprofile):
-                self.list_values.append('project__data__country_custom_answers')
-                self.list_values.append('project__data__country_custom_answers_private')
+                has_country_permission = True
             else:
                 raise ValidationError("No access to country.")
         elif view_as:
             raise ValidationError("You can only view as country or donor.")
 
         if portfolio_page in ["inventory", "review"]:
-            if not query_params.get('portfolio'):
-                raise ValidationError("Portfolio ID is missing for portfolio page")
-
-            portfolio = get_object_or_400(Portfolio, "No such portfolio", id=query_params.get('portfolio'))
+            portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio)
             self.check_object_permissions(request, portfolio)
             query_params._mutable = True
             query_params.pop('ps', None)
             query_params.pop('sp', None)
 
             if portfolio_page == "inventory":
-                qs = qs.exclude(project__review_states__portfolio_id=query_params.get('portfolio'))
+                qs = qs.exclude(project__review_states__portfolio_id=portfolio)
                 # edge case scenario where we need to ignore all the portfolio reliant query params from here
                 query_params.pop('portfolio', None)
             elif portfolio_page == "review":
                 qs = qs.exclude(project__review_states__approved=True)
 
             query_params._mutable = False
-        elif query_params.get('portfolio'):
+        elif portfolio:
             # portfolio_page = "portfolio"
-            qs = qs.filter(project__review_states__approved=True)
+            pass
+            # qs = qs.filter(project__review_states__approved=True)
 
         if search_term:
             if len(search_term) < 2:
