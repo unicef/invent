@@ -164,11 +164,11 @@ export default {
       tab: (state) => state.portfolio.tab,
       back: (state) => state.portfolio.back,
       forward: (state) => state.portfolio.forward,
+      total: (state) => state.portfolio.total,
     }),
     ...mapGetters({
       selectedRows: 'dashboard/getSelectedRows',
       allSelected: 'dashboard/getSelectAll',
-      total: 'portfolio/getTotal',
       // user: "user/getProfile",
       projects: 'dashboard/getProjectsBucket',
       // dashboardId: "dashboard/getDashboardId",

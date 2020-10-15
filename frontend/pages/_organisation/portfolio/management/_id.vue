@@ -52,34 +52,19 @@ export default {
     Tabs,
   },
   async fetch({ store, query, error, params }) {
-    store.dispatch('landing/resetSearch')
-    store.dispatch('dashboard/setDashboardSection', 'list')
-    store.commit('portfolio/SET_VALUE', {
-      key: 'currentPortfolioId',
-      val: params.id,
-    })
-    store.commit('portfolio/SET_VALUE', {
-      key: 'currentPortfolioId',
-      val: params.id,
-    })
+    // search setup
+    store.dispatch('search/resetSearch')
     store.commit('search/SET_SEARCH', { key: 'portfolio', val: params.id })
-
+    // project list setup and filters
+    store.commit('portfolio/SET_VALUE', {
+      key: 'currentPortfolioId',
+      val: params.id,
+    })
+    // actual search
     await Promise.all([
-      store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('portfolio/getPortfolioProjects'),
     ])
-    await store.dispatch('dashboard/setSearchOptions', query)
-    try {
-      await store.dispatch('dashboard/loadProjectList')
-    } catch (e) {
-      console.log(e)
-      error({
-        statusCode: 404,
-        message: 'Unable to process the search with the current parameters',
-      })
-    }
-    // todo: integration should handle the status to refill data of initiatives
   },
   computed: {
     ...mapState({
@@ -89,44 +74,14 @@ export default {
       errorDisplay: (state) => state.portfolio.errorDisplay,
       errorMessage: (state) => state.portfolio.errorMessage,
     }),
-    ...mapGetters({
-      // searchParameters: 'dashboard/getSearchParameters',
-      // dashboardSection: 'dashboard/getDashboardSection',
-    }),
+    ...mapGetters({}),
   },
-  watch: {
-    // searchParameters: {
-    //   immediate: false,
-    //   handler(query) {
-    //     this.searchParameterChanged(query)
-    //   },
-    // },
-  },
-  mounted() {
-    // if (window) {
-    //   const savedFilters = window.localStorage.getItem('savedFilters')
-    //   if (savedFilters) {
-    //     this.setSavedFilters(JSON.parse(savedFilters))
-    //   }
-    // }
-  },
+  watch: {},
+  mounted() {},
   methods: {
     ...mapActions({
-      // loadProjectList: 'dashboard/loadProjectList',
-      // setSavedFilters: 'dashboard/setSavedFilters',
       setTab: 'portfolio/setTab',
     }),
-    // searchParameterChanged: debounce(function (query) {
-    //   if (this.dashboardSection === 'list') {
-    //     this.$router.replace({ ...this.$route, query })
-    //     this.load()
-    //   }
-    // }, 100),
-    // async load() {
-    //   this.$nuxt.$loading.start()
-    //   await this.loadProjectList()
-    //   this.$nuxt.$loading.finish()
-    // },
   },
 }
 </script>

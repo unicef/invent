@@ -3,8 +3,6 @@
     <filter-presets-actions />
     <search-box />
     <div>
-      <!--
-      partner -->
       <filter-select
         :value="region"
         :items="regions"

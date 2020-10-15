@@ -5,14 +5,14 @@
         <el-input
           :value="q"
           :placeholder="$gettext('Type something...') | translate"
-          @input="handleSearch"
+          @input="handleSearch('q', $event)"
         >
           <fa slot="prepend" icon="search" />
         </el-input>
       </el-col>
     </el-row>
     <el-row type="flex" class="search-options">
-      <el-col class="SearchOptionsHeader">
+      <el-col class="search-options-header">
         <el-button
           type="text"
           size="small"
@@ -32,7 +32,7 @@
           "
           effect="dark"
           placement="left"
-          popper-class="SearchBoxTooltip"
+          popper-class="search-box-tooltip"
           manual
         >
           <el-button
@@ -46,22 +46,19 @@
       </el-col>
 
       <transition name="slide-fade">
-        <el-col v-show="optionsVisible" class="SearchOptionsBody">
+        <el-col v-show="optionsVisible" class="search-options-body">
           <el-checkbox-group
-            v-model="selectedOptions"
+            v-model="searchIn"
             class="OnePerRow CheckboxSmall"
+            @change="handleSearch('in', $event)"
           >
-            <el-checkbox label="name" class="CheckboxSmall">
-              <translate>Initiative Name</translate>
-            </el-checkbox>
-            <el-checkbox label="overview" class="CheckboxSmall">
-              Overview of the <translate>digital health</translate>
-            </el-checkbox>
-            <el-checkbox label="partner" class="CheckboxSmall">
-              <translate>Implementing Partners</translate>
-            </el-checkbox>
-            <el-checkbox label="donor" class="CheckboxSmall">
-              <translate>Investors</translate>
+            <el-checkbox
+              v-for="checkbox in checkboxes"
+              :key="checkbox.label"
+              :label="checkbox.label"
+              class="CheckboxSmall"
+            >
+              {{ checkbox.text }}
             </el-checkbox>
           </el-checkbox-group>
         </el-col>
@@ -73,21 +70,39 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
-import { mapGettersActions } from '@/utilities/form.js'
 
 export default {
   data() {
     return {
       optionsVisible: false,
       showSearchBoxTooltip: false,
+      searchIn: [
+        'name',
+        'org',
+        'country',
+        'overview',
+        'loc',
+        'partner',
+        'donor',
+      ],
+      checkboxes: [
+        { label: 'name', text: this.$gettext('Initiative Name') },
+        { label: 'org', text: this.$gettext('Organisation') },
+        { label: 'country', text: this.$gettext('Country') },
+        {
+          label: 'overview',
+          text: this.$gettext('Overview of the digital health'),
+        },
+        { label: 'loc', text: this.$gettext('Location') },
+        { label: 'partner', text: this.$gettext('Implementing Partners') },
+        { label: 'donor', text: this.$gettext('Investors') },
+      ],
     }
   },
   computed: {
     ...mapState({
       q: (state) => state.search.filter.q,
-    }),
-    ...mapGettersActions({
-      selectedOptions: ['dashboard', 'getSearchIn', 'setSearchIn', 0],
+      in: (state) => state.search.filter.in,
     }),
   },
   methods: {
@@ -97,16 +112,16 @@ export default {
     ...mapActions({
       getSearch: 'search/getSearch',
     }),
-    toggleOptionsVisibility() {
-      this.optionsVisible = !this.optionsVisible
-    },
-    handleSearch(e) {
-      this.setSearch({ key: 'q', val: e })
+    handleSearch(key, val) {
+      this.setSearch({ key, val })
       this.getSearchResults()
     },
     getSearchResults: debounce(function () {
       this.getSearch()
     }, 350),
+    toggleOptionsVisibility() {
+      this.optionsVisible = !this.optionsVisible
+    },
   },
 }
 </script>
@@ -119,11 +134,18 @@ export default {
   .search-options {
     flex-direction: column;
 
-    .SearchOptionsHeader {
-      margin: 10px 0 0;
+    .search-options-header {
+      margin: 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
       .el-button--text {
         padding: 0;
+      }
+
+      .MutedButton {
+        color: @colorBrandGrayDark;
       }
 
       .el-tooltip {
@@ -132,7 +154,7 @@ export default {
       }
     }
 
-    .SearchOptionsBody {
+    .search-options-body {
       margin-top: 5px;
 
       .el-checkbox {
@@ -164,7 +186,7 @@ export default {
   }
 }
 
-.SearchBoxTooltip {
+.search-box-tooltip {
   max-width: @advancedSearchWidth;
 }
 </style>
