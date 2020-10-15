@@ -43,6 +43,18 @@ class PortfolioSearchTests(PortfolioSetup):
         self.review_and_approve_project(pps2, self.scores, self.user_2_client)
         self.review_and_approve_project(pps4, self.scores, self.user_2_client)
 
+        # For extra testing of the filters, add another portfolio with reviews for the same projects as portfolio 2
+        response = self.create_portfolio("Test Portfolio 3", "Port-o-folio 3", [self.user_3_pr_id], self.user_2_client)
+        self.assertEqual(response.status_code, 201, response.json())
+        self.portfolio3_id = response.json()['id']
+        # Add project 2 to portfolio 3
+        url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio3_id})
+        request_data = {"project": [self.project2_id]}
+        response = self.user_2_client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+        pps2_3 = ProjectPortfolioState.objects.get(project_id=self.project2_id, portfolio_id=self.portfolio3_id)
+        self.review_and_approve_project(pps2_3, self.scores, self.user_2_client)
+
     def test_list_all_in_portfolio_for_detail_page(self):
         url = reverse("search-project-list")
         data = {"portfolio": self.portfolio_id, "type": "portfolio"}
@@ -287,6 +299,7 @@ class PortfolioSearchTests(PortfolioSetup):
         data = {"portfolio": self.portfolio_id, "type": "portfolio", "portfolio_page": "portfolio"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
+
         self.assertEqual(response.json()['count'], 3)
 
         # you can leave out the optional portfolio_page for the same results

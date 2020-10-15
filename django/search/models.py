@@ -119,6 +119,7 @@ class ProjectSearch(ExtendedModel):
                         lookup = query_params.get(field)
 
                     queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
+        queryset = queryset.distinct('project__id')
         return queryset
 
     @classmethod
