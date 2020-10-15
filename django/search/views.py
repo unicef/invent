@@ -196,26 +196,30 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
 
         results_type = query_params.get('type', 'map')
 
+        context = dict(donor=donor, country=country, 
+                       has_country_permission=has_country_permission, has_donor_permission=has_donor_permission)
+
         if results_type == 'list':
-            page = self.paginate_queryset(qs.values(*self.list_values))
-            data = ListResultSerializer(page, many=True, context={"donor": donor, "country": country}).data
+            page = self.paginate_queryset(qs)
+            data = ListResultSerializer(page, many=True, context=context).data
         elif results_type == 'portfolio':
             if 'scores' in query_params and portfolio_page not in ["inventory", "review"]:
-                portfolio = get_object_or_400(Portfolio, "No such portfolio", id=query_params.get('portfolio'))
+                portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio)
                 project_ids = qs.values_list('project_id', flat=True)
                 results.update(
                     ambition_matrix=portfolio.get_ambition_matrix(project_ids),
                     risk_impact_matrix=portfolio.get_risk_impact_matrix(project_ids),
                     problem_statement_matrix=portfolio.get_problem_statement_matrix(project_ids))
 
-            page = self.paginate_queryset(qs.values(*self.portfolio_values))
+            page = self.paginate_queryset(qs)
 
             if portfolio_page == "review":
-                data = PortfolioReviewSerializer(page, many=True, context={"donor": donor, "country": country}).data
+                data = PortfolioReviewSerializer(page, many=True, context=context).data
             else:
-                data = PortfolioResultSerializer(page, many=True, context={"donor": donor, "country": country}).data
+                context.update(dict(portfolio=portfolio))
+                data = PortfolioResultSerializer(page, many=True, context=context).data
         else:
-            page = self.paginate_queryset(qs.values(*self.map_values))
+            page = self.paginate_queryset(qs)
             data = MapResultSerializer(page, many=True).data
 
         results.update(projects=data, type=results_type, search_term=search_term, search_in=search_fields)
