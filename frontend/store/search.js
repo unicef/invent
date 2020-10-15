@@ -87,6 +87,8 @@ export const actions = {
     commit('SET_SEARCH', { key: 'goal', val: [] })
     commit('SET_SEARCH', { key: 'ic', val: [] })
     commit('SET_SEARCH', { key: 'type', val: 'portfolio' })
+    commit('SET_SEARCH', { key: 'ps', val: [] })
+    commit('SET_SEARCH', { key: 'sp', val: '' })
     commit('SET_SEARCH', { key: 'page', val: 1 })
     commit('SET_SEARCH', { key: 'page_size', val: 10 })
     // manual setup

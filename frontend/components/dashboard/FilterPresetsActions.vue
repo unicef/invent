@@ -8,12 +8,7 @@
           popper-class="CustomPopover AdvancedSearchPresetsDropdown"
           trigger="click"
         >
-          <el-button
-            slot="reference"
-            type="text"
-            size="small"
-            class="IconRight"
-          >
+          <el-button slot="reference" type="text" class="IconRight">
             <translate v-show="!activePreseet"> Load filters </translate>
             <span v-if="activePreseet">
               {{ activePreseet.name }}
@@ -43,12 +38,12 @@
         </el-popover>
       </el-col>
       <el-col :span="6">
-        <el-button type="text" size="small" @click="openSaveFilter">
+        <el-button type="text" disabled @click="openSaveFilter">
           <translate>Save</translate>
         </el-button>
       </el-col>
       <el-col :span="6">
-        <el-button type="text" size="small" class="DeleteButton" @click="clear">
+        <el-button type="text" class="DeleteButton" @click="handleReset">
           <translate>Clear</translate>
         </el-button>
       </el-col>
@@ -64,7 +59,7 @@ import { queryStringComparisonParser } from '../../utilities/api.js'
 export default {
   computed: {
     ...mapGetters({
-      dashboardType: 'dashboard/getDashboardType',
+      // dashboardType: 'dashboard/getDashboardType',
       savedFilters: 'dashboard/getSavedFilters',
     }),
     activePreseet() {
@@ -76,12 +71,15 @@ export default {
       setSearchOptions: 'dashboard/setSearchOptions',
       setSaveFiltersDialogState: 'layout/setSaveFiltersDialogState',
       setSavedFilters: 'dashboard/setSavedFilters',
+      resetSearch: 'search/resetSearch',
+      getSearch: 'search/getSearch',
     }),
-    clear() {
-      this.setSearchOptions({})
-    },
     openSaveFilter() {
-      this.setSaveFiltersDialogState(this.dashboardType)
+      // this.setSaveFiltersDialogState(this.dashboardType)
+    },
+    handleReset() {
+      this.resetSearch()
+      this.getSearch()
     },
     isActive(query) {
       const fromRoute = queryStringComparisonParser(this.$route.query)
@@ -121,8 +119,8 @@ export default {
 @import '~assets/style/mixins.less';
 
 .FilterPresets {
-  padding: 15px 20px !important;
-  background-color: lighten(@colorGrayLightest, 2%);
+  padding: 20px !important;
+  background-color: @colorWhite;
 
   .el-col {
     // Selector
