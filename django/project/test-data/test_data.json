@@ -166,6 +166,7 @@
               "rnci": 5,
               "ratp": 3,
               "ra": 4,
+              "nc": 5,
               "ee": 2,
               "nst": 5,
               "ps": 3,
@@ -186,6 +187,7 @@
               "ra": 5,
               "ee": 5,
               "nst": 5,
+              "nc": 3,
               "ps": 5,
               "impact": 5,
               "scale_phase": 2
@@ -268,6 +270,7 @@
               "ratp": 3,
               "ra": 4,
               "ee": 2,
+              "nc": 2,
               "nst": 5,
               "ps": 3,
               "impact": 5,
@@ -287,6 +290,7 @@
               "ra": 5,
               "ee": 5,
               "nst": 5,
+              "nc": 3,
               "ps": 5,
               "impact": 5,
               "scale_phase": 2
@@ -324,14 +328,14 @@
               "psa": [
                 "Development is slowing down"
               ],
-              "rnci": 3,
+              "rnci": 1,
               "rnci_comment": "I am not sure this is the right way",
-              "ratp": 4,
+              "ratp": 1,
               "ratp_comment": "I totally agree",
-              "ra": 2,
-              "ee": 3,
-              "nst": 4,
-              "ps": 5
+              "ra": 1,
+              "ee": 1,
+              "nst": 1,
+              "ps": 1
             },
             {
               "name": "Samuel Vimes",
@@ -348,14 +352,14 @@
               "psa": [
                 "Infrastructure is decayed"
               ],
-              "rnci": 3,
-              "rnci_comment": "I am not sure this is the right way",
-              "ratp": 4,
-              "ratp_comment": "I totally agree",
-              "ra": 2,
-              "ee": 3,
-              "nst": 4,
-              "ps": 5
+              "rnci": 1,
+              "rnci_comment": "Archived message: I am not sure this is the right way",
+              "ratp": 1,
+              "ratp_comment": "Archived message: I totally agree",
+              "ra": 1,
+              "ee": 1,
+              "nst": 1,
+              "ps": 1
             },
             {
               "name": "Samuel Vimes",
@@ -365,14 +369,15 @@
               "psa": [
                 "Infrastructure is decayed"
               ],
-              "rnci": 5,
-              "ratp": 3,
-              "ra": 4,
-              "ee": 2,
-              "nst": 5,
-              "ps": 3,
-              "impact": 5,
-              "scale_phase": 2
+              "rnci": 1,
+              "ratp": 1,
+              "ra": 1,
+              "ee": 1,
+              "nst": 1,
+              "nc": 1,
+              "ps": 1,
+              "impact": 1,
+              "scale_phase": 1
           }
         }
       ],
@@ -388,6 +393,7 @@
               "ra": 5,
               "ee": 5,
               "nst": 5,
+              "nc": 3,
               "ps": 5,
               "impact": 5,
               "scale_phase": 2
