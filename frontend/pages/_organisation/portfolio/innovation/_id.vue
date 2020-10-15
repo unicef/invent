@@ -34,8 +34,8 @@
               :elements="elements"
               :left="['high', 'risk', 'low']"
               :bottom="['low', 'impact (total global need)', 'high']"
-              extraBottom="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
-              extraLeft="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
+              extra-bottom="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
+              extra-left="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
             />
           </el-tab-pane>
           <el-tab-pane label="PROBLEM STATEMENT MATRIX" name="problem">
@@ -87,6 +87,7 @@
             <table-top-actions />
           </el-row>
           <el-row>
+            <!-- {{ matrix }} -->
             <main-table />
           </el-row>
         </div>
@@ -99,9 +100,11 @@
 </template>
 
 <script>
-import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
+import { mapState } from 'vuex'
+
 import MainTable from '@/components/portfolio/dashboard/MainTable'
-import AdvancedSearch from '@/components/dashboard/AdvancedSearch'
+import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
+import AdvancedSearch from '@/components/search/AdvancedSearch'
 import Matrix from '@/components/portfolio/Matrix'
 import Radio from '@/components/portfolio/form/inputs/Radio'
 import groupBy from 'lodash/groupBy'
@@ -186,7 +189,33 @@ export default {
       ],
     }
   },
+  async fetch({ store, query, error, params }) {
+    // setup search
+    store.dispatch('search/resetSearch')
+    store.commit('search/SET_SEARCH', { key: 'portfolio', val: params.id })
+    store.commit('search/SET_SEARCH', {
+      key: 'portfolio_page',
+      val: 'portfolio',
+    })
+    store.commit('search/SET_SEARCH', { key: 'scores', val: true })
+    // set portfolio details
+    store.commit('portfolio/SET_VALUE', {
+      key: 'currentPortfolioId',
+      val: params.id,
+    })
+    // actual search
+    await Promise.all([
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('portfolio/getPortfolioDetails', params.id),
+      store.dispatch('search/getSearch'),
+    ])
+  },
+
   computed: {
+    ...mapState({
+      // will give you matrix info with each search
+      matrix: (state) => state.portfolio.matrix,
+    }),
     problemColumns() {
       return groupBy(this.problems, 'col')
     },
