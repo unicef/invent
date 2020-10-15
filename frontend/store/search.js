@@ -37,8 +37,8 @@ export const state = () => ({
     //            project__data__government_investor | country__region |
     //            project__modified
     // ** PAGINATION **
-    // `page` 1...n | last (will show the last page no matter the number)
-    // `page_size` eg: 20
+    page: 1, // `page` 1...n | last (will show the last page no matter the number)
+    page_size: 10, // `page_size` eg: 20
     // ** VIEW AS **
     // `view_as` donor | country
     // ** PORTFOLIO OPTIONS **
@@ -54,10 +54,23 @@ export const actions = {
       const query = objectToQueryString(state.filter)
       const {
         data: {
-          results: { projects },
+          count,
+          results: {
+            projects,
+            ambition_matrix,
+            risk_impact_matrix,
+            problem_statement_matrix,
+          },
         },
       } = await this.$axios.get(`api/search${query}`)
-      dispatch('portfolio/setProjects', projects, { root: true })
+
+      dispatch(
+        'portfolio/setMatrix',
+        { ambition_matrix, risk_impact_matrix, problem_statement_matrix },
+        { root: true }
+      )
+
+      dispatch('portfolio/setProjects', { projects, count }, { root: true })
     } catch (e) {
       console.error('search failed')
     }
@@ -73,9 +86,11 @@ export const actions = {
     commit('SET_SEARCH', { key: 'co', val: [] })
     commit('SET_SEARCH', { key: 'goal', val: [] })
     commit('SET_SEARCH', { key: 'ic', val: [] })
-    commit('SET_SEARCH', { key: 'portfolio', val: '' })
     commit('SET_SEARCH', { key: 'type', val: 'portfolio' })
+    commit('SET_SEARCH', { key: 'page', val: 1 })
+    commit('SET_SEARCH', { key: 'page_size', val: 10 })
     // manual setup
+    // commit('SET_SEARCH', { key: 'portfolio', val: '' })
     // commit('SET_SEARCH', { key: 'portfolio_page', val: 'inventory' })
   },
 }

@@ -111,6 +111,10 @@ export const state = () => ({
     'impact',
     'scale_phase',
   ],
+  // pagination
+  total: 0,
+  // matrix
+  matrix: {},
 })
 
 export const getters = {
@@ -121,7 +125,6 @@ export const getters = {
   getManagers: (state) => state.managers,
   getStatements: (state) => state.statements,
   getLoading: (state) => state.loading,
-  getTotal: (state) => state.projects.length,
 }
 
 export const actions = {
@@ -147,7 +150,6 @@ export const actions = {
     commit('SET_LOADING', value)
   },
   setTab({ state, commit, dispatch }, val) {
-    // todo: integrate and handle projects filters for table
     commit('SET_TAB', val)
     commit('SET_VALUE', { key: 'back', val: state.tab - 2 })
     commit('SET_VALUE', { key: 'forward', val: state.tab })
@@ -237,10 +239,14 @@ export const actions = {
         this.$axios.get(`${baseUrl}review`),
         this.$axios.get(`${baseUrl}portfolio`),
       ])
-      // todo: pagination
+      const {
+        data: {
+          count,
+          results: { projects },
+        },
+      } = results[state.tab - 1]
       // set the projects of the portfolio by tab filter
-      // console.log(results[1].data.results);
-      dispatch('setProjects', results[state.tab - 1].data.results.projects)
+      dispatch('setProjects', { projects, count })
       // update tab counts
       commit('SET_VALUE', {
         key: 'tabs',
@@ -273,10 +279,13 @@ export const actions = {
       console.error('portfolio/getPortfolioProjects failed')
     }
   },
-  setProjects({ state, commit, dispatch }, results) {
+  setProjects({ state, commit, dispatch }, { projects, count }) {
+    // pagination
+    commit('SET_VALUE', { key: 'total', val: count })
+    // projects
     commit('SET_VALUE', {
       key: 'projects',
-      val: results.map((i) => {
+      val: projects.map((i) => {
         // todo: set this attributes from api
         return {
           ...i,
@@ -284,6 +293,14 @@ export const actions = {
           ...i.project_data,
         }
       }),
+    })
+  },
+  // matrix info
+  setMatrix({ state, commit, dispatch }, matrix) {
+    // set matrix
+    commit('SET_VALUE', {
+      key: 'matrix',
+      val: matrix,
     })
   },
   // move action
