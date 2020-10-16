@@ -42,9 +42,13 @@
       </div>
       <div class="MColumn">
         <div v-if="active" class="Overlay">
-          <div class="el-icon-close" @click="activeIndex = undefined" />
+          <div class="el-icon-close" @click="clear" />
           <div class="ListTitle">
-            <h4>List of initiatives ({{ active.projects.length }})</h4>
+            <h4>
+              <translate :parameters="{ num: active.projects.length }">
+                List of initiatives ({num})
+              </translate>
+            </h4>
             <p>
               {{ leftText }}: {{ active.y }}&nbsp; &nbsp; {{ bottomText }}:
               {{ active.x }}
@@ -65,24 +69,19 @@
           </div>
         </div>
         <div class="Content">
-          <h4>Summary</h4>
+          <h4><translate>Summary</translate></h4>
           <p>
-            Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id
-            facit quod lex prohibet. Gallia est omnis divisa in partes tres,
-            quarum. Pellentesque habitant morbi tristique senectus et netus.
-            Donec sed odio operae, eu vulputate felis rhoncus. Curabitur est
-            gravida et libero vitae dictum. Cum ceteris in veneratione tui
-            montes, nascetur mus. Ab illo tempore, ab est sed immemorabili.
-            Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
-            tempor incidunt ut labore et dolore magna aliqua. Qui ipsorum lingua
-            Celtae, nostra Galli appellantur.
+            {{ description }}
           </p>
-          <h4>Contact Person</h4>
-          <p>
-            Edson Monterio <br />
-            <a href="mailto:emonterio@unicef.org">emonterio@unicef.org</a>
-          </p>
+          <template v-if="contactEmail">
+            <h4>
+              <translate>Contact Person</translate>
+            </h4>
+            <p>
+              {{ contactName }} <br />
+              <a :href="`mailto:${contactEmail}`">emonterio@unicef.org</a>
+            </p>
+          </template>
         </div>
       </div>
     </div>
@@ -111,11 +110,11 @@ export default {
     },
     extraBottom: {
       type: String,
-      deafult: '',
+      default: '',
     },
     extraLeft: {
       type: String,
-      deafult: '',
+      default: '',
     },
     color: {
       type: String,
@@ -137,10 +136,21 @@ export default {
       type: String,
       default: '',
     },
+    description: {
+      type: String,
+      default: '',
+    },
+    contactEmail: {
+      type: String,
+      default: '',
+    },
+    contactName: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
-      showBottomTooltip: false,
       activeIndex: undefined,
     }
   },
@@ -181,6 +191,9 @@ export default {
     },
   },
   methods: {
+    clear() {
+      this.activeIndex = undefined
+    },
     removeBracets(text) {
       return text.replace(/.\(.*\)/, '')
     },
