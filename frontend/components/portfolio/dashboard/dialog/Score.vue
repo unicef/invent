@@ -134,13 +134,7 @@
                 />
               </template>
               <template v-else>
-                <p class="statement">
-                  {{
-                    score[scope.row.type] === null
-                      ? 'N/A'
-                      : score[scope.row.type]
-                  }}
-                </p>
+                <p class="statement">{{ reviewScoreText(scope.row.type) }}</p>
               </template>
             </template>
             <template v-else>
@@ -168,6 +162,20 @@
                   :key="i.id"
                   :label="i.name"
                   :value="i.id"
+                />
+              </el-select>
+              <el-select
+                v-else-if="scope.row.type === 'scale_phase'"
+                v-model="score[scope.row.type]"
+                class="select-psa"
+                clearable
+                :disabled="review.reviewed"
+              >
+                <el-option
+                  v-for="sp in scalePhases"
+                  :key="sp.id"
+                  :label="sp.name"
+                  :value="sp.id"
                 />
               </el-select>
               <el-select
@@ -240,6 +248,7 @@ export default {
       loadingScore: (state) => state.portfolio.loadingScore,
       problemStatements: (state) => state.portfolio.problemStatements,
       questionType: (state) => state.portfolio.questionType,
+      scalePhases: (state) => state.system.scalePhases,
     }),
     disabled() {
       if (this.review.reviewed) {
@@ -318,6 +327,12 @@ export default {
         impact: this.review.impact,
         scale_phase: this.review.scale_phase,
       }
+    },
+    reviewScoreText(type) {
+      if (type === 'scale_phase') {
+        return this.scalePhases.find((i) => i.id === this.score[type]).name
+      }
+      return this.score[type] === null ? 'N/A' : this.score[type]
     },
   },
 }
