@@ -4,7 +4,7 @@ export const state = () => ({
   filter: {
     // ** SEARCH PARAMETERS **
     q: '',
-    in: ['name', 'org', 'country', 'overview', 'loc', 'partner', 'donor'],
+    in: ['name', 'org', 'country', 'overview', 'loc'],
     // ** FILTER PARAMETERS **
     // `country` eg: country=1&country=2
     // `sw` eg: sw=1&sw=2
@@ -27,7 +27,7 @@ export const state = () => ({
     // `cs` Capability Sucategories overlap eg: cs=1&cs=2
     ic: [], // `ic` Innovation Categories overlap eg: ic=1&ic=2
     sp: '', // `sp` Scale Phase in eg: sp=1
-    ps: [], // `ps` Problem Statement in eg: ps=1
+    ps: '', // `ps` Problem Statement in eg: ps=1
     portfolio: '',
     // ** FOUND IN FEATURE **
     // `found` include if present (defaults to exclude)
@@ -79,7 +79,7 @@ export const actions = {
     commit('SET_SEARCH', { key: 'q', val: '' })
     commit('SET_SEARCH', {
       key: 'in',
-      val: ['name', 'org', 'country', 'overview', 'loc', 'partner', 'donor'],
+      val: ['name', 'org', 'country', 'overview', 'loc'],
     })
     commit('SET_SEARCH', { key: 'region', val: '' })
     commit('SET_SEARCH', { key: 'partner', val: [] })
@@ -87,7 +87,7 @@ export const actions = {
     commit('SET_SEARCH', { key: 'goal', val: [] })
     commit('SET_SEARCH', { key: 'ic', val: [] })
     commit('SET_SEARCH', { key: 'type', val: 'portfolio' })
-    commit('SET_SEARCH', { key: 'ps', val: [] })
+    commit('SET_SEARCH', { key: 'ps', val: '' })
     commit('SET_SEARCH', { key: 'sp', val: '' })
     commit('SET_SEARCH', { key: 'page', val: 1 })
     commit('SET_SEARCH', { key: 'page_size', val: 10 })

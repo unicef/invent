@@ -19,6 +19,7 @@ export const state = () => ({
   link_types: [],
   donorsLibrary: {},
   review_questions: {},
+  scalePhases: [],
 })
 
 export const getters = {
@@ -143,6 +144,7 @@ export const actions = {
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types)
       commit('SET_REGIONS', data.unicef_regions)
       commit('SET_DATA', { key: 'unicef_regions', value: data.unicef_regions })
+      commit('SET_DATA', { key: 'scalePhases', value: data.scale_phases })
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
         root: true,
       })

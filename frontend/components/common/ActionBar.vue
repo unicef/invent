@@ -95,10 +95,7 @@
         </el-row>
       </el-col>
 
-      <el-col
-        v-if="!isDashboard && !isPortfolioEdit"
-        class="SearchComponentWrapper"
-      >
+      <el-col v-if="isHome" class="SearchComponentWrapper">
         <search-component />
       </el-col>
       <template v-if="isDashboard">
@@ -166,6 +163,9 @@ export default {
     },
     isDashboard() {
       return this.$route.path.includes('/dashboard')
+    },
+    isHome() {
+      return this.$route.name.includes('organisation___')
     },
     isPortfolioEdit() {
       return this.$route.name.includes('organisation-portfolio-management-id')

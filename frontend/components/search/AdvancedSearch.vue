@@ -47,7 +47,6 @@
         <filter-select
           :value="ps"
           :items="problemStatements"
-          multiple
           :placeholder="$gettext('Problem Statement') | translate"
           @change="handleSearch('ps', $event)"
         />
@@ -70,17 +69,6 @@ export default {
     SearchBox,
     FilterSelect,
   },
-  data() {
-    return {
-      scalePhases: [
-        { id: 1, value: '1' },
-        { id: 2, value: '2' },
-        { id: 3, value: '3' },
-        { id: 4, value: '4' },
-        { id: 5, value: '5' },
-      ],
-    }
-  },
   computed: {
     ...mapState({
       // prefilter state
@@ -95,6 +83,7 @@ export default {
       ps: (state) => state.search.filter.ps,
       // list
       offices: (state) => state.offices.offices,
+      scalePhases: (state) => state.system.scalePhases,
       problemStatements: (state) => state.portfolio.problemStatements,
     }),
 
