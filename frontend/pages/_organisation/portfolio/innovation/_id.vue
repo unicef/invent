@@ -75,7 +75,7 @@
                       <radio
                         v-for="statement in problemStatementMatrix[index]"
                         :key="statement.id"
-                        :value="selectedProblem === statement.id"
+                        :value="ps === statement.id"
                         :disabled="
                           disabledProblems.indexOf(statement.id) !== -1
                         "
@@ -108,7 +108,6 @@
             <table-top-actions />
           </el-row>
           <el-row>
-            <!-- {{ matrix }} -->
             <main-table />
           </el-row>
         </div>
@@ -126,7 +125,7 @@ import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
 import AdvancedSearch from '@/components/search/AdvancedSearch'
 import Matrix from '@/components/portfolio/Matrix'
 import Radio from '@/components/portfolio/form/inputs/Radio'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -139,7 +138,6 @@ export default {
   data() {
     return {
       activeName: 'ambition',
-      selectedProblem: -1,
       disabledProblems: [],
       matrixLabels: {
         problemStatement: [
@@ -198,6 +196,9 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      ps: (state) => state.search.filter.ps,
+    }),
     ...mapGetters({
       ambitionMatrix: 'matrixes/getAmbitionMatrix',
       riskImpactMatrix: 'matrixes/getRiskImpactMatrix',
@@ -212,7 +213,6 @@ export default {
       this.$store.dispatch('search/resetSearch')
       this.$refs.ambitionMatrix.clear()
       this.$refs.riskMatrix.clear()
-      this.selectedProblem = -1
       this.$router.push(
         this.localePath({
           name: 'organisation-portfolio-innovation-id',
@@ -220,14 +220,8 @@ export default {
         })
       )
     },
-    select(id, value) {
-      if (value) {
-        this.selectedProblem = id
-      } else if (this.selectedProblem === id) {
-        this.selectedProblem = -1
-      }
-      const ps = this.selectedProblem === -1 ? [] : [this.selectedProblem]
-      this.$store.commit('search/SET_SEARCH', { key: 'ps', val: ps })
+    select(val) {
+      this.$store.commit('search/SET_SEARCH', { key: 'ps', val })
       this.$store.dispatch('search/getSearch')
     },
   },
