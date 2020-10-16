@@ -65,7 +65,7 @@ export const actions = {
       } = await this.$axios.get(`api/search${query}`)
 
       dispatch(
-        'portfolio/setMatrix',
+        'matrixes/setPortfolioMatrix',
         { ambition_matrix, risk_impact_matrix, problem_statement_matrix },
         { root: true }
       )
