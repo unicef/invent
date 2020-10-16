@@ -34,7 +34,7 @@
                 <nuxt-link
                   :to="
                     localePath({
-                      name: 'organisation-dashboard-list',
+                      name: 'organisation-inventory',
                       params: $route.params,
                     })
                   "
