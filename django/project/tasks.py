@@ -20,8 +20,8 @@ from rest_framework.exceptions import ValidationError
 from core.utils import send_mail_wrapper
 from country.models import Country, Donor, DonorCustomQuestion
 from scheduler.celery import app
-from user.models import Organisation
-from .models import Project, InteroperabilityLink
+from user.models import Organisation, UserProfile
+from .models import Project, InteroperabilityLink, ReviewScore
 from .serializers import ProjectDraftSerializer
 
 logger = get_task_logger(__name__)
@@ -50,47 +50,33 @@ def exclude_specific_project_stages(projects, filter_key_prefix='draft'):
     return projects
 
 
-def send_review_mail_wrapper(review, msg_subject, msg_details):
-    """
-    Base review-email wrapper function
-    """
-    from user.models import UserProfile
-    try:
-        profile = UserProfile.objects.get(id=review.reviewer)
-    except UserProfile.DoesNotExist:  # pragma: no cover
-        pass
-    else:
-        send_mail_wrapper(
-            subject=msg_subject,
-            email_type='reminder_project_review_template',
-            to=profile.user.email,
-            language=profile.language or settings.LANGUAGE_CODE,
-            context={
-                'reviewscore': review,
-                'name': profile.name,
-                'details': msg_details,
-            }
-        )
-
-
 @app.task(name="project_review_requested_on_create_notification")
-def project_review_requested_on_create_notification(review):
+def project_review_requested_on_create_notification(review_id):
     """
     Sends notification if a project needs review by an user - on create task
     """
-    send_review_mail_wrapper(
-        review=review,
-        msg_subject=_("You have a new project review request"),
-        msg_details=_('Please consider reviewing this project: ')
-        )
+    try:
+        review = ReviewScore.objects.get(id=review_id)
+    except ReviewScore.DoesNotExist:  # pragma: no cover
+        pass
+    else:
+        send_mail_wrapper(
+            subject=_("You have a new project review request"),
+            email_type='reminder_project_review_template',
+            to=review.reviewer.user.email,
+            language=review.reviewer.language or settings.LANGUAGE_CODE,
+            context={
+                'reviewscores': [review],
+                'name': review.reviewer.name,
+                'details': _('Please review this project: '),
+            })
 
 
 @app.task(name="project_review_requested_monthly_notification")
 def project_review_requested_monthly_notification():
     """
-    Sends notification if a project needs review by an user - montly celery task
+    Sends notification if a project needs review by an user - monthly celery task
     """
-    from project.models import ReviewScore
 
     incomplete_reviews = ReviewScore.objects.filter(complete=False).filter(
         modified__lt=timezone.now() - timezone.timedelta(days=settings.NOTIFICATION_PROJECT_REVIEW_DAYS))
@@ -100,15 +86,22 @@ def project_review_requested_monthly_notification():
 
     # limit number of mails sent
     if not settings.EMAIL_SENDING_PRODUCTION:
-        reviews = ReviewScore.objects.filter(id=incomplete_reviews.first().id)
+        incomplete_reviews = ReviewScore.objects.filter(id=incomplete_reviews.first().id)
 
-    for review in reviews:
-        send_review_mail_wrapper(
-            review=review,
-            msg_subject=_("One of your requested project reviews has not been completed yet"),
-            msg_details=_('The following project review has been incomplete for 30 days, '
-                          'Please consider reviewing it: ')
-        )
+    # grab the list of users
+    addressees = UserProfile.objects.filter(id__in=incomplete_reviews.values_list('reviewer', flat=True).distinct())
+
+    for addressee in addressees:
+        send_mail_wrapper(
+            subject=_("You have a new project review request"),
+            email_type='reminder_project_review_template',
+            to=addressee.user.email,
+            language=addressee.language or settings.LANGUAGE_CODE,
+            context={
+                'reviewscores': list(addressee.review_scores.filter(id__in=incomplete_reviews).order_by('modified')),
+                'name': addressee.name,
+                'details': _('Please review the following project(s): '),
+            })
 
 
 @app.task(name="project_still_in_draft_notification")
