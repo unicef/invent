@@ -172,7 +172,6 @@ p {
     }
     .SubAccordionContent {
       padding-left: 40px;
-      height: 80px;
       color: @colorBrandGrayDark;
       font-size: 13px;
       letter-spacing: 0;
