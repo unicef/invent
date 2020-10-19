@@ -12,7 +12,7 @@ from rest_framework.viewsets import GenericViewSet
 from core.views import get_object_or_400, PortfolioAccessMixin
 from country.models import Donor, Country
 from project.models import Portfolio
-from .serializers import MapResultSerializer, ListResultSerializer, PortfolioResultSerializer, PortfolioReviewSerializer
+from .serializers import MapResultSerializer, ListResultSerializer, PortfolioResultSerializer
 from .models import ProjectSearch
 
 
@@ -59,7 +59,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         ** SEARCH PARAMETERS **
 
         `q` search term eg: q=test  
-        `in` search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc&in=partner&in=donor]  
+        `in` search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc]  
 
         ** FILTER PARAMETERS **
 
@@ -117,15 +117,15 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         results = {}
         search_fields = set()
         donor = country = has_donor_permission = has_country_permission = None
-        
+
         query_params = request.query_params
 
         qs = self.get_queryset()
 
         search_term = query_params.get('q')
         view_as = query_params.get('view_as')
-        portfolio_page = query_params.get('portfolio_page')
-        portfolio = query_params.get('portfolio')
+        portfolio_page = query_params.get('portfolio_page', 'portfolio')
+        portfolio_id = query_params.get('portfolio')
 
         if view_as and view_as == 'donor':
             donor_list = query_params.getlist('donor')
