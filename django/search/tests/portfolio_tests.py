@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django.urls import reverse
 
 from project.models import ProblemStatement, ProjectPortfolioState, Project
@@ -43,9 +45,23 @@ class PortfolioSearchTests(PortfolioSetup):
         self.review_and_approve_project(pps2, self.scores, self.user_2_client)
         self.review_and_approve_project(pps4, self.scores, self.user_2_client)
 
+        # For extra testing of the filters, add another portfolio with reviews for the same projects as portfolio 2
+        response = self.create_portfolio("Test Portfolio 3", "Port-o-folio 3", [self.user_3_pr_id], self.user_2_client)
+        self.assertEqual(response.status_code, 201, response.json())
+        self.portfolio3_id = response.json()['id']
+        # Add project 2 to portfolio 3
+        url = reverse("portfolio-project-add", kwargs={"pk": self.portfolio3_id})
+        request_data = {"project": [self.project2_id]}
+        response = self.user_2_client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+        pps2_3 = ProjectPortfolioState.objects.get(project_id=self.project2_id, portfolio_id=self.portfolio3_id)
+        scores = deepcopy(self.scores)
+        del scores['psa']
+        self.review_and_approve_project(pps2_3, scores, self.user_2_client)
+
     def test_list_all_in_portfolio_for_detail_page(self):
         url = reverse("search-project-list")
-        data = {"portfolio": self.portfolio_id, "type": "portfolio"}
+        data = {"portfolio": self.portfolio_id, "type": "portfolio", "ordering": "project__modified"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
@@ -157,7 +173,7 @@ class PortfolioSearchTests(PortfolioSetup):
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
-        self.assertEqual(response.json()['results']['projects'][0]['scale_phase'],
+        self.assertEqual(response.json()['results']['projects'][0]['review_states']['scale_phase'],
                          ProjectPortfolioState.SCALE_CHOICES[1][0])
 
     def test_problem_statement_filter_on_portfolio(self):
@@ -236,7 +252,7 @@ class PortfolioSearchTests(PortfolioSetup):
         data = {"type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), ['Portfolio ID is missing for portfolio page'])
+        self.assertEqual(response.json(), {'details': 'No such portfolio'})
 
         url = reverse("search-project-list")
         data = {"portfolio": 999, "type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
@@ -257,6 +273,25 @@ class PortfolioSearchTests(PortfolioSetup):
         # add new project to a Portfolio 1
         self.move_project_to_portfolio(self.portfolio_id, new_project_id, 201, self.user_2_client)
 
+        # review by reviewer
+        user_y_pr_id, user_y_client, user_y_key = self.create_user('jeff@bezos.com', '12345789TIZ', '12345789TIZ')
+        url = reverse("portfolio-assign-questionnaire",
+                      kwargs={"portfolio_id": self.portfolio_id, 'project_id': new_project_id})
+        request_data = {'userprofile': [user_y_pr_id]}
+        response = self.user_2_client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        question_id_y = response.json()[0]['id']
+
+        partial_data_2 = {
+            'ee': 2,
+            'ra': 4,
+            'nst': 1,
+            'nst_comment': 'Neither do I'
+        }
+        url = reverse('review-score-fill', kwargs={"pk": question_id_y})
+        response = user_y_client.post(url, partial_data_2, format="json")
+        self.assertEqual(response.status_code, 200)
+
         self.assertEqual(Project.objects.count(), 6)
 
         url = reverse("search-project-list")
@@ -265,6 +300,7 @@ class PortfolioSearchTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
         self.assertFalse(response.json()['results']['projects'][0]['review_states']['approved'])
+        self.assertTrue(response.json()['results']['projects'][0]['review_states']['review_scores'][0]['complete'])
 
         # now reviewed, approve project
         pps = ProjectPortfolioState.objects.get(project_id=new_project_id, portfolio_id=self.portfolio_id)
@@ -287,6 +323,7 @@ class PortfolioSearchTests(PortfolioSetup):
         data = {"portfolio": self.portfolio_id, "type": "portfolio", "portfolio_page": "portfolio"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
+
         self.assertEqual(response.json()['count'], 3)
 
         # you can leave out the optional portfolio_page for the same results
