@@ -39,10 +39,10 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-draft"),
-    url(r"^projects/member-of/$",
-        view=views.ProjectListViewSet.as_view({
-            'get': 'list'
-        }), name="project-list"),
+    path('projects/user-list/<str:list_name>',
+         view=views.ProjectListViewSet.as_view({
+             'get': 'list'
+         }), name="project-list"),
     url(r"^projects/structure/$",
         view=views.ProjectPublicViewSet.as_view({
             'get': 'project_structure'
@@ -79,6 +79,16 @@ urlpatterns = [
             'get': 'list',
         }),
         name="project-map"),
+    path('projects/favorites/add/<int:pk>',
+         view=views.ProjectModifyFavoritesViewSet.as_view({
+             'put': 'add'
+         }),
+         name="projects-add-favorite"),
+    path('projects/favorites/remove/<int:pk>',
+         view=views.ProjectModifyFavoritesViewSet.as_view({
+             'put': 'remove'
+         }),
+         name="projects-remove-favorite"),
     path(r'approvals/<int:country_id>/',
          view=views.ProjectApprovalViewSet.as_view({
              'get': 'list'
