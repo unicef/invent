@@ -164,24 +164,19 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             raise ValidationError("You can only view as country or donor.")
 
         if portfolio_page in ["inventory", "review"]:
-            portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio)
+            portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio_id)
             self.check_object_permissions(request, portfolio)
             query_params._mutable = True
             query_params.pop('ps', None)
             query_params.pop('sp', None)
 
             if portfolio_page == "inventory":
-                qs = qs.exclude(project__review_states__portfolio_id=portfolio)
+                qs = qs.exclude(project__review_states__portfolio_id=portfolio_id)
                 # edge case scenario where we need to ignore all the portfolio reliant query params from here
                 query_params.pop('portfolio', None)
             elif portfolio_page == "review":
-                qs = qs.exclude(project__review_states__approved=True)
-
+                query_params.update(dict(review=True))
             query_params._mutable = False
-        elif portfolio:
-            # portfolio_page = "portfolio"
-            pass
-            # qs = qs.filter(project__review_states__approved=True)
 
         if search_term:
             if len(search_term) < 2:
@@ -205,7 +200,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             data = ListResultSerializer(page, many=True, context=context).data
         elif results_type == 'portfolio':
             if 'scores' in query_params and portfolio_page not in ["inventory", "review"]:
-                portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio)
+                portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio_id)
                 project_ids = qs.values_list('project_id', flat=True)
                 results.update(
                     ambition_matrix=portfolio.get_ambition_matrix(project_ids),
