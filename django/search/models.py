@@ -8,8 +8,8 @@ from django.dispatch import receiver
 from django.http import QueryDict
 
 from core.models import ExtendedModel
-from country.models import Country, Donor, CountryOffice
-from project.models import Project, HealthFocusArea, DigitalStrategy
+from country.models import Country, CountryOffice
+from project.models import Project, HealthFocusArea, DigitalStrategy, ProjectPortfolioState
 from user.models import Organisation
 
 
@@ -22,7 +22,6 @@ class ProjectSearch(ExtendedModel):
         "country": "country__name",
         "region": "country_office__region",
         "overview": "project__data__implementation_overview",
-        "donor": "donor_names"
     }
 
     FILTER_BY = {
@@ -43,7 +42,7 @@ class ProjectSearch(ExtendedModel):
         "cc": "capability_categories",  # eg: cc=1&cc=2
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
         "ic": "innovation_categories",  # eg: ic=1&ic=2
-        "portfolio": "project__review_states__portfolio",  # eg: portfolio=1
+        "portfolio": "project__review_states",  # eg: portfolio=1
         "sp": "project__review_states__scale_phase",  # eg: sp=1
         "ps": "project__review_states__psa",  # eg: ps=1
     }
@@ -54,7 +53,6 @@ class ProjectSearch(ExtendedModel):
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
 
     donors = ArrayField(models.IntegerField(), default=list)
-    donor_names = ArrayField(models.CharField(max_length=128), default=list)
 
     software = ArrayField(models.IntegerField(), default=list)
     dhi_categories = ArrayField(models.IntegerField(), default=list)
@@ -114,7 +112,12 @@ class ProjectSearch(ExtendedModel):
                     elif field == "approved":
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
-                    elif field in ["portfolio", "sp", "ps"]:
+                    elif field == "portfolio":
+                        approved = not query_params.get('review', False)
+                        lookup_param = "in"
+                        lookup = list(ProjectPortfolioState.objects.filter(
+                            portfolio_id=query_params.get(field), approved=approved).values_list('pk', flat=True))
+                    elif field in ["sp", "ps"]:
                         lookup_param = "exact"
                         lookup = query_params.get(field)
 
@@ -149,7 +152,6 @@ class ProjectSearch(ExtendedModel):
             self.organisation_id = int(project.data["organisation"])
 
             self.donors = [int(x) for x in project.data.get("donors", [])]
-            self.donor_names = [Donor.objects.get(id=int(x)).name for x in project.data.get("donors", [])]
 
             self.software = project.data.get('platforms')
             self.hsc = project.data.get('hsc_challenges')
