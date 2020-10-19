@@ -595,11 +595,3 @@ class ReviewScore(BaseScore):
 
     class Meta:
         unique_together = ('reviewer', 'portfolio_review')
-
-
-@receiver(post_save, sender=ReviewScore)
-def on_create_notify(sender, instance, created, **kwargs):
-    from project.tasks import project_review_requested_on_create_notification
-    pk = instance.pk
-    if created:
-        project_review_requested_on_create_notification.apply_async(args=[pk])

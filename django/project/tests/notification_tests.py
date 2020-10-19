@@ -283,7 +283,7 @@ class ProjectNotificationTests(SetupTests):
         pps_1 = ProjectPortfolioState.objects.create(project=published_project_1, portfolio=portfolio_1)
         reviewscore_1, _ = pps_1.assign_questionnaire(self.profile_1)
 
-        project_review_requested_on_create_notification(reviewscore_1.id)
+        project_review_requested_on_create_notification(reviewscore_1.id, "Testing!")
 
         # task should send email about Published project 1
         self.assertEqual(len(send_mail_wrapper.call_args_list), 1)

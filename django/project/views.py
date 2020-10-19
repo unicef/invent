@@ -709,11 +709,15 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
 
         if 'userprofile' not in request.data:
             raise ValidationError({'userprofile': 'UserProfile data is missing'})  # pragma: no cover
-        userprofiles = UserProfile.objects.filter(pk__in=request.data['userprofile'])
+        userprofiles = UserProfile.objects.filter(pk__in=request.data.get('userprofile'))
         scores = list()
         for profile in userprofiles:
             score, created = pps.assign_questionnaire(user=profile)
             scores.append(score)
+            if created:
+                from project.tasks import project_review_requested_on_create_notification
+                project_review_requested_on_create_notification.apply_async(args=[score.id,
+                                                                                  request.data.get('message', None)],)
         # return with scores
         data_serializer = ReviewScoreBriefSerializer(scores, many=True)
         return Response(data_serializer.data, status=status.HTTP_200_OK)

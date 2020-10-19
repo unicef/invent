@@ -51,7 +51,7 @@ def exclude_specific_project_stages(projects, filter_key_prefix='draft'):
 
 
 @app.task(name="project_review_requested_on_create_notification")
-def project_review_requested_on_create_notification(review_id):
+def project_review_requested_on_create_notification(review_id, custom_msg=None):
     """
     Sends notification if a project needs review by an user - on create task
     """
@@ -69,6 +69,7 @@ def project_review_requested_on_create_notification(review_id):
                 'reviewscores': [review],
                 'name': review.reviewer.name,
                 'details': _('Please review this project: '),
+                'custom_msg': custom_msg
             })
 
 
