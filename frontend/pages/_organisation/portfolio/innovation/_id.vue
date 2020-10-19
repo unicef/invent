@@ -205,7 +205,7 @@ export default {
       problemStatementMatrix: 'matrixes/getProblemStatementMatrix',
       name: 'portfolio/getName',
       description: 'portfolio/getDescription',
-      portfolios: 'portfolio/getPortfolios',
+      portfolios: 'portfolio/getActivePortfolios',
     }),
   },
   methods: {
