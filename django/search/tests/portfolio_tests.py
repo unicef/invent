@@ -273,6 +273,25 @@ class PortfolioSearchTests(PortfolioSetup):
         # add new project to a Portfolio 1
         self.move_project_to_portfolio(self.portfolio_id, new_project_id, 201, self.user_2_client)
 
+        # review by reviewer
+        user_y_pr_id, user_y_client, user_y_key = self.create_user('jeff@bezos.com', '12345789TIZ', '12345789TIZ')
+        url = reverse("portfolio-assign-questionnaire",
+                      kwargs={"portfolio_id": self.portfolio_id, 'project_id': new_project_id})
+        request_data = {'userprofile': [user_y_pr_id]}
+        response = self.user_2_client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        question_id_y = response.json()[0]['id']
+
+        partial_data_2 = {
+            'ee': 2,
+            'ra': 4,
+            'nst': 1,
+            'nst_comment': 'Neither do I'
+        }
+        url = reverse('review-score-fill', kwargs={"pk": question_id_y})
+        response = user_y_client.post(url, partial_data_2, format="json")
+        self.assertEqual(response.status_code, 200)
+
         self.assertEqual(Project.objects.count(), 6)
 
         url = reverse("search-project-list")
@@ -281,6 +300,7 @@ class PortfolioSearchTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
         self.assertFalse(response.json()['results']['projects'][0]['review_states']['approved'])
+        self.assertTrue(response.json()['results']['projects'][0]['review_states']['review_scores'][0]['complete'])
 
         # now reviewed, approve project
         pps = ProjectPortfolioState.objects.get(project_id=new_project_id, portfolio_id=self.portfolio_id)
