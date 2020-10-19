@@ -273,6 +273,7 @@ export default {
       border-bottom: 1px solid #a8a8a9;
     }
     .MColumn + .MColumn {
+      flex: 1;
       position: relative;
       h4 {
         font-size: 18px;
