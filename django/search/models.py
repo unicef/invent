@@ -42,7 +42,7 @@ class ProjectSearch(ExtendedModel):
         "cc": "capability_categories",  # eg: cc=1&cc=2
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
         "ic": "innovation_categories",  # eg: ic=1&ic=2
-        "portfolio": "project__review_states__portfolio",  # eg: portfolio=1
+        "portfolio": "project__review_states",  # eg: portfolio=1
         "sp": "project__review_states__scale_phase",  # eg: sp=1
         "ps": "project__review_states__psa",  # eg: ps=1
     }
