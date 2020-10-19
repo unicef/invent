@@ -19,13 +19,24 @@
       </translate>
     </p>
 
-    <el-collapse v-model="activeNames" accordion class="MainAccordion">
-      <el-collapse-item v-for="index in ['1', '2']" :key="index" :name="index">
+    <el-collapse v-model="activePortfolio" accordion class="MainAccordion">
+      <el-collapse-item
+        v-for="portfolio in portfolios"
+        :key="portfolio.name"
+        :name="portfolio.id"
+      >
         <div slot="title" class="AccordionTitle">
           <span class="accordion-status"></span>
-          <span class="icon-circle icon-tiip-innovation">&nbsp;</span>
-          <span class="portfolio-title">Consistency</span>
-          <nuxt-link to="/">
+          <span :class="`icon-circle icon-tiip-${portfolio.icon}`">&nbsp;</span>
+          <span class="portfolio-title">{{ portfolio.name }}</span>
+          <nuxt-link
+            :to="
+              localePath({
+                name: 'organisation-portfolio-innovation-id',
+                params: { organisation: '-', id: portfolio.id },
+              })
+            "
+          >
             <translate>View Portfolio</translate>
           </nuxt-link>
         </div>
@@ -35,29 +46,17 @@
               <div class="col-title">
                 <translate>Problem Statements</translate>
               </div>
-              <el-collapse
-                v-model="activeNamesTemp"
-                accordion
-                class="SubAccordion"
-              >
-                <el-collapse-item name="1">
+              <el-collapse v-model="activePS" accordion class="SubAccordion">
+                <el-collapse-item
+                  v-for="{ name, id, description } in portfolio.ps"
+                  :key="name"
+                  :name="id"
+                >
                   <div slot="title" class="SubAccordionTitle">
-                    Addressing Management challenges
+                    {{ name }}
                   </div>
                   <div class="SubAccordionContent">
-                    Lore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsum
-                    Lore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsum
-                    Lore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsum
-                  </div>
-                </el-collapse-item>
-                <el-collapse-item name="2">
-                  <div slot="title" class="SubAccordionTitle">
-                    Addressing Management challenges
-                  </div>
-                  <div class="SubAccordionContent">
-                    Lore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsum
-                    Lore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsum
-                    Lore ipsumLore ipsumLore ipsumLore ipsumLore ipsumLore ipsum
+                    {{ description }}
                   </div>
                 </el-collapse-item>
               </el-collapse>
@@ -67,25 +66,17 @@
                 <translate>Summary</translate>
               </div>
               <p class="summary">
-                Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus
-                sagittis lacus vel augue laoreet rutrum faucibus. Contra legem
-                facit qui id facit quod lex prohibet. Gallia est omnis divisa in
-                partes tres, quarum. Pellentesque habitant morbi tristique
-                senectus et netus. Donec sed odio operae, eu vulputate felis
-                rhoncus.Curabitur est gravida et libero vitae dictum. Cum
-                ceteris in veneratione tui montes, nascetur mus. Ab illo
-                tempore, ab est sed immemorabili. Lorem ipsum dolor sit amet,
-                consectetur adipisici elit, sed eiusmod tempor incidunt ut
-                labore et dolore magna aliqua. Qui ipsorum lingua Celtae, nostra
-                Galli appellantur.
+                {{ portfolio.description }}
               </p>
-              <div class="col-title">
-                <translate>Contact person</translate>
-              </div>
-              <div class="contact">
-                Edson Monteiro <br />
-                <a href="mailto:emonterio@unicef.org">emonterio@unicef.org</a>
-              </div>
+              <template v-if="false">
+                <div class="col-title">
+                  <translate>Contact person</translate>
+                </div>
+                <div class="contact">
+                  Edson Monteiro <br />
+                  <a href="mailto:emonterio@unicef.org">emonterio@unicef.org</a>
+                </div>
+              </template>
             </el-col>
           </el-row>
         </div>
@@ -97,15 +88,25 @@
 
 <script>
 import InfoCard from '@/components/portfolio/dashboard/InfoCard'
+import { mapGetters } from 'vuex'
+
 export default {
   components: {
     InfoCard,
   },
   data() {
     return {
-      activeNames: '1',
-      activeNamesTemp: '1',
+      activePortfolio: undefined,
+      activePS: undefined,
     }
+  },
+  fetch({ store }) {
+    return store.dispatch('portfolio/getPortfolios')
+  },
+  computed: {
+    ...mapGetters({
+      portfolios: 'portfolio/getActivePortfolios',
+    }),
   },
 }
 </script>
