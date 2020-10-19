@@ -91,11 +91,16 @@
         </div>
       </el-collapse-item>
     </el-collapse>
+    <info-card class="InfoCard" />
   </section>
 </template>
 
 <script>
+import InfoCard from '@/components/portfolio/dashboard/InfoCard'
 export default {
+  components: {
+    InfoCard,
+  },
   data() {
     return {
       activeNames: '1',
@@ -109,6 +114,9 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
+.InfoCard {
+  padding-top: 40px;
+}
 h1 {
   color: @colorBrandPrimary;
   font-size: 36px;
