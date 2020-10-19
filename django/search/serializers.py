@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from project.models import ProjectPortfolioState
-from project.serializers import ProjectPortfolioStateSerializer, ProjectPortfolioStateManagerSerializer
+from project.serializers import ProjectPortfolioStateManagerSerializer
 
 
 class MapResultSerializer(serializers.Serializer):
@@ -55,13 +54,11 @@ class ListResultSerializer(serializers.Serializer):
             return obj.project.data.get('donor_custom_answers')
 
     def get_donor_custom_answers_private(self, obj):
-        if not self.context.get('has_donor_permission'):
-            return
-
-        private_fields = obj.project.data.get('donor_custom_answers_private')
-        if private_fields and self.context['donor']:
-            return {donor_id: private_fields[donor_id]
-                    for donor_id in private_fields if donor_id == str(self.context['donor'].id)}
+        if self.context.get('has_donor_permission'):
+            private_fields = obj.project.data.get('donor_custom_answers_private')
+            if private_fields and self.context['donor']:
+                return {donor_id: private_fields[donor_id]
+                        for donor_id in private_fields if donor_id == str(self.context['donor'].id)}
 
 
 class PortfolioResultSerializer(ListResultSerializer):
