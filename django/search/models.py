@@ -8,8 +8,8 @@ from django.dispatch import receiver
 from django.http import QueryDict
 
 from core.models import ExtendedModel
-from country.models import Country, Donor, CountryOffice
-from project.models import Project, HealthFocusArea, DigitalStrategy
+from country.models import Country, CountryOffice
+from project.models import Project, HealthFocusArea, DigitalStrategy, ProjectPortfolioState
 from user.models import Organisation
 
 
@@ -22,7 +22,6 @@ class ProjectSearch(ExtendedModel):
         "country": "country__name",
         "region": "country_office__region",
         "overview": "project__data__implementation_overview",
-        "donor": "donor_names"
     }
 
     FILTER_BY = {
@@ -54,7 +53,6 @@ class ProjectSearch(ExtendedModel):
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
 
     donors = ArrayField(models.IntegerField(), default=list)
-    donor_names = ArrayField(models.CharField(max_length=128), default=list)
 
     software = ArrayField(models.IntegerField(), default=list)
     dhi_categories = ArrayField(models.IntegerField(), default=list)
@@ -150,7 +148,6 @@ class ProjectSearch(ExtendedModel):
             self.organisation_id = int(project.data["organisation"])
 
             self.donors = [int(x) for x in project.data.get("donors", [])]
-            self.donor_names = [Donor.objects.get(id=int(x)).name for x in project.data.get("donors", [])]
 
             self.software = project.data.get('platforms')
             self.hsc = project.data.get('hsc_challenges')
