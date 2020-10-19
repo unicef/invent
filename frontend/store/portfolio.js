@@ -1,4 +1,5 @@
 import { toInteger } from 'lodash'
+import filter from 'lodash/filter'
 
 export const state = () => ({
   loading: false,
@@ -124,6 +125,12 @@ export const getters = {
   getStatements: (state) => state.statements,
   getLoading: (state) => state.loading,
   getPortfolios: (state) => state.portfolios,
+  getActivePortfolios: (state) => {
+    return filter(
+      state.portfolios,
+      (portfolio) => portfolio.status === 'active'
+    )
+  },
 }
 
 export const actions = {
@@ -200,6 +207,8 @@ export const actions = {
         name: i.name,
         total: i.project_count,
         status: status(i.status),
+        description: i.description,
+        ps: i.problem_statements,
         icon,
       }
     })
