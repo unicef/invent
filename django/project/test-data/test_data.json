@@ -281,19 +281,115 @@
       "projects_approved": [
         {
           "name":  "Fix pothole dug for Windle Poons",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Infrastructure is decayed"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }],
           "scores": {
               "psa": [
-                "Commuting takes too much time"
+                "Infrastructure is decayed"
+              ],
+              "rnci": 5,
+              "ratp": 3,
+              "ra": 4,
+              "ee": 2,
+              "nc": 2,
+              "nst": 5,
+              "ps": 3,
+              "impact": 5,
+              "scale_phase": 2
+          }
+        },
+        {
+          "name":  "Clacks system 2nd generation",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Infrastructure is decayed"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 2,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }],
+          "scores": {
+              "psa": [
+                "Infrastructure is decayed",
+                "Development is slowing down"
               ],
               "rnci": 5,
               "ratp": 5,
-              "ra": 5,
+              "ra": 4,
               "ee": 5,
+              "nc": 4,
+              "nst": 4,
+              "ps": 3,
+              "impact": 4,
+              "scale_phase": 4
+          }
+        },
+        {
+          "name":  "The underground tunnel network",
+          "reviews": [
+            {
+              "name": "Carrot Ironfoundersson",
+              "complete": true,
+              "psa": [
+                "Infrastructure is decayed"
+              ],
+              "rnci": 3,
+              "rnci_comment": "I am not sure this is the right way",
+              "ratp": 4,
+              "ratp_comment": "I totally agree",
+              "ra": 4,
+              "ee": 3,
+              "nst": 4,
+              "ps": 5
+            },
+            {
+              "name": "Samuel Vimes",
+              "complete": false
+            }],
+          "scores": {
+              "psa": [
+                "Infrastructure is decayed",
+                "Development is slowing down"
+              ],
+              "rnci": 5,
+              "ratp": 5,
+              "ra": 4,
+              "ee": 5,
+              "nc": 4,
               "nst": 5,
-              "nc": 3,
-              "ps": 5,
-              "impact": 5,
-              "scale_phase": 2
+              "ps": 3,
+              "impact": 4,
+              "scale_phase": 4
           }
         }
       ]
