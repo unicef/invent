@@ -33,7 +33,7 @@ function processMatrix(matrix, projects) {
       ...element,
       projects: compact(
         map(element.projects, function (projectId) {
-          const project = find(projects, ({ id }) => projectId)
+          const project = find(projects, ({ id }) => id === projectId)
           if (!project) {
             return null
           }
