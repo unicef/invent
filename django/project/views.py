@@ -140,9 +140,9 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         return data
 
     @staticmethod
-    def favorite_list(userprofile):
+    def favorite_list(user):
         data = []
-        for project in Project.objects.published_only().filter(favorited_by=userprofile):
+        for project in Project.objects.published_only().filter(favorited_by=user.userprofile):
             published = project.to_representation()
             data.append(project.to_response_dict(published=published, draft=None))
         return data
@@ -155,10 +155,9 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         if list_name == 'member-of':
             data = self.member_list(request.user)
         elif list_name == 'favorite':
-            data = self.favorite_list(request.user.userprofile)
+            data = self.favorite_list(request.user)
         elif list_name == 'review':
             qs = ReviewScore.objects.filter(reviewer=request.user.userprofile). \
-                exclude(portfolio_review__project__public_id__isnull=True). \
                 exclude(portfolio_review__project__public_id__exact='')
             data_serializer = ReviewScoreDetailedSerializer(qs.all(), many=True)
             data = data_serializer.data
