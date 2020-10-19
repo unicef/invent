@@ -209,11 +209,10 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
 
             page = self.paginate_queryset(qs)
 
-            if portfolio_page == "review":
-                data = PortfolioReviewSerializer(page, many=True, context=context).data
-            else:
-                context.update(dict(portfolio=portfolio))
-                data = PortfolioResultSerializer(page, many=True, context=context).data
+            context.update(dict(portfolio_id=portfolio_id, 
+                                portfolio_page=portfolio_page, 
+                                profile=request.user.userprofile))
+            data = PortfolioResultSerializer(page, many=True, context=context).data
         else:
             page = self.paginate_queryset(qs)
             data = MapResultSerializer(page, many=True).data
