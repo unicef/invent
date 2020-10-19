@@ -794,7 +794,6 @@ class ProjectTests(SetupTests):
         self.assertNotEqual(project.search.country_id, None)
         self.assertNotEqual(project.search.organisation_id, None)
         self.assertNotEqual(project.search.donors, [])
-        self.assertNotEqual(project.search.donor_names, [])
         self.assertNotEqual(project.search.software, [])
         self.assertNotEqual(project.search.hsc, [])
         self.assertNotEqual(project.search.hfa_categories, [])
