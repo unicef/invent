@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django.urls import reverse
 
 from project.models import ProblemStatement, ProjectPortfolioState, Project
@@ -53,11 +55,13 @@ class PortfolioSearchTests(PortfolioSetup):
         response = self.user_2_client.post(url, request_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
         pps2_3 = ProjectPortfolioState.objects.get(project_id=self.project2_id, portfolio_id=self.portfolio3_id)
-        self.review_and_approve_project(pps2_3, self.scores, self.user_2_client)
+        scores = deepcopy(self.scores)
+        del scores['psa']
+        self.review_and_approve_project(pps2_3, scores, self.user_2_client)
 
     def test_list_all_in_portfolio_for_detail_page(self):
         url = reverse("search-project-list")
-        data = {"portfolio": self.portfolio_id, "type": "portfolio"}
+        data = {"portfolio": self.portfolio_id, "type": "portfolio", "ordering": "project__modified"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
@@ -169,7 +173,7 @@ class PortfolioSearchTests(PortfolioSetup):
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
-        self.assertEqual(response.json()['results']['projects'][0]['scale_phase'],
+        self.assertEqual(response.json()['results']['projects'][0]['review_states']['scale_phase'],
                          ProjectPortfolioState.SCALE_CHOICES[1][0])
 
     def test_problem_statement_filter_on_portfolio(self):
@@ -248,7 +252,7 @@ class PortfolioSearchTests(PortfolioSetup):
         data = {"type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), ['Portfolio ID is missing for portfolio page'])
+        self.assertEqual(response.json(), {'details': 'No such portfolio'})
 
         url = reverse("search-project-list")
         data = {"portfolio": 999, "type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
