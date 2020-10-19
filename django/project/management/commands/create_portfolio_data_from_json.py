@@ -71,7 +71,7 @@ class Command(BaseCommand, TestProjectData):
         return projects_list
 
     @staticmethod
-    def parse_review_data(portfolio, pps, proj_data):
+    def parse_review_data(portfolio, pps, proj_data, approved=False):
         if 'reviews' in proj_data:
             for review in proj_data['reviews']:
                 user = UserProfile.objects.get(name=review['name'])
@@ -81,7 +81,7 @@ class Command(BaseCommand, TestProjectData):
                 pp.pprint(f'{user_score}, created: {created}')
                 user_score.complete = review['complete'] if 'complete' in review else False
                 user_score.rnci = review['rnci'] if 'rnci' in review else None
-                user_score.rnci_comment = review['rnci'] if 'rnci_comment' in review else None
+                user_score.rnci_comment = review['rnci_comment'] if 'rnci_comment' in review else None
                 user_score.ratp = review['ratp'] if 'ratp' in review else None
                 user_score.ratp_comment = review['ratp_comment'] if 'ratp_comment' in review else None
                 user_score.ra = review['ra'] if 'ra' in review else None
@@ -96,19 +96,20 @@ class Command(BaseCommand, TestProjectData):
                     user_score.psa.set(portfolio.problem_statements.filter(name__in=review['psa']))
                 user_score.psa_comment = review['psa_comment'] if 'psa_comment' in review else None
                 user_score.save()
-            if 'scores' in proj_data:
-                pps.psa.set(portfolio.problem_statements.filter(name__in=proj_data['scores']['psa']))
-                pps.reviewed = True
-                pps.rnci = proj_data['scores']['rnci']
-                pps.ratp = proj_data['scores']['ratp']
-                pps.nc = proj_data['scores']['nc']
-                pps.ra = proj_data['scores']['ra']
-                pps.ee = proj_data['scores']['ee']
-                pps.nst = proj_data['scores']['nst']
-                pps.ps = proj_data['scores']['ps']
-                pps.impact = proj_data['scores']['impact']
-                pps.scale_phase = proj_data['scores']['scale_phase']
-                pps.save()
+        if 'scores' in proj_data:
+            pps.psa.set(portfolio.problem_statements.filter(name__in=proj_data['scores']['psa']))
+            pps.reviewed = True
+            pps.rnci = proj_data['scores']['rnci']
+            pps.ratp = proj_data['scores']['ratp']
+            pps.nc = proj_data['scores']['nc']
+            pps.ra = proj_data['scores']['ra']
+            pps.ee = proj_data['scores']['ee']
+            pps.nst = proj_data['scores']['nst']
+            pps.ps = proj_data['scores']['ps']
+            pps.impact = proj_data['scores']['impact']
+            pps.scale_phase = proj_data['scores']['scale_phase']
+            pps.approved = approved
+            pps.save()
 
     def create_portfolios(self, portfolios):
         for p_data in portfolios:
@@ -129,17 +130,13 @@ class Command(BaseCommand, TestProjectData):
                     pp_project = Project.objects.get(name=proj_data['name'])
                     pps, created = ProjectPortfolioState.objects.get_or_create(project=pp_project, portfolio=portfolio)
                     pp.pprint(f'ProjectPortfolioState: {pps}, created: {created}')
-                    self.parse_review_data(portfolio, pps, proj_data)
+                    self.parse_review_data(portfolio, pps, proj_data, False)
             if 'projects_approved' in p_data:
                 for proj_data in p_data['projects_approved']:
                     pp_project = Project.objects.get(name=proj_data['name'])
                     pps, created = ProjectPortfolioState.objects.get_or_create(project=pp_project, portfolio=portfolio)
-
                     pp.pprint(f'Approved ProjectPortfolioState: {pps}, created: {created}')
-
-                    self.parse_review_data(portfolio, pps, proj_data)
-                    pps.approved = True
-                    pps.save()
+                    self.parse_review_data(portfolio, pps, proj_data, True)
 
     def handle(self, *args, **options):
         pp.pprint('Parsing input data')
