@@ -112,12 +112,16 @@ class ProjectSearch(ExtendedModel):
                     elif field == "approved":
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
-                    elif field in ["portfolio", "sp", "ps"]:
+                    elif field == "portfolio":
+                        approved = not query_params.get('review', False)
+                        lookup_param = "in"
+                        lookup = list(ProjectPortfolioState.objects.filter(
+                            portfolio_id=query_params.get(field), approved=approved).values_list('pk', flat=True))
+                    elif field in ["sp", "ps"]:
                         lookup_param = "exact"
                         lookup = query_params.get(field)
 
                     queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
-        queryset = queryset.distinct('project__id')
         return queryset
 
     @classmethod
