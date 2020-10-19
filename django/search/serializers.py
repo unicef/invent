@@ -62,18 +62,16 @@ class ListResultSerializer(serializers.Serializer):
 
 
 class PortfolioResultSerializer(ListResultSerializer):
-    portfolio = serializers.ReadOnlyField(source="project__review_states__portfolio")
-    portfolio_name = serializers.ReadOnlyField(source="project__review_states__portfolio__name")
-    scale_phase = serializers.ReadOnlyField(source="project__review_states__scale_phase")
-
-
-class PortfolioReviewSerializer(PortfolioResultSerializer):
+    portfolio = serializers.SerializerMethodField()
     review_states = serializers.SerializerMethodField()
 
+    def get_portfolio(self, obj):
+        return int(self.context['portfolio_id'])
+
     def get_review_states(self, obj):
-        try:
-            pps = ProjectPortfolioState.objects.get(id=obj.get('project__review_states__id'))
-        except ProjectPortfolioState.DoesNotExist:  # pragma: no cover
-            return
-        else:
-            return ProjectPortfolioStateSerializer(pps).data
+        profile = self.context.get('profile')
+        if self.context.get('portfolio_page') in ['review', 'portfolio'] and \
+                profile and (profile.global_portfolio_owner or obj.managers.filter(id=profile.id)):
+            return ProjectPortfolioStateManagerSerializer(
+                obj.project.review_states.get(portfolio_id=self.context['portfolio_id'])
+            ).data
