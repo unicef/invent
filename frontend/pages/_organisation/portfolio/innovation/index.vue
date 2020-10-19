@@ -237,7 +237,7 @@ p {
       text-decoration: none;
     }
     .accordion-status {
-      fon t-size: 30px;
+      font-size: 30px;
       width: 68px;
       height: 76px;
       line-height: 76px;
