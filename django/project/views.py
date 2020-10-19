@@ -29,7 +29,8 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
     ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, \
     ProjectPortfolioStateManagerSerializer, PortfolioSerializer, \
-    PortfolioStateChangeSerializer
+    PortfolioStateChangeSerializer, ReviewScoreDetailedSerializer
+from user.serializers import UserProfileSerializer
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -129,16 +130,39 @@ class ProjectPublicViewSet(ViewSet):
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
+    @staticmethod
+    def member_list(user):
+        data = []
+        for project in Project.objects.member_of(user):
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return data
+
+    @staticmethod
+    def favorite_list(user):
+        data = []
+        for project in Project.objects.published_only().filter(favorited_by=user.userprofile):
+            published = project.to_representation()
+            data.append(project.to_response_dict(published=published, draft=None))
+        return data
+
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
         """
-        data = []
-        for project in Project.objects.member_of(request.user):
-            published = project.to_representation()
-            draft = project.to_representation(draft_mode=True)
-            data.append(project.to_response_dict(published=published, draft=draft))
-
+        list_name = kwargs.get('list_name')
+        if list_name == 'member-of':
+            data = self.member_list(request.user)
+        elif list_name == 'favorite':
+            data = self.favorite_list(request.user)
+        elif list_name == 'review':
+            qs = ReviewScore.objects.filter(reviewer=request.user.userprofile). \
+                exclude(portfolio_review__project__public_id__exact='')
+            data_serializer = ReviewScoreDetailedSerializer(qs.all(), many=True)
+            data = data_serializer.data
+        else:
+            raise ValidationError({'list_name': 'Unknown list type'})  # pragma: no cover
         return Response(data)
 
 
@@ -704,3 +728,27 @@ class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, Retr
             raise PermissionDenied("Approved project reviews may not be edited")
 
         return pps
+
+
+class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    queryset = Project.objects.published_only()
+
+    def add(self, request, *args, **kwargs):
+        """
+        Adds the project in the POST request's body to the user's favorite projects
+        """
+        self.request.user.userprofile.favorite_projects.add(self.get_object())
+        self.request.user.userprofile.save()
+
+        data_serializer = UserProfileSerializer(self.request.user.userprofile)
+        return Response(data_serializer.data, status=status.HTTP_200_OK)
+
+    def remove(self, request, *args, **kwargs):
+        """
+        Removes the projects in the POST request's body to the user's favorite projects
+        """
+        self.request.user.userprofile.favorite_projects.remove(self.get_object())
+        self.request.user.userprofile.save()
+
+        data_serializer = UserProfileSerializer(self.request.user.userprofile)
+        return Response(data_serializer.data, status=status.HTTP_200_OK)

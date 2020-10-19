@@ -3,7 +3,7 @@ from rest_auth.serializers import JWTSerializer
 from rest_framework.exceptions import ValidationError
 
 from country.models import Country
-from project.models import Project, Portfolio
+from project.models import Project, Portfolio, ReviewScore
 from .models import UserProfile, Organisation
 
 
@@ -60,6 +60,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     account_type_approved = serializers.SerializerMethodField()
     manager = serializers.SerializerMethodField(required=False)
     global_portfolio_owner = serializers.NullBooleanField(required=False)
+    favorite = serializers.SerializerMethodField(required=False)
+    reviews = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = UserProfile
@@ -84,6 +86,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
             return Portfolio.objects.is_manager(obj.user).values_list('id', flat=True)
 
     @staticmethod
+    def get_reviews(obj):
+        return ReviewScore.objects.filter(reviewer=obj).values_list('id', flat=True)
+
+    @staticmethod
     def get_account_type_approved(obj):
         if obj.account_type == UserProfile.DONOR and obj.donor:
             return obj in obj.donor.users.all()
@@ -98,6 +104,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         elif obj.account_type == UserProfile.SUPER_COUNTRY_ADMIN and obj.country:
             return obj in obj.country.super_admins.all()
         return False
+
+    @staticmethod
+    def get_favorite(obj):
+        return Project.objects.published_only().favorited_by(obj.user).values_list('id', flat=True)
 
     def validate(self, attrs):
         if attrs.get('account_type') in [UserProfile.DONOR, UserProfile.DONOR_ADMIN, UserProfile.SUPER_DONOR_ADMIN]:
