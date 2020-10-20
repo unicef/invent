@@ -39,7 +39,7 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-draft"),
-    path('projects/user-list/<str:list_name>',
+    path('projects/user-list/<str:list_name>/',
          view=views.ProjectListViewSet.as_view({
              'get': 'list'
          }), name="project-list"),
