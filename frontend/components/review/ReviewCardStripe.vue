@@ -1,19 +1,14 @@
 <template>
   <div class="project-review">
-    <review-state-info :complete="complete" portfolio="Portfolio Name B">
+    <review-state-info
+      :complete="item.complete"
+      :portfolio="item.portfolio ? item.portfolio.name : ''"
+    >
       <template slot="actions">
-        <p
-          v-if="complete"
-          class="completed"
-          @click="handleReview({ id: 1, reviewed: true })"
-        >
+        <p v-if="item.complete" class="completed" @click="handleReview(item)">
           <fa icon="comment-alt" /><translate>View Review</translate>
         </p>
-        <p
-          v-else
-          class="not-completed"
-          @click="handleReview({ id: 1, reviewed: false })"
-        >
+        <p v-else class="not-completed" @click="handleReview(item)">
           <fa icon="comment-alt" /><translate>Complete Review</translate>
         </p>
       </template>
@@ -29,19 +24,20 @@ export default {
   components: {
     ReviewStateInfo,
   },
-  computed: {
-    complete() {
-      return Math.random() >= 0.5
+  props: {
+    item: {
+      type: Object,
+      required: true,
     },
   },
   methods: {
     ...mapActions({
       setReviewDialog: 'projects/setReviewDialog',
-      setCurrentProjectReviewer: 'projects/setCurrentProjectReviewer',
+      setCurrentProjectReview: 'projects/setCurrentProjectReview',
     }),
     handleReview(review) {
       this.setReviewDialog(true)
-      this.setCurrentProjectReviewer(review)
+      this.setCurrentProjectReview(review)
     },
   },
 }

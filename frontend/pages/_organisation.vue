@@ -25,7 +25,6 @@ export default {
     }
     if (store.getters['user/getProfile']) {
       await Promise.all([
-        store.dispatch('projects/loadUserProjects'),
         store.dispatch('system/loadOrganisations'),
         store.dispatch('system/loadUserProfiles'),
       ])

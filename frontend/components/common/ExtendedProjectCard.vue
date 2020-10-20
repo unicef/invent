@@ -1,7 +1,7 @@
 <template>
   <el-card :body-style="{ padding: '0px' }" class="ExtendedProjectCard rounded">
     <div>
-      <review-card-stripe v-if="type === 'review'" />
+      <review-card-stripe v-if="type === 'review'" :item="project" />
       <el-row
         type="flex"
         align="middle"
@@ -11,13 +11,16 @@
         <el-col class="ProjectName">
           <el-row class="FirstSubRow">
             <el-col>
-              {{ projectData.name }}
+              {{ project.name }}
             </el-col>
           </el-row>
           <el-row type="flex" align="middle" class="SecondSubRow">
-            <country-item :id="projectData.country" :show-flag="true" />
-            <organisation-item :id="projectData.organisation" />
-            <organisation-item :id="projectData.organisation" />
+            <country-item :id="project.country" :show-flag="true" />
+            <organisation-item :id="project.organisation" />
+            <field-office-item
+              :value="project.field_office"
+              :office="project.country"
+            />
           </el-row>
         </el-col>
         <el-row type="flex" align="center" justify="end">
@@ -39,6 +42,12 @@
           </el-col>
           <el-col>
             <project-legend :id="id" />
+            <!-- favorite -->
+            <favorite
+              v-if="project.isPublished"
+              :id="id"
+              :favorite="project.favorite"
+            />
           </el-col>
         </el-row>
       </el-row>
@@ -51,7 +60,7 @@
             <translate key="published"> Published </translate>
           </div>
           <div
-            v-if="projectData.approved"
+            v-if="project.approved"
             class="ProjectStatus approved-by-country"
           >
             <translate key="approved"> Approved by MOH </translate>
@@ -66,14 +75,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
 
 import ReviewCardStripe from '@/components/review/ReviewCardStripe'
-import CountryItem from './CountryItem'
-import OrganisationItem from './OrganisationItem'
-import ProjectCardActions from './ProjectCardActions'
-import ProjectLegend from './ProjectLegend'
+import CountryItem from '@/components/common/CountryItem'
+import OrganisationItem from '@/components/common/OrganisationItem'
+import ProjectCardActions from '@/components/common/ProjectCardActions'
+import ProjectLegend from '@/components/common/ProjectLegend'
+import FieldOfficeItem from '@/components/project/FieldOfficeItem'
+import Favorite from '@/components/common/Favorite'
 
 export default {
   components: {
@@ -82,6 +92,8 @@ export default {
     ProjectCardActions,
     ProjectLegend,
     ReviewCardStripe,
+    FieldOfficeItem,
+    Favorite,
   },
   props: {
     id: {
@@ -92,29 +104,21 @@ export default {
       type: String,
       default: 'regular',
     },
+    project: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
-    ...mapGetters({
-      getUserProjectDetails: 'projects/getUserProjectDetails',
-    }),
-    project() {
-      return this.getUserProjectDetails(this.id)
-    },
-    projectData() {
-      return this.project.isPublished
-        ? this.project.published
-        : this.project.draft
-    },
     donors() {
-      return this.projectData && this.projectData.donors
-        ? this.projectData.donors.length
+      return this.project && this.project.donors
+        ? this.project.donors.length
         : 0
     },
     lastChange() {
-      return format(this.projectData.modified, 'DD/MM/YYYY')
+      return format(this.project.modified, 'DD/MM/YYYY')
     },
   },
-  methods: {},
 }
 </script>
 
@@ -137,7 +141,9 @@ export default {
     }
 
     .SecondSubRow {
-      .OrganisationItem {
+      .OrganisationItem,
+      .FieldOfficeItem {
+        width: auto;
         font-size: @fontSizeBase;
         font-weight: 400;
         color: @colorBrandGrayDark!important;

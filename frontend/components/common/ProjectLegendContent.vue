@@ -10,18 +10,6 @@
         </span>
       </span>
     </template>
-    <span>
-      <template v-if="Math.random() >= 0.5">
-        <el-tooltip content="Unmark as favorite" placement="top">
-          <fa class="heart-full" :icon="['fas', 'heart']" />
-        </el-tooltip>
-      </template>
-      <template v-else>
-        <el-tooltip content="Mark as favorite" placement="top">
-          <fa class="heart-empty" :icon="['far', 'heart']" />
-        </el-tooltip>
-      </template>
-    </span>
     <template v-if="showEye">
       <span>
         <fa icon="eye" class="ViewerIcon" />
@@ -163,14 +151,6 @@ export default {
   }
   .OwnerIcon {
     color: @colorOwner;
-  }
-  .heart-full {
-    cursor: pointer;
-    color: #c4225f;
-  }
-  .heart-empty {
-    cursor: pointer;
-    color: @colorBrandGrayLight;
   }
   .ViewerIcon {
     color: @colorViewer;
