@@ -22,11 +22,17 @@ export default {
     UserProjectList,
     Tabs,
   },
+  fetch({ store, params }) {
+    store.dispatch('projects/getInitiatives')
+  },
   computed: {
     ...mapState({
       tabs: (state) => state.projects.tabs,
       tab: (state) => state.projects.tab,
     }),
+  },
+  mounted() {
+    this.setTab(1)
   },
   methods: {
     ...mapActions({

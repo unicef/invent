@@ -1,8 +1,9 @@
 <template>
-  <div class="ProjectLegend">
+  <div :class="`ProjectLegend ${height === 0 ? 'no-padding' : ''}`">
     <project-legend-content
       v-if="!compactMode"
       :id="id"
+      ref="legend"
       :donors="donors"
       :country="country"
       :force-star="forceStar"
@@ -86,34 +87,41 @@ export default {
       default: false,
     },
   },
-  computed: {},
+  data() {
+    return {
+      height: 0,
+    }
+  },
+  mounted() {
+    this.height = this.$refs.legend.$el.clientHeight
+  },
 }
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .ProjectLegend {
   opacity: 1;
   transition: @transitionFade;
   padding-top: 7px;
-  width: 67px;
   display: flex;
   justify-content: flex-end;
-
+  &.no-padding {
+    // total cheat
+    padding-top: 0px;
+    margin-top: -2px;
+  }
   .OwnerIcon {
     color: @colorOwner;
   }
-
   .ViewerIcon {
     color: @colorViewer;
   }
-
   .DonorIcon {
     color: @colorDonor;
   }
-
   .CountryAdminIcon {
     color: @colorCountryAdmin;
   }
