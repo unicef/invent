@@ -732,10 +732,13 @@ class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, Retr
 
 class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.published_only()
+    serializer_class = UserProfileSerializer
 
     def add(self, request, *args, **kwargs):
         """
         Adds the project in the POST request's body to the user's favorite projects
+
+        Request body can be EMPTY
         """
         self.request.user.userprofile.favorite_projects.add(self.get_object())
         self.request.user.userprofile.save()
@@ -746,6 +749,9 @@ class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, GenericV
     def remove(self, request, *args, **kwargs):
         """
         Removes the projects in the POST request's body to the user's favorite projects
+
+        Request body can be EMPTY
+
         """
         self.request.user.userprofile.favorite_projects.remove(self.get_object())
         self.request.user.userprofile.save()
