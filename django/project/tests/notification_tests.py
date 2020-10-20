@@ -8,8 +8,9 @@ from django.utils import timezone
 from freezegun import freeze_time
 
 from country.models import Donor, DonorCustomQuestion
-from project.models import Project
-from project.tasks import project_still_in_draft_notification, published_projects_updated_long_ago
+from project.models import Project, Portfolio, ProjectPortfolioState
+from project.tasks import project_still_in_draft_notification, published_projects_updated_long_ago, \
+    project_review_requested_monthly_notification, project_review_requested_on_create_notification
 from project.tests.setup import SetupTests
 from user.models import UserProfile
 
@@ -209,3 +210,85 @@ class ProjectNotificationTests(SetupTests):
             self.assertEqual(call_args_list['email_type'], 'reminder_common_template')
             self.assertEqual(call_args_list['to'], self.user_1.email)
             self.assertIn(published_project_1, call_args_list['context']['projects'])
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_project_review_monthly_reminder(self, send_mail_wrapper):
+        now = timezone.now()
+
+        with freeze_time(now - timezone.timedelta(days=45)):
+            # create project
+            published_project_1 = Project.objects.create(
+                name='Published project 1', data=self.published_project_data, public_id='1111')
+            published_project_1.team.add(self.profile_1)
+            published_project_2 = Project.objects.create(
+                name='Published project 2', data=self.published_project_data, public_id='1112')
+            published_project_2.team.add(self.profile_1)
+            published_project_3 = Project.objects.create(
+                name='Published project 3', data=self.published_project_data, public_id='1113')
+            published_project_3.team.add(self.profile_1)
+            # create portfolio
+            portfolio_1 = Portfolio.objects.create(name="Notification test portfolio")
+            # create reviews
+            pps_1 = ProjectPortfolioState.objects.create(project=published_project_1, portfolio=portfolio_1)
+            pps_2 = ProjectPortfolioState.objects.create(project=published_project_2, portfolio=portfolio_1)
+            pps_3 = ProjectPortfolioState.objects.create(project=published_project_3, portfolio=portfolio_1)
+            reviewscore_1, _ = pps_1.assign_questionnaire(self.profile_1)
+            reviewscore_2, _ = pps_2.assign_questionnaire(self.profile_2)
+            reviewscore_3, _ = pps_3.assign_questionnaire(self.profile_2)
+        with freeze_time(now - timezone.timedelta(days=10)):
+            # task shouldn't pick this up
+            reviewscore_4, _ = pps_2.assign_questionnaire(self.profile_1)
+
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
+            project_review_requested_monthly_notification.apply()
+
+            # task should send emails about Published project 1 and 2-3
+            self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
+
+            for call in send_mail_wrapper.call_args_list:
+                call_args = call[1]
+                self.assertEqual(call_args['email_type'], 'reminder_project_review_template')
+                self.assertEqual(call_args['language'], 'en')
+
+                if call_args['to'] == self.user_1.email:
+                    # user_1 should receive notifications about published project 1
+                    self.assertEqual(call_args['context']['name'], self.profile_1.name)
+                    self.assertEqual([reviewscore_1], call_args['context']['reviewscores'])
+                else:
+                    # user_2 should receive notifications about published project 2
+                    self.assertEqual(call_args['context']['name'], self.profile_2.name)
+                    self.assertEqual({reviewscore_2, reviewscore_3}, set(call_args['context']['reviewscores']))
+        # init
+        send_mail_wrapper.call_args_list = _CallList()
+
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
+            project_review_requested_monthly_notification.apply()
+
+            # task should send email about Published project 1
+            self.assertEqual(len(send_mail_wrapper.call_args_list), 1)
+            call_args_list = send_mail_wrapper.call_args_list[0][1]
+            self.assertEqual(call_args_list['email_type'], 'reminder_project_review_template')
+            self.assertEqual(call_args_list['to'], self.user_1.email)
+            self.assertEqual([reviewscore_1], call_args_list['context']['reviewscores'])
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_project_review_on_create_reminder(self, send_mail_wrapper):
+        # create project
+        published_project_1 = Project.objects.create(
+            name='Published project 1', data=self.published_project_data, public_id='1111')
+        published_project_1.team.add(self.profile_1)
+        # create portfolio
+        portfolio_1 = Portfolio.objects.create(name="Notification test portfolio")
+        # create review
+        pps_1 = ProjectPortfolioState.objects.create(project=published_project_1, portfolio=portfolio_1)
+        reviewscore_1, _ = pps_1.assign_questionnaire(self.profile_1)
+
+        project_review_requested_on_create_notification(reviewscore_1.id, "Testing!")
+
+        # task should send email about Published project 1
+        self.assertEqual(len(send_mail_wrapper.call_args_list), 1)
+        call_args = send_mail_wrapper.call_args_list[0][1]
+        self.assertEqual(call_args['email_type'], 'reminder_project_review_template')
+        self.assertEqual(call_args['context']['name'], self.profile_1.name)
+        self.assertEqual(call_args['language'], 'en')
+        self.assertEqual([reviewscore_1], call_args['context']['reviewscores'])
