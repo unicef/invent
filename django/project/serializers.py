@@ -498,7 +498,8 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
             'ra': calc_avg([score.ra for score in complete_scores if score.ra]),
             'ee': calc_avg([score.ee for score in complete_scores if score.ee]),
             'nst': calc_avg([score.nst for score in complete_scores if score.nst]),
-            'ps': calc_avg([score.ps for score in complete_scores if score.ps])
+            'ps': calc_avg([score.ps for score in complete_scores if score.ps]),
+            'nc': calc_avg([score.nc for score in complete_scores if score.nc])
         }
 
 

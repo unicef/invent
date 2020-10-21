@@ -197,6 +197,7 @@ class ReviewTests(PortfolioSetup):
         partial_data = {
             'ee': 1,
             'ra': 5,
+            'nc': 4,
             'nst_comment': 'I do not know how to set this'
         }
         url = reverse('review-score-fill', kwargs={"pk": question_id})
@@ -228,6 +229,7 @@ class ReviewTests(PortfolioSetup):
             'ee': 2,
             'ra': 4,
             'nst': 1,
+            'nc': 2,
             'nst_comment': 'Neither do I'
         }
         url = reverse('review-score-fill', kwargs={"pk": question_id_y})
@@ -242,6 +244,7 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.json()['averages']['ra'], 4.5)
         self.assertEqual(response.json()['averages']['nst'], 1.0)
         self.assertEqual(response.json()['averages']['rnci'], None)
+        self.assertEqual(response.json()['averages']['nc'], 3)
         self.assertEqual(len(response.json()['review_scores']), 2)
 
         # Try to modify the answers - should not be allowed
