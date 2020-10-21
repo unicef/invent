@@ -410,10 +410,7 @@ export const actions = {
   },
   async addFavorite({ state, commit, dispatch }, id) {
     try {
-      const { data } = await this.$axios.put(
-        `/api/projects/favorites/add/${id}`
-      )
-      console.log(data)
+      await this.$axios.put(`/api/projects/favorites/add/${id}`)
       dispatch('getInitiatives')
     } catch (e) {
       console.log(e.response.data)
@@ -421,10 +418,7 @@ export const actions = {
   },
   async removeFavorite({ state, commit, dispatch }, id) {
     try {
-      const { data } = await this.$axios.put(
-        `/api/projects/favorites/remove/${id}`
-      )
-      console.log(data)
+      await this.$axios.put(`/api/projects/favorites/remove/${id}`)
       dispatch('getInitiatives')
     } catch (e) {
       console.log(e.response.data)

@@ -73,7 +73,10 @@
           </p>
           <p v-else class="na">N/A</p>
           <el-popover
-            v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+            v-if="
+              scope.row[reviewer][`${scope.row.type}_comment`] &&
+              scope.row.type !== 'psa'
+            "
             placement="right"
             :title="$gettext('Comment') | translate"
             width="360"
@@ -99,12 +102,7 @@
         label-class-name="score-general-header"
         class-name="user-row"
       >
-        <template slot-scope="scope">
-          <template v-if="scope.row.type === 'psa'">
-            <p class="na psa">N/A</p>
-          </template>
-          <p v-else class="na">N/A</p>
-        </template>
+        <p class="na"></p>
       </el-table-column>
       <!-- reviewers -->
       <el-table-column
@@ -298,9 +296,9 @@ export default {
     examples() {
       switch (this.reviewersName.length) {
         case 0:
-          return ['example user 1', 'example user 2']
+          return ['', '']
         case 1:
-          return ['example user 1']
+          return ['']
         default:
           return []
       }

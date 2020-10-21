@@ -287,17 +287,22 @@ export const actions = {
       console.error('portfolio/getPortfolioProjects failed')
     }
   },
-  setProjects({ state, commit, dispatch }, { projects, count }) {
+  async setProjects(
+    { state, commit, dispatch, rootGetters },
+    { projects, count }
+  ) {
     // pagination
     commit('SET_VALUE', { key: 'total', val: count })
+    // set favorite
+    await dispatch('user/refreshProfile', {}, { root: true })
+    const user = rootGetters['user/getProfile']
     // projects
     commit('SET_VALUE', {
       key: 'projects',
       val: projects.map((i) => {
-        // todo: set this attributes from api
         return {
           ...i,
-          favorite: Math.random() >= 0.5,
+          favorite: user ? user.favorite.includes(i.id) : undefined,
           ...i.project_data,
         }
       }),
