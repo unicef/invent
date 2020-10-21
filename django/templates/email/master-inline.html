@@ -515,14 +515,24 @@
                             <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >Manager message: {{ custom_msg }}</p>
                         {% endif %}
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ details }}</p>
-                        {% for score in reviewscores %}
-                            <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
-                                {% trans "Project Name" %}{{ score.project.name }}
-                                {% trans "Portfolio Name" %}{{ score.portfolio.name }}
-                                {% trans "Date of Submission" %}{{ score.modified }}
-                                <a href="{% site_url %}/{{ language }}/-/initiatives?review=score.id" target="_blank" style="color:#00AEEF;text-decoration:underline;" ><b>{% trans "Review" %} {{ reviewscore.project.name }}</b></a>
-                            </p>
-                        {% endfor %}
+                        <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-border-horizontal-spacing:0px;-webkit-border-vertical-spacing:0px;width:auto;" >
+                          <tbody>
+                            <tr>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{% trans "Project Name" %}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{% trans "Portfolio Name" %}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{% trans "Date of Submission" %}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" ></td>
+                            </tr>
+                            {% for review in reviewscores %}
+                            <tr>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{{ review.portfolio_review.project.name }}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{{ review.portfolio_review.portfolio.name }}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{{ review.modified }}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" ><a href="{% site_url %}/{{ language }}/-/initiatives?review={{ review.id }}" target="_blank" style="color:#00AEEF;text-decoration:underline;" ><b>{% trans "Review" %}</b></a></td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
                         <!-- /REMINDER PROJECT REVIEW TEMPLATE -->
                         {% endif %}
                       <!-- END TEMPLATES -->
