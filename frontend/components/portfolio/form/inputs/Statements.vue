@@ -1,6 +1,5 @@
 <template>
   <div class="statements">
-    <!-- {{ statements }} -->
     <div v-for="(item, i) in statements" :key="i" class="statement">
       <div class="close" @click="handleRemoveStatement(i)">
         <fa icon="times" />
@@ -44,7 +43,7 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   computed: {
     ...mapState({
-      statements: (state) => state.portfolio.statements,
+      statements: (state) => state.portfolio.problemStatements,
     }),
   },
 

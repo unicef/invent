@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { publishRules, draftRules } from '@/utilities/portfolio'
 import GeneralSettings from '@/components/portfolio/form/GeneralSettings'
 import Managers from '@/components/portfolio/form/Managers'
@@ -82,9 +82,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      portfolio: 'portfolio/getProjectData',
-    }),
     draftRules,
     publishRules,
     rules() {

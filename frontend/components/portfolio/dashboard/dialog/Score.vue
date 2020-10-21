@@ -73,10 +73,7 @@
           </p>
           <p v-else class="na">N/A</p>
           <el-popover
-            v-if="
-              scope.row[reviewer][`${scope.row.type}_comment`] &&
-              scope.row.type !== 'psa'
-            "
+            v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
             placement="right"
             :title="$gettext('Comment') | translate"
             width="360"
@@ -87,7 +84,9 @@
             <fa
               v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
               slot="reference"
-              class="comment-icon"
+              :class="`comment-icon ${
+                scope.row.type === 'psa' && 'comment-psa'
+              }`"
               :icon="['fas', 'comment-alt']"
             />
           </el-popover>
@@ -97,14 +96,14 @@
       <el-table-column
         v-for="example in examples"
         :key="example"
-        :label="$gettext(example) | translate"
+        label=""
         width="240"
         label-class-name="score-general-header"
         class-name="user-row"
       >
         <p class="na"></p>
       </el-table-column>
-      <!-- reviewers -->
+      <!-- average -->
       <el-table-column
         prop="average"
         label="Average"
@@ -296,9 +295,9 @@ export default {
     examples() {
       switch (this.reviewersName.length) {
         case 0:
-          return ['', '']
+          return ['user example 1', 'user example 2']
         case 1:
-          return ['']
+          return ['user example 1']
         default:
           return []
       }
@@ -474,6 +473,11 @@ export default {
         font-size: 18px;
         &:hover {
           color: @colorTextPrimary;
+        }
+        &.comment-psa {
+          position: relative;
+          top: 0;
+          right: 0;
         }
       }
     }

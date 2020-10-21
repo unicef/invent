@@ -47,6 +47,7 @@
               v-if="project.isPublished"
               :id="id"
               :favorite="project.favorite"
+              type="initiatives"
             />
           </el-col>
         </el-row>

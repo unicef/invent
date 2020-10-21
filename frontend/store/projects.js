@@ -408,31 +408,33 @@ export const actions = {
     // update initiatives/projects by tab click
     dispatch('getInitiatives')
   },
-  async addFavorite({ state, commit, dispatch }, id) {
+  addFavorite({ state, commit, dispatch }, { id, type }) {
+    dispatch('setFavorite', { id, type, action: 'add' })
+  },
+  removeFavorite({ state, commit, dispatch }, { id, type }) {
+    dispatch('setFavorite', { id, type, action: 'remove' })
+  },
+  async setFavorite({ state, commit, dispatch }, { id, type, action }) {
     try {
-      await this.$axios.put(`/api/projects/favorites/add/${id}`)
-      dispatch('getInitiatives')
+      await this.$axios.put(`/api/projects/favorites/${action}/${id}`)
+      switch (type) {
+        case 'initiatives':
+          await dispatch('getInitiatives')
+          break
+        case 'table':
+          await dispatch('portfolio/getPortfolioProjects', {}, { root: true })
+          break
+        case 'detail':
+          await dispatch('user/refreshProfile', {}, { root: true })
+          break
+      }
     } catch (e) {
       console.log(e.response.data)
     }
   },
-  async removeFavorite({ state, commit, dispatch }, id) {
-    try {
-      await this.$axios.put(`/api/projects/favorites/remove/${id}`)
-      dispatch('getInitiatives')
-    } catch (e) {
-      console.log(e.response.data)
-    }
-  },
+
   // state interaction handlers
   setCurrentProjectReview({ commit }, val) {
-    commit('SET_VALUE', {
-      key: 'problemStatements',
-      val: [
-        { id: 1, name: 'statement 1' },
-        { id: 2, name: 'statement 2' },
-      ],
-    })
     commit('SET_VALUE', { key: 'currentProjectReview', val })
   },
   setReviewDialog({ commit }, val) {

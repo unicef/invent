@@ -122,7 +122,7 @@ export const getters = {
   getStatus: (state) => state.status,
   getIcon: (state) => state.icon,
   getManagers: (state) => state.managers,
-  getStatements: (state) => state.statements,
+  getStatements: (state) => state.problemStatements,
   getLoading: (state) => state.loading,
   getPortfolios: (state) => state.portfolios,
   getActivePortfolios: (state) => {
@@ -182,7 +182,7 @@ export const actions = {
       status: state.status,
       icon: state.icon.id,
       managers: state.managers,
-      problem_statements: state.statements.filter((i) => i.name !== ''),
+      problem_statements: state.problemStatements.filter((i) => i.name !== ''),
     })
     dispatch('setLoading', false)
   },
@@ -194,7 +194,7 @@ export const actions = {
       status: state.status,
       icon: state.icon.id,
       managers: state.managers,
-      problem_statements: state.statements.filter((i) => i.name !== ''),
+      problem_statements: state.problemStatements.filter((i) => i.name !== ''),
     })
     dispatch('setLoading', false)
   },
@@ -291,11 +291,11 @@ export const actions = {
     { state, commit, dispatch, rootGetters },
     { projects, count }
   ) {
-    // pagination
-    commit('SET_VALUE', { key: 'total', val: count })
     // set favorite
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
+    // pagination
+    commit('SET_VALUE', { key: 'total', val: count })
     // projects
     commit('SET_VALUE', {
       key: 'projects',
@@ -426,7 +426,7 @@ export const mutations = {
     state.managers = managers
   },
   SET_STATEMENTS: (state, statements) => {
-    state.statements = statements
+    state.problemStatements = statements
   },
   SET_LOADING: (state, loading) => {
     state.loading = loading
