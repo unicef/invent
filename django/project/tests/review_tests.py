@@ -321,5 +321,5 @@ class ReviewTests(PortfolioSetup):
         problem_statement_matrix = portfolio.get_problem_statement_matrix()
 
         self.assertEqual(len(problem_statement_matrix['high_activity']), 0)
-        self.assertEqual(len(problem_statement_matrix['moderate']), 3)
-        self.assertEqual(len(problem_statement_matrix['neglected']), 4)
+        self.assertEqual(len(problem_statement_matrix['moderate']), 5)
+        self.assertEqual(len(problem_statement_matrix['neglected']), 2)

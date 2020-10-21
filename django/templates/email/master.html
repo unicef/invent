@@ -533,6 +533,34 @@
                           </tbody>
                         </table>
                         <!-- /TEMPLATE: STATUS REPORT -->
+
+
+                        <!-- REMINDER PROJECT REVIEW TEMPLATE -->
+                        {% elif type == "reminder_project_review_template" %}
+                        <h2>{% trans "Dear" %} {{ name }}</h2>
+                        {% if custom_msg %}
+                            <p>Manager message: {{ custom_msg }}</p>
+                        {% endif %}
+                        <p>{{ details }}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td>{% trans "Project Name" %}</td>
+                              <td>{% trans "Portfolio Name" %}</td>
+                              <td>{% trans "Date of Submission" %}</td>
+                              <td></td>
+                            </tr>
+                            {% for review in reviewscores %}
+                            <tr class="list-content">
+                              <td>{{ review.portfolio_review.project.name }}</td>
+                              <td>{{ review.portfolio_review.portfolio.name }}</td>
+                              <td>{{ review.modified }}</td>
+                              <td><a href="{% site_url %}/{{ language }}/-/initiatives?review={{ review.id }}" target="_blank"><b>{% trans "Review" %}</b></a></td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <!-- /REMINDER PROJECT REVIEW TEMPLATE -->
                         {% endif %}
                       <!-- END TEMPLATES -->
                       </td>
