@@ -5,10 +5,8 @@
         <el-col :span="12" class="ProjectName">
           <div>
             {{ project.name }}
-            <project-legend :id="project.id" />
           </div>
         </el-col>
-
         <el-col :span="12" class="ProjectInfo">
           <el-row type="flex" justify="end">
             <el-col :span="8" class="InfoSection">
@@ -40,6 +38,10 @@
                   <fa icon="envelope" />
                 </a>
               </div>
+            </el-col>
+            <el-col v-if="isPublished" :span="2" class="InfoSection">
+              <favorite :id="project.id" :favorite="favorite" />
+              <!-- <project-legend :id="project.id" /> -->
             </el-col>
           </el-row>
         </el-col>
@@ -82,7 +84,8 @@
         >
           <translate>Initiative</translate>
         </nuxt-link>
-        <!-- <nuxt-link :to="localePath({name: 'organisation-initiatives-id-assessment', params: {id, organisation: $route.params.organisation}})">
+        <!--
+        <nuxt-link :to="localePath({name: 'organisation-initiatives-id-assessment', params: {id, organisation: $route.params.organisation}})">
           <translate>Assessment</translate>
         </nuxt-link>
         <nuxt-link
@@ -98,7 +101,8 @@
           :to="localePath({name: 'organisation-initiatives-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})"
         >
           <translate>Summary score</translate>
-        </nuxt-link> -->
+        </nuxt-link>
+        -->
       </div>
     </div>
   </div>
@@ -107,13 +111,16 @@
 <script>
 import { format } from 'date-fns'
 import { mapGetters } from 'vuex'
+import Favorite from '@/components/common/Favorite'
+import toInteger from 'lodash/toInteger'
 import OrganisationItem from './OrganisationItem'
-import ProjectLegend from './ProjectLegend'
+// import ProjectLegend from './ProjectLegend'
 
 export default {
   components: {
     OrganisationItem,
-    ProjectLegend,
+    // ProjectLegend,
+    Favorite,
   },
   computed: {
     ...mapGetters({
@@ -121,8 +128,16 @@ export default {
       published: 'project/getPublished',
       user: 'user/getProfile',
     }),
+    favorite() {
+      return this.user
+        ? this.user.favorite.includes(toInteger(this.$route.params.id))
+        : undefined
+    },
     project() {
       return this.published && this.published.name ? this.published : this.draft
+    },
+    isPublished() {
+      return !!(this.published && this.published.name)
     },
     id() {
       return +this.$route.params.id

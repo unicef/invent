@@ -39,13 +39,13 @@
                 v-if="scope.row.favorite"
                 class="heart-full"
                 :icon="['fas', 'heart']"
-                @click="removeFavorite(scope.row.id)"
+                @click="removeFavorite({ id: scope.row.id, type: 'table' })"
               />
               <fa
                 v-else
                 class="heart-empty"
                 :icon="['far', 'heart']"
-                @click="addFavorite(scope.row.id)"
+                @click="addFavorite({ id: scope.row.id, type: 'table' })"
               />
             </div>
           </el-tooltip>

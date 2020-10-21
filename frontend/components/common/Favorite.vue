@@ -2,25 +2,25 @@
   <p class="heart">
     <template v-if="favorite">
       <el-tooltip
-        :content="$gettext('Unmark as favorite') | translate"
+        :content="$gettext('Remove from Favorites') | translate"
         placement="bottom"
       >
         <fa
           class="heart-full"
           :icon="['fas', 'heart']"
-          @click="removeFavorite(id)"
+          @click="removeFavorite({ id, type })"
         />
       </el-tooltip>
     </template>
     <template v-else>
       <el-tooltip
-        :content="$gettext('Mark as favorite') | translate"
+        :content="$gettext('Add to favorites') | translate"
         placement="bottom"
       >
         <fa
           class="heart-empty"
           :icon="['far', 'heart']"
-          @click="addFavorite(id)"
+          @click="addFavorite({ id, type })"
         />
       </el-tooltip>
     </template>
@@ -39,6 +39,10 @@ export default {
     favorite: {
       type: Boolean,
       required: true,
+    },
+    type: {
+      type: String,
+      default: 'detail',
     },
   },
   methods: {
