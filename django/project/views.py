@@ -684,7 +684,6 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
     serializer_class = ReviewScoreBriefSerializer
 
     def get_project_and_portfolio(self):
-        # TODO: Add Message field to this API call
         portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
 
         pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
