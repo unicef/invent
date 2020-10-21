@@ -367,7 +367,7 @@ class PortfolioSearchTests(PortfolioSetup):
         ps1 = ProblemStatement.objects.get(name="PS 1", portfolio_id=self.portfolio_id)
         ps2 = ProblemStatement.objects.get(name="PS 2", portfolio_id=self.portfolio_id)
         self.assertEqual(response.json()['results']['problem_statement_matrix'],
-                         {'neglected': [ps1.id, ps2.id], 'moderate': [], 'high_activity': []})
+                         {'neglected': [ps2.id], 'moderate': [ps1.id], 'high_activity': []})
 
         new_project_id, *_ = self.create_new_project(self.user_2_client, name="New Project 1")
 
@@ -390,7 +390,7 @@ class PortfolioSearchTests(PortfolioSetup):
         ps1 = ProblemStatement.objects.get(name="PS 1", portfolio_id=self.portfolio_id)
         ps2 = ProblemStatement.objects.get(name="PS 2", portfolio_id=self.portfolio_id)
         self.assertEqual(response.json()['results']['problem_statement_matrix'],
-                         {'neglected': [ps1.id, ps2.id], 'moderate': [], 'high_activity': []})
+                         {'neglected': [ps2.id], 'moderate': [ps1.id], 'high_activity': []})
 
         # include search criteria
         url = reverse("search-project-list")
@@ -405,4 +405,4 @@ class PortfolioSearchTests(PortfolioSetup):
         ps1 = ProblemStatement.objects.get(name="PS 1", portfolio_id=self.portfolio_id)
         ps2 = ProblemStatement.objects.get(name="PS 2", portfolio_id=self.portfolio_id)
         self.assertEqual(response.json()['results']['problem_statement_matrix'],
-                         {'neglected': [ps1.id, ps2.id], 'moderate': [], 'high_activity': []})
+                         {'neglected': [ps2.id], 'moderate': [ps1.id], 'high_activity': []})
