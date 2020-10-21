@@ -508,6 +508,8 @@
                           </tbody>
                         </table>
                         <!-- /TEMPLATE: STATUS REPORT -->
+
+
                         <!-- REMINDER PROJECT REVIEW TEMPLATE -->
                         {% elif type == "reminder_project_review_template" %}
                         <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ name }}</h2>
@@ -515,20 +517,20 @@
                             <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >Manager message: {{ custom_msg }}</p>
                         {% endif %}
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ details }}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-border-horizontal-spacing:0px;-webkit-border-vertical-spacing:0px;width:auto;" >
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-border-horizontal-spacing:0px;-webkit-border-vertical-spacing:0px;width:100%;" >
                           <tbody>
-                            <tr>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{% trans "Project Name" %}</td>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{% trans "Portfolio Name" %}</td>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{% trans "Date of Submission" %}</td>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" ></td>
+                            <tr class="list-header">
+                              <td style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >{% trans "Project Name" %}</td>
+                              <td style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >{% trans "Portfolio Name" %}</td>
+                              <td style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >{% trans "Date of Submission" %}</td>
+                              <td style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" ></td>
                             </tr>
                             {% for review in reviewscores %}
-                            <tr>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{{ review.portfolio_review.project.name }}</td>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{{ review.portfolio_review.portfolio.name }}</td>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" >{{ review.modified }}</td>
-                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" ><a href="{% site_url %}/{{ language }}/-/initiatives?review={{ review.id }}" target="_blank" style="color:#00AEEF;text-decoration:underline;" ><b>{% trans "Review" %}</b></a></td>
+                            <tr class="list-content">
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >{{ review.portfolio_review.project.name }}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >{{ review.portfolio_review.portfolio.name }}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >{{ review.modified }}</td>
+                              <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" ><a href="{% site_url %}/{{ language }}/-/initiatives?review={{ review.id }}" target="_blank" style="color:#00AEEF;text-decoration:underline;" ><b>{% trans "Review" %}</b></a></td>
                             </tr>
                             {% endfor %}
                           </tbody>
