@@ -425,7 +425,8 @@ class ProblemStatementSerializer(serializers.ModelSerializer):
 
 class PortfolioListSerializer(serializers.ModelSerializer):
     project_count = serializers.SerializerMethodField()
-    managers = serializers.SerializerMethodField()
+    managers = UserProfileSerializer(many=True)
+
     problem_statements = ProblemStatementSerializer(many=True)
 
     class Meta:
@@ -435,10 +436,6 @@ class PortfolioListSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_project_count(obj):
         return len(Project.objects.published_only().filter(is_active=True, review_states__in=obj.review_states.all()))
-
-    @staticmethod
-    def get_managers(obj):
-        return obj.managers.all().values_list('id', flat=True)
 
 
 class ReviewScoreBriefSerializer(serializers.ModelSerializer):
