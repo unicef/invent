@@ -73,13 +73,13 @@
           <p>
             {{ description }}
           </p>
-          <template v-if="contactEmail">
+          <template v-if="contacts && contacts.length > 0">
             <h4>
               <translate>Contact Person</translate>
             </h4>
-            <p>
-              {{ contactName }} <br />
-              <a :href="`mailto:${contactEmail}`">emonterio@unicef.org</a>
+            <p v-for="{ name, email } in contacts" :key="name">
+              {{ name }} <br />
+              <a :href="`mailto:${email}`">{{ email }}</a>
             </p>
           </template>
         </div>
@@ -140,13 +140,9 @@ export default {
       type: String,
       default: '',
     },
-    contactEmail: {
-      type: String,
-      default: '',
-    },
-    contactName: {
-      type: String,
-      default: '',
+    contacts: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {

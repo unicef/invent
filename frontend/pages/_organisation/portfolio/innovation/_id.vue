@@ -37,6 +37,7 @@
               :elements="ambitionMatrix"
               :left="matrixLabels.ambition.left"
               :bottom="matrixLabels.ambition.bottom"
+              :contacts="managers"
             />
           </el-tab-pane>
           <el-tab-pane
@@ -52,6 +53,7 @@
               :elements="riskImpactMatrix"
               :left="matrixLabels.riskImpact.left"
               :bottom="matrixLabels.riskImpact.bottom"
+              :contacts="managers"
               extra-bottom="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
               extra-left="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
             />
@@ -204,6 +206,7 @@ export default {
       riskImpactMatrix: 'matrixes/getRiskImpactMatrix',
       problemStatementMatrix: 'matrixes/getProblemStatementMatrix',
       name: 'portfolio/getName',
+      managers: 'portfolio/getManagers',
       description: 'portfolio/getDescription',
       portfolios: 'portfolio/getActivePortfolios',
     }),
