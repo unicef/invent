@@ -241,6 +241,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         max_blob_size = max([len(x['projects']) for x in blob_list])
         for blob in blob_list:
             blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
+            blob['projects'].sort()
         return blob_list
 
     def get_risk_impact_matrix(self, project_ids: Union[List[int], None] = None):
@@ -266,6 +267,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         max_blob_size = max([len(x['projects']) for x in blob_list])
         for blob in blob_list:
             blob['ratio'] = round(len(blob['projects']) / max_blob_size, 2)
+            blob['projects'].sort()
         return blob_list
 
     def get_problem_statement_matrix(self, project_ids: Union[List[int], None] = None):
