@@ -16,27 +16,44 @@ import { mapState, mapActions } from 'vuex'
 
 import UserProjectList from '@/components/common/UserProjectsList'
 import Tabs from '@/components/common/Tabs'
+import toInteger from 'lodash/toInteger'
 
 export default {
   components: {
     UserProjectList,
     Tabs,
   },
-  fetch({ store, params }) {
-    store.dispatch('projects/getInitiatives')
-  },
+  // fetch({ store, params }) {
+  //   store.dispatch('projects/getInitiatives')
+  // },
   computed: {
     ...mapState({
       tabs: (state) => state.projects.tabs,
       tab: (state) => state.projects.tab,
+      projects: (state) => state.projects.userProjects,
     }),
   },
-  mounted() {
-    this.setTab(1)
+  async mounted() {
+    if (this.$route.query.review) {
+      // filter popup for open an id
+      await this.setTab(2)
+      const review = this.projects.find(
+        (i) => i.reviewId === toInteger(this.$route.query.review)
+      )
+      if (review) {
+        await this.setCurrentProjectReview(review)
+        this.setReviewDialog(true)
+      }
+    } else {
+      await this.setTab(1)
+    }
   },
   methods: {
     ...mapActions({
       setTab: 'projects/setTab',
+      getInitiatives: 'projects/getInitiatives',
+      setCurrentProjectReview: 'projects/setCurrentProjectReview',
+      setReviewDialog: 'projects/setReviewDialog',
     }),
   },
 }
