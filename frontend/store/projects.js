@@ -15,7 +15,7 @@ export const state = () => ({
     { id: 3, name: 'My favorites', icon: 'heart', total: 1 },
   ],
   tab: 1,
-  loadingProject: false,
+  loadingProject: true,
   // project review
   loadingReview: false,
   dialogReview: false,
@@ -403,10 +403,10 @@ export const actions = {
     commit('RESET_PROJECTS_DATA')
   },
   // get every project or initiative
-  setTab({ state, commit, dispatch }, val) {
+  async setTab({ state, commit, dispatch }, val) {
     commit('SET_VALUE', { key: 'tab', val })
     // update initiatives/projects by tab click
-    dispatch('getInitiatives')
+    await dispatch('getInitiatives')
   },
   addFavorite({ state, commit, dispatch }, { id, type }) {
     dispatch('setFavorite', { id, type, action: 'add' })
