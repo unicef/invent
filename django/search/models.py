@@ -43,8 +43,6 @@ class ProjectSearch(ExtendedModel):
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
         "ic": "innovation_categories",  # eg: ic=1&ic=2
         "portfolio": "project__review_states",  # eg: portfolio=1
-        "sp": "project__review_states__scale_phase",  # eg: sp=1
-        "ps": "project__review_states__psa",  # eg: ps=1
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -113,13 +111,17 @@ class ProjectSearch(ExtendedModel):
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
                     elif field == "portfolio":
-                        approved = not query_params.get('review', False)
+                        filter_params = dict(scale_phase=query_params.get('sp'),
+                                             portfolio_id=query_params.get('portfolio'),
+                                             psa=query_params.get('ps'),
+                                             approved=not query_params.get('review', False))
+                        pps_filter_params = {k: v for k, v in filter_params.items() if v is not None}
                         lookup_param = "in"
-                        lookup = list(ProjectPortfolioState.objects.filter(
-                            portfolio_id=query_params.get(field), approved=approved).values_list('pk', flat=True))
-                    elif field in ["sp", "ps"]:
-                        lookup_param = "exact"
-                        lookup = query_params.get(field)
+                        lookup = list(ProjectPortfolioState.objects.filter(**pps_filter_params)
+                                      .values_list('pk', flat=True))
+                        
+                        if not lookup:
+                            return queryset.none()
 
                     queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
         return queryset
