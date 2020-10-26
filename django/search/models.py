@@ -119,7 +119,7 @@ class ProjectSearch(ExtendedModel):
                         lookup_param = "in"
                         lookup = list(ProjectPortfolioState.objects.filter(**pps_filter_params)
                                       .values_list('pk', flat=True))
-                        
+
                         if not lookup:
                             return queryset.none()
 
