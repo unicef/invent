@@ -198,7 +198,7 @@ class PortfolioQuerySet(ActiveQuerySet, PortfolioManager):
 
 
 class Portfolio(ExtendedNameOrderedSoftDeletedModel):
-    description = models.CharField(max_length=511)
+    description = models.CharField(max_length=1000)
     icon = models.CharField(max_length=3, blank=True)
     managers = models.ManyToManyField(UserProfile, related_name="portfolios", blank=True)
     STATUS_DRAFT = 'DR'
