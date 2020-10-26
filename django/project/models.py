@@ -1,6 +1,5 @@
 import uuid
 from collections import namedtuple
-from typing import List, Union
 
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
@@ -217,13 +216,11 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
     )
     objects = PortfolioQuerySet.as_manager()
 
-    def get_ambition_matrix(self, project_ids: Union[List[int], None] = None):
+    def get_ambition_matrix(self):
         """
         Returns with a list of coordinates and assigned project ids for the risk impact matrix
         """
         filtered_reviews = self.review_states.filter(approved=True)
-        if project_ids:
-            filtered_reviews = filtered_reviews.filter(project_id__in=project_ids)
         if not filtered_reviews:
             return None  # pragma: no cover
 
@@ -244,13 +241,11 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             blob['projects'].sort()
         return blob_list
 
-    def get_risk_impact_matrix(self, project_ids: Union[List[int], None] = None):
+    def get_risk_impact_matrix(self):
         """
         Returns with a list of coordinates and assigned project ids for the risk-impact matrix
         """
         filtered_reviews = self.review_states.filter(approved=True)
-        if project_ids:
-            filtered_reviews = filtered_reviews.filter(project_id__in=project_ids)
         if not filtered_reviews:
             return None  # pragma: no cover
 
@@ -270,7 +265,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
             blob['projects'].sort()
         return blob_list
 
-    def get_problem_statement_matrix(self, project_ids: Union[List[int], None] = None):
+    def get_problem_statement_matrix(self):
         tresholds = settings.PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS
 
         neglected_filter = Q(num_projects__lt=tresholds['MODERATE'])
@@ -280,8 +275,6 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         when_statement = dict(
             projectportfoliostate__approved=True,
             then=F('projectportfoliostate__id'))
-        if project_ids:
-            when_statement.update(dict(projectportfoliostate__project_id__in=project_ids))
 
         base_qs = self.problem_statements.annotate(num_projects=Count(Case(When(**when_statement),
                                                    output_field=IntegerField()), distinct=True))

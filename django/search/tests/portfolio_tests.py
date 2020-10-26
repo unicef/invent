@@ -398,10 +398,13 @@ class PortfolioSearchTests(PortfolioSetup):
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
+        # matrixes always display data related to the COMPLETE portfolio!
         self.assertEqual(response.json()['results']['ambition_matrix'],
-                         [{'x': 5, 'y': 5, 'projects': [new_project_id], 'ratio': 1.0}])
+                         [{'x': 5, 'y': 5, 'projects': [self.project2_id, self.project4_id, new_project_id],
+                           'ratio': 1.0}])
         self.assertEqual(response.json()['results']['risk_impact_matrix'],
-                         [{'x': 5, 'y': 5, 'projects': [new_project_id], 'ratio': 1.0}])
+                         [{'x': 5, 'y': 5, 'projects': [self.project2_id, self.project4_id, new_project_id],
+                           'ratio': 1.0}])
         ps1 = ProblemStatement.objects.get(name="PS 1", portfolio_id=self.portfolio_id)
         ps2 = ProblemStatement.objects.get(name="PS 2", portfolio_id=self.portfolio_id)
         self.assertEqual(response.json()['results']['problem_statement_matrix'],
