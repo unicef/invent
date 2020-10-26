@@ -478,6 +478,9 @@ export default {
           position: relative;
           top: 0;
           right: 0;
+          margin: 6px 0;
+          width: 100%;
+          text-align: center;
         }
       }
     }

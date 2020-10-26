@@ -77,7 +77,9 @@ export default {
     ...mapGetters({}),
   },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.setTab(1)
+  },
   methods: {
     ...mapActions({
       setTab: 'portfolio/setTab',

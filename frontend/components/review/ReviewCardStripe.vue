@@ -36,8 +36,8 @@ export default {
       setCurrentProjectReview: 'projects/setCurrentProjectReview',
     }),
     handleReview(review) {
-      this.setReviewDialog(true)
       this.setCurrentProjectReview(review)
+      this.setReviewDialog(true)
     },
   },
 }
