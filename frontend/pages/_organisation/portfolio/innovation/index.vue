@@ -68,13 +68,19 @@
               <p class="summary">
                 {{ portfolio.description }}
               </p>
-              <template v-if="false">
+              <template
+                v-if="portfolio.managers && portfolio.managers.length > 0"
+              >
                 <div class="col-title">
                   <translate>Contact person</translate>
                 </div>
-                <div class="contact">
-                  Edson Monteiro <br />
-                  <a href="mailto:emonterio@unicef.org">emonterio@unicef.org</a>
+                <div
+                  v-for="{ email, name } in portfolio.managers"
+                  :key="portfolio.id + name"
+                  class="contact"
+                >
+                  {{ name }} <br />
+                  <a :href="`mailto:${email}`">{{ email }}</a>
                 </div>
               </template>
             </el-col>
@@ -201,7 +207,6 @@ p {
         line-height: 23px;
       }
       .summary {
-        height: 189px;
         color: @colorTextPrimary;
         font-size: 14px;
         letter-spacing: -0.25px;
@@ -210,7 +215,9 @@ p {
       }
       .contact {
         font-size: 14px;
+        margin-bottom: 20px;
         a {
+          text-decoration: none;
           color: @colorBrandPrimary;
         }
       }
