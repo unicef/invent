@@ -209,6 +209,7 @@ export const actions = {
         status: status(i.status),
         description: i.description,
         ps: i.problem_statements,
+        managers: i.managers,
         icon,
       }
     })
