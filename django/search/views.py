@@ -205,7 +205,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
                 results.update(
                     ambition_matrix=portfolio.get_ambition_matrix(project_ids),
                     risk_impact_matrix=portfolio.get_risk_impact_matrix(project_ids),
-                    problem_statement_matrix=portfolio.get_problem_statement_matrix(project_ids))
+                    problem_statement_matrix=portfolio.get_problem_statement_matrix())
 
             page = self.paginate_queryset(qs)
 
