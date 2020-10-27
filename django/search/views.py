@@ -201,10 +201,10 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         elif results_type == 'portfolio':
             if 'scores' in query_params and portfolio_page not in ["inventory", "review"]:
                 portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio_id)
-                # project_ids = qs.values_list('project_id', flat=True)
+                project_ids = qs.values_list('project_id', flat=True)
                 results.update(
-                    ambition_matrix=portfolio.get_ambition_matrix(),
-                    risk_impact_matrix=portfolio.get_risk_impact_matrix(),
+                    ambition_matrix=portfolio.get_ambition_matrix(project_ids),
+                    risk_impact_matrix=portfolio.get_risk_impact_matrix(project_ids),
                     problem_statement_matrix=portfolio.get_problem_statement_matrix())
 
             page = self.paginate_queryset(qs)
