@@ -536,6 +536,9 @@ class ProjectImportV2(ExtendedModel):
     class Meta:
         unique_together = ('user', 'filename', 'sheet_name')
 
+    def __str__(self):  # pragma: no cover
+        return self.filename if self.filename else self.pk
+
 
 class ImportRow(models.Model):
     data = JSONField(default=dict)
