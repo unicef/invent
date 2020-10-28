@@ -30,9 +30,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import SubLevelMarker from './SubLevelMarker'
-import CountryCenterMarker from './CountryCenterMarker'
-import GeoJsonLayer from './GeoJsonLayer'
+import SubLevelMarker from '@/components/common/map/SubLevelMarker'
+import CountryCenterMarker from '@/components/common/map/CountryCenterMarker'
+import GeoJsonLayer from '@/components/common/map/GeoJsonLayer'
 
 export default {
   components: {
@@ -86,6 +86,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      // related
       getSubLevelDetails: 'countries/getSubLevelDetails',
     }),
     subLevelPinsAndMapReady() {

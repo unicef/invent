@@ -20,11 +20,11 @@ export default {
   props: {
     x: {
       type: Number,
-      required: true,
+      default: 0,
     },
     y: {
       type: Number,
-      required: true,
+      default: 0,
     },
     ratio: {
       type: Number,

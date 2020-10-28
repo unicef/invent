@@ -5,8 +5,8 @@
     }`"
     @click="update"
   >
-    <i v-show="trueValue" class="fas fa-check-circle" />
-    <i v-show="!trueValue" class="far fa-circle" />
+    <fa v-show="trueValue" :icon="['fas', 'check-circle']" />
+    <fa v-show="!trueValue" :icon="['far', 'circle']" />
     <span>
       <slot />
     </span>

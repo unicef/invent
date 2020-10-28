@@ -75,6 +75,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      // non-related
       getCountryProjects: 'landing/getCountryProjects',
     }),
   },

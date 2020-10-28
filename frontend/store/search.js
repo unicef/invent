@@ -1,6 +1,13 @@
 import { objectToQueryString } from '@/utilities/search'
+import {
+  stateGenerator,
+  gettersGenerator,
+  actionsGenerator,
+  mutationsGenerator,
+} from '@/utilities/map'
 
 export const state = () => ({
+  ...stateGenerator(),
   filter: {
     // ** SEARCH PARAMETERS **
     q: '',
@@ -47,8 +54,12 @@ export const state = () => ({
   },
 })
 
+export const getters = {
+  ...gettersGenerator(),
+}
+
 export const actions = {
-  saveAnswer({ state, commit, dispatch, rootState }, answer) {},
+  ...actionsGenerator(),
   async getSearch({ state, commit, dispatch }) {
     try {
       const query = objectToQueryString(state.filter)
@@ -63,14 +74,15 @@ export const actions = {
           },
         },
       } = await this.$axios.get(`api/search${query}`)
-
       dispatch(
         'matrixes/setPortfolioMatrix',
         { ambition_matrix, risk_impact_matrix, problem_statement_matrix },
         { root: true }
       )
-
       dispatch('portfolio/setProjects', { projects, count }, { root: true })
+      // for map feed
+      commit('projects/SET_USER_PROJECT_LIST', projects, { root: true })
+      dispatch('loadProjectsMap', projects)
     } catch (e) {
       console.error('search failed')
     }
@@ -95,9 +107,13 @@ export const actions = {
     // commit('SET_SEARCH', { key: 'portfolio', val: '' })
     // commit('SET_SEARCH', { key: 'portfolio_page', val: 'inventory' })
   },
+  loadProjectsMap({ state, commit, dispatch }, projects) {
+    commit('SET_PROJECT_MAP', projects)
+  },
 }
 // Reducers
 export const mutations = {
+  ...mutationsGenerator(),
   SET_SEARCH(state, { key, val }) {
     state.filter[key] = val
   },

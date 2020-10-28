@@ -66,31 +66,31 @@ export default {
   computed: {
     ...mapGetters({
       // non related
-      allCountriesPin: 'dashboard/getCountryPins',
-      getActiveCountry: 'dashboard/getActiveCountry',
-      getSelectedCountry: 'dashboard/getSelectedCountry',
-      getCountryProjects: 'dashboard/getCountryProjects',
-      getActiveTab: 'dashboard/getProjectBoxActiveTab',
-      mapProjects: 'dashboard/getProjectsMap',
-      currentZoom: 'dashboard/getCurrentZoom',
+      allCountriesPin: 'search/getCountryPins',
+      getActiveCountry: 'search/getActiveCountry',
+      getSelectedCountry: 'search/getSelectedCountry',
+      getCountryProjects: 'search/getCountryProjects',
+      getActiveTab: 'search/getProjectBoxActiveTab',
+      mapProjects: 'search/getProjectsMap',
+      currentZoom: 'search/getCurrentZoom',
       getSearched: 'dashboard/getSearched',
       // related
       geoJson: 'countries/getGeoJsonLibrary',
-      subLevelPins: 'dashboard/getSubLevelPins',
-      mapReady: 'dashboard/getMapReady',
-      subNationalProjects: 'dashboard/getSelectedCountrySubNationalProjects',
-      nationalProjects: 'dashboard/getSelectedCountryNationalProjects',
+      subLevelPins: 'search/getSubLevelPins',
+      mapReady: 'search/getMapReady',
+      subNationalProjects: 'search/getSelectedCountrySubNationalProjects',
+      nationalProjects: 'search/getSelectedCountryNationalProjects',
     }),
   },
   methods: {
     ...mapActions({
       // non related
-      setCurrentZoom: 'dashboard/setCurrentZoom',
-      setSelectedCountry: 'dashboard/setSelectedCountry',
-      setActiveCountry: 'dashboard/setActiveCountry',
+      setCurrentZoom: 'search/setCurrentZoom',
+      setSelectedCountry: 'search/setSelectedCountry',
+      setActiveCountry: 'search/setActiveCountry',
       // related
-      setMapReady: 'dashboard/setMapReady',
-      setActiveTab: 'dashboard/setProjectBoxActiveTab',
+      setMapReady: 'search/setMapReady',
+      setActiveTab: 'search/setProjectBoxActiveTab',
     }),
   },
 }
