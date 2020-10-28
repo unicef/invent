@@ -7,7 +7,7 @@
   >
     <el-col class="TableExportOptions">
       <el-row type="flex">
-        <el-button size="small" @click="toggleSelectAll">
+        <el-button size="small" type="text" @click="toggleSelectAll">
           <translate v-show="!allSelected" :parameters="{ total }">
             Select all {total} initiatives
           </translate>
@@ -29,7 +29,7 @@
                 <template #default="{ download }">
                   <el-button
                     :disabled="selectedRows.length === 0"
-                    type="primary"
+                    type="text"
                     size="small"
                     class="IconLeft"
                     @click="exportRows(download)"
@@ -59,7 +59,7 @@
           <div class="Separator" />
           <el-button
             :disabled="selectedRows.length === 0"
-            type="primary"
+            type="text"
             size="small"
             class="IconLeft"
             @click="openMailDialog"
@@ -104,7 +104,6 @@
             class="TableSettingsButton IconLeft"
           >
             <fa icon="cog" />
-            <translate>Settings</translate>
           </el-button>
 
           <div class="CustomPopoverList Small ColumnSelector">
@@ -283,8 +282,8 @@ export default {
   width: calc(100vw - @advancedSearchWidth);
   min-width: @appWidthMinLimit - @advancedSearchWidth;
   max-width: @appWidthMaxLimit - @advancedSearchWidth;
-  height: @tableTopActionsHeight;
-  padding: 0 40px;
+  // height: @tableTopActionsHeight;
+  padding: 40px 40px 30px 40px;
 
   .Separator {
     .SeparatorStyle();
@@ -304,7 +303,7 @@ export default {
     }
 
     .el-select {
-      width: 100px;
+      width: 84px;
       margin-left: 10px;
     }
   }
@@ -317,6 +316,7 @@ export default {
       font-size: @fontSizeSmall;
       color: @colorTextSecondary;
       white-space: nowrap;
+      padding-top: 0px;
 
       .svg-inline--fa {
         position: relative;

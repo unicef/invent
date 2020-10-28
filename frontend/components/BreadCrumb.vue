@@ -44,8 +44,8 @@ export default {
         'organisation-admin-donor': this.$gettext('Admin'),
         'organisation-admin-import': this.$gettext('Admin'),
         'organisation-admin-import-id': this.$gettext('Admin'),
-        'organisation-dashboard': this.$gettext('Dashboard'),
-        'organisation-dashboard-list': this.$gettext('Dashboard'),
+        'organisation-inventory': this.$gettext('TIIP Inventory'),
+        'organisation-inventory-list': this.$gettext('TIIP Inventory'),
         'organisation-initiatives': this.$gettext('My initiatives'),
         'organisation-initiatives-id-published': this.$gettext(
           'Published Initiative'
@@ -59,7 +59,6 @@ export default {
         'organisation-initiatives-id-toolkit-scorecard': this.$gettext(
           'Toolkit'
         ),
-        'organisation-inventory': this.$gettext('TIIP Inventory'),
         'organisation-portfolio-innovation': this.$gettext(
           'Innovation Portfolio'
         ),

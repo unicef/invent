@@ -66,7 +66,7 @@
             <nuxt-link
               :to="
                 localePath({
-                  name: 'organisation-dashboard-list',
+                  name: 'organisation-inventory-list',
                   params: $route.params,
                   query: $route.query,
                 })
@@ -81,7 +81,7 @@
             <nuxt-link
               :to="
                 localePath({
-                  name: 'organisation-dashboard',
+                  name: 'organisation-inventory',
                   params: $route.params,
                   query: $route.query,
                 })
@@ -162,7 +162,7 @@ export default {
       return false
     },
     isDashboard() {
-      return this.$route.path.includes('/dashboard')
+      return this.$route.path.includes('/inventory')
     },
     isHome() {
       return this.$route.name.includes('organisation___')
@@ -174,10 +174,10 @@ export default {
       return this.$route.name.includes('organisation-portfolio-innovation-id')
     },
     isMapSubRoute() {
-      return this.$route.name.includes('organisation-dashboard___')
+      return this.$route.name.includes('organisation-inventory___')
     },
     isListSubRoute() {
-      return this.$route.name.includes('organisation-dashboard-list___')
+      return this.$route.name.includes('organisation-inventory-list___')
     },
   },
 }

@@ -17,7 +17,7 @@
         :resizable="false"
         type="selection"
         align="center"
-        width="35"
+        width="45"
       />
       <el-table-column
         v-if="selectedColumns.includes('1')"
@@ -486,7 +486,7 @@ export default {
 @import '~assets/style/mixins.less';
 
 .MainTable {
-  margin: 0 40px;
+  margin: 0 40px 120px;
   max-height: calc(
     100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
       @appFooterHeight - 93px
@@ -500,6 +500,33 @@ export default {
     }
   }
 
+  .favorite {
+    cursor: pointer;
+    position: absolute;
+    top: 32px;
+    left: -32px;
+    svg {
+      font-size: 14px;
+    }
+    .heart-full {
+      color: #c4225f;
+    }
+    .heart-empty {
+      color: @colorBrandGrayLight;
+    }
+  }
+
+  .el-table--border th {
+    border-right: 1px solid @colorWhite;
+  }
+  .el-table--group,
+  .el-table--border {
+    border: 0px solid transparent;
+  }
+  .el-table__body tr.hover-row > td,
+  .el-table__body tr.hover-row.current-row > td {
+    background-color: #e8f6fd;
+  }
   // Custom table template
   .el-table {
     th,
@@ -507,16 +534,28 @@ export default {
       vertical-align: top;
     }
 
+    .caret-wrapper .sort-caret {
+      &.ascending {
+        border-bottom-color: @colorWhite;
+      }
+      &.descending {
+        border-top-color: @colorWhite;
+      }
+    }
+
     th {
+      background-color: @colorBrandPrimary;
       > .cell {
-        line-height: 24px;
-        // truncate long headers
+        font-size: @fontSizeSmall;
+        color: @colorWhite;
+        font-weight: bold;
+        letter-spacing: 0;
+        line-height: 29px;
         white-space: nowrap;
-        //
       }
 
       &.is-leaf {
-        border-bottom-color: @colorTextMuted;
+        border-bottom-color: @colorWhite;
       }
 
       // Disable select-all-row
@@ -528,10 +567,12 @@ export default {
     }
 
     td {
+      padding: 10px 16px 10px 12px;
       > .cell {
+        min-height: 37px;
         line-height: 17px;
         word-break: normal;
-
+        padding: 0;
         p {
           position: relative;
           margin: 0;
@@ -540,17 +581,10 @@ export default {
           -webkit-box-orient: vertical;
           // With 17 in the calc the fixed columns and the rest of the table go out of sync
           max-height: calc(16.5px * 4);
-
-          // &::after {
-          //   content: "";
-          //   text-align: right;
-          //   position: absolute;
-          //   bottom: 0;
-          //   right: 0;
-          //   width: 20%;
-          //   height: 17px;
-          //   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-          // }
+          font-size: @fontSizeSmall;
+          letter-spacing: 0;
+          line-height: 15px;
+          font-weight: 100;
         }
 
         a {
@@ -565,11 +599,7 @@ export default {
     .el-table__row {
       &.Selected {
         > td {
-          background-color: #fffbdc;
-
-          &.el-table-column--selection {
-            box-shadow: inset 2px 0 0 #fbc02d;
-          }
+          background-color: #e8f6fd;
         }
       }
     }
@@ -582,7 +612,7 @@ export default {
 
     .caret-wrapper {
       position: absolute;
-      top: 1px;
+      top: 4px;
       right: 4px;
     }
 
@@ -599,14 +629,6 @@ export default {
 
     .ProjectCard {
       overflow: visible;
-
-      .ProjectName {
-        padding-right: 12px;
-      }
-
-      .ProjectCountryOrg {
-        margin-top: 4px;
-      }
 
       .ProjectLegend {
         top: 1px;
@@ -638,7 +660,9 @@ export default {
       .CountryName {
         margin: 0;
         font-size: @fontSizeSmall;
-        line-height: inherit;
+        letter-spacing: 0;
+        line-height: 15px;
+        font-weight: 100;
       }
     }
 
@@ -671,17 +695,11 @@ export default {
 
         li {
           position: relative;
-
+          display: flex;
+          align-items: center;
           > span {
-            &:first-child {
-              position: absolute;
-              left: 0;
-              top: 0;
-            }
-
             &:last-child {
-              display: block;
-              padding-left: 15px;
+              margin-left: 6px;
               .textTruncate();
             }
           }
@@ -699,9 +717,8 @@ export default {
     height: 53px;
     //
     box-sizing: border-box;
-    border: solid @colorGrayLight;
-    border-width: 1px 1px 2px;
-    background-color: @colorBrandBlueLight;
+    border-top: 1px solid @colorGrayLight;
+    background-color: @colorWhite;
     text-align: right;
 
     .el-pagination {
@@ -718,17 +735,14 @@ export default {
         margin: 0 10px;
         font-size: @fontSizeSmall;
         color: @colorTextSecondary;
+        letter-spacing: 0;
+        line-height: 15px;
       }
 
       button {
         padding: 0;
         background-color: transparent;
         transition: @transitionAll;
-
-        &:hover {
-          background-color: lighten(@colorBrandBlueLight, 3%);
-        }
-
         i {
           font-size: @fontSizeLarge;
           font-weight: 700;
