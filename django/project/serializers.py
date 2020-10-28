@@ -26,6 +26,7 @@ class PartnerSerializer(serializers.Serializer):
 
     partner_type = serializers.ChoiceField(choices=PARTNER_TYPE)
     partner_name = serializers.CharField(max_length=100)
+    partner_contact = serializers.CharField(max_length=100, required=False)
     partner_email = serializers.EmailField(required=False)
     partner_website = serializers.URLField(required=False)
 
