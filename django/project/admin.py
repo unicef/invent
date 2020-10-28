@@ -8,7 +8,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, HardwarePlatform, NontechPlatform, \
-    PlatformFunction, Portfolio, InnovationCategory, CPD
+    PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, ImportRow
 from core.utils import make_admin_list
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -201,6 +201,14 @@ class CPDAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
+class ProjectImportAdmin(admin.ModelAdmin):
+    pass
+
+
+class ProjectImportRowAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
@@ -222,3 +230,5 @@ admin.site.register(NontechPlatform, NontechPlatformAdmin)
 admin.site.register(PlatformFunction, PlatformFunctionAdmin)
 admin.site.register(InnovationCategory, InnovationCategoryAdmin)
 admin.site.register(CPD, CPDAdmin)
+admin.site.register(ProjectImportV2, ProjectImportAdmin)
+admin.site.register(ImportRow, ProjectImportRowAdmin)
