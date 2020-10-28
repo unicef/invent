@@ -3,7 +3,7 @@
     <div class="title">
       <slot name="title" />
     </div>
-    <div class="tabs">
+    <div :class="`tabs ${center && 'center'}`">
       <p
         v-for="item in tabs"
         :key="item.id"
@@ -12,7 +12,9 @@
       >
         <fa :icon="item.icon" />
         {{ $gettext(item.name) | translate }}
-        {{ ` (${item.total})` }}
+        <template v-if="item.total">
+          {{ ` (${item.total})` }}
+        </template>
       </p>
     </div>
   </div>
@@ -28,6 +30,10 @@ export default {
     tab: {
       type: Number,
       required: true,
+    },
+    center: {
+      type: Boolean,
+      default: true,
     },
   },
 }
@@ -65,8 +71,10 @@ export default {
   }
   .tabs {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    &.center {
+      align-items: center;
+      justify-content: center;
+    }
     p {
       cursor: pointer;
       color: @colorBrandGrayDark;
@@ -75,14 +83,18 @@ export default {
       letter-spacing: 0;
       line-height: 18px;
       padding-bottom: 17px;
-      margin: 0 15px;
+      margin: 0 32px 0 0;
       border-bottom: 3px solid transparent;
       svg {
         margin-right: 8px;
+        color: #a8a8a9;
       }
       &.active {
         color: @colorTextPrimary;
         border-bottom: 3px solid @colorBrandPrimary;
+        svg {
+          color: @colorTextPrimary;
+        }
       }
     }
   }

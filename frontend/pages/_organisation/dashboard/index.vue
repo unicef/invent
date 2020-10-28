@@ -8,8 +8,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
-import DashboardMap from '../../../components/dashboard/DashboardMap'
-import DashboardProjectBox from '../../../components/dashboard/DashboardProjectBox'
+import DashboardMap from '@/components/dashboard/DashboardMap'
+import DashboardProjectBox from '@/components/dashboard/DashboardProjectBox'
 export default {
   components: {
     DashboardMap,

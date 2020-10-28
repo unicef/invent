@@ -15,20 +15,22 @@ const MapMixin = {
   },
   computed: {
     ...mapGetters({
+      // related
       allCountriesPin: 'landing/getCountryPins',
       getActiveCountry: 'landing/getActiveCountry',
-      geoJson: 'countries/getGeoJsonLibrary',
       getSelectedCountry: 'landing/getSelectedCountry',
-      subLevelPins: 'landing/getSubLevelPins',
       getCountryProjects: 'landing/getCountryProjects',
       mapReady: 'landing/getMapReady',
       getActiveTab: 'landing/getProjectBoxActiveTab',
       getActiveSubLevel: 'landing/getActiveSubLevel',
-      subNationalProjects: 'landing/getSelectedCountrySubNationalProjects',
-      nationalProjects: 'landing/getSelectedCountryNationalProjects',
       mapProjects: 'landing/getProjectsMap',
       currentZoom: 'landing/getCurrentZoom',
       getSearched: 'landing/getSearched',
+      // non related
+      geoJson: 'countries/getGeoJsonLibrary',
+      subLevelPins: 'landing/getSubLevelPins',
+      subNationalProjects: 'landing/getSelectedCountrySubNationalProjects',
+      nationalProjects: 'landing/getSelectedCountryNationalProjects',
     }),
     isSearched() {
       return !!this.getSearched

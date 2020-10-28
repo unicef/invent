@@ -2,109 +2,96 @@
   <section class="portfolio-area">
     <div class="content-area">
       <div class="portfolio">
-        <div class="PHeader">
-          <h2>
-            <translate>Portfolio</translate>:
-            <el-dropdown
-              trigger="click"
-              placement="bottom-start"
-              @command="navigate"
-            >
-              <span class="Title el-dropdown-link">
-                {{ name }} <i class="el-icon-caret-bottom el-icon--right" />
-              </span>
-              <el-dropdown-menu slot="dropdown" class="PDropdown">
-                <el-dropdown-item
-                  v-for="portfolio in portfolios"
-                  :key="portfolio.id"
-                  :command="portfolio.id"
+        <!-- tabs -->
+        <tabs :tabs="tabs" :tab="tab" :center="false" @handleTab="setTab">
+          <template slot="title">
+            <div class="PHeader">
+              <h2>
+                <translate>Portfolio</translate>:
+                <el-dropdown
+                  trigger="click"
+                  placement="bottom-start"
+                  @command="navigate"
                 >
-                  {{ portfolio.name }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </h2>
-        </div>
-        <el-tabs v-model="activeName">
-          <el-tab-pane
-            :label="$gettext('AMBITION MATRIX') | translate"
-            name="ambition"
-          >
-            <Matrix
-              ref="ambitionMatrix"
-              bg-image="/bg-ambition_matrix.svg"
-              :description="description"
-              :elements="ambitionMatrix"
-              :left="matrixLabels.ambition.left"
-              :bottom="matrixLabels.ambition.bottom"
-              :contacts="managers"
-            />
-          </el-tab-pane>
-          <el-tab-pane
-            :label="$gettext('RISK-IMPACT MATRIX') | translate"
-            name="risk"
-          >
-            <Matrix
-              ref="riskMatrix"
-              bg-color="#FCEFE8"
-              color="#F26A21"
-              noarrow
-              :description="description"
-              :elements="riskImpactMatrix"
-              :left="matrixLabels.riskImpact.left"
-              :bottom="matrixLabels.riskImpact.bottom"
-              :contacts="managers"
-              extra-bottom="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
-              extra-left="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
-            />
-          </el-tab-pane>
-          <el-tab-pane
-            :label="$gettext('PROBLEM STATEMENT MATRIX') | translate"
-            name="problem"
-          >
-            <div class="Problems">
-              <el-row type="flex">
-                <el-col
-                  v-for="(col, index) in matrixLabels.problemStatement"
-                  :key="col"
-                  :span="8"
-                >
-                  <div :class="`Problem Problem${index + 1}`">
-                    <div class="Title">
-                      {{ col }}
-                    </div>
-                    <div>
-                      <radio
-                        v-for="statement in problemStatementMatrix[index]"
-                        :key="statement.id"
-                        :value="ps === statement.id"
-                        :disabled="
-                          disabledProblems.indexOf(statement.id) !== -1
-                        "
-                        @update="select(statement.id, $event)"
-                      >
-                        {{ statement.title }}
-                      </radio>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
-              <el-row>
-                <div class="Info">
-                  <i class="fas fa-info-circle" />
-                  <translate>
-                    By clicking on a problem statement you can add or remove it
-                    from your current filter settings.
-                  </translate>
-                </div>
-              </el-row>
+                  <span class="Title el-dropdown-link">
+                    {{ name }} <i class="el-icon-caret-bottom el-icon--right" />
+                  </span>
+                  <el-dropdown-menu slot="dropdown" class="PDropdown">
+                    <el-dropdown-item
+                      v-for="portfolio in portfolios"
+                      :key="portfolio.id"
+                      :command="portfolio.id"
+                    >
+                      {{ portfolio.name }}
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </h2>
             </div>
-          </el-tab-pane>
-          <el-tab-pane :label="$gettext('MAP VIEW') | translate" name="map">
-            TODO
-          </el-tab-pane>
-        </el-tabs>
-
+          </template>
+        </tabs>
+        <section class="tab-content">
+          <Matrix
+            v-show="tab === 1"
+            ref="ambitionMatrix"
+            bg-image="/bg-ambition_matrix.svg"
+            :description="description"
+            :elements="ambitionMatrix"
+            :left="matrixLabels.ambition.left"
+            :bottom="matrixLabels.ambition.bottom"
+          />
+          <Matrix
+            v-show="tab === 2"
+            ref="riskMatrix"
+            bg-color="#FCEFE8"
+            color="#F26A21"
+            noarrow
+            :description="description"
+            :elements="riskImpactMatrix"
+            :left="matrixLabels.riskImpact.left"
+            :bottom="matrixLabels.riskImpact.bottom"
+            extra-bottom="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
+            extra-left="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
+          />
+          <div v-if="tab === 3" class="Problems">
+            <el-row type="flex">
+              <el-col
+                v-for="(col, index) in matrixLabels.problemStatement"
+                :key="col"
+                :span="8"
+              >
+                <div :class="`Problem Problem${index + 1}`">
+                  <div class="Title">
+                    {{ col }}
+                  </div>
+                  <div>
+                    <radio
+                      v-for="statement in problemStatementMatrix[index]"
+                      :key="statement.id"
+                      :value="ps === statement.id"
+                      :disabled="disabledProblems.indexOf(statement.id) !== -1"
+                      @update="select(statement.id, $event)"
+                    >
+                      {{ statement.title }}
+                    </radio>
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <div class="Info">
+                <!-- <i class="fas fa-info-circle" /> -->
+                <fa icon="info-circle" />
+                <translate>
+                  By clicking on a problem statement you can add or remove it
+                  from your current filter settings.
+                </translate>
+              </div>
+            </el-row>
+          </div>
+          <search-map v-if="tab === 4" />
+        </section>
+        <!-- tabs -->
         <div class="DashboardListView">
           <el-row>
             <table-top-actions />
@@ -127,6 +114,9 @@ import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
 import AdvancedSearch from '@/components/search/AdvancedSearch'
 import Matrix from '@/components/portfolio/Matrix'
 import Radio from '@/components/portfolio/form/inputs/Radio'
+import SearchMap from '@/components/searchMap/SearchMap'
+import Tabs from '@/components/common/Tabs'
+
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -136,6 +126,8 @@ export default {
     MainTable,
     AdvancedSearch,
     TableTopActions,
+    SearchMap,
+    Tabs,
   },
   data() {
     return {
@@ -172,6 +164,30 @@ export default {
           ],
         },
       },
+      // tabs information handle
+      tabs: [
+        {
+          id: 1,
+          name: this.$gettext('ambition matrix'),
+          icon: 'braille',
+        },
+        {
+          id: 2,
+          name: this.$gettext('risk-impact matrix'),
+          icon: 'th',
+        },
+        {
+          id: 3,
+          name: this.$gettext('problem statement matrix'),
+          icon: 'columns',
+        },
+        {
+          id: 4,
+          name: this.$gettext('map view'),
+          icon: 'globe-africa',
+        },
+      ],
+      tab: 1,
     }
   },
   async fetch({ store, query, error, params }) {
@@ -194,6 +210,8 @@ export default {
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('portfolio/getPortfolioDetails', params.id),
       store.dispatch('search/getSearch'),
+      // map
+      store.dispatch('countries/loadMapData'),
     ])
   },
 
@@ -206,7 +224,6 @@ export default {
       riskImpactMatrix: 'matrixes/getRiskImpactMatrix',
       problemStatementMatrix: 'matrixes/getProblemStatementMatrix',
       name: 'portfolio/getName',
-      managers: 'portfolio/getManagers',
       description: 'portfolio/getDescription',
       portfolios: 'portfolio/getActivePortfolios',
     }),
@@ -227,6 +244,9 @@ export default {
       this.$store.commit('search/SET_SEARCH', { key: 'ps', val })
       this.$store.dispatch('search/getSearch')
     },
+    setTab(id) {
+      this.tab = id
+    },
   },
 }
 </script>
@@ -234,6 +254,12 @@ export default {
 <style lang="less" scoped>
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
+
+.tab-content {
+  padding: 40px;
+  background-color: #fbfaf8;
+}
+
 .portfolio-area::v-deep {
   .move {
     display: none;
@@ -248,83 +274,12 @@ section.portfolio-area {
     position: absolute;
   }
 }
-
 .portfolio {
-  //margin: 0 40px 160px 40px;
   margin-bottom: 80px;
   .PHeader {
-    padding: 0 40px;
     background-color: white;
   }
-  &::v-deep .el-tabs {
-    .el-tabs__header {
-      padding: 0 40px;
-      background-color: white;
-    }
-    .el-tabs__nav-wrap::after {
-      background-color: transparent;
-    }
-    .el-tabs__active-bar {
-      height: 3px;
-      background-color: #1cabe2;
-    }
-    .el-tabs__content {
-      margin: 0 40px;
-      padding-top: 40px;
-    }
-    .el-tabs__item {
-      color: #777779;
-      &.is-active,
-      &:hover {
-        color: #404041;
-      }
-      &:hover {
-        font-weight: bold;
-      }
-    }
-  }
-  &::v-deep .el-tabs__nav {
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 0;
-    line-height: 18px;
 
-    & > div:before {
-      font-family: 'Font Awesome 5 Free';
-      -moz-osx-font-smoothing: grayscale;
-      -webkit-font-smoothing: antialiased;
-      display: inline-block;
-      font-style: normal;
-      font-feature-settings: normal;
-      font-variant: normal;
-      text-rendering: auto;
-      line-height: 1;
-      font-weight: 900;
-      margin-right: 8px;
-    }
-    & > div:first-child {
-      & + div {
-        &:before {
-          content: '\f2a1';
-        }
-      }
-      & + div + div {
-        &:before {
-          content: '\f00a';
-        }
-      }
-      & + div + div + div {
-        &:before {
-          content: '\f0db';
-        }
-      }
-      & + div + div + div + div {
-        &:before {
-          content: '\f57c';
-        }
-      }
-    }
-  }
   span.Title {
     display: inline-block;
     cursor: pointer;
@@ -336,7 +291,6 @@ section.portfolio-area {
   }
   h2 {
     margin: 0;
-    padding: 50px 0 24px 0;
     height: 45px;
     color: #1cabe2;
     font-size: 36px;
