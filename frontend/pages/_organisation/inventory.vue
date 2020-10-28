@@ -12,7 +12,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import AdvancedSearch from '../../components/dashboard/AdvancedSearch'
+import AdvancedSearch from '@/components/dashboard/AdvancedSearch'
 
 export default {
   components: {

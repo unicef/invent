@@ -23,13 +23,6 @@
         :placeholder="$gettext('Innovation Category') | translate"
         @change="handleSearch('ic', $event)"
       />
-      <!-- <filter-select
-        :value="partner"
-        :items="partners"
-        multiple
-        :placeholder="$gettext('Partners') | translate"
-        @change="handleSearch('partner', $event)"
-      /> -->
       <filter-select
         :value="goal"
         :items="goalAreas"

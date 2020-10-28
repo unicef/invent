@@ -231,20 +231,28 @@ export default {
 .AdvancedSearch {
   box-sizing: border-box;
   width: @advancedSearchWidth;
-  // TODO
   min-height: 100%;
-  border-left: 1px solid @colorGrayLight;
+  border-left: 1px solid #eae6e1;
   background-color: @colorWhite;
-
-  // search filters blocks
   > div {
     padding: 20px;
-    border-bottom: 1px solid @colorGrayLight;
-
+    border-bottom: 1px solid #eae6e1;
+    .el-select {
+      margin-bottom: 12px;
+      .el-select__tags {
+        overflow: hidden;
+      }
+    }
+    .el-input {
+      .el-input__inner {
+        border-color: #a8a8a9;
+      }
+    }
     &:last-child {
       border: 0;
     }
   }
+
   .MultiSelectorFilter {
     margin: 10px 0;
   }

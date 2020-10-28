@@ -39,7 +39,6 @@ import MainTable from '@/components/portfolio/dashboard/MainTable'
 import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
 import Tabs from '@/components/common/Tabs'
 import { mapState, mapGetters, mapActions } from 'vuex'
-// import debounce from 'lodash/debounce'
 // dialogs
 import Error from '@/components/portfolio/dashboard/dialog/Error'
 

@@ -598,7 +598,7 @@ export default {
     },
     routeToDashboard(locale) {
       const path = this.localePath(
-        { name: 'organisation-dashboard-list', params: this.$route.params },
+        { name: 'organisation-inventory-list', params: this.$route.params },
         locale
       )
       this.$router.push(path)
