@@ -119,7 +119,7 @@ class FieldOffice(InvalidateCacheMixin, models.Model):
 
 
 class Currency(InvalidateCacheMixin, models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=40)
     code = models.CharField(max_length=8)
 
     def __str__(self):  # pragma: no cover

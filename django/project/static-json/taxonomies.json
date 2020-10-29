@@ -1,0 +1,1274 @@
+{
+    "UNICEF Sector": [
+        "- NA",
+        "Adolescents",
+        "C4D",
+        "Child Protection",
+        "Children with Disabilities",
+        "Climate Change & Environment",
+        "Communications",
+        "Disaster Risk Reduction (DRR)",
+        "Early Childhood Development (ECD)",
+        "Education",
+        "Emergency",
+        "Evaluation",
+        "Fundraising",
+        "Gender",
+        "HACT",
+        "Health",
+        "HIV & AIDS",
+        "Human Resources",
+        "ICT",
+        "Immunization",
+        "Nutrition",
+        "Operations",
+        "Partnerships",
+        "Planning and Monitoring",
+        "Polio",
+        "Social Inclusion",
+        "Social Policy",
+        "Supply",
+        "WASH"
+    ],
+    "Regional Priorities": [
+        "EAPR 1.1 - Maternal, newborn and child healthcare services",
+        "EAPR 1.2 - Preventive and curative nutrition services",
+        "EAPR 1.3 - Positive parenting and care practices",
+        "EAPR 1.4 - ECD",
+        "EAPR 1.5 - Quality learning in and out of school",
+        "EAPR 1.6 - Multi-dimensional child poverty and social protection",
+        "EAPR 2.10 - Children and adolescent participation in climate action",
+        "EAPR 2.11 - DRR and social cohesion",
+        "EAPR 2.12 - Access to justice",
+        "EAPR 2.7 - Urban inequities",
+        "EAPR 2.8 - Safe drinking water and basic sanitation",
+        "EAPR 2.9 - Indoor and ambient pollution",
+        "EAPR 3.13 - Adolescent learning outcomes",
+        "EAPR 3.14 - Gender responsive adolescent health and nutrition",
+        "EAPR 3.15 - Prevention and protection from violence",
+        "EAPR 3.16 - Child pregnancies and child marriage",
+        "EAPR 3.17 - Safe spaces for participation, creativity and self-expression",
+        "EAPR 3.18 - Safe access to and responsible use of ICT",
+        "ECAR 1.1 - Children\u2019s right to health and well-being",
+        "ECAR 1.2 - Children\u2019s rights to be born and remain free of HIV",
+        "ECAR 2.1 - Children\u2019s right to inclusive quality education and early learning",
+        "ECAR 3.1 - Children\u2019s rights to a supportive family environment and to be protected from violence",
+        "ECAR 3.2 - Children\u2019s right to accessing justice",
+        "ECAR 4.1 \u2013 A second chance for adolescents",
+        "ECAR 5.1 - Children and their caregivers benefit from a strengthened protective environment",
+        "ECAR 5.2 - Children access inclusive formal and/or non-formal education",
+        "ECAR 5.3 - Child Rights Monitoring",
+        "ESAR 1.1 - Neonatal and maternal care (integrated with services to eliminate new HIV infections in children)",
+        "ESAR 1.2 - Under-five child mortality reduction, with a focus on the first two years of life",
+        "ESAR 1.3 - Expanded Programme on Immunization (EPI) and polio eradication",
+        "ESAR 1.4 - Health emergencies: early detection and control of epidemics, while ensuring continuity of reproductive, maternal, neonatal and child health services",
+        "ESAR 1.5 - Early childhood development (nurturing and parental practices)",
+        "ESAR 1.6 - Birth registration",
+        "ESAR 1.7 - Water, sanitation and hygiene (WASH) in health facilities",
+        "ESAR 2.1 - Maternal, infant and young child nutrition (MIYCN), and micronutrient supplementation",
+        "ESAR 2.2 - Management of severe acute malnutrition (SAM) and nutrition in emergencies",
+        "ESAR 2.3 - Water and sanitation in communities",
+        "ESAR 3.1 - Early learning and early primary education: building the foundations for learning",
+        "ESAR 3.2 - In school and learning",
+        "ESAR 3.3 - Learning for children who are out of school",
+        "ESAR 3.4 - Water, sanitation, and hygiene (WASH) in schools",
+        "ESAR 4.1 - Increasing utilization of HIV prevention, treatment and care services for adolescents",
+        "ESAR 4.2 - Reduction in violence against children",
+        "ESAR 4.3 - Eliminating child marriage and female genital mutilation/cutting (FGM/C)",
+        "ESAR 5.1 - Designing social protection legislation, policies and strategies",
+        "ESAR 5.2 - Building effective and child-sensitive social protection systems",
+        "ESAR 5.3 - Financing social protection",
+        "ESAR 5.4 - Scalable and shock-responsive social protection systems and programmes",
+        "ESAR 5.5 - Cash Plus and beyond cash",
+        "WCAR 1 - Immunization Plus",
+        "WCAR 2 - Prevention of Stunting",
+        "WCAR 3 - Equitable and Sustainable Access to Education",
+        "WCAR 4 - Improved Learning Outcomes",
+        "WCAR 5 - Protection of Children from exploitation and violence,",
+        "WCAR 6 - Child Marriage and Female Genital Mutilation/Cutting",
+        "WCAR 7 - Birth Registration",
+        "WCAR 8 - Open Defecation and sustainable access to hygiene and sanitation"
+    ],
+    "If this is an innovation initiative, in which way is it innovative?": [
+        "- NA",
+        "Uses an entirely new tool or approach",
+        "Brings a tool or approach to a new target group or population ",
+        "Significantly improves our ability to deliver (e.g., much faster or cheaper than existing alternatives)"
+    ],
+    "UNICEF Innovation Categories": [
+        "- NA",
+        "Digital Innovation",
+        "Frugal Innovation",
+        "Innovative Financing",
+        "Physical Product Innovation",
+        "Programme Innovation"
+    ],
+    "In Country programme document (CPD) and annual work plan?": [
+        "- NA",
+        "- No",
+        "2006",
+        "2007",
+        "2008",
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+    ],
+    "Currency": [
+        {
+            "code": "- USD",
+            "name": "US Dollar"
+        },
+        {
+            "code": "AFN",
+            "name": "Afghani"
+        },
+        {
+            "code": "DZD",
+            "name": "Algerian Dinar"
+        },
+        {
+            "code": "ARS",
+            "name": "Argentine Peso"
+        },
+        {
+            "code": "AMD",
+            "name": "Armenian Dram"
+        },
+        {
+            "code": "AWG",
+            "name": "Aruban Florin"
+        },
+        {
+            "code": "AUD",
+            "name": "Australian Dollar"
+        },
+        {
+            "code": "AZN",
+            "name": "Azerbaijan Manat"
+        },
+        {
+            "code": "BSD",
+            "name": "Bahamian Dollar"
+        },
+        {
+            "code": "BHD",
+            "name": "Bahraini Dinar"
+        },
+        {
+            "code": "THB",
+            "name": "Baht"
+        },
+        {
+            "code": "PAB",
+            "name": "Balboa"
+        },
+        {
+            "code": "BBD",
+            "name": "Barbados Dollar"
+        },
+        {
+            "code": "BYN",
+            "name": "Belarusian Ruble"
+        },
+        {
+            "code": "BZD",
+            "name": "Belize Dollar"
+        },
+        {
+            "code": "BMD",
+            "name": "Bermudian Dollar"
+        },
+        {
+            "code": "XBT",
+            "name": "Bitcoin"
+        },
+        {
+            "code": "VES",
+            "name": "Bol\u00edvar Soberano"
+        },
+        {
+            "code": "BOB",
+            "name": "Boliviano"
+        },
+        {
+            "code": "BRL",
+            "name": "Brazilian Real"
+        },
+        {
+            "code": "BND",
+            "name": "Brunei Dollar"
+        },
+        {
+            "code": "BGN",
+            "name": "Bulgarian Lev"
+        },
+        {
+            "code": "BIF",
+            "name": "Burundi Franc"
+        },
+        {
+            "code": "CVE",
+            "name": "Cabo Verde Escudo"
+        },
+        {
+            "code": "CAD",
+            "name": "Canadian Dollar"
+        },
+        {
+            "code": "KYD",
+            "name": "Cayman Islands Dollar"
+        },
+        {
+            "code": "XOF",
+            "name": "CFA Franc BCEAO"
+        },
+        {
+            "code": "XAF",
+            "name": "CFA Franc BEAC"
+        },
+        {
+            "code": "XPF",
+            "name": "CFP Franc"
+        },
+        {
+            "code": "CLP",
+            "name": "Chilean Peso"
+        },
+        {
+            "code": "COP",
+            "name": "Colombian Peso"
+        },
+        {
+            "code": "KMF",
+            "name": "Comorian Franc"
+        },
+        {
+            "code": "CDF",
+            "name": "Congolese Franc"
+        },
+        {
+            "code": "BAM",
+            "name": "Convertible Mark"
+        },
+        {
+            "code": "NIO",
+            "name": "Cordoba Oro"
+        },
+        {
+            "code": "CRC",
+            "name": "Costa Rican Colon"
+        },
+        {
+            "code": "CUP",
+            "name": "Cuban Peso"
+        },
+        {
+            "code": "CZK",
+            "name": "Czech Koruna"
+        },
+        {
+            "code": "GMD",
+            "name": "Dalasi"
+        },
+        {
+            "code": "DKK",
+            "name": "Danish Krone"
+        },
+        {
+            "code": "MKD",
+            "name": "Denar"
+        },
+        {
+            "code": "DJF",
+            "name": "Djibouti Franc"
+        },
+        {
+            "code": "STN",
+            "name": "Dobra"
+        },
+        {
+            "code": "DOP",
+            "name": "Dominican Peso"
+        },
+        {
+            "code": "VND",
+            "name": "Dong"
+        },
+        {
+            "code": "XCD",
+            "name": "East Caribbean Dollar"
+        },
+        {
+            "code": "EGP",
+            "name": "Egyptian Pound"
+        },
+        {
+            "code": "SVC",
+            "name": "El Salvador Colon"
+        },
+        {
+            "code": "ETH",
+            "name": "Ether"
+        },
+        {
+            "code": "ETB",
+            "name": "Ethiopian Birr"
+        },
+        {
+            "code": "EUR",
+            "name": "Euro"
+        },
+        {
+            "code": "FKP",
+            "name": "Falkland Islands Pound"
+        },
+        {
+            "code": "FJD",
+            "name": "Fiji Dollar"
+        },
+        {
+            "code": "HUF",
+            "name": "Forint"
+        },
+        {
+            "code": "GHS",
+            "name": "Ghana Cedi"
+        },
+        {
+            "code": "GIP",
+            "name": "Gibraltar Pound"
+        },
+        {
+            "code": "HTG",
+            "name": "Gourde"
+        },
+        {
+            "code": "PYG",
+            "name": "Guarani"
+        },
+        {
+            "code": "GNF",
+            "name": "Guinean Franc"
+        },
+        {
+            "code": "GYD",
+            "name": "Guyana Dollar"
+        },
+        {
+            "code": "HKD",
+            "name": "Hong Kong Dollar"
+        },
+        {
+            "code": "UAH",
+            "name": "Hryvnia"
+        },
+        {
+            "code": "ISK",
+            "name": "Iceland Krona"
+        },
+        {
+            "code": "INR",
+            "name": "Indian Rupee"
+        },
+        {
+            "code": "IRR",
+            "name": "Iranian Rial"
+        },
+        {
+            "code": "IQD",
+            "name": "Iraqi Dinar"
+        },
+        {
+            "code": "JMD",
+            "name": "Jamaican Dollar"
+        },
+        {
+            "code": "JOD",
+            "name": "Jordanian Dinar"
+        },
+        {
+            "code": "KES",
+            "name": "Kenyan Shilling"
+        },
+        {
+            "code": "PGK",
+            "name": "Kina"
+        },
+        {
+            "code": "HRK",
+            "name": "Kuna"
+        },
+        {
+            "code": "KWD",
+            "name": "Kuwaiti Dinar"
+        },
+        {
+            "code": "AOA",
+            "name": "Kwanza"
+        },
+        {
+            "code": "MMK",
+            "name": "Kyat"
+        },
+        {
+            "code": "LAK",
+            "name": "Lao Kip"
+        },
+        {
+            "code": "GEL",
+            "name": "Lari"
+        },
+        {
+            "code": "LBP",
+            "name": "Lebanese Pound"
+        },
+        {
+            "code": "ALL",
+            "name": "Lek"
+        },
+        {
+            "code": "HNL",
+            "name": "Lempira"
+        },
+        {
+            "code": "SLL",
+            "name": "Leone"
+        },
+        {
+            "code": "LRD",
+            "name": "Liberian Dollar"
+        },
+        {
+            "code": "LYD",
+            "name": "Libyan Dinar"
+        },
+        {
+            "code": "SZL",
+            "name": "Lilangeni"
+        },
+        {
+            "code": "LSL",
+            "name": "Loti"
+        },
+        {
+            "code": "MGA",
+            "name": "Malagasy Ariary"
+        },
+        {
+            "code": "MWK",
+            "name": "Malawi Kwacha"
+        },
+        {
+            "code": "MYR",
+            "name": "Malaysian Ringgit"
+        },
+        {
+            "code": "MUR",
+            "name": "Mauritius Rupee"
+        },
+        {
+            "code": "MXN",
+            "name": "Mexican Peso"
+        },
+        {
+            "code": "MXV",
+            "name": "Mexican Unidad de Inversion (UDI)"
+        },
+        {
+            "code": "MDL",
+            "name": "Moldovan Leu"
+        },
+        {
+            "code": "MAD",
+            "name": "Moroccan Dirham"
+        },
+        {
+            "code": "MZN",
+            "name": "Mozambique Metical"
+        },
+        {
+            "code": "BOV",
+            "name": "Mvdol"
+        },
+        {
+            "code": "NGN",
+            "name": "Naira"
+        },
+        {
+            "code": "ERN",
+            "name": "Nakfa"
+        },
+        {
+            "code": "NAD",
+            "name": "Namibia Dollar"
+        },
+        {
+            "code": "NPR",
+            "name": "Nepalese Rupee"
+        },
+        {
+            "code": "ANG",
+            "name": "Netherlands Antillean Guilder"
+        },
+        {
+            "code": "ILS",
+            "name": "New Israeli Sheqel"
+        },
+        {
+            "code": "TWD",
+            "name": "New Taiwan Dollar"
+        },
+        {
+            "code": "NZD",
+            "name": "New Zealand Dollar"
+        },
+        {
+            "code": "BTN",
+            "name": "Ngultrum"
+        },
+        {
+            "code": "KPW",
+            "name": "North Korean Won"
+        },
+        {
+            "code": "NOK",
+            "name": "Norwegian Krone"
+        },
+        {
+            "code": "MRU",
+            "name": "Ouguiya"
+        },
+        {
+            "code": "TOP",
+            "name": "Pa\u2019anga"
+        },
+        {
+            "code": "PKR",
+            "name": "Pakistan Rupee"
+        },
+        {
+            "code": "MOP",
+            "name": "Pataca"
+        },
+        {
+            "code": "CUC",
+            "name": "Peso Convertible"
+        },
+        {
+            "code": "UYU",
+            "name": "Peso Uruguayo"
+        },
+        {
+            "code": "PHP",
+            "name": "Philippine Peso"
+        },
+        {
+            "code": "GBP",
+            "name": "Pound Sterling"
+        },
+        {
+            "code": "BWP",
+            "name": "Pula"
+        },
+        {
+            "code": "QAR",
+            "name": "Qatari Rial"
+        },
+        {
+            "code": "GTQ",
+            "name": "Quetzal"
+        },
+        {
+            "code": "ZAR",
+            "name": "Rand"
+        },
+        {
+            "code": "OMR",
+            "name": "Rial Omani"
+        },
+        {
+            "code": "KHR",
+            "name": "Riel"
+        },
+        {
+            "code": "RON",
+            "name": "Romanian Leu"
+        },
+        {
+            "code": "MVR",
+            "name": "Rufiyaa"
+        },
+        {
+            "code": "IDR",
+            "name": "Rupiah"
+        },
+        {
+            "code": "RUB",
+            "name": "Russian Ruble"
+        },
+        {
+            "code": "RWF",
+            "name": "Rwanda Franc"
+        },
+        {
+            "code": "SHP",
+            "name": "Saint Helena Pound"
+        },
+        {
+            "code": "SAR",
+            "name": "Saudi Riyal"
+        },
+        {
+            "code": "XDR",
+            "name": "SDR (Special Drawing Right)"
+        },
+        {
+            "code": "RSD",
+            "name": "Serbian Dinar"
+        },
+        {
+            "code": "SCR",
+            "name": "Seychelles Rupee"
+        },
+        {
+            "code": "SGD",
+            "name": "Singapore Dollar"
+        },
+        {
+            "code": "PEN",
+            "name": "Sol"
+        },
+        {
+            "code": "SBD",
+            "name": "Solomon Islands Dollar"
+        },
+        {
+            "code": "KGS",
+            "name": "Som"
+        },
+        {
+            "code": "SOS",
+            "name": "Somali Shilling"
+        },
+        {
+            "code": "TJS",
+            "name": "Somoni"
+        },
+        {
+            "code": "SSP",
+            "name": "South Sudanese Pound"
+        },
+        {
+            "code": "LKR",
+            "name": "Sri Lanka Rupee"
+        },
+        {
+            "code": "XSU",
+            "name": "Sucre"
+        },
+        {
+            "code": "SDG",
+            "name": "Sudanese Pound"
+        },
+        {
+            "code": "SRD",
+            "name": "Surinam Dollar"
+        },
+        {
+            "code": "SEK",
+            "name": "Swedish Krona"
+        },
+        {
+            "code": "CHF",
+            "name": "Swiss Franc"
+        },
+        {
+            "code": "SYP",
+            "name": "Syrian Pound"
+        },
+        {
+            "code": "BDT",
+            "name": "Taka"
+        },
+        {
+            "code": "WST",
+            "name": "Tala"
+        },
+        {
+            "code": "TZS",
+            "name": "Tanzanian Shilling"
+        },
+        {
+            "code": "KZT",
+            "name": "Tenge"
+        },
+        {
+            "code": "TTD",
+            "name": "Trinidad and Tobago Dollar"
+        },
+        {
+            "code": "MNT",
+            "name": "Tugrik"
+        },
+        {
+            "code": "TND",
+            "name": "Tunisian Dinar"
+        },
+        {
+            "code": "TRY",
+            "name": "Turkish Lira"
+        },
+        {
+            "code": "TMT",
+            "name": "Turkmenistan New Manat"
+        },
+        {
+            "code": "AED",
+            "name": "UAE Dirham"
+        },
+        {
+            "code": "UGX",
+            "name": "Uganda Shilling"
+        },
+        {
+            "code": "CLF",
+            "name": "Unidad de Fomento"
+        },
+        {
+            "code": "COU",
+            "name": "Unidad de Valor Real"
+        },
+        {
+            "code": "UYW",
+            "name": "Unidad Previsional"
+        },
+        {
+            "code": "UYI",
+            "name": "Uruguay Peso en Unidades Indexadas (UI)"
+        },
+        {
+            "code": "UZS",
+            "name": "Uzbekistan Sum"
+        },
+        {
+            "code": "VUV",
+            "name": "Vatu"
+        },
+        {
+            "code": "CHE",
+            "name": "WIR Euro"
+        },
+        {
+            "code": "CHW",
+            "name": "WIR Franc"
+        },
+        {
+            "code": "KRW",
+            "name": "Won"
+        },
+        {
+            "code": "YER",
+            "name": "Yemeni Rial"
+        },
+        {
+            "code": "JPY",
+            "name": "Yen"
+        },
+        {
+            "code": "CNY",
+            "name": "Yuan Renminbi"
+        },
+        {
+            "code": "ZMW",
+            "name": "Zambian Kwacha"
+        },
+        {
+            "code": "ZWL",
+            "name": "Zimbabwe Dollar"
+        },
+        {
+            "code": "PLN",
+            "name": "Zloty"
+        }
+    ],
+    "Links to website/Current Documentation": [
+        "Website",
+        "SharePoint Repository ",
+        "External Advocacy/Communications",
+        "Monitoring, Evaluation or Learning ",
+        "Other Documents/Resources "
+    ],
+    "Phase of Initiative": [
+        "- NA",
+        "Opportunity and Ideation",
+        "Preparation and Scoping",
+        "Analysis and Design",
+        "Implementation Planning",
+        "Developing or Adapting Solution",
+        "Piloting and Evidence Generation",
+        "Package and Advocacy",
+        "Deploying",
+        "Scaling Up",
+        "Handover or Complete",
+        "Under Review",
+        "Discontinued",
+        "External"
+    ],
+    "Partner Type": [
+        "Investment",
+        "Government",
+        "Programme",
+        "Technology"
+    ],
+    "Software Platform(s)": [
+        "- NA",
+        "- Unknown",
+        "- Other",
+        "- Bespoke",
+        ".Stat Suite",
+        "ACCEDA",
+        "Accessmod",
+        "Ada",
+        "Adopt a Drain",
+        "Afinidata",
+        "African Storybook",
+        "Agora",
+        "AgroSense",
+        "Akvo Caddisfly",
+        "Akvo Flow",
+        "Akvo RSR",
+        "Antura and the Letters",
+        "Apache Fineract",
+        "Apache Superset",
+        "ArcGIS",
+        "Archive",
+        "BA Obras",
+        "Babylon Health COVID-19 Care Assistant",
+        "Bahmni",
+        "Band Protocol",
+        "Bootstrap",
+        "BSIS",
+        "Canopy",
+        "CasePro",
+        "CCVMS",
+        "Child Growth Monitor (CGM)",
+        "Cliente @firma",
+        "CodeIgniter",
+        "CogniCity",
+        "Collegium Telemedicus",
+        "CommCare",
+        "CommonHealth",
+        "CommonPass",
+        "CommunityPulse",
+        "Consul",
+        "Count Me In",
+        "COVIDcheck",
+        "CPIMS+",
+        "CropPlanning",
+        "CRVSNOW",
+        "Cuebiq",
+        "DAI",
+        "Data4Action",
+        "DataWinners",
+        "DEEP",
+        "DetectED-X BreastED",
+        "DetectED-X CovED",
+        "DetectED-X LungED",
+        "DHIS 2",
+        "DHIS 2 Dashboard",
+        "DHIS 2 Data Capture",
+        "DHIS 2 Event Capture",
+        "DHIS 2 Tracker Capture",
+        "Digital Health Atlas",
+        "DiSARM",
+        "Drupal",
+        "e-LMIS Medexis",
+        "e-TB Manager",
+        "ECD Mobi",
+        "EduApp4Syria",
+        "element",
+        "Entgra EMM",
+        "Entuition Vesta",
+        "Equist",
+        "Epi Info",
+        "Ethereum",
+        "eTools",
+        "EViews",
+        "EVM Assessor",
+        "Facebook",
+        "Facebook Geoinsights",
+        "Facebook Messenger",
+        "Facility Reconciliation Tool",
+        "FarmData",
+        "farmOS",
+        "Feed the Monster",
+        "Field Supply",
+        "FlowKit",
+        "FocusMDM",
+        "formhub",
+        "Fulcrum",
+        "GBVIMS+",
+        "GDL Radio",
+        "GeoPrism",
+        "GISIDA",
+        "Global Digital Library",
+        "Global Forest Watch",
+        "Go.Data",
+        "Gobierto",
+        "Golden Volunteer",
+        "Google Classroom",
+        "Google Data Studio",
+        "Google Earth",
+        "Google Forms",
+        "Google Fusion",
+        "Google Maps",
+        "GrowStuff",
+        "GxAlert",
+        "H5P",
+        "HazeGazer",
+        "Health Alert",
+        "Health Network Quality Improvement System (HNQIS)",
+        "healthsites.io",
+        "HEARTH",
+        "Helix",
+        "HeRAMS",
+        "HospitalRun",
+        "Humansis",
+        "iClinicSys",
+        "iHRIS",
+        "ImmReg",
+        "iMonitor+",
+        "Infogram",
+        "InStrat",
+        "Integrated e-Diagnostic Approach (IeDA)",
+        "Internet of Good Things (IoGT)",
+        "iViZard",
+        "IXL",
+        "JOOX",
+        "Kepler.gl",
+        "Khan Academy",
+        "Khan Academy Kids",
+        "Kitkit School",
+        "KoBoToolbox",
+        "Kolibri",
+        "KoomBook",
+        "KuaiShou",
+        "Learning Passport",
+        "LibreHealth",
+        "LINE",
+        "Logistimo",
+        "MagicBox",
+        "Magpi",
+        "Manage Engine",
+        "mAsset",
+        "Medic Mobile",
+        "MET Norway Weather",
+        "mHero",
+        "Microsoft Excel",
+        "Microsoft Forms",
+        "MICS Plus",
+        "Mifos",
+        "mInventory",
+        "Mobile WACh NEO",
+        "Mojaloop",
+        "Moodle",
+        "Mosaic",
+        "MOSIP",
+        "MOTECH",
+        "MRE App",
+        "MRMIMS+",
+        "mSupply",
+        "mUzima",
+        "mWater",
+        "NutriDash",
+        "ODK",
+        "ODK Aggregate",
+        "ODK Collect",
+        "OKY",
+        "ONA Data",
+        "Open Ag Data Alliance",
+        "Open Concept Lab (OCL)",
+        "Open Food Facts",
+        "Open Food Network",
+        "Open Food Source",
+        "OpenAerialMap",
+        "OpenCBS",
+        "OpenCHS",
+        "OpenCRVS",
+        "OpenELIS",
+        "OpenEMIS",
+        "OpenESSENCE",
+        "OpenFarm",
+        "OpenFn",
+        "OpenHIM",
+        "OpenIMIS",
+        "OpenMRS",
+        "OpenRefine",
+        "OpenSRP",
+        "Oppia",
+        "Oracle",
+        "OsCAR",
+        "PathCheck SafePlaces",
+        "Pharmadex",
+        "PhET",
+        "PlanWise",
+        "Pollit",
+        "Power BI",
+        "Precious Plastic",
+        "Primero",
+        "PViMS",
+        "QGIS",
+        "QLik",
+        "QuanTB",
+        "R",
+        "RapidPro",
+        "RapidPro Surveyor",
+        "RapidSMS",
+        "Resource Map",
+        "Reveal",
+        "RxSolution",
+        "SanteEMR",
+        "SanteGuard",
+        "SanteMPI",
+        "Scalefusion",
+        "SCOPE",
+        "SCOPE CODA",
+        "Scratch",
+        "Senaite",
+        "SharePoint",
+        "Somleng",
+        "Somleng SCFM",
+        "SORMAS",
+        "SparkBeyond",
+        "Spatial IQ",
+        "Spatiotemporal Epidemiological Modeler (STEM)",
+        "SPSS",
+        "StoryWeaver",
+        "Studyladder",
+        "SugarCRM",
+        "Sunbird",
+        "Surveda",
+        "Survey Solutions",
+        "Synergy SPIS",
+        "Synthea",
+        "Tableau",
+        "Tangerine",
+        "Tania",
+        "Telegram",
+        "TenFour",
+        "TikTok",
+        "TolaData",
+        "TransferTo",
+        "trase",
+        "Tupaia",
+        "Turn",
+        "Twitter",
+        "Ushahidi",
+        "VaxTrac",
+        "Verboice",
+        "Viamo IVR",
+        "Viber",
+        "VictorReaders",
+        "VIPS",
+        "VisualDX",
+        "Vitalliance LMIS",
+        "ViVA",
+        "Volttron",
+        "Vota Inteligente",
+        "VRMaker",
+        "WASH FIT Digital",
+        "WashBAT",
+        "WeChat",
+        "WelTel",
+        "WhatsApp",
+        "WordPress",
+        "xView2",
+        "YouTube",
+        "Yumnn-MIS",
+        "Zalo",
+        "Zenysis Harmony",
+        "Zzapp"
+    ],
+    "Hardware Platform(s)/Physical Product(s)": [
+        "- NA",
+        "- Unknown",
+        "- Other",
+        "3D Printer",
+        "Audio Devices",
+        "Offline Server",
+        "Compressed Blocks",
+        "Display Screens",
+        "Drone/UAV",
+        "Handwashing Tap",
+        "IoT/Sensors",
+        "Prefab Building",
+        "Pico Projector",
+        "Projector",
+        "Radio",
+        "Microcomputer",
+        "Robot",
+        "SD Card",
+        "Solar Energy",
+        "Solar Fridges",
+        "Tablet",
+        "VSAT",
+        "Wearables"
+    ],
+    "Non-Technology Platform(s)/Programme Innovation(s) and Non-Technology Platform(s)": [
+        "- NA",
+        "- Unknown",
+        "- Other",
+        "Adaptive Management",
+        "Adolescent In Emergencies Kit",
+        "Audit",
+        "Compost",
+        "Curriculum",
+        "EduTrac",
+        "Evaluation",
+        "Event",
+        "Finance",
+        "Forum",
+        "Human-Centered Design",
+        "Innovation Lab",
+        "Innovative Finance",
+        "Latrines",
+        "Legal Advice",
+        "Meeting",
+        "MICS",
+        "MO-CRIA",
+        "Participatory Mapping",
+        "Partnership",
+        "Peer Network",
+        "Podium",
+        "Policy and Regulation",
+        "Public Private Partnership",
+        "Recycling",
+        "Research",
+        "Sanitary Products",
+        "Standard",
+        "StartUP Social Venture",
+        "Strategy",
+        "Training",
+        "U-Report",
+        "UPSHIFT",
+        "Workshop",
+        "Youth Challenge"
+    ],
+    "Function(s) of Platform": [
+        "- NA",
+        "- Unknown",
+        "- Other",
+        "API",
+        "Artificial Intelligence",
+        "Asset Tracking",
+        "Assistive Technology",
+        "Attendance MIS",
+        "Authentication",
+        "Big Data",
+        "Biometrics",
+        "Blockchain",
+        "Case Management",
+        "Cash-Transfer",
+        "Census & Population",
+        "Chatbot",
+        "Classroom MIS",
+        "Clinical terminology and classifications",
+        "Cold Chain",
+        "Community of Practice",
+        "Community-based information system",
+        "Complaints MIS",
+        "Computer Assisted Telephone Interview (CATI)",
+        "Content Management",
+        "COVID-19",
+        "CRM",
+        "Crowdsourcing",
+        "CRVS",
+        "Dashboard",
+        "Data and Analytics",
+        "Data interoperability",
+        "Data visualization",
+        "Database",
+        "Decision Support Tool",
+        "Desktop Application",
+        "Digital Finance",
+        "Digital Inclusion & Connectivity",
+        "Digital Security",
+        "Disaster and Early Warning",
+        "Disease Surveillance",
+        "Distant Learning",
+        "Education MIS",
+        "Education Resources MIS",
+        "Electronic Identification",
+        "Electronic medical records",
+        "Emergency response system",
+        "Environmental monitoring systems",
+        "Facility MIS",
+        "Game",
+        "GIS",
+        "Health finance and insurance MIS",
+        "Health Messaging",
+        "Health MIS",
+        "Helplines & Call Center",
+        "HR MIS",
+        "Image processing",
+        "Immunization Monitoring",
+        "Immunization Registry",
+        "Information management",
+        "IVR",
+        "Knowledge management system",
+        "Laboratory and diagnostic MIS",
+        "Learning and Training",
+        "Logistics MIS",
+        "MDM",
+        "Messaging Services",
+        "Misinformation and Fact Checking",
+        "Mobile App",
+        "Mobile Money",
+        "MOOC",
+        "Nutrition MIS",
+        "Personal Health Tracking",
+        "Pharmacy information system",
+        "Podcast",
+        "Radio",
+        "Rapid Assessment",
+        "Real-Time Monitoring",
+        "Research information systems",
+        "Satellite Imagery",
+        "SMS",
+        "Social Media",
+        "Social Registry",
+        "Telemedicine",
+        "Television",
+        "Test and Certification MIS",
+        "USSD",
+        "Video",
+        "Video Conferencing",
+        "Virtual Reality",
+        "Volunteer Engagement",
+        "Water Quality Testing",
+        "Website",
+        "Youth Engagement"
+    ],
+    "Information Security Classification as per UNICEF's Classi Tool": [
+        "Not Classified ",
+        "Class I - Confidential",
+        "Class II - Internal",
+        "Class III - Internal",
+        "Class IV - Public"
+    ]
+}
