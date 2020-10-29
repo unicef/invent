@@ -68,6 +68,7 @@ export default {
       text-align: center;
     }
     a {
+      font-size: @fontSizeBase;
       text-decoration: none;
     }
   }

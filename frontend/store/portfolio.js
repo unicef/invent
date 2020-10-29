@@ -121,7 +121,7 @@ export const getters = {
   getDescription: (state) => state.description,
   getStatus: (state) => state.status,
   getIcon: (state) => state.icon,
-  getManagers: (state) => state.managers,
+  getManagers: (state) => state.managers.map((i) => i.id || i),
   getStatements: (state) => state.problemStatements,
   getLoading: (state) => state.loading,
   getPortfolios: (state) => state.portfolios,
@@ -401,7 +401,7 @@ export const actions = {
     commit('SET_VALUE', { key: 'status', val: 'DR' })
     commit('SET_VALUE', { key: 'icon', val: null })
     commit('SET_VALUE', { key: 'managers', val: [] })
-    commit('SET_VALUE', { key: 'statements', val: [] })
+    commit('SET_VALUE', { key: 'problemStatements', val: [] })
   },
   // general pre portfolio setup
   // todo: change to portfolios API
