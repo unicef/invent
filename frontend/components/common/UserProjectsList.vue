@@ -42,13 +42,13 @@ export default {
     return {
       headline: [
         this.$gettext(
-          'Please specify headline copy text for each tabs, thank you.'
+          'Here are all the initiatives you are a Member or a Viewer of'
         ),
         this.$gettext(
-          'Please complete portfolio review process for any projects marked “unscored” below.'
+          'Any initiatives you have been requested to review as part of the innovation portfolio review process will appear below. Please complete review for any initiatives marked “Unscored” below.'
         ),
         this.$gettext(
-          'Please specify headline copy text for each tabs, thank you.'
+          'Initiatives you have added to your favorites will appear below.'
         ),
       ],
     }

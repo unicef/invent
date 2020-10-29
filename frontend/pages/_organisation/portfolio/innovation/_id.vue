@@ -40,6 +40,20 @@
             :left="matrixLabels.ambition.left"
             :bottom="matrixLabels.ambition.bottom"
           />
+          <div v-if="tab === 1" class="Problems problem-matrix">
+            <el-row>
+              <div class="Info">
+                <fa icon="info-circle" />
+                <translate>
+                  The innovation ambition matrix is a strategic framework that
+                  helps balance risk and impact. “Newer” challenges and
+                  solutions are not necessarily advantageous; rather, the goal
+                  is to appropriately balance resource allocation across the
+                  incremental, substantial, and breakthrough categories.
+                </translate>
+              </div>
+            </el-row>
+          </div>
           <Matrix
             v-show="tab === 2"
             ref="riskMatrix"
@@ -50,8 +64,8 @@
             :elements="riskImpactMatrix"
             :left="matrixLabels.riskImpact.left"
             :bottom="matrixLabels.riskImpact.bottom"
-            extra-bottom="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
-            extra-left="Quid securi etiam tamquam eu fugiat nulla pariatur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Contra legem facit qui id facit quod lex prohibet."
+            :extra-bottom="impactInfo"
+            :extra-left="riskInfo"
           />
           <div v-if="tab === 3" class="Problems">
             <el-row type="flex">
@@ -133,6 +147,13 @@ export default {
     return {
       activeName: 'ambition',
       disabledProblems: [],
+      riskInfo: this.$gettext(
+        'What are the risk levels associated with this initiative? Note that low scores indicate high risk assessment.'
+      ),
+      impactInfo: this.$gettext(
+        'Impact score takes into account an initiative’s reach, effectiveness, and ability to address key challenges, particularly for vulnerable and hard-to-reach children.'
+      ),
+
       matrixLabels: {
         problemStatement: [
           this.$gettext('Neglected'),
@@ -303,6 +324,9 @@ section.portfolio-area {
   }
   .Problems {
     background-color: white;
+    &.problem-matrix {
+      background-color: transparent;
+    }
     .Info {
       color: #777779;
       font-size: 12px;
