@@ -69,6 +69,7 @@ export default {
     margin-bottom: 30px;
     button {
       align-self: center;
+      height: 48px;
     }
   }
 }

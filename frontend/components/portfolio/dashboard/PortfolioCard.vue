@@ -141,7 +141,7 @@ export default {
     text-transform: uppercase;
     align-self: center;
     margin: 0;
-    padding: 0 60px;
+    padding: 0 20px;
     text-align: center;
     span {
       font-weight: 100;
@@ -159,7 +159,7 @@ export default {
       z-index: 2;
     }
     .name {
-      font-size: 22px;
+      font-size: 18px;
       padding: 0 20px;
       line-height: 28px;
       margin-top: 50px;

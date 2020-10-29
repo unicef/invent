@@ -13,7 +13,7 @@
         :value="co"
         :items="offices"
         multiple
-        :placeholder="$gettext('Country Office') | translate"
+        :placeholder="$gettext('UNICEF Office') | translate"
         @change="handleSearch('co', $event)"
       />
       <filter-select

@@ -27,7 +27,7 @@
     <!-- action forms -->
     <div class="action-form">
       <el-button type="text" size="large" @click="handleCancel">
-        <translate>Cancel</translate>
+        <translate>Dismiss changes</translate>
       </el-button>
       <el-button
         v-if="edit"
@@ -100,7 +100,6 @@ export default {
       setLoading: 'portfolio/setLoading',
     }),
     async unCaughtErrorHandler(errors) {
-      // todo: change or tune in for portfolio
       if (this.$sentry) {
         this.$sentry.captureMessage(
           'Un-caught validation error in portfolio page',
@@ -240,6 +239,32 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
+&::v-deep {
+  .el-input__inner,
+  .el-textarea__inner {
+    border: 1px solid #a8a8a9;
+  }
+  .el-tag.el-tag--info {
+    background-color: #f5f3ef;
+    border: none;
+    padding: 3px 9px;
+    .el-tag__close {
+      color: #a8a8a9;
+    }
+  }
+  .el-select .el-tag {
+    box-sizing: inherit;
+  }
+  .el-select .el-tag__close.el-icon-close {
+    background-color: transparent;
+  }
+  .el-tag .el-icon-close {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+}
+
 .action-form {
   margin-top: 60px;
   display: flex;
@@ -256,6 +281,7 @@ export default {
     color: @colorWhite!important;
     &:hover {
       background-color: #a8a8a9;
+      opacity: 0.8;
     }
   }
   .create-btn {

@@ -70,10 +70,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="
-          (selectedColumns.includes('30') && tab === 2) ||
-          (selectedColumns.includes('30') && tab === 3)
-        "
+        v-if="selectedColumns.includes('30') && tab === 2"
         :resizable="false"
         :label="$gettext('Scoring') | translate"
         prop="scores"
