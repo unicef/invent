@@ -64,12 +64,14 @@
       <div class="info-box">
         <fa class="info-icon" icon="info-circle" />
         <p>
-          <b><translate>Brief Text Comes Here</translate>{{ ` ` }}</b>
+          <b><translate>Instructions</translate>{{ ` ` }}</b>
           <translate>
-            — Contra legem facit qui id facit quod lex prohibet. At nos hinc
-            posthac, sitientis piros Afros. Fabio vel iudice vincam, sunt in
-            culpa qui officia. Ab illo tempore, ab est sed immemorabili. Nihil
-            hic munitissimus habendi senatus locus, nihil horum?
+            — Please consult the detailed project information for this
+            initiative in INVENT before completing the questionnaire. Carefully
+            review each question and associated scoring guidance by hovering
+            over the question mark icon. NOTE: Once questionnaire is submitted,
+            it can no longer be changed. Please reach out to the portfolio
+            manager with any questions.
           </translate>
         </p>
       </div>

@@ -2,14 +2,19 @@
   <article class="portfolio-main-info">
     <div />
     <div>
-      <h3>What is a Portfolio?</h3>
+      <h3>What is UNICEF’s portfolio approach to innovation?</h3>
       <p>
         <translate>
-          Petierunt uti sibi concilium totius Galliae in diem certam indicere.
-          Contra legem facit qui id facit quod lex prohibet. Nec dubitamus multa
-          iter quae et nos invenerat. Qui ipsorum lingua Celtae, nostra Galli
-          appellantur. Tu quoque, Brute, fili mi, nihil timor populi, nihil! At
-          nos hinc posthac, sitientis piros Afros.
+          Successful engagement in innovation requires focus and prioritization
+          based on the greatest challenges facing children and young people.
+          UNICEF’s portfolio approach makes evidence-based decisions about which
+          problems to tackle based on programme-led analysis of areas most in
+          need of acceleration solutions through new or significantly improved
+          interventions. Innovations are then assessed against key criteria to
+          identify solutions best suited to solving these challenges, resulting
+          in portfolios that enable UNICEF to balance resources between scaling
+          up tried-and-tested solutions and developing nascent solutions from
+          the early stages.
         </translate>
       </p>
     </div>

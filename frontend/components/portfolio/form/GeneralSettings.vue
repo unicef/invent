@@ -92,11 +92,9 @@
         <fa icon="info-circle" />
         <p>
           <translate>
-            This is a bottom note section if it’s needed: lorem ispumd olor sit
-            amet. Prima luce, cum quibus mons aliud consensu ab eo. Cum sociis
-            natoque penatibus et magnis dis parturient. Ambitioni dedisse
-            scripsisse iudicaretur. Quis aute iure reprehenderit in voluptate
-            velit esse.
+            Note: Once status is changed to “Active,” portfolio is viewable to
+            all users through the portfolio tool. Please set status as “Draft”
+            until portfolio is ready to be published to the site.
           </translate>
         </p>
       </div>

@@ -1,21 +1,25 @@
 <template>
   <section class="portfolio-main">
     <h1>
-      <translate>What is UNICEF’s Approach of Portfolio Management</translate>
+      <translate>UNICEF’s Global Innovation Portfolios</translate>
     </h1>
     <h2>
-      <translate>Explore Our Portfolio-Driven Portfolios</translate>
+      <translate>Explore the Portfolios</translate>
     </h2>
     <p>
       <translate>
-        Our priority portfolios for innovation are driven by the key problems we
-        seek to solve for children. Please select a problem statement from one
-        of the portfolios below to learn more.
+        UNICEF's portfolio approach to innovation ensures that innovation is
+        applied to the toughest, most pressing problems faced by some of the
+        most vulnerable children and young people. Our innovation portfolios are
+        curated sets of investments that focus on these pressing challenges to
+        accelerate results where we can achieve the greatest impact.
       </translate>
     </p>
     <p>
       <translate>
-        Dynamically populated based on the portfolio data set.
+        Expand the portfolios below to learn more about the key problems we seek
+        to solve in our priority areas for innovation, or select “View
+        Portfolio” to explore solutions.
       </translate>
     </p>
 
