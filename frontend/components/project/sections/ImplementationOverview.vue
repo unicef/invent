@@ -527,7 +527,7 @@ export default {
       getCapabilityLevelsItems: 'projects/getCapabilityLevels',
       getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
       getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories',
-      getLinkTypes: 'system/getPartnerTypes',
+      getLinkTypes: 'system/getLinkTypes',
     }),
     ...mapGettersActions({
       goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],

@@ -95,7 +95,6 @@ export default {
       const filled = this.$children.filter(
         (sc) => sc.column && !['custom_fields'].includes(sc.column)
       )
-
       const countryCustom = this.$children
         .filter((sc) => sc.type && sc.type.startsWith('MOH'))
         .map((c) => ({
@@ -135,7 +134,7 @@ export default {
       const dataRow = this.row
       dataRow.project = data.id
       this.$emit('update:row', dataRow)
-      return dataRow
+      return this.row
     },
   },
 }
