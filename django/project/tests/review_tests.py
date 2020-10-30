@@ -323,3 +323,104 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(len(problem_statement_matrix['high_activity']), 0)
         self.assertEqual(len(problem_statement_matrix['moderate']), 5)
         self.assertEqual(len(problem_statement_matrix['neglected']), 2)
+
+    def test_score_update(self):
+        # create new portfolio
+        problem_statements = [
+            {
+                "name": "PS 1",
+                "description": "PS 1 description"
+            },
+            {
+                "name": "PS 2",
+                "description": "PS 2 description"
+            },
+            {
+                "name": "PS 3",
+                "description": "PS 3 description"
+            }
+
+        ]
+        response = self.create_portfolio('Scores test portfolio', "Portfolio for testing scores output",
+                                         [self.user_3_pr_id],  self.user_2_client, problem_statements)
+        self.assertEqual(response.status_code, 201, response.json())
+        portfolio_id = response.json()['id']
+        # create new project
+        project_id = self.create_new_project(self.user_2_client)[0]
+        # move it to the portfolio
+        resp = self.move_project_to_portfolio(portfolio_id, project_id)
+        portfolio_review_id = resp['review_states'][0]['id']
+        portfolio_db = Portfolio.objects.get(id=portfolio_id)
+        problem_statements = portfolio_db.problem_statements.all()
+
+        # create user review
+        user_y_pr_id, user_y_client, user_y_key = self.create_user('jeff@bezos.com', '12345789TIZ', '12345789TIZ')
+        url = reverse("portfolio-assign-questionnaire",
+                      kwargs={"portfolio_id": portfolio_id, 'project_id': project_id})
+        request_data = {'userprofile': [user_y_pr_id]}
+        response = self.user_3_client.post(url, request_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        question_id_y = response.json()[0]['id']
+
+        # fill the answer with the user
+        partial_data_2 = {
+            'psa': [problem_statements[0].id, problem_statements[1].id, problem_statements[2].id],
+            'ee': 2,
+            'ra': 4,
+            'nst': 1,
+            'nc': 2,
+            'nst_comment': 'Fun times'
+        }
+        url = reverse('review-score-fill', kwargs={"pk": question_id_y})
+        response = user_y_client.post(url, partial_data_2, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # write managerial review
+        review_data_complete = {
+            'psa': [problem_statements[0].id, problem_statements[1].id, problem_statements[2].id],
+            'rnci': 2,
+            'ratp': 4,
+            'ra': 5,
+            'ee': 5,
+            'nst': 5,
+            'nc': 5,
+            'ps': 5,
+            'impact': 5,
+            'scale_phase': 6
+        }
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': portfolio_review_id})
+        response = self.user_3_client.post(url, review_data_complete, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # delete ps[1]
+        ps_ids_to_keep = set([problem_statements[0].id, problem_statements[2].id])
+        problem_statements[1].delete()
+        url = reverse('review-score-get-or-delete', kwargs={'pk': question_id_y})
+        response = self.user_3_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['psa']), ps_ids_to_keep)
+
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': portfolio_review_id})
+        response = self.user_3_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['psa']), ps_ids_to_keep)
+
+        # approve the project
+        url = reverse('portfolio-project-approve', kwargs={'pk': portfolio_id})
+        project_data = {'project': [project_id]}
+        response = self.user_3_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # try to delete ps[2]
+        url = reverse("portfolio-update", kwargs={"pk": portfolio_id})
+        update_data = {'problem_statements': [
+            {'id': problem_statements[0].id,
+             'name': problem_statements[0].name,
+             'description': problem_statements[0].description}]
+        }
+
+        response = self.user_3_client.patch(url, update_data, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            response.json()['detail'],
+            f"Problem Statements linked to approved projects may not be deleted: [{problem_statements[1].id}]")
