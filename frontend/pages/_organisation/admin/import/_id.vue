@@ -266,8 +266,8 @@ export default {
     saveUpdatedValue: debounce(function (row) {
       this.patchRow(row)
     }, 1000),
-    async patchRow(row) {
-      return await this.$axios.patch(`/api/projects/import-row/${row.id}/`, {
+    patchRow(row) {
+      return this.$axios.patch(`/api/projects/import-row/${row.id}/`, {
         ...row,
         id: undefined,
       })

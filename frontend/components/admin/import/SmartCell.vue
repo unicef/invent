@@ -63,6 +63,8 @@
 import DateField from '@/components/admin/import/DateField'
 import { Validator } from 'vee-validate'
 import { mapState } from 'vuex'
+import chunk from 'lodash/chunk'
+import find from 'lodash/find'
 
 export default {
   components: {
@@ -184,6 +186,28 @@ export default {
       if (!this.column) {
         return result
       } else {
+        const listParser = (valueLength, source) => {
+          return () => {
+            const indexList = []
+            const valueList = chunk(
+              this.stringToArray(this.value),
+              valueLength
+            ).map((list) => {
+              const type = find(
+                this.systemDicts[source],
+                (type) => type.name.substr(0, 3) === list[0].substr(0, 3)
+              )
+              if (type) {
+                indexList.push(type.id)
+              }
+              return list.join(', ')
+            })
+            return {
+              names: valueList,
+              ids: indexList.length === valueList.length ? indexList : [],
+            }
+          }
+        }
         const resolver = {
           organisation: () => this.findSystemValue('organisations'),
           platforms: () =>
@@ -218,7 +242,23 @@ export default {
             this.findProjectCollectionValue('capability_categories', true),
           capability_subcategories: () =>
             this.findProjectCollectionValue('capability_subcategories', true),
-
+          // INVENT
+          total_budget: () => this.parseNumber(),
+          target_group_reached: () => this.parseNumber(),
+          wbs: () => this.stringArray(),
+          links: listParser(2, 'link_types'),
+          partners: listParser(5, 'partner_types'),
+          unicef_sector: () => this.findProjectCollectionValue('sectors', true),
+          functions: () => this.findProjectCollectionValue('functions', true),
+          currency: () => this.findProjectCollectionValue('currencies', false),
+          phase: () => this.findProjectCollectionValue('phases', false),
+          hardware: () => this.findProjectCollectionValue('hardware', true),
+          nontech: () => this.findProjectCollectionValue('nontech', true),
+          regional_priorities: () =>
+            this.findProjectCollectionValue('regional_priorities', true),
+          innovation_categories: () =>
+            this.findProjectCollectionValue('innovation_categories', true),
+          cpd: () => this.findProjectCollectionValue('cpd', true),
           custom_field: () => {
             const q = this.customFieldsLib[this.type]
             if (!q) {
@@ -289,6 +329,13 @@ export default {
     },
     parseDate() {
       const result = this.value ? new Date(this.value) : null
+      return {
+        ids: [result],
+        names: [result],
+      }
+    },
+    parseNumber() {
+      const result = this.value ? this.value * 1 : null
       return {
         ids: [result],
         names: [result],
@@ -366,9 +413,20 @@ export default {
         'capability_categories',
         'capability_subcategories',
         'custom_field',
+        'functions',
+        'hardware',
+        'nontech',
+        'regional_priorities',
+        'innovation_categories',
+        'unicef_sector',
+        'cpd',
+        'wbs',
+        'links',
       ]
       const isIds = [
         ...isMultiple,
+        'currency',
+        'phase',
         'donors',
         'country',
         'organisation',
@@ -376,6 +434,37 @@ export default {
         'goal_area',
         'result_area',
       ]
+      if (
+        this.column === 'partners' &&
+        this.parsedValue.ids &&
+        this.parsedValue.ids.length
+      ) {
+        const { names } = this.parsedValue
+        return this.parsedValue.ids.map(function (id, index) {
+          const data = names[index].split(', ')
+          return {
+            partner_type: id,
+            partner_name: data[1],
+            partner_contact: data[2],
+            partner_email: data[3],
+            partner_website: data[4],
+          }
+        })
+      }
+      if (
+        this.column === 'links' &&
+        this.parsedValue.ids &&
+        this.parsedValue.ids.length
+      ) {
+        const { names } = this.parsedValue
+        return this.parsedValue.ids.map(function (id, index) {
+          const data = names[index].split(', ')
+          return {
+            link_type: id,
+            link_url: data[1],
+          }
+        })
+      }
       const idsOrNames = isIds.includes(this.column)
         ? this.parsedValue.ids
         : this.parsedValue.names

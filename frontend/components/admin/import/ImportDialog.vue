@@ -20,6 +20,18 @@
           <translate> Edit </translate>
         </h3>
 
+        <template v-if="apiNameInvenMapping[dialogData.column]">
+          <single-select
+            v-if="['phase'].includes(dialogData.column)"
+            v-model="dialogData.value[0]"
+            :source="`projects/${apiNameInvenMapping[dialogData.column]}`"
+          />
+          <multi-selector
+            v-else
+            v-model="dialogData.value"
+            :source="apiNameInvenMapping[dialogData.column]"
+          />
+        </template>
         <health-system-challenges-selector
           v-if="dialogData.column === 'hsc_challenges'"
           v-model="dialogData.value"
@@ -147,6 +159,8 @@
 </template>
 
 <script>
+import MultiSelector from '@/components/project/MultiSelector'
+import SingleSelect from '@/components/common/SingleSelect'
 import PlatformSelector from '@/components/project/PlatformSelector'
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector'
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
@@ -155,6 +169,7 @@ import GoalAreasSelector from '@/components/common/GoalAreasSelector'
 import ResultAreasSelector from '@/components/common/ResultAreasSelector'
 import CapabilitySelector from '@/components/project/CapabilitySelector'
 import FieldOfficeSelector from '@/components/project/FieldOfficeSelector'
+import { apiNameInvenMapping } from '@/utilities/import'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -167,6 +182,8 @@ export default {
     ResultAreasSelector,
     CapabilitySelector,
     FieldOfficeSelector,
+    MultiSelector,
+    SingleSelect,
   },
   props: {
     customFieldsLib: {
@@ -211,6 +228,9 @@ export default {
         width: this.dialogData.column === 'dhis' ? '90vw' : '50%',
         className: ['ImportDialog', this.dialogData.column].join(' '),
       }
+    },
+    apiNameInvenMapping() {
+      return apiNameInvenMapping
     },
   },
   methods: {

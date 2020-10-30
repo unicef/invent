@@ -52,6 +52,26 @@
             />
           </custom-required-form-item>
           <custom-required-form-item
+            :error="errors.first('partner_contact' + index)"
+            :draft-rule="draftRules.partner_contact"
+            :publish-rule="publishRules.partner_contact"
+          >
+            <template slot="label">
+              <translate key="partner_contact">
+                Please provide the name and title of the person in charge of the initiative at the respective partner(s).
+              </translate>
+            </template>
+
+            <character-count-input
+              v-validate="rules.partner_contact"
+              :value="partner.partner_contact"
+              :rules="rules.partner_contact"
+              :data-vv-name="'partner_contact' + index"
+              data-vv-as="Partner Contact"
+              @input="setPartnerItem(index, 'partner_contact', $event)"
+            />
+          </custom-required-form-item>
+          <custom-required-form-item
             :error="errors.first('partner_email' + index)"
             :draft-rule="draftRules.partner_email"
             :publish-rule="publishRules.partner_email"

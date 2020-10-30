@@ -49,7 +49,7 @@ export default {
       store.dispatch('system/loadStaticData'),
     ]).then(function () {
       const code = store.getters['system/getUnicefDonor'].id
-      store.dispatch('system/loadDonorDetails', code)
+      return store.dispatch('system/loadDonorDetails', code)
     })
   },
   computed: {

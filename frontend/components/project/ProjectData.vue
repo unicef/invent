@@ -179,6 +179,12 @@
             :header="$gettext('Program Targets Achieved') | translate"
           />
           <simple-field
+            :content="project.target_group_reached"
+            :header="
+              $gettext('Target Group (Target Population) Reached ') | translate
+            "
+          />
+          <simple-field
             :content="project.current_achievements"
             :header="$gettext('Current Achievements') | translate"
           />
@@ -252,6 +258,10 @@
                     source="getPartnerTypes"
                     root="system"
                   />
+                </li>
+                <li>
+                  <translate>Partner Contact</translate>:
+                  {{ partner.partner_contact }}
                 </li>
                 <li>
                   <translate>Partner Email</translate>:

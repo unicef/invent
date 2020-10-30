@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import CountryOfficeSelect from '@/components/common/CountryOfficeSelect'
 import FormHint from '@/components/common/FormHint'
 import {
@@ -142,9 +142,15 @@ import {
   XlsxSheet,
   XlsxDownload,
 } from 'vue-xlsx'
-import { importTemplate, nameMapping } from '@/utilities/import'
+import {
+  importTemplate,
+  nameMapping,
+  nameInventMapping,
+  apiNameInvenMapping,
+} from '@/utilities/import'
 import { draftRules } from '@/utilities/projects'
 import get from 'lodash/get'
+import reduce from 'lodash/reduce'
 
 export default {
   components: {
@@ -177,14 +183,33 @@ export default {
     ...mapState({
       offices: (state) => state.offices.offices,
     }),
+    ...mapGetters({
+      getUnicefDonor: 'system/getUnicefDonor',
+    }),
     finalImportTemplate() {
-      const unicefCustomQuestions = get(
-        this,
-        'systemDicts.donorsLibrary.20.donor_questions'
+      const unicefCustomQuestions =
+        get(
+          this,
+          `systemDicts.donorsLibrary.${this.getUnicefDonor.id}.donor_questions`
+        ) || []
+      const keyMapping = {
+        unicef_sector: 'sectors',
+        phase: 'phases',
+      }
+      const inventFields = reduce(
+        apiNameInvenMapping,
+        (res, val, key) => {
+          res[nameInventMapping[key]] = this.projectDicts[
+            keyMapping[key] || key
+          ][0].name
+          return res
+        },
+        {}
       )
       return importTemplate.map((i) => {
         const row = {
           ...i,
+          ...inventFields,
         }
         unicefCustomQuestions.forEach((q) => {
           row[q.question] = q.options.join('|')
@@ -224,7 +249,31 @@ export default {
       const flatCapabilitySubcategories = this.projectDicts.capability_subcategories.map(
         (p) => p.name
       )
+      // INVENT
+      const flatCurrency = this.projectDicts.currencies.map((p) => p.name)
+      const flatPhases = this.projectDicts.phases.map((p) => p.name)
+      const flatFunctions = this.projectDicts.functions.map((p) => p.name)
+      const flatHardware = this.projectDicts.hardware.map((p) => p.name)
+      const flatNontech = this.projectDicts.nontech.map((p) => p.name)
+      const flatRegionalPriorities = this.projectDicts.regional_priorities.map(
+        (p) => p.name
+      )
+      const flatInnovationCategories = this.projectDicts.innovation_categories.map(
+        (p) => p.name
+      )
+      const flatCpd = this.projectDicts.cpd.map((p) => p.name)
+      // const flatPhases = this.projectDicts.phases.map(p => p.name);
+
       return [
+        [nameMapping.phase, ...flatPhases],
+        [nameMapping.currency, ...flatCurrency],
+        [nameMapping.functions, ...flatFunctions],
+        [nameMapping.hardware, ...flatHardware],
+        [nameMapping.nontech, ...flatNontech],
+        [nameMapping.regional_priorities, ...flatRegionalPriorities],
+        [nameMapping.innovation_categories, ...flatInnovationCategories],
+        [nameMapping.cpd, ...flatCpd],
+        // [nameMapping.phases, ...flatPhases],
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
         [nameMapping.platforms, ...flatPlatforms],

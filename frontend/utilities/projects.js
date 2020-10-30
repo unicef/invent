@@ -47,6 +47,11 @@ export const projectFields = () => ({
   hardware: [],
   nontech: [],
   regional_priorities: [],
+  wbs: [],
+  innovation_categories: [],
+  cpd: [],
+  partners: [],
+  links: [],
   overview: '',
   program_targets: '',
   program_targets_achieved: '',
@@ -58,12 +63,7 @@ export const projectFields = () => ({
   target_group_reached: 0,
   currency: 1,
   total_budget: 0,
-  wbs: [],
-  innovation_categories: [],
-  cpd: [],
   phase: null,
-  partners: [],
-  links: [],
 })
 
 export const draftRules = () => {
@@ -75,6 +75,9 @@ export const draftRules = () => {
     cbd: {},
     partner_name: {
       required: true,
+      max: 100,
+    },
+    partner_contact: {
       max: 100,
     },
     partner_email: {
@@ -161,6 +164,9 @@ export const draftRules = () => {
 }
 export const publishRules = () => {
   return {
+    partner_contact: {
+      max: 100,
+    },
     partner_name: {
       required: true,
       max: 100,
