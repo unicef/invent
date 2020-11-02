@@ -9,50 +9,52 @@
       </el-col>
     </el-row>
 
-    <user-projects-list :limit="3" />
+    <user-projects-list :limit="3" landing />
 
-    <el-row
-      v-if="userProjecList.length > 0"
-      type="flex"
-      class="SeeAllMyProjects"
-    >
-      <el-col>
-        <nuxt-link
-          :to="
-            localePath({
-              name: 'organisation-initiatives',
-              params: $route.params,
-            })
-          "
-          tag="button"
-          class="el-button el-button--default el-button--medium"
-        >
-          <translate>See all my initiatives</translate>
-        </nuxt-link>
-      </el-col>
-    </el-row>
+    <div v-if="projects.length > 0" class="initiative-link">
+      <el-button type="primary" @click="handleLink">
+        <translate>View all Initiatives</translate>
+        <fa icon="angle-right" />
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
-import UserProjectsList from '../common/UserProjectsList'
+import UserProjectsList from '@/components/common/UserProjectsList'
 export default {
   components: {
     UserProjectsList,
   },
   computed: {
-    ...mapGetters({
-      userProjecList: 'projects/getUserProjectList',
+    ...mapState({
+      projects: (state) => state.projects.userProjects,
     }),
+  },
+  async mounted() {
+    await this.setTab(1)
+  },
+  methods: {
+    ...mapActions({
+      setTab: 'projects/setTab',
+    }),
+    handleLink() {
+      this.$router.push(
+        this.localePath({
+          name: 'organisation-initiatives',
+          params: this.$route.params,
+        })
+      )
+    },
   },
 }
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .MyProjectsBox {
   height: 100%;
@@ -90,16 +92,17 @@ export default {
     }
   }
 
-  .UserProjectsList {
-    .NuxtLink {
-      margin-left: 30px;
-      font-size: @fontSizeSmall;
+  .initiative-link {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    button {
+      height: 48px;
+      font-size: 16px;
+      svg {
+        margin-left: 8px;
+      }
     }
-  }
-
-  .SeeAllMyProjects {
-    padding-bottom: 40px;
-    text-align: center;
   }
 }
 </style>

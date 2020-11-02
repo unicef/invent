@@ -94,7 +94,6 @@
             </el-row>
             <el-row>
               <div class="Info">
-                <!-- <i class="fas fa-info-circle" /> -->
                 <fa icon="info-circle" />
                 <translate>
                   By clicking on a problem statement you can add or remove it
@@ -261,8 +260,12 @@ export default {
         })
       )
     },
-    select(val) {
-      this.$store.commit('search/SET_SEARCH', { key: 'ps', val })
+    select(val, event) {
+      if (event) {
+        this.$store.commit('search/SET_SEARCH', { key: 'ps', val })
+      } else {
+        this.$store.commit('search/SET_SEARCH', { key: 'ps', val: '' })
+      }
       this.$store.dispatch('search/getSearch')
     },
     setTab(id) {
