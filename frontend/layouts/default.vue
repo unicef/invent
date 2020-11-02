@@ -26,6 +26,7 @@ export default {
     DjangoFeedback,
   },
   mixins: [HeadMixin],
+  middleware: 'permissions',
   computed: {
     pureRoute() {
       if (this.$route && this.$route.name) {

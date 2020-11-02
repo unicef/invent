@@ -7,15 +7,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
+  props: {
+    total: {
+      type: Number,
+      required: true,
+    },
+    pageSize: {
+      type: Number,
+      required: true,
+    },
+    page: {
+      type: Number,
+      required: true,
+    },
+  },
   computed: {
-    ...mapState({
-      total: (state) => state.portfolio.total,
-      pageSize: (state) => state.search.filter.page_size,
-      page: (state) => state.search.filter.page,
-    }),
     min() {
       return 1 + this.pageSize * (this.page - 1)
     },

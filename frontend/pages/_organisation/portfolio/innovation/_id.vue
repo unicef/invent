@@ -130,7 +130,7 @@ import Radio from '@/components/portfolio/form/inputs/Radio'
 import SearchMap from '@/components/searchMap/SearchMap'
 import Tabs from '@/components/common/Tabs'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -231,6 +231,7 @@ export default {
       store.dispatch('portfolio/getPortfolioDetails', params.id),
       store.dispatch('search/getSearch'),
       // map
+      store.dispatch('search/loadProjectsMap'),
       store.dispatch('countries/loadMapData'),
     ])
   },
@@ -249,6 +250,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      loadProjectsMap: 'search/loadProjectsMap',
+    }),
     navigate(id) {
       this.$store.dispatch('search/resetSearch')
       this.$refs.ambitionMatrix.clear()
