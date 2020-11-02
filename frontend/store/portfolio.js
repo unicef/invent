@@ -199,6 +199,7 @@ export const actions = {
     dispatch('setLoading', false)
   },
   async getPortfolios({ state, commit, dispatch }) {
+    // active-list
     const { data } = await this.$axios.get('api/portfolio/manager-of/')
     const portfolios = data.map((i) => {
       const icon = state.icons.find((item) => item.id === i.icon).icon

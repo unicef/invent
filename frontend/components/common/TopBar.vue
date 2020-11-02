@@ -61,7 +61,7 @@
                   key="inventoryBtn"
                   :to="
                     localePath({
-                      name: 'organisation-inventory',
+                      name: 'organisation-inventory-list',
                       params: $route.params,
                       query: {},
                     })
@@ -87,7 +87,7 @@
                   <translate>Innovation Portfolios</translate>
                 </nuxt-link>
               </div>
-              <div>
+              <div v-if="displayManager">
                 <nuxt-link
                   key="managerBtn"
                   :to="
@@ -248,13 +248,20 @@ export default {
     isSuperUser() {
       return this.user && this.user.is_superuser
     },
+    displayManager() {
+      return (
+        (this.user && this.user.is_superuser) ||
+        (this.user && this.user.global_portfolio_owner) ||
+        (this.user && this.user.manager.length > 0)
+      )
+    },
   },
 }
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
 .TopBar {
   .TopBarInner {

@@ -69,21 +69,23 @@
           <translate>Assessment</translate>
         </nuxt-link>
       </el-col>
-      <el-col v-if="project.isPublished">
-        <nuxt-link
-          to=""
-          class="NuxtLink IconLeft danger"
-          @click.native="
-            handleClickUnPublish(
-              { name: 'organisation-initiatives' },
-              project.id
-            )
-          "
-        >
-          <fa icon="times-circle" />
-          <translate>Unpublish</translate>
-        </nuxt-link>
-      </el-col>
+      <template v-if="showUnpublish">
+        <el-col v-if="project.isPublished">
+          <nuxt-link
+            to=""
+            class="NuxtLink IconLeft danger"
+            @click.native="
+              handleClickUnPublish(
+                { name: 'organisation-initiatives' },
+                project.id
+              )
+            "
+          >
+            <fa icon="times-circle" />
+            <translate>Unpublish</translate>
+          </nuxt-link>
+        </el-col>
+      </template>
     </el-row>
   </div>
 </template>
@@ -101,6 +103,10 @@ export default {
     forceShow: {
       type: Boolean,
       default: false,
+    },
+    showUnpublish: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

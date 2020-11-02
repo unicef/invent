@@ -342,7 +342,7 @@
         @prev-click="pagClick"
         @next-click="pagClick"
       >
-        <current-page />
+        <current-page :total="total" :page-size="pageSize" :page="page" />
       </el-pagination>
     </div>
     <!-- dialogs -->

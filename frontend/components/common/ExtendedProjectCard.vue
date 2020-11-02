@@ -69,7 +69,11 @@
           </div>
         </el-col>
         <el-col>
-          <project-card-actions :project="project" :force-show="false" />
+          <project-card-actions
+            :project="project"
+            :force-show="false"
+            :show-unpublish="user.member.includes(project.id)"
+          />
         </el-col>
       </el-row>
     </div>
@@ -78,6 +82,7 @@
 
 <script>
 import { format } from 'date-fns'
+import { mapGetters } from 'vuex'
 
 import ReviewCardStripe from '@/components/review/ReviewCardStripe'
 import CountryItem from '@/components/common/CountryItem'
@@ -112,6 +117,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      user: 'user/getProfile',
+    }),
     donors() {
       return this.project && this.project.donors
         ? this.project.donors.length

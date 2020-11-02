@@ -284,7 +284,7 @@
         :total="total"
         :layout="paginationOrderStr"
       >
-        <current-page />
+        <current-page :total="total" :page-size="pageSize" :page="page" />
       </el-pagination>
     </div>
   </div>
@@ -340,6 +340,7 @@ export default {
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       selectAll: 'dashboard/getSelectAll',
+      page: 'dashboard/getCurrentPage',
       total: 'dashboard/getTotal',
       countryColumns: 'dashboard/getCountryColumns',
       donorColumns: 'dashboard/getDonorColumns',
