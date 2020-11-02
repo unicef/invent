@@ -1,6 +1,6 @@
 <template>
-  <div class="user-projects-list">
-    <p class="headline">
+  <div :class="`user-projects-list ${landing && 'landing'}`">
+    <p v-if="!landing" class="headline">
       {{ headline[tab - 1] }}
     </p>
     <div v-loading="loadingProject" class="loading-mask">
@@ -36,6 +36,10 @@ export default {
     limit: {
       type: Number,
       default: null,
+    },
+    landing: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -84,6 +88,9 @@ export default {
 }
 .user-projects-list {
   padding: 50px 80px 60px;
+  &.landing {
+    padding: 40px 24px 10px;
+  }
   .headline {
     font-size: 14px;
     letter-spacing: 0;

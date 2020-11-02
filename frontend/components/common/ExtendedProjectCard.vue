@@ -24,14 +24,15 @@
           </el-row>
         </el-col>
         <el-row type="flex" align="center" justify="end">
-          <el-col class="ProjectMeta">
+          <!-- I leave this here in case they change their mind -->
+          <!-- <el-col class="ProjectMeta">
             <div class="Donors">
               <div>
                 {{ donors }}
               </div>
               <span><translate>Investor(s)</translate></span>
             </div>
-          </el-col>
+          </el-col> -->
           <el-col class="ProjectMeta">
             <div class="LastChange">
               <div>

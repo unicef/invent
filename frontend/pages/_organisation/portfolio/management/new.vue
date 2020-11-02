@@ -14,11 +14,20 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import NewPortfolioForm from '@/components/portfolio/form/NewPortfolioForm'
 
 export default {
   components: {
     NewPortfolioForm,
+  },
+  beforeMount() {
+    this.resetPortfolio()
+  },
+  methods: {
+    ...mapActions({
+      resetPortfolio: 'portfolio/resetPortfolio',
+    }),
   },
 }
 </script>

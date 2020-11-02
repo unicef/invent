@@ -88,15 +88,10 @@ export default {
       return this.usePublishRules ? this.publishRules : this.draftRules
     },
   },
-  mounted() {},
-  beforeDestroy() {
-    this.resetPortfolio()
-  },
   methods: {
     ...mapActions({
       createPortfolio: 'portfolio/createPortfolio',
       editPortfolio: 'portfolio/editPortfolio',
-      resetPortfolio: 'portfolio/resetPortfolio',
       setLoading: 'portfolio/setLoading',
     }),
     async unCaughtErrorHandler(errors) {
