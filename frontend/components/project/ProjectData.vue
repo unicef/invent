@@ -20,6 +20,13 @@
             :content="office.name"
           />
 
+          <simple-field :header="$gettext('City') | translate">
+            <FieldOfficeItem
+              :value="project.field_office"
+              :office="office.id"
+            />
+          </simple-field>
+
           <simple-field :header="$gettext('Country') | translate">
             <country-item :id="project.country" :show-flag="false" />
           </simple-field>
@@ -34,42 +41,31 @@
             :content="selectedRegionOffice"
           />
 
-          <simple-field :header="$gettext('Field Office') | translate">
-            <FieldOfficeItem
-              :value="project.field_office"
-              :office="office.id"
-            />
-          </simple-field>
-
-          <simple-field
-            :header="$gettext('Last Updated') | translate"
-            :content="lastUpdated"
-          />
           <simple-field
             :content="project.overview"
             :header="$gettext('Overview') | translate"
           />
+
           <simple-field
             :content="project.implementation_overview"
-            :header="$gettext('Initiative Description') | translate"
+            :header="$gettext('Description') | translate"
           />
 
           <el-row>
             <el-col :span="12">
               <simple-field
-                :content="project.start_date"
-                :header="$gettext('Initiative start date') | translate"
-                date
+                :content="project.contact_name"
+                :header="$gettext('Contact Name') | translate"
               />
             </el-col>
             <el-col :span="12">
               <simple-field
-                :content="project.end_date"
-                :header="$gettext('Initiative end date') | translate"
-                date
+                :content="project.contact_email"
+                :header="$gettext('Contact Email') | translate"
               />
             </el-col>
           </el-row>
+
           <div class="GrayArea">
             <simple-field :header="$gettext('Team members') | translate">
               <team-list :value="project.team" />
@@ -78,32 +74,24 @@
               <team-list :value="project.viewers" />
             </simple-field>
           </div>
+
+          <simple-field
+            :header="$gettext('Last Updated') | translate"
+            :content="lastUpdated"
+          />
         </collapsible-card>
 
         <collapsible-card
-          id="focalpoint"
-          :title="$gettext('2. Focal Point Overview') | translate"
+          id="categorization"
+          :title="$gettext('2. Categorization') | translate"
         >
-          <el-row>
-            <el-col :span="12">
-              <simple-field
-                :content="project.contact_name"
-                :header="$gettext('Programme Focal Point Name') | translate"
-              />
-            </el-col>
-            <el-col :span="12">
-              <simple-field
-                :content="project.contact_email"
-                :header="$gettext('Programme Focal Point Email') | translate"
-              />
-            </el-col>
-          </el-row>
-        </collapsible-card>
+          <simple-field :header="$gettext('UNICEF Sector') | translate">
+            <platforms-list
+              :platforms="project.unicef_sector"
+              source="getSectors"
+            />
+          </simple-field>
 
-        <collapsible-card
-          id="implementation"
-          :title="$gettext('3. Implementation Overview') | translate"
-        >
           <simple-field
             :header="$gettext('Goal area') | translate"
             :content="goalArea.name"
@@ -162,14 +150,25 @@
             </simple-field>
           </template>
 
-          <simple-field :header="$gettext('Software') | translate">
-            <platforms-list :platforms="project.platforms" />
+          <simple-field :header="$gettext('Regional Priorities') | translate">
+            <platforms-list
+              :platforms="project.regional_priorities"
+              source="getRegionalPriorities"
+            />
           </simple-field>
 
-          <simple-field :header="$gettext('Investor(s)') | translate">
-            <donors-list :value="project.donors" />
+          <simple-field :header="$gettext('Innovation Categories') | translate">
+            <platforms-list
+              :platforms="project.innovation_categories"
+              source="getInnovationCategories"
+            />
           </simple-field>
+        </collapsible-card>
 
+        <collapsible-card
+          id="implementation"
+          :title="$gettext('3. Implementation Overview') | translate"
+        >
           <simple-field
             :content="project.program_targets"
             :header="$gettext('Program Targets') | translate"
@@ -180,14 +179,14 @@
           />
           <simple-field
             :content="project.target_group_reached"
-            :header="
-              $gettext('Target Group (Target Population) Reached ') | translate
-            "
+            :header="$gettext('Number of beneficiaries reached') | translate"
           />
+
           <simple-field
             :content="project.current_achievements"
             :header="$gettext('Current Achievements') | translate"
           />
+
           <simple-field
             :header="
               $gettext(
@@ -218,6 +217,7 @@
             :content="project.total_budget_narrative"
             :header="$gettext('Total Budget (Narrative)') | translate"
           />
+
           <simple-field
             :content="project.funding_needs"
             :header="$gettext('Funding Needs') | translate"
@@ -232,12 +232,36 @@
             :content="link_url"
             :header="getLinkHeader(link_type)"
           />
+
+          <!--          <simple-field :header="$gettext('Investor(s)') | translate">-->
+          <!--            <donors-list :value="project.donors" />-->
+          <!--          </simple-field>-->
         </collapsible-card>
 
         <collapsible-card id="phase" :title="$gettext('4. Phase') | translate">
+          <el-row>
+            <el-col :span="12">
+              <simple-field
+                :content="project.start_date"
+                :header="$gettext('Initiative start date') | translate"
+                date
+              />
+            </el-col>
+          </el-row>
+
           <simple-field :header="$gettext('Phase of Initiative') | translate">
             <list-element :value="project.phase" source="getPhases" />
           </simple-field>
+
+          <el-row>
+            <el-col :span="12">
+              <simple-field
+                :content="project.end_date"
+                :header="$gettext('Initiative end date') | translate"
+                date
+              />
+            </el-col>
+          </el-row>
         </collapsible-card>
 
         <collapsible-card
@@ -260,11 +284,11 @@
                   />
                 </li>
                 <li>
-                  <translate>Partner Contact</translate>:
+                  <translate>Contact Name</translate>:
                   {{ partner.partner_contact }}
                 </li>
                 <li>
-                  <translate>Partner Email</translate>:
+                  <translate>Contact Email</translate>:
                   <a :href="`mailto:${partner.partner_email}`">{{
                     partner.partner_email
                   }}</a>
@@ -281,33 +305,13 @@
         </collapsible-card>
 
         <collapsible-card
-          id="categorization"
-          :title="$gettext('6. Categorization') | translate"
-        >
-          <simple-field :header="$gettext('UNICEF Sector') | translate">
-            <platforms-list
-              :platforms="project.unicef_sector"
-              source="getSectors"
-            />
-          </simple-field>
-          <simple-field :header="$gettext('Regional Priorities') | translate">
-            <platforms-list
-              :platforms="project.regional_priorities"
-              source="getRegionalPriorities"
-            />
-          </simple-field>
-          <simple-field :header="$gettext('Innovation Categories') | translate">
-            <platforms-list
-              :platforms="project.innovation_categories"
-              source="getInnovationCategories"
-            />
-          </simple-field>
-        </collapsible-card>
-
-        <collapsible-card
           id="technology"
-          :title="$gettext('7. Technology') | translate"
+          :title="$gettext('6. Technology') | translate"
         >
+          <simple-field :header="$gettext('Software') | translate">
+            <platforms-list :platforms="project.platforms" />
+          </simple-field>
+
           <simple-field
             :header="
               $gettext('Hardware Platform(s) and Physical Product(s)')

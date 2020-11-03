@@ -11,9 +11,8 @@
             :publish-rules="publishRules"
             :api-errors="apiErrors"
           />
-          <focal-overview
-            ref="focalOverview"
-            :use-publish-rules="usePublishRules"
+          <categorization
+            ref="categorization"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
@@ -35,13 +34,6 @@
           />
           <partners
             ref="partners"
-            :rules="rules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
-            :api-errors="apiErrors"
-          />
-          <categorization
-            ref="categorization"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
@@ -83,7 +75,6 @@ import Partners from '@/components/project/sections/Partners'
 import { mapGetters, mapActions } from 'vuex'
 import ProjectNavigation from './ProjectNavigation'
 import GeneralOverview from './sections/GeneralOverview'
-import focalOverview from './sections/FocalOverview'
 import ImplementationOverview from './sections/ImplementationOverview'
 import DonorCustom from './sections/DonorCustom'
 
@@ -91,7 +82,6 @@ export default {
   components: {
     ProjectNavigation,
     GeneralOverview,
-    focalOverview,
     ImplementationOverview,
     DonorCustom,
     Categorization,
@@ -233,12 +223,12 @@ export default {
     async validate() {
       const validations = await Promise.all([
         this.$refs.generalOverview.validate(),
-        this.$refs.focalOverview.validate(),
         this.$refs.categorization.validate(),
-        this.$refs.technology.validate(),
         this.$refs.implementationOverview.validate(),
-        this.$refs.donorCustom.validate(),
         this.$refs.stages.validate(),
+        this.$refs.partners.validate(),
+        this.$refs.technology.validate(),
+        this.$refs.donorCustom.validate(),
       ])
       console.log('root validations', validations)
       return validations.reduce((a, c) => a && c, true)
@@ -246,12 +236,11 @@ export default {
     clearValidation() {
       this.apiErrors = {}
       this.$refs.generalOverview.clear()
-      this.$refs.focalOverview.clear()
       this.$refs.categorization.clear()
-      this.$refs.technology.clear()
+      this.$refs.implementationOverview.clear()
       this.$refs.stages.clear()
       this.$refs.partners.clear()
-      this.$refs.implementationOverview.clear()
+      this.$refs.technology.clear()
       this.$refs.donorCustom.clear()
     },
     async doSaveDraft() {
@@ -259,19 +248,11 @@ export default {
       this.usePublishRules = false
       await this.$nextTick(async () => {
         const valid = await this.$refs.generalOverview.validateDraft()
-        const focal = await this.$refs.focalOverview.validateDraft()
         const categorization = await this.$refs.categorization.validateDraft()
         const technology = await this.$refs.technology.validateDraft()
         const stages = await this.$refs.stages.validateDraft()
         const partners = await this.$refs.partners.validateDraft()
-        if (
-          valid &&
-          focal &&
-          categorization &&
-          technology &&
-          stages &&
-          partners
-        ) {
+        if (valid && categorization && technology && stages && partners) {
           try {
             if (this.isNewProject) {
               const id = await this.createProject()

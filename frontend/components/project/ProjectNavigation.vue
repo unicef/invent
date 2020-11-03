@@ -36,6 +36,14 @@
               <translate>General</translate>
             </el-button>
           </li>
+          <li :class="{ active: active === 'categorization' }">
+            <el-button type="text" @click="scrollTo('categorization')">
+              <span class="Step">
+                <fa icon="arrow-right" />
+              </span>
+              <translate>Categorization</translate>
+            </el-button>
+          </li>
           <li :class="{ active: active === 'implementation' }">
             <el-button type="text" @click="scrollTo('implementation')">
               <span class="Step">
@@ -58,14 +66,6 @@
                 <fa icon="arrow-right" />
               </span>
               <translate>Partners</translate>
-            </el-button>
-          </li>
-          <li :class="{ active: active === 'categorization' }">
-            <el-button type="text" @click="scrollTo('categorization')">
-              <span class="Step">
-                <fa icon="arrow-right" />
-              </span>
-              <translate>Categorization</translate>
             </el-button>
           </li>
           <li :class="{ active: active === 'technology' }">

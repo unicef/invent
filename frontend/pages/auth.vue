@@ -90,7 +90,7 @@ export default {
   margin: 80px auto;
   p {
     margin-top: 20px;
-    max-width: 300px;
+    max-width: 400px;
     color: @colorGray;
   }
 }
