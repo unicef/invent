@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 import pprint as pp
 import json
 from user.models import User, UserProfile, Organisation
-from country.models import Donor
+from country.models import Donor, Country, CountryOffice
 from project.models import Project, Portfolio, ProblemStatement, ProjectPortfolioState, ReviewScore
 from project.tests.setup import TestProjectData
 
@@ -23,7 +23,7 @@ class Command(BaseCommand, TestProjectData):
     def create_background_data(self, data_dict):
         pp.pprint('Creating background data if needed')
         self.org, _ = Organisation.objects.get_or_create(name=data_dict['organisation'])
-        self.d1, _ = Donor.objects.get_or_create(name=data_dict['d1'],
+        self.d2, _ = Donor.objects.get_or_create(name=data_dict['d1'],
                                                  code=data_dict['d1'].lower().replace(' ', '_'))
         self.d2, _ = Donor.objects.get_or_create(name=data_dict['d2'],
                                                  code=data_dict['d2'].lower().replace(' ', '_'))
@@ -53,6 +53,18 @@ class Command(BaseCommand, TestProjectData):
 
             project_gen_data = project_gen_data['project']
             project_gen_data['date'] = project_gen_data['date'].strftime("%m/%d/%Y, %H:%M:%S")
+            country, _ = Country.objects.get_or_create(name=project_data.get('country', "unnamed_country"))
+            country_offices = CountryOffice.objects.filter(country=country)
+
+            if country_offices:
+                country_office = country_offices[0]
+            else:
+                CountryOffice.objects.get_or_create(
+                    name=f'Test Country Office ({country.name})',
+                    region=Country.UNICEF_REGIONS[0][0],
+                    country=country
+                )
+
             project_gen_data['country'] = country.id
             project_gen_data['organisation'] = org.id
             project_gen_data['country_office'] = country_office.id
@@ -63,7 +75,6 @@ class Command(BaseCommand, TestProjectData):
             project.team.set(project_team)
             project.data = project_gen_data
             project.make_public_id(self.country.id)
-            project.approve()
             project.save()
 
             projects_list.append(project)

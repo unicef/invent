@@ -1,7 +1,7 @@
 {
   "general": {
     "organisation": "Test org",
-    "d1": "T Donor 1",
+    "d1": "UNICEF",
     "d2": "T Donor 2"
   },
  "users": [
@@ -44,50 +44,63 @@
   "projects": [
     {
       "name":  "Improve hygienic access to goblins",
-      "team": ["Delphine Angua von Überwald", "Adora Belle Dearheart"]},
+      "team": ["Delphine Angua von Überwald", "Adora Belle Dearheart", "David Kiss"],
+      "country": "Afghanistan"
+    },
     {
       "name":  "Koom Valley celebrations",
-      "team": ["Delphine Angua von Überwald", "Carrot Ironfoundersson"]
+      "team": ["Delphine Angua von Überwald", "Carrot Ironfoundersson"],
+      "country": "Afghanistan"
     },
     {
       "name": "City watch ballista upgrade",
-      "team": ["Samuel Vimes", "Carrot Ironfoundersson"]
+      "team": ["Samuel Vimes", "Carrot Ironfoundersson"],
+      "country": "Afghanistan"
     },
     {
       "name":  "Clacks system 2nd generation",
-      "team": ["Moist von Lipwig", "Adora Belle Dearheart"]
+      "team": ["Moist von Lipwig", "Adora Belle Dearheart"],
+      "country": "Albania"
     },
     {
       "name": "Battle bread museum restoration",
-      "team": ["Carrot Ironfoundersson"]
+      "team": ["Carrot Ironfoundersson"],
+      "country": "Algeria"
     },
     {
       "name":  "Improve pie access to clowns befallen of hard times",
-      "team": ["Carrot Ironfoundersson"]
+      "team": ["Carrot Ironfoundersson"],
+      "country": "Angola"
     },
     {
       "name":  "The underground tunnel network",
-      "team": ["Havelock Vetinary"]
+      "team": ["Havelock Vetinary"],
+      "country": "Argentina"
     },
     {
       "name":  "Close the old Treacle mine",
-      "team": ["Havelock Vetinary"]
+      "team": ["Havelock Vetinary"],
+      "country": "Armenia"
     },
     {
       "name":  "Brass bridge polishing",
-      "team": ["Frederick Colon"]
+      "team": ["Frederick Colon"],
+      "country": "Azerbaijan"
     },
     {
       "name":  "Fix pothole dug for Windle Poons",
-      "team": ["Frederick Colon"]
+      "team": ["Frederick Colon"],
+      "country": "Bangladesh"
     },
     {
       "name":  "Black ribbonner awareness month",
-      "team": ["Carrot Ironfoundersson"]
+      "team": ["Carrot Ironfoundersson"],
+      "country": "Belarus"
     },
     {
       "name":  "Fund extensive city renovation by raising taxes",
-      "team": ["Havelock Vetinary"]
+      "team": ["Havelock Vetinary"],
+      "country": "Benin"
     }
   ],
   "portfolios": [
