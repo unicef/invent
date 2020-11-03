@@ -5,6 +5,25 @@
       :title="$gettext('Technology') | translate"
       show-legend
     >
+      <custom-required-form-item
+        :error="errors.first('platforms')"
+        :draft-rule="draftRules.platforms"
+        :publish-rule="publishRules.platforms"
+      >
+        <template slot="label">
+          <translate key="platform-label">
+            What are the names of the software included in the deployment?
+          </translate>
+        </template>
+
+        <platform-selector
+          v-model="platforms"
+          v-validate="rules.platforms"
+          data-vv-name="platforms"
+          data-vv-as="Software"
+        />
+      </custom-required-form-item>
+
       <el-row :gutter="20" type="flex">
         <el-col :span="24">
           <custom-required-form-item
@@ -93,15 +112,17 @@
 <script>
 import MultiSelector from '@/components/project/MultiSelector'
 import { mapGetters } from 'vuex'
+import { mapGettersActions } from '@/utilities/form'
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 import CollapsibleCard from '../CollapsibleCard'
-import { mapGettersActions } from '../../../utilities/form'
+import PlatformSelector from '../PlatformSelector'
 
 export default {
   components: {
     CollapsibleCard,
     MultiSelector,
+    PlatformSelector,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
@@ -112,6 +133,7 @@ export default {
       hardware: ['project', 'getHardware', 'setHardware', 0],
       functions: ['project', 'getFunctions', 'setFunctions', 0],
       nontech: ['project', 'getNontech', 'setNontech', 0],
+      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
     }),
   },
   methods: {

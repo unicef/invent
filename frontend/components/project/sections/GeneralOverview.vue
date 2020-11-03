@@ -50,6 +50,13 @@
 
       <custom-required-form-item>
         <template slot="label">
+          <translate key="field-offices"> City </translate>
+        </template>
+        <FieldOfficeSelector v-model="field_office" :office="country_office" />
+      </custom-required-form-item>
+
+      <custom-required-form-item>
+        <template slot="label">
           <translate key="country"> Country </translate>
         </template>
         {{ countryOfOffice }}
@@ -69,20 +76,6 @@
           </translate>
         </template>
         {{ regionalOffice }}
-      </custom-required-form-item>
-
-      <custom-required-form-item>
-        <template slot="label">
-          <translate key="field-offices"> Field Office </translate>
-        </template>
-        <FieldOfficeSelector v-model="field_office" :office="country_office" />
-      </custom-required-form-item>
-
-      <custom-required-form-item v-if="modified">
-        <template slot="label">
-          <translate key="updated"> Last updated </translate>
-        </template>
-        {{ lastUpdated }}
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -128,9 +121,7 @@
         :publish-rule="publishRules.implementation_overview"
       >
         <template slot="label">
-          <translate key="implementation-overview">
-            Initiative Description
-          </translate>
+          <translate key="implementation-overview"> Description </translate>
           <form-hint>
             <translate key="implementation-overview-hint">
               Describe your overall digital health project design.
@@ -160,57 +151,45 @@
       <el-row :gutter="20" type="flex">
         <el-col :span="12">
           <custom-required-form-item
-            :error="errors.first('start_date')"
-            :draft-rule="draftRules.start_date"
-            :publish-rule="publishRules.start_date"
+            :error="errors.first('contact_name')"
+            :draft-rule="draftRules.contact_name"
+            :publish-rule="publishRules.contact_name"
           >
             <template slot="label">
-              <translate key="start-date"> Initiative start date </translate>
+              <translate key="contact-name">Contact Name</translate>
               <form-hint>
-                <translate key="start-date-hint">
-                  When did the overall project, not just the digital health
-                  component, start.
+                <translate key="contact-name-hint">
+                  This is the individual who will be the lead point of contact
+                  for any queries through the DHA.
                 </translate>
               </form-hint>
             </template>
 
-            <SafeDatePicker
-              ref="Start date"
-              v-model="start_date"
-              v-validate="rules.start_date"
-              :placeholder="$gettext('Start date') | translate"
-              data-vv-name="start_date"
-              data-vv-as="Start date"
-              class="Date"
-              align="left"
+            <character-count-input
+              v-model="contact_name"
+              v-validate="rules.contact_name"
+              :rules="rules.contact_name"
+              data-vv-name="contact_name"
+              data-vv-as="Contact name"
             />
           </custom-required-form-item>
         </el-col>
-
         <el-col :span="12">
           <custom-required-form-item
-            :error="errors.first('end_date') || endDateError"
-            :draft-rule="draftRules.end_date"
-            :publish-rule="publishRules.end_date"
+            :error="errors.first('contact_email')"
+            :draft-rule="draftRules.contact_email"
+            :publish-rule="publishRules.contact_email"
           >
             <template slot="label">
-              <translate key="end-date"> Initiative end date </translate>
-              <form-hint>
-                <translate key="end-date-hint">
-                  When will the overall project be completed. If your project is
-                  ongoing, leave this field blank.
-                </translate>
-              </form-hint>
+              <translate key="contact-email">Contact Email</translate>
             </template>
 
-            <SafeDatePicker
-              v-model="end_date"
-              v-validate="rules.end_date"
-              :placeholder="$gettext('End date') | translate"
-              data-vv-name="end_date"
-              data-vv-as="End date"
-              class="Date"
-              align="left"
+            <character-count-input
+              v-model="contact_email"
+              v-validate="rules.contact_email"
+              :rules="rules.contact_email"
+              data-vv-name="contact_email"
+              data-vv-as="Contact email"
             />
           </custom-required-form-item>
         </el-col>
@@ -276,12 +255,19 @@
           </span>
         </custom-required-form-team-item>
       </div>
+
+      <custom-required-form-item v-if="modified">
+        <template slot="label">
+          <translate key="updated"> Last updated </translate>
+        </template>
+        {{ lastUpdated }}
+      </custom-required-form-item>
     </collapsible-card>
   </div>
 </template>
 
 <script>
-import { isAfter, format } from 'date-fns'
+import { format } from 'date-fns'
 import { mapGetters, mapState } from 'vuex'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
@@ -325,25 +311,12 @@ export default {
         'setImplementationOverview',
         0,
       ],
-      start_date: ['project', 'getStartDate', 'setStartDate', 0],
-      end_date: ['project', 'getEndDate', 'setEndDate', 0],
       contact_name: ['project', 'getContactName', 'setContactName', 0],
       contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0],
       field_office: ['project', 'getFieldOffice', 'setFieldOffice', 0],
     }),
-    endDateError() {
-      if (
-        this.usePublishRules &&
-        this.start_date &&
-        this.end_date &&
-        isAfter(this.start_date, this.end_date)
-      ) {
-        return this.$gettext('End date must be after Start date')
-      }
-      return ''
-    },
     selectedRegion() {
       const office = this.offices.find((obj) => obj.id === this.country_office)
       if (office) {
