@@ -123,7 +123,7 @@
       >
         <template slot-scope="scope">
           <div :class="`content ${scope.row.type === 'psa' ? '' : 'center'}`">
-            <template v-if="review.reviewed">
+            <template v-if="review.approved">
               <template v-if="scope.row.type === 'psa'">
                 <psa-list
                   :items="score[scope.row.type]"
@@ -152,7 +152,7 @@
                 multiple
                 filterable
                 clearable
-                :disabled="review.reviewed"
+                :disabled="review.approved"
               >
                 <el-option
                   v-for="i in problemStatements"
@@ -166,7 +166,7 @@
                 v-model="score[scope.row.type]"
                 class="select-psa"
                 clearable
-                :disabled="review.reviewed"
+                :disabled="review.approved"
               >
                 <el-option
                   v-for="sp in scalePhases"
@@ -179,7 +179,7 @@
                 v-else
                 v-model="score[scope.row.type]"
                 clearable
-                :disabled="review.reviewed"
+                :disabled="review.approved"
               >
                 <el-option v-for="i in points" :key="i" :label="i" :value="i" />
               </el-select>
@@ -193,7 +193,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <template v-if="!review.reviewed">
+    <template v-if="!review.approved">
       <span slot="footer" class="dialog-footer">
         <el-button type="info" text @click="setScoreDialog(false)">
           <translate>Cancel</translate>
@@ -248,7 +248,7 @@ export default {
       scalePhases: (state) => state.system.scalePhases,
     }),
     disabled() {
-      if (this.review.reviewed) {
+      if (this.review.approved) {
         return true
       }
       if (this.score.impact === null || this.score.impact === '') {

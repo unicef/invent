@@ -3,7 +3,7 @@
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
-    :placeholder="$gettext('Select Unicef office') | translate"
+    :placeholder="$gettext('UNICEF office') | translate"
     filterable
     class="select-office"
   >
