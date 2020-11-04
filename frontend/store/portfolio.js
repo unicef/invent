@@ -176,7 +176,7 @@ export const actions = {
   // portfolio actions
   async createPortfolio({ state, getters, dispatch }) {
     dispatch('setLoading', 'create')
-    await this.$axios.post(`/api/portfolio/create/`, {
+    const { data } = await this.$axios.post(`/api/portfolio/create/`, {
       name: state.name,
       description: state.description,
       status: state.status,
@@ -185,6 +185,7 @@ export const actions = {
       problem_statements: state.problemStatements.filter((i) => i.name !== ''),
     })
     dispatch('setLoading', false)
+    return data
   },
   async editPortfolio({ state, getters, dispatch }, id) {
     dispatch('setLoading', 'edit')

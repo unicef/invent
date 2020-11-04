@@ -36,7 +36,8 @@
       "
       :value="person.id"
     >
-      <span style="float: left">{{ person.name ? person.name : 'N/A' }}</span>
+      <!-- N/A -->
+      <span style="float: left">{{ person.name ? person.name : ' ' }}</span>
       <template v-if="person.organisation">
         <organisation-item :id="person.organisation" />
       </template>

@@ -173,7 +173,7 @@ export default {
       } else if (value && value.length > 0) {
         return value.join(', ')
       }
-      return 'N/A'
+      return ' ' // N/A
     },
     printProjectLink(project) {
       if (window) {

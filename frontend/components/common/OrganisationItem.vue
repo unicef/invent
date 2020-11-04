@@ -4,7 +4,7 @@
       {{ organisation.name }}
     </span>
     <span v-else>
-      <translate>N/A</translate>
+      <!-- N/A -->
     </span>
   </div>
 </template>

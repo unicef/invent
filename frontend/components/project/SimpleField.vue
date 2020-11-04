@@ -22,7 +22,7 @@
       </template>
     </div>
     <div v-show="missingContent" class="Empty">
-      <translate>N/A</translate>
+      <!-- N/A -->
     </div>
   </div>
 </template>

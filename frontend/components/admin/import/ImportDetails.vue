@@ -73,7 +73,7 @@ export default {
       const office = this.offices.find(
         (obj) => obj.id === this.item.country_office
       )
-      return office ? office.name : 'N/A'
+      return office ? office.name : ' ' // N/A
     },
     countryId() {
       const office = this.offices.find(

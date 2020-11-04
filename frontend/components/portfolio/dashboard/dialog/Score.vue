@@ -66,12 +66,14 @@
               :items="scope.row[reviewer][scope.row.type]"
               :problem-statements="problemStatements"
             />
-            <p v-else class="na psa">N/A</p>
+            <!-- N/A -->
+            <p v-else class="na psa"></p>
           </template>
           <p v-else-if="scope.row[reviewer][scope.row.type]" class="user-score">
             {{ scope.row[reviewer][scope.row.type] }}
           </p>
-          <p v-else class="na">N/A</p>
+          <!-- N/A -->
+          <p v-else class="na"></p>
           <el-popover
             v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
             placement="right"
@@ -329,7 +331,7 @@ export default {
       if (type === 'scale_phase') {
         return this.scalePhases.find((i) => i.id === this.score[type]).name
       }
-      return this.score[type] === null ? 'N/A' : this.score[type]
+      return this.score[type] === null ? ' ' : this.score[type] // N/A
     },
   },
 }

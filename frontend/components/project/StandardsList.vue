@@ -4,7 +4,8 @@
       <li v-for="standard in selected" :key="standard.id">
         {{ standard.name }}
       </li>
-      <li v-show="selected.length === 0">N/A</li>
+      <!-- N/A -->
+      <li v-show="selected.length === 0"></li>
     </ul>
   </div>
 </template>
