@@ -23,7 +23,7 @@ class Command(BaseCommand, TestProjectData):
     def create_background_data(self, data_dict):
         pp.pprint('Creating background data if needed')
         self.org, _ = Organisation.objects.get_or_create(name=data_dict['organisation'])
-        self.d2, _ = Donor.objects.get_or_create(name=data_dict['d1'],
+        self.d1, _ = Donor.objects.get_or_create(name=data_dict['d1'],
                                                  code=data_dict['d1'].lower().replace(' ', '_'))
         self.d2, _ = Donor.objects.get_or_create(name=data_dict['d2'],
                                                  code=data_dict['d2'].lower().replace(' ', '_'))
