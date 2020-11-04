@@ -166,7 +166,6 @@ export default {
   data() {
     return {
       country_office: null,
-      donor: 20,
       isDraftOrPublish: 'draft',
       inputFile: null,
       selectedSheet: null,
@@ -318,7 +317,7 @@ export default {
         country_office: this.country_office,
         country: this.offices.find((obj) => obj.id === this.country_office)
           .country,
-        donor: this.donor,
+        donor: this.getUnicefDonor.id,
         sheet_name: this.selectedSheet,
         header_mapping: Object.keys(this.parsed[0]).map((title) => ({
           selected: null,
