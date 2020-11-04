@@ -457,9 +457,9 @@ export default {
         const result = this.unicef_regions.find(
           (uf) => uf.id === this.office.region
         )
-        return (result && result.name) || 'N/A'
+        return (result && result.name) || ' ' // N/A
       }
-      return 'N/A'
+      return ' ' // N/A
     },
     selectedRegionOffice() {
       if (this.office) {

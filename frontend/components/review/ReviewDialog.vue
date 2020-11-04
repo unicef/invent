@@ -35,7 +35,7 @@
         <template v-if="!(question === 'impact' || question === 'scale_phase')">
           <div class="score-line">
             <p key="label" class="label">
-              <translate>{{ reviewQuestions[question].name }}</translate>
+              {{ reviewQuestions[question].name }}
             </p>
             <div class="divider"></div>
             <p v-if="question !== 'psa'" class="label">{{ score[question] }}</p>
@@ -53,7 +53,7 @@
             </template>
             <template v-else>
               <fa :icon="['fas', 'comment-alt']" />
-              <translate>{{ score[`${question}_comment`] }}</translate>
+              {{ score[`${question}_comment`] }}
             </template>
           </p>
         </template>
@@ -83,10 +83,10 @@
         <template v-if="!(question === 'impact' || question === 'scale_phase')">
           <p class="label">
             {{ `${idx + 1}/A: ` }}
-            <translate>{{ reviewQuestions[question].name }}</translate>
+            {{ reviewQuestions[question].name }}
           </p>
           <p class="sub-label">
-            <translate>{{ reviewQuestions[question].text }}</translate>
+            {{ reviewQuestions[question].text }}
           </p>
           <div class="select-box">
             <el-select

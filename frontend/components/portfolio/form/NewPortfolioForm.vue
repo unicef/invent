@@ -95,6 +95,7 @@ export default {
       setLoading: 'portfolio/setLoading',
     }),
     async unCaughtErrorHandler(errors) {
+      console.log(this.apiErrors)
       if (this.$sentry) {
         this.$sentry.captureMessage(
           'Un-caught validation error in portfolio page',
@@ -108,31 +109,18 @@ export default {
         )
       }
 
-      try {
-        await this.$confirm(
-          this.$gettext(
-            'There was an un-caught validation error an automatic report has been submitted'
-          ),
-          this.$gettext('Warning'),
-          {
-            confirmButtonText: this.$gettext('Recover & Reload'),
-            cancelButtonText: this.$gettext('Discard changes'),
-          }
-        )
-        const portfolio = {
-          ...this.portfolio,
+      await this.$confirm(
+        this.apiErrors.detail
+          ? this.apiErrors.detail
+          : this.$gettext(
+              'There was an un-caught validation error an automatic report has been submitted'
+            ),
+        this.$gettext('Warning'),
+        {
+          confirmButtonText: this.$gettext('Reload'),
         }
-        const toStore = JSON.stringify(portfolio)
-        window.localStorage.setItem('rescuedProject', toStore)
-        const newUrl =
-          window.location.origin +
-          this.$route.path +
-          `?reloadDataFromStorage=true`
-        window.location.href = newUrl
-      } catch (e) {
-        console.log('User declined the option to save, just reloading')
-        window.location.reload(true)
-      }
+      )
+      window.location.reload(true)
     },
     handleErrorMessages() {
       this.$nextTick(() => {

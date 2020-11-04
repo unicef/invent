@@ -321,13 +321,13 @@ export default {
       const office = this.offices.find((obj) => obj.id === this.country_office)
       if (office) {
         const result = this.unicef_regions.find((uf) => uf.id === office.region)
-        return (result && result.name) || 'N/A'
+        return (result && result.name) || ' ' // N/A
       }
-      return 'N/A'
+      return ' ' // N/A
     },
     countryOfOffice() {
       const office = this.offices.find((obj) => obj.id === this.country_office)
-      return office ? this.getCountryDetails(office.country).name : 'N/A'
+      return office ? this.getCountryDetails(office.country).name : ' ' // N/A
     },
     regionalOffice() {
       const office = this.regionalOffices.find(

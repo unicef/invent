@@ -20,7 +20,7 @@ export default {
     }),
     selected() {
       const found = this.items.find((i) => i.id === this.value)
-      return found ? found.name : 'N/A'
+      return found ? found.name : ' '
     },
   },
 }
