@@ -266,15 +266,18 @@ export const actions = {
     commit('SET_SEARCH_IN', value)
     commit('SET_CURRENT_PAGE', 1)
   },
-  setSelectedDHI({ commit }, columns) {
+  setSelectedDHI({ commit, dispatch }, columns) {
+    dispatch('setSearchGoals', { key: 'dhi', val: columns })
     commit('SET_SELECTED_DHI', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
-  setSelectedHFA({ commit }, columns) {
+  setSelectedHFA({ commit, dispatch }, columns) {
+    dispatch('setSearchGoals', { key: 'hfa', val: columns })
     commit('SET_SELECTED_HFA', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
-  setSelectedHSC({ commit }, columns) {
+  setSelectedHSC({ commit, dispatch }, columns) {
+    dispatch('setSearchGoals', { key: 'hsc', val: columns })
     commit('SET_SELECTED_HSC', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
@@ -286,21 +289,31 @@ export const actions = {
     commit('SET_SELECTED_RESULT', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
-  setSelectedCapabilityLevels({ commit }, columns) {
+  setSelectedCapabilityLevels({ commit, dispatch }, columns) {
+    dispatch('setSearchGoals', { key: 'cl', val: columns })
     commit('SET_SELECTED_CAPABILITY_LEVELS', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
-  setSelectedCapabilityCategories({ commit }, columns) {
+  setSelectedCapabilityCategories({ commit, dispatch }, columns) {
+    dispatch('setSearchGoals', { key: 'cc', val: columns })
     commit('SET_SELECTED_CAPABILITY_CATEGORIES', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
-  setSelectedCapabilitySubcategories({ commit }, columns) {
+  setSelectedCapabilitySubcategories({ commit, dispatch }, columns) {
+    dispatch('setSearchGoals', { key: 'cs', val: columns })
     commit('SET_SELECTED_CAPABILITY_SUBCATEGORIES', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
-  setSelectedPlatforms({ commit }, columns) {
+  setSelectedPlatforms({ commit, dispatch }, columns) {
+    dispatch('setSearchGoals', { key: 'sw', val: columns })
     commit('SET_SELECTED_PLATFORMS', columns)
     commit('SET_CURRENT_PAGE', 1)
+  },
+  setSearchGoals({ commit, dispatch, rootState }, { key, val }) {
+    if (!rootState.search.blockSearch) {
+      commit('search/SET_SEARCH', { key: 'sw', val }, { root: true })
+      dispatch('search/getSearch', {}, { root: true })
+    }
   },
   setSelectedRows({ commit, state }, rows) {
     if (state.selectAll && state.selectedRows.length > rows.length) {

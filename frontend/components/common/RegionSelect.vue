@@ -2,7 +2,7 @@
   <el-select
     v-model="innerValue"
     :disabled="disabled"
-    :placeholder="$gettext('Select region') | translate"
+    :placeholder="$gettext('Region') | translate"
     clearable
   >
     <el-option

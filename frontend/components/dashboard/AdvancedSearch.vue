@@ -6,19 +6,19 @@
     <div class="UnicefSingleSelection">
       <goal-areas-selector
         v-model="selectedGoal"
-        :placeholder="$gettext('Select Goal Area') | translate"
+        :placeholder="$gettext('Goal Area') | translate"
         clearable
       />
       <result-areas-selector
         v-model="selectedResult"
         :goal-area="selectedGoal"
-        :placeholder="$gettext('Select Result Area') | translate"
+        :placeholder="$gettext('Result Area') | translate"
       />
       <multi-selector
         v-model="innovationCategories"
         class="MultiSelectorFilter"
         source="getInnovationCategories"
-        :placeholder="$gettext('Select Innovation Categories') | translate"
+        :placeholder="$gettext('Innovation Categories') | translate"
       />
     </div>
     <div class="FilterItems">
@@ -235,12 +235,15 @@ export default {
   border-left: 1px solid #eae6e1;
   background-color: @colorWhite;
   > div {
-    padding: 20px;
+    padding: 21px;
     border-bottom: 1px solid #eae6e1;
     .el-select {
       margin-bottom: 12px;
       .el-select__tags {
         overflow: hidden;
+      }
+      &:last-child {
+        margin-bottom: 0px;
       }
     }
     .el-input {
@@ -251,19 +254,6 @@ export default {
     &:last-child {
       border: 0;
     }
-  }
-
-  .MultiSelectorFilter {
-    margin: 10px 0;
-  }
-
-  .UnicefSingleSelection {
-    .el-select:first-child {
-      margin-bottom: 10px;
-    }
-  }
-
-  .FilterSwitches {
   }
 }
 </style>
