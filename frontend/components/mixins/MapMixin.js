@@ -74,7 +74,9 @@ const MapMixin = {
       },
     },
     countriesPin() {
-      return this.allCountriesPin.filter((cp) => cp.id !== this.selectedCountry)
+      return this.allCountriesPin
+        ? this.allCountriesPin.filter((cp) => cp.id !== this.selectedCountry)
+        : []
     },
     selectedCountryPin() {
       return this.allCountriesPin.find((cp) => cp.id === this.selectedCountry)
@@ -212,7 +214,7 @@ const MapMixin = {
     zoomChangeHandler(event) {
       this.setCurrentZoom(event.target.getZoom())
     },
-    pinOptionsAndIconGenerator(id, isActive) {
+    pinOptionsAndIconGenerator(id, isActive = false) {
       const projects = this.getCountryProjects(id).length
       const markerClasses = ['CountryCenterIcon']
       if (isActive) {
@@ -235,9 +237,13 @@ const MapMixin = {
     iconsGenerator() {
       const icons = {}
       const options = {}
-      this.countriesPin.forEach((cp) => {
-        ;[icons[cp.id], options[cp.id]] = this.pinOptionsAndIconGenerator(cp.id)
-      })
+      if (this.countriesPin.length > 0) {
+        this.countriesPin.forEach((cp) => {
+          ;[icons[cp.id], options[cp.id]] = this.pinOptionsAndIconGenerator(
+            cp.id
+          )
+        })
+      }
       this.countryCenterIcons = icons
       this.countryCenterOptions = options
     },

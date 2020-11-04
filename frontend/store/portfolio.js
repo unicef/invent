@@ -125,12 +125,6 @@ export const getters = {
   getStatements: (state) => state.problemStatements,
   getLoading: (state) => state.loading,
   getPortfolios: (state) => state.portfolios,
-  getActivePortfolios: (state) => {
-    return filter(
-      state.portfolios,
-      (portfolio) => portfolio.status === 'active'
-    )
-  },
 }
 
 export const actions = {
@@ -217,6 +211,23 @@ export const actions = {
     })
     commit('SET_VALUE', { key: 'portfolios', val: portfolios })
   },
+  async getActivePortfolios({ state, commit, dispatch }) {
+    const { data } = await this.$axios.get('api/portfolio/active-list/')
+    const portfolios = data.map((i) => {
+      const icon = state.icons.find((item) => item.id === i.icon).icon
+      return {
+        id: i.id,
+        name: i.name,
+        total: i.project_count,
+        status: status(i.status),
+        description: i.description,
+        ps: i.problem_statements,
+        managers: i.managers,
+        icon,
+      }
+    })
+    commit('SET_VALUE', { key: 'portfolios', val: portfolios })
+  },
   async getPortfolioDetails({ state, commit, dispatch }, id) {
     const { data } = await this.$axios.get(`api/portfolio/manager-of/`)
     const {
@@ -235,7 +246,10 @@ export const actions = {
       key: 'icon',
       val: state.icons.find((item) => item.id === icon),
     })
-    commit('SET_VALUE', { key: 'managers', val: managers })
+    commit('SET_VALUE', {
+      key: 'managers',
+      val: managers.map((i) => i.id || i),
+    })
     commit('SET_VALUE', {
       key: 'problemStatements',
       val: problem_statements,

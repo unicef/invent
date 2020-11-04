@@ -227,7 +227,7 @@ export default {
     })
     // actual search
     await Promise.all([
-      store.dispatch('portfolio/getPortfolios'),
+      store.dispatch('portfolio/getActivePortfolios'),
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('portfolio/getPortfolioDetails', params.id),
       store.dispatch('search/getSearch'),
@@ -240,6 +240,7 @@ export default {
   computed: {
     ...mapState({
       ps: (state) => state.search.filter.ps,
+      portfolios: (state) => state.portfolio.portfolios,
     }),
     ...mapGetters({
       ambitionMatrix: 'matrixes/getAmbitionMatrix',
@@ -247,7 +248,6 @@ export default {
       problemStatementMatrix: 'matrixes/getProblemStatementMatrix',
       name: 'portfolio/getName',
       description: 'portfolio/getDescription',
-      portfolios: 'portfolio/getActivePortfolios',
     }),
   },
   methods: {

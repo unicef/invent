@@ -21,7 +21,12 @@ export const stateGenerator = () => ({
 })
 
 export const gettersGenerator = () => ({
-  getProjectsMap: (state) => [...state.projectsMap.map((r) => ({ ...r }))],
+  getProjectsMap(state) {
+    const map = state.projectsMap
+      ? state.projectsMap.map((r) => ({ ...r }))
+      : []
+    return [...map]
+  },
   getCountryPins(state, getters, rootState, rootGetters) {
     const polyLabeled = rootGetters['countries/getCountries'].filter(
       (c) => c.lat
