@@ -98,7 +98,7 @@
 
 <script>
 import InfoCard from '@/components/portfolio/dashboard/InfoCard'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -110,12 +110,12 @@ export default {
       activePS: undefined,
     }
   },
-  fetch({ store }) {
-    return store.dispatch('portfolio/getPortfolios')
+  async fetch({ store }) {
+    await store.dispatch('portfolio/getActivePortfolios')
   },
   computed: {
-    ...mapGetters({
-      portfolios: 'portfolio/getActivePortfolios',
+    ...mapState({
+      portfolios: (state) => state.portfolio.portfolios,
     }),
   },
 }
