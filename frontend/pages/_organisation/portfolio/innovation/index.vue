@@ -111,7 +111,7 @@ export default {
     }
   },
   async fetch({ store }) {
-    await store.dispatch('portfolio/getActivePortfolios')
+    await store.dispatch('portfolio/getPortfolios', 'active-list')
   },
   computed: {
     ...mapState({
