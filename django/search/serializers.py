@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from project.models import Portfolio
 from project.serializers import ProjectPortfolioStateManagerSerializer
 
 
@@ -69,8 +70,10 @@ class PortfolioResultSerializer(ListResultSerializer):
 
     def get_review_states(self, obj):
         profile = self.context.get('profile')
-        if self.context.get('portfolio_page') in ['review', 'portfolio'] and \
-                profile and (profile.global_portfolio_owner or obj.project.managers.filter(id=profile.id)):
+        if self.context.get('portfolio_page') in ['review', 'portfolio'] \
+                and profile \
+                and (profile.global_portfolio_owner
+                     or Portfolio.objects.get(id=self.context['portfolio_id']).managers.filter(id=profile.id)):
             return ProjectPortfolioStateManagerSerializer(
                 obj.project.review_states.get(portfolio_id=self.context['portfolio_id'])
             ).data
