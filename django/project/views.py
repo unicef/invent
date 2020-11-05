@@ -94,26 +94,29 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         return dict(
-            technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
+            technology_platforms=TechnologyPlatform.objects.values('id', 'name').custom_ordered(),
             goal_areas=UNICEFGoal.objects.values('id', 'name', 'capability_level_question',
-                                                 'capability_category_question', 'capability_subcategory_question'),
-            result_areas=UNICEFResultArea.objects.values('id', 'name', 'goal_area_id'),
-            capability_levels=UNICEFCapabilityLevel.objects.values('id', 'name', 'goal_area_id'),
-            capability_categories=UNICEFCapabilityCategory.objects.values('id', 'name', 'goal_area_id'),
-            capability_subcategories=UNICEFCapabilitySubCategory.objects.values('id', 'name', 'goal_area_id'),
+                                                 'capability_category_question', 'capability_subcategory_question')
+            .custom_ordered(),
+            result_areas=UNICEFResultArea.objects.values('id', 'name', 'goal_area_id').custom_ordered(),
+            capability_levels=UNICEFCapabilityLevel.objects.values('id', 'name', 'goal_area_id').custom_ordered(),
+            capability_categories=UNICEFCapabilityCategory.objects.values('id', 'name', 'goal_area_id').
+            custom_ordered(),
+            capability_subcategories=UNICEFCapabilitySubCategory.objects.values('id', 'name', 'goal_area_id').
+            custom_ordered(),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
             regional_offices=RegionalOffice.objects.values('id', 'name'),
             currencies=Currency.objects.values('id', 'name', 'code'),
-            sectors=UNICEFSector.objects.values('id', 'name'),
-            regional_priorities=RegionalPriority.objects.values('id', 'name'),
+            sectors=UNICEFSector.objects.values('id', 'name').custom_ordered(),
+            regional_priorities=RegionalPriority.objects.values('id', 'name').custom_ordered(),
             phases=Phase.objects.values('id', 'name'),
-            hardware=HardwarePlatform.objects.values('id', 'name'),
-            nontech=NontechPlatform.objects.values('id', 'name'),
-            functions=PlatformFunction.objects.values('id', 'name'),
-            cpd=CPD.objects.values('id', 'name'),
-            innovation_categories=InnovationCategory.objects.values('id', 'name')
+            hardware=HardwarePlatform.objects.values('id', 'name').custom_ordered(),
+            nontech=NontechPlatform.objects.values('id', 'name').custom_ordered(),
+            functions=PlatformFunction.objects.values('id', 'name').custom_ordered(),
+            cpd=CPD.objects.values('id', 'name').custom_ordered(),
+            innovation_categories=InnovationCategory.objects.values('id', 'name').custom_ordered()
         )
 
     @staticmethod
@@ -719,7 +722,7 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
             if created:
                 from project.tasks import project_review_requested_on_create_notification
                 project_review_requested_on_create_notification.apply_async(args=[score.id,
-                                                                                  request.data.get('message', None)],)
+                                                                                  request.data.get('message', None)], )
         # return with scores
         data_serializer = ReviewScoreBriefSerializer(scores, many=True)
         return Response(data_serializer.data, status=status.HTTP_200_OK)

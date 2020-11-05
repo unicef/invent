@@ -90,8 +90,35 @@ class SoftDeleteModel(models.Model):
         self.save()
 
 
+class CustomNameOrderedQuerySet(ActiveQuerySet):
+
+    special_names = {
+        'NA',
+        'N/A',
+        'Unknown',
+        'Other',
+        'Bespoke',
+        'No'
+    }
+
+    def custom_ordered(self):
+        items = self.all()
+        items_front = []
+        items_back = []
+        for item in items:
+            if item.get("name", None) in self.special_names:  # pragma: no cover
+                items_front.append(item)
+            else:
+                items_back.append(item)
+
+        return items_front + items_back
+
+
 class ExtendedNameOrderedSoftDeletedModel(SoftDeleteModel, ExtendedModel):
     name = models.CharField(max_length=512)
+
+    all_objects = QuerySet.as_manager()
+    objects = CustomNameOrderedQuerySet.as_manager()
 
     class Meta:
         abstract = True

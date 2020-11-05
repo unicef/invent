@@ -24,9 +24,9 @@ class Command(BaseCommand, TestProjectData):
         pp.pprint('Creating background data if needed')
         self.org, _ = Organisation.objects.get_or_create(name=data_dict['organisation'])
         self.d1, _ = Donor.objects.get_or_create(name=data_dict['d1'],
-                                                 code=data_dict['d1'].lower().replace(' ', '_'))
+                                                 defaults={'code': data_dict['d1'].lower().replace(' ', '_')})
         self.d2, _ = Donor.objects.get_or_create(name=data_dict['d2'],
-                                                 code=data_dict['d2'].lower().replace(' ', '_'))
+                                                 defaults={'code': data_dict['d2'].lower().replace(' ', '_')})
         self.country, self.country_office = self.create_new_country_and_office(project_approval=False)
 
     @staticmethod
