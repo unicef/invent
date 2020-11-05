@@ -255,11 +255,13 @@ export default {
 
   .el-dialog__body {
     padding: 0;
-    height: calc(80vh - (@dialogHeaderFooterHeight*2));
+    height: inherit;
+    overflow: hidden;
+    overflow-y: hidden !important;
   }
 
   .FilterDialogWrapper {
-    height: calc(80vh - (@dialogHeaderFooterHeight*2));
+    height: inherit;
 
     .FilterSelector {
       position: relative;
@@ -284,22 +286,23 @@ export default {
     }
 
     // Special case for DHI items
-    // OMG, this is a real mess!! :(
     .DigitalHealthInterventionsFilter {
       .el-col-6 {
         overflow: hidden;
-        height: calc(80vh - (@dialogHeaderFooterHeight * 2));
+        height: inherit;
         border-right: 1px solid @colorGrayLight;
 
         .SelectorDialogColumn {
           .Header {
-            width: calc((90vw - @filterSelectorWidth) / 4 - 1px);
-            max-width: calc(
-              ((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4 - 1px
-            );
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            .el-checkbox__label {
+              font-size: 10px;
+            }
           }
-
           .Main {
+            top: 0;
             .Item {
               .el-checkbox__label {
                 font-size: @fontSizeSmall;
@@ -308,16 +311,13 @@ export default {
             }
           }
         }
-
         &:last-child {
           border: 0;
-
           .SelectorDialogColumn {
             .Header {
-              width: calc((90vw - @filterSelectorWidth) / 4);
-              max-width: calc(
-                ((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4
-              );
+              position: relative;
+              width: 100%;
+              max-width: 100%;
             }
           }
         }
@@ -330,12 +330,13 @@ export default {
     .PlatformFilter {
       .SelectorDialogColumn {
         .Header {
-          width: calc(90vw - @filterSelectorWidth);
-          max-width: calc((@appWidthMaxLimit * 0.9) - @filterSelectorWidth);
+          position: relative;
+          width: 100%;
+          max-width: 100%;
         }
       }
-
       .Main {
+        top: 0;
         .Items {
           margin: 0;
         }
