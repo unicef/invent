@@ -334,7 +334,6 @@ export default {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate(),
-        Promise.resolve(this.endDateError === ''),
       ])
       console.log('General overview published validation', validations)
       return validations.reduce((a, c) => a && c, true)
