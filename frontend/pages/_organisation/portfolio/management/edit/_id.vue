@@ -31,7 +31,7 @@ export default {
     }
   },
   async fetch({ store, params }) {
-    await store.dispatch('portfolio/getPortfolioDetails', params.id)
+    await store.dispatch('portfolio/getPortfolioDetails', { id: params.id })
   },
   computed: {
     ...mapState({

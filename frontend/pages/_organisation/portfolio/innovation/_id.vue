@@ -227,9 +227,11 @@ export default {
     })
     // actual search
     await Promise.all([
-      store.dispatch('portfolio/getActivePortfolios'),
       store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('portfolio/getPortfolioDetails', params.id),
+      store.dispatch('portfolio/getPortfolioDetails', {
+        id: params.id,
+        type: 'active-list',
+      }),
       store.dispatch('search/getSearch'),
       // map
       store.dispatch('search/loadProjectsMap'),

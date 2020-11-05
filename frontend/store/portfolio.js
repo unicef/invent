@@ -1,5 +1,4 @@
 import { toInteger } from 'lodash'
-import filter from 'lodash/filter'
 
 export const state = () => ({
   loading: false,
@@ -193,9 +192,9 @@ export const actions = {
     })
     dispatch('setLoading', false)
   },
-  async getPortfolios({ state, commit, dispatch }) {
+  async getPortfolios({ state, commit, dispatch }, type = 'manager-of') {
     // active-list
-    const { data } = await this.$axios.get('api/portfolio/manager-of/')
+    const { data } = await this.$axios.get(`api/portfolio/${type}/`)
     const portfolios = data.map((i) => {
       const icon = state.icons.find((item) => item.id === i.icon).icon
       return {
@@ -211,25 +210,12 @@ export const actions = {
     })
     commit('SET_VALUE', { key: 'portfolios', val: portfolios })
   },
-  async getActivePortfolios({ state, commit, dispatch }) {
-    const { data } = await this.$axios.get('api/portfolio/active-list/')
-    const portfolios = data.map((i) => {
-      const icon = state.icons.find((item) => item.id === i.icon).icon
-      return {
-        id: i.id,
-        name: i.name,
-        total: i.project_count,
-        status: status(i.status),
-        description: i.description,
-        ps: i.problem_statements,
-        managers: i.managers,
-        icon,
-      }
-    })
-    commit('SET_VALUE', { key: 'portfolios', val: portfolios })
-  },
-  async getPortfolioDetails({ state, commit, dispatch }, id) {
-    const { data } = await this.$axios.get(`api/portfolio/manager-of/`)
+
+  async getPortfolioDetails(
+    { state, commit, dispatch },
+    { id, type = 'manager-of' }
+  ) {
+    const { data } = await this.$axios.get(`api/portfolio/${type}/`)
     const {
       name,
       description,
@@ -257,7 +243,7 @@ export const actions = {
   },
   async getPortfolioProjects({ state, commit, dispatch }) {
     try {
-      dispatch('getPortfolioDetails', state.currentPortfolioId)
+      dispatch('getPortfolioDetails', { id: state.currentPortfolioId })
       const baseUrl = `api/search?portfolio=${state.currentPortfolioId}&type=portfolio&portfolio_page=`
       const results = await Promise.all([
         this.$axios.get(`${baseUrl}inventory`),
@@ -419,8 +405,6 @@ export const actions = {
     commit('SET_VALUE', { key: 'managers', val: [] })
     commit('SET_VALUE', { key: 'problemStatements', val: [] })
   },
-  // general pre portfolio setup
-  // todo: change to portfolios API
 }
 
 export const mutations = {
