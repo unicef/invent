@@ -29,8 +29,6 @@ DASHBOARD_COLUMNS = [
      'label': _('Capability Categories')},
     {'id': 15,
      'label': _('Capability Subcategories')},
-    {'id': 16,
-     'label': _('Field office')},
     {'id': 17,
      'label': _('Innovation Categories')},
 ]

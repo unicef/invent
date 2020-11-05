@@ -37,7 +37,6 @@ class ProjectSearch(ExtendedModel):
         "approved": "project__approval__approved",  # false=> approved=0 ; true=> approved=1
         "goal": "project__data__goal_area",  # eg: goal=1
         "result": "project__data__result_area",  # eg: result=1
-        "fo": "project__data__field_office",  # eg: fo=1&fo=2
         "cl": "capability_levels",  # eg: cl=1&cl=2
         "cc": "capability_categories",  # eg: cc=1&cc=2
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
@@ -100,7 +99,7 @@ class ProjectSearch(ExtendedModel):
         if selected_fields:
             for field in selected_fields:
                 if query_params[field]:
-                    if field in ["country", 'co', "region", "goal", "result", "fo"]:
+                    if field in ["country", 'co', "region", "goal", "result"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field in ["donor", "sw", "dhi", "hfa", "hsc",

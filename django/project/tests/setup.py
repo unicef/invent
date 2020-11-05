@@ -57,7 +57,8 @@ class TestProjectData:
         country_office, _ = CountryOffice.objects.get_or_create(
             name=f'Test Country Office ({name})',
             region=Country.UNICEF_REGIONS[0][0],
-            country=country
+            country=country,
+            city="Zion"
         )
         return country, country_office
 
@@ -100,7 +101,6 @@ class TestProjectData:
             "hsc_challenges": [1, 2],
             "start_date": str(datetime.today().date()),
             "end_date": str(datetime.today().date()),
-            "field_office": 1,
             "goal_area": 1,
             "result_area": 1,
             "capability_levels": [],

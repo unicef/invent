@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
-from country.models import Donor, FieldOffice, CountryOffice, RegionalOffice, Currency
+from country.models import Donor, CountryOffice, RegionalOffice, Currency
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
     ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin
 from project.cache import cache_structure
@@ -48,7 +48,6 @@ class ProjectPublicViewSet(ViewSet):
         `health_focus_areas` = WHO's Health Focus Areas  
         `hsc_challenges` = WHO's Health System Challanges  
         `strategies` = WHO's Digital Health Interventions  
-        `field_offices`  
         `regional_offices`  
         `currencies`  
         `sectors` = UNICEF Sectors  
@@ -105,7 +104,6 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
-            field_offices=FieldOffice.objects.values('id', 'name', 'country_office_id'),
             regional_offices=RegionalOffice.objects.values('id', 'name'),
             currencies=Currency.objects.values('id', 'name', 'code'),
             sectors=UNICEFSector.objects.values('id', 'name'),

@@ -30,7 +30,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "technology_platforms")
         self.assertContains(response, "hsc_challenges")
-        self.assertEqual(len(response.json().keys()), 20)
+        self.assertEqual(len(response.json().keys()), 19)
 
     def test_retrieve_project_structure_cache(self):
         with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):

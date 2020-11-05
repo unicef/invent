@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
-from .models import Country, Donor, FieldOffice, CountryOffice, RegionalOffice, Currency
+from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
 
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -34,12 +34,6 @@ class CountryAdmin(AllObjectsAdmin):
 
     def has_delete_permission(self, request, obj=None):  # pragma: no cover
         return False
-
-
-@admin.register(FieldOffice)
-class FieldOfficeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'country_office', 'name')
-    ordering = search_fields = ['country_office__name', 'name']
 
 
 @admin.register(RegionalOffice)
