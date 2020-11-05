@@ -101,6 +101,7 @@ class CountryOffice(ExtendedModel):
     region = models.IntegerField(choices=Country.UNICEF_REGIONS, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     regional_office = models.ForeignKey(RegionalOffice, on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):  # pragma: no cover
         return self.name
@@ -108,14 +109,6 @@ class CountryOffice(ExtendedModel):
     class Meta:
         verbose_name = 'UNICEF Office'
         verbose_name_plural = 'UNICEF Offices'
-
-
-class FieldOffice(InvalidateCacheMixin, models.Model):
-    name = models.CharField(max_length=256)
-    country_office = models.ForeignKey(CountryOffice, blank=True, null=True, on_delete=models.CASCADE)
-
-    def __str__(self):  # pragma: no cover
-        return self.name
 
 
 class Currency(InvalidateCacheMixin, models.Model):

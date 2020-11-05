@@ -59,7 +59,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
     contact_email = serializers.EmailField()
 
     # UNICEF SECTION
-    field_office = serializers.IntegerField(required=False)
     goal_area = serializers.IntegerField()
     result_area = serializers.IntegerField(required=False)
     capability_levels = serializers.ListField(

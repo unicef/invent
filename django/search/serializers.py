@@ -35,7 +35,6 @@ class ListResultSerializer(serializers.Serializer):
     # UNICEF FIELDS
     goal_area = serializers.ReadOnlyField(source="project.data.goal_area")
     result_area = serializers.ReadOnlyField(source="project.data.result_area")
-    field_office = serializers.ReadOnlyField(source="project.data.field_office")
     capability_levels = serializers.ReadOnlyField(source="project.data.capability_levels")
     capability_categories = serializers.ReadOnlyField(source="project.data.capability_categories")
     capability_subcategories = serializers.ReadOnlyField(source="project.data.capability_subcategories")

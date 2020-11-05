@@ -77,7 +77,6 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         ** UNICEF filters **
 
         `co` UNICEF Office eg: co=1&co=2  
-        `fo` Field Office in eg: fo=1&fo=2  
         `goal` Goal Area in eg: goal=1&goal=2  
         `result` Result Area in eg: result=1&result=2  
         `cl` Capability Levels overlap eg: cl=1&cl=2  
