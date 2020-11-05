@@ -50,6 +50,13 @@
 
       <custom-required-form-item>
         <template slot="label">
+          <translate key="field-offices"> City </translate>
+        </template>
+        {{ city }}
+      </custom-required-form-item>
+
+      <custom-required-form-item>
+        <template slot="label">
           <translate key="country"> Country </translate>
         </template>
         {{ countryOfOffice }}
@@ -318,6 +325,10 @@ export default {
     countryOfOffice() {
       const office = this.offices.find((obj) => obj.id === this.country_office)
       return office ? this.getCountryDetails(office.country).name : ' ' // N/A
+    },
+    city() {
+      const office = this.offices.find((obj) => obj.id === this.country_office)
+      return office ? office.city : ' ' // N/A
     },
     regionalOffice() {
       const office = this.regionalOffices.find(
