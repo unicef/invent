@@ -134,7 +134,10 @@ export default {
   methods: {
     async validate() {
       this.$refs.collapsible.expandCard()
-      const validations = await Promise.all([this.$validator.validate()])
+      const validations = await Promise.all([
+        this.$validator.validate(),
+        Promise.resolve(this.endDateError === ''),
+      ])
       return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft() {
