@@ -235,9 +235,6 @@ export default {
         return a.concat(innerValue)
       }, [])
       const flatGoalAreas = this.projectDicts.goal_areas.map((p) => p.name)
-      const flatFieldOffices = this.projectDicts.field_offices.map(
-        (p) => p.name
-      )
       const flatResultAreas = this.projectDicts.result_areas.map((p) => p.name)
       const flatCapabilityLevels = this.projectDicts.capability_levels.map(
         (p) => p.name
@@ -277,7 +274,6 @@ export default {
         [nameMapping.hsc_challenges, ...flatHSC],
         [nameMapping.platforms, ...flatPlatforms],
         [nameMapping.dhis, ...flathDHI],
-        [nameMapping.field_office, ...flatFieldOffices],
         [nameMapping.goal_area, ...flatGoalAreas],
         [nameMapping.result_area, ...flatResultAreas],
         [nameMapping.capability_levels, ...flatCapabilityLevels],

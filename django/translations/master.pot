@@ -1,0 +1,3894 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: easygettext\n"
+"Project-Id-Version: \n"
+
+#: components/project/sections/GeneralOverview.vue:83
+msgid "-"
+msgstr ""
+
+#: components/review/ReviewDialog.vue:67
+msgid ""
+"— Please consult the detailed project information for this\n"
+"          initiative in INVENT before completing the questionnaire. "
+"Carefully\n"
+"          review each question and associated scoring guidance by hovering\n"
+"          over the question mark icon. NOTE: Once questionnaire is "
+"submitted,\n"
+"          it can no longer be changed. Please reach out to the portfolio\n"
+"          manager with any questions."
+msgstr ""
+
+#: components/common/list/DonorsList.vue:14
+#: components/common/list/HealthFocusAreasList.vue:15
+#: components/dashboard/CustomAnswersCell.vue:14
+msgid "... {excluded} more"
+msgstr ""
+
+#: pages/_organisation/terms.vue:32
+msgid ""
+"(“Website”), including without limitation participation in its\n"
+"            forums, blog, and all linked pages owned and operated by "
+"Results\n"
+"            for Development Institute (“HRP,” “we,” or “our”)."
+msgstr ""
+
+#: components/review/ReviewDialog.vue:51
+msgid "(no comment)"
+msgstr ""
+
+#: components/review/ReviewDialog.vue:37 components/review/ReviewDialog.vue:85
+msgid "{{ reviewQuestions[question].name }}"
+msgstr ""
+
+#: components/review/ReviewDialog.vue:88
+msgid "{{ reviewQuestions[question].text }}"
+msgstr ""
+
+#: components/review/ReviewDialog.vue:55
+msgid "{{ score[`${question}_comment`] }}"
+msgstr ""
+
+#: components/dashboard/PersonaSelector.vue:48
+msgid "{country} MoH"
+msgstr ""
+
+#: components/dashboard/CurrentPage.vue:2
+msgid "{min}-{max} of {total}"
+msgstr ""
+
+#: components/dashboard/PersonaSelector.vue:24
+msgid "{name} (me)"
+msgstr ""
+
+#: components/project/ProjectData.vue:498
+#: components/project/sections/CountryCustom.vue:59
+#: components/project/sections/DonorCustom.vue:60
+msgid "{name} custom fields"
+msgstr ""
+
+#: components/project/SubLevelCoverageField.vue:5
+#: components/project/SubLevelCoverageField.vue:24
+msgid "{name} level deployment"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:117 components/admin/CountryAdmin.vue:133
+#: components/admin/CountryAdmin.vue:149 components/admin/DonorAdmin.vue:86
+#: components/admin/DonorAdmin.vue:12 components/admin/DonorAdmin.vue:114
+msgid "{num} new request(s)"
+msgstr ""
+
+#: components/common/SearchComponent.vue:106
+msgid "{num} result(s)"
+msgstr ""
+
+#: components/common/SearchComponent.vue:28
+msgid "{num} result(s):"
+msgstr ""
+
+#: components/dialogs/FilterItem.vue:13
+msgid "{selected} item(s) selected"
+msgstr ""
+
+#: components/dashboard/DashboardFiltersHeader.vue:3
+msgid "{total} project(s) to show"
+msgstr ""
+
+#: components/common/map/MapProjectsBox.vue:12
+msgid "&nbsp; {count} project(s)"
+msgstr ""
+
+#: components/project/CoverageField.vue:16
+#: components/project/CoverageField.vue:47
+msgid "# Clients"
+msgstr ""
+
+#: components/project/CoverageField.vue:10
+#: components/project/CoverageField.vue:33
+msgid "# Facilities"
+msgstr ""
+
+#: components/project/CoverageField.vue:4
+#: components/project/CoverageField.vue:19
+msgid "# Health Workers"
+msgstr ""
+
+#: components/project/TeamList.vue:7
+msgid "+ {{ unknown }} members"
+msgstr ""
+
+#: components/project/ProjectData.vue:4 components/project/ProjectData.vue:23
+msgid "1. General Overview"
+msgstr ""
+
+#: components/project/ProjectData.vue:76 components/project/ProjectData.vue:201
+msgid "2. Categorization"
+msgstr ""
+
+#: components/project/ProjectData.vue:160
+#: components/project/ProjectData.vue:407
+msgid "3. Implementation Overview"
+msgstr ""
+
+#: components/project/ProjectData.vue:233
+#: components/project/ProjectData.vue:568
+msgid "4. Phase"
+msgstr ""
+
+#: components/project/ProjectData.vue:259
+#: components/project/ProjectData.vue:646
+msgid "5. Partners"
+msgstr ""
+
+#: components/project/ProjectData.vue:299
+#: components/project/ProjectData.vue:738
+msgid "6. Technology"
+msgstr ""
+
+#: components/dialogs/SaveFilterDialog.vue:89
+msgid "A saved configuration with this name is already present"
+msgstr ""
+
+#: pages/_organisation/terms.vue:63
+msgid "Accuracy of Content"
+msgstr ""
+
+#: components/project/ProjectForm.vue:310
+msgid "Action cancelled"
+msgstr ""
+
+#: components/portfolio/dashboard/TableTopActions.vue:103
+msgid "Actions:"
+msgstr ""
+
+#: components/admin/DhaQuestionOptions.vue:49
+#: components/dashboard/FilterItem.vue:15
+#: components/project/AddRmButtons.vue:20
+msgid "Add"
+msgstr ""
+
+#: components/admin/DhaQuestionOptions.vue:34
+#: components/admin/DhaQuestionOptions.vue:79
+msgid "Add a new option here"
+msgstr ""
+
+#: components/review/ReviewDialog.vue:118
+msgid "Add comment (optional)"
+msgstr ""
+
+#: components/project/DigitalHealthInterventionsSelector.vue:4
+msgid "Add Digital Health Interventions"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Review.vue:25
+msgid "Add Message:"
+msgstr ""
+
+#: components/common/EmptyProjects.vue:21
+msgid "Add new project"
+msgstr ""
+
+#: components/admin/DhaQuestionaire.vue:36
+msgid "Add new question"
+msgstr ""
+
+#: components/portfolio/form/inputs/Statements.vue:33
+msgid "Add new statement"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:47
+msgid "Add Portfolio"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:198
+msgid "Add team members (editors)"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:227
+msgid "Add team members (viewers)"
+msgstr ""
+
+#: components/common/Favorite.vue:15 components/common/Favorite.vue:41
+msgid "Add to favorites"
+msgstr ""
+
+#: components/portfolio/dashboard/MainTable.vue:387
+msgid "Add to Favorites"
+msgstr ""
+
+#: components/portfolio/form/Managers.vue:14
+msgid "Add/remove manager(s)"
+msgstr ""
+
+#: components/project/sections/DonorCustom.vue:58
+msgid "Additional {name} fields"
+msgstr ""
+
+#: components/BreadCrumb.vue:42 components/BreadCrumb.vue:43
+#: components/BreadCrumb.vue:44 components/BreadCrumb.vue:45
+#: components/BreadCrumb.vue:46
+msgid "Admin"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:38
+msgid "Administrator that approved the project"
+msgstr ""
+
+#: components/common/SearchComponent.vue:42
+msgid "Advanced search"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:56
+msgid "All Countries"
+msgstr ""
+
+#: components/common/DhaFooter.vue:6
+msgid ""
+"All reasonable precautions have been taken by the UNICEF to verify the\n"
+"        information contained in this publication. However, the published\n"
+"        material is being distributed without warranty of any kind, either\n"
+"        expressed or implied. The responsibility for the interpretation and\n"
+"        use of the material lies with the reader. In no event shall the "
+"UNICEF\n"
+"        be liable for damages arising from its use. Please read our"
+msgstr ""
+
+#: components/SignupComponent.vue:53
+msgid "Already signed up?"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:191
+msgid "ambition matrix"
+msgstr ""
+
+#: components/DhaLogin.vue:132
+msgid ""
+"An email with instructions to reset your password have been\n"
+"        sent."
+msgstr ""
+
+#: components/DhaLogin.vue:229
+msgid "An error occured during login, please reload the page and try again"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:163
+msgid "An error occured while deleting the question"
+msgstr ""
+
+#: components/admin/DhaQuestionaire.vue:91
+msgid "An error occured while processing your request"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:228
+msgid "An error occured while saving the data"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:202
+msgid "An error occured while saving the question"
+msgstr ""
+
+#: components/common/EmptyProjects.vue:30
+msgid "and begin tracking your performance"
+msgstr ""
+
+#: components/DhaVerify.vue:14
+msgid "and use the system."
+msgstr ""
+
+#: components/project/ProjectData.vue:191
+#: components/project/ProjectData.vue:471
+msgid "Annual Work Plan"
+msgstr ""
+
+#: components/common/UserProjectsList.vue:51
+msgid ""
+"Any initiatives you have been requested to review as part of the innovation "
+"portfolio review process will appear below. Please complete review for any "
+"initiatives marked “Unscored” below."
+msgstr ""
+
+#: pages/_organisation/terms.vue:228
+msgid ""
+"Any personal information that you provide to us will be used only\n"
+"            for the following purposes:"
+msgstr ""
+
+#: components/dialogs/DashboardFiltersDialog.vue:115
+msgid "Apply filters"
+msgstr ""
+
+#: components/dialogs/DashboardFiltersDialog.vue:1
+#: components/dialogs/DashboardFiltersDialog.vue:12
+msgid "Applying specific filter to map/list"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:541 components/admin/DonorAdmin.vue:457
+#: components/admin/ProjectApproval.vue:57
+#: components/admin/ProjectApproval.vue:151
+#: components/dialogs/ProjectApprovalDialog.vue:21
+#: components/dialogs/ProjectApprovalDialog.vue:66
+#: components/dialogs/ProjectApprovalDialog.vue:68
+#: components/dialogs/ProjectApprovalDialog.vue:225
+msgid "Approved"
+msgstr ""
+
+#: components/common/ExtendedProjectCard.vue:63
+#: components/common/ProjectCard.vue:28
+msgid "Approved by MOH"
+msgstr ""
+
+#: components/admin/import/ImportHeaders.vue:155
+msgid "Are you sure? this operation is not reversible"
+msgstr ""
+
+#: components/DjangoFeedback.vue:13
+msgid "Ask our experts"
+msgstr ""
+
+#: components/BreadCrumb.vue:57 components/common/ProjectBar.vue:4
+#: components/common/ProjectCardActions.vue:68
+msgid "Assessment"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Review.vue:1
+#: components/portfolio/dashboard/dialog/Review.vue:9
+msgid "Assign Reviewer"
+msgstr ""
+
+#: components/portfolio/dashboard/table/Reviewers.vue:17
+msgid "Assign Reviewers"
+msgstr ""
+
+#: pages/_organisation/terms.vue:415
+msgid ""
+"At any time and without notice, we may suspend, cancel, or\n"
+"            terminate your right to use this Website or any portion of the\n"
+"            Website. In the event of a suspension, cancellation, or\n"
+"            termination, you are no longer authorized to access the part of\n"
+"            the Website affected by such suspension, cancellation, or\n"
+"            termination."
+msgstr ""
+
+#: components/project/ProjectForm.vue:294
+msgid "Attention"
+msgstr ""
+
+#: pages/_organisation/portfolio/management/_id.vue:9
+#: pages/_organisation/portfolio/management/edit/_id.vue:7
+#: pages/_organisation/portfolio/management/new.vue:7
+msgid "Back"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:90
+msgid "Back to admin"
+msgstr ""
+
+#: components/admin/DhaQuestionaire.vue:19
+#: components/admin/DhaQuestionaire.vue:53
+msgid "Before adding another question please save the previous one"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:97
+msgid ""
+"By clicking on a problem statement you can add or remove it\n"
+"                from your current filter settings."
+msgstr ""
+
+#: components/dashboard/SearchBox.vue:24 components/dashboard/SearchBox.vue:99
+#: components/search/SearchBox.vue:25 components/search/SearchBox.vue:98
+msgid ""
+"By selecting these fields, you will limit the search to only data included "
+"in these fields. If you want a broader search, leave these fields blank and "
+"all project data will be searched."
+msgstr ""
+
+#: components/UserPrivileges.vue:41
+msgid "Can approve initiatives if the iniciative approval feature is active"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:234 components/admin/CountryAdmin.vue:291
+msgid ""
+"Can approve initiatives if the initiative approval\n"
+"                      feature is active"
+msgstr ""
+
+#: components/UserPrivileges.vue:73
+msgid "Can approve initiatives if the initiative approval feature is active"
+msgstr ""
+
+#: components/UserPrivileges.vue:36 components/UserPrivileges.vue:68
+#: components/admin/CountryAdmin.vue:229 components/admin/CountryAdmin.vue:286
+msgid "Can approve users to join the Government page"
+msgstr ""
+
+#: components/UserPrivileges.vue:107 components/UserPrivileges.vue:129
+#: components/admin/DonorAdmin.vue:181 components/admin/DonorAdmin.vue:227
+msgid "Can approve users to join the investor page"
+msgstr ""
+
+#: components/UserPrivileges.vue:21 components/UserPrivileges.vue:53
+#: components/admin/CountryAdmin.vue:213 components/admin/CountryAdmin.vue:270
+msgid "Can create and delete Government-specific questions"
+msgstr ""
+
+#: components/UserPrivileges.vue:97 components/UserPrivileges.vue:119
+#: components/admin/DonorAdmin.vue:171 components/admin/DonorAdmin.vue:217
+msgid "Can create and delete investor-specific questions"
+msgstr ""
+
+#: components/UserPrivileges.vue:78 components/admin/CountryAdmin.vue:297
+msgid "Can customize and update Government home page"
+msgstr ""
+
+#: components/UserPrivileges.vue:134 components/admin/DonorAdmin.vue:232
+msgid "Can customize and update investor home page"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:172 components/admin/CountryAdmin.vue:223
+#: components/admin/CountryAdmin.vue:280
+msgid ""
+"Can read/export responses to private Government\n"
+"                      questions"
+msgstr ""
+
+#: components/UserPrivileges.vue:4 components/UserPrivileges.vue:31
+#: components/UserPrivileges.vue:63
+msgid "Can read/export responses to private Government questions"
+msgstr ""
+
+#: components/UserPrivileges.vue:85 components/UserPrivileges.vue:92
+#: components/admin/DonorAdmin.vue:136 components/admin/DonorAdmin.vue:166
+msgid "Can read/export responses to private investor questions"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:211
+msgid ""
+"Can read/export responses to private investor-specific\n"
+"                      questions"
+msgstr ""
+
+#: components/UserPrivileges.vue:114
+msgid "Can read/export responses to private investor-specific questions"
+msgstr ""
+
+#: components/UserPrivileges.vue:26 components/UserPrivileges.vue:58
+#: components/UserPrivileges.vue:102 components/UserPrivileges.vue:124
+#: components/admin/CountryAdmin.vue:218 components/admin/CountryAdmin.vue:275
+#: components/admin/DonorAdmin.vue:176 components/admin/DonorAdmin.vue:222
+msgid "Can select which questions are private and public"
+msgstr ""
+
+#: components/UserPrivileges.vue:16 components/UserPrivileges.vue:48
+#: components/admin/CountryAdmin.vue:208 components/admin/CountryAdmin.vue:265
+msgid "Can update Government map data"
+msgstr ""
+
+#: components/UserPrivileges.vue:9 components/admin/CountryAdmin.vue:178
+msgid "Can view when a project is approved/declined"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:73
+msgid "Can you provide a link to a demo of the application?"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:51
+msgid "Can you provide a link to code documentation?"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:96
+msgid "Can you provide a link to the software wikipage?"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:144 components/admin/DhaQuestion.vue:182
+#: components/admin/import/ImportDialog.vue:146
+#: components/admin/import/ImportHeaders.vue:159
+#: components/dashboard/FilterPresetsActions.vue:101
+#: components/dashboard/TableTopActions.vue:129
+#: components/dialogs/DashboardFiltersDialog.vue:110
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:38
+#: components/dialogs/EditSubLevelDialog.vue:19
+#: components/dialogs/ProjectApprovalDialog.vue:84
+#: components/dialogs/SaveFilterDialog.vue:29
+#: components/portfolio/dashboard/TableTopActions.vue:83
+#: components/portfolio/dashboard/dialog/Score.vue:198
+#: components/project/ProjectForm.vue:297
+#: components/project/ProjectNavigation.vue:178
+#: pages/_organisation/admin/import/_id.vue:284
+#: pages/_organisation/admin/import/_id.vue:308
+#: pages/_organisation/admin/import/_id.vue:377
+msgid "Cancel"
+msgstr ""
+
+#: components/project/TeamSelector.vue:144
+msgid "cant't be added. Make sure email is part of unicef.org"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:140
+#: components/dashboard/MainTable.vue:316
+#: components/portfolio/dashboard/MainTable.vue:193
+#: components/portfolio/dashboard/MainTable.vue:432
+msgid "Capability Categories"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:245
+msgid "Capability Categories:"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:124
+#: components/dashboard/MainTable.vue:283
+#: components/portfolio/dashboard/MainTable.vue:177
+#: components/portfolio/dashboard/MainTable.vue:399
+msgid "Capability Levels"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:241
+msgid "Capability Levels:"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:156
+#: components/dashboard/MainTable.vue:350
+#: components/portfolio/dashboard/MainTable.vue:209
+#: components/portfolio/dashboard/MainTable.vue:466
+msgid "Capability Subcategories"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:251
+msgid "Capability Subcategories:"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:43
+#: components/project/sections/Categorization.vue:2
+#: components/project/sections/Categorization.vue:14
+msgid "Categorization"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:177
+msgid "challenge"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:33
+msgid "Change"
+msgstr ""
+
+#: components/portfolio/dashboard/table/Scores.vue:4
+msgid "Change / view score"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:22 components/admin/CountryAdmin.vue:55
+msgid "Choose country"
+msgstr ""
+
+#: components/portfolio/form/inputs/IconSelect.vue:8
+msgid "Choose icon"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:22 components/admin/DonorAdmin.vue:55
+msgid "Choose investor"
+msgstr ""
+
+#: components/dashboard/FilterPresetsActions.vue:46
+#: components/dialogs/FilterItem.vue:24
+msgid "Clear"
+msgstr ""
+
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:41
+msgid "Clear All"
+msgstr ""
+
+#: components/DjangoFeedback.vue:32
+msgid ""
+"Click here if you are experiencing any issues or have suggestion for\n"
+"        improving the website"
+msgstr ""
+
+#: components/common/map/MapProjectsBox.vue:23
+msgid ""
+"Click on the map to view the digital health project\n"
+"            information."
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:80
+msgid ""
+"Client users refers to all care recipients who have direct\n"
+"              access to the software. If there are no users of this type, "
+"put\n"
+"              0."
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:176
+#: components/portfolio/form/NewPortfolioForm.vue:209
+#: components/project/ProjectForm.vue:272
+#: components/project/ProjectForm.vue:331
+msgid "Close"
+msgstr ""
+
+#: components/dialogs/SelectorDialogColumn.vue:8
+msgid "Collapse"
+msgstr ""
+
+#: components/admin/import/ImportHeaders.vue:156
+msgid "Column Delete"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Score.vue:74
+#: components/portfolio/dashboard/dialog/Score.vue:161
+msgid "Comment"
+msgstr ""
+
+#: components/portfolio/dashboard/table/Reviewers.vue:8
+msgid "Complete"
+msgstr ""
+
+#: components/review/ReviewCardStripe.vue:11
+msgid "Complete Review"
+msgstr ""
+
+#: components/portfolio/dashboard/table/Scores.vue:8
+msgid "Completed"
+msgstr ""
+
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:46
+msgid "Confirm"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:174
+#: components/portfolio/form/NewPortfolioForm.vue:207
+#: components/project/ProjectForm.vue:270
+#: components/project/ProjectForm.vue:329
+msgid "Congratulation"
+msgstr ""
+
+#: components/DhaVerify.vue:8
+msgid "Congratulations your email address is verified, you can now"
+msgstr ""
+
+#: components/DhaLogin.vue:128
+msgid "Congratulations!"
+msgstr ""
+
+#: pages/_organisation/terms.vue:449 pages/_organisation/terms.vue:451
+#: pages/_organisation/terms.vue:558
+msgid "Contact"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:68
+msgid "Contact {selected} selected"
+msgstr ""
+
+#: components/project/ProjectData.vue:54 components/project/ProjectData.vue:283
+#: components/project/ProjectData.vue:135
+#: components/project/sections/GeneralOverview.vue:176
+#: components/project/sections/Partners.vue:79
+msgid "Contact Email"
+msgstr ""
+
+#: components/project/ProjectData.vue:48 components/project/ProjectData.vue:279
+#: components/project/ProjectData.vue:119
+#: components/project/sections/GeneralOverview.vue:151
+msgid "Contact Name"
+msgstr ""
+
+#: components/common/ProjectBar.vue:29
+#: pages/_organisation/portfolio/innovation/index.vue:78
+msgid "Contact person"
+msgstr ""
+
+#: components/portfolio/Matrix.vue:77
+msgid "Contact Person"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:67
+msgid "Contact selected"
+msgstr ""
+
+#: components/dialogs/SendEmailDialog.vue:27
+msgid "Copy to clipboard"
+msgstr ""
+
+#: components/EditProfile.vue:38 components/EditProfile.vue:123
+#: components/admin/import/ImportDetails.vue:5
+#: components/common/ProjectCard.vue:122 components/common/UserDropdown.vue:26
+#: components/dashboard/MainTable.vue:48 components/dashboard/MainTable.vue:103
+#: components/portfolio/dashboard/MainTable.vue:101
+#: components/portfolio/dashboard/MainTable.vue:219
+#: components/project/ProjectData.vue:22 components/project/ProjectData.vue:67
+#: components/project/sections/GeneralOverview.vue:52
+#: components/search/SearchBox.vue:83
+msgid "Country"
+msgstr ""
+
+#: components/common/ActionBar.vue:41
+#: components/common/ProjectLegendContent.vue:32
+#: components/common/UserDropdown.vue:72
+msgid "Country admin"
+msgstr ""
+
+#: components/EditProfile.vue:267
+msgid "Country Admin"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:4
+msgid "Country admin for {name}"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:101
+msgid "Country center pin"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:10 components/admin/CountryAdmin.vue:28
+msgid "Country information"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:327 components/admin/CountryAdmin.vue:904
+msgid "Country map"
+msgstr ""
+
+#: components/portfolio/dashboard/MainTable.vue:114
+#: components/portfolio/dashboard/MainTable.vue:248
+msgid "Country Office"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:320 components/admin/CountryAdmin.vue:892
+msgid "Country specific questionnaire"
+msgstr ""
+
+#: components/EditProfile.vue:289
+msgid "Country System Admin"
+msgstr ""
+
+#: components/common/map/CountryCenterMarker.vue:24
+msgid "Country view"
+msgstr ""
+
+#: components/dashboard/PersonaSelector.vue:41
+msgid "Country View"
+msgstr ""
+
+#: components/EditProfile.vue:114 components/EditProfile.vue:245
+msgid "Country viewer"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:38 components/admin/CountryAdmin.vue:99
+#: components/admin/DonorAdmin.vue:38 components/admin/DonorAdmin.vue:94
+msgid "Cover image"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:42 components/admin/CountryAdmin.vue:120
+#: components/admin/DonorAdmin.vue:42 components/admin/DonorAdmin.vue:115
+msgid "Cover text"
+msgstr ""
+
+#: components/BreadCrumb.vue:66
+msgid "Create a new portfolio"
+msgstr ""
+
+#: components/portfolio/dashboard/TitleCard.vue:10
+msgid "Create a New Portfolio"
+msgstr ""
+
+#: pages/_organisation/portfolio/management/new.vue:9
+msgid "Create new portfolio"
+msgstr ""
+
+#: components/common/SearchComponent.vue:7
+#: components/common/SearchComponent.vue:51
+msgid "Create your search here"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:248
+msgid "Currency"
+msgstr ""
+
+#: components/project/ProjectData.vue:177
+#: components/project/ProjectData.vue:443
+msgid "Current Achievements"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:101
+msgid ""
+"Data can only be added one office at a time. If your data is from\n"
+"            more than one office, you can make a separate sheet for each\n"
+"            one."
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:46
+#: components/dialogs/ProjectApprovalDialog.vue:183
+msgid "Date/Time"
+msgstr ""
+
+#: components/project/AddRmButtons.vue:10
+msgid "Delete"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:293
+msgid "Delete canceled"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:135
+msgid ""
+"Describe what the technology aims to achieve, detailing the\n"
+"            users, the reasons for deploying the system, and current and\n"
+"            future phases of deployment."
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:118
+msgid "Describe your overall digital health project design."
+msgstr ""
+
+#: components/portfolio/form/GeneralSettings.vue:31
+#: components/portfolio/form/inputs/Statements.vue:19
+#: components/project/ProjectData.vue:41 components/project/ProjectData.vue:104
+#: components/project/sections/GeneralOverview.vue:116
+msgid "Description"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:13
+#: components/portfolio/dashboard/TableTopActions.vue:7
+msgid "Deselect all {total} initiatives"
+msgstr ""
+
+#: pages/_organisation/terms.vue:3
+msgid "DHA Help Center"
+msgstr ""
+
+#: components/dashboard/SearchBox.vue:56
+msgid "digital health"
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:102
+#: components/dashboard/AdvancedSearch.vue:239
+#: components/dialogs/DashboardFiltersDialog.vue:14
+#: components/dialogs/DashboardFiltersDialog.vue:42
+msgid "Digital Health Interventions"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:119
+#: components/project/ProjectForm.vue:192
+msgid "Discard changes"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:124
+msgid "Discard draft"
+msgstr ""
+
+#: components/common/DhaFooter.vue:4
+msgid "Disclaimer:"
+msgstr ""
+
+#: pages/_organisation/terms.vue:327
+msgid "Disclaimers"
+msgstr ""
+
+#: pages/_organisation/terms.vue:269
+msgid "Disclosure"
+msgstr ""
+
+#: components/EditProfile.vue:385 components/admin/CountryAdmin.vue:338
+#: components/admin/DonorAdmin.vue:266
+#: components/portfolio/form/NewPortfolioForm.vue:29
+msgid "Dismiss changes"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:109
+msgid "Districts center pin"
+msgstr ""
+
+#: components/project/sections/InteroperabilityAndStandards.vue:13
+msgid ""
+"Does your project share information with one or more of these\n"
+"          digital Health Information System components?"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:11
+msgid "Download"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:117
+#: components/common/ExtendedProjectCard.vue:54
+#: components/project/ProjectNavigation.vue:12
+#: pages/_organisation/initiatives/_id/edit/index.vue:7
+#: pages/_organisation/initiatives/_id/index.vue:7
+msgid "Draft"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:113
+msgid "Draft or Publish"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:26
+msgid "Draft or Published"
+msgstr ""
+
+#: components/project/ProjectForm.vue:304
+msgid "Draft overriden with published version"
+msgstr ""
+
+#: components/BreadCrumb.vue:54
+msgid "Drafted Initiative"
+msgstr ""
+
+#: components/DhaLogin.vue:20 components/DhaLogin.vue:90
+#: components/DhaLogin.vue:46 components/DhaLogin.vue:234
+msgid "E-mail"
+msgstr ""
+
+#: components/admin/import/ImportDialog.vue:19
+#: components/dashboard/FilterItem.vue:19
+msgid "Edit"
+msgstr ""
+
+#: pages/_organisation/portfolio/management/_id.vue:12
+#: pages/_organisation/portfolio/management/edit/_id.vue:10
+msgid "Edit `{name}` portfolio"
+msgstr ""
+
+#: components/common/ProjectCardActions.vue:51
+msgid "Edit Draft"
+msgstr ""
+
+#: components/portfolio/dashboard/PortfolioCard.vue:45
+msgid "Edit info"
+msgstr ""
+
+#: components/BreadCrumb.vue:53
+msgid "Edit Initiative"
+msgstr ""
+
+#: pages/_organisation/initiatives/_id/edit/index.vue:3
+msgid "Edit Initiative Info"
+msgstr ""
+
+#: components/EditProfile.vue:3
+msgid "Edit my profile"
+msgstr ""
+
+#: components/BreadCrumb.vue:69 components/BreadCrumb.vue:70
+msgid "Edit portfolio"
+msgstr ""
+
+#: components/project/DigitalHealthInterventionsSelector.vue:15
+msgid "Edit selection"
+msgstr ""
+
+#: components/dialogs/EditSubLevelDialog.vue:1
+#: components/dialogs/EditSubLevelDialog.vue:11
+msgid "Edit Sub Level"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:200
+#: components/project/sections/GeneralOverview.vue:216
+msgid "Editors can edit and publish initiatives"
+msgstr ""
+
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:16
+#: components/common/UserDropdown.vue:19
+msgid "Email"
+msgstr ""
+
+#: components/EditProfile.vue:24 components/EditProfile.vue:76
+#: components/SignupComponent.vue:22 components/SignupComponent.vue:65
+msgid "Email address"
+msgstr ""
+
+#: components/dialogs/SendEmailDialog.vue:91
+msgid "Email address(es) successfully copied in your clipboard"
+msgstr ""
+
+#: components/dialogs/SendEmailDialog.vue:84
+msgid "Email addresses ({rows})"
+msgstr ""
+
+#: components/DhaVerify.vue:4
+msgid "Email confirmation"
+msgstr ""
+
+#: pages/_organisation/terms.vue:460
+msgid "Email:"
+msgstr ""
+
+#: components/project/sections/Stages.vue:79
+#: components/project/sections/Stages.vue:212
+msgid "End date"
+msgstr ""
+
+#: components/project/sections/Stages.vue:129
+msgid "End date must be after Start date"
+msgstr ""
+
+#: components/SignupComponent.vue:5
+msgid "Enter new password"
+msgstr ""
+
+#: components/DhaLogin.vue:75
+msgid ""
+"Enter your email address and follow the instructions you will get by\n"
+"        email."
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:346
+msgid "Error"
+msgstr ""
+
+#: components/project/sections/Technology.vue:74
+msgid ""
+"Examples of Progamme Innovation and Non-Technology platform(s)\n"
+"                include, but are not limited to, UpShift, Innovative "
+"Finance,\n"
+"                Partnerships, etc."
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:176
+#: pages/_organisation/portfolio/innovation/_id.vue:181
+msgid "existing"
+msgstr ""
+
+#: components/dialogs/SelectorDialogColumn.vue:12
+msgid "Expand"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/index.vue:18
+msgid ""
+"Expand the portfolios below to learn more about the key problems we seek\n"
+"      to solve in our priority areas for innovation, or select “View\n"
+"      Portfolio” to explore solutions."
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/index.vue:6
+msgid "Explore the Portfolios"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:41
+msgid "Export {selected} selected"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:38
+#: components/portfolio/dashboard/TableTopActions.vue:29
+msgid "Export selected"
+msgstr ""
+
+#: components/admin/ProjectApproval.vue:10
+msgid "Export Selected"
+msgstr ""
+
+#: components/project/FacilitySelector.vue:1
+#: components/project/FacilitySelector.vue:11
+msgid "Facilities"
+msgstr ""
+
+#: components/admin/import/SmartCell.vue:53
+msgid "Failed to parse your data, click to manually fix"
+msgstr ""
+
+#: components/project/ProjectForm.vue:132
+msgid "Failed to restore auto-saved project"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:457
+msgid "File imported succesffully"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:39
+msgid "File Name"
+msgstr ""
+
+#: components/dialogs/SaveFilterDialog.vue:17
+#: components/dialogs/SaveFilterDialog.vue:45
+msgid "Filter preset name"
+msgstr ""
+
+#: components/EditProfile.vue:354
+msgid "Financial investor"
+msgstr ""
+
+#: components/EditProfile.vue:17 components/EditProfile.vue:50
+msgid "First and Last Name"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:60 components/admin/CountryAdmin.vue:172
+#: components/admin/DonorAdmin.vue:55 components/admin/DonorAdmin.vue:163
+msgid "Footer text"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:51 components/admin/CountryAdmin.vue:146
+#: components/admin/DonorAdmin.vue:51 components/admin/DonorAdmin.vue:141
+msgid "Footer title"
+msgstr ""
+
+#: pages/_organisation/terms.vue:246
+msgid "For internal review."
+msgstr ""
+
+#: components/DhaLogin.vue:52
+msgid "Forgot password?"
+msgstr ""
+
+#: components/common/ProjectCard.vue:36
+msgid "Found in \"{found}\""
+msgstr ""
+
+#: components/project/ProjectData.vue:326
+#: components/project/ProjectData.vue:806
+msgid "Function(s) of Platform"
+msgstr ""
+
+#: components/project/ProjectData.vue:213
+#: components/project/ProjectData.vue:535
+#: components/project/sections/ImplementationOverview.vue:289
+msgid "Funding Needs"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:35
+msgid "General"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:2
+#: components/project/sections/GeneralOverview.vue:14
+msgid "General overview"
+msgstr ""
+
+#: components/portfolio/form/GeneralSettings.vue:2
+#: components/portfolio/form/GeneralSettings.vue:14
+msgid "General settings"
+msgstr ""
+
+#: components/landing/AboutSection.vue:12
+msgid "Global Support to DHA"
+msgstr ""
+
+#: pages/_organisation/terms.vue:6
+msgid "Go back"
+msgstr ""
+
+#: components/DhaLogin.vue:108 components/DhaLogin.vue:152
+msgid "Go back to login"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:169
+msgid "Go to Dashboard"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:356
+msgid "Go to project"
+msgstr ""
+
+#: components/project/ProjectData.vue:87 components/project/ProjectData.vue:228
+msgid "Goal area"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:87 components/dashboard/MainTable.vue:196
+#: components/portfolio/dashboard/MainTable.vue:140
+#: components/portfolio/dashboard/MainTable.vue:312
+#: components/project/sections/Categorization.vue:45
+msgid "Goal Area"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:409
+msgid "Goal Area:"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:130
+msgid "Government Admins"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:146
+msgid "Government System Admins"
+msgstr ""
+
+#: components/EditProfile.vue:92 components/EditProfile.vue:244
+#: components/EditProfile.vue:266 components/EditProfile.vue:288
+msgid "Government user"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:114
+msgid "Government Viewers"
+msgstr ""
+
+#: components/project/ProjectData.vue:307
+#: components/project/ProjectData.vue:762
+msgid "Hardware Platform(s) and Physical Product(s)"
+msgstr ""
+
+#: components/DhaLogin.vue:185 components/DhaLogin.vue:208
+#: components/SignupComponent.vue:115
+msgid "Has to be a valid email address"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:47
+msgid ""
+"Health facilities using the system refers to all facilities that\n"
+"              have direct access to the software. If there are no users of\n"
+"              this type, put 0."
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:76
+#: components/dashboard/AdvancedSearch.vue:189
+msgid "Health Focus Area"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:265
+msgid "Health Focus Area:"
+msgstr ""
+
+#: components/project/ProjectData.vue:108
+#: components/project/ProjectData.vue:266
+msgid "Health focus area(s)"
+msgstr ""
+
+#: components/dialogs/DashboardFiltersDialog.vue:21
+#: components/dialogs/DashboardFiltersDialog.vue:58
+msgid "Health focus areas"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:210
+#: components/dashboard/MainTable.vue:489
+#: components/portfolio/dashboard/MainTable.vue:265
+#: components/portfolio/dashboard/MainTable.vue:605
+msgid "Health Focus Areas"
+msgstr ""
+
+#: components/dialogs/DashboardFiltersDialog.vue:28
+#: components/dialogs/DashboardFiltersDialog.vue:74
+msgid "Health system challenges"
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:89
+#: components/dashboard/AdvancedSearch.vue:214
+#: components/dashboard/PdfExport.vue:274
+msgid "Health System Challenges"
+msgstr ""
+
+#: components/project/ProjectData.vue:114
+#: components/project/ProjectData.vue:283
+msgid "Health System Challenges (HSC)"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:14
+msgid ""
+"Health workers include all recognized health professionals\n"
+"              directly accessing the software. If there are no users of "
+"this\n"
+"              type, put 0."
+msgstr ""
+
+#: components/common/UserProjectsList.vue:48
+msgid "Here are all the initiatives you are a Member or a Viewer of"
+msgstr ""
+
+#: components/landing/MyProjectsBox.vue:6
+msgid "Here are your initiatives updated most recently"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:102
+#: components/admin/VueMapCustomizer.vue:110
+#: components/admin/VueMapCustomizer.vue:234
+#: components/admin/VueMapCustomizer.vue:265
+msgid "Hide"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:164
+#: pages/_organisation/portfolio/innovation/_id.vue:171
+msgid "high"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:160
+msgid "High activity"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:44
+#: components/dialogs/ProjectApprovalDialog.vue:169
+msgid "History"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:74
+msgid "How many beneficiaries are reached be the initiative?"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:76
+msgid "How many clients use the system?"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:43
+msgid "How many facilities use the system?"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:10
+msgid "How many health workers use the system?"
+msgstr ""
+
+#: pages/_organisation/terms.vue:176
+msgid ""
+"HRP reserves the right, but has no obligation, to monitor the\n"
+"            content of the message boards, bulletin boards, blogs, and "
+"other\n"
+"            services available on the Website to determine compliance with "
+"the\n"
+"            Terms of Use and any other operating rules we establish. We\n"
+"            reserve the exclusive right to edit, remove, or refuse to post "
+"any\n"
+"            submitted materials or information. We are not responsible for "
+"and\n"
+"            do not endorse any of the opinions, advice, or statements "
+"posted\n"
+"            in messages, bulletin boards, blogs, and other services. We are\n"
+"            not responsible for any offensive, defamatory, or obscene "
+"posting\n"
+"            made on the message boards or other features on the Website. We\n"
+"            reserve the right to disclose any information we believe "
+"necessary\n"
+"            to satisfy any Law regulation, or governmental request, or to\n"
+"            refuse to post or to remove any information or materials, in "
+"whole\n"
+"            or in part, that in our sole discretion are inappropriate,\n"
+"            objectionable or in violation of these Terms. We also reserve "
+"the\n"
+"            right to deny access to the Website or any features of the "
+"Website\n"
+"            to anyone who violates these Terms or who, in our judgment,\n"
+"            interferes with the ability of others to enjoy our website or\n"
+"            infringes the rights of others. HRP assumes no liability for "
+"any\n"
+"            action or inaction with respect to any conduct, communication, "
+"or\n"
+"            posting on the message boards, bulletin boards, blogs, or other\n"
+"            services on this Website."
+msgstr ""
+
+#: pages/_organisation/terms.vue:78
+msgid ""
+"HRP, its contributors, sponsors, administrators, or anyone else\n"
+"            connected with HRP in any way whatsoever, cannot be responsible\n"
+"            for any inaccurate or libelous information or for your use of "
+"the\n"
+"            information contained in or linked from these web pages."
+msgstr ""
+
+#: pages/_organisation/terms.vue:346
+msgid ""
+"HRP, TO THE FULLEST EXTENT PERMITTED BY LAW, DISCLAIMS ALL\n"
+"              WARRANTIES, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT "
+"LIMITED\n"
+"              TO WARRANTIES OF TITLE, NON-INFRINGEMENT OF THIRD PARTIES’\n"
+"              RIGHTS, AND IMPLIED WARRANTIES OF MERCHANTABILITY OF FITNESS "
+"FOR\n"
+"              A PARTICULAR PURPOSE. HRP DOES NOT WARRANT THAT THIS SERVICE\n"
+"              WILL BE UNINTERRUPTED OR ERROR-FREE, VIRUS-FREE, NOR DOES HRP\n"
+"              MAKE ANY WARRANTIES THAT ANY DEFECTS WILL BE CORRECTED."
+msgstr ""
+
+#: components/EditProfile.vue:71
+msgid "I request to be a:"
+msgstr ""
+
+#: components/EditProfile.vue:4
+msgid "I request to join the investor group below:"
+msgstr ""
+
+#: components/portfolio/form/GeneralSettings.vue:80
+msgid "Icon"
+msgstr ""
+
+#: components/project/SubNationalLevelDeployment.vue:5
+#: components/project/SubNationalLevelDeployment.vue:47
+msgid "If subnational, which {name} does your project cover?"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:15
+msgid ""
+"If this is your first time uploading a project, a sample data form\n"
+"            can be found here for reference."
+msgstr ""
+
+#: components/EditProfile.vue:149
+msgid ""
+"If you are part of an investor group that is providing either\n"
+"                financial or in-kind support to project activities, the DHA\n"
+"                can be used to help organize and connect all of your\n"
+"                initiatives. By joining your investor page, you will see\n"
+"                information that is private to your organization. If your\n"
+"                group is not listed below, send an email to\n"
+"                digitalhealthatlas@gmail.com to add them to the\n"
+"                list."
+msgstr ""
+
+#: pages/_organisation/terms.vue:454
+msgid ""
+"If you have further questions about the DHA, do not hesitate to\n"
+"            get in touch using the details below:"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:42
+msgid ""
+"If you have more than one investor, we recommend that you go back to\n"
+"        your initiatives once uploaded and add the correct investors."
+msgstr ""
+
+#: components/project/sections/InteroperabilityAndStandards.vue:40
+msgid ""
+"If your data standards are not available here, please email\n"
+"            digitalhealthatlas@gmail.com"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:170
+msgid "impact (total global need)"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:152
+msgid ""
+"Impact score takes into account an initiative’s reach, effectiveness, and "
+"ability to address key challenges, particularly for vulnerable and hard-to-"
+"reach children."
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:51
+msgid "Implementation"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:2
+#: components/project/sections/ImplementationOverview.vue:14
+msgid "Implementation overview"
+msgstr ""
+
+#: components/common/ProjectCard.vue:127
+msgid "Implementation Overview"
+msgstr ""
+
+#: components/dashboard/SearchBox.vue:59
+msgid "Implementing Partners"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:126
+msgid "Import"
+msgstr ""
+
+#: components/common/UserDropdown.vue:106
+msgid "Import interface"
+msgstr ""
+
+#: components/admin/FacilityImport.vue:15
+msgid "Imported Facilities ({num}):"
+msgstr ""
+
+#: components/landing/InfoBox.vue:28
+msgid ""
+"In addition, the DHA supports implementers to assess the maturity of\n"
+"        their digital health initiatives and gain access to global "
+"resources\n"
+"        on current best practices in digital health."
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:36
+msgid ""
+"In addition, you can also only select one Investor for all of the data\n"
+"        from within your spreadsheet."
+msgstr ""
+
+#: components/project/ProjectData.vue:182
+#: components/project/ProjectData.vue:453
+msgid "In Country programme document (CPD) and annual work plan"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:138
+msgid "In Country programme document (CPD) and annual work plan?"
+msgstr ""
+
+#: pages/_organisation/terms.vue:399
+msgid ""
+"In no event will HRP or its directors, employees, or agents be\n"
+"            liable to you or any third person for any direct, indirect,\n"
+"            consequential, exemplary, incidental, special, or punitive\n"
+"            damages, including for any lost profits or lost data arising "
+"from\n"
+"            your use of the Website or this service or the unavailability "
+"of\n"
+"            the Website or this service. When using the Website, "
+"information\n"
+"            will be transmitted over a medium that may be beyond the "
+"control\n"
+"            and jurisdiction of HRP. Accordingly, HRP assumes no liability "
+"for\n"
+"            or relating to the delay, failure, interruption, or corruption "
+"of\n"
+"            any data or other information transmitted in connection with "
+"use\n"
+"            of the Website."
+msgstr ""
+
+#: components/landing/AboutSection.vue:46
+msgid "In-country support to DHA"
+msgstr ""
+
+#: components/admin/ProjectApproval.vue:41
+#: components/admin/ProjectApproval.vue:118 components/common/ProjectBar.vue:60
+#: components/common/ProjectBar.vue:72 components/common/ProjectBar.vue:84
+msgid "Initiative"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:95 components/admin/CountryAdmin.vue:276
+#: components/dialogs/ProjectApprovalDialog.vue:1
+#: components/dialogs/ProjectApprovalDialog.vue:11
+msgid "Initiative Approval"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:69 components/admin/CountryAdmin.vue:199
+msgid "Initiative approval process"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:199
+#: components/dashboard/MainTable.vue:460
+#: components/portfolio/dashboard/MainTable.vue:254
+#: components/portfolio/dashboard/MainTable.vue:576
+msgid "Initiative Description"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:394
+msgid "Initiative Description:"
+msgstr ""
+
+#: components/project/ProjectData.vue:250
+#: components/project/ProjectData.vue:626
+#: components/project/sections/Stages.vue:70
+msgid "Initiative end date"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:410
+msgid "Initiative inbox"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:21 components/dashboard/MainTable.vue:42
+#: components/dashboard/SearchBox.vue:53
+#: components/portfolio/dashboard/MainTable.vue:21
+#: components/portfolio/dashboard/MainTable.vue:42
+#: components/project/ProjectData.vue:8 components/project/ProjectData.vue:32
+#: components/search/SearchBox.vue:81
+msgid "Initiative Name"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:331
+msgid "Initiative page"
+msgstr ""
+
+#: components/project/ProjectData.vue:236
+#: components/project/ProjectData.vue:583
+#: components/project/sections/Stages.vue:15
+msgid "Initiative start date"
+msgstr ""
+
+#: components/common/UserProjectsList.vue:54
+msgid "Initiatives you have added to your favorites will appear below."
+msgstr ""
+
+#: components/dashboard/MainTable.vue:98 components/dashboard/MainTable.vue:224
+#: components/portfolio/dashboard/MainTable.vue:151
+#: components/portfolio/dashboard/MainTable.vue:340
+#: components/project/ProjectData.vue:152
+#: components/project/ProjectData.vue:383
+msgid "Innovation Categories"
+msgstr ""
+
+#: components/search/AdvancedSearch.vue:18
+#: components/search/AdvancedSearch.vue:49
+msgid "Innovation Category"
+msgstr ""
+
+#: components/BreadCrumb.vue:62
+msgid "Innovation Portfolio"
+msgstr ""
+
+#: components/common/TopBar.vue:86
+msgid "Innovation Portfolios"
+msgstr ""
+
+#: components/review/ReviewDialog.vue:66
+msgid "Instructions"
+msgstr ""
+
+#: pages/_organisation/terms.vue:85
+msgid "Intellectual Property Rights"
+msgstr ""
+
+#: components/project/sections/InteroperabilityAndStandards.vue:17
+msgid "Interoperability & Standards"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:13
+msgid "Intiative Name"
+msgstr ""
+
+#: components/common/TopBar.vue:70
+msgid "Inventory"
+msgstr ""
+
+#: components/EditProfile.vue:143 components/EditProfile.vue:310
+#: components/EditProfile.vue:332 components/admin/import/ImportDetails.vue:19
+#: components/common/ProjectCard.vue:123
+#: components/common/ProjectLegendContent.vue:24
+msgid "Investor"
+msgstr ""
+
+#: components/common/ActionBar.vue:56 components/common/UserDropdown.vue:89
+msgid "Investor admin"
+msgstr ""
+
+#: components/EditProfile.vue:333
+msgid "Investor Admin"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:4
+msgid "Investor admin for {name}"
+msgstr ""
+
+#: components/EditProfile.vue:6 components/admin/DonorAdmin.vue:7
+msgid "Investor Admins"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:86
+msgid "Investor fields"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:10 components/admin/DonorAdmin.vue:28
+msgid "Investor information"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:255 components/admin/DonorAdmin.vue:680
+msgid "Investor specific questionaire"
+msgstr ""
+
+#: components/EditProfile.vue:355
+msgid "Investor System Admin"
+msgstr ""
+
+#: components/EditProfile.vue:205
+msgid "Investor System Admins"
+msgstr ""
+
+#: components/dashboard/PersonaSelector.vue:31
+msgid "Investor View"
+msgstr ""
+
+#: components/EditProfile.vue:311
+msgid "Investor Viewer"
+msgstr ""
+
+#: components/EditProfile.vue:186
+msgid "Investor Viewers"
+msgstr ""
+
+#: components/common/ExtendedProjectCard.vue:3
+#: components/project/ProjectData.vue:1
+msgid "Investor(s)"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:172
+#: components/dashboard/MainTable.vue:383 components/dashboard/SearchBox.vue:62
+#: components/portfolio/dashboard/MainTable.vue:225
+#: components/portfolio/dashboard/MainTable.vue:499
+msgid "Investors"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:372
+msgid "Investors:"
+msgstr ""
+
+#: components/common/Tabs.vue:27
+msgid "item"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:332
+#: pages/_organisation/admin/import/_id.vue:411
+msgid "Keep working"
+msgstr ""
+
+#: components/common/ExtendedProjectCard.vue:36
+#: components/dashboard/MainTable.vue:74 components/dashboard/MainTable.vue:165
+#: components/portfolio/dashboard/MainTable.vue:127
+#: components/portfolio/dashboard/MainTable.vue:281
+#: components/project/sections/GeneralOverview.vue:253
+msgid "Last updated"
+msgstr ""
+
+#: components/common/ProjectBar.vue:13 components/project/ProjectData.vue:70
+#: components/project/ProjectData.vue:187
+msgid "Last Updated"
+msgstr ""
+
+#: pages/_organisation/terms.vue:397
+msgid "Limitations on Liability"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:89
+#: components/project/sections/TechnologyOverview.vue:225
+msgid "Link to the wiki page"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:63
+msgid "List exported on "
+msgstr ""
+
+#: components/portfolio/Matrix.vue:47
+msgid "List of initiatives ({num})"
+msgstr ""
+
+#: components/admin/DhaQuestionOptions.vue:2
+msgid "List of selectable options:"
+msgstr ""
+
+#: components/common/ActionBar.vue:76
+msgid "List view"
+msgstr ""
+
+#: components/dashboard/FilterPresetsActions.vue:11
+msgid "Load filters"
+msgstr ""
+
+#: components/DhaLoader.vue:6
+msgid "Loading"
+msgstr ""
+
+#: components/common/ProjectCard.vue:124 components/search/SearchBox.vue:88
+msgid "Location"
+msgstr ""
+
+#: components/DhaLogin.vue:57
+msgid "Log in"
+msgstr ""
+
+#: components/DhaLogin.vue:8
+msgid "Log in to Digital Health Atlas"
+msgstr ""
+
+#: components/DhaVerify.vue:12
+msgid "login"
+msgstr ""
+
+#: pages/auth.vue:5
+msgid "Login"
+msgstr ""
+
+#: components/SignupComponent.vue:63
+msgid "Login here"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:29 components/admin/CountryAdmin.vue:73
+#: components/admin/DonorAdmin.vue:71
+msgid "Logo"
+msgstr ""
+
+#: components/common/UserDropdown.vue:115
+msgid "Logout"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:166
+#: pages/_organisation/portfolio/innovation/_id.vue:169
+msgid "low"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:189
+#: components/portfolio/dashboard/TableTopActions.vue:195
+msgid "main fields"
+msgstr ""
+
+#: components/portfolio/dashboard/PortfolioCard.vue:35
+msgid "Manage"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:490
+msgid "Map donwload failed, please try again later"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:9
+msgid "Map file:"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:206
+msgid "map view"
+msgstr ""
+
+#: components/common/ActionBar.vue:91
+msgid "Map view"
+msgstr ""
+
+#: components/common/ToolkitDialogWrapper.vue:24
+msgid "MAPS Toolkit"
+msgstr ""
+
+#: pages/_organisation/terms.vue:276
+msgid "Marketing and Advertising"
+msgstr ""
+
+#: components/dashboard/PersonaSelector.vue:84
+msgid "Me"
+msgstr ""
+
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:18
+msgid "Message"
+msgstr ""
+
+#: pages/_organisation/terms.vue:149
+msgid "Message Boards and Other Interactive Features"
+msgstr ""
+
+#: pages/_organisation/terms.vue:152
+msgid ""
+"Message boards, bulletin boards, blogs, and other services may be\n"
+"            available on or through the Website. In addition to any other\n"
+"            rules or regulations that HRP posts in connection with these\n"
+"            particular services, you shall not upload, post, transmit,\n"
+"            distribute, or otherwise publish through the Website or any\n"
+"            service or feature made available on or through the Website any\n"
+"            materials which: (a) restrict or inhibit any other user from "
+"using\n"
+"            and enjoying the Website; (b) are fraudulent, unlawful,\n"
+"            threatening, abusive, harassing, libelous, defamatory, or\n"
+"            offensive; (c) constitute or encourage conduct that would\n"
+"            constitute a criminal offense, give rise to civil liability or\n"
+"            otherwise violate any local, state, federal, or international "
+"law;\n"
+"            (d) violate, plagiarize, or infringe the rights of third "
+"parties,\n"
+"            including, without limitation, copyright, trademark, trade "
+"secret,\n"
+"            confidentiality, contract, patent, rights of privacy, or "
+"publicity\n"
+"            or any other proprietary rights; (e) contain a virus, spyware, "
+"or\n"
+"            any other harmful content; (f) contain embedded links or\n"
+"            advertising of any kind; or (g) constitute or contain false or\n"
+"            misleading indications of origin, endorsements, or statements "
+"of\n"
+"            fact."
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:159
+msgid "Moderate"
+msgstr ""
+
+#: components/portfolio/dashboard/TableTopActions.vue:153
+msgid "Move to Inventory"
+msgstr ""
+
+#: components/portfolio/dashboard/TableTopActions.vue:155
+msgid "Move to Porfolio"
+msgstr ""
+
+#: components/portfolio/dashboard/TableTopActions.vue:154
+msgid "Move to Review"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:66
+msgid "Multicountry or Regional Office"
+msgstr ""
+
+#: components/project/ProjectData.vue:31 components/project/ProjectData.vue:88
+msgid "Multicountry or Regional Office\n"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:32 components/admin/DhaQuestion.vue:94
+msgid "Multiple choice"
+msgstr ""
+
+#: components/dashboard/FilterPresetsActions.vue:4
+#: components/dashboard/FilterPresetsActions.vue:22
+msgid "My filters presets"
+msgstr ""
+
+#: components/BreadCrumb.vue:49
+msgid "My initiatives"
+msgstr ""
+
+#: components/common/TopBar.vue:116 components/landing/MyProjectsBox.vue:4
+#: pages/_organisation/initiatives/index.vue:5
+msgid "My Initiatives"
+msgstr ""
+
+#: components/EditProfile.vue:249 components/EditProfile.vue:271
+#: components/EditProfile.vue:293 components/EditProfile.vue:315
+#: components/EditProfile.vue:337 components/EditProfile.vue:359
+msgid "My Privileges are:"
+msgstr ""
+
+#: components/common/ActionBar.vue:26 components/common/UserDropdown.vue:55
+msgid "My profile"
+msgstr ""
+
+#: components/common/OrganisationItem.vue:6
+#: components/project/CustomReadonlyField.vue:7
+#: components/project/CustomReadonlyField.vue:17
+#: components/project/InteroperabilityLinksList.vue:10
+#: components/project/SimpleField.vue:24 components/project/TeamList.vue:11
+msgid "N/A"
+msgstr ""
+
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:15
+#: components/common/ProjectCard.vue:125
+#: components/portfolio/form/inputs/Statements.vue:8
+msgid "Name"
+msgstr ""
+
+#: components/common/map/SwitchViewBox.vue:3
+#: components/common/map/SwitchViewBox.vue:13
+#: components/common/map/TabbedCardProjectList.vue:18
+#: components/common/map/TabbedCardProjectList.vue:60
+msgid "National"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:158
+msgid "Neglected"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:178
+#: pages/_organisation/portfolio/innovation/_id.vue:183
+msgid "new"
+msgstr ""
+
+#: pages/_organisation/admin/import/index.vue:23
+msgid "New Import"
+msgstr ""
+
+#: components/common/TopBar.vue:144
+msgid "New initiative"
+msgstr ""
+
+#: components/BreadCrumb.vue:56
+msgid "New Initiative"
+msgstr ""
+
+#: components/admin/DhaQuestionaire.vue:86
+msgid "New order saved"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:541 components/admin/DonorAdmin.vue:457
+msgid "New requests"
+msgstr ""
+
+#: components/dashboard/ListExport.vue:79
+msgid "no"
+msgstr ""
+
+#: components/admin/ApprovalTag.vue:12 components/admin/ProjectApproval.vue:117
+#: components/admin/import/ImportDialog.vue:96
+#: components/dashboard/PdfExport.vue:167 components/project/CustomField.vue:37
+msgid "No"
+msgstr ""
+
+#: components/common/FileUpload.vue:16
+msgid "No file chosen"
+msgstr ""
+
+#: components/admin/DhaQuestionOptions.vue:4
+msgid "No options added yet"
+msgstr ""
+
+#: components/common/map/MapProjectsBox.vue:31
+#: components/common/map/TabbedCardProjectList.vue:15
+#: components/common/map/TabbedCardProjectList.vue:28
+msgid "No project to show..."
+msgstr ""
+
+#: pages/_organisation/terms.vue:278
+msgid ""
+"No promotional offers or advertising will appear on the Website\n"
+"            nor will your personal contact information ever be given, sold, "
+"or\n"
+"            otherwise shared by HRP with third parties for advertising or\n"
+"            marketing purposes."
+msgstr ""
+
+#: components/dashboard/PersonaSelector.vue:20
+msgid "Normal View"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:76
+msgid "Not used for initiatives in country"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:343
+msgid ""
+"Note that all import files need to have a unique name. Please re-name the "
+"file and upload it again."
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:48
+msgid ""
+"Note that for now the imported project are loaded in draft and need to\n"
+"        be manually published"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:278
+msgid "Note that once this column is deleted, you cannot recover the data."
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:371
+msgid ""
+"Note that once you have saved these initiatives, they will be uploaded to "
+"the DHA. You can access all saved initiatives from your My Initiatives page."
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:302
+msgid ""
+"Note that once you have saved this project, it will be uploaded to the DHA. "
+"You can access all of your saved Projects from your My Initiatives page."
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:30
+msgid ""
+"Note that your data should be organized to have data from only one\n"
+"        office included in a spreadsheet."
+msgstr ""
+
+#: components/portfolio/form/GeneralSettings.vue:93
+msgid ""
+"Note: Once status is changed to “Active,” portfolio is viewable to\n"
+"          all users through the portfolio tool. Please set status as "
+"“Draft”\n"
+"          until portfolio is ready to be published to the site."
+msgstr ""
+
+#: components/project/ProjectData.vue:172
+#: components/project/ProjectData.vue:434
+msgid "Number of beneficiaries reached"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:29 components/admin/DhaQuestion.vue:73
+msgid "Numeric field"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:136
+#: components/project/ProjectNavigation.vue:447
+msgid "of the project to the current date."
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:12
+msgid "Office"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Score.vue:116
+#: components/portfolio/dashboard/dialog/Score.vue:246
+msgid "Official Score"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:231
+#: components/project/ProjectForm.vue:296
+msgid "Ok"
+msgstr ""
+
+#: components/DhaLogin.vue:234 components/admin/DhaQuestion.vue:143
+#: components/admin/DhaQuestion.vue:181
+#: components/admin/import/ImportHeaders.vue:158
+#: components/dashboard/FilterPresetsActions.vue:100
+#: components/project/ProjectForm.vue:135
+#: pages/_organisation/admin/import/_id.vue:283
+#: pages/_organisation/admin/import/_id.vue:307
+#: pages/_organisation/admin/import/_id.vue:376
+msgid "OK"
+msgstr ""
+
+#: components/dashboard/FilterPresetsActions.vue:110
+msgid "Operation successfully aborted"
+msgstr ""
+
+#: components/EditProfile.vue:139
+msgid "or"
+msgstr ""
+
+#: components/landing/SignupBox.vue:10
+msgid "or technologist, sign up below."
+msgstr ""
+
+#: components/common/ProjectBar.vue:21 components/common/ProjectCard.vue:126
+#: components/project/ProjectData.vue:13 components/project/ProjectData.vue:42
+#: components/search/SearchBox.vue:82
+msgid "Organisation"
+msgstr ""
+
+#: components/EditProfile.vue:31 components/EditProfile.vue:100
+msgid "Organisation name"
+msgstr ""
+
+#: components/admin/import/ImportDialog.vue:13
+msgid "Original Data"
+msgstr ""
+
+#: pages/_organisation/terms.vue:424
+msgid "Other Terms"
+msgstr ""
+
+#: components/project/ProjectData.vue:36 components/project/ProjectData.vue:97
+msgid "Overview"
+msgstr ""
+
+#: components/search/SearchBox.vue:86
+msgid "Overview of the digital health"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:82 components/admin/CountryAdmin.vue:243
+#: components/admin/DonorAdmin.vue:59 components/admin/DonorAdmin.vue:185
+msgid "Partner logos"
+msgstr ""
+
+#: components/project/ProjectData.vue:271
+msgid "Partner Type"
+msgstr ""
+
+#: components/project/ProjectData.vue:289
+#: components/project/sections/Partners.vue:97
+msgid "Partner Website"
+msgstr ""
+
+#: components/common/ProjectCard.vue:128
+#: components/project/ProjectNavigation.vue:67
+#: components/project/sections/Partners.vue:2
+#: components/project/sections/Partners.vue:14
+msgid "Partners"
+msgstr ""
+
+#: components/project/ProjectData.vue:217
+#: components/project/ProjectData.vue:543
+#: components/project/sections/ImplementationOverview.vue:308
+msgid "Partnership Needs"
+msgstr ""
+
+#: components/DhaLogin.vue:24 components/DhaLogin.vue:70
+#: components/SignupComponent.vue:30 components/SignupComponent.vue:89
+msgid "Password"
+msgstr ""
+
+#: components/SignupComponent.vue:37 components/SignupComponent.vue:113
+msgid "Password (again)"
+msgstr ""
+
+#: components/admin/ApprovalTag.vue:15 components/admin/ProjectApproval.vue:118
+#: components/portfolio/dashboard/table/Reviewers.vue:11
+msgid "Pending"
+msgstr ""
+
+#: pages/_organisation/terms.vue:212
+msgid "Personal Information"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:59
+#: components/project/sections/Stages.vue:2
+#: components/project/sections/Stages.vue:14
+msgid "Phase"
+msgstr ""
+
+#: components/project/ProjectData.vue:244
+#: components/project/ProjectData.vue:600
+msgid "Phase of Initiative"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:18
+#: components/project/sections/TechnologyOverview.vue:53
+msgid "Pick a day"
+msgstr ""
+
+#: components/BreadCrumb.vue:55 components/common/TopBar.vue:9
+msgid "Planning and Guidance"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:182
+msgid "Please add the relevant WBS number:"
+msgstr ""
+
+#: pages/_organisation/initiatives/create.vue:5
+msgid ""
+"Please complete the questions below to include your initiative\n"
+"        information in the Digital Health Atlas. These questions document "
+"your\n"
+"        initiative's health focus area(s), software features and national\n"
+"        scale."
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Error.vue:17
+msgid "Please complete your scores and try again!"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:268
+msgid "Please explaine briefly the main activities covered by the budget."
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:237
+msgid "Please fill all the required fields"
+msgstr ""
+
+#: components/SignupComponent.vue:20
+msgid "Please fill out the form below:"
+msgstr ""
+
+#: components/dialogs/DialogsContainer.vue:45
+msgid "Please fill your profile first"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:158
+msgid ""
+"Please input wich outcomes or activities the initiative serves in\n"
+"          the Annual Work Plan."
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:79
+msgid "Please provide a brief overview of the initiative."
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:122
+msgid ""
+"Please provide information about the realisation of the\n"
+"            initiative's objectives at the time of entry. This could "
+"include\n"
+"            number of target population reached, partnerships, funding\n"
+"            secured, spin-off initiatives, etc."
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:30
+msgid ""
+"Please provide information on the metrics for success of the\n"
+"            initiative."
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:60
+msgid ""
+"Please provide information on the successes the intiative has\n"
+"            achieved to date."
+msgstr ""
+
+#: components/project/sections/Partners.vue:59
+msgid ""
+"Please provide the name and title of the person in charge of the initiative "
+"at the respective partner(s)."
+msgstr ""
+
+#: components/project/sections/Partners.vue:39
+msgid "Please provide the name(s) of your partner(s)."
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:233
+msgid ""
+"Please provide the total estimated budget from inception to\n"
+"                scale."
+msgstr ""
+
+#: pages/_organisation/terms.vue:15
+msgid ""
+"Please read these Terms of Use before using the Website or any of\n"
+"            its features. By using the Website, you accept and agree to be\n"
+"            bound by these Terms. If you do not agree to the Terms, please\n"
+"            exit the Website and do not access or otherwise use the Website."
+msgstr ""
+
+#: components/portfolio/dashboard/TitleCard.vue:14
+msgid ""
+"Please select a portfolio below to edit its information or manage the\n"
+"      review and addition of initiatives."
+msgstr ""
+
+#: components/project/sections/Technology.vue:92
+msgid "Please select all applicable functions the platform performs."
+msgstr ""
+
+#: components/project/sections/Partners.vue:11
+msgid "Please select all partner types involved with the initiative."
+msgstr ""
+
+#: components/project/sections/Technology.vue:34
+msgid ""
+"Please select all the hardware platform(s) used in the\n"
+"              deployment of the initiative."
+msgstr ""
+
+#: components/project/sections/Technology.vue:58
+msgid ""
+"Please select all the Progamme Innovation and Non-Technology\n"
+"              platform(s) used in the deployment of the initiative."
+msgstr ""
+
+#: components/project/sections/Categorization.vue:203
+msgid ""
+"Please select all UNICEF Innovation categories this initiative\n"
+"              applies to."
+msgstr ""
+
+#: components/project/ProjectForm.vue:160
+msgid "Please select one or more Digital Health Intervetions for this Software"
+msgstr ""
+
+#: components/project/sections/Categorization.vue:186
+msgid ""
+"Please select the regional priorities addressed by the\n"
+"                initiative."
+msgstr ""
+
+#: components/project/sections/Categorization.vue:15
+#: components/project/sections/Categorization.vue:30
+msgid "Please select the sector(s) the initiative serves."
+msgstr ""
+
+#: components/project/sections/Stages.vue:46
+msgid "Please select which phase the inititiave has reached to date."
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:9
+msgid "Portfolio"
+msgstr ""
+
+#: components/BreadCrumb.vue:65 components/common/TopBar.vue:101
+msgid "Portfolio Manager"
+msgstr ""
+
+#: components/portfolio/form/Managers.vue:2
+#: components/portfolio/form/Managers.vue:14
+msgid "Portfolio managers"
+msgstr ""
+
+#: components/portfolio/form/GeneralSettings.vue:13
+msgid "Portfolio name"
+msgstr ""
+
+#: pages/_organisation/admin/import/index.vue:6
+msgid "Previous imports"
+msgstr ""
+
+#: pages/_organisation/terms.vue:201
+msgid "Privacy Policy"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:48 components/admin/DhaQuestion.vue:134
+msgid "Private"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:203
+msgid "Privileges for Government Admins"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:260
+msgid "Privileges for Government System Admins"
+msgstr ""
+
+#: components/EditProfile.vue:98
+msgid ""
+"Privileges for Government Users are detailed below. Select\n"
+"                the user type that most matches your role within the DHA. "
+"This\n"
+"                request will be received by the Government Admin team and a\n"
+"                response will be sent via email for your request."
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:167
+msgid "Privileges for Government Viewers"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:161
+msgid "Privileges for Investor Admins"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:206
+msgid "Privileges for Investor System Admins"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:131
+msgid "Privileges for Investor Users"
+msgstr ""
+
+#: components/search/AdvancedSearch.vue:39
+#: components/search/AdvancedSearch.vue:95
+msgid "Problem Statement"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:201
+msgid "problem statement matrix"
+msgstr ""
+
+#: components/portfolio/form/ProblemStatement.vue:2
+#: components/portfolio/form/ProblemStatement.vue:14
+#: pages/_organisation/portfolio/innovation/index.vue:50
+msgid "Problem Statements"
+msgstr ""
+
+#: components/EditProfile.vue:570
+msgid "Profile succesfully updated"
+msgstr ""
+
+#: components/EditProfile.vue:584
+msgid "Profile update error"
+msgstr ""
+
+#: components/project/ProjectData.vue:164
+#: components/project/ProjectData.vue:416
+msgid "Program Targets"
+msgstr ""
+
+#: components/project/ProjectData.vue:168
+#: components/project/ProjectData.vue:425
+msgid "Program Targets Achieved"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:182
+#: components/dashboard/MainTable.vue:415
+#: components/portfolio/dashboard/MainTable.vue:236
+#: components/portfolio/dashboard/MainTable.vue:531
+msgid "Programme Focal Point Name"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:382
+msgid "Programme Focal Point Name:"
+msgstr ""
+
+#: components/project/ProjectData.vue:318
+#: components/project/ProjectData.vue:784
+msgid "Programme Innovation(s) and Non-Technology Platform(s)"
+msgstr ""
+
+#: components/portfolio/dashboard/PortfolioFiltersHeader.vue:5
+msgid "project(s) to show"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:92
+msgid ""
+"Provide the number of individuals reached by this initiative to\n"
+"            date"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:120
+#: components/project/ProjectNavigation.vue:101
+msgid "Publish"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:146
+msgid "Publish as latest"
+msgstr ""
+
+#: components/common/ExtendedProjectCard.vue:57
+#: components/project/ProjectNavigation.vue:22
+#: pages/_organisation/initiatives/_id/published.vue:7
+msgid "Published"
+msgstr ""
+
+#: components/BreadCrumb.vue:50
+msgid "Published Initiative"
+msgstr ""
+
+#: pages/_organisation/terms.vue:223
+msgid "Purposes for which Personal Information May Be Used"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:158
+msgid "Question deletion canceled"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Score.vue:29
+#: components/portfolio/dashboard/dialog/Score.vue:79
+msgid "Question Description"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:196
+msgid "Question saving canceled"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:152
+msgid "Question successfully deleted"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:190
+msgid "Question successfully saved"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:36 components/admin/DhaQuestion.vue:104
+msgid "Question text"
+msgstr ""
+
+#: components/portfolio/dashboard/MainTable.vue:54
+#: components/portfolio/dashboard/MainTable.vue:123
+msgid "Questionnaires Assigned"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Score.vue:19
+#: components/portfolio/dashboard/dialog/Score.vue:58
+msgid "Questions"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:62
+#: components/dialogs/ProjectApprovalDialog.vue:109
+#: components/dialogs/ProjectApprovalDialog.vue:218
+msgid "Reason"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:118
+#: components/project/ProjectForm.vue:191
+msgid "Recover & Reload"
+msgstr ""
+
+#: components/common/ProjectCard.vue:129 components/dashboard/MainTable.vue:35
+#: components/dashboard/MainTable.vue:76
+#: components/portfolio/dashboard/MainTable.vue:88
+#: components/portfolio/dashboard/MainTable.vue:192
+#: components/project/ProjectData.vue:26 components/project/ProjectData.vue:80
+#: components/project/sections/GeneralOverview.vue:59
+#: components/search/AdvancedSearch.vue:5
+#: components/search/AdvancedSearch.vue:20
+msgid "Region"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:366
+msgid "Region:"
+msgstr ""
+
+#: components/project/ProjectData.vue:145
+#: components/project/ProjectData.vue:363
+msgid "Regional Priorities"
+msgstr ""
+
+#: pages/_organisation/initiatives/create.vue:3
+msgid "Register your Digital Health Initiative"
+msgstr ""
+
+#: pages/_organisation/terms.vue:303
+msgid "Registration and Passwords"
+msgstr ""
+
+#: components/common/Favorite.vue:3 components/common/Favorite.vue:16
+#: components/portfolio/dashboard/MainTable.vue:388
+msgid "Remove from Favorites"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:43 components/admin/DhaQuestion.vue:121
+msgid "Required"
+msgstr ""
+
+#: components/project/CollapsibleCard.vue:31
+msgid "Required to publish"
+msgstr ""
+
+#: components/project/CollapsibleCard.vue:21
+msgid "Required to save draft"
+msgstr ""
+
+#: components/DhaLogin.vue:113
+msgid "Reset"
+msgstr ""
+
+#: components/DhaLogin.vue:71
+msgid "Reset forgotten password"
+msgstr ""
+
+#: components/project/ProjectData.vue:92 components/project/ProjectData.vue:235
+msgid "Result area"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:113
+#: components/dashboard/MainTable.vue:256
+#: components/portfolio/dashboard/MainTable.vue:166
+#: components/portfolio/dashboard/MainTable.vue:372
+#: components/project/sections/Categorization.vue:63
+msgid "Result Area"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:413
+msgid "Result Area:"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:180
+msgid "Return to the Dashboard"
+msgstr ""
+
+#: components/review/ReviewStateInfo.vue:11
+msgid "Review for '{name}'"
+msgstr ""
+
+#: components/review/ReviewStateInfo.vue:4
+msgid "Reviewed"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:165
+msgid "risk"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:196
+msgid "risk-impact matrix"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:281
+msgid "Row Delete"
+msgstr ""
+
+#: components/admin/import/ImportDialog.vue:150
+#: components/dashboard/FilterPresetsActions.vue:41
+#: components/dialogs/EditSubLevelDialog.vue:24
+#: components/dialogs/ProjectApprovalDialog.vue:99
+#: components/dialogs/SaveFilterDialog.vue:34
+msgid "Save"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:33
+msgid "Save All"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:374
+msgid "Save all initiatives"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:341 components/admin/DonorAdmin.vue:269
+msgid "Save changes"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:113
+msgid "Save draft"
+msgstr ""
+
+#: components/dialogs/SaveFilterDialog.vue:1
+#: components/dialogs/SaveFilterDialog.vue:11
+msgid "Save filters"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:305
+msgid "Save Initiative"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:38
+msgid "Save Portfolio"
+msgstr ""
+
+#: components/EditProfile.vue:395
+msgid "Save settings"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:385
+msgid "Saving all initiatives has been cancelled"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:320
+msgid "Saving Cancelled"
+msgstr ""
+
+#: components/search/AdvancedSearch.vue:33
+#: components/search/AdvancedSearch.vue:80
+msgid "Scale Phase"
+msgstr ""
+
+#: components/portfolio/dashboard/MainTable.vue:71
+#: components/portfolio/dashboard/MainTable.vue:158
+msgid "Scoring"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Score.vue:137
+#: components/portfolio/dashboard/dialog/Score.vue:294
+#: components/review/ReviewDialog.vue:109
+#: components/review/ReviewDialog.vue:246
+msgid "Scoring Guidance"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Score.vue:12
+msgid "Scoring: {name}"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:87
+msgid "See Initiative"
+msgstr ""
+
+#: pages/_organisation/admin/import/index.vue:15
+msgid "Select"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:10
+#: components/portfolio/dashboard/TableTopActions.vue:4
+msgid "Select all {total} initiatives"
+msgstr ""
+
+#: components/admin/import/ImportHeaders.vue:43
+msgid "Select an header to create a new column"
+msgstr ""
+
+#: components/common/CountrySelect.vue:1 components/common/CountrySelect.vue:12
+msgid "Select country"
+msgstr ""
+
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:1
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:12
+msgid "Select Digital Health Intervention(s)"
+msgstr ""
+
+#: components/admin/FacilityImport.vue:9
+msgid "Select Facility List"
+msgstr ""
+
+#: components/dashboard/SearchBox.vue:20 components/search/SearchBox.vue:21
+msgid "Select fields to include in your search"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:56
+msgid "Select File"
+msgstr ""
+
+#: components/admin/import/ImportDialog.vue:106
+#: components/admin/import/ImportDialog.vue:126
+#: components/admin/import/ImportDialog.vue:266
+#: components/admin/import/ImportDialog.vue:303
+#: components/common/GoalAreasSelector.vue:52
+#: components/common/ResultAreasSelector.vue:62
+#: components/common/SingleSelect.vue:2 components/common/SingleSelect.vue:14
+#: components/dialogs/filters/CapabilityFilter.vue:2
+#: components/dialogs/filters/CapabilityFilter.vue:15
+#: components/dialogs/filters/HealthFocusAreaFilter.vue:2
+#: components/dialogs/filters/HealthFocusAreaFilter.vue:15
+#: components/dialogs/filters/HealthInformationSystemFilter.vue:2
+#: components/dialogs/filters/HealthInformationSystemFilter.vue:15
+#: components/dialogs/filters/HealthSystemChallengesFilter.vue:2
+#: components/dialogs/filters/HealthSystemChallengesFilter.vue:15
+#: components/dialogs/filters/PlatformFilter.vue:2
+#: components/dialogs/filters/PlatformFilter.vue:15
+#: components/portfolio/form/GeneralSettings.vue:59
+#: components/portfolio/form/GeneralSettings.vue:151
+#: components/project/CapabilitySelector.vue:1
+#: components/project/CapabilitySelector.vue:11
+#: components/project/CustomField.vue:42 components/project/CustomField.vue:136
+#: components/project/HealthFocusAreasSelector.vue:1
+#: components/project/HealthFocusAreasSelector.vue:11
+#: components/project/HealthSystemChallengesSelector.vue:1
+#: components/project/HealthSystemChallengesSelector.vue:11
+#: components/project/HisBucketSelector.vue:11
+#: components/project/MultiSelector.vue:1
+#: components/project/MultiSelector.vue:14
+#: components/project/PlatformSelector.vue:1
+#: components/project/PlatformSelector.vue:13
+#: components/project/SubNationalLevelDeploymentItem.vue:11
+#: components/project/SubNationalLevelDeploymentItem.vue:39
+msgid "Select from list"
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:6
+#: components/dashboard/AdvancedSearch.vue:22
+#: components/search/AdvancedSearch.vue:25
+#: components/search/AdvancedSearch.vue:64
+msgid "Select Goal Area"
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:16
+#: components/dashboard/AdvancedSearch.vue:56
+msgid "Select Innovation Categories"
+msgstr ""
+
+#: components/common/DonorSelect.vue:1 components/common/DonorSelect.vue:11
+msgid "Select investor"
+msgstr ""
+
+#: components/common/LanguageSelect.vue:1
+#: components/common/LanguageSelect.vue:12
+msgid "Select language"
+msgstr ""
+
+#: components/common/RegionSelect.vue:1 components/common/RegionSelect.vue:10
+msgid "Select region"
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:11
+#: components/dashboard/AdvancedSearch.vue:39
+msgid "Select Result Area"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:62
+msgid "Select Sheet"
+msgstr ""
+
+#: components/common/CountryOfficeSelect.vue:1
+#: components/common/CountryOfficeSelect.vue:12
+msgid "Select Unicef office"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:99
+msgid "Select Unicef Office"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Review.vue:42
+#: components/review/ReviewDialog.vue:142
+msgid "Send"
+msgstr ""
+
+#: components/dialogs/SendEmailDialog.vue:1
+#: components/dialogs/SendEmailDialog.vue:12
+msgid "Send email to contact person(s)"
+msgstr ""
+
+#: components/dialogs/SendEmailDialog.vue:32
+msgid "Send email(s)"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Review.vue:9
+msgid "Send Questionnaires to:"
+msgstr ""
+
+#: layouts/error.vue:46
+msgid "Server error"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:123
+msgid "Set / Reset Markers"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:33
+msgid "Sheet Name"
+msgstr ""
+
+#: components/admin/VueMapCustomizer.vue:102
+#: components/admin/VueMapCustomizer.vue:110
+#: components/admin/VueMapCustomizer.vue:231
+#: components/admin/VueMapCustomizer.vue:262
+msgid "Show"
+msgstr ""
+
+#: components/dialogs/FilterItem.vue:9
+msgid "Show all"
+msgstr ""
+
+#: components/dashboard/FilterItem.vue:31
+msgid "Show all selected..."
+msgstr ""
+
+#: components/common/ProjectLegend.vue:38
+msgid "Show legend"
+msgstr ""
+
+#: components/SignupComponent.vue:8
+msgid "Sign up for Digital Health Atlas"
+msgstr ""
+
+#: components/SignupComponent.vue:68
+msgid "Sign up now"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:31 components/admin/DhaQuestion.vue:87
+msgid "Single choice"
+msgstr ""
+
+#: components/EditProfile.vue:51 components/EditProfile.vue:163
+msgid "Site language"
+msgstr ""
+
+#: components/common/UserDropdown.vue:33
+msgid "Site Language"
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:116
+#: components/dashboard/AdvancedSearch.vue:265
+#: components/dialogs/DashboardFiltersDialog.vue:143
+#: components/project/ProjectData.vue:303
+#: components/project/ProjectData.vue:746
+msgid "Software"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:182
+msgid "solution (tools)"
+msgstr ""
+
+#: components/DjangoFeedback.vue:24
+msgid "Sorry"
+msgstr ""
+
+#: components/project/InteroperabilityLinkComponent.vue:11
+#: components/project/InteroperabilityLinkComponent.vue:59
+msgid "Specify URL"
+msgstr ""
+
+#: components/project/sections/Stages.vue:24
+#: components/project/sections/Stages.vue:73
+msgid "Start date"
+msgstr ""
+
+#: components/portfolio/form/GeneralSettings.vue:57
+msgid "Status"
+msgstr ""
+
+#: components/common/map/SwitchViewBox.vue:3
+#: components/common/map/SwitchViewBox.vue:14
+#: components/common/map/TabbedCardProjectList.vue:2
+#: components/common/map/TabbedCardProjectList.vue:16
+msgid "Sub-national"
+msgstr ""
+
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:17
+msgid "Subject"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Score.vue:206
+msgid "Submit Score"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:329
+#: pages/_organisation/admin/import/_id.vue:408
+msgid "Success!"
+msgstr ""
+
+#: components/portfolio/dashboard/InfoCard.vue:6
+msgid ""
+"Successful engagement in innovation requires focus and prioritization\n"
+"        based on the greatest challenges facing children and young people.\n"
+"        UNICEF’s portfolio approach makes evidence-based decisions about "
+"which\n"
+"        problems to tackle based on programme-led analysis of areas most in\n"
+"        need of acceleration solutions through new or significantly "
+"improved\n"
+"        interventions. Innovations are then assessed against key criteria "
+"to\n"
+"        identify solutions best suited to solving these challenges, "
+"resulting\n"
+"        in portfolios that enable UNICEF to balance resources between "
+"scaling\n"
+"        up tried-and-tested solutions and developing nascent solutions from\n"
+"        the early stages."
+msgstr ""
+
+#: components/portfolio/Matrix.vue:71
+#: pages/_organisation/portfolio/innovation/index.vue:69
+msgid "Summary"
+msgstr ""
+
+#: components/common/ProjectBar.vue:23
+msgid "Summary score"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:111
+msgid "System Admins"
+msgstr ""
+
+#: components/common/ProjectLegendContent.vue:84
+msgid "Team member"
+msgstr ""
+
+#: components/common/ProjectLegendContent.vue:8
+msgid "Team Member"
+msgstr ""
+
+#: components/project/ProjectData.vue:62 components/project/ProjectData.vue:155
+msgid "Team members"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:75
+#: components/project/sections/Technology.vue:2
+#: components/project/sections/Technology.vue:14
+msgid "Technology"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:2
+#: components/project/sections/TechnologyOverview.vue:14
+msgid "Technology overview"
+msgstr ""
+
+#: pages/_organisation/terms.vue:413
+msgid "Terminations"
+msgstr ""
+
+#: components/common/DhaFooter.vue:18
+msgid "Terms of use"
+msgstr ""
+
+#: pages/_organisation/terms.vue:12 pages/_organisation/terms.vue:13
+#: pages/_organisation/terms.vue:48
+msgid "Terms of Use"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:28 components/admin/DhaQuestion.vue:66
+msgid "Text field"
+msgstr ""
+
+#: components/DjangoFeedback.vue:16
+msgid "Thank you"
+msgstr ""
+
+#: pages/_organisation/terms.vue:87
+msgid ""
+"The contents of the Website are protected by copyright, trademark,\n"
+"            and other intellectual property laws. The Website may not be "
+"used\n"
+"            in any manner that violates the privacy rights, publicity "
+"rights,\n"
+"            copyrights, trademark rights, patent rights, contract rights, "
+"or\n"
+"            any other rights belonging to HRP or a third party. Unless\n"
+"            authorized by the Terms or by the owner of the materials, you "
+"are\n"
+"            strictly prohibited from modifying, copying, reproducing,\n"
+"            republishing, uploading, posting, transmitting, translating,\n"
+"            selling, creating derivative works, or distributing in any "
+"manner\n"
+"            or medium (including email or other electronic means) any "
+"material\n"
+"            from the Website. Your use of the Website does not grant you\n"
+"            ownership of any content, code, data, or other materials you "
+"may\n"
+"            access on or through the Website. Use of the Website and the\n"
+"            services offered on or through the Website are only for your\n"
+"            personal and non-commercial use."
+msgstr ""
+
+#: pages/_organisation/terms.vue:53
+msgid ""
+"The contents of the Website such as texts, graphics, images, and\n"
+"            all other information, whether provided by HRP or its users, "
+"are\n"
+"            for informational purposes only. The content is not intended to "
+"be\n"
+"            a substitute for professional medical advice, diagnosis, or\n"
+"            treatment. If you need specific advice (for example, medical,\n"
+"            legal, or financial) please seek a professional who is licensed "
+"or\n"
+"            knowledgeable in that area."
+msgstr ""
+
+#: components/project/ProjectForm.vue:291
+msgid "The current draft will be overwritten by the published version"
+msgstr ""
+
+#: components/landing/InfoBox.vue:1
+msgid ""
+"The DHA facilitates implementers to assess the maturity of their digital "
+"health implementations, gain personalized guidance, benefit from other’s "
+"implementation experiences, and gain access to global resources from leading "
+"technical institutions."
+msgstr ""
+
+#: components/landing/InfoBox.vue:12
+msgid ""
+"The Digital Health Atlas (DHA) is an open-source web platform\n"
+"        designed to support goverments, technologists, implementers and "
+"donors\n"
+"        to better coordinate digital health activities globally."
+msgstr ""
+
+#: components/landing/InfoBox.vue:1
+msgid ""
+"The Digital Health Atlas (DHA) offers governments, technologists, "
+"implementers, and donors a platform of tools and guidance to improve the use "
+"of, and planning coordination for digital information systems for health."
+msgstr ""
+
+#: pages/_organisation/terms.vue:23
+msgid "The following Terms of Use (“Terms”) govern the use of"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:5
+msgid ""
+"The Import Interface allows you to import your Projects from an Excel\n"
+"        file into the Digital Health Atlas."
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:46
+msgid ""
+"The innovation ambition matrix is a strategic framework that\n"
+"                helps balance risk and impact. “Newer” challenges and\n"
+"                solutions are not necessarily advantageous; rather, the "
+"goal\n"
+"                is to appropriately balance resource allocation across the\n"
+"                incremental, substantial, and breakthrough categories."
+msgstr ""
+
+#: pages/_organisation/terms.vue:214
+msgid ""
+"The only personal information that we will collect is the personal\n"
+"            information that you provide to us when you register with us or\n"
+"            when you communicate with us through our website. We will at "
+"any\n"
+"            time, at your request, provide you with a copy of any personal\n"
+"            information that we are holding about you."
+msgstr ""
+
+#: components/SignupComponent.vue:158
+msgid "The password must match"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:98
+msgid ""
+"The short description provides a clear understanding of the\n"
+"            purpose and target group to a reader who does not know anything\n"
+"            about the initiative. It should include the technology or\n"
+"            innovation, programme function and target beneficiary. eg.\n"
+"            Text-based behaviour change communication messages on maternal\n"
+"            health for midwives."
+msgstr ""
+
+#: pages/_organisation/terms.vue:65
+msgid ""
+"The use of the Website and its content is at your own risk. HRP\n"
+"            makes a reasonable effort to ensure that the content of the\n"
+"            Website is accurate and up-to-date, but does not offer any\n"
+"            warranties (whether express, implied or otherwise) as to the\n"
+"            reliability, accuracy or completeness of the information "
+"appearing\n"
+"            on the Website, whether provided by HRP or any user, "
+"information\n"
+"            provider, or any other person or entity. HRP may remove "
+"material\n"
+"            from the Website at its own discretion and without giving any\n"
+"            notice."
+msgstr ""
+
+#: pages/_organisation/terms.vue:338
+msgid ""
+"The Website and any content, materials, features, or products\n"
+"            available or sold on or through the Website are available on an\n"
+"            “as is” basis."
+msgstr ""
+
+#: components/DjangoFeedback.vue:27
+msgid "There was a problem processing your ticket, please try again"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:113
+#: components/project/ProjectForm.vue:186
+msgid ""
+"There was an un-caught validation error an automatic report has been "
+"submitted"
+msgstr ""
+
+#: pages/_organisation/terms.vue:426
+msgid ""
+"These Terms constitute the entire agreement between you and HRP\n"
+"            regarding the use of the Website and supersede any prior\n"
+"            agreements between you and HRP relating to your use of the\n"
+"            Website. The failure of HRP to exercise or enforce any right or\n"
+"            provision of these Terms shall not constitute a waiver of such\n"
+"            right or provision in that or any other instance. If any "
+"provision\n"
+"            of these Terms is held invalid, the remainder of the Terms "
+"shall\n"
+"            continue in full force and effect. If any provision of these "
+"Terms\n"
+"            shall be deemed unlawful, void, or for any other reason\n"
+"            unenforceable, then that provision shall be deemed severable "
+"from\n"
+"            these Terms and shall not affect the validity and "
+"enforceability\n"
+"            of any remaining provisions. This agreement shall be governed "
+"and\n"
+"            construed by the laws of the District of Columbia without "
+"giving\n"
+"            effect to any principles of conflicts of law. The foregoing\n"
+"            provisions of these Terms are for the benefit of HRP, its\n"
+"            affiliates, and third-party content providers and licensors, "
+"and\n"
+"            each shall have the right to asset and enforce provisions of "
+"the\n"
+"            Terms directly and on their own behalf."
+msgstr ""
+
+#: pages/_organisation/terms.vue:285
+msgid "Third Party Sites"
+msgstr ""
+
+#: components/TranslateWrapper.vue:22
+msgid "this"
+msgstr ""
+
+#: components/project/ProjectNavigation.vue:134
+#: components/project/ProjectNavigation.vue:436
+msgid "This action will update the timestamp"
+msgstr ""
+
+#: components/DhaLogin.vue:180 components/DhaLogin.vue:193
+#: components/DhaLogin.vue:203 components/EditProfile.vue:469
+#: components/EditProfile.vue:477 components/EditProfile.vue:485
+#: components/EditProfile.vue:493 components/EditProfile.vue:501
+#: components/SignupComponent.vue:110 components/SignupComponent.vue:127
+#: components/SignupComponent.vue:142
+msgid "This field is required"
+msgstr ""
+
+#: components/SignupComponent.vue:132
+msgid "This field should be at least 8 characters"
+msgstr ""
+
+#: components/dialogs/ProjectApprovalDialog.vue:132
+#: components/dialogs/SaveFilterDialog.vue:57
+msgid "This is required"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:153
+msgid ""
+"This is the individual who will be the lead point of contact\n"
+"                for any queries through the DHA."
+msgstr ""
+
+#: pages/_organisation/terms.vue:47
+msgid ""
+"This Site Does Not Provide Medical Advice, Diagnosis or\n"
+"            Treatment."
+msgstr ""
+
+#: components/landing/InfoBox.vue:20
+msgid ""
+"This web platform offers users the information needed to improve the\n"
+"        planning, coordination and use of digital health information "
+"systems\n"
+"        for health."
+msgstr ""
+
+#: components/landing/InfoBox.vue:1
+msgid ""
+"This web platform supports issuing unique IDs for curating the range of "
+"digital health products and initiatives globally. Governments and "
+"communities of technologists, implementers, and donors will be equipped to "
+"better coordinate and plan, monitor the growth of implementations, and "
+"reduce redundancy of investments."
+msgstr ""
+
+#: pages/_organisation/terms.vue:329
+msgid ""
+"This Website provides links to websites maintained by third\n"
+"            parties. Any information, products, or services provided by the\n"
+"            third-party sites are maintained by the operators of such sites\n"
+"            and not by HRP or our subsidiaries. When these third-party "
+"sites\n"
+"            are accessed, they are accessed at your own risk."
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:140
+msgid "This will permanently delete the question?"
+msgstr ""
+
+#: components/dashboard/FilterPresetsActions.vue:95
+msgid "This will permanently delete this saved configuration. Continue?"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:176
+msgid ""
+"This will save the question, type and options will not be editable anymore"
+msgstr ""
+
+#: components/dashboard/PdfExport.vue:45
+msgid "TIIP"
+msgstr ""
+
+#: components/BreadCrumb.vue:47 components/BreadCrumb.vue:48
+msgid "TIIP Inventory"
+msgstr ""
+
+#: pages/_organisation/terms.vue:305
+msgid ""
+"To access certain services of the Website, you may need to provide\n"
+"            information such as your name, email address, street address, "
+"and\n"
+"            zip code. By use of these services, you agree to: (a) provide\n"
+"            accurate, current, and complete information about you; (b)\n"
+"            maintain the security of your password and identification; (c)\n"
+"            maintain and promptly update your data and any other "
+"information\n"
+"            you provide to the Website to keep it accurate, current, and\n"
+"            complete; and (d) be fully responsible for all use of your "
+"account\n"
+"            and for any actions, whether by you or another person, that "
+"take\n"
+"            place using your account. You will notify us immediately of any\n"
+"            unauthorized use of your password or account or any other "
+"breach\n"
+"            of security. HRP assumes no liability for any loss or damage\n"
+"            arising from any unauthorized use of your password or account by "
+"a\n"
+"            third party. Any reliance on the contents of a third-party site "
+"is\n"
+"            done at your own risk and you assume all responsibilities and\n"
+"            consequences resulting from such reliance. Our use of any\n"
+"            personally identifiable information provided by you in regards "
+"to\n"
+"            obtaining a registration and password is governed by the terms "
+"of\n"
+"            our Privacy Policy."
+msgstr ""
+
+#: pages/_organisation/terms.vue:262
+msgid ""
+"To compile and disclose statistics about our users and their\n"
+"              preferences. However, these statistics are anonymous and do "
+"not\n"
+"              identify individual users."
+msgstr ""
+
+#: pages/_organisation/terms.vue:251
+msgid ""
+"To customize the content and /or layout of the website for each\n"
+"              individual user."
+msgstr ""
+
+#: pages/_organisation/terms.vue:248
+msgid "To improve the content of the website."
+msgstr ""
+
+#: components/common/EmptyProjects.vue:28
+msgid "to include your project in the inventory"
+msgstr ""
+
+#: pages/_organisation/terms.vue:241
+msgid ""
+"To let you know about information and services from HRP in\n"
+"              which you may be interested."
+msgstr ""
+
+#: pages/_organisation/terms.vue:257
+msgid "To notify users about updates to the website."
+msgstr ""
+
+#: pages/_organisation/terms.vue:235
+msgid ""
+"To provide information or services to you as requested by\n"
+"              you."
+msgstr ""
+
+#: components/BreadCrumb.vue:58 components/BreadCrumb.vue:59
+#: components/common/ToolkitDialogWrapper.vue:5
+#: components/common/ToolkitDialogWrapper.vue:26
+msgid "Toolkit"
+msgstr ""
+
+#: components/project/ProjectData.vue:204
+#: components/project/ProjectData.vue:503
+msgid "Total Budget"
+msgstr ""
+
+#: components/project/ProjectData.vue:208
+#: components/project/ProjectData.vue:527
+msgid "Total Budget (Narrative)"
+msgstr ""
+
+#: components/common/OrganisationSelect.vue:1
+#: components/common/OrganisationSelect.vue:12
+#: components/project/DonorSelector.vue:1
+#: components/project/DonorSelector.vue:12
+#: components/project/FacilitySelector.vue:8
+#: components/project/FacilitySelector.vue:35
+#: components/project/TeamSelector.vue:1 components/project/TeamSelector.vue:33
+msgid "Type and select a name"
+msgstr ""
+
+#: components/portfolio/form/Managers.vue:16
+#: components/portfolio/form/Managers.vue:62
+msgid "Type and select name"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Review.vue:10
+#: components/portfolio/dashboard/dialog/Review.vue:38
+msgid "Type emails (separate with commas)"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Review.vue:26
+#: components/portfolio/dashboard/dialog/Review.vue:69
+#: components/review/ReviewDialog.vue:120
+#: components/review/ReviewDialog.vue:280
+msgid "Type here..."
+msgstr ""
+
+#: components/dashboard/SearchBox.vue:4 components/dashboard/SearchBox.vue:21
+#: components/search/SearchBox.vue:4 components/search/SearchBox.vue:22
+msgid "Type something..."
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:187 components/admin/CountryAdmin.vue:244
+#: components/admin/CountryAdmin.vue:306 components/admin/CountryAdmin.vue:529
+#: components/admin/CountryAdmin.vue:688 components/admin/CountryAdmin.vue:863
+#: components/admin/DonorAdmin.vue:145 components/admin/DonorAdmin.vue:190
+#: components/admin/DonorAdmin.vue:241 components/admin/DonorAdmin.vue:383
+#: components/admin/DonorAdmin.vue:508 components/admin/DonorAdmin.vue:651
+msgid "Type to filter users..."
+msgstr ""
+
+#: components/admin/DhaQuestionOptions.vue:24
+#: components/admin/DhaQuestionOptions.vue:61
+msgid "Unable to add or remove options on saved questions"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Error.vue:1
+#: components/portfolio/dashboard/dialog/Error.vue:9
+msgid "Unable to proceed action"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:34
+msgid "Under what license is the project governed?"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:61 components/dashboard/MainTable.vue:132
+#: components/project/ProjectData.vue:17 components/project/ProjectData.vue:57
+#: components/project/sections/GeneralOverview.vue:40
+msgid "Unicef Office"
+msgstr ""
+
+#: components/search/AdvancedSearch.vue:11
+#: components/search/AdvancedSearch.vue:34
+msgid "UNICEF Office"
+msgstr ""
+
+#: components/project/ProjectData.vue:80 components/project/ProjectData.vue:211
+msgid "UNICEF Sector"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/index.vue:9
+msgid ""
+"UNICEF's portfolio approach to innovation ensures that innovation is\n"
+"      applied to the toughest, most pressing problems faced by some of the\n"
+"      most vulnerable children and young people. Our innovation portfolios "
+"are\n"
+"      curated sets of investments that focus on these pressing challenges "
+"to\n"
+"      accelerate results where we can achieve the greatest impact."
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/index.vue:3
+msgid "UNICEF’s Global Innovation Portfolios"
+msgstr ""
+
+#: components/common/ProjectCardActions.vue:84
+#: components/project/ProjectNavigation.vue:160
+msgid "Unpublish"
+msgstr ""
+
+#: components/review/ReviewStateInfo.vue:7
+msgid "Unscored"
+msgstr ""
+
+#: components/dashboard/TableTopActions.vue:139
+#: components/dialogs/ProjectApprovalDialog.vue:12
+#: components/dialogs/ProjectApprovalDialog.vue:41
+#: components/portfolio/dashboard/TableTopActions.vue:93
+msgid "Update"
+msgstr ""
+
+#: components/common/ProjectBar.vue:13
+msgid "Update score"
+msgstr ""
+
+#: components/common/FileUpload.vue:13
+msgid "Upload file"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:341
+#: components/project/sections/Partners.vue:112
+msgid "URL format: https://invent.unicef.org"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:73
+msgid "Used for initiatives in country"
+msgstr ""
+
+#: components/admin/ProjectApproval.vue:47
+#: components/admin/ProjectApproval.vue:127
+#: components/dialogs/ProjectApprovalDialog.vue:35
+#: components/dialogs/ProjectApprovalDialog.vue:51
+#: components/dialogs/ProjectApprovalDialog.vue:132
+#: components/dialogs/ProjectApprovalDialog.vue:191
+msgid "User"
+msgstr ""
+
+#: components/SignupComponent.vue:165
+msgid "User created succesfully"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:103 components/admin/CountryAdmin.vue:288
+#: components/admin/DonorAdmin.vue:72 components/admin/DonorAdmin.vue:216
+msgid "User management"
+msgstr ""
+
+#: pages/_organisation/initiatives/_id/edit/index.vue:9
+#: pages/_organisation/initiatives/_id/index.vue:9
+#: pages/_organisation/initiatives/_id/published.vue:9
+msgid "version of the initiative."
+msgstr ""
+
+#: components/landing/MyProjectsBox.vue:15
+msgid "View all Initiatives"
+msgstr ""
+
+#: components/dashboard/PersonaSelector.vue:9
+msgid "View as:"
+msgstr ""
+
+#: components/common/ProjectCardActions.vue:17
+msgid "View Draft"
+msgstr ""
+
+#: pages/_organisation/initiatives/_id/index.vue:3
+#: pages/_organisation/initiatives/_id/published.vue:3
+msgid "View Initiative Info"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/index.vue:43
+msgid "View Portfolio"
+msgstr ""
+
+#: components/common/ProjectCardActions.vue:34
+msgid "View Published"
+msgstr ""
+
+#: components/review/ReviewCardStripe.vue:8
+msgid "View Review"
+msgstr ""
+
+#: components/portfolio/dashboard/table/Scores.vue:5
+msgid "View score"
+msgstr ""
+
+#: components/common/ProjectLegendContent.vue:16
+msgid "Viewer"
+msgstr ""
+
+#: components/admin/DonorAdmin.vue:83 components/project/ProjectData.vue:65
+#: components/project/ProjectData.vue:171
+msgid "Viewers"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:229
+#: components/project/sections/GeneralOverview.vue:245
+msgid "Viewers can view initiative drafts"
+msgstr ""
+
+#: components/DhaLogin.vue:232 components/admin/DhaQuestion.vue:141
+#: components/admin/DhaQuestion.vue:179
+#: components/dashboard/FilterPresetsActions.vue:98
+#: components/dialogs/DialogsContainer.vue:46
+#: components/dialogs/ProjectApprovalDialog.vue:229
+#: components/portfolio/form/NewPortfolioForm.vue:116
+#: components/project/ProjectForm.vue:133
+#: components/project/ProjectForm.vue:189
+#: pages/_organisation/initiatives/_id.vue:40
+msgid "Warning"
+msgstr ""
+
+#: pages/_organisation/terms.vue:203
+msgid ""
+"We know that you care how information about you is used and shared\n"
+"            and we are careful to ensure that any such information that "
+"comes\n"
+"            into our possession is properly looked after. This Privacy "
+"Policy\n"
+"            sets out the steps that we take to ensure that any information\n"
+"            provided to us is kept secure and confidential and is used only\n"
+"            for the purposes for which it is provided."
+msgstr ""
+
+#: pages/_organisation/terms.vue:359
+msgid ""
+"WE MAKE NO WARRANTY THAT THE WEBSITE OR THE PROVIDED SERVICES\n"
+"              WILL MEET USERS' REQUIREMENTS. NO ADVICE, RESULTS OR\n"
+"              INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED BY YOU FROM US "
+"OR\n"
+"              THROUGH THE WEBSITE SHALL CREATE ANY WARRANTY NOT EXPRESSLY "
+"MADE\n"
+"              HEREIN. HRP ALSO ASSUMES NO RESPONSIBILITY, AND SHALL NOT BE\n"
+"              LIABLE FOR, ANY DAMAGES TO, OR VIRUSES THAT MAY INFECT, YOUR\n"
+"              EQUIPMENT ON ACCOUNT OF YOUR ACCESS TO, USE OF, OR BROWSING "
+"IN\n"
+"              THE WEBSITE OR YOUR DOWNLOADING OF ANY MATERIALS, DATA, TEXT,\n"
+"              IMAGES, VIDEO CONTENT, OR AUDIO CONTENT FROM THE WEBSITE. IF "
+"YOU\n"
+"              ARE DISSATISFIED WITH THE WEBSITE, YOUR SOLE REMEDY IS TO\n"
+"              DISCONTINUE USING THE WEBSITE."
+msgstr ""
+
+#: pages/_organisation/terms.vue:39
+msgid ""
+"We reserve the right to modify, add, or delete any of these Terms\n"
+"            at any time. Continued use of the Website after any "
+"modifications,\n"
+"            additions, or deletions to the Terms will constitute your\n"
+"            acceptance of the Terms, as modified."
+msgstr ""
+
+#: pages/_organisation/terms.vue:130
+msgid ""
+"We respect the intellectual property rights of others and require\n"
+"            that people who use the Website and services available on the\n"
+"            Website do the same. If you believe your work has been copied in "
+"a\n"
+"            way that constitutes infringement, please forward the following\n"
+"            information to our designated offices: • your address, "
+"telephone\n"
+"            number, and email address; • a description of the copyrighted "
+"work\n"
+"            you claim has been infringed; • a description of where the "
+"alleged\n"
+"            infringing material is located; • a statement that you have a "
+"good\n"
+"            faith belief that the disputed use is not authorized by the\n"
+"            copyright owner, its agent, or the law; • an electronic or\n"
+"            physical signature of the person authorized to act on behalf of\n"
+"            the owner of the copyright interest; and • a statement by you,\n"
+"            made under penalty of perjury, that the above information in "
+"your\n"
+"            notice is accurate and that you are the copyright owner or are\n"
+"            authorized to act on the copyright owner's behalf."
+msgstr ""
+
+#: pages/_organisation/terms.vue:376
+msgid ""
+"WE TRY TO ENSURE THAT THE INFORMATION POSTED ON THE WEBSITE IS\n"
+"              CORRECT AND UP-TO-DATE. WE RESERVE THE RIGHT TO CHANGE OR "
+"MAKE\n"
+"              CORRECTIONS TO ANY OF THE INFORMATION PROVIDED ON THE WEBSITE "
+"AT\n"
+"              ANY TIME AND WITHOUT ANY PRIOR WARNING. HRP NEITHER ENDORSES "
+"NOR\n"
+"              IS RESPONSIBLE FOR THE ACCURACY OR RELIABILITY OF ANY "
+"OPINION,\n"
+"              ADVICE OR STATEMENT ON THE WEBSITE, NOR FOR ANY OFFENSIVE,\n"
+"              DEFAMATORY, OBSCENE, INDECENT, UNLAWFUL OR INFRINGING POSTING\n"
+"              MADE THEREON BY ANYONE OTHER THAN AUTHORIZED HRP EMPLOYEE\n"
+"              SPOKESPERSONS WHILE ACTING IN THEIR OFFICIAL CAPACITIES\n"
+"              (INCLUDING, WITHOUT LIMITATION, OTHER USERS OF THE WEBSITE). "
+"IT\n"
+"              IS YOUR RESPONSIBILITY TO EVALUATE THE ACCURACY, COMPLETENESS "
+"OR\n"
+"              USEFULNESS OF ANY INFORMATION, OPINION, ADVICE OR OTHER "
+"CONTENT\n"
+"              AVAILABLE THROUGH THE WEBSITE. PLEASE SEEK THE ADVICE OF\n"
+"              PROFESSIONALS, AS APPROPRIATE, REGARDING THE EVALUATION OF "
+"ANY\n"
+"              SPECIFIC INFORMATION, OPINION, ADVICE OR OTHER CONTENT,\n"
+"              INCLUDING BUT NOT LIMITED TO FINANCIAL, HEALTH, OR LIFESTYLE\n"
+"              INFORMATION, OPINION, ADVICE OR OTHER CONTENT."
+msgstr ""
+
+#: pages/_organisation/terms.vue:271
+msgid ""
+"We will not pass any of your personal information to any third\n"
+"            party, other than members of HRP, without your consent."
+msgstr ""
+
+#: components/EditProfile.vue:81
+msgid ""
+"We will notify you via email when your user access has been\n"
+"                approved. If you would like to request a different type of\n"
+"                access, you can resubmit the form below and saving your\n"
+"                changes."
+msgstr ""
+
+#: components/landing/WelcomeBox.vue:4
+msgid "Welcome!"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:14
+msgid "What are the final programme targets the initiative aims to achieve?"
+msgstr ""
+
+#: components/project/sections/Categorization.vue:103
+msgid ""
+"What are the Health System Challenges addressed by the Digital\n"
+"            Health Intervention?"
+msgstr ""
+
+#: components/project/sections/Technology.vue:13
+msgid "What are the names of the software included in the deployment?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:44
+msgid "What are the programme targets the initiative has achieved to date?"
+msgstr ""
+
+#: pages/_organisation/portfolio/innovation/_id.vue:149
+msgid ""
+"What are the risk levels associated with this initiative? Note that low "
+"scores indicate high risk assessment."
+msgstr ""
+
+#: components/project/sections/InteroperabilityAndStandards.vue:36
+msgid "What data standards does your digital health project use?"
+msgstr ""
+
+#: components/project/ProjectData.vue:98 components/project/ProjectData.vue:247
+msgid ""
+"What is the health capability area(s) addressed? What are the Health System "
+"Challenges addressed by the Digital Health Intervention?"
+msgstr ""
+
+#: components/project/sections/Categorization.vue:83
+msgid "What is the health focus area(s) addressed by the DHI?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:106
+msgid "What is the impact the initiative has had to date?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:215
+msgid "What is the total estimated budget for the initiative?"
+msgstr ""
+
+#: components/project/sections/Categorization.vue:171
+msgid "What regional priorities are addressed by the initiative?"
+msgstr ""
+
+#: components/project/sections/Stages.vue:17
+msgid ""
+"When did the overall project, not just the digital health\n"
+"                component, start."
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:11
+msgid "When importing your initiatives"
+msgstr ""
+
+#: components/project/sections/Stages.vue:72
+msgid ""
+"When will the overall project be completed. If your project is\n"
+"                ongoing, leave this field blank."
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:13
+msgid "When will the technology be first deployed?"
+msgstr ""
+
+#: pages/_organisation/terms.vue:106
+msgid ""
+"When you post or submit any material to this Website, you\n"
+"            represent and warrant that you are the owner of the material or\n"
+"            have express permission from the owner of the material to post,\n"
+"            use, or submit the material. By posting or submitting material "
+"to\n"
+"            the Website, you agree that such submission is non-confidential\n"
+"            for all purposes. You are solely responsible for any damages\n"
+"            resulting from any infringements of copyrights, trademark "
+"rights,\n"
+"            propriety rights, or any other harm resulting from any "
+"uploading,\n"
+"            posting, or submission. When you post or submit material to the\n"
+"            Website, you grant HRP the right to use the material,\n"
+"            royalty-free, and grant us a non-exclusive, perpetual, and\n"
+"            worldwide license to use, reproduce, modify, adapt, publish,\n"
+"            translate, display, distribute and create any type of "
+"derivative\n"
+"            work from the submitted material. Submitting or posting "
+"material\n"
+"            also grants us the right to identify you as the author of any "
+"of\n"
+"            your postings or submissions by name, email address, or "
+"username,\n"
+"            as we deem appropriate. If you wish to keep any information,\n"
+"            ideas, concepts or inventions private or proprietary, do not\n"
+"            submit them to the Website or to HRP by email. We try to answer\n"
+"            every email in a timely manner, but are not always able to do so."
+msgstr ""
+
+#: components/landing/SignupBox.vue:6
+msgid "Whether you are an implementer, government, investor"
+msgstr ""
+
+#: components/landing/InfoBox.vue:2 components/landing/InfoBox.vue:10
+msgid "Why use the Digital Health Atlas"
+msgstr ""
+
+#: components/landing/InfoBox.vue:9
+msgid "Why use the Digital Health Atlas?"
+msgstr ""
+
+#: components/project/ProjectData.vue:195
+#: components/project/ProjectData.vue:481
+msgid "Work Breakdown Structure (WBS)"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:565 components/admin/CountryAdmin.vue:593
+#: components/admin/CountryAdmin.vue:617
+msgid "Wrong image format, you can only upload .jpg and .png files"
+msgstr ""
+
+#: components/dashboard/ListExport.vue:79
+msgid "yes"
+msgstr ""
+
+#: components/admin/ApprovalTag.vue:9 components/admin/ProjectApproval.vue:115
+#: components/admin/import/ImportDialog.vue:93
+#: components/dashboard/PdfExport.vue:167 components/project/CustomField.vue:34
+msgid "Yes"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:30 components/admin/DhaQuestion.vue:80
+msgid "Yes - no field"
+msgstr ""
+
+#: components/portfolio/dashboard/dialog/Error.vue:11
+msgid ""
+"You are not able to move the selected project(s) to portfolio, because\n"
+"        some of them have not been reviewd yet."
+msgstr ""
+
+#: pages/_organisation/initiatives/_id.vue:39
+msgid "You are not authorized to access this view"
+msgstr ""
+
+#: pages/_organisation/initiatives/_id/edit/index.vue:5
+#: pages/_organisation/initiatives/_id/index.vue:5
+#: pages/_organisation/initiatives/_id/published.vue:5
+msgid "You are viewing the"
+msgstr ""
+
+#: components/common/SearchComponent.vue:53
+msgid ""
+"You can use filters to further refine your search. Note\n"
+"                    that these filters can be saved by selecting Filters "
+"and\n"
+"                    naming your filter. These can then be viewed at a later\n"
+"                    time after you log in."
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:21
+msgid "you can use this file as a reference for the format of the data"
+msgstr ""
+
+#: pages/_organisation/terms.vue:287
+msgid ""
+"You may be able to link from HRP's Website to third-party\n"
+"            websites; conversely, third-party websites may link to HRP’s\n"
+"            Website. You acknowledge and agree that HRP's Website has no\n"
+"            responsibility for the information, content, products, "
+"services,\n"
+"            advertising, code, or other materials which may be provided by "
+"or\n"
+"            through third-party sites. Links to third-party sites do not\n"
+"            constitute an endorsement or sponsorship by HRP's Website of "
+"such\n"
+"            third-party sites or the information, content, products, "
+"services,\n"
+"            advertising, or other materials presented on or through such\n"
+"            websites. You agree that HRP and its affiliates are not\n"
+"            responsible for any damages that you incur arising from your "
+"use\n"
+"            of any products or services made available by third-parties\n"
+"            through the Website."
+msgstr ""
+
+#: pages/auth.vue:8
+msgid "You must have a UNICEF account to log in."
+msgstr ""
+
+#: components/project/ProjectForm.vue:328
+msgid "Your draft has been published successfully"
+msgstr ""
+
+#: components/project/ProjectForm.vue:269
+msgid "Your draft has been saved successfully"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:405
+msgid ""
+"Your initiatives have been successfully saved as a draft, you can go to your "
+"project inbox or keep working on the import interface"
+msgstr ""
+
+#: components/DjangoFeedback.vue:19
+msgid "Your message has been successfully sent! We will be back to you soon!"
+msgstr ""
+
+#: components/SignupComponent.vue:178
+msgid "Your password was reset successfully"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:173
+msgid "Your portfolio has been created successfully"
+msgstr ""
+
+#: components/portfolio/form/NewPortfolioForm.vue:206
+msgid "Your portfolio has been updated successfully"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:326
+msgid ""
+"Your project has been successfully saved as a draft, you can go to your "
+"project page or keep working on the import interface"
+msgstr ""
+
+#: components/EditProfile.vue:75
+msgid "Your user access has been submitted"
+msgstr ""
+
+#: components/EditProfile.vue:227
+msgid "Your user role request has been accepted!"
+msgstr ""

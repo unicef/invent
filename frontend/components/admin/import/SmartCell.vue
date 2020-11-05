@@ -233,7 +233,6 @@ export default {
             ),
           start_date: () => this.parseDate(),
           end_date: () => this.parseDate(),
-          field_office: () => this.findProjectCollectionValue('field_offices'),
           goal_area: () => this.findProjectCollectionValue('goal_areas'),
           result_area: () => this.findProjectCollectionValue('result_areas'),
           capability_levels: () =>
@@ -430,7 +429,6 @@ export default {
         'donors',
         'country',
         'organisation',
-        'field_office',
         'goal_area',
         'result_area',
       ]

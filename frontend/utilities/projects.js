@@ -23,7 +23,6 @@ export const projectFields = () => ({
   country: null,
   country_office: null,
   modified: null,
-  field_office: null,
   implementation_overview: null,
   start_date: null,
   end_date: null,

@@ -52,10 +52,6 @@
           />
         </template>
 
-        <template v-if="dialogData.column === 'field_office'">
-          <FieldOfficeSelector v-model="dialogData.value[0]" :office="office" />
-        </template>
-
         <template v-if="dialogData.column === 'goal_area'">
           <GoalAreasSelector v-model="dialogData.value[0]" />
         </template>
@@ -168,7 +164,6 @@ import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/Digit
 import GoalAreasSelector from '@/components/common/GoalAreasSelector'
 import ResultAreasSelector from '@/components/common/ResultAreasSelector'
 import CapabilitySelector from '@/components/project/CapabilitySelector'
-import FieldOfficeSelector from '@/components/project/FieldOfficeSelector'
 import { apiNameInvenMapping } from '@/utilities/import'
 import { mapGetters } from 'vuex'
 
@@ -181,7 +176,6 @@ export default {
     GoalAreasSelector,
     ResultAreasSelector,
     CapabilitySelector,
-    FieldOfficeSelector,
     MultiSelector,
     SingleSelect,
   },
