@@ -1,6 +1,6 @@
 {
     "UNICEF Sector": [
-        "- NA",
+        "NA",
         "Adolescents",
         "C4D",
         "Child Protection",
@@ -90,13 +90,13 @@
         "WCAR 8 - Open Defecation and sustainable access to hygiene and sanitation"
     ],
     "If this is an innovation initiative, in which way is it innovative?": [
-        "- NA",
+        "NA",
         "Uses an entirely new tool or approach",
         "Brings a tool or approach to a new target group or population ",
         "Significantly improves our ability to deliver (e.g., much faster or cheaper than existing alternatives)"
     ],
     "UNICEF Innovation Categories": [
-        "- NA",
+        "NA",
         "Digital Innovation",
         "Frugal Innovation",
         "Innovative Financing",
@@ -104,8 +104,8 @@
         "Programme Innovation"
     ],
     "In Country programme document (CPD) and annual work plan?": [
-        "- NA",
-        "- No",
+        "NA",
+        "No",
         "2006",
         "2007",
         "2008",
@@ -814,7 +814,7 @@
         "Other Documents/Resources "
     ],
     "Phase of Initiative": [
-        "- NA",
+        "NA",
         "Opportunity and Ideation",
         "Preparation and Scoping",
         "Analysis and Design",
@@ -836,10 +836,10 @@
         "Technology"
     ],
     "Software Platform(s)": [
-        "- NA",
-        "- Unknown",
-        "- Other",
-        "- Bespoke",
+        "NA",
+        "Unknown",
+        "Other",
+        "Bespoke",
         ".Stat Suite",
         "ACCEDA",
         "Accessmod",
@@ -1105,9 +1105,9 @@
         "Zzapp"
     ],
     "Hardware Platform(s)/Physical Product(s)": [
-        "- NA",
-        "- Unknown",
-        "- Other",
+        "NA",
+        "Unknown",
+        "Other",
         "3D Printer",
         "Audio Devices",
         "Offline Server",
@@ -1130,9 +1130,9 @@
         "Wearables"
     ],
     "Non-Technology Platform(s)/Programme Innovation(s) and Non-Technology Platform(s)": [
-        "- NA",
-        "- Unknown",
-        "- Other",
+        "NA",
+        "Unknown",
+        "Other",
         "Adaptive Management",
         "Adolescent In Emergencies Kit",
         "Audit",
@@ -1170,9 +1170,9 @@
         "Youth Challenge"
     ],
     "Function(s) of Platform": [
-        "- NA",
-        "- Unknown",
-        "- Other",
+        "NA",
+        "Unknown",
+        "Other",
         "API",
         "Artificial Intelligence",
         "Asset Tracking",
@@ -1265,7 +1265,7 @@
         "Youth Engagement"
     ],
     "Information Security Classification as per UNICEF's Classi Tool": [
-        "Not Classified ",
+        "Not Classified",
         "Class I - Confidential",
         "Class II - Internal",
         "Class III - Internal",
