@@ -246,6 +246,7 @@ export default {
         (p) => p.name
       )
       // INVENT
+      const flatSectors = this.projectDicts.sectors.map((p) => p.name)
       const flatCurrency = this.projectDicts.currencies.map((p) => p.name)
       const flatPhases = this.projectDicts.phases.map((p) => p.name)
       const flatFunctions = this.projectDicts.functions.map((p) => p.name)
@@ -261,6 +262,7 @@ export default {
       // const flatPhases = this.projectDicts.phases.map(p => p.name);
 
       return [
+        [nameMapping.unicef_sector, ...flatSectors],
         [nameMapping.phase, ...flatPhases],
         [nameMapping.currency, ...flatCurrency],
         [nameMapping.functions, ...flatFunctions],
@@ -269,7 +271,6 @@ export default {
         [nameMapping.regional_priorities, ...flatRegionalPriorities],
         [nameMapping.innovation_categories, ...flatInnovationCategories],
         [nameMapping.cpd, ...flatCpd],
-        // [nameMapping.phases, ...flatPhases],
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
         [nameMapping.platforms, ...flatPlatforms],
