@@ -50,7 +50,6 @@ export const getters = {
     const all = get(state, 'projectStructure.capability_subcategories', [])
     return id ? all.filter((i) => i.goal_area_id === id) : all
   },
-  getFieldOffices: (state) => get(state, 'projectStructure.field_offices', []),
   getHealthFocusAreas: (state) =>
     state.projectStructure.health_focus_areas
       ? [...state.projectStructure.health_focus_areas]

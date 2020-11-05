@@ -17,10 +17,6 @@
           <el-row type="flex" align="middle" class="SecondSubRow">
             <country-item :id="project.country" :show-flag="true" />
             <organisation-item :id="project.organisation" />
-            <field-office-item
-              :value="project.field_office"
-              :office="project.country"
-            />
           </el-row>
         </el-col>
         <el-row type="flex" align="center" justify="end">
@@ -89,7 +85,6 @@ import CountryItem from '@/components/common/CountryItem'
 import OrganisationItem from '@/components/common/OrganisationItem'
 import ProjectCardActions from '@/components/common/ProjectCardActions'
 import ProjectLegend from '@/components/common/ProjectLegend'
-import FieldOfficeItem from '@/components/project/FieldOfficeItem'
 import Favorite from '@/components/common/Favorite'
 
 export default {
@@ -99,7 +94,6 @@ export default {
     ProjectCardActions,
     ProjectLegend,
     ReviewCardStripe,
-    FieldOfficeItem,
     Favorite,
   },
   props: {
@@ -151,8 +145,7 @@ export default {
     }
 
     .SecondSubRow {
-      .OrganisationItem,
-      .FieldOfficeItem {
+      .OrganisationItem {
         width: auto;
         font-size: @fontSizeBase;
         font-weight: 400;

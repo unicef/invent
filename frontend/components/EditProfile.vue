@@ -425,8 +425,6 @@ export default {
     return {
       innerProfile: {
         name: null,
-        // default code for unicef
-        organisation: this.unicefOrganisation.id,
         language: null,
         country: null,
         account_type: null,
@@ -438,7 +436,9 @@ export default {
       donorFilters: ['unicef'],
     }
   },
-
+  async fetch({ store, params }) {
+    await store.dispatch('system/loadStaticData')
+  },
   computed: {
     ...mapGetters({
       profile: 'user/getProfile',

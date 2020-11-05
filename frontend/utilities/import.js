@@ -54,7 +54,6 @@ export const nameMapping = {
   capability_levels: 'Capability Levels',
   capability_categories: 'Capability Categories',
   capability_subcategories: 'Capability Subcategories',
-  field_office: 'Field Office',
   ...nameInventMapping,
 }
 
@@ -75,7 +74,6 @@ export const importTemplate = [
       '1.1 Lack of population denominator|1.2 Delayed reporting of events',
     'Goal Area': '21. Survive and Thrive',
     'Result Area': '21-01 Maternal and newborn health',
-    'Field Office': 'According to selected country office',
     Overview: 'text',
     'Program Targets': 'text',
     'Program Targets Achieved': 'text',
@@ -103,7 +101,6 @@ export const importTemplate = [
     Software: 'Bamboo',
     'Goal Area': '22. Learn',
     'Result Area': '22-01 Equitable access to quality education',
-    'Field Office': 'According to selected country office',
     'Capability Levels': '4. Interventions for data services',
     'Capability Categories': '1.3 Student to student communication',
     'Capability Subcategories':

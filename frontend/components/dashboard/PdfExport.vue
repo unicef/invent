@@ -28,7 +28,6 @@ export default {
       capabilityLevels: 'projects/getCapabilityLevels',
       capabilityCategories: 'projects/getCapabilityCategories',
       capabilitySubcategories: 'projects/getCapabilitySubcategories',
-      fieldOffices: 'projects/getFieldOffices',
       regions: 'system/getUnicefRegions',
       hscChallenges: 'projects/getHscChallenges',
     }),
@@ -323,11 +322,6 @@ export default {
           'name',
           ''
         )
-        const fieldOffice = get(
-          this.fieldOffices.find((r) => r.id === project.field_office),
-          'name',
-          ''
-        )
         const capabilityLevels = this.parseFlatList(
           project.capability_levels,
           'capabilityLevels'
@@ -371,10 +365,6 @@ export default {
                 [
                   { text: this.$gettext('Region:'), style: 'subHeader' },
                   region,
-                ],
-                [
-                  { text: this.$gettext('Field office:'), style: 'subHeader' },
-                  fieldOffice,
                 ],
 
                 {

@@ -139,20 +139,6 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('16')"
-        :resizable="false"
-        :label="$gettext('Field office') | translate"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <FieldOfficeItem
-            :value="scope.row.field_office"
-            :office="scope.row.country_office"
-          />
-        </template>
-      </el-table-column>
-
-      <el-table-column
         v-if="selectedColumns.includes('11')"
         :resizable="false"
         :label="$gettext('Goal Area') | translate"
@@ -367,7 +353,6 @@ import CustomAnswersCell from '@/components/dashboard/CustomAnswersCell'
 import GoalAreaItem from '@/components/dashboard/GoalAreaItem'
 import ResultAreaItem from '@/components/dashboard/ResultAreaItem'
 import CurrentPage from '@/components/dashboard/CurrentPage'
-import FieldOfficeItem from '@/components/project/FieldOfficeItem'
 import CapabilitiesList from '@/components/project/CapabilitiesList'
 import Reviewers from '@/components/portfolio/dashboard/table/Reviewers'
 import Scores from '@/components/portfolio/dashboard/table/Scores'
@@ -385,7 +370,6 @@ export default {
     RegionItem,
     CustomAnswersCell,
     CurrentPage,
-    FieldOfficeItem,
     CapabilitiesList,
     GoalAreaItem,
     ResultAreaItem,

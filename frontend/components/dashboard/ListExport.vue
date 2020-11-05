@@ -25,7 +25,6 @@ export default {
       capabilityLevels: 'projects/getCapabilityLevels',
       capabilityCategories: 'projects/getCapabilityCategories',
       capabilitySubcategories: 'projects/getCapabilitySubcategories',
-      fieldOffices: 'projects/getFieldOffices',
       regions: 'system/getUnicefRegions',
       platforms: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
@@ -59,10 +58,6 @@ export default {
           capability_subcategories: this.parseFlatList(
             s.capability_categories,
             'capabilitySubcategories'
-          ),
-          field_office: this.parseSingleSelection(
-            s.field_office,
-            'fieldOffices'
           ),
           goal_area: this.parseSingleSelection(s.goal_area, 'goalAreas'),
           result_area: this.parseSingleSelection(s.result_area, 'resultAreas'),

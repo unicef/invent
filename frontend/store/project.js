@@ -32,7 +32,6 @@ export const getters = {
   getOrganisation: (state) => state.organisation,
   getCountry: (state) => state.country,
   getCountryOffice: (state) => state.country_office,
-  getFieldOffice: (state) => state.field_office,
   getModified: (state) => state.modified,
   getImplementationOverview: (state) => state.implementation_overview,
   getStartDate: (state) => state.start_date,
@@ -204,9 +203,6 @@ export const actions = {
   setResultArea({ commit }, value) {
     commit('SET_DATA', { key: 'result_area', value })
   },
-  setFieldOffice({ commit }, value) {
-    commit('SET_DATA', { key: 'field_office', value })
-  },
   setCapabilityLevels({ commit }, value) {
     commit('SET_DATA', { key: 'capability_levels', value })
   },
@@ -228,7 +224,6 @@ export const actions = {
   },
   setCountryOffice({ commit, dispatch }, value) {
     dispatch('offices/loadOffice', value, { root: true })
-    commit('SET_DATA', { key: 'field_office', value: '' })
     commit('SET_COUNTRY_OFFICE', value)
   },
   setImplementationOverview({ commit }, value) {
@@ -573,7 +568,6 @@ export const mutations = {
     state.country = get(project, 'country', null)
     state.country_office = get(project, 'country_office', null)
     state.modified = get(project, 'modified', null)
-    state.field_office = get(project, 'field_office', null)
     state.implementation_overview = get(project, 'implementation_overview', '')
     state.start_date = get(project, 'start_date', '')
     state.end_date = get(project, 'end_date', '')

@@ -50,13 +50,6 @@
 
       <custom-required-form-item>
         <template slot="label">
-          <translate key="field-offices"> City </translate>
-        </template>
-        <FieldOfficeSelector v-model="field_office" :office="country_office" />
-      </custom-required-form-item>
-
-      <custom-required-form-item>
-        <template slot="label">
           <translate key="country"> Country </translate>
         </template>
         {{ countryOfOffice }}
@@ -274,7 +267,6 @@ import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 import CollapsibleCard from '../CollapsibleCard'
 import TeamSelector from '../TeamSelector'
-import FieldOfficeSelector from '../FieldOfficeSelector'
 import CountryOfficeSelect from '../../common/CountryOfficeSelect'
 import FormHint from '../FormHint'
 import { mapGettersActions } from '../../../utilities/form'
@@ -284,7 +276,6 @@ export default {
     CollapsibleCard,
     CountryOfficeSelect,
     TeamSelector,
-    FieldOfficeSelector,
     FormHint,
     CustomRequiredFormTeamItem,
   },
@@ -315,7 +306,6 @@ export default {
       contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0],
-      field_office: ['project', 'getFieldOffice', 'setFieldOffice', 0],
     }),
     selectedRegion() {
       const office = this.offices.find((obj) => obj.id === this.country_office)

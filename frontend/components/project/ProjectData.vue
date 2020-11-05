@@ -20,13 +20,6 @@
             :content="office.name"
           />
 
-          <simple-field :header="$gettext('City') | translate">
-            <FieldOfficeItem
-              :value="project.field_office"
-              :office="office.id"
-            />
-          </simple-field>
-
           <simple-field :header="$gettext('Country') | translate">
             <country-item :id="project.country" :show-flag="false" />
           </simple-field>
@@ -211,7 +204,7 @@
           </simple-field>
           <simple-field :header="$gettext('Total Budget') | translate">
             {{ project.total_budget }}
-            <list-element :value="project.currency" source="getCurrencies" />
+            <list-element :value="++project.currency" source="getCurrencies" />
           </simple-field>
           <simple-field
             :content="project.total_budget_narrative"
@@ -250,7 +243,7 @@
           </el-row>
 
           <simple-field :header="$gettext('Phase of Initiative') | translate">
-            <list-element :value="project.phase" source="getPhases" />
+            <list-element :value="++project.phase" source="getPhases" />
           </simple-field>
 
           <el-row>
@@ -278,7 +271,7 @@
                 <li>
                   <translate>Partner Type</translate>:
                   <list-element
-                    :value="partner.partner_type"
+                    :value="++partner.partner_type"
                     source="getPartnerTypes"
                     root="system"
                   />
@@ -388,13 +381,12 @@ import OrganisationItem from '../common/OrganisationItem'
 import CountryItem from '../common/CountryItem'
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList'
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
-import DonorsList from '../common/list/DonorsList'
+// import DonorsList from '../common/list/DonorsList'
 import ProjectNavigation from './ProjectNavigation'
 import CollapsibleCard from './CollapsibleCard'
 import SimpleField from './SimpleField'
 import TeamList from './TeamList'
 import PlatformsList from './PlatformsList'
-import FieldOfficeItem from './FieldOfficeItem'
 import DhiList from './DhiList'
 import CapabilitiesList from './CapabilitiesList'
 import CustomReadonlyField from './CustomReadonlyField'
@@ -408,11 +400,10 @@ export default {
     CountryItem,
     TeamList,
     PlatformsList,
-    FieldOfficeItem,
     DhiList,
     HealthFocusAreasList,
     HealthSystemChallengesList,
-    DonorsList,
+    // DonorsList,
     CustomReadonlyField,
     CapabilitiesList,
     ListElement,
