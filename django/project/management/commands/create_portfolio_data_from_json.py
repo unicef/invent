@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
 
+from datetime import datetime
+
 from django.core.management.base import BaseCommand
 import pprint as pp
 import json
 from user.models import User, UserProfile, Organisation
-from country.models import Donor, Country, CountryOffice
+from country.models import Donor, CountryOffice
 from project.models import Project, Portfolio, ProblemStatement, ProjectPortfolioState, ReviewScore
 from project.tests.setup import TestProjectData
 
@@ -20,21 +22,18 @@ class Command(BaseCommand, TestProjectData):
         with open(input_file, 'r') as f:
             return json.load(f)
 
-    def create_background_data(self, data_dict):
+    def set_generals(self):
         pp.pprint('Creating background data if needed')
-        self.org, _ = Organisation.objects.get_or_create(name=data_dict['organisation'])
-        self.d1, _ = Donor.objects.get_or_create(name=data_dict['d1'],
-                                                 defaults={'code': data_dict['d1'].lower().replace(' ', '_')})
-        self.d2, _ = Donor.objects.get_or_create(name=data_dict['d2'],
-                                                 defaults={'code': data_dict['d2'].lower().replace(' ', '_')})
-        self.country, self.country_office = self.create_new_country_and_office(project_approval=False)
+        self.org = Organisation.objects.get(name='UNICEF')
+        self.d1 = Donor.objects.get(name='UNICEF')
 
     @staticmethod
     def create_users(users):
         pp.pprint('Creating users if needed')
         profiles_list = []
         for user_data in users:
-            user_db, created = User.objects.get_or_create(username=user_data['email'])
+            user_db, created = User.objects.get_or_create(username=user_data['email'], 
+                                                          defaults={'email': user_data['email']})
             user_db.password = '1234YabbaDabba'
             user_db.save()
             userprofile_db, created = UserProfile.objects.get_or_create(user=user_db)
@@ -48,25 +47,50 @@ class Command(BaseCommand, TestProjectData):
     def create_projects(self, projects):
         projects_list = []
         for project_data in projects:
-            project_gen_data, org, country, country_office, d1, d2 = \
-                self.create_test_data(name=project_data['name'], new_country_only=True)
+            country_office = CountryOffice.objects.filter(country__name=project_data['country'])[0]
+
+            project_gen_data = {"project": {
+                "date": datetime.utcnow(),
+                "name": project_data['name'],
+                "organisation": self.org.id,
+                "contact_name": "name1",
+                "contact_email": "a@a.com",
+                "implementation_overview": "overview",
+                "overview": "new overview",
+                "implementation_dates": "2016",
+                "health_focus_areas": [1, 2],
+                "geographic_scope": "somewhere",
+                "country_office": country_office.id,
+                "platforms": [1, 2],
+                "donors": [self.d1.id],
+                "hsc_challenges": [1, 2],
+                "start_date": str(datetime.today().date()),
+                "end_date": str(datetime.today().date()),
+                "goal_area": 1,
+                "result_area": 1,
+                "capability_levels": [],
+                "capability_categories": [],
+                "capability_subcategories": [],
+                "dhis": [],
+                "unicef_sector": [1, 2],
+                "innovation_categories": [1, 2],
+                "cpd": [1, 2],
+                "regional_priorities": [1, 2],
+                "hardware": [1, 2],
+                "nontech": [1, 2],
+                "functions": [1, 2],
+                "phase": 1,
+                "partners": [dict(partner_type=0, partner_name="test partner 1", partner_email="p1@partner.ppp",
+                                  partner_contact="test partner contact 1", partner_website="https://partner1.com"),
+                             dict(partner_type=1, partner_name="test partner 2", partner_email="p2@partner.ppp",
+                                  partner_contact="test partner contact 2", partner_website="https://partner2.com")],
+                "links": [dict(link_type=0, link_url="https://website.com"),
+                          dict(link_type=1, link_url="https://sharepoint.directory")]
+            }}
 
             project_gen_data = project_gen_data['project']
             project_gen_data['date'] = project_gen_data['date'].strftime("%m/%d/%Y, %H:%M:%S")
-            country, _ = Country.objects.get_or_create(name=project_data.get('country', "unnamed_country"))
-            country_offices = CountryOffice.objects.filter(country=country)
-
-            if country_offices:
-                country_office = country_offices[0]
-            else:
-                CountryOffice.objects.get_or_create(
-                    name=f'Test Country Office ({country.name})',
-                    region=Country.UNICEF_REGIONS[0][0],
-                    country=country
-                )
-
-            project_gen_data['country'] = country.id
-            project_gen_data['organisation'] = org.id
+            project_gen_data['country'] = country_office.country.id
             project_gen_data['country_office'] = country_office.id
 
             project, created = Project.objects.get_or_create(name=project_data['name'])
@@ -74,7 +98,7 @@ class Command(BaseCommand, TestProjectData):
 
             project.team.set(project_team)
             project.data = project_gen_data
-            project.make_public_id(self.country.id)
+            project.make_public_id(country_office.country.id)
             project.save()
 
             projects_list.append(project)
@@ -153,11 +177,10 @@ class Command(BaseCommand, TestProjectData):
         pp.pprint('Parsing input data')
 
         data = self.read_input_json(options.get('input_json'))
-        general = data['general']
         users = data['users']
         projects = data['projects']
         portfolios = data['portfolios']
-        self.create_background_data(general)
+        self.set_generals()
         self.create_users(users)
         self.create_projects(projects)
         self.create_portfolios(portfolios)

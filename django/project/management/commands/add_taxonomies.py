@@ -10,7 +10,7 @@ from country.models import Currency
 
 class Command(BaseCommand):
     help = 'Generates test data in the DB based on it the input JSON'
-    json_path = 'project/static-json/taxonomies.json'
+    json_path = 'project/data_files/taxonomies.json'
 
     data_model_map = {
         'UNICEF Sector': UNICEFSector,
@@ -28,40 +28,6 @@ class Command(BaseCommand):
         'Links to website/Current Documentation',
         'Partner Type'
     }
-
-    def add_arguments(self, parser):
-        parser.add_argument('input_json', type=str)
-
-    def parse_csv(self, file_path):  # Optional, better keep it
-        from csv import reader
-        with open(file_path) as csvfile:
-            csv_reader = reader(csvfile, delimiter=',')
-            column_names = next(csv_reader)
-            pp.pprint(f'Columns: {column_names}')
-            data = dict()
-            for i, column in enumerate(column_names):
-                splitted = column.split('- ')
-                if len(splitted) == 2:
-                    column_number = int(splitted[0].strip())
-                    column_name = splitted[1].strip().replace('\n', '')
-                else:
-                    column_name = column.strip()
-                    column_number = 0
-                data[i] = {
-                    'number': column_number,
-                    'name': column_name,
-                    'values': list()
-                }
-            for row in csv_reader:
-                self.stdout.write(f'Read: {row}')
-                for index in data:
-                    if row[index] and data[index]['name'] == 'Currency':
-                        data[index]['values'].append({'code': row[index], 'name': row[index - 1]})
-                    elif row[index]:
-                        data[index]['values'].append(row[index])
-            data.pop(5)
-            with open(self.json_path, 'w', encoding='utf-8') as ofile:
-                json.dump({data[x]['name']: data[x]['values'] for x in data}, ofile, indent=4)
 
     @staticmethod
     def read_input_json(input_file):
@@ -83,7 +49,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         pp.pprint('Parsing input data')
-        data = self.read_input_json(options.get('input_json'))
+        data = self.read_input_json(self.json_path)
 
         for block_name in data:
             if block_name in self.data_model_map:
