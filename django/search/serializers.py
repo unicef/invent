@@ -70,7 +70,7 @@ class PortfolioResultSerializer(ListResultSerializer):
     def get_review_states(self, obj):
         profile = self.context.get('profile')
         if self.context.get('portfolio_page') in ['review', 'portfolio'] and \
-                profile and (profile.global_portfolio_owner or obj.managers.filter(id=profile.id)):
+                profile and (profile.global_portfolio_owner or obj.project.managers.filter(id=profile.id)):
             return ProjectPortfolioStateManagerSerializer(
                 obj.project.review_states.get(portfolio_id=self.context['portfolio_id'])
             ).data
