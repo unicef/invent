@@ -20,18 +20,9 @@
             :content="office.name"
           />
 
-          <simple-field :header="$gettext('Country') | translate">
-            <country-item :id="project.country" :show-flag="false" />
-          </simple-field>
-
           <simple-field
-            :header="$gettext('Region') | translate"
-            :content="selectedRegion"
-          />
-
-          <simple-field
-            :header="$gettext('Multicountry or Regional Office\n') | translate"
-            :content="selectedRegionOffice"
+            :header="$gettext('Location') | translate"
+            :content="location"
           />
 
           <simple-field
@@ -271,7 +262,7 @@
                 <li>
                   <translate>Partner Type</translate>:
                   <list-element
-                    :value="++partner.partner_type"
+                    :value="partner.partner_type * 1"
                     source="getPartnerTypes"
                     root="system"
                   />
@@ -428,6 +419,13 @@ export default {
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
     }),
+    location() {
+      const { selectedRegionOffice, office, country, selectedRegion } = this
+      if (selectedRegionOffice) {
+        return `UNICEF ${selectedRegionOffice}, ${office.city}, ${country.name}, ${selectedRegion}`
+      }
+      return `UNICEF ${country.name}, ${office.city}, ${country.name}, ${selectedRegion}`
+    },
     route() {
       return this.$route.name.split('__')[0]
     },
@@ -441,7 +439,7 @@ export default {
       if (this.project.country) {
         return this.getCountryDetails(this.project.country)
       }
-      return null
+      return {}
     },
     selectedRegion() {
       if (this.office) {
