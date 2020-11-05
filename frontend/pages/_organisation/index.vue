@@ -29,12 +29,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import LandingMap from '../../components/landing/LandingMap.vue'
-import WelcomeBox from '../../components/landing/WelcomeBox.vue'
-import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue'
-import InfoBox from '../../components/landing/InfoBox.vue'
-import CentralBox from '../../components/landing/CentralBox.vue'
-import AboutSection from '../../components/landing/AboutSection.vue'
+import LandingMap from '@/components/landing/LandingMap.vue'
+import WelcomeBox from '@/components/landing/WelcomeBox.vue'
+import CountryProjectsBox from '@/components/landing/CountryProjectsBox.vue'
+import InfoBox from '@/components/landing/InfoBox.vue'
+import CentralBox from '@/components/landing/CentralBox.vue'
+import AboutSection from '@/components/landing/AboutSection.vue'
 
 export default {
   components: {
@@ -60,8 +60,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .LandingPage {
   .MapBoxContainer {
@@ -91,8 +91,8 @@ export default {
     }
 
     .InfoBoxWrapper {
-      min-width: 360px;
-      max-width: 360px;
+      min-width: 400px;
+      max-width: 400px;
       margin-left: 40px;
       margin-right: 30px;
       background-color: @colorWhite;
