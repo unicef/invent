@@ -115,7 +115,7 @@
       <el-table-column
         v-if="selectedColumns.includes('4')"
         :resizable="false"
-        :label="$gettext('Country Office') | translate"
+        :label="$gettext('UNICEF Office') | translate"
         sortable="custom"
         prop="country_office__name"
         width="180"

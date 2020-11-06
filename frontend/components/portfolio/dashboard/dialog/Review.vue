@@ -11,6 +11,7 @@
       <el-select
         v-model="reviewers"
         multiple
+        filterable
         :placeholder="
           $gettext('Type emails (separate with commas)') | translate
         "

@@ -19,7 +19,7 @@
           tag="button"
           class="el-button el-button--primary el-button--medium"
         >
-          <translate>Add new project</translate>
+          <translate>Add new initiative</translate>
         </nuxt-link>
       </el-col>
     </el-row>

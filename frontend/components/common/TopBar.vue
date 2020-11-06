@@ -10,21 +10,6 @@
           :to="localePath({ name: 'organisation', params: $route.params })"
         >
           <el-row type="flex" align="middle">
-            <!-- <el-col class="LogoWHO">
-              <img
-                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
-                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
-              >
-            </el-col>
-            <el-col class="Separator">
-              <div />
-            </el-col>
-            <el-col class="LogoDHA">
-              <img
-                src="/logo-dha.svg"
-                alt="Digital Health Atlas"
-              >
-            </el-col> -->
             <el-col class="LogoUnicef">
               <img
                 class="UnicefLogoNormal"
@@ -71,7 +56,6 @@
                   <translate>Inventory</translate>
                 </nuxt-link>
               </div>
-              <!-- organisation-dashboard-list -->
               <div>
                 <nuxt-link
                   key="portfolioBtn"
@@ -117,19 +101,6 @@
                   <translate>My Initiatives</translate>
                 </nuxt-link>
               </div>
-              <!-- <div>
-                <nuxt-link
-                  v-if="isSuperUser"
-                  key="planningAndGuidanceBtn"
-                  :to="localePath({name: 'organisation-cms', params: $route.params})"
-                  class="HeaderBtn"
-                >
-                  <translate>Planning and Guidance</translate>
-                </nuxt-link>
-              </div> -->
-              <!-- <div>
-                <toolkit-dialog-wrapper v-if="isSuperUser" />
-              </div> -->
               <div>
                 <nuxt-link
                   key="newProjectBtn"
@@ -201,7 +172,6 @@ import { mapGetters } from 'vuex'
 
 import LanguageSelector from './LanguageSelector'
 import UserDropdown from './UserDropdown'
-// import ToolkitDialogWrapper from './ToolkitDialogWrapper'
 
 export default {
   directives: {
@@ -210,7 +180,6 @@ export default {
   components: {
     LanguageSelector,
     UserDropdown,
-    // ToolkitDialogWrapper,
   },
   props: {
     errorPage: {

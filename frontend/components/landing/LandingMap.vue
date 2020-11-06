@@ -49,11 +49,11 @@
 
 <script>
 import NoSSR from 'vue-no-ssr'
-import MapMixin from '../mixins/MapMixin'
+import MapMixin from '@/components/mixins/MapMixin'
 
-import CountryCenterMarker from '../common/map/CountryCenterMarker'
-import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay'
-import WorldZoomButton from '../common/map/WorldZoomButton'
+import CountryCenterMarker from '@/components/common/map/CountryCenterMarker'
+import CountryDetailsOverlay from '@/components/common/map/CountryDetailsOverlay'
+import WorldZoomButton from '@/components/common/map/WorldZoomButton'
 
 export default {
   components: {
@@ -67,8 +67,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .LandingMap {
   height: @landingMapHeight;

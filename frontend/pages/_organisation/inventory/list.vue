@@ -21,6 +21,7 @@ export default {
     TableTopActions,
   },
   async fetch({ store, query, error }) {
+    store.dispatch('landing/resetSearch')
     store.dispatch('dashboard/setDashboardSection', 'list')
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
