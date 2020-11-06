@@ -44,8 +44,8 @@ export default {
         'organisation-admin-donor': this.$gettext('Admin'),
         'organisation-admin-import': this.$gettext('Admin'),
         'organisation-admin-import-id': this.$gettext('Admin'),
-        'organisation-inventory': this.$gettext('TIIP Inventory'),
-        'organisation-inventory-list': this.$gettext('TIIP Inventory'),
+        'organisation-inventory': this.$gettext('Inventory'),
+        'organisation-inventory-list': this.$gettext('Inventory'),
         'organisation-initiatives': this.$gettext('My initiatives'),
         'organisation-initiatives-id-published': this.$gettext(
           'Published Initiative'

@@ -242,18 +242,16 @@ a {
   min-height: @landingMapMinHeight;
   background-color: @colorGrayLight;
 
-  &.Searched {
-    .CountryCenterIcon {
-      &.EmptyMarker {
-        display: none;
-        pointer-events: none;
-      }
+  .CountryCenterIcon {
+    &.EmptyMarker {
+      display: none;
+      pointer-events: none;
     }
-    .CountryClusterIcon {
-      &.EmptyCluster {
-        display: none;
-        pointer-events: none;
-      }
+  }
+  .CountryClusterIcon {
+    &.EmptyCluster {
+      display: none;
+      pointer-events: none;
     }
   }
 

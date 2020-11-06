@@ -16,6 +16,7 @@ export default {
     DashboardProjectBox,
   },
   async fetch({ store, query, error }) {
+    store.dispatch('landing/resetSearch')
     store.dispatch('dashboard/setDashboardSection', 'map')
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),

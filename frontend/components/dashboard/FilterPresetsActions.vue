@@ -54,7 +54,7 @@
 <script>
 import isEqual from 'lodash/isEqual'
 import { mapActions, mapGetters } from 'vuex'
-import { queryStringComparisonParser } from '../../utilities/api.js'
+import { queryStringComparisonParser } from '@/utilities/api.js'
 
 export default {
   computed: {

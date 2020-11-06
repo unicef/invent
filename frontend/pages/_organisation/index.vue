@@ -45,8 +45,15 @@ export default {
     AboutSection,
     CountryProjectsBox,
   },
-  fetch({ store }) {
-    store.dispatch('landing/resetSearch')
+  async fetch({ store }) {
+    await store.dispatch('landing/resetSearch')
+    await store.dispatch('dashboard/setDashboardSection', 'map')
+    await Promise.all([
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('countries/loadMapData'),
+    ])
+    await store.dispatch('dashboard/loadProjectsMap')
   },
   computed: {
     ...mapGetters({
