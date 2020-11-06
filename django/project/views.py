@@ -111,7 +111,7 @@ class ProjectPublicViewSet(ViewSet):
             currencies=Currency.objects.values('id', 'name', 'code'),
             sectors=UNICEFSector.objects.values('id', 'name').custom_ordered(),
             regional_priorities=RegionalPriority.objects.values('id', 'name').custom_ordered(),
-            phases=Phase.objects.values('id', 'name'),
+            phases=Phase.objects.values('id', 'name').custom_ordered(),
             hardware=HardwarePlatform.objects.values('id', 'name').custom_ordered(),
             nontech=NontechPlatform.objects.values('id', 'name').custom_ordered(),
             functions=PlatformFunction.objects.values('id', 'name').custom_ordered(),
