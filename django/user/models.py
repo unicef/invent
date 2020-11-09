@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import HStoreField
 from django.db import models, transaction
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -62,6 +63,7 @@ class UserProfile(ExtendedModel):
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
     global_portfolio_owner = models.BooleanField(default=False)
+    filters = HStoreField(default=dict, blank=True)
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""

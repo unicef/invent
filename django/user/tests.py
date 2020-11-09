@@ -510,3 +510,20 @@ class UserProfileTests(APITestCase):
         recipients = mail.outbox[-2].recipients()[0] + mail.outbox[-1].recipients()[0]
         self.assertTrue(UserProfile.objects.get(id=self.user_profile_id).user.email in recipients)
         self.assertTrue(super_user.email in recipients)
+
+    def test_save_filters(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        data = {
+            "filters": {
+                "my filter 1": "?page_size=10&page=1&ordering&stage&donor&region&hfa=143&sc=1&sc=2&sc=3",
+                "my filter 2": "?page_size=10&page=1&ordering",
+            }
+        }
+        response = self.client.patch(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['filters']), 2)
+        self.assertTrue("my filter 1" in response.json()['filters'])
+        self.assertTrue("my filter 2" in response.json()['filters'])
