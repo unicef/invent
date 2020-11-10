@@ -28,7 +28,7 @@ class PartnerSerializer(serializers.Serializer):
     partner_name = serializers.CharField(max_length=100)
     partner_contact = serializers.CharField(max_length=100, required=False)
     partner_email = serializers.EmailField(required=False)
-    partner_website = serializers.URLField(required=False)
+    partner_website = serializers.URLField(max_length=2048, required=False)
 
 
 class LinkSerializer(serializers.Serializer):
@@ -39,7 +39,7 @@ class LinkSerializer(serializers.Serializer):
                  (4, _('Other Documents/Resources'))]
 
     link_type = serializers.ChoiceField(choices=LINK_TYPE)
-    link_url = serializers.URLField(required=False)
+    link_url = serializers.URLField(max_length=2048, required=False)
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
