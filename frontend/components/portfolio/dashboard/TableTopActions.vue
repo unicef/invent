@@ -38,7 +38,7 @@
       <el-select v-model="exportType" :disabled="disabled" size="small">
         <el-option label="CSV" value="CSV" />
         <el-option label="XLSX" value="XLSX" />
-        <el-option label="PDF" value="PDF" />
+        <!-- <el-option label="PDF" value="PDF" /> -->
       </el-select>
     </div>
     <div class="right">
