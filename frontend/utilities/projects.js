@@ -81,7 +81,7 @@ export const draftRules = () => {
     },
     partner_email: {
       email: true,
-      required: true,
+      required: false,
       max: 100,
     },
     partner_website: {
@@ -172,7 +172,7 @@ export const publishRules = () => {
     },
     partner_email: {
       email: true,
-      required: true,
+      required: false,
       max: 100,
     },
     partner_website: {
