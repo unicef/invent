@@ -22,7 +22,7 @@
 
         <template v-if="apiNameInvenMapping[dialogData.column]">
           <single-select
-            v-if="['phase'].includes(dialogData.column)"
+            v-if="['phase', 'currency'].includes(dialogData.column)"
             v-model="dialogData.value[0]"
             :source="`projects/${apiNameInvenMapping[dialogData.column]}`"
           />
@@ -80,8 +80,20 @@
           />
         </template>
 
+        <template v-if="dialogData.column === 'partners'">
+          <partner-data :value.sync="dialogData.value" />
+        </template>
+
+        <template v-if="dialogData.column === 'links'">
+          <links-data :value.sync="dialogData.value" />
+        </template>
+
+        <template v-if="dialogData.column === 'wbs'">
+          <wbs-data :value.sync="dialogData.value" />
+        </template>
+
         <div v-if="dialogData.column === 'custom_field'" ref="custom_fields">
-          <el-input
+          <el-inputvalue
             v-if="dialogData.customField.type < 3"
             v-model="dialogData.value[0]"
           />
@@ -164,6 +176,9 @@ import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/Digit
 import GoalAreasSelector from '@/components/common/GoalAreasSelector'
 import ResultAreasSelector from '@/components/common/ResultAreasSelector'
 import CapabilitySelector from '@/components/project/CapabilitySelector'
+import PartnerData from '@/components/admin/import/PartnerData'
+import LinksData from '@/components/admin/import/LinksData'
+import WbsData from '@/components/admin/import/WbsData'
 import { apiNameInvenMapping } from '@/utilities/import'
 import { mapGetters } from 'vuex'
 
@@ -178,6 +193,9 @@ export default {
     CapabilitySelector,
     MultiSelector,
     SingleSelect,
+    PartnerData,
+    LinksData,
+    WbsData,
   },
   props: {
     customFieldsLib: {
@@ -219,7 +237,7 @@ export default {
     dialogStyle() {
       return {
         top: this.dialogData.column === 'dhis' ? '10vh' : undefined,
-        width: this.dialogData.column === 'dhis' ? '90vw' : '50%',
+        width: ['dhis'].includes(this.dialogData.column) ? '90vw' : '50%',
         className: ['ImportDialog', this.dialogData.column].join(' '),
       }
     },

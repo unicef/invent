@@ -407,7 +407,7 @@ export default {
           ),
           this.$gettext('Success!'),
           {
-            confirmButtonText: this.$gettext('Initiative inbox'),
+            confirmButtonText: this.$gettext('Go to My Initiatives'),
             cancelButtonText: this.$gettext('Keep working'),
             type: 'info',
           }
