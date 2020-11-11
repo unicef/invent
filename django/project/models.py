@@ -296,7 +296,7 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
 
 
 class ProblemStatement(ExtendedNameOrderedSoftDeletedModel):
-    description = models.CharField(max_length=511)
+    description = models.CharField(max_length=1024)
     portfolio = models.ForeignKey(Portfolio, blank=False, null=False, on_delete=models.CASCADE,
                                   related_name='problem_statements')
 
