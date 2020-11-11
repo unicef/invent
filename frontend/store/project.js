@@ -381,7 +381,7 @@ export const actions = {
     commit('SET_VIEWERS', data.viewers)
     return dispatch('user/updateTeamViewers', { ...data, id }, { root: true })
   },
-  async createProject({ getters, dispatch, rootGetters }) {
+  async createProject({ state, getters, dispatch, rootGetters }) {
     dispatch('setLoading', 'draft')
     const draft = getters.getProjectData
     draft.organisation = rootGetters['system/getUnicefOrganisation'].id

@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Select Digital Health Intervention(s)') | translate"
     modal
@@ -17,11 +16,12 @@
       >
         <selector-dialog-column
           :header="category.name"
+          expand-collapse
           @handleToggleExpand="handleToggleExpand"
         >
           <selector-dialog-category
             v-for="cat in category.subGroups"
-            :key="cat.id"
+            :key="`${selectedPlatform || ''}_${cat.id}`"
             v-model="currentSelection"
             :category-selectable="true"
             :category="cat"
@@ -54,8 +54,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import SelectorDialogColumn from './SelectorDialogColumn'
-import SelectorDialogCategory from './SelectorDialogCategory'
+import SelectorDialogColumn from '@/components/dialogs/SelectorDialogColumn'
+import SelectorDialogCategory from '@/components/dialogs/SelectorDialogCategory'
 
 export default {
   components: {
@@ -72,12 +72,10 @@ export default {
     ...mapGetters({
       selectedPlatform: 'layout/getDigitalHealthInterventionsDialogState',
       digitalHealthInterventions: 'projects/getDigitalHealthInterventions',
-      selectedDHI: 'project/getDigitalHealthInterventions',
+      selectedDHi: 'project/getDigitalHealthInterventions',
     }),
     savedSelection() {
       return this.selectedDHi
-        .filter((dhi) => dhi.platform === this.selectedPlatform)
-        .map((dhi) => dhi.id)
     },
     visible: {
       get() {
@@ -96,7 +94,7 @@ export default {
     }),
 
     loadCurrentSelection() {
-      this.currentSelection = [...this.selectedDHI]
+      this.currentSelection = [...this.savedSelection]
     },
     clearAll() {
       this.currentSelection = []
@@ -112,14 +110,8 @@ export default {
       }
     },
     apply() {
-      const selected = this.currentSelection.map((id) => ({
-        platform: this.selectedPlatform,
-        id,
-      }))
-      const filtered = this.selectedDHi.filter(
-        (dhi) => dhi.platform !== this.selectedPlatform
-      )
-      this.setDigitalHealthInterventions([...filtered, ...selected])
+      const selected = this.currentSelection.map((id) => id)
+      this.setDigitalHealthInterventions([...selected])
       this.setDigitalHealthInterventionsDialogState(null)
     },
   },
@@ -127,8 +119,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .SelectDHIDialog {
   max-width: @appWidthMaxLimit * 0.9;
@@ -137,7 +129,7 @@ export default {
   margin-bottom: 0;
 
   .el-dialog__body {
-    padding: 0;
+    padding: 0 !important;
     height: calc(80vh - (@dialogHeaderFooterHeight*2));
   }
 

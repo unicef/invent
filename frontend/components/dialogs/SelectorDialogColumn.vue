@@ -1,10 +1,8 @@
 <template>
   <div class="SelectorDialogColumn">
     <div class="Header">
-      <span v-show="!headerSelectable">
-        {{ header }}
-      </span>
-      <template v-if="expand">
+      <span v-show="!headerSelectable">{{ header }}</span>
+      <template v-if="expandCollapse">
         <span class="toggle-expand primary" @click="handleToggleExpand(false)">
           <small><translate>Collapse</translate></small>
         </span>
@@ -20,7 +18,6 @@
       >
         {{ header }}
       </el-checkbox>
-      <span v-show="!headerSelectable">{{ header }}</span>
     </div>
     <div class="Main">
       <slot />
@@ -39,15 +36,17 @@ export default {
     headerSelectable: {
       type: Boolean,
       default: false,
+      required: false,
+    },
+    expandCollapse: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
     selected: {
       type: Boolean,
       default: false,
     },
-    // expand: {
-    //   type: Boolean,
-    //   default: false,
-    // },
   },
   data() {
     return {
@@ -104,7 +103,6 @@ export default {
     height: calc(80vh - (@dialogHeaderFooterHeight * 3));
     overflow-y: scroll;
   }
-
   .toggle-expand {
     text-transform: none;
     float: right;

@@ -76,6 +76,31 @@
 
       <template v-if="shoDHAFields">
         <custom-required-form-item
+          :error="errors.first('strategies')"
+          :draft-rule="draftRules.strategies"
+          :publish-rule="publishRules.strategies"
+          class="DigitalHealthIntervention"
+        >
+          <template slot="label">
+            <translate key="strategies">
+              What are the Digital Health Intervention(s)?
+            </translate>
+            <a
+              class="TooltipLink"
+              target="_blank"
+              href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)"
+            >
+              <fa icon="question-circle" />
+            </a>
+          </template>
+          <digital-health-interventions-selector
+            v-validate="rules.strategies"
+            data-vv-name="strategies"
+            data-vv-as="Digital health interventions"
+          />
+        </custom-required-form-item>
+
+        <custom-required-form-item
           :error="errors.first('health_focus_areas')"
           :draft-rule="draftRules.health_focus_areas"
           :publish-rule="publishRules.health_focus_areas"
@@ -222,17 +247,20 @@
 </template>
 
 <script>
-import MultiSelector from '@/components/project/MultiSelector'
 import { mapGetters } from 'vuex'
+import { mapGettersActions } from '@/utilities/form'
+// components
+import MultiSelector from '@/components/project/MultiSelector'
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector'
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
 import GoalAreasSelector from '@/components/common/GoalAreasSelector'
 import ResultAreasSelector from '@/components/common/ResultAreasSelector'
 import CapabilitySelector from '@/components/project/CapabilitySelector'
-import { mapGettersActions } from '@/utilities/form'
-import CollapsibleCard from '../CollapsibleCard'
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import DigitalHealthInterventionsSelector from '@/components/project/DigitalHealthInterventionsSelector'
+import CollapsibleCard from '@/components/project/CollapsibleCard'
+// mixins
+import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin'
 
 export default {
   components: {
@@ -243,6 +271,7 @@ export default {
     GoalAreasSelector,
     ResultAreasSelector,
     CapabilitySelector,
+    DigitalHealthInterventionsSelector,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
@@ -294,6 +323,7 @@ export default {
         'setInnovationCategories',
         0,
       ],
+      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
     }),
     shoDHAFields() {
       return this.goal_area === 1

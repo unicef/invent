@@ -1,17 +1,22 @@
 <template>
   <div class="DigitalHealthInterventionsSelector">
-    <el-button v-show="dhi.length === 0" class="IconLeft" @click="openDialog">
+    <el-button
+      v-show="dhi.length === 0"
+      class="IconLeft"
+      type="primary"
+      @click="openDialog"
+    >
       <fa icon="plus" />
       <translate>Add Digital Health Interventions</translate>
     </el-button>
     <div v-show="dhi.length > 0" class="HasSelectedItems">
       <ul class="SelectedDigitalHealthInterventions">
-        <li v-for="item in dhi" :key="item.id">
+        <li v-for="item in dhi" :key="item">
           <fa icon="check" size="xs" />
           <digital-health-intervention-item :id="item" />
         </li>
       </ul>
-      <el-button class="IconLeft" @click="openDialog">
+      <el-button class="IconLeft" type="primary" @click="openDialog">
         <fa icon="edit" />
         <translate>Edit selection</translate>
       </el-button>
@@ -21,7 +26,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import DigitalHealthInterventionItem from '../common/DigitalHealthInterventionItem'
+import DigitalHealthInterventionItem from '@/components/common/DigitalHealthInterventionItem'
 
 export default {
   components: {
@@ -60,8 +65,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .DigitalHealthInterventionsSelector {
   .el-button {
