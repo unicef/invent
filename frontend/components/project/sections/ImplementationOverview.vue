@@ -5,7 +5,6 @@
       :title="$gettext('Implementation overview') | translate"
       show-legend
     >
-
       <custom-required-form-item
         :error="errors.first('program_targets')"
         :draft-rule="draftRules.program_targets"
