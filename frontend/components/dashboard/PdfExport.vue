@@ -42,7 +42,7 @@ export default {
           body: [
             [
               {
-                text: this.$gettext('TIIP'),
+                text: this.$gettext('INVENT'),
                 fillColor: '#1CABE2',
                 color: '#FFFFFF',
                 colSpan: 2,

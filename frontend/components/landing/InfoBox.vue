@@ -10,9 +10,10 @@
       <h3><translate>T4D and Innovation Inventory Platform</translate></h3>
       <p>
         <translate>
-          The T4D and Innovation Inventory Platform (TIIP) is an open-source web
-          platform designed to support goverments, technologists, implementers
-          and donors to better coordinate digital health activities globally.
+          The T4D and Innovation Inventory Platform (INVENT) is an open-source
+          web platform designed to support goverments, technologists,
+          implementers and donors to better coordinate digital health activities
+          globally.
         </translate>
       </p>
       <p>
@@ -24,9 +25,9 @@
       </p>
       <p>
         <translate>
-          In addition, the TIIP supports implementers to assess the maturity of
-          their digital health projects and gain access to global resources on
-          current best practices in digital health.
+          In addition, the INVENT supports implementers to assess the maturity
+          of their digital health projects and gain access to global resources
+          on current best practices in digital health.
         </translate>
       </p>
     </div>

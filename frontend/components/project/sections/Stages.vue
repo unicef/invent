@@ -45,7 +45,7 @@
           >
             <template slot="label">
               <translate key="phase-label">
-                Please select which phase the inititiave has reached to date.
+                Please select which phase the initiative has reached to date.
               </translate>
             </template>
 

@@ -133,9 +133,9 @@
           :hide-after="parseInt(3200, 10)"
         >
           <div slot="content">
-            {{ $gettext('This action will update the timestamp') | translate
+            {{ $gettext('The action will update the timestamp') | translate
             }}<br />
-            {{ $gettext('of the project to the current date.') | translate }}
+            {{ $gettext('of the initiative to the current date.') | translate }}
           </div>
           <el-button
             :disabled="!!loading"

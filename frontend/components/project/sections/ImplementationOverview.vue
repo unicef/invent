@@ -72,7 +72,7 @@
       >
         <template slot="label">
           <translate key="target_group_reached">
-            How many beneficiaries are reached be the initiative?
+            How many beneficiaries are reached by the initiative?
           </translate>
         </template>
 
@@ -156,7 +156,7 @@
       >
         <template slot="label">
           <translate key="awp">
-            Please input wich outcomes or activities the initiative serves in
+            Please input which outcomes or activities the initiative serves in
             the Annual Work Plan.
           </translate>
         </template>
@@ -266,7 +266,7 @@
       >
         <template slot="label">
           <translate key="total_budget_narrative">
-            Please explaine briefly the main activities covered by the budget.
+            Please explain briefly the main activities covered by the budget.
           </translate>
         </template>
 
