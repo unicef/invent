@@ -20,11 +20,8 @@ export default {
       getRegionDetails: 'system/getRegionDetails',
     }),
     region() {
-      if (this.id) {
-        const id = parseInt(this.id, 10)
-        return this.getRegionDetails(id)
-      }
-      return null
+      const id = parseInt(this.id, 10)
+      return this.getRegionDetails(id)
     },
   },
 }
