@@ -10,7 +10,7 @@ const handleProjectUnpublish = {
     async handleClickUnPublish(destination, id) {
       try {
         await this.$confirm(
-          this.$gettext('The current project will be unpublish'),
+          this.$gettext('The current initiative will be unpublished.'),
           this.$gettext('Attention'),
           {
             confirmButtonText: this.$gettext('Ok'),
@@ -38,7 +38,7 @@ const handleProjectUnpublish = {
         await this.latestProject(id)
         this.$message({
           type: 'success',
-          message: this.$gettext('The project has been updated to latest'),
+          message: this.$gettext('The initiative has been updated to latest.'),
         })
       } catch (e) {
         this.setLoading(false)

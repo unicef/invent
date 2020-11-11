@@ -11,7 +11,7 @@
         :publish-rule="publishRules.name"
       >
         <template slot="label">
-          <translate key="project-name"> Intiative Name </translate>
+          <translate key="project-name"> Initiative Name </translate>
           <form-hint>
             <translate key="project-name-hint">
               If this is your first time uploading a project, a sample data form
@@ -343,9 +343,7 @@ export default {
   methods: {
     async validate() {
       this.$refs.collapsible.expandCard()
-      const validations = await Promise.all([
-        this.$validator.validate(),
-      ])
+      const validations = await Promise.all([this.$validator.validate()])
       console.log('General overview published validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },
