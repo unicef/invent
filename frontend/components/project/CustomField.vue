@@ -31,10 +31,10 @@
       :data-vv-scope="'custom_question_' + id"
       data-vv-name="answer"
     >
-      <el-radio label="yes">
+      <el-radio label="Yes">
         <translate>Yes</translate>
       </el-radio>
-      <el-radio label="no">
+      <el-radio label="No">
         <translate>No</translate>
       </el-radio>
     </el-radio-group>
