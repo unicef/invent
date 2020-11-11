@@ -195,8 +195,10 @@ export default {
         unicef_sector: 'sectors',
         phase: 'phases',
       }
+      const mapping = { ...apiNameInvenMapping }
+      delete mapping.currency
       const inventFields = reduce(
-        apiNameInvenMapping,
+        mapping,
         (res, val, key) => {
           res[nameInventMapping[key]] = this.projectDicts[
             keyMapping[key] || key
