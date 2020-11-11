@@ -369,7 +369,7 @@ import find from 'lodash/find'
 import orderBy from 'lodash/orderBy'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import OrganisationItem from '../common/OrganisationItem'
-import CountryItem from '../common/CountryItem'
+// import CountryItem from '../common/CountryItem'
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList'
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
 // import DonorsList from '../common/list/DonorsList'
@@ -388,7 +388,7 @@ export default {
     CollapsibleCard,
     SimpleField,
     OrganisationItem,
-    CountryItem,
+    // CountryItem,
     TeamList,
     PlatformsList,
     DhiList,

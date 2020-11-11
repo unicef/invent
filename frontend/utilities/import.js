@@ -10,6 +10,12 @@ export const nameInventMapping = {
   regional_priorities: 'Regional Priorities',
   innovation_categories: 'Innovation Categories',
   cpd: 'In Country programme document (CPD)',
+  phase: 'Phase of Initiative',
+  currency: 'Currency',
+  wbs: 'WBS number',
+  partners: 'Partners',
+  links: 'Links to website/Current Documentation',
+
   overview: 'Overview',
   program_targets: 'Program Targets',
   program_targets_achieved: 'Program Targets Achieved',
@@ -18,13 +24,8 @@ export const nameInventMapping = {
   total_budget_narrative: 'Total Budget (Narrative)',
   funding_needs: 'Funding Needs',
   partnership_needs: 'Partnership Needs',
-  partners: 'Partners',
-  wbs: 'WBS number',
-  currency: 'Currency',
   total_budget: 'Total Estimated Budget',
-  phase: 'Phase of Initiative',
   target_group_reached: 'Target Group Reached',
-  links: 'Links to website/Current Documentation',
 }
 
 export const apiNameInvenMapping = {
@@ -36,6 +37,7 @@ export const apiNameInvenMapping = {
   innovation_categories: 'getInnovationCategories',
   cpd: 'getCpd',
   phase: 'getPhases',
+  currency: 'getCurrencies',
 }
 
 export const nameMapping = {
@@ -65,7 +67,7 @@ export const importTemplate = [
     'Project End Date': '01/01/2019',
     'Programme Focal Point Name': 'Nico',
     'Programme Focal Point Email': 'nico@pulilab.com',
-    Software: 'Bamboo',
+    Software: 'Bamboo|Agora|Adobe Froms',
     'Digital Health Interventions':
       '3.4.1 Notify birth event|3.4.2 Register birth event',
     'Health Focus Areas':
