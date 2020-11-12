@@ -59,9 +59,9 @@ export const projectFields = () => ({
   total_budget_narrative: '',
   funding_needs: '',
   partnership_needs: '',
-  target_group_reached: 0,
-  currency: 1,
-  total_budget: 0,
+  target_group_reached: null,
+  currency: null,
+  total_budget: null,
   phase: null,
 })
 
