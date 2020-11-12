@@ -347,17 +347,18 @@
 </template>
 
 <script>
+import filter from 'lodash/filter'
+import find from 'lodash/find'
+import findIndex from 'lodash/findIndex'
+
+import { mapGetters } from 'vuex'
+import { mapGettersActions } from '@/utilities/form'
 import SingleSelect from '@/components/common/SingleSelect'
 import MultiSelector from '@/components/project/MultiSelector'
 import AddRmButtons from '@/components/project/AddRmButtons'
-import { mapGetters } from 'vuex'
-import findIndex from 'lodash/findIndex'
-import find from 'lodash/find'
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
-
-import CollapsibleCard from '../CollapsibleCard'
-import { mapGettersActions } from '../../../utilities/form'
+import CollapsibleCard from '@/components/project/CollapsibleCard'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 
 export default {
   components: {
@@ -436,7 +437,7 @@ export default {
       } else {
         links.push(data)
       }
-      this.links = links
+      this.links = filter(links, (link) => link.link_url !== '')
     },
     getLinkWebsite(index) {
       const link = find(this.links, (l) => l.link_type === index)

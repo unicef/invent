@@ -70,7 +70,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('30') && tab === 2"
+        v-if="scoringDisplay"
         :resizable="false"
         :label="$gettext('Scoring') | translate"
         prop="scores"
@@ -416,6 +416,15 @@ export default {
       return loc === 'ar'
         ? 'sizes, next, slot, prev'
         : 'sizes, prev, slot, next'
+    },
+    scoringDisplay() {
+      if (this.$route.name.includes('organisation-portfolio-management-id')) {
+        return (
+          this.selectedColumns.includes('30') &&
+          (this.tab === 2 || this.tab === 3)
+        )
+      }
+      return false
     },
   },
   watch: {
