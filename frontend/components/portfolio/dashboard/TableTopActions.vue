@@ -131,6 +131,8 @@
 </template>
 
 <script>
+import filter from 'lodash/filter'
+
 import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 // import PdfExport from '@/components/dashboard/PdfExport'
 import ListExport from '@/components/dashboard/ListExport'
@@ -165,6 +167,7 @@ export default {
       back: (state) => state.portfolio.back,
       forward: (state) => state.portfolio.forward,
       total: (state) => state.portfolio.total,
+      portfolioPage: (state) => state.search.filter.portfolio_page,
     }),
     ...mapGetters({
       selectedRows: 'dashboard/getSelectedRows',
@@ -231,11 +234,23 @@ export default {
       const tab = this.tab - 1
       switch (tab) {
         case 1:
-          await this.moveToState({
-            type: 'remove-project',
-            project: this.selectedRows,
-            tab,
-          })
+          try {
+            await this.$confirm(
+              this.$gettext(
+                'When you move initiatives back to inventory, all completed reviews are deleted for legacy reasons. Please confirm.'
+              ),
+              {
+                confirmButtonText: this.$gettext('Confirm'),
+                cancelButtonText: this.$gettext('Cancel'),
+                type: 'warning',
+              }
+            )
+            await this.moveToState({
+              type: 'remove-project',
+              project: this.selectedRows,
+              tab,
+            })
+          } catch (e) {}
           break
         case 2:
           await this.moveToState({
@@ -271,7 +286,24 @@ export default {
     },
     // settings
     popperOpenHandler() {
-      this.selectedColumns = [...this.columns.map((s) => ({ ...s }))]
+      const colFilter = (hide = ['20', '30']) =>
+        filter(columns, (c) => !hide.includes(c.id))
+      const columns = [...this.columns.map((s) => ({ ...s }))]
+      if (this.$route.name.includes('organisation-portfolio-management-id')) {
+        switch (this.portfolioPage) {
+          case 'review':
+            this.selectedColumns = columns
+            break
+          case 'portfolio':
+            this.selectedColumns = colFilter(['20'])
+            break
+          default:
+            this.selectedColumns = colFilter()
+            break
+        }
+      } else {
+        this.selectedColumns = colFilter()
+      }
     },
     updateColumns() {
       this.setSelectedColumns(

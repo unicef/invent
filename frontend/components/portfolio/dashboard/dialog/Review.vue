@@ -17,9 +17,9 @@
         "
       >
         <el-option
-          v-for="item in reviewersList"
+          v-for="item in reviewersSortList"
           :key="item.id"
-          :label="item.name"
+          :label="item.email"
           :value="item.id"
         >
         </el-option>
@@ -48,6 +48,9 @@
 </template>
 
 <script>
+import sortBy from 'lodash/sortBy'
+import filter from 'lodash/filter'
+
 import { mapGetters, mapState, mapActions } from 'vuex'
 
 export default {
@@ -64,13 +67,19 @@ export default {
       loadingAddReviewers: (state) => state.portfolio.loadingAddReviewers,
     }),
     ...mapGetters({
-      reviewersList: 'system/getUserProfilesNoFilter',
+      users: 'system/getUserProfilesNoFilter',
     }),
     disabled() {
       if (this.reviewers.length > 0) {
         return false
       }
       return true
+    },
+    reviewersSortList() {
+      return sortBy(
+        filter(this.users, (i) => i.email),
+        [(user) => user.email.toLowerCase()]
+      )
     },
   },
   methods: {
