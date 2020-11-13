@@ -96,7 +96,7 @@ export default {
 
       > span {
         position: relative;
-        top: 4px;
+        top: 3px;
       }
     }
 

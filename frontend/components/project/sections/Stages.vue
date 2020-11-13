@@ -13,15 +13,19 @@
             :publish-rule="publishRules.start_date"
           >
             <template slot="label">
-              <translate key="start-date"> Initiative start date </translate>
-              <form-hint>
-                <translate key="start-date-hint">
-                  When did the overall project, not just the digital health
-                  component, start.
-                </translate>
-              </form-hint>
+              <translate key="start-date">
+                Please select the date the initiative was started.
+              </translate>
             </template>
-
+            <template slot="tooltip">
+              <el-tooltip
+                class="item"
+                content="Date format: YYYY-MM-DD"
+                placement="right"
+              >
+                <i class="el-icon-warning warning" />
+              </el-tooltip>
+            </template>
             <SafeDatePicker
               ref="Start date"
               v-model="start_date"
@@ -32,6 +36,16 @@
               class="Date"
               align="left"
             />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  The official start of the initiative. This could be a launch,
+                  meeting with government partners, signing of concept note,
+                  inclusion in workplan, etc.
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
         </el-col>
       </el-row>
@@ -56,6 +70,17 @@
               data-vv-as="Phase of Initiative"
               source="projects/getPhases"
             />
+
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Come back and update the status as the initiative progresses.
+                  For a detailed overview of each stage visit:
+                  https://uni.cf/invent-help
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
         </el-col>
       </el-row>
@@ -68,15 +93,19 @@
             :publish-rule="publishRules.end_date"
           >
             <template slot="label">
-              <translate key="end-date"> Initiative end date </translate>
-              <form-hint>
-                <translate key="end-date-hint">
-                  When will the overall project be completed. If your project is
-                  ongoing, leave this field blank.
-                </translate>
-              </form-hint>
+              <translate key="end-date">
+                What is the (projected) end date of the initiative?
+              </translate>
             </template>
-
+            <template slot="tooltip">
+              <el-tooltip
+                class="item"
+                content="Date format: YYYY-MM-DD"
+                placement="right"
+              >
+                <i class="el-icon-warning warning" />
+              </el-tooltip>
+            </template>
             <SafeDatePicker
               v-model="end_date"
               v-validate="rules.end_date"
@@ -86,6 +115,16 @@
               class="Date"
               align="left"
             />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  An estimated end date for the Initiative. This could refer to
+                  the end of a programme cycle, humanitarian response plan,
+                  hand-over to government, etc.
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
         </el-col>
       </el-row>
@@ -101,13 +140,11 @@ import { mapGettersActions } from '@/utilities/form'
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 import CollapsibleCard from '../CollapsibleCard'
-import FormHint from '../FormHint'
 
 export default {
   components: {
     CollapsibleCard,
     SingleSelect,
-    FormHint,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
