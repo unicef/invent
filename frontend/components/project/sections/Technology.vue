@@ -51,9 +51,9 @@
             <template slot="tooltip">
               <el-tooltip
                 class="item"
-                content="If you encounter an error and/or can not locate
-                the software platform in this list, please send a request
-                to add additional products to invent@unicef.org "
+                content="If you encounter an error and/or can not locate the
+                hardware platform in this list, please send a request to add
+                additional platforms to invent@unicef.org "
                 placement="right"
               >
                 <i class="el-icon-warning warning" />
@@ -95,8 +95,8 @@
               <el-tooltip
                 class="item"
                 content="If you encounter an error and/or can not locate
-                the software platform in this list, please send a request
-                to add additional products to invent@unicef.org "
+                the entry you would like to see in this list, please send
+                a request with details to invent@unicef.org "
                 placement="right"
               >
                 <i class="el-icon-warning warning" />
@@ -138,8 +138,8 @@
               <el-tooltip
                 class="item"
                 content="If you encounter an error and/or can not locate
-                the software platform in this list, please send a request
-                to add additional products to invent@unicef.org "
+                the entry you would like to see in this list, please send
+                a request with details to invent@unicef.org "
                 placement="right"
               >
                 <i class="el-icon-warning warning" />
