@@ -177,11 +177,11 @@ export const publishRules = () => {
     },
     partner_website: {
       url: { require_protocol: true },
-      max: 100,
+      max: 2048,
     },
     link_website: {
       url: { require_protocol: true },
-      max: 100,
+      max: 2048,
     },
     wbs: {
       max: 30,
