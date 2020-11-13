@@ -1,38 +1,38 @@
 <template>
   <div class="ProjectLegendContent">
     <template v-if="showStar">
-      <span>
+      <p>
         <el-tooltip :content="member" placement="top">
           <fa icon="star" class="OwnerIcon" />
         </el-tooltip>
         <span v-show="showLabel">
           <translate>Team Member</translate>
         </span>
-      </span>
+      </p>
     </template>
     <template v-if="showEye">
-      <span>
+      <p>
         <fa icon="eye" class="ViewerIcon" />
         <span v-show="showLabel">
           <translate>Viewer</translate>
         </span>
-      </span>
+      </p>
     </template>
     <template v-if="showHandshake">
-      <span>
+      <p>
         <fa icon="handshake" class="DonorIcon" />
         <span v-show="showLabel">
           <translate>Investor</translate>
         </span>
-      </span>
+      </p>
     </template>
     <template v-if="showGlobe">
-      <span>
+      <p>
         <fa icon="globe-africa" class="CountryAdminIcon" />
         <span v-show="showLabel">
           <translate>Country admin</translate>
         </span>
-      </span>
+      </p>
     </template>
   </div>
 </template>
@@ -145,9 +145,14 @@ export default {
 @import '~assets/style/mixins.less';
 
 .ProjectLegendContent {
+  p {
+    margin: 0 0 0 0;
+    font-size: 12px;
+    display: inline;
+  }
   svg {
-    font-size: 16px !important;
-    margin-left: 12px;
+    font-size: 16px;
+    min-width: 16px;
   }
   .OwnerIcon {
     color: @colorOwner;

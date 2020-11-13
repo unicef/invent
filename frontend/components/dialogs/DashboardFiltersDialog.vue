@@ -228,13 +228,31 @@ export default {
       this.setDashboardFiltersDialogState(null)
     },
     apply() {
-      this.selectedDHI = this.dhi
-      this.selectedHFA = this.hfa
-      this.selectedHSC = this.hsc
-      this.selectedCapabilityLevels = this.capabilityLevels
-      this.selectedCapabilityCategories = this.capabilityCategories
-      this.selectedCapabilitySubcategories = this.capabilitySubcategories
-      this.selectedPlatforms = this.platforms
+      console.log('filter to apply')
+      console.log(this.selectedFilter)
+      switch (this.selectedFilter) {
+        case 'dhi':
+          this.selectedDHI = this.dhi
+          break
+        case 'hfa':
+          this.selectedHFA = this.hfa
+          break
+        case 'hsc':
+          this.selectedHSC = this.hsc
+          break
+        case 'capabilityLevels':
+          this.selectedCapabilityLevels = this.capabilityLevels
+          break
+        case 'capabilityCategories':
+          this.selectedCapabilityCategories = this.capabilityCategories
+          break
+        case 'capabilitySubcategories':
+          this.selectedCapabilitySubcategories = this.capabilitySubcategories
+          break
+        case 'platform':
+          this.selectedPlatforms = this.platforms
+          break
+      }
       this.$nextTick(() => {
         this.setDashboardFiltersDialogState(null)
       })

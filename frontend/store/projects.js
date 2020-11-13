@@ -259,6 +259,7 @@ export const actions = {
   async getInitiatives({ state, commit, dispatch, rootGetters }) {
     commit('SET_VALUE', { key: 'loadingProject', val: true })
     commit('SET_VALUE', { key: 'userProjects', val: [] })
+    console.log('momento de actualizar')
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
     try {
@@ -327,7 +328,7 @@ export const actions = {
       })
       commit('SET_VALUE', { key: 'loadingProject', val: false })
     } catch (e) {
-      // console.log(e.response.data);
+      console.log(e.response.data)
       commit('SET_VALUE', { key: 'loadingProject', val: false })
       console.error('portfolio/loadPortfolioProjects failed')
     }

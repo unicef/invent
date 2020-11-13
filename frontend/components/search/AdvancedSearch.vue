@@ -255,6 +255,14 @@ export default {
       offices: (state) => state.offices.offices,
       scalePhases: (state) => state.system.scalePhases,
       problemStatements: (state) => state.portfolio.problemStatements,
+      // dialogs
+      sw: (state) => state.search.filter.sw,
+      dhi: (state) => state.search.filter.dhi,
+      hfa: (state) => state.search.filter.hfa,
+      hsc: (state) => state.search.filter.hsc,
+      cl: (state) => state.search.filter.cl,
+      cc: (state) => state.search.filter.cc,
+      cs: (state) => state.search.filter.cc,
     }),
     ...mapGetters({
       regions: 'system/getRegions',
@@ -317,6 +325,27 @@ export default {
       if (newGoal === '' || newGoal === null) {
         this.handleSearch('result', '')
       }
+    },
+    selectedPlatforms() {
+      this.handleSearch('sw', this.selectedPlatforms)
+    },
+    selectedDHI() {
+      this.handleSearch('dhi', this.selectedDHI)
+    },
+    selectedHFA() {
+      this.handleSearch('hfa', this.selectedHFA)
+    },
+    selectedHSC() {
+      this.handleSearch('hsc', this.selectedHSC)
+    },
+    selectedCapabilityLevels() {
+      this.handleSearch('cl', this.selectedCapabilityLevels)
+    },
+    selectedCapabilityCategories() {
+      this.handleSearch('cc', this.selectedCapabilityCategories)
+    },
+    selectedCapabilitySubcategories() {
+      this.handleSearch('cs', this.selectedCapabilitySubcategories)
     },
   },
   mounted() {

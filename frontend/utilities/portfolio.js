@@ -32,9 +32,12 @@ export const draftRules = () => {
     },
     statementName: {
       required: false,
+      min: 1,
+      max: 100,
     },
     statementDescription: {
       required: false,
+      max: 1000,
     },
   }
 }
