@@ -39,7 +39,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
             user.save()
             sociallogin.account.user = user
             sociallogin.account.save()
-            UserProfile.objects.create(user=user, name=name)
+            UserProfile.objects.create(user=user, name=name, account_type=UserProfile.DONOR)
             setup_user_email(request, user, sociallogin.email_addresses)
         else:
             sociallogin.account.user = old_user

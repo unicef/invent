@@ -193,7 +193,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
     def perform_create(self, email):
         user = User.objects.create_user(username=email[:150], email=email)
-        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
+        UserProfile.objects.create(user=user, account_type=UserProfile.DONOR)
         return user
 
     def save(self, **kwargs):
