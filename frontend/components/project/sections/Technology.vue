@@ -12,10 +12,21 @@
       >
         <template slot="label">
           <translate key="platform-label">
-            What are the names of the software included in the deployment?
+            Select all the software platform(s) used in the deployment of the
+            initiative.
           </translate>
         </template>
-
+        <template slot="tooltip">
+          <el-tooltip
+            class="item"
+            content="If you encounter an error and/or can not locate
+                the software platform in this list, please send a request
+                to add additional products to invent@unicef.org "
+            placement="right"
+          >
+            <i class="el-icon-warning warning" />
+          </el-tooltip>
+        </template>
         <platform-selector
           v-model="platforms"
           v-validate="rules.platforms"
@@ -37,7 +48,17 @@
                 deployment of the initiative.
               </translate>
             </template>
-
+            <template slot="tooltip">
+              <el-tooltip
+                class="item"
+                content="If you encounter an error and/or can not locate
+                the software platform in this list, please send a request
+                to add additional products to invent@unicef.org "
+                placement="right"
+              >
+                <i class="el-icon-warning warning" />
+              </el-tooltip>
+            </template>
             <multi-selector
               v-model="hardware"
               v-validate="rules.hardware"
@@ -45,6 +66,15 @@
               data-vv-as="Hardware Platform(s) and Physical Product(s)"
               source="getHardware"
             />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Only complete this field if there is a significant hardware or
+                  Product Innovation as part of the initiative.
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
         </el-col>
       </el-row>
@@ -61,7 +91,17 @@
                 platform(s) used in the deployment of the initiative.
               </translate>
             </template>
-
+            <template slot="tooltip">
+              <el-tooltip
+                class="item"
+                content="If you encounter an error and/or can not locate
+                the software platform in this list, please send a request
+                to add additional products to invent@unicef.org "
+                placement="right"
+              >
+                <i class="el-icon-warning warning" />
+              </el-tooltip>
+            </template>
             <multi-selector
               v-model="nontech"
               v-validate="rules.nontech"
@@ -73,9 +113,9 @@
               <fa icon="info-circle" />
               <p>
                 <translate>
-                  Examples of Progamme Innovation and Non-Technology platform(s)
-                  include, but are not limited to, UpShift, Innovative Finance,
-                  Partnerships, etc.
+                  Only complete this field if the initiative includes
+                  organisational methods and processes ('soft'
+                  technologies/innovations).
                 </translate>
               </p>
             </span>
@@ -94,7 +134,17 @@
                 Please select all applicable functions the platform performs.
               </translate>
             </template>
-
+            <template slot="tooltip">
+              <el-tooltip
+                class="item"
+                content="If you encounter an error and/or can not locate
+                the software platform in this list, please send a request
+                to add additional products to invent@unicef.org "
+                placement="right"
+              >
+                <i class="el-icon-warning warning" />
+              </el-tooltip>
+            </template>
             <multi-selector
               v-model="functions"
               v-validate="rules.functions"
@@ -102,6 +152,16 @@
               data-vv-as="Function(s) of Platform"
               source="getFunctions"
             />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Platform functions represent the types of ICT applications,
+                  innovations and information systems designed to enable
+                  programmes.
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
         </el-col>
       </el-row>

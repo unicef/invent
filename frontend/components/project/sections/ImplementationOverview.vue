@@ -27,9 +27,12 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate
-              >Please provide information on the metrics for success of the
-              initiative.
+            <translate>
+              Programme targets and metrics refer to quantitative or qualitative
+              measures of how to assess initiative achievement and outputs for a
+              certain period of time. Good metrics help track initiative
+              progress and promote strategic analysis for continuous
+              improvement. eg. percentage of geographic coverage.
             </translate>
           </p>
         </span>
@@ -57,9 +60,9 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate
-              >Please provide information on the successes the intiative has
-              achieved to date.
+            <translate>
+              Provide a snapshot of any targets already achieved at the time of
+              this update.
             </translate>
           </p>
         </span>
@@ -89,10 +92,10 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate
-              >Provide the number of individuals reached by this initiative to
-              date</translate
-            >
+            <translate>
+              This refers to the scale of defined target groups that are
+              receiving benefits from the initiative.
+            </translate>
           </p>
         </span>
       </custom-required-form-item>
@@ -104,7 +107,7 @@
       >
         <template slot="label">
           <translate key="current_achievements">
-            What is the impact the initiative has had to date?
+            What impact has the initiative had to date?
           </translate>
         </template>
 
@@ -119,12 +122,12 @@
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate
-              >Please provide information about the realisation of the
+            <translate>
+              Please provide information about the realisation of the
               initiative's objectives at the time of entry. This could include
-              number of target population reached, partnerships, funding
-              secured, spin-off initiatives, etc.</translate
-            >
+              the number of target populations reached, partnerships, funding
+              secured, spin-off initiatives, etc.
+            </translate>
           </p>
         </span>
       </custom-required-form-item>
@@ -136,7 +139,8 @@
       >
         <template slot="label">
           <translate key="cpd-label">
-            In Country programme document (CPD) and annual work plan?
+            Is the initiative included in the Country Programme Document and
+            Annual Work Plan?
           </translate>
         </template>
 
@@ -147,6 +151,20 @@
           data-vv-as="In Country programme document (CPD) and annual work plan"
           source="getCpd"
         />
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Country programme document (CPD) is a description of the outcomes,
+              outputs and strategies to be adopted in a proposed country
+              programme of cooperation submitted to the UNICEF Executive Board
+              together with a summary results matrix. The Annual work plan is
+              tied to the CPD and describes the specific activities to be
+              supported by UNICEF during a particular year in order to achieve
+              the results specified in its CPD.
+            </translate>
+          </p>
+        </span>
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -169,6 +187,16 @@
           data-vv-as="Annual Work Plan"
           type="textarea"
         />
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              This refers to the activities and associated information
+              (timeframe, budget, responsibilities) in the annual work plan to
+              achieve the results specified in its CPD.
+            </translate>
+          </p>
+        </span>
       </custom-required-form-item>
 
       <el-row v-for="(wbsItem, index) in wbs" :key="index">
@@ -180,8 +208,18 @@
           >
             <template slot="label">
               <translate key="wbs">
-                Please add the relevant WBS number:
+                Please enter the Work Breakdown Structure (WBS) number for the
+                initiative.
               </translate>
+            </template>
+            <template slot="tooltip">
+              <el-tooltip
+                class="item"
+                content="WBS format:  nnnn/an/nn/nnn/nnn/nnn where n is a number; a is an alphanumeric character"
+                placement="right"
+              >
+                <i class="el-icon-warning warning" />
+              </el-tooltip>
             </template>
 
             <character-count-input
@@ -192,6 +230,20 @@
               data-vv-as="Work Breakdown Structure (WBS)"
               @input="setWbsItem(index, $event)"
             />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Enter the Work Breakdown Structure (WBS) code(s) at the
+                  activity level. The WBS provides the foundation for programme
+                  planning, budget planning and resource allocation. It consists
+                  of WBS Elements, which describe tasks or subtasks to be
+                  performed within a defined time period. You can add more than
+                  one WBS number by clicking on the ‘+’ option. For more info:
+                  https://uni.cf/invent-help
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
         </el-col>
         <el-col :span="8" class="btContainer">
@@ -230,9 +282,8 @@
             <span class="Hint">
               <fa icon="info-circle" />
               <p>
-                <translate
-                  >Please provide the total estimated budget from inception to
-                  scale.
+                <translate>
+                  The total estimated budget from ideation through to handover.
                 </translate>
               </p>
             </span>
@@ -286,7 +337,10 @@
         :publish-rule="publishRules.funding_needs"
       >
         <template slot="label">
-          <translate key="funding_needs"> Funding Needs </translate>
+          <translate key="funding_needs">
+            What are the funding needs to achieve the objectives of the
+            initiative?
+          </translate>
         </template>
 
         <character-count-input
@@ -297,6 +351,15 @@
           data-vv-as="Funding Needs"
           type="textarea"
         />
+
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Please provide an indication of the funding gaps.
+            </translate>
+          </p>
+        </span>
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -305,9 +368,10 @@
         :publish-rule="publishRules.partnership_needs"
       >
         <template slot="label">
-          <translate key="partnership_needs"> Partnership Needs </translate>
+          <translate key="partnership_needs">
+            What partnerships are needed for this initiative?
+          </translate>
         </template>
-
         <character-count-input
           v-model="partnership_needs"
           v-validate="rules.partnership_needs"
@@ -316,6 +380,16 @@
           data-vv-as="Partnership Needs"
           type="textarea"
         />
+
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Please be as specific as possible about the partnership needs.
+              They could be NGO, academic, financial, private, etc.
+            </translate>
+          </p>
+        </span>
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -326,7 +400,15 @@
         :publish-rule="publishRules.link_website"
       >
         <template slot="label"> {{ linkType.name }} URL </template>
-
+        <template slot="tooltip">
+          <el-tooltip
+            class="item"
+            content="URL format: https://invent.unicef.org"
+            placement="right"
+          >
+            <i class="el-icon-warning warning" />
+          </el-tooltip>
+        </template>
         <character-count-input
           v-validate="rules.link_website"
           :value="getLinkWebsite(index)"
@@ -338,7 +420,45 @@
         <span v-if="index === 0" class="Hint">
           <fa icon="info-circle" />
           <p>
-            <translate>URL format: https://invent.unicef.org</translate>
+            <translate>
+              Provide a link to the main website for the initiative, if
+              applicable.
+            </translate>
+          </p>
+        </span>
+        <span v-else-if="index === 1" class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Provide the link(s) to the Sharepoint or other repository holding
+              all the relevant documentation for the initiative.
+            </translate>
+          </p>
+        </span>
+        <span v-else-if="index === 2" class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Provide link(s) to any advocacy and marketing stories celebrating
+              the initiative.
+            </translate>
+          </p>
+        </span>
+        <span v-else-if="index === 3" class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Provide link(s) to any research and or reports detailing
+              monitoring, evaluation or learning associated with the initiative.
+            </translate>
+          </p>
+        </span>
+        <span v-else class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Provide any other link(s) associated with the initiative.
+            </translate>
           </p>
         </span>
       </custom-required-form-item>

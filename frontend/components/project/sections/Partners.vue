@@ -10,7 +10,7 @@
           <custom-required-form-item>
             <template slot="label">
               <translate key="partners">
-                Please select all partner types involved with the initiative.
+                Please select the partner type.
               </translate>
             </template>
             <single-select
@@ -20,6 +20,15 @@
               source="system/getPartnerTypes"
               @change="setPartnerItem(index, 'partner_type', $event)"
             />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Choose a category from the list. For more info:
+                  https://uni.cf/invent-help
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
         </el-col>
         <el-col :span="8" class="btContainer">
@@ -38,7 +47,7 @@
           >
             <template slot="label">
               <translate key="partner_name">
-                Please provide the name(s) of your partner(s).
+                Please provide the name of your partner.
               </translate>
             </template>
 
@@ -50,6 +59,16 @@
               data-vv-as="Partner Name"
               @input="setPartnerItem(index, 'partner_name', $event)"
             />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Enter the official names of your partners, as specified on the
+                  partnership cooperation agreements, or other contractual
+                  arrangements if available.
+                </translate>
+              </p>
+            </span>
           </custom-required-form-item>
           <custom-required-form-item
             :error="errors.first('partner_contact' + index)"
@@ -58,7 +77,8 @@
           >
             <template slot="label">
               <translate key="partner_contact">
-                Please provide the name and title of the person in charge of the initiative at the respective partner(s).
+                Please provide the name and title of the person in charge of the
+                initiative at the partner.
               </translate>
             </template>
 
@@ -77,7 +97,7 @@
             :publish-rule="publishRules.partner_email"
           >
             <template slot="label">
-              <translate key="partner_email"> Contact Email </translate>
+              <translate key="partner_email"> Partner contact email </translate>
             </template>
 
             <character-count-input
@@ -95,9 +115,19 @@
             :publish-rule="publishRules.partner_website"
           >
             <template slot="label">
-              <translate key="partner_website"> Partner Website </translate>
+              <translate key="partner_website">
+                Provide the website of the partner, if available.
+              </translate>
             </template>
-
+            <template slot="tooltip">
+              <el-tooltip
+                class="item"
+                content="URL format: https://invent.unicef.org"
+                placement="right"
+              >
+                <i class="el-icon-warning warning" />
+              </el-tooltip>
+            </template>
             <character-count-input
               v-validate="rules.partner_website"
               :value="partner.partner_website"
@@ -106,13 +136,6 @@
               data-vv-as="Partner Website"
               @input="setPartnerItem(index, 'partner_website', $event)"
             />
-
-            <span class="Hint">
-              <fa icon="info-circle" />
-              <p>
-                <translate>URL format: https://invent.unicef.org</translate>
-              </p>
-            </span>
           </custom-required-form-item>
         </el-col>
       </el-row>
