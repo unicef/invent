@@ -259,7 +259,6 @@ export const actions = {
   async getInitiatives({ state, commit, dispatch, rootGetters }) {
     commit('SET_VALUE', { key: 'loadingProject', val: true })
     commit('SET_VALUE', { key: 'userProjects', val: [] })
-    console.log('momento de actualizar')
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
     try {
