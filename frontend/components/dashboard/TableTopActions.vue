@@ -150,6 +150,7 @@
 </template>
 
 <script>
+import filter from 'lodash/filter'
 import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 import ListExport from '@/components/dashboard/ListExport'
 import { mapGetters, mapActions } from 'vuex'
@@ -236,7 +237,10 @@ export default {
       }
     },
     popperOpenHandler() {
-      this.selectedColumns = [...this.columns.map((s) => ({ ...s }))]
+      const colFilter = (hide = ['20', '30']) =>
+        filter(columns, (c) => !hide.includes(c.id))
+      const columns = [...this.columns.map((s) => ({ ...s }))]
+      this.selectedColumns = colFilter()
     },
     updateColumns() {
       this.setSelectedColumns(
@@ -314,7 +318,7 @@ export default {
 
     .ProjectLegend {
       font-size: @fontSizeSmall;
-      color: @colorTextSecondary;
+      // color: @colorTextSecondary;
       white-space: nowrap;
       padding-top: 0px;
 
@@ -324,8 +328,8 @@ export default {
         height: 14px;
         margin-left: 20px;
         margin-right: 6px;
-        color: @colorTextSecondary;
-        font-size: 12px;
+        // color: @colorTextSecondary;
+        font-size: 10px;
 
         &.fa-star {
           top: -1px;

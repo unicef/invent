@@ -191,7 +191,11 @@
             :header="$gettext('Total estimated budget') | translate"
           >
             {{ project.total_budget }}
-            <list-element :value="project.currency" source="getCurrencies" />
+            <list-element
+              v-if="project.total_budget"
+              :value="project.currency"
+              source="getCurrencies"
+            />
           </simple-field>
           <simple-field
             :content="project.total_budget_narrative"

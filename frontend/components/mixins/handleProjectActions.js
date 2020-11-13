@@ -6,6 +6,7 @@ const handleProjectUnpublish = {
       unpublishProject: 'project/unpublishProject',
       latestProject: 'project/latestProject',
       setLoading: 'project/setLoading',
+      getInitiatives: 'projects/getInitiatives',
     }),
     async handleClickUnPublish(destination, id) {
       try {
@@ -25,6 +26,7 @@ const handleProjectUnpublish = {
           type: 'success',
           message: this.$gettext('The project has been unpublish'),
         })
+        await this.getInitiatives()
       } catch (e) {
         this.setLoading(false)
         this.$message({

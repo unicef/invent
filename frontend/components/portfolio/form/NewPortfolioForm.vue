@@ -52,6 +52,10 @@
 </template>
 
 <script>
+import isEmpty from 'lodash/isEmpty'
+import flatten from 'lodash/flatten'
+import join from 'lodash/join'
+
 import { mapActions } from 'vuex'
 import { publishRules, draftRules } from '@/utilities/portfolio'
 import GeneralSettings from '@/components/portfolio/form/GeneralSettings'
@@ -95,7 +99,6 @@ export default {
       setLoading: 'portfolio/setLoading',
     }),
     async unCaughtErrorHandler(errors) {
-      console.log(this.apiErrors)
       if (this.$sentry) {
         this.$sentry.captureMessage(
           'Un-caught validation error in portfolio page',
@@ -108,13 +111,23 @@ export default {
           }
         )
       }
+      const errorList = Object.entries(this.apiErrors).map((e) => {
+        if (e[0] === 'problem_statements') {
+          return `${e[0]}: ${join(
+            e[1].map((problem) => problem.description),
+            '\n'
+          )}`
+        }
+        return `${e[0]}: ${e[1]}`
+      })
 
+      console.log(errorList)
       await this.$confirm(
-        this.apiErrors.detail
-          ? this.apiErrors.detail
-          : this.$gettext(
+        isEmpty(this.apiErrors)
+          ? this.$gettext(
               'There was an un-caught validation error an automatic report has been submitted'
-            ),
+            )
+          : join(errorList, '\n'),
         this.$gettext('Warning'),
         {
           confirmButtonText: this.$gettext('Reload'),

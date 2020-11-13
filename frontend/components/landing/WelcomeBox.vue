@@ -7,12 +7,10 @@
         <!-- <h6>{{ welcomeText }}</h6> -->
         <h6>
           <translate>
-            The goal to Innovation Portal is to become a one-stop-shop to
-            explore, discover, connect and contribute to the landscape of
-            innovations occuring across UNICEF.” to “Invent provides a
-            one-stop-shop to explore, discover, connect and contribute to the
-            landscape of T4D and Innovations across UNICEF, while improving
-            portfolio management and decision making at all levels.
+            INVENT provides a one-stop-shop to explore, discover, connect and
+            contribute to the landscape of Technology for Development (T4D) and
+            Innovations across UNICEF, while improving portfolio management and
+            decision making at all levels.
           </translate>
         </h6>
         <el-button class="CloseWelcomeBox" @click="closeWelcomeBox">
@@ -73,7 +71,7 @@ export default {
     box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.15);
 
     h2 {
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 100;
       letter-spacing: -1px;
       line-height: 45px;
@@ -81,7 +79,7 @@ export default {
     }
 
     h6 {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 100;
       margin: 0;
       overflow: hidden;

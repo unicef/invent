@@ -23,9 +23,6 @@ export default {
     UserProjectList,
     Tabs,
   },
-  // fetch({ store, params }) {
-  //   store.dispatch('projects/getInitiatives')
-  // },
   computed: {
     ...mapState({
       tabs: (state) => state.projects.tabs,
@@ -51,7 +48,6 @@ export default {
   methods: {
     ...mapActions({
       setTab: 'projects/setTab',
-      getInitiatives: 'projects/getInitiatives',
       setCurrentProjectReview: 'projects/setCurrentProjectReview',
       setReviewDialog: 'projects/setReviewDialog',
     }),

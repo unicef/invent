@@ -126,4 +126,11 @@ export default {
     color: @colorCountryAdmin;
   }
 }
+.TableLegendDropdown {
+  .ProjectLegendContent {
+    p {
+      display: table !important;
+    }
+  }
+}
 </style>

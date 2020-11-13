@@ -268,7 +268,6 @@
                 What is the total estimated budget for the initiative?
               </translate>
             </template>
-
             <el-input
               v-model="total_budget"
               v-validate="rules.total_budget"
@@ -291,6 +290,7 @@
         </el-col>
         <el-col :span="8">
           <custom-required-form-item
+            v-if="total_budget"
             :error="errors.first('currency')"
             :draft-rule="draftRules.currency"
             :publish-rule="publishRules.currency"
