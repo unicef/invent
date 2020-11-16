@@ -358,7 +358,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/" target="_blank">{% trans "Go to my project" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/initiatives/{{ project_id }}/" target="_blank">{% trans "Go to my initiative" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -386,7 +386,7 @@
                             {% for project in projects %}
                             <tr class="list-content">
                               <td align="left">
-                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
+                                <a href="{% site_url %}/{{ language }}/-/initiatives/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
                               </td>
                               <td align="right">
                                 <b>{{ project.modified }}</b>
