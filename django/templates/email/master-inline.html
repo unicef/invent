@@ -13,7 +13,7 @@
     <title>UNICEF T4D & Innovation Inventory Portal Email Notification</title>
 
     <style>
-
+      
       img {
         border: none;
         -ms-interpolation-mode: bicubic;
@@ -47,22 +47,22 @@
           font-size: 14px;
           vertical-align: top; }
 
-
+      
       .body {
         background-color: #F2F2F2;
         width: 100%; }
 
-
+      
       .container {
         display: block;
         margin: 0 auto !important;
-
+        
         max-width: 580px;
         padding: 10px;
         width: 580px;
         color: #474747; }
 
-
+      
       .content {
         box-sizing: border-box;
         display: block;
@@ -70,10 +70,10 @@
         max-width: 580px;
         padding: 20px; }
 
-
+      
       .main {
         width: 100%;
-
+        
         background: #FFFFFF; }
 
       .wrapper {
@@ -122,7 +122,7 @@
           padding-top: 20px; }
 
 
-
+      
       h1,
       h2,
       h3,
@@ -161,7 +161,7 @@
         color: #00AEEF;
         text-decoration: underline; }
 
-
+      
       .btn {
         box-sizing: border-box;
         width: 100%; }
@@ -194,7 +194,7 @@
         border-color: #00AEEF;
         color: #FFFFFF; }
 
-
+      
       .last {
         margin-bottom: 0; }
 
@@ -239,9 +239,9 @@
         border-bottom: 1px solid #D6D6D6;
         margin: 20px 0; }
 
-
+      
       @media only screen and (max-width: 620px) {
-
+        
         table[class=body] .wrapper,
         table[class=body] .article {
           padding: 15px !important; }
@@ -266,7 +266,7 @@
           padding: 0 15px 15px; }
         }
 
-
+      
       @media all {
         .ExternalClass {
           width: 100%; }
@@ -333,7 +333,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-webkit-border-horizontal-spacing:0px;-webkit-border-vertical-spacing:0px;width:auto;" >
                                   <tbody>
                                     <tr>
-                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" > <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#00AEEF;border-color:#00AEEF;color:#FFFFFF;" >{% trans "Go to my project" %}</a> </td>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#00AEEF;" > <a href="{% site_url %}/{{ language }}/-/initiatives/{{ project_id }}/" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#00AEEF;border-color:#00AEEF;color:#FFFFFF;" >{% trans "Go to my initiative" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -361,7 +361,7 @@
                             {% for project in projects %}
                             <tr class="list-content">
                               <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
-                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank" style="color:#00AEEF;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                                <a href="{% site_url %}/{{ language }}/-/initiatives/{{ project.id }}/published" target="_blank" style="color:#00AEEF;text-decoration:underline;" ><b>{{ project.name }}</b></a>
                               </td>
                               <td align="right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
                                 <b>{{ project.modified }}</b>
@@ -558,7 +558,7 @@
                       <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="{% site_url %}/{{ language }}/-/terms" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Terms of use" %}</a>
                       <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="mailto:digitalhealthatlas@gmail.com" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Contact us" %}</a>
+                      <a href="mailto:invent@unicef.org" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Contact us" %}</a>
                     </td>
                   </tr>
                   <td class="content-block" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
