@@ -53,7 +53,6 @@
 
 <script>
 import isEmpty from 'lodash/isEmpty'
-import flatten from 'lodash/flatten'
 import join from 'lodash/join'
 
 import { mapActions } from 'vuex'
