@@ -1,10 +1,11 @@
 <template>
   <div class="InfoBox">
-    <img
-      :alt="$gettext('INVENT') | translate"
-      class="InfoPicture"
-      src="/photo-whyusedha.jpg"
-    />
+    <div class="img-container">
+      <img
+        :alt="$gettext('INVENT') | translate"
+        src="/INVENT-landing-left.jpg"
+      />
+    </div>
 
     <div class="InfoArticle">
       <h3><translate>INVENT</translate></h3>
@@ -54,9 +55,15 @@ export default {}
   // background-repeat: no-repeat;
   // background-position: center bottom;
 
-  .InfoPicture {
+  .img-container {
     width: 100%;
-    max-height: 172px;
+    // max-height: 172px;
+    overflow: hidden;
+    img {
+      width: inherit;
+      height: inherit;
+      object-fit: cover;
+    }
   }
 
   .InfoArticle {
