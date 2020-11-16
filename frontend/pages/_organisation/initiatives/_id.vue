@@ -19,22 +19,19 @@ export default {
       profile: 'user/getProfile',
     }),
     currentProject() {
-      return this.getProjectDetails(+this.$route.params.id)
-    },
-    route() {
-      return this.$route.name.split('__')[0]
+      return this.getProjectDetails(this.$route.params.id)
     },
   },
   watch: {
     currentProject: {
       immediate: true,
       handler(project) {
-        if (
-          (!project.draft || !project.draft.name) &&
-          this.profile &&
-          !this.profile.is_superuser &&
-          this.route !== 'organisation-initiatives-id-published'
-        ) {
+        const allowed =
+          this.profile.is_superuser ||
+          this.profile.member.includes(parseInt(this.$route.params.id, 10)) ||
+          this.$route.name.split('__')[0] ===
+            'organisation-initiatives-id-published'
+        if (!allowed) {
           this.$alert(
             this.$gettext('You are not authorized to access this view'),
             this.$gettext('Warning'),

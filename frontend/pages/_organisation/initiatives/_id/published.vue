@@ -45,6 +45,7 @@ export default {
   .CollapsibleCard {
     .el-card__header {
       background-color: lighten(@colorPublished, 10%) !important;
+      color: @colorWhite !important;
     }
   }
 
