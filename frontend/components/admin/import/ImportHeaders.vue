@@ -68,6 +68,8 @@
 import { projectFields } from '@/utilities/projects'
 
 const blackList = [
+  'modified',
+  'organisation',
   'country',
   'country_office',
   'donors',
