@@ -102,7 +102,10 @@
               </div>
             </el-row>
           </div>
-          <search-map v-if="tab === 4" />
+          <div v-if="tab === 4" class="map">
+            <search-map />
+            <portfolio-project-box />
+          </div>
         </section>
         <!-- tabs -->
         <div class="DashboardListView">
@@ -129,6 +132,7 @@ import Matrix from '@/components/portfolio/Matrix'
 import Radio from '@/components/portfolio/form/inputs/Radio'
 import SearchMap from '@/components/searchMap/SearchMap'
 import Tabs from '@/components/common/Tabs'
+import PortfolioProjectBox from '@/components/searchMap/PortfolioProjectBox'
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -141,6 +145,7 @@ export default {
     TableTopActions,
     SearchMap,
     Tabs,
+    PortfolioProjectBox,
   },
   data() {
     return {
@@ -213,6 +218,7 @@ export default {
   async fetch({ store, query, error, params }) {
     // setup search
     store.dispatch('search/resetSearch')
+    await store.dispatch('landing/resetSearch')
     await store.dispatch('dashboard/setSearchOptions', query)
     store.commit('search/SET_SEARCH', { key: 'portfolio', val: params.id })
     store.commit('search/SET_SEARCH', {
@@ -331,6 +337,9 @@ section.portfolio-area {
     .el-icon-caret-bottom {
       font-size: 22px;
     }
+  }
+  .map {
+    position: relative;
   }
   .Problems {
     background-color: white;
