@@ -34,6 +34,8 @@
           :sub-level-pins="subLevelPins"
           :map-ready="mapReady"
           :selected-country-pin="selectedCountryPin"
+          :active-sub-level.sync="activeSubLevel"
+          :national-level-coverage="true"
           :sub-national-projects="subNationalProjects"
           :national-projects="nationalProjects"
         />
@@ -81,6 +83,9 @@ export default {
       subNationalProjects: 'search/getSelectedCountrySubNationalProjects',
       nationalProjects: 'search/getSelectedCountryNationalProjects',
     }),
+  },
+  beforeDestroy() {
+    this.setActiveCountry(null)
   },
   methods: {
     ...mapActions({

@@ -31,7 +31,11 @@
       >
         <div slot="title" class="AccordionTitle">
           <span class="accordion-status"></span>
-          <span :class="`icon-circle icon-tiip-${portfolio.icon}`">&nbsp;</span>
+          <span :class="`icon-circle icon-tiip-${portfolio.icon}`">
+            <template v-if="path(portfolio.icon)">
+              <span class="path1" /><span class="path2" />
+            </template>
+          </span>
           <span class="portfolio-title">{{ portfolio.name }}</span>
           <nuxt-link
             :to="
@@ -118,6 +122,11 @@ export default {
       portfolios: (state) => state.portfolio.portfolios,
     }),
   },
+  methods: {
+    path(icon) {
+      return icon === 'breast_feeding' || icon === 'mother_and_baby'
+    },
+  },
 }
 </script>
 
@@ -166,7 +175,7 @@ p {
   .SubAccordion {
     border-width: 0;
     .SubAccordionTitle {
-      height: 21px;
+      margin-bottom: 21px;
       color: #404041;
       font-size: 14px;
       font-weight: normal;
@@ -280,6 +289,12 @@ p {
         display: block;
         width: 48px;
         text-align: center;
+      }
+    }
+    .icon-tiip-breast_feeding,
+    .icon-tiip-mother_and_baby {
+      .path1:before {
+        margin-left: 6px;
       }
     }
   }
