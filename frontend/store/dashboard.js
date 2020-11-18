@@ -220,9 +220,19 @@ export const actions = {
   setDashboardColumns({ commit }, columns) {
     commit('SET_DASHBOARD_COLUMNS', columns)
   },
-  async loadProjectList({ commit, dispatch }) {
+  async loadProjectList({ rootGetters, commit, dispatch }) {
     const data = await dispatch('loadProjects', { type: 'list' })
-    commit('SET_PROJECT_LIST', data.results.projects)
+    await dispatch('user/refreshProfile', {}, { root: true })
+    const user = rootGetters['user/getProfile']
+    commit(
+      'SET_PROJECT_LIST',
+      data.results.projects.map((i) => {
+        return {
+          ...i,
+          favorite: user ? user.favorite.includes(i.id) : undefined,
+        }
+      })
+    )
     commit('SET_SEARCH_STATUS', data)
     commit('SET_SELECT_ALL', false)
     commit('SET_SELECTED_ROWS', [])

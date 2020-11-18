@@ -420,8 +420,11 @@ export const actions = {
         case 'initiatives':
           await dispatch('getInitiatives')
           break
+        case 'inventory':
+          await dispatch('dashboard/loadProjectList', {}, { root: true })
+          break
         case 'table':
-          await dispatch('portfolio/getPortfolioProjects', {}, { root: true })
+          await dispatch('search/getSearch', {}, { root: true })
           break
         case 'detail':
           await dispatch('user/refreshProfile', {}, { root: true })

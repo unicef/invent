@@ -217,6 +217,8 @@ export default {
   color: #404041;
   background-color: white;
   margin: 5px;
+  // some circles are way outside the graph
+  // overflow: hidden;
   //&::v-deep .el-scrollbar__bar.is-vertical {
   //  opacity: 1 !important;
   //}

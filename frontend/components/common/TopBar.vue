@@ -44,13 +44,7 @@
               <div>
                 <nuxt-link
                   key="inventoryBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-inventory-list',
-                      params: $route.params,
-                      query: {},
-                    })
-                  "
+                  :to="localePath({ name: 'organisation-inventory-list' })"
                   class="HeaderBtn"
                 >
                   <translate>Inventory</translate>
@@ -60,11 +54,7 @@
                 <nuxt-link
                   key="portfolioBtn"
                   :to="
-                    localePath({
-                      name: 'organisation-portfolio-innovation',
-                      params: $route.params,
-                      query: {},
-                    })
+                    localePath({ name: 'organisation-portfolio-innovation' })
                   "
                   class="HeaderBtn"
                 >
@@ -75,11 +65,7 @@
                 <nuxt-link
                   key="managerBtn"
                   :to="
-                    localePath({
-                      name: 'organisation-portfolio-management',
-                      params: $route.params,
-                      query: {},
-                    })
+                    localePath({ name: 'organisation-portfolio-management' })
                   "
                   class="HeaderBtn"
                 >
@@ -88,13 +74,8 @@
               </div>
               <div>
                 <nuxt-link
-                  key="myProjectsBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-initiatives',
-                      params: $route.params,
-                    })
-                  "
+                  key="myInitiativesBtn"
+                  :to="localePath({ name: 'organisation-initiatives' })"
                   exact
                   class="HeaderBtn"
                 >
@@ -103,13 +84,8 @@
               </div>
               <div>
                 <nuxt-link
-                  key="newProjectBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-initiatives-create',
-                      params: $route.params,
-                    })
-                  "
+                  key="newInitiativeBtn"
+                  :to="localePath({ name: 'organisation-initiatives-create' })"
                   class="HeaderBtn"
                 >
                   <fa icon="plus-circle" size="lg" />
