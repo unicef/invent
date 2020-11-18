@@ -168,7 +168,9 @@ export default {
       return this.$route.name.includes('organisation___')
     },
     isPortfolioEdit() {
-      return this.$route.name.includes('organisation-portfolio-management-id')
+      return this.$route.name.includes(
+        'organisation-portfolio-management-edit-id'
+      )
     },
     isPortfolioDetails() {
       return this.$route.name.includes('organisation-portfolio-innovation-id')
@@ -209,7 +211,8 @@ export default {
   }
 
   .ActionBarTabs {
-    width: 100%;
+    width: auto;
+    margin-right: auto;
     height: @actionBarHeight;
     overflow: hidden;
 

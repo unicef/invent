@@ -30,6 +30,25 @@
       >
         <template slot-scope="scope">
           <project-card :project="scope.row" hide-borders show-verified />
+          <el-tooltip
+            :content="scope.row.favorite ? removeFavoriteText : addFavoriteText"
+            placement="bottom"
+          >
+            <div class="favorite">
+              <fa
+                v-if="scope.row.favorite"
+                class="heart-full"
+                :icon="['fas', 'heart']"
+                @click="removeFavorite({ id: scope.row.id, type: 'inventory' })"
+              />
+              <fa
+                v-else
+                class="heart-empty"
+                :icon="['far', 'heart']"
+                @click="addFavorite({ id: scope.row.id, type: 'inventory' })"
+              />
+            </div>
+          </el-tooltip>
         </template>
       </el-table-column>
 
@@ -313,6 +332,8 @@ export default {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
       localSort: null,
+      addFavoriteText: this.$gettext('Add to Favorites'),
+      removeFavoriteText: this.$gettext('Remove from Favorites'),
     }
   },
   computed: {
@@ -396,6 +417,8 @@ export default {
     ...mapActions({
       setSelectedRows: 'dashboard/setSelectedRows',
       loadOffices: 'offices/loadOffices',
+      addFavorite: 'projects/addFavorite',
+      removeFavorite: 'projects/removeFavorite',
     }),
     customHeaderRenderer(h, { column, $index }) {
       return h('span', { attrs: { title: column.label } }, column.label)

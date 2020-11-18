@@ -44,14 +44,14 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
 .CollapsibleCard {
   margin: 0 0 20px;
 
-  .el-card {
+  &::v-deep .el-card {
     // box-shadow: inset 0 -1px 0 0 #eae6e1;
     .el-card__header {
       padding: 0 20px 0 40px;

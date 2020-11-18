@@ -218,33 +218,27 @@ export default {
   async fetch({ store, query, error, params }) {
     // setup search
     store.dispatch('search/resetSearch')
-    await store.dispatch('landing/resetSearch')
-    await store.dispatch('dashboard/setSearchOptions', query)
-    store.commit('search/SET_SEARCH', { key: 'portfolio', val: params.id })
+    store.dispatch('landing/resetSearch')
+    store.dispatch('dashboard/setSearchOptions', query)
+    // search stup
+    store.commit('search/SET_SEARCH', {
+      key: 'portfolio',
+      val: params.id,
+    })
     store.commit('search/SET_SEARCH', {
       key: 'portfolio_page',
       val: 'portfolio',
     })
     store.commit('search/SET_SEARCH', { key: 'scores', val: true })
-    // set portfolio details
-    store.commit('portfolio/SET_VALUE', {
-      key: 'currentPortfolioId',
-      val: params.id,
-    })
-    // actual search
     await Promise.all([
-      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('portfolio/getPortfolios', 'active-list'),
+      store.dispatch('countries/loadMapData'),
       store.dispatch('portfolio/getPortfolioDetails', {
         id: params.id,
         type: 'active-list',
       }),
-      store.dispatch('search/getSearch'),
-      // map
-      store.dispatch('search/loadProjectsMap'),
-      store.dispatch('countries/loadMapData'),
     ])
   },
-
   computed: {
     ...mapState({
       ps: (state) => state.search.filter.ps,
@@ -258,9 +252,13 @@ export default {
       description: 'portfolio/getDescription',
     }),
   },
+  mounted() {
+    this.getSearch()
+  },
   methods: {
     ...mapActions({
       loadProjectsMap: 'search/loadProjectsMap',
+      getSearch: 'search/getSearch',
     }),
     navigate(id) {
       this.$store.dispatch('search/resetSearch')
@@ -279,7 +277,7 @@ export default {
       } else {
         this.$store.commit('search/SET_SEARCH', { key: 'ps', val: '' })
       }
-      this.$store.dispatch('search/getSearch')
+      this.getSearch()
     },
     setTab(id) {
       this.tab = id
