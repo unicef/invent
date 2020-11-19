@@ -5,7 +5,8 @@ export const objectToQueryString = (queryParameters) => {
           // const symbol = queryString.length === 0 ? '?' : '&'
           const symbol = '&'
           queryString +=
-            typeof val === 'object'
+            typeof val === 'object' &&
+            !(val === '' || val === null || val === undefined)
               ? val.map((value) => `${symbol}${key}=${value}`).join('')
               : !(val === '' || val === null || val === undefined)
               ? `${symbol}${key}=${val}`
@@ -15,4 +16,17 @@ export const objectToQueryString = (queryParameters) => {
         ''
       )}`
     : ''
+}
+
+export const queryStringToObject = (url) => {
+  const obj = [...new URLSearchParams(url.split('?')[1])].reduce(
+    (a, [k, v]) => {
+      if (a[k]) {
+        return (a[k] = typeof a[k] === 'object' ? [...a[k], v] : [a[k], v]), a
+      }
+      return (a[k] = v), a
+    },
+    {}
+  )
+  return obj
 }

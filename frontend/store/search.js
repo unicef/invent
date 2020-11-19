@@ -24,7 +24,7 @@ export const state = () => ({
     // `gov` gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
     // `donor` eg: donor=1&donor=2
     // `approved` eg: approved=0 (for not approved), approved=1 (for approved)
-    partner: [],
+    // partner: [],
     // ** UNICEF filters **
     co: [], // `co` UNICEF Office eg: co=1&co=2
     // `fo` Field Office in eg: fo=1&fo=2
@@ -99,7 +99,7 @@ export const actions = {
     })
     commit('SET_SEARCH', { key: 'region', val: '' })
     commit('SET_SEARCH', { key: 'country', val: [] })
-    commit('SET_SEARCH', { key: 'partner', val: [] })
+    // commit('SET_SEARCH', { key: 'partner', val: [] })
     commit('SET_SEARCH', { key: 'co', val: [] })
     commit('SET_SEARCH', { key: 'goal', val: '' })
     commit('SET_SEARCH', { key: 'result', val: '' })
