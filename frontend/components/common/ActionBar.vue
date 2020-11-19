@@ -168,8 +168,9 @@ export default {
       return this.$route.name.includes('organisation___')
     },
     isPortfolioEdit() {
-      return this.$route.name.includes(
-        'organisation-portfolio-management-edit-id'
+      return (
+        this.$route.name.includes('organisation-portfolio-management-id') &&
+        !this.$route.name.includes('organisation-portfolio-management-id-edit')
       )
     },
     isPortfolioDetails() {

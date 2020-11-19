@@ -9,41 +9,47 @@
           trigger="click"
         >
           <el-button slot="reference" type="text" class="IconRight">
-            <translate v-show="!activePreseet"> Load filters </translate>
-            <span v-if="activePreseet">
-              {{ activePreseet.name }}
-            </span>
+            <span v-if="currentFilter"> {{ currentFilter }} </span>
+            <translate v-else> Load filters </translate>
             <fa icon="caret-down" />
           </el-button>
           <div class="CustomPopoverList">
-            <ul>
+            <p v-if="emptyFilters">
+              <translate>No Filters saved</translate>
+            </p>
+            <ul v-else>
               <li
-                v-for="filter in savedFilters"
-                :key="filter.name"
-                :class="{ Active: isActive(filter.query) }"
-                @click="applyPreset(filter.query)"
+                v-for="(value, name) in filters"
+                :key="name"
+                :class="{ Active: currentFilter === name }"
+                @click="handleFilterSelect(name)"
               >
                 <fa icon="check" />
                 <el-button
                   type="text"
                   class="DeleteButton"
-                  @click.stop="deleteFilter(filter)"
+                  @click.stop="handleDelete(name)"
                 >
                   <fa icon="times" />
                 </el-button>
-                {{ filter.name }}
+                {{ name }}
               </li>
             </ul>
           </div>
         </el-popover>
       </el-col>
       <el-col :span="6">
-        <el-button type="text" disabled @click="openSaveFilter">
+        <el-button type="text" :disabled="disabled" @click="openSaveFilter">
           <translate>Save</translate>
         </el-button>
       </el-col>
       <el-col :span="6">
-        <el-button type="text" class="DeleteButton" @click="handleReset">
+        <el-button
+          type="text"
+          :disabled="disabled"
+          :class="disabled ? 'MutedButton' : 'DeleteButton'"
+          @click="handleReset"
+        >
           <translate>Clear</translate>
         </el-button>
       </el-col>
@@ -52,44 +58,110 @@
 </template>
 
 <script>
+import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
-import { mapActions, mapGetters } from 'vuex'
-import { queryStringComparisonParser } from '@/utilities/api.js'
+
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
+  data() {
+    return {
+      emptySearch: {
+        q: '',
+        // in: ['name', 'org', 'country', 'overview', 'loc'],
+        country: [],
+        sw: [],
+        dhi: [],
+        hfa: [],
+        hsc: [],
+        region: '',
+        // partner: [],
+        co: [],
+        goal: '',
+        result: '',
+        cl: [],
+        cc: [],
+        cs: [],
+        ic: [],
+        sp: '',
+        ps: '',
+      },
+      emptySearchInventory: {
+        q: '',
+        // in: ['name', 'org', 'country', 'overview', 'loc'],
+        country: [],
+        sw: [],
+        dhi: [],
+        hfa: [],
+        hsc: [],
+        region: '',
+        co: [],
+        goal: '',
+        result: '',
+        cl: [],
+        cc: [],
+        cs: [],
+        ic: [],
+      },
+    }
+  },
   computed: {
-    ...mapGetters({
-      // dashboardType: 'dashboard/getDashboardType',
-      savedFilters: 'dashboard/getSavedFilters',
+    ...mapState({
+      tabs: (state) => state.filters.tabs,
+      filters: (state) => state.filters.filters,
+      currentFilter: (state) => state.filters.currentFilter,
+      currentSearchFilter: (state) => state.search.filter,
     }),
-    activePreseet() {
-      return this.savedFilters.find((f) => this.isActive(f.query))
+    ...mapGetters({
+      getSearchParameters: 'dashboard/getSearchParameters',
+    }),
+    emptyFilters() {
+      return isEmpty(this.filters)
     },
+    disabled() {
+      if (this.tabs) {
+        return this.isSearchEmpty(this.emptySearch, this.currentSearchFilter)
+      } else {
+        return this.isSearchEmpty(
+          this.emptySearchInventory,
+          this.getSearchParameters
+        )
+      }
+    },
+  },
+  mounted() {
+    this.setCurrentFilter()
+    this.getFilters()
   },
   methods: {
     ...mapActions({
-      setSearchOptions: 'dashboard/setSearchOptions',
       setSaveFiltersDialogState: 'layout/setSaveFiltersDialogState',
-      setSavedFilters: 'dashboard/setSavedFilters',
-      resetSearch: 'search/resetSearch',
+      getFilters: 'filters/getFilters',
+      setCurrentFilter: 'filters/setCurrentFilter',
+      setFilters: 'filters/setFilters',
+      resetFilters: 'filters/resetFilters',
+      deleteFilter: 'filters/deleteFilter',
       getSearch: 'search/getSearch',
     }),
+    isSearchEmpty(keys, filter) {
+      for (const key in keys) {
+        if (!isEqual(filter[key], keys[key])) return false
+      }
+      return true
+    },
     openSaveFilter() {
-      // this.setSaveFiltersDialogState(this.dashboardType)
+      this.setSaveFiltersDialogState(true)
     },
     handleReset() {
-      this.resetSearch()
-      this.getSearch()
+      this.resetFilters()
+      if (this.tabs) {
+        this.getSearch()
+      }
     },
-    isActive(query) {
-      const fromRoute = queryStringComparisonParser(this.$route.query)
-      const fromItem = queryStringComparisonParser(query)
-      return isEqual(fromRoute, fromItem)
+    handleFilterSelect(name) {
+      this.setFilters(name)
     },
-    applyPreset(query) {
-      this.setSearchOptions(query)
-    },
-    async deleteFilter(filter) {
+    async handleDelete(name) {
       try {
         await this.$confirm(
           this.$gettext(
@@ -102,10 +174,7 @@ export default {
             type: 'warning',
           }
         )
-        const filtered = this.savedFilters.filter(
-          (f) => !(f.name === filter.name && f.category === filter.category)
-        )
-        this.setSavedFilters(filtered)
+        await this.deleteFilter(name)
       } catch (e) {
         this.$message(this.$gettext('Operation successfully aborted'))
       }

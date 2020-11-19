@@ -220,7 +220,7 @@ export default {
     store.dispatch('search/resetSearch')
     store.dispatch('landing/resetSearch')
     store.dispatch('dashboard/setSearchOptions', query)
-    // search stup
+    // search setup
     store.commit('search/SET_SEARCH', {
       key: 'portfolio',
       val: params.id,

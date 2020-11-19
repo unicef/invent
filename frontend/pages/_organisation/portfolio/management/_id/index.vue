@@ -53,7 +53,8 @@ export default {
   async fetch({ store, query, error, params }) {
     // search setup
     store.dispatch('search/resetSearch')
-    await store.dispatch('dashboard/setSearchOptions', query)
+    // await store.dispatch('dashboard/setSearchOptions', { query })
+    await store.dispatch('dashboard/setSearchOptions', {})
     store.commit('search/SET_SEARCH', { key: 'portfolio', val: params.id })
     // project list setup and filters
     store.commit('portfolio/SET_VALUE', {

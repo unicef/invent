@@ -50,8 +50,8 @@ export const state = () => ({
   selectedDHI: [],
   selectedHFA: [],
   selectedHSC: [],
-  selectedGoal: null,
-  selectedResult: null,
+  selectedGoal: '',
+  selectedResult: '',
   selectedCapabilityLevels: [],
   selectedCapabilityCategories: [],
   selectedCapabilitySubcategories: [],
@@ -183,7 +183,7 @@ export const getters = {
     const q =
       state.searchString && state.searchString.length > 1
         ? state.searchString
-        : undefined
+        : ''
     const country = getters.getFilteredCountries
     const donor = state.dashboardType === 'donor' ? [state.dashboardId] : null
     return {
@@ -194,7 +194,7 @@ export const getters = {
       in: q ? state.searchIn : undefined,
       country,
       donor,
-      region: state.filteredRegion,
+      region: state.filteredRegion ? state.filteredRegion : '',
       ic: state.innovationCategories,
       fo: state.filteredOffice,
       co: state.filteredCountryOffice,
@@ -204,8 +204,8 @@ export const getters = {
       dhi: state.selectedDHI,
       hfa: state.selectedHFA,
       hsc: state.selectedHSC,
-      goal: state.selectedGoal,
-      result: state.selectedResult,
+      goal: state.selectedGoal ? state.selectedGoal : '',
+      result: state.selectedResult ? state.selectedResult : '',
       cl: state.selectedCapabilityLevels,
       cc: state.selectedCapabilityCategories,
       cs: state.selectedCapabilitySubcategories,
@@ -409,7 +409,7 @@ export const actions = {
   setDashboardSection({ commit }, value) {
     commit('SET_DASHBOARD_SECTION', value)
   },
-  resetUserInput({ commit }) {
+  resetUserInput({ state, commit, dispatch }) {
     commit('RESET_USER_INPUT')
     commit('SET_SEARCH_OPTIONS', {})
     commit('SET_SELECTED_COLUMNS', defaultSelectedColumns())
@@ -439,6 +439,7 @@ export const mutations = {
     state.pageSize = options.page_size ? +options.page_size : 10
     state.page = options.page ? +options.page : 1
     state.sorting = options.ordering ? options.ordering : null
+    console.log(state.searchString)
     state.searchString = options.q ? options.q : ''
     state.searchIn = options.in ? options.in : searchIn()
     state.filteredCountries = intArrayFromQs(options.country)

@@ -3,8 +3,9 @@
     <el-row type="flex" class="SearchInput">
       <el-col>
         <el-input
-          v-model="searchString"
+          :value="searchString"
           :placeholder="$gettext('Type something...') | translate"
+          @input="handleSearch"
         >
           <fa slot="prepend" icon="search" />
         </el-input>
@@ -70,6 +71,8 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { mapGettersActions } from '../../utilities/form.js'
 
 export default {
@@ -80,18 +83,23 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      searchString: (state) => state.dashboard.searchString,
+    }),
+    ...mapGetters({
+      getSearchString: 'dashboard/getSearchString',
+    }),
     ...mapGettersActions({
-      searchString: [
-        'dashboard',
-        'getSearchString',
-        'setSearchString',
-        300,
-        true,
-      ],
       selectedOptions: ['dashboard', 'getSearchIn', 'setSearchIn', 0],
     }),
   },
   methods: {
+    ...mapActions({
+      setSearchString: 'dashboard/setSearchString',
+    }),
+    handleSearch(val) {
+      this.setSearchString(val)
+    },
     toggleOptionsVisibility() {
       this.optionsVisible = !this.optionsVisible
     },

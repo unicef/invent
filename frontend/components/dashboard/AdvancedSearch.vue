@@ -146,7 +146,7 @@ import SimplePlatformList from '@/components/common/list/SimplePlatformList'
 import GoalAreasSelector from '@/components/common/GoalAreasSelector'
 import ResultAreasSelector from '@/components/common/ResultAreasSelector'
 import MultiSelector from '@/components/project/MultiSelector'
-import { mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -216,7 +216,13 @@ export default {
       return null
     },
   },
+  mounted() {
+    this.setValue({ key: 'tabs', val: false })
+  },
   methods: {
+    ...mapMutations({
+      setValue: 'filters/SET_VALUE',
+    }),
     deleteFromCollection(id, collectionName) {
       this[collectionName] = this[collectionName].filter((item) => item !== id)
     },
