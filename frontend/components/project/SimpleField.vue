@@ -13,8 +13,8 @@
         <span v-if="!link">
           {{ processedContent }}
         </span>
-        <a v-if="link" :href="formattedLink" target="_blank" class="TextLink">
-          {{ formattedLink }}
+        <a v-if="link" :href="content" target="_blank" class="TextLink">
+          {{ evenLines }}
         </a>
       </template>
       <template v-if="!showContent">
@@ -62,14 +62,8 @@ export default {
       }
       return this.content
     },
-    formattedLink() {
-      if (this.content) {
-        if (!this.content.match(/^[a-zA-Z]+:\/\//)) {
-          return 'http://' + this.content
-        }
-        return this.content
-      }
-      return null
+    evenLines() {
+      return this.content.match(/.{1,102}/g).join('\n')
     },
   },
 }
