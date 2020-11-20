@@ -215,8 +215,8 @@
             :key="'link_type' + link_type"
             :content="link_url"
             :header="getLinkHeader(link_type)"
+            link
           />
-
           <!--          <simple-field :header="$gettext('Investor(s)') | translate">-->
           <!--            <donors-list :value="project.donors" />-->
           <!--          </simple-field>-->

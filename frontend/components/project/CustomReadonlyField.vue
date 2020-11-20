@@ -1,12 +1,19 @@
 <template>
   <simple-field :header="question">
     <template v-if="type < 5">
-      <span v-show="value">
-        {{ value }}
-      </span>
-      <span v-show="!value">
-        <!-- N/A -->
-      </span>
+      <template v-if="type === 1">
+        <a :href="value" target="_blank" class="TextLink">
+          {{ value }}
+        </a>
+      </template>
+      <template v-else>
+        <span v-show="value">
+          {{ value }}
+        </span>
+        <span v-show="!value">
+          <!-- N/A -->
+        </span>
+      </template>
     </template>
     <template v-if="type === 5">
       <ul>
@@ -82,7 +89,11 @@ export default {
       )
     },
     value() {
-      return this.type === 5 ? this.answer.answer : this.answer.answer[0]
+      const answer =
+        this.type === 5 ? this.answer.answer : this.answer.answer[0]
+      return answer === undefined
+        ? answer
+        : answer.match(/.{1,102}/g).join('\n')
     },
   },
 }
