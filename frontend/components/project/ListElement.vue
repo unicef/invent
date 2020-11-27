@@ -9,8 +9,8 @@ export default {
   components: {},
   props: {
     value: {
-      type: Number,
-      required: true,
+      type: [Number, Object],
+      default: null,
     },
     source: {
       type: String,

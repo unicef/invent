@@ -1,6 +1,9 @@
 <template>
   <div class="TeamList">
-    <ul v-show="team.length > 0 || unknown > 0">
+    <ul v-show="team.length > 0 || unknown > 0 || unlisted.length > 0">
+      <li v-for="p in unlisted" :key="p">
+        {{ p }}
+      </li>
       <li v-for="p in team" :key="p.id">
         {{ p.name }}
       </li>
@@ -32,6 +35,12 @@ export default {
     team() {
       if (this.value) {
         return this.profiles.filter((p) => this.value.includes(p.id) && p.name)
+      }
+      return []
+    },
+    unlisted() {
+      if (this.value) {
+        return this.value.filter((p) => p !== p * 1)
       }
       return []
     },

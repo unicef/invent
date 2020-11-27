@@ -32,6 +32,12 @@
             :source="apiNameInvenMapping[dialogData.column]"
           />
         </template>
+
+        <team-selector
+          v-if="dialogData.column === 'team'"
+          v-model="dialogData.value"
+        />
+
         <health-system-challenges-selector
           v-if="dialogData.column === 'hsc_challenges'"
           v-model="dialogData.value"
@@ -179,6 +185,7 @@ import CapabilitySelector from '@/components/project/CapabilitySelector'
 import PartnerData from '@/components/admin/import/PartnerData'
 import LinksData from '@/components/admin/import/LinksData'
 import WbsData from '@/components/admin/import/WbsData'
+import TeamSelector from '@/components/project/TeamSelector'
 import { apiNameInvenMapping } from '@/utilities/import'
 import { mapGetters } from 'vuex'
 
@@ -196,6 +203,7 @@ export default {
     PartnerData,
     LinksData,
     WbsData,
+    TeamSelector,
   },
   props: {
     customFieldsLib: {

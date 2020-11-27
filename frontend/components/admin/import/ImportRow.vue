@@ -16,6 +16,7 @@
 import { mapGetters } from 'vuex'
 import { projectFields } from '@/utilities/projects'
 import { apiWriteParser } from '@/utilities/api'
+import uniq from 'lodash/uniq'
 
 export default {
   props: {
@@ -91,6 +92,19 @@ export default {
         }
       }
     },
+    async saveTeamViewers(id, team = []) {
+      const teamViewers = {
+        team: team.filter((d) => typeof d === 'number'),
+        new_team_emails: team.filter((d) => typeof d === 'string'),
+        viewers: [],
+        new_viewer_emails: [],
+      }
+      const { data } = await this.$axios.put(
+        `/api/projects/${id}/groups/`,
+        teamViewers
+      )
+      return this.$store.dispatch('user/updateTeamViewers', { ...data, id })
+    },
     async save(country, donor, publish, office) {
       const filled = this.$children.filter(
         (sc) => sc.column && !['custom_fields'].includes(sc.column)
@@ -116,15 +130,16 @@ export default {
         a[c.column] = c.apiValue()
         return a
       }, projectFields())
-      result.team = [this.userProfile.id]
       result.country = country
       result.country_office = office
       result.donors = [donor]
       const parsed = apiWriteParser(result, countryCustom, donorCustom)
+      parsed.project.team = uniq([...parsed.project.team, this.userProfile.id])
       const { data } = await this.$axios.post(
         `api/projects/draft/${office}/`,
         parsed
       )
+      await this.saveTeamViewers(data.id, parsed.project.team)
       if (publish) {
         await this.$axios.put(
           `api/projects/publish/${data.id}/${office}/`,
