@@ -6,7 +6,11 @@
       :region-filter="selectedRegion"
       :multiple="true"
     />
-    <country-select v-model="selectedCountries" :disabled="disabledCountries" />
+    <country-select
+      v-model="selectedCountries"
+      :region="selectedRegion"
+      :disabled="disabledCountries"
+    />
   </div>
 </template>
 

@@ -392,85 +392,94 @@
         </span>
       </custom-required-form-item>
 
-      <custom-required-form-item
-        v-for="(linkType, index) in getLinkTypes"
-        :key="linkType.name"
-        :error="errors.first('link_website' + index)"
-        :draft-rule="draftRules.link_website"
-        :publish-rule="publishRules.link_website"
-      >
-        <template slot="label"> {{ linkType.name }} URL </template>
-        <template slot="tooltip">
-          <el-tooltip
-            class="item"
-            content="URL format: https://invent.unicef.org"
-            placement="right"
-          >
-            <i class="el-icon-warning warning" />
-          </el-tooltip>
-        </template>
-        <character-count-input
-          v-validate="rules.link_website"
-          :value="getLinkWebsite(index)"
-          :rules="rules.link_website"
-          :data-vv-name="'link_website' + index"
-          data-vv-as="Link Website"
-          @input="setLinkWebsite($event, index)"
-        />
-        <span v-if="index === 0" class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              Provide a link to the main website for the initiative, if
-              applicable.
-            </translate>
-          </p>
-        </span>
-        <span v-else-if="index === 1" class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              Provide the link(s) to the Sharepoint or other repository holding
-              all the relevant documentation for the initiative.
-            </translate>
-          </p>
-        </span>
-        <span v-else-if="index === 2" class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              Provide link(s) to any advocacy and marketing stories celebrating
-              the initiative.
-            </translate>
-          </p>
-        </span>
-        <span v-else-if="index === 3" class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              Provide link(s) to any research and or reports detailing
-              monitoring, evaluation or learning associated with the initiative.
-            </translate>
-          </p>
-        </span>
-        <span v-else class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              Provide any other link(s) associated with the initiative.
-            </translate>
-          </p>
-        </span>
-      </custom-required-form-item>
+      <div class="el-form-item">
+        <label class="el-form-item__label">
+          <translate> Links to website/Current Documentation </translate>
+        </label>
+        <el-row v-for="(link, index) in links" :key="`Link_${index}`">
+          <el-col :span="16">
+            <single-select
+              :value="link ? link.link_type : null"
+              data-vv-name="linkType"
+              data-vv-as="Link Type"
+              source="system/getLinkTypes"
+              @change="setLinkItem(index, 'link_type', $event)"
+            />
+          </el-col>
+          <el-col :span="8">
+            <add-rm-buttons
+              :show-add="isLastAndExist(links, index)"
+              :show-rm="links.length > 1"
+              @add="addLink"
+              @rm="rmLink(index)"
+            />
+          </el-col>
+          <el-col v-if="link" :span="24">
+            <custom-required-form-item
+              :error="errors.first('link_website' + index)"
+              :draft-rule="draftRules.link_website"
+              :publish-rule="publishRules.link_website"
+            >
+              <template slot="tooltip">
+                <el-tooltip
+                  class="item"
+                  content="URL format: https://invent.unicef.org"
+                  placement="right"
+                >
+                  <i class="el-icon-warning warning" />
+                </el-tooltip>
+              </template>
+              <character-count-input
+                v-validate="rules.link_website"
+                :value="link.link_url"
+                :rules="rules.link_website"
+                :data-vv-name="'link_website' + index"
+                data-vv-as="Link Website"
+                @input="setLinkItem(index, 'link_url', $event)"
+              />
+              <span class="Hint">
+                <fa icon="info-circle" />
+                <p v-show="link.link_type === 0">
+                  <translate>
+                    Provide a link to the main website for the initiative, if
+                    applicable.
+                  </translate>
+                </p>
+                <p v-show="link.link_type === 1">
+                  <translate>
+                    Provide the link(s) to the Sharepoint or other repository
+                    holding all the relevant documentation for the initiative.
+                  </translate>
+                </p>
+                <p v-show="link.link_type === 2">
+                  <translate>
+                    Provide link(s) to any advocacy and marketing stories
+                    celebrating the initiative.
+                  </translate>
+                </p>
+                <p v-show="link.link_type === 3">
+                  <translate>
+                    Provide link(s) to any research and or reports detailing
+                    monitoring, evaluation or learning associated with the
+                    initiative.
+                  </translate>
+                </p>
+                <p v-show="link.link_type === 4">
+                  <translate>
+                    Provide any other link(s) associated with the initiative.
+                  </translate>
+                </p>
+              </span>
+            </custom-required-form-item>
+          </el-col>
+        </el-row>
+      </div>
     </collapsible-card>
   </div>
 </template>
 
 <script>
-import filter from 'lodash/filter'
 import find from 'lodash/find'
-import findIndex from 'lodash/findIndex'
-
 import { mapGetters } from 'vuex'
 import { mapGettersActions } from '@/utilities/form'
 import SingleSelect from '@/components/common/SingleSelect'
@@ -493,9 +502,6 @@ export default {
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
 
   computed: {
-    ...mapGetters({
-      getLinkTypes: 'system/getLinkTypes',
-    }),
     ...mapGettersActions({
       program_targets: ['project', 'getProgramTargets', 'setProgramTargets', 0],
       program_targets_achieved: [
@@ -545,24 +551,6 @@ export default {
     }),
   },
   methods: {
-    setLinkWebsite(url, index) {
-      const links = [...this.links]
-      const linkIndex = findIndex(links, (l) => l.link_type === index)
-      const data = {
-        link_url: url,
-        link_type: index,
-      }
-      if (linkIndex !== -1) {
-        links[linkIndex] = data
-      } else {
-        links.push(data)
-      }
-      this.links = filter(links, (link) => link.link_url !== '')
-    },
-    getLinkWebsite(index) {
-      const link = find(this.links, (l) => l.link_type === index)
-      return link ? link.link_url : ''
-    },
     async validate() {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
@@ -582,6 +570,18 @@ export default {
       const wbs = [...this.wbs]
       wbs[index] = value
       this.wbs = wbs
+    },
+    addLink() {
+      this.links = [...this.links, null]
+    },
+    rmLink(index) {
+      this.links = this.links.filter((p, i) => i !== index)
+    },
+    setLinkItem(index, key, value) {
+      const links = [...this.links]
+      links[index] = links[index] ? { ...links[index] } : {}
+      links[index][key] = value
+      this.links = links
     },
   },
 }
