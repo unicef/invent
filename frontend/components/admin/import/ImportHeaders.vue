@@ -76,7 +76,6 @@ const blackList = [
   'coverage',
   'national_level_deployment',
   'coverageData',
-  'team',
   'viewers',
   'coverageType',
   'coverage_second_level',

@@ -27,6 +27,9 @@
           />
         </div>
 
+        <template v-else-if="column === 'team'">
+          <team-list :value="parsedValue.ids" />
+        </template>
         <template v-else-if="isDate || isTextArea">
           {{ internalValue }}
         </template>
@@ -92,6 +95,7 @@
 </template>
 
 <script>
+import TeamList from '@/components/project/TeamList'
 import DateField from '@/components/admin/import/DateField'
 import ListElement from '@/components/project/ListElement'
 import { Validator } from 'vee-validate'
@@ -105,6 +109,7 @@ export default {
   components: {
     DateField,
     ListElement,
+    TeamList,
   },
   model: {
     prop: 'value',
@@ -275,6 +280,7 @@ export default {
           total_budget: () => this.parseNumber(),
           target_group_reached: () => this.parseNumber(),
           wbs: () => this.stringArray(),
+          team: () => this.stringArray(),
           links: () => this.parseLinks(),
           partners: () => this.parsePartners(),
           unicef_sector: () => this.findProjectCollectionValue('sectors', true),
@@ -495,6 +501,7 @@ export default {
     },
     apiValue() {
       const isMultiple = [
+        'team',
         'partners',
         'platforms',
         'health_focus_areas',

@@ -56,6 +56,7 @@ export const nameMapping = {
   capability_levels: 'Capability Levels',
   capability_categories: 'Capability Categories',
   capability_subcategories: 'Capability Subcategories',
+  team: 'Team Members',
   ...nameInventMapping,
 }
 
@@ -92,6 +93,7 @@ export const importTemplate = [
       'Website|https://invent.unicef.org|SharePoint|https://invent.unicef.org|External|https://invent.unicef.org|Monitoring|https://invent.unicef.org|Other|https://invent.unicef.org',
     Partners:
       'Investor Partner|Investor Name|Investor Contact|partner@investor.com|https://www.investor.com|Technology Partner|Partner Name|Partner Contact|partner@technology.com|https://www.technology.com',
+    'Team Members': 'db@unicef.org|db+test@unicef.org',
   },
   {
     'Project Name': 'MyProject2',
