@@ -91,7 +91,7 @@
           </nuxt-link>
         </div>
 
-        <div class="DropdownLink">
+        <div v-if="isUserDA" class="DropdownLink">
           <nuxt-link
             :to="
               localePath({
