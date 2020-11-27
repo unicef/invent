@@ -4,7 +4,11 @@ export default function ({ store, redirect, app, route }) {
   if (
     routeName === 'organisation-admin-import' &&
     profile &&
-    !profile.is_superuser
+    !profile.is_superuser &&
+    !(
+      profile.account_type_approved &&
+      ['DA', 'SDA'].includes(profile.account_type)
+    )
   ) {
     const path = app.localePath({ name: 'organisation', params: route.params })
     redirect(path)
