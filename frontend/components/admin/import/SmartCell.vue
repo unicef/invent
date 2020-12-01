@@ -280,7 +280,10 @@ export default {
           total_budget: () => this.parseNumber(),
           target_group_reached: () => this.parseNumber(),
           wbs: () => this.stringArray(),
-          team: () => this.stringArray(),
+          team: () =>
+            this.stringArray().ids[0] === ''
+              ? { ids: [], names: [] }
+              : this.stringArray(),
           links: () => this.parseLinks(),
           partners: () => this.parsePartners(),
           unicef_sector: () => this.findProjectCollectionValue('sectors', true),
@@ -313,7 +316,12 @@ export default {
       }
     },
     parsingFailed() {
-      return this.value && this.column && this.parsedValue.ids.length === 0
+      return (
+        this.value &&
+        this.column &&
+        this.column !== 'team' &&
+        this.parsedValue.ids.length === 0
+      )
     },
     errorMessage() {
       const e = this.errors.find((e) => e.field === this.column)
