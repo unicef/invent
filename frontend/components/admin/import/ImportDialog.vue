@@ -253,6 +253,13 @@ export default {
       return apiNameInvenMapping
     },
   },
+  watch: {
+    'dialogData.value'(newElement, values = []) {
+      if (typeof newElement === 'string') {
+        this.dialogData.value = [...values, newElement]
+      }
+    },
+  },
   methods: {
     openDialog(row, key, { column, value, type }) {
       const stringified = JSON.stringify(value)
