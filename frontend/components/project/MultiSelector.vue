@@ -44,10 +44,18 @@ export default {
       type: String,
       default: '',
     },
+    filter: {
+      type: Number,
+      default: null,
+    },
   },
   computed: {
     sourceList() {
-      return this.$store.getters['projects/' + this.source]
+      const list = this.$store.getters['projects/' + this.source] || []
+      if (this.filter === null) {
+        return list
+      }
+      return list.filter(({ region }) => region === this.filter)
     },
   },
   methods: {
