@@ -287,6 +287,7 @@
             <multi-selector
               v-model="regional_priorities"
               v-validate="rules.regional_priorities"
+              :filter="country_office"
               data-vv-name="regional_priorities"
               data-vv-as="Regional Priorities"
               source="getRegionalPriorities"
@@ -377,6 +378,7 @@ export default {
       getCapabilityLevelsItems: 'projects/getCapabilityLevels',
       getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
       getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories',
+      country_office: 'project/getCountryOffice',
     }),
     ...mapGettersActions({
       goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],
