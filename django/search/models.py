@@ -42,6 +42,7 @@ class ProjectSearch(ExtendedModel):
         "cs": "capability_subcategories",  # eg: cs=1&cs=2
         "ic": "innovation_categories",  # eg: ic=1&ic=2
         "portfolio": "project__review_states",  # eg: portfolio=1
+        "ro": "country_office__regional_office",  # eg: portfolio=1
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -99,7 +100,7 @@ class ProjectSearch(ExtendedModel):
         if selected_fields:
             for field in selected_fields:
                 if query_params[field]:
-                    if field in ["country", 'co', "region", "goal", "result"]:
+                    if field in ["country", 'co', "region", "goal", "result", "ro"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field in ["donor", "sw", "dhi", "hfa", "hsc",

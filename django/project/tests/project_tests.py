@@ -1,6 +1,7 @@
 import copy
 from datetime import datetime
 
+import mock
 import pytz
 from django.urls import reverse
 from django.utils import timezone
@@ -17,7 +18,8 @@ from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.tasks import send_project_approval_digest
+from project.tasks import send_project_approval_digest, notify_superusers_about_new_pending_approval, \
+    notify_user_about_approval
 
 from project.tests.setup import SetupTests, MockRequest
 from user.tests import create_profile_for_user
@@ -30,7 +32,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "technology_platforms")
         self.assertContains(response, "hsc_challenges")
-        self.assertEqual(len(response.json().keys()), 19)
+        self.assertEqual(len(response.json().keys()), 21)
 
     def test_retrieve_project_structure_cache(self):
         with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):
@@ -1002,3 +1004,125 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
         self.assertEqual([p['id'] for p in response.json()], [project_ids[2]])
+
+    @mock.patch('project.views.notify_superusers_about_new_pending_approval.apply_async')
+    def test_technology_platform_create(self, notify_superusers_about_new_pending_approval):
+
+        user = User.objects.create_user(username='test_user_100000', password='test_user_100000')
+        user_profile = UserProfile.objects.create(user=user, name="test_user_100000")
+
+        data = {
+            'name': 'test platform',
+            'state': TechnologyPlatform.APPROVED,  # should have no effect
+            'added_by': user_profile.id,  # should have no effect
+        }
+        url = reverse('technologyplatform-list')
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        data = response.json()
+        self.assertEqual(data['state'], TechnologyPlatform.PENDING)
+        self.assertEqual(data['added_by'], self.user_profile_id)
+
+        software = TechnologyPlatform.objects.get(id=data['id'])
+
+        notify_superusers_about_new_pending_approval.assert_called_once_with((software._meta.model_name, software.pk))
+
+    @mock.patch('project.tasks.send_mail_wrapper')
+    def test_notify_super_users_about_pending_software_success(self, send_email):
+        super_users = User.objects.filter(is_superuser=True)
+        # remove super user status from the current super users
+        for user in super_users:
+            user.is_superuser = False
+            user.save()
+
+        test_super_user_1 = User.objects.create_superuser(username='superuser_1', email='s1@pulilab.com', 
+                                                          password='puli_1234', is_staff=True, is_superuser=True)
+        test_super_user_2 = User.objects.create_superuser(username='superuser_2', email='s2@pulilab.com', 
+                                                          password='puli_1234', is_staff=True, is_superuser=True)
+        try:
+            software = TechnologyPlatform.objects.create(name='pending software', state=TechnologyPlatform.PENDING)
+            notify_superusers_about_new_pending_approval.apply((software._meta.model_name, software.id))
+
+            call_args_list = send_email.call_args_list[0][1]
+            self.assertEqual(call_args_list['subject'], f'New {software._meta.model_name} is pending for approval')
+            self.assertEqual(call_args_list['email_type'], 'new_pending_approval')
+            self.assertIn(test_super_user_1.email, call_args_list['to'])
+            self.assertIn(test_super_user_2.email, call_args_list['to'])
+            self.assertEqual(call_args_list['context']['object_name'], software.name)
+
+        finally:
+            test_super_user_1.delete()
+            test_super_user_2.delete()
+
+            # give back super user status
+            for user in super_users:
+                user.is_superuser = True
+                user.save()
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_approve(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software', state=TechnologyPlatform.PENDING, 
+                                                     added_by_id=self.user_profile_id)
+        notify_user_about_approval.apply(args=('test', software._meta.model_name, software.id))
+        notify_user_about_approval.apply(args=('approve', software._meta.model_name, software.id))
+
+        send_email.assert_called_once()
+        call_args_list = send_email.call_args_list[0][1]
+        self.assertEqual(call_args_list['subject'], f"`{software.name}` you requested has been approved")
+        self.assertEqual(call_args_list['email_type'], 'object_approved')
+        self.assertEqual(call_args_list['context']['object_name'], software.name)
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_decline(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software', state=TechnologyPlatform.PENDING, 
+                                                     added_by_id=self.user_profile_id)
+        notify_user_about_approval.apply(args=('decline', software._meta.model_name, software.id))
+
+        call_args_list = send_email.call_args_list[0][1]
+        self.assertEqual(call_args_list['subject'], f"`{software.name}` you requested has been declined")
+        self.assertEqual(call_args_list['email_type'], 'object_declined')
+        self.assertEqual(call_args_list['context']['object_name'], software.name)
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_approval_fail(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software')
+        notify_user_about_approval.apply(args=('approve', software._meta.model_name, software.id))
+
+        send_email.assert_not_called()
+
+    @mock.patch('project.tasks.notify_user_about_approval.apply_async', return_value=None)
+    def test_software_decline(self, notify_user_about_approval):
+        software_1 = TechnologyPlatform.objects.create(name='approved software')
+        software_2 = TechnologyPlatform.objects.create(name='will be declined', state=TechnologyPlatform.PENDING)
+
+        data, org, country, country_office, d1, d2 = self.create_test_data(name="Test Project 10000")
+        data['project']['platforms'] = [software_1.id, software_2.id]
+
+        url = reverse("project-create", kwargs={"country_office_id": country_office.id})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        project = Project.objects.get(pk=response.json()['id'])
+        self.assertEqual(len(project.draft['platforms']), 2)
+
+        url = reverse("project-publish", kwargs={"project_id": project.id,
+                                                 "country_office_id": country_office.id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 2)
+        self.assertEqual(len(project.data['platforms']), 2)
+
+        # decline software
+        software_2.state = TechnologyPlatform.DECLINED
+        software_2.save()
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 1)
+        self.assertEqual(project.draft['platforms'][0], software_1.id)
+        self.assertEqual(len(project.data['platforms']), 1)
+        self.assertEqual(project.data['platforms'][0], software_1.id)
+
+        notify_user_about_approval.assert_called_once_with(args=('decline', 
+                                                                 software_2._meta.model_name, software_2.pk))

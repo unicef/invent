@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 from django.db.models import Q
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -8,7 +9,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, HardwarePlatform, NontechPlatform, \
-    PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2
+    PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState
 from core.utils import make_admin_list
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -36,10 +37,78 @@ class ViewOnlyInlineMixin:
         return False
 
 
-class TechnologyPlatformAdmin(AllObjectsAdmin):
+def approve(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.state = ApprovalState.APPROVED
+        obj.save()
+
+
+approve.short_description = "Approve selected items"
+
+
+def decline(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.state = ApprovalState.DECLINED
+        obj.save()
+
+
+decline.short_description = "Decline selected items"
+
+
+class ApprovalStateFilter(SimpleListFilter):
+    title = 'State'
+
+    parameter_name = 'state'
+
+    def lookups(self, request, model_admin):
+        return (ApprovalState.APPROVED, ApprovalState.STATES[0][1]), \
+               (ApprovalState.PENDING, ApprovalState.STATES[1][1]), \
+               (ApprovalState.DECLINED, ApprovalState.STATES[2][1])
+
+    def choices(self, cl):  # pragma: no cover
+        for lookup, title in self.lookup_choices:
+            try:
+                selected = int(self.value()) == lookup
+            except TypeError:
+                selected = None
+
+            yield {
+                'selected': selected,
+                'query_string': cl.get_query_string({
+                    self.parameter_name: lookup,
+                }, []),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            self.used_parameters[self.parameter_name] = ApprovalState.PENDING
+        return queryset.filter(state=self.value())
+
+
+class ApprovalStateAdmin(AllObjectsAdmin):
     list_display = [
-        'name',
+        'name', 'state', 'added_by'
     ]
+    ordering = search_fields = ['name']
+    list_filter = [ApprovalStateFilter]
+    actions = (approve, decline)
+
+
+class TechnologyPlatformAdmin(ApprovalStateAdmin):
+    pass
+
+
+class HardwarePlatformAdmin(ApprovalStateAdmin):
+    pass
+
+
+class NontechPlatformAdmin(ApprovalStateAdmin):
+    pass
+
+
+class PlatformFunctionAdmin(ApprovalStateAdmin):
+    pass
 
 
 class ParentFilter(admin.SimpleListFilter):
@@ -181,23 +250,19 @@ class PhaseAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
-class HardwarePlatformAdmin(admin.ModelAdmin):
-    ordering = search_fields = ['name']
-
-
-class NontechPlatformAdmin(admin.ModelAdmin):
-    ordering = search_fields = ['name']
-
-
-class PlatformFunctionAdmin(admin.ModelAdmin):
-    ordering = search_fields = ['name']
-
-
 class InnovationCategoryAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
+class InnovationWayAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
 class CPDAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+
+
+class ISCAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
@@ -224,6 +289,8 @@ admin.site.register(Phase, PhaseAdmin)
 admin.site.register(HardwarePlatform, HardwarePlatformAdmin)
 admin.site.register(NontechPlatform, NontechPlatformAdmin)
 admin.site.register(PlatformFunction, PlatformFunctionAdmin)
+admin.site.register(InnovationWay, InnovationWayAdmin)
 admin.site.register(InnovationCategory, InnovationCategoryAdmin)
 admin.site.register(CPD, CPDAdmin)
+admin.site.register(ISC, ISCAdmin)
 admin.site.register(ProjectImportV2, ProjectImportAdmin)

@@ -298,10 +298,3 @@ class PermissionTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn("last_version", response.json()['published'])
-
-    def test_project_structure_export(self):
-        url = reverse("get-project-structure-export")
-        response = self.test_user_client.get(url)
-
-        self.assertEqual(len(response.data['technology_platforms']), 48)
-        self.assertEqual(len(response.data['digital_strategies']), 28)

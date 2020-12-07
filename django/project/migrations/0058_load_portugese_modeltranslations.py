@@ -6,7 +6,6 @@ from django.db import migrations
 from django.core.management import call_command
 
 PT_TRANSLATIONS = [
-    '2018_01_30__tp_pt.json',
     '2018_01_30__licence_pt.json',
     '2018_01_30__istandard_pt.json',
     '2018_01_30__ilink_pt.json',

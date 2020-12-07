@@ -15,7 +15,7 @@ from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
-    ProjectPortfolioState, ReviewScore
+    ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction
 
 
 class PartnerSerializer(serializers.Serializer):
@@ -409,6 +409,50 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         for row in rows:
             ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
         return instance
+
+
+class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=512, 
+                                 validators=[UniqueValidator(
+                                     queryset=TechnologyPlatform.objects.all(), lookup='iexact')])
+
+    class Meta:
+        model = TechnologyPlatform
+        fields = '__all__'
+        read_only_fields = ('is_active', 'state', 'added_by')
+
+
+class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=512, 
+                                 validators=[UniqueValidator(
+                                     queryset=HardwarePlatform.objects.all(), lookup='iexact')])
+
+    class Meta:
+        model = HardwarePlatform
+        fields = '__all__'
+        read_only_fields = ('is_active', 'state', 'added_by')
+
+
+class NontechPlatformCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=512,
+                                 validators=[UniqueValidator(
+                                     queryset=NontechPlatform.objects.all(), lookup='iexact')])
+
+    class Meta:
+        model = NontechPlatform
+        fields = '__all__'
+        read_only_fields = ('is_active', 'state', 'added_by')
+
+
+class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=512, 
+                                 validators=[UniqueValidator(
+                                     queryset=PlatformFunction.objects.all(), lookup='iexact')])
+
+    class Meta:
+        model = PlatformFunction
+        fields = '__all__'
+        read_only_fields = ('is_active', 'state', 'added_by')
 
 
 class ProblemStatementSerializer(serializers.ModelSerializer):

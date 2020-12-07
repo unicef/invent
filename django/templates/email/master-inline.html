@@ -373,6 +373,35 @@
                         <!-- /REMINDER COMMON TEMPLATE -->
 
 
+                        <!-- NEW PENDING APPROVAL -->
+                        {% elif type == "new_pending_approval" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >`{{ object_name }}` {% trans "has been added to the system for approval" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Requested by: " %} {{ added_by }}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                        <a href="{% site_url %}{{ change_url }}" target="_blank" style="color:#00AEEF;text-decoration:underline;" >{% trans "Approve/Decline" %}</a>
+                        </p>
+                        <!-- /NEW PENDING APPROVAL -->
+
+
+                        <!-- OBJECT DECLINED -->
+                        {% elif type == "object_declined" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >`{{ object_name }}` {% trans "has been declined" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ object_name }}{% trans " has not been approved for inclusion in the INVENT platform. Please get in touch with the INVENT team if you believe this decision has been taken in error." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /OBJECT DECLINED -->
+
+
+                        <!-- OBJECT APPROVED -->
+                        {% elif type == "object_approved" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >`{{ object_name }}` {% trans "has been approved" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ object_name }}{% trans " has now been approved for inclusion in the INVENT platform." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                          <a href="{% site_url %}/{{ language }}/-/initiatives/create" target="_blank" style="color:#00AEEF;text-decoration:underline;" >{% trans "Register new initiative" %}</a>
+                        </p>
+                        <!-- /OBJECT APPROVED -->
+
+
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Country admin" %}</h1>
