@@ -18,7 +18,8 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GP
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
-    Phase, HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory
+    Phase, HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
+    ApprovalState
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
@@ -29,8 +30,10 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, PortfolioListSerializer, \
     ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, \
     ProjectPortfolioStateManagerSerializer, PortfolioSerializer, \
-    PortfolioStateChangeSerializer, ReviewScoreDetailedSerializer
+    PortfolioStateChangeSerializer, ReviewScoreDetailedSerializer, TechnologyPlatformCreateSerializer, \
+    HardwarePlatformCreateSerializer, NontechPlatformCreateSerializer, PlatformFunctionCreateSerializer
 from user.serializers import UserProfileSerializer
+from .tasks import notify_superusers_about_new_pending_approval
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -58,6 +61,8 @@ class ProjectPublicViewSet(ViewSet):
         `functions` = Function(s) of Platform  
         `cpd` = CPD and annual work plan  
         `innovation_categories` = Innovation Categories  
+        `innovation_ways` = Innovation ways  
+        `isc` = Information Security Classification  
         """
         return Response(self._get_project_structure())
 
@@ -94,40 +99,36 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         return dict(
-            technology_platforms=TechnologyPlatform.objects.values('id', 'name').custom_ordered(),
+            result_areas=UNICEFResultArea.objects.values('id', 'name', 'goal_area_id').custom_ordered(),
             goal_areas=UNICEFGoal.objects.values('id', 'name', 'capability_level_question',
                                                  'capability_category_question', 'capability_subcategory_question')
-            .custom_ordered(),
-            result_areas=UNICEFResultArea.objects.values('id', 'name', 'goal_area_id').custom_ordered(),
+                .custom_ordered(),  # noqa: E131
             capability_levels=UNICEFCapabilityLevel.objects.values('id', 'name', 'goal_area_id').custom_ordered(),
-            capability_categories=UNICEFCapabilityCategory.objects.values('id', 'name', 'goal_area_id').
-            custom_ordered(),
-            capability_subcategories=UNICEFCapabilitySubCategory.objects.values('id', 'name', 'goal_area_id').
-            custom_ordered(),
+            capability_categories=UNICEFCapabilityCategory.objects.values('id', 'name', 'goal_area_id')
+                .custom_ordered(),
+            capability_subcategories=UNICEFCapabilitySubCategory.objects.values('id', 'name', 'goal_area_id')
+                .custom_ordered(),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
             regional_offices=RegionalOffice.objects.values('id', 'name'),
             currencies=Currency.objects.values('id', 'name', 'code'),
             sectors=UNICEFSector.objects.values('id', 'name').custom_ordered(),
-            regional_priorities=RegionalPriority.objects.values('id', 'name').custom_ordered(),
+            regional_priorities=RegionalPriority.objects.values('id', 'name', 'region').custom_ordered(),
             phases=Phase.objects.values('id', 'name').custom_ordered(),
-            hardware=HardwarePlatform.objects.values('id', 'name').custom_ordered(),
-            nontech=NontechPlatform.objects.values('id', 'name').custom_ordered(),
-            functions=PlatformFunction.objects.values('id', 'name').custom_ordered(),
+            technology_platforms=TechnologyPlatform.objects.exclude(state=ApprovalState.DECLINED)
+                .values('id', 'name', 'state').custom_ordered(),
+            hardware=HardwarePlatform.objects.exclude(state=ApprovalState.DECLINED)
+                .values('id', 'name', 'state').custom_ordered(),
+            nontech=NontechPlatform.objects.exclude(state=ApprovalState.DECLINED)
+                .values('id', 'name', 'state').custom_ordered(),
+            functions=PlatformFunction.objects.exclude(state=ApprovalState.DECLINED)
+                .values('id', 'name', 'state').custom_ordered(),
             cpd=CPD.objects.values('id', 'name').custom_ordered(),
-            innovation_categories=InnovationCategory.objects.values('id', 'name').custom_ordered()
+            innovation_categories=InnovationCategory.objects.values('id', 'name').custom_ordered(),
+            innovation_ways=InnovationWay.objects.values('id', 'name').custom_ordered(),
+            isc=ISC.objects.values('id', 'name').custom_ordered(),
         )
-
-    @staticmethod
-    def project_structure_export(request):
-        """
-        Used to sync objects to "Implementation Toolkit"
-        """
-        return Response(dict(
-            technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
-            digital_strategies=DigitalStrategy.objects.filter(parent=None).values('id', 'name')
-        ))
 
 
 class ProjectListViewSet(TokenAuthMixin, ViewSet):
@@ -593,6 +594,42 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
         return ImportRow.objects.filter(parent__user=self.request.user)
+
+
+class ApprovalRequestViewSet(CreateModelMixin, GenericViewSet):
+    model = None
+
+    def perform_create(self, serializer) -> None:
+        serializer.save(added_by=self.request.user.userprofile, state=ApprovalState.PENDING)
+        notify_superusers_about_new_pending_approval.apply_async((self.model._meta.model_name, serializer.instance.id,))
+
+
+class TechnologyPlatformRequestViewSet(ApprovalRequestViewSet):
+    model = TechnologyPlatform
+    queryset = TechnologyPlatform.objects.all()
+    serializer_class = TechnologyPlatformCreateSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class HardwarePlatformRequestViewSet(ApprovalRequestViewSet):
+    model = HardwarePlatform
+    queryset = HardwarePlatform.objects.all()
+    serializer_class = HardwarePlatformCreateSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class NontechPlatformRequestViewSet(ApprovalRequestViewSet):
+    model = NontechPlatform
+    queryset = NontechPlatform.objects.all()
+    serializer_class = NontechPlatformCreateSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class PlatformFunctionRequestViewSet(ApprovalRequestViewSet):
+    model = PlatformFunction
+    queryset = PlatformFunction.objects.all()
+    serializer_class = PlatformFunctionCreateSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class PortfolioActiveListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):

@@ -398,11 +398,86 @@ class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedM
     pre = models.CharField(max_length=255)
 
 
-class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+class ApprovalState(models.Model):
+    APPROVED = 1
+    PENDING = 2
+    DECLINED = 3
+
+    STATES = (
+        (APPROVED, _("Approved")),
+        (PENDING, _("Pending")),
+        (DECLINED, _("Declined")),
+    )
+
+    state = models.IntegerField(choices=STATES, default=APPROVED)
+    added_by = models.ForeignKey(UserProfile, blank=True, null=True, on_delete=models.SET_NULL)
+
     class Meta:
-        verbose_name = 'Platform'
-        verbose_name_plural = 'Platforms'
-        ordering = ['name']
+        abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__important_fields = ['state']
+        for field in self.__important_fields:
+            setattr(self, '__original_%s' % field, getattr(self, field))
+
+
+class TechnologyPlatform(InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel):
+    class Meta:
+        verbose_name = 'Software'
+        verbose_name_plural = 'Software'
+
+
+class HardwarePlatform(InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Hardware Platform(s) and Physical Product(s)'
+
+
+class NontechPlatform(InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Programme Innovation(s) and Non-Technology Platform(s)'
+
+
+class PlatformFunction(InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Function(s) of Platform'
+
+
+@receiver(post_save, sender=PlatformFunction)
+@receiver(post_save, sender=NontechPlatform)
+@receiver(post_save, sender=HardwarePlatform)
+@receiver(post_save, sender=TechnologyPlatform)
+def process_approval_states(sender, instance, created, **kwargs):
+    if not created and instance.__original_state != instance.state:
+        from project.tasks import notify_user_about_approval
+
+        if sender == TechnologyPlatform:
+            data_key = 'platforms'
+        elif sender == HardwarePlatform:  # pragma: no cover
+            data_key = 'hardware'
+        elif sender == NontechPlatform:  # pragma: no cover
+            data_key = 'nontech'
+        elif sender == PlatformFunction:  # pragma: no cover
+            data_key = 'functions'
+        else:  # pragma: no cover
+            return
+
+        if instance.state == ApprovalState.DECLINED:
+            projects = Project.objects.filter(Q(**{f"data__{data_key}__contains": [instance.id]}) |
+                                              Q(**{f"draft__{data_key}__contains": [instance.id]}))
+
+            for project in projects:
+                if project.public_id and data_key in project.data:
+                    project.data[data_key] = \
+                        [item for item in project.data[data_key] if item != instance.id]
+                if data_key in project.draft:
+                    project.draft[data_key] = \
+                        [item for item in project.draft[data_key] if item != instance.id]
+                project.save(update_fields=['data', 'draft'])
+
+            notify_user_about_approval.apply_async(args=('decline', instance._meta.model_name, instance.pk,))
+        elif instance.state == ApprovalState.APPROVED:
+            notify_user_about_approval.apply_async(args=('approve', instance._meta.model_name, instance.pk,))
 
 
 class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
@@ -475,6 +550,8 @@ class UNICEFSector(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class RegionalPriority(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    region = models.IntegerField(choices=Country.UNICEF_REGIONS, null=True, blank=True)
+
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'Regional Priorities'
 
@@ -484,29 +561,24 @@ class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         verbose_name_plural = 'Phase of Initiative'
 
 
-class HardwarePlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
-        verbose_name_plural = 'Hardware Platform(s) and Physical Product(s)'
-
-
-class NontechPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
-        verbose_name_plural = 'Programme Innovation(s) and Non-Technology Platform(s)'
-
-
-class PlatformFunction(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
-        verbose_name_plural = 'Function(s) of Platform'
-
-
 class InnovationCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'Innovation Categories'
 
 
+class InnovationWay(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Innovation Ways'
+
+
 class CPD(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'CPD and annual work plan'
+
+
+class ISC(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Information Security Classification'
 
 
 class ProjectImport(ExtendedModel):

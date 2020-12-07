@@ -398,6 +398,35 @@
                         <!-- /REMINDER COMMON TEMPLATE -->
 
 
+                        <!-- NEW PENDING APPROVAL -->
+                        {% elif type == "new_pending_approval" %}
+                        <h1>`{{ object_name }}` {% trans "has been added to the system for approval" %}</h1>
+                        <p>{% trans "Requested by: " %} {{ added_by }}</p>
+                        <p>
+                        <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Approve/Decline" %}</a>
+                        </p>
+                        <!-- /NEW PENDING APPROVAL -->
+
+
+                        <!-- OBJECT DECLINED -->
+                        {% elif type == "object_declined" %}
+                        <h1>`{{ object_name }}` {% trans "has been declined" %}</h1>
+                        <p>{{ object_name }}{% trans " has not been approved for inclusion in the INVENT platform. Please get in touch with the INVENT team if you believe this decision has been taken in error." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /OBJECT DECLINED -->
+
+
+                        <!-- OBJECT APPROVED -->
+                        {% elif type == "object_approved" %}
+                        <h1>`{{ object_name }}` {% trans "has been approved" %}</h1>
+                        <p>{{ object_name }}{% trans " has now been approved for inclusion in the INVENT platform." %}</p>
+                        <p>
+                          <a href="{% site_url %}/{{ language }}/-/initiatives/create" target="_blank">{% trans "Register new initiative" %}</a>
+                        </p>
+                        <!-- /OBJECT APPROVED -->
+
+
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>

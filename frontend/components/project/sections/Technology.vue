@@ -27,11 +27,15 @@
             <i class="el-icon-warning warning" />
           </el-tooltip>
         </template>
-        <platform-selector
+        <select-box
           v-model="platforms"
           v-validate="rules.platforms"
+          filterable
+          multiple
+          source="software"
           data-vv-name="platforms"
-          data-vv-as="Software"
+          :options="softwareList"
+          :new-info-title="newInfoSoftware"
         />
       </custom-required-form-item>
 
@@ -59,12 +63,15 @@
                 <i class="el-icon-warning warning" />
               </el-tooltip>
             </template>
-            <multi-selector
+            <select-box
               v-model="hardware"
               v-validate="rules.hardware"
+              filterable
+              multiple
+              source="hardware"
               data-vv-name="hardware"
-              data-vv-as="Hardware Platform(s) and Physical Product(s)"
-              source="getHardware"
+              :options="hardwareList"
+              :new-info-title="newInfoHardware"
             />
             <span class="Hint">
               <fa icon="info-circle" />
@@ -102,12 +109,15 @@
                 <i class="el-icon-warning warning" />
               </el-tooltip>
             </template>
-            <multi-selector
+            <select-box
               v-model="nontech"
               v-validate="rules.nontech"
+              filterable
+              multiple
+              source="nontech"
               data-vv-name="nontech"
-              data-vv-as="Programme Innovation(s) and Non-Technology Platform(s)"
-              source="getNontech"
+              :options="nontechList"
+              :new-info-title="newInfoNontech"
             />
             <span class="Hint">
               <fa icon="info-circle" />
@@ -145,12 +155,15 @@
                 <i class="el-icon-warning warning" />
               </el-tooltip>
             </template>
-            <multi-selector
+            <select-box
               v-model="functions"
               v-validate="rules.functions"
+              filterable
+              multiple
+              source="function"
               data-vv-name="functions"
-              data-vv-as="Function(s) of Platform"
-              source="getFunctions"
+              :options="functionList"
+              :new-info-title="newInfoFunction"
             />
             <span class="Hint">
               <fa icon="info-circle" />
@@ -170,24 +183,46 @@
 </template>
 
 <script>
-import MultiSelector from '@/components/project/MultiSelector'
+// import MultiSelector from '@/components/project/MultiSelector'
 import { mapGetters } from 'vuex'
 import { mapGettersActions } from '@/utilities/form'
+// import PlatformSelector from '@/components/project/PlatformSelector'
+import SelectBox from '@/components/project/SelectBox'
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 import CollapsibleCard from '../CollapsibleCard'
-import PlatformSelector from '../PlatformSelector'
 
 export default {
   components: {
     CollapsibleCard,
-    MultiSelector,
-    PlatformSelector,
+    // MultiSelector,
+    // PlatformSelector,
+    SelectBox,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  data() {
+    return {
+      newInfoSoftware: this.$gettext(
+        'DHA Admin will update the Software list to include your new software name'
+      ),
+      newInfoHardware: this.$gettext(
+        'DHA Admin will update the Hardware list to include your new hardware name'
+      ),
+      newInfoNontech: this.$gettext(
+        'DHA Admin will update the Nontech list to include your new nontech name'
+      ),
+      newInfoFunction: this.$gettext(
+        'DHA Admin will update the Function list to include your new function name'
+      ),
+    }
+  },
   computed: {
     ...mapGetters({
       modified: 'project/getModified',
+      softwareList: 'projects/getTechnologyPlatforms',
+      hardwareList: 'projects/getHardware',
+      nontechList: 'projects/getNontech',
+      functionList: 'projects/getFunctions',
     }),
     ...mapGettersActions({
       hardware: ['project', 'getHardware', 'setHardware', 0],

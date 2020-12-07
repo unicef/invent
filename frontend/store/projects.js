@@ -434,6 +434,18 @@ export const actions = {
       console.log(e.response.data)
     }
   },
+  async setNewItem({ commit, dispatch }, { type, name }) {
+    try {
+      const { data } = await this.$axios.post(
+        `/api/projects/${type}-request/`,
+        { name }
+      )
+      await dispatch('loadProjectStructure', true)
+      return data.id
+    } catch (e) {
+      return e
+    }
+  },
 
   // state interaction handlers
   setCurrentProjectReview({ commit }, val) {

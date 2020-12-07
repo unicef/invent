@@ -2,6 +2,7 @@
   <div id="general" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
+      key="general"
       :title="$gettext('General overview') | translate"
       show-legend
     >

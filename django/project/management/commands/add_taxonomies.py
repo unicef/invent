@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 import pprint as pp
 import json
 from project.models import UNICEFSector, RegionalPriority, InnovationCategory, CPD, Phase, TechnologyPlatform, \
-    HardwarePlatform, NontechPlatform, PlatformFunction
+    HardwarePlatform, NontechPlatform, PlatformFunction, ISC, InnovationWay
 from country.models import Currency
 
 
@@ -21,7 +21,9 @@ class Command(BaseCommand):
         'Software Platform(s)': TechnologyPlatform,
         'Hardware Platform(s)/Physical Product(s)': HardwarePlatform,
         'Non-Technology Platform(s)/Programme Innovation(s) and Non-Technology Platform(s)': NontechPlatform,
-        'Function(s) of Platform': PlatformFunction
+        'Function(s) of Platform': PlatformFunction,
+        "Information Security Classification as per UNICEF's Classi Tool": ISC,
+        "If this is an innovation initiative, in which way is it innovative?": InnovationWay
     }
 
     nonmodel_blocks = {
@@ -38,7 +40,8 @@ class Command(BaseCommand):
     def fill_named_model(data, model):
         for entry in data:
             _, created = model.objects.get_or_create(name=entry)
-            pp.pprint(f'{entry}, created: {created}')
+            if created:
+                pp.pprint(f'{entry} created')
 
     @staticmethod
     def fill_currencies(data):
