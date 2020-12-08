@@ -10,7 +10,7 @@
         </template>
         <el-input
           :value="item.name"
-          placeholder="Max. 80 characters"
+          placeholder="Max. 120 characters"
           @input="handleInput($event, 'name', i)"
         />
       </custom-required-form-item>

@@ -289,7 +289,10 @@ export default {
         line-height: 21px;
       }
       .Content {
-        padding: 5px 20px 20px 40px;
+        margin: 5px 20px 20px 40px;
+        height: 576px;
+        overflow-y: hidden;
+        overflow: scroll;
       }
       .Overlay {
         position: absolute;
