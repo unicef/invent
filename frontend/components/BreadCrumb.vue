@@ -44,7 +44,7 @@ export default {
         'Published Initiative'
       ),
       'organisation-initiatives-id-edit': this.$gettext('Edit Initiative'),
-      'organisation-initiatives-id-stages': this.$gettext('Stages'),
+      'organisation-initiatives-id-stages': this.$gettext('Phases'),
 
       // route exclutions
       exclude: [

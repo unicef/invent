@@ -2,7 +2,7 @@
   <div id="stages" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Document Completion of Initiative Stages') | translate"
+      :title="$gettext('Document Completion of Initiative Phases') | translate"
       show-legend
     >
       <el-row :gutter="20" type="flex">

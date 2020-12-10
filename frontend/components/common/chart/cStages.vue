@@ -19,11 +19,11 @@
         </li>
         <li>
           <div class="legend__cirle legend__circle--blue" />
-          <translate>Stage completion date</translate>
+          <translate>Phase completion date</translate>
         </li>
         <li>
           <div class="legend__cirle legend__circle--grey" />
-          <translate>Next stage (incomplete)</translate>
+          <translate>Next phase (incomplete)</translate>
         </li>
         <li>
           <div class="legend__line legend__line--blue" />
@@ -35,10 +35,9 @@
         </li>
       </ul>
       <p>
-        <translate
-          >The date under a stage represents when that stage was
-          completed.</translate
-        >
+        <translate>
+          The date under a phase represents when that phase was completed.
+        </translate>
       </p>
     </section>
   </section>

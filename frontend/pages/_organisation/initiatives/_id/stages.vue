@@ -1,6 +1,6 @@
 <template>
   <section class="stage-graph">
-    <p><translate>initiative stages</translate></p>
+    <p><translate>initiative phases</translate></p>
     <div>
       <c-stages />
     </div>
