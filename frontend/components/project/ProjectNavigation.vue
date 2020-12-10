@@ -57,7 +57,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              <translate>Stages</translate>
+              <translate>Phases</translate>
             </el-button>
           </li>
           <li :class="{ active: active === 'partners' }">

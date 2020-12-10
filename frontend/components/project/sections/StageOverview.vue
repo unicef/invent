@@ -2,7 +2,7 @@
   <div id="stages" class="StageOverview">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Completion of initiative stages') | translate"
+      :title="$gettext('Completion of initiative phases') | translate"
       show-legend
     >
       <!-- stages -->
@@ -162,7 +162,7 @@
           >
             <template slot="label">
               <translate key="end-date">
-                Set end stage of initiative
+                Set end phase of initiative
               </translate>
               <tooltip
                 :text="$gettext('Date format: YYYY-MM-DD') | translate"
@@ -410,7 +410,7 @@ export default {
     width: 100%;
   }
   .note {
-    width: 518px;
+    width: 678px;
     margin-left: auto;
   }
 }

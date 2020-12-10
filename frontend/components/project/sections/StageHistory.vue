@@ -2,7 +2,7 @@
   <div id="stages" class="graph">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('4. Completion of initiative stages') | translate"
+      :title="$gettext('4. Completion of initiative phases') | translate"
     >
       <c-stages v-if="stages" />
       <div v-else class="NoData">
