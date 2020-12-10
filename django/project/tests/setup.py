@@ -120,7 +120,16 @@ class TestProjectData:
                          dict(partner_type=1, partner_name="test partner 2", partner_email="p2@partner.ppp",
                               partner_contact="test partner contact 2", partner_website="https://partner2.com")],
             "links": [dict(link_type=0, link_url="https://website.com"),
-                      dict(link_type=1, link_url="https://sharepoint.directory")]
+                      dict(link_type=1, link_url="https://sharepoint.directory")],
+            "stages": [{
+                "id": 1,
+                "date": str(datetime.today().date()),
+                "note": "stage 1 note",
+            }, {
+                "id": 2,
+                "date": str(datetime.today().date()),
+                "note": "stage 2 note",
+            }],
         }}, org, country, country_office, d1, d2
 
     def create_new_project(self, test_user_client=None, name=None):

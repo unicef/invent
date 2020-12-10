@@ -102,10 +102,25 @@ export const donorCustomFieldMapper = (collection) => {
   return customAnswers
 }
 
+export const dateParser = (date) => {
+  if (date) {
+    return new Date(date)
+  }
+  return null
+}
+
 export const apiReadParser = (p) => {
   p = lib.parseCustomAnswers(p)
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers)
-  return { ...p, donor_custom_answers }
+  const research = 'research' in p ? p.research : undefined
+
+  return {
+    ...p,
+    start_date: dateParser(p.start_date),
+    end_date: dateParser(p.end_date),
+    donor_custom_answers,
+    research,
+  }
 }
 
 export const isNullUndefinedOrEmptyString = (value) =>

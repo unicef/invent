@@ -84,6 +84,16 @@
         >
           <translate>Initiative</translate>
         </nuxt-link>
+        <nuxt-link
+          :to="
+            localePath({
+              name: 'organisation-initiatives-id-stages',
+              params: { id, organisation: $route.params.organisation },
+            })
+          "
+        >
+          <translate>Stages</translate>
+        </nuxt-link>
         <!--
         <nuxt-link :to="localePath({name: 'organisation-initiatives-id-assessment', params: {id, organisation: $route.params.organisation}})">
           <translate>Assessment</translate>

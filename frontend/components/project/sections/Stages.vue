@@ -1,8 +1,8 @@
 <template>
-  <div id="phase" class="GeneralOverview">
+  <div id="stages" class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Phase') | translate"
+      :title="$gettext('Document Completion of Initiative Stages') | translate"
       show-legend
     >
       <el-row :gutter="20" type="flex">

@@ -19,7 +19,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
     Phase, HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
-    ApprovalState
+    ApprovalState, Stage
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
@@ -128,6 +128,7 @@ class ProjectPublicViewSet(ViewSet):
             innovation_categories=InnovationCategory.objects.values('id', 'name').custom_ordered(),
             innovation_ways=InnovationWay.objects.values('id', 'name').custom_ordered(),
             isc=ISC.objects.values('id', 'name').custom_ordered(),
+            stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
         )
 
 

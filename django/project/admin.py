@@ -3,13 +3,14 @@ from django.contrib.admin import SimpleListFilter
 from django.db.models import Q
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from adminsortable2.admin import SortableAdminMixin
 from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, HardwarePlatform, NontechPlatform, \
-    PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState
+    PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage
 from core.utils import make_admin_list
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -270,6 +271,10 @@ class ProjectImportAdmin(admin.ModelAdmin):
     pass
 
 
+class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
+    pass
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
@@ -294,3 +299,4 @@ admin.site.register(InnovationCategory, InnovationCategoryAdmin)
 admin.site.register(CPD, CPDAdmin)
 admin.site.register(ISC, ISCAdmin)
 admin.site.register(ProjectImportV2, ProjectImportAdmin)
+admin.site.register(Stage, StageAdmin)
