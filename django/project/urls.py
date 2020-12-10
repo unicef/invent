@@ -52,11 +52,6 @@ urlpatterns = [
             'get': 'project_structure'
         }),
         name="get-project-structure"),
-    url(r"^projects/structure/export/$",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'project_structure_export'
-        }),
-        name="get-project-structure-export"),
     url(r"^projects/(?P<project_id>\d+)/version/$",
         view=views.ProjectVersionViewSet.as_view({
             'post': 'create'

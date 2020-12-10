@@ -1,22 +1,32 @@
 <template>
   <div class="NewProjectForm">
+    <div v-show="!showForm" class="Loader">
+      <div />
+      <span>Loading</span>
+    </div>
     <el-form ref="projectForm" label-position="top" @submit.native.prevent>
-      <el-row type="flex">
+      <el-row v-show="showForm" type="flex">
         <el-col :span="18">
           <general-overview
+            key="generalOverview"
             ref="generalOverview"
             :use-publish-rules="usePublishRules"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <categorization
+            key="categorization"
             ref="categorization"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <implementation-overview
             ref="implementationOverview"
@@ -24,13 +34,18 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
-          <stages
-            ref="stages"
+          <stage-overview
+            ref="stageOverview"
+            :use-publish-rules="usePublishRules"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <partners
             ref="partners"
@@ -38,6 +53,8 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <technology
             ref="technology"
@@ -45,6 +62,8 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <donor-custom
             ref="donorCustom"
@@ -52,6 +71,8 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
         </el-col>
         <el-col :span="6">
@@ -68,26 +89,26 @@
 
 <script>
 import { publishRules, draftRules } from '@/utilities/projects'
-import Categorization from '@/components/project/sections/Categorization'
-import Technology from '@/components/project/sections/Technology'
-import Stages from '@/components/project/sections/Stages'
-import Partners from '@/components/project/sections/Partners'
 import { mapGetters, mapActions } from 'vuex'
-import ProjectNavigation from './ProjectNavigation'
-import GeneralOverview from './sections/GeneralOverview'
-import ImplementationOverview from './sections/ImplementationOverview'
-import DonorCustom from './sections/DonorCustom'
+import GeneralOverview from '@/components/project/sections/GeneralOverview'
+import Categorization from '@/components/project/sections/Categorization'
+import ImplementationOverview from '@/components/project/sections/ImplementationOverview'
+import StageOverview from '@/components/project/sections/StageOverview'
+import Partners from '@/components/project/sections/Partners'
+import Technology from '@/components/project/sections/Technology'
+import DonorCustom from '@/components/project/sections/DonorCustom'
+import ProjectNavigation from '@/components/project/ProjectNavigation'
 
 export default {
   components: {
-    ProjectNavigation,
     GeneralOverview,
-    ImplementationOverview,
-    DonorCustom,
     Categorization,
-    Stages,
+    ImplementationOverview,
+    StageOverview,
     Partners,
     Technology,
+    DonorCustom,
+    ProjectNavigation,
   },
   $_veeValidate: {
     validator: 'new',
@@ -111,6 +132,9 @@ export default {
     },
     isNewProject() {
       return this.$route.name.includes('organisation-initiatives-create')
+    },
+    showForm() {
+      return this.readyElements >= this.createdElements
     },
     draftRules,
     publishRules,
@@ -225,7 +249,7 @@ export default {
         this.$refs.generalOverview.validate(),
         this.$refs.categorization.validate(),
         this.$refs.implementationOverview.validate(),
-        this.$refs.stages.validate(),
+        this.$refs.stageOverview.validate(),
         this.$refs.partners.validate(),
         this.$refs.technology.validate(),
         this.$refs.donorCustom.validate(),
@@ -238,7 +262,7 @@ export default {
       this.$refs.generalOverview.clear()
       this.$refs.categorization.clear()
       this.$refs.implementationOverview.clear()
-      this.$refs.stages.clear()
+      this.$refs.stageOverview.clear()
       this.$refs.partners.clear()
       this.$refs.technology.clear()
       this.$refs.donorCustom.clear()
@@ -250,7 +274,7 @@ export default {
         const valid = await this.$refs.generalOverview.validateDraft()
         const categorization = await this.$refs.categorization.validateDraft()
         const technology = await this.$refs.technology.validateDraft()
-        const stages = await this.$refs.stages.validateDraft()
+        const stages = await this.$refs.stageOverview.validateDraft()
         const partners = await this.$refs.partners.validateDraft()
         if (valid && categorization && technology && stages && partners) {
           try {
@@ -335,19 +359,27 @@ export default {
           } catch (e) {
             console.log(e)
             this.setLoading(false)
-            this.apiErrors = e.response.data
+            this.apiErrors = e.response.data ? e.response.data : 'error'
           }
         }
         this.handleErrorMessages()
       })
+    },
+    createdHandler() {
+      this.createdElements += 1
+    },
+    mountedHandler() {
+      setTimeout(() => {
+        this.readyElements += 1
+      }, 300)
     },
   },
 }
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .NewProjectForm {
   .limitPageWidth();

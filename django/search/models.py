@@ -43,6 +43,7 @@ class ProjectSearch(ExtendedModel):
         "ic": "innovation_categories",  # eg: ic=1&ic=2
         "portfolio": "project__review_states",  # eg: portfolio=1
         "ro": "country_office__regional_office",  # eg: portfolio=1
+        "stage": "stages",  # eg: stage=1&stage=2
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -56,6 +57,7 @@ class ProjectSearch(ExtendedModel):
     dhi_categories = ArrayField(models.IntegerField(), default=list)
     hsc = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
+    stages = ArrayField(models.IntegerField(), default=list)
 
     # UNICEF fields
     capability_levels = ArrayField(models.IntegerField(), default=list)
@@ -104,7 +106,7 @@ class ProjectSearch(ExtendedModel):
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field in ["donor", "sw", "dhi", "hfa", "hsc",
-                                   "cl", "cc", "cs", "ic"]:
+                                   "cl", "cc", "cs", "ic", "stage"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
@@ -156,6 +158,7 @@ class ProjectSearch(ExtendedModel):
             self.donors = [int(x) for x in project.data.get("donors", [])]
 
             self.software = project.data.get('platforms')
+            self.stages = [int(x['id']) for x in project.data.get("stages", [])]
             self.hsc = project.data.get('hsc_challenges')
             self.dhi_categories = list(set(filter(None.__ne__,
                                                   [DigitalStrategy.get_parent_id(int(id), 'parent') for

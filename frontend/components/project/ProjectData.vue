@@ -222,7 +222,7 @@
           <!--          </simple-field>-->
         </collapsible-card>
 
-        <collapsible-card id="phase" :title="$gettext('4. Phase') | translate">
+        <!-- <collapsible-card id="stages" :title="$gettext('4. Phase') | translate">
           <el-row>
             <el-col :span="12">
               <simple-field
@@ -246,7 +246,11 @@
               />
             </el-col>
           </el-row>
-        </collapsible-card>
+        </collapsible-card> -->
+
+        <!-- stage graph -->
+        <stage-history />
+        <!-- stage graph -->
 
         <collapsible-card
           id="partners"
@@ -359,6 +363,7 @@ import find from 'lodash/find'
 import orderBy from 'lodash/orderBy'
 import { mapGetters, mapState, mapActions } from 'vuex'
 // import CountryItem from '../common/CountryItem'
+import StageHistory from '@/components/project/sections/StageHistory'
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList'
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
 // import DonorsList from '../common/list/DonorsList'
@@ -386,6 +391,7 @@ export default {
     CustomReadonlyField,
     CapabilitiesList,
     ListElement,
+    StageHistory,
   },
   mixins: [handleProjectActions],
   computed: {
