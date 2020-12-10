@@ -250,7 +250,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         for profile in new_team_members:
             context = {
-                "user_name": profile.name,
+                "user_name": profile.name if profile.name else profile.user.email,
                 "project_id": instance.id,
                 "project_name": instance.name,
                 "role": "team member",
@@ -263,7 +263,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         for profile in new_viewers:
             context = {
-                "user_name": profile.name,
+                "user_name": profile.name if profile.name else profile.user.email,
                 "project_id": instance.id,
                 "project_name": instance.name,
                 "role": "viewer",
