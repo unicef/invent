@@ -290,6 +290,7 @@
               data-vv-name="regional_priorities"
               data-vv-as="Regional Priorities"
               source="getRegionalPriorities"
+              :filter="country_office"
             />
             <span class="Hint">
               <fa icon="info-circle" />
