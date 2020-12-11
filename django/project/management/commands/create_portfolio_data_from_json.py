@@ -79,7 +79,6 @@ class Command(BaseCommand, TestProjectData):
                 "hardware": [1, 2],
                 "nontech": [1, 2],
                 "functions": [1, 2],
-                "phase": 1,
                 "partners": [dict(partner_type=0, partner_name="test partner 1", partner_email="p1@partner.ppp",
                                   partner_contact="test partner contact 1", partner_website="https://partner1.com"),
                              dict(partner_type=1, partner_name="test partner 2", partner_email="p2@partner.ppp",

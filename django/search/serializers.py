@@ -40,6 +40,15 @@ class ListResultSerializer(serializers.Serializer):
     capability_categories = serializers.ReadOnlyField(source="project.data.capability_categories")
     capability_subcategories = serializers.ReadOnlyField(source="project.data.capability_subcategories")
     innovation_categories = serializers.ReadOnlyField(source="project.data.innovation_categories")
+    innovation_ways = serializers.ReadOnlyField()
+    unicef_sector = serializers.ReadOnlyField()
+    hardware = serializers.ReadOnlyField()
+    nontech = serializers.ReadOnlyField()
+    functions = serializers.ReadOnlyField()
+    isc = serializers.ReadOnlyField(source="project.data.isc")
+    regional_priorities = serializers.ReadOnlyField()
+    regional_office = serializers.ReadOnlyField(source='country_office.regional_office.id')
+    stages = serializers.ReadOnlyField()
 
     def get_country_custom_answers(self, obj):
         if self.context.get('has_country_permission'):

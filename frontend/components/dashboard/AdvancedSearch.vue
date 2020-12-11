@@ -4,6 +4,12 @@
     <search-box />
     <country-filters />
     <div class="UnicefSingleSelection">
+      <multi-selector
+        v-model="unicefSectors"
+        class="MultiSelectorFilter"
+        source="getSectors"
+        :placeholder="$gettext('Unicef Sectors') | translate"
+      />
       <goal-areas-selector
         v-model="selectedGoal"
         :placeholder="$gettext('Goal Area') | translate"
@@ -15,6 +21,20 @@
         :placeholder="$gettext('Result Area') | translate"
       />
       <multi-selector
+        v-model="regionalPriorities"
+        class="MultiSelectorFilter"
+        source="getRegionalPriorities"
+        :placeholder="$gettext('Regional Priorities') | translate"
+        :filter="regionalPrioritiesFilter"
+      />
+      <multi-selector
+        v-model="innovationWays"
+        class="MultiSelectorFilter"
+        source="getInnovationWays"
+        :placeholder="$gettext('Innovation Ways') | translate"
+      />
+      <multi-selector
+        v-show="!hideInnovationCategories"
         v-model="innovationCategories"
         class="MultiSelectorFilter"
         source="getInnovationCategories"
@@ -128,6 +148,43 @@
         />
       </filter-item>
     </div>
+    <div>
+      <multi-selector
+        v-model="phaseOfInitiative"
+        :placeholder="$gettext('Phase of Initiative') | translate"
+        source="getStages"
+        class="MultiSelectorFilter AddMargin"
+      />
+      <multi-selector
+        v-model="hardwarePlatforms"
+        class="MultiSelectorFilter AddMargin"
+        source="getHardware"
+        :placeholder="$gettext('Hardware Platforms') | translate"
+      />
+      <multi-selector
+        v-model="programmePlatforms"
+        class="MultiSelectorFilter AddMargin"
+        source="getNontech"
+        :placeholder="
+          $gettext('Programme Innovation/Non-Technology Platforms') | translate
+        "
+      />
+      <multi-selector
+        v-model="platformFunctions"
+        class="MultiSelectorFilter AddMargin"
+        source="getFunctions"
+        :placeholder="$gettext('Platform/Product Function') | translate"
+      />
+      <multi-selector
+        v-model="informationSecurity"
+        class="MultiSelectorFilter AddMargin"
+        source="getInfoSec"
+        :placeholder="
+          $gettext('Information Security Classification as per Classi')
+            | translate
+        "
+      />
+    </div>
   </div>
 </template>
 
@@ -147,6 +204,7 @@ import GoalAreasSelector from '@/components/common/GoalAreasSelector'
 import ResultAreasSelector from '@/components/common/ResultAreasSelector'
 import MultiSelector from '@/components/project/MultiSelector'
 import { mapMutations, mapGetters } from 'vuex'
+import find from 'lodash/find'
 
 export default {
   components: {
@@ -165,6 +223,9 @@ export default {
   },
   computed: {
     ...mapGetters({
+      regionalPrioritiesList: 'projects/getRegionalPriorities',
+      innovationWaysList: 'projects/getInnovationWays',
+      region: 'dashboard/getFilteredRegion',
       goalAreas: 'projects/getGoalAreas',
     }),
     ...mapGettersActions({
@@ -202,18 +263,75 @@ export default {
         'setSelectedPlatforms',
         0,
       ],
+      unicefSectors: ['dashboard', 'getUnicefSectors', 'setUnicefSectors', 0],
       innovationCategories: [
         'dashboard',
         'getInnovationCategories',
         'setInnovationCategories',
         0,
       ],
+      regionalPriorities: [
+        'dashboard',
+        'getRegionalPriorities',
+        'setRegionalPriorities',
+        0,
+      ],
+      innovationWays: [
+        'dashboard',
+        'getInnovationWays',
+        'setInnovationWays',
+        0,
+      ],
+      phaseOfInitiative: ['dashboard', 'getPhase', 'setPhase', 0],
+      programmePlatforms: [
+        'dashboard',
+        'getProgrammePlatforms',
+        'setProgrammePlatforms',
+        0,
+      ],
+      platformFunctions: [
+        'dashboard',
+        'getPlatformFunctions',
+        'setPlatformFunctions',
+        0,
+      ],
+      informationSecurity: [
+        'dashboard',
+        'getInformationSecurity',
+        'setInformationSecurity',
+        0,
+      ],
+      hardwarePlatforms: [
+        'dashboard',
+        'getHardwarePlatforms',
+        'setHardwarePlatforms',
+        0,
+      ],
     }),
+    regionalPrioritiesFilter() {
+      if (this.region === null) {
+        return null
+      }
+      return this.regionalPrioritiesList
+        .filter(({ region }) => region === this.region)
+        .map(({ id }) => id)
+    },
     selectedGoalAreaDetails() {
       if (this.selectedGoal) {
         return this.goalAreas.find((g) => g.id === this.selectedGoal)
       }
       return null
+    },
+    hideInnovationCategories() {
+      const na = find(this.innovationWaysList, ({ name }) => name === 'N/A')
+      return na && this.innovationWays.includes(na.id)
+    },
+  },
+  watch: {
+    hideInnovationCategories(hide) {
+      if (hide) {
+        this.innovationCategories = []
+      }
     },
   },
   mounted() {
@@ -240,6 +358,9 @@ export default {
   min-height: 100%;
   border-left: 1px solid #eae6e1;
   background-color: @colorWhite;
+  .AddMargin {
+    margin-bottom: 12px;
+  }
   > div {
     padding: 21px;
     border-bottom: 1px solid #eae6e1;

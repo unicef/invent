@@ -3,6 +3,7 @@
     :value="platforms"
     multiple
     filterable
+    :disabled="disabled"
     :placeholder="placeholder || $gettext('Select from list') | translate"
     popper-class="PlatformSelectorDropdown"
     class="PlatformSelector"
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import find from 'lodash/find'
 export default {
   name: 'MultiSelector',
   model: {
@@ -44,8 +46,12 @@ export default {
       type: String,
       default: '',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     filter: {
-      type: Number,
+      type: [Array, Number],
       default: null,
     },
   },
@@ -55,7 +61,27 @@ export default {
       if (this.filter === null) {
         return list
       }
+      if (this.filter && this.filter.length) {
+        return list.filter(({ id }) => this.filter.includes(id))
+      }
       return list.filter(({ region }) => region === this.filter)
+    },
+  },
+  watch: {
+    filter(newFilter) {
+      if (!this.platforms) {
+        return
+      }
+      let newValue = []
+      if (this.filter && this.filter.length !== undefined) {
+        newValue = this.platforms.filter((value) => newFilter.includes(value))
+      } else {
+        newValue = this.platforms.filter((value) => {
+          const item = find(this.sourceList, ({ id }) => id === value) || {}
+          return item.region === newFilter
+        })
+      }
+      this.changeHandler(newValue)
     },
   },
   methods: {

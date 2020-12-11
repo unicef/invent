@@ -96,7 +96,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
     funding_needs = serializers.CharField(max_length=500, required=False)
     partnership_needs = serializers.CharField(max_length=500, required=False)
     currency = serializers.IntegerField(required=False)
-    phase = serializers.IntegerField()
     hardware = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     nontech = serializers.ListField(
@@ -106,6 +105,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
 
     links = LinkSerializer(many=True, required=False, allow_empty=True)
     partners = PartnerSerializer(many=True, required=False, allow_empty=True)
+
+    # ITERATION 2 Fields
+    innovation_ways = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    isc = serializers.IntegerField(required=False)
 
     # SECTION 2 Implementation Overview
     platforms = serializers.ListField(
@@ -167,7 +171,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     overview = serializers.CharField(max_length=300, required=False)
     unicef_sector = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
-    phase = serializers.IntegerField(required=False)
 
     def create(self, validated_data):
         validated_data['country'] = self.co.country.id

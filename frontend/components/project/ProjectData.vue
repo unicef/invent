@@ -131,7 +131,15 @@
             />
           </simple-field>
 
+          <simple-field :header="$gettext('Innovation(s)') | translate">
+            <platforms-list
+              :platforms="project.innovation_ways"
+              source="getInnovationWays"
+            />
+          </simple-field>
+
           <simple-field
+            v-show="!hideInnovationCategories"
             :header="$gettext('Innovation category(ies)') | translate"
           >
             <platforms-list
@@ -317,6 +325,13 @@
               source="getFunctions"
             />
           </simple-field>
+          <simple-field
+            :header="
+              $gettext('Information security classification ') | translate
+            "
+          >
+            <list-element :value="project.isc" source="getInfoSec" />
+          </simple-field>
         </collapsible-card>
 
         <div v-if="donors && donors.length > 0" id="donorcustom">
@@ -412,6 +427,7 @@ export default {
       linkTypes: 'system/getLinkTypes',
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
+      innovationWays: 'projects/getInnovationWays',
     }),
     location() {
       const { selectedRegionOffice, office, country, selectedRegion } = this
@@ -473,6 +489,10 @@ export default {
     },
     orderedLinkList() {
       return orderBy(this.project.links, ['link_type'], ['asc'])
+    },
+    hideInnovationCategories() {
+      const na = find(this.innovationWays, ({ name }) => name === 'N/A')
+      return na && this.project.innovation_ways.includes(na.id)
     },
   },
   mounted() {

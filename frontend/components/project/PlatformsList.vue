@@ -26,7 +26,7 @@ export default {
   computed: {
     selected() {
       const list = this.$store.getters[`projects/${this.source}`]
-      return list && this.platforms
+      return list && this.platforms && this.platforms.length
         ? list.filter((tp) => this.platforms.includes(tp.id))
         : []
     },

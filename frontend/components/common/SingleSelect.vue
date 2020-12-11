@@ -1,8 +1,9 @@
 <template>
   <div>
     <lazy-el-select
+      :clearable="clearable"
       :value="realValue"
-      :placeholder="$gettext('Select from list') | translate"
+      :placeholder="placeholder || $gettext('Select from list') | translate"
       popper-class="SelectorPopper"
       class="Selector"
       @change="changeHandler"
@@ -11,7 +12,7 @@
         v-for="option in sourceList"
         :key="option.id"
         :label="option.name"
-        :value="`${option.id}`"
+        :value="getValue(option.id)"
       />
     </lazy-el-select>
   </div>
@@ -26,8 +27,8 @@ export default {
   },
   props: {
     value: {
-      type: Number,
-      default: 0,
+      type: [Number, Object],
+      default: null,
     },
     source: {
       type: String,
@@ -37,9 +38,20 @@ export default {
       type: Array,
       default: () => [],
     },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    clearable: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     realValue() {
+      if (this.clearable) {
+        return this.value
+      }
       if (this.value === null) {
         return null
       }
@@ -52,7 +64,14 @@ export default {
     },
   },
   methods: {
+    getValue(value) {
+      return this.clearable ? value : `${value}`
+    },
     changeHandler(value) {
+      if (this.clearable) {
+        this.$emit('change', value || null)
+        return
+      }
       this.$emit('change', value * 1)
     },
   },
