@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_taxonomies),
-        migrations.RunPython(rebuild_search),
-        migrations.RunPython(reorder_stages),
+        migrations.RunPython(add_taxonomies, reverse_code=migrations.RunPython.noop),
+        migrations.RunPython(rebuild_search, reverse_code=migrations.RunPython.noop),
+        migrations.RunPython(reorder_stages, reverse_code=migrations.RunPython.noop),
     ]
