@@ -4,10 +4,7 @@ from django.db import migrations
 
 
 def regenerate_search_objects(apps, schema_editor):
-    PS = apps.get_model("search", "ProjectSearch")
-    Project = apps.get_model("project", "Project")
-    for project in Project.objects.all():
-        PS.objects.get_or_create(project_id=project.id)
+    pass
 
 
 class Migration(migrations.Migration):
