@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
 from modeltranslation.translator import register, TranslationOptions
-from .models import DigitalStrategy, HSCChallenge, HealthCategory, HealthFocusArea, InteroperabilityLink,\
-    TechnologyPlatform, Licence, InteroperabilityStandard, HISBucket, HSCGroup
+from .models import DigitalStrategy, HSCChallenge, HealthCategory, HealthFocusArea, \
+    TechnologyPlatform, HSCGroup, HardwarePlatform, NontechPlatform, PlatformFunction, Stage
 
 
 @register(DigitalStrategy)
@@ -30,26 +30,26 @@ class HealthFocusAreaTranslationOptions(TranslationOptions):
     fields = ('name',)
 
 
-@register(InteroperabilityLink)
-class InteroperabilityLinkTranslationOptions(TranslationOptions):
-    fields = ('name', 'pre')
-
-
 @register(TechnologyPlatform)
 class TechnologyPlatformTranslationOptions(TranslationOptions):
     fields = ('name',)
 
 
-@register(Licence)
-class LicenceTranslationOptions(TranslationOptions):
+@register(HardwarePlatform)
+class HardwarePlatformTranslationOptions(TranslationOptions):
     fields = ('name',)
 
 
-@register(InteroperabilityStandard)
-class InteroperabilityStandardTranslationOptions(TranslationOptions):
+@register(NontechPlatform)
+class NontechPlatformTranslationOptions(TranslationOptions):
     fields = ('name',)
 
 
-@register(HISBucket)
-class HISBucketTranslationOptions(TranslationOptions):
+@register(PlatformFunction)
+class PlatformFunctionTranslationOptions(TranslationOptions):
+    fields = ('name',)
+
+
+@register(Stage)
+class StageTranslationOptions(TranslationOptions):
     fields = ('name',)
