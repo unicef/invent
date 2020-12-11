@@ -540,11 +540,6 @@ class RegionalPriority(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel
         verbose_name_plural = 'Regional Priorities'
 
 
-class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
-        verbose_name_plural = 'Phase of Initiative'
-
-
 class InnovationCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = 'Innovation Categories'
@@ -685,6 +680,8 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
     class Meta:
         ordering = ['order', 'name']
+        verbose_name = 'Phase of initiative'
+        verbose_name_plural = 'Phases of initiative'
 
     def __str__(self):  # pragma: no cover
         return self.name
