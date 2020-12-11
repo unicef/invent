@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 from django.core.management.base import BaseCommand
 import pprint as pp
 import json
-from project.models import UNICEFSector, RegionalPriority, InnovationCategory, CPD, Phase, TechnologyPlatform, \
-    HardwarePlatform, NontechPlatform, PlatformFunction, ISC, InnovationWay
+from project.models import UNICEFSector, RegionalPriority, InnovationCategory, CPD, TechnologyPlatform, \
+    HardwarePlatform, NontechPlatform, PlatformFunction, ISC, InnovationWay, Stage
 from country.models import Currency
 
 
@@ -17,7 +17,7 @@ class Command(BaseCommand):
         'Regional Priorities': RegionalPriority,
         'UNICEF Innovation Categories': InnovationCategory,
         'In Country programme document (CPD) and annual work plan?': CPD,
-        'Phase of Initiative': Phase,
+        'Phase of Initiative': Stage,
         'Software Platform(s)': TechnologyPlatform,
         'Hardware Platform(s)/Physical Product(s)': HardwarePlatform,
         'Non-Technology Platform(s)/Programme Innovation(s) and Non-Technology Platform(s)': NontechPlatform,
@@ -64,5 +64,5 @@ class Command(BaseCommand):
                 self.fill_currencies(data[block_name])
             elif block_name in self.nonmodel_blocks:
                 pp.pprint(f"Warning: need to check {block_name} by hand as it's non-model")
-            else:
+            else:  # pragma: no cover
                 pp.pprint(f"Warning: unhandled block name: {block_name}")
