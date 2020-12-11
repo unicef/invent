@@ -23,6 +23,7 @@ def reorder_stages(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ('project', '0085_auto_20201211_1433'),
+        ('search', '0024_remove_projectsearch_infosec'),
     ]
 
     operations = [
