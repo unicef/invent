@@ -51,6 +51,9 @@ class Command(BaseCommand):
             pp.pprint(f'{currency["name"]}, created: {created}')
 
     def handle(self, *args, **options):
+        if options['verbosity'] == 0:
+            pp.pprint = lambda *x: x
+
         pp.pprint('Parsing input data')
         data = self.read_input_json(self.json_path)
 
