@@ -4,13 +4,10 @@ from django.db import migrations
 
 
 def update_search_objects(apps, schema_editor):
-    Project = apps.get_model("project", "Project")
-    for project in Project.objects.exclude(public_id=""):
-        project.search.update(project)
+    pass  # noop
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('search', '0015_convert_hsc_categories_to_hsc'),
     ]
