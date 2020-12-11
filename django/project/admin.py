@@ -9,7 +9,7 @@ from country.models import Country
 from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
-    UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, Phase, HardwarePlatform, NontechPlatform, \
+    UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage
 from core.utils import make_admin_list
 
@@ -247,10 +247,6 @@ class RegionalPriorityAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
-class PhaseAdmin(admin.ModelAdmin):
-    ordering = search_fields = ['name']
-
-
 class InnovationCategoryAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
 
@@ -271,7 +267,7 @@ class ProjectImportAdmin(admin.ModelAdmin):
     pass
 
 
-class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
+class StageAdmin(SortableAdminMixin, AllObjectsAdmin):
     pass
 
 
@@ -290,7 +286,6 @@ admin.site.register(UNICEFCapabilityCategory, UNICEFCapabilityCategoryAdmin)
 admin.site.register(UNICEFCapabilitySubCategory, UNICEFCapabilitySubCategoryAdmin)
 admin.site.register(UNICEFSector, UNICEFSectorAdmin)
 admin.site.register(RegionalPriority, RegionalPriorityAdmin)
-admin.site.register(Phase, PhaseAdmin)
 admin.site.register(HardwarePlatform, HardwarePlatformAdmin)
 admin.site.register(NontechPlatform, NontechPlatformAdmin)
 admin.site.register(PlatformFunction, PlatformFunctionAdmin)
