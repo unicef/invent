@@ -708,6 +708,22 @@ fieldset {
   }
 }
 
+// statements options
+.statement-options {
+  min-width: 100%;
+  max-width: fit-content;
+  white-space: normal;
+  overflow: inherit;
+  height: auto;
+  &.selected::after {
+    top: 0;
+  }
+  span {
+    padding: 0 12px 0 0;
+    display: block;
+  }
+}
+
 .el-checkbox {
   .el-checkbox__inner {
     // thicker tick

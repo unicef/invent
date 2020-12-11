@@ -61,6 +61,7 @@
         :value="ps"
         :items="problemStatements"
         :placeholder="$gettext('Problem Statement') | translate"
+        option-class="statement-options"
         @change="handleSearch('ps', $event)"
       />
     </div>
