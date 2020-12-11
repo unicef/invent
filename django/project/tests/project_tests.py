@@ -49,9 +49,9 @@ class ProjectTests(SetupTests):
             self.assertFalse(cache_data is None)
 
             # Changing cached data should invalidate cache
-            lic = Licence.objects.all().first()
-            lic.name = 'other'
-            lic.save()
+            st = Stage.objects.all().first()
+            st.name = 'other'
+            st.save()
             cache_data = cache.get('project-structure-data')
             self.assertTrue(cache_data is None)
 
