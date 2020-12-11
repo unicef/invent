@@ -3,7 +3,7 @@ import copy
 from django.urls import reverse
 from rest_framework import status
 
-from country.models import Donor, DonorCustomQuestion, CountryCustomQuestion
+from country.models import Donor, DonorCustomQuestion, CountryCustomQuestion, RegionalOffice
 from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
 from project.tests.setup import SetupTests
 
@@ -233,6 +233,18 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
 
+    def test_filter_regional_office(self):
+        url = reverse("search-project-list")
+        data = {"ro": RegionalOffice.objects.get(name='RO test').id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"ro": 999}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 0)
+
     def test_filter_donor(self):
         url = reverse("search-project-list")
         data = {"donor": Donor.objects.all()[0].id}
@@ -392,6 +404,121 @@ class SearchTests(SetupTests):
         self.assertEqual(response.json()['count'], 2)
 
         url = url + '?stage=1&stage=300'
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_platforms(self):
+        url = reverse("search-project-list")
+        data = {"hp": 300}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"hp": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        url = url + '?hp=1&hp=2'
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"pp": 300}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"pp": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        url = url + '?pp=1&pp=2'
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"pf": 300}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"pf": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        url = url + '?pf=1&pf=2'
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_ic_iw(self):
+        url = reverse("search-project-list")
+        data = {"iw": 300}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"iw": 3}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"ic": 300}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"ic": 2}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        url = url + '?iw=3&ic=2'
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_unicef_sector(self):
+        url = reverse("search-project-list")
+        data = {"us": 2}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_infosec(self):
+        url = reverse("search-project-list")
+        data = {"is": 3}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"is": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        url = url + '?is=3&is=1'
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_regional_priorities(self):
+        url = reverse("search-project-list")
+        data = {"rp": 2}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"rp": 200}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        url = url + '?rp=2&rp=200'
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 2)

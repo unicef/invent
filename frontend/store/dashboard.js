@@ -73,6 +73,15 @@ export const state = () => ({
   dashboardType: 'user',
   dashboardId: null,
   dashboardSection: 'map',
+  regionalPriorities: [],
+  sectors: [],
+  filteredRegionalOffice: [],
+  stage: null,
+  innovationWays: [],
+  hardwarePlatforms: [],
+  programmePlatforms: [],
+  platformFunctions: [],
+  informationSecurity: null,
 })
 export const getters = {
   ...gettersGenerator(),
@@ -165,7 +174,18 @@ export const getters = {
       ? [state.dashboardId]
       : state.filteredCountryOffice
   },
+  getFilteredRegionalOffice: (state) => {
+    return state.filteredRegionalOffice
+  },
+  getUnicefSectors: (state) => state.sectors,
+  getInnovationWays: (state) => state.innovationWays,
+  getPhase: (state) => state.stage,
+  getHardwarePlatforms: (state) => state.hardwarePlatforms,
+  getProgrammePlatforms: (state) => state.programmePlatforms,
+  getPlatformFunctions: (state) => state.platformFunctions,
+  getInformationSecurity: (state) => state.informationSecurity,
   getInnovationCategories: (state) => state.innovationCategories,
+  getRegionalPriorities: (state) => state.regionalPriorities,
   getGovernmentApproved: (state) => state.governmentApproved,
   getGovernmentFinanced: (state) => state.governmentFinanced,
   getSelectAll: (state) => state.selectAll,
@@ -211,6 +231,16 @@ export const getters = {
       cs: state.selectedCapabilitySubcategories,
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
       sc: state.selectedColumns,
+      // new
+      ro: state.filteredRegionalOffice,
+      us: state.sectors,
+      rp: state.regionalPriorities,
+      iw: state.innovationWays,
+      stage: state.stage,
+      hp: state.hardwarePlatforms,
+      pp: state.programmePlatforms,
+      pf: state.platformFunctions,
+      is: state.informationSecurity,
     }
   },
 }
@@ -220,15 +250,22 @@ export const actions = {
   setDashboardColumns({ commit }, columns) {
     commit('SET_DASHBOARD_COLUMNS', columns)
   },
-  async loadProjectList({ rootGetters, commit, dispatch }) {
+  async loadProjectList({ rootState, rootGetters, commit, dispatch }) {
     const data = await dispatch('loadProjects', { type: 'list' })
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
+    const offices = rootState.offices.offices
     commit(
       'SET_PROJECT_LIST',
       data.results.projects.map((i) => {
+        let regional_office = null
+        if (i.country_office > 0) {
+          const office = offices.find(({ id }) => id === i.country_office)
+          regional_office = office ? office.regional_office : null
+        }
         return {
           ...i,
+          regional_office,
           favorite: user ? user.favorite.includes(i.id) : undefined,
         }
       })
@@ -346,8 +383,44 @@ export const actions = {
     commit('SET_FILTERED_REGION', value)
     commit('SET_CURRENT_PAGE', 1)
   },
+  setFilteredRegionalOffice({ commit }, value) {
+    commit('SET_FILTERED_REGIONAL_OFFICE', value)
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setUnicefSectors({ commit }, value) {
+    commit('SET_UNICEF_SECTORS', value)
+    commit('SET_CURRENT_PAGE', 1)
+  },
   setInnovationCategories({ commit }, value) {
     commit('SET_INNOVATION_CATEGORIES', value)
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setRegionalPriorities({ commit }, value) {
+    commit('SET_REGIONAL_PRIORITIES', value)
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setInnovationWays({ commit }, value) {
+    commit('SET_DATA', { type: 'innovationWays', value })
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setPhase({ commit }, value) {
+    commit('SET_DATA', { type: 'stage', value })
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setHardwarePlatforms({ commit }, value) {
+    commit('SET_DATA', { type: 'hardwarePlatforms', value })
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setProgrammePlatforms({ commit }, value) {
+    commit('SET_DATA', { type: 'programmePlatforms', value })
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setPlatformFunctions({ commit }, value) {
+    commit('SET_DATA', { type: 'platformFunctions', value })
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setInformationSecurity({ commit }, value) {
+    commit('SET_DATA', { type: 'informationSecurity', value })
     commit('SET_CURRENT_PAGE', 1)
   },
   setFilteredOffice({ commit }, value) {
@@ -450,6 +523,17 @@ export const mutations = {
     state.governmentFinanced = options.gov ? true : null
     state.governmentApproved = options.approved ? true : null
     state.selectedPlatforms = intArrayFromQs(options.sw)
+
+    state.regionalPriorities = intArrayFromQs(options.rp)
+    state.sectors = intArrayFromQs(options.us)
+    state.filteredRegionalOffice = intArrayFromQs(options.ro)
+    state.innovationWays = intArrayFromQs(options.iw)
+    state.hardwarePlatforms = intArrayFromQs(options.hp)
+    state.programmePlatforms = intArrayFromQs(options.pp)
+    state.platformFunctions = intArrayFromQs(options.pf)
+    state.stage = options.pi ? +options.pi : null
+    state.informationSecurity = options.is ? +options.is : null
+
     state.selectedDHI = intArrayFromQs(options.dhi)
     state.selectedHFA = intArrayFromQs(options.hfa)
     state.selectedHSC = intArrayFromQs(options.hsc)
@@ -514,8 +598,17 @@ export const mutations = {
   SET_FILTERED_REGION: (state, value) => {
     state.filteredRegion = value
   },
+  SET_FILTERED_REGIONAL_OFFICE: (state, value) => {
+    state.filteredRegionalOffice = value
+  },
+  SET_UNICEF_SECTORS: (state, value) => {
+    state.sectors = value
+  },
   SET_INNOVATION_CATEGORIES: (state, value) => {
     state.innovationCategories = value
+  },
+  SET_REGIONAL_PRIORITIES: (state, value) => {
+    state.regionalPriorities = value
   },
   SET_GOVERNMENT_APPROVED: (state, value) => {
     state.governmentApproved = value
@@ -549,5 +642,8 @@ export const mutations = {
   },
   SET_DASHBOARD_SECTION: (state, section) => {
     state.dashboardSection = section
+  },
+  SET_DATA: (state, { type, value }) => {
+    state[type] = value
   },
 }

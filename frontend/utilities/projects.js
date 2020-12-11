@@ -102,7 +102,8 @@ export const projectFields = () => ({
   target_group_reached: null,
   currency: null,
   total_budget: null,
-  // phase: null,
+  innovation_ways: [],
+  isc: null,
 })
 
 export const draftRules = () => {
@@ -110,11 +111,9 @@ export const draftRules = () => {
     target_group_reached: {},
     currency: {},
     total_budget: {},
-    // phase: {},
     cbd: {},
-    research: {
-      required: false,
-    },
+    innovation_ways: {},
+    isc: {},
     start_date: {
       isDate: true,
     },
@@ -237,9 +236,6 @@ export const publishRules = () => {
     wbs: {
       max: 30,
     },
-    // phase: {
-    //   required: true,
-    // },
     unicef_sector: {
       required: true,
     },
@@ -274,9 +270,6 @@ export const publishRules = () => {
     },
     geographic_scope: {
       max: 1024,
-    },
-    research: {
-      required: false,
     },
     start_date: {
       required: true,

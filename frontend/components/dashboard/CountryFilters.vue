@@ -11,6 +11,12 @@
       :region="selectedRegion"
       :disabled="disabledCountries"
     />
+    <multi-selector
+      v-model="selectedRegionalOffice"
+      :disabled="disabledCountries"
+      :placeholder="$gettext('Multicountry or Regional Office ') | translate"
+      source="getRegionalOffices"
+    />
   </div>
 </template>
 
@@ -21,9 +27,11 @@ import { mapGettersActions } from '../../utilities/form.js'
 
 import CountrySelect from '../common/CountrySelect'
 import RegionSelect from '../common/RegionSelect'
+import MultiSelector from '~/components/project/MultiSelector'
 
 export default {
   components: {
+    MultiSelector,
     CountrySelect,
     CountryOfficeSelect,
     RegionSelect,
@@ -31,11 +39,17 @@ export default {
   computed: {
     ...mapGetters({
       dashboardType: 'dashboard/getDashboardType',
+      regionalOffices: 'projects/getRegionalOffices',
     }),
     ...mapState({
       offices: (state) => state.offices.offices,
     }),
     ...mapGettersActions({
+      selectedRegionalOffice: [
+        'dashboard',
+        'getFilteredRegionalOffice',
+        'setFilteredRegionalOffice',
+      ],
       selectedCountries: [
         'dashboard',
         'getFilteredCountries',
@@ -50,9 +64,7 @@ export default {
     }),
     disabledCountries() {
       return !!(
-        this.selectedCountryOffice &&
-        this.selectedCountryOffice.length > 0 &&
-        this.selectedCountryOffice !== null
+        this.selectedCountryOffice && this.selectedCountryOffice.length > 0
       )
     },
   },
@@ -69,6 +81,9 @@ export default {
       }
     },
     selectedRegion(newRegion) {
+      if (newRegion === '') {
+        this.selectedRegion = null
+      }
       this.selectedCountries = Number.isInteger(newRegion)
         ? this.selectedCountries.filter((c) => c.unicef_region === newRegion.id)
         : this.selectedCountries
@@ -79,6 +94,13 @@ export default {
             .filter((o) => newOffices.includes(o.id))
             .map((c) => c.country)
         : this.offices.filter((o) => newOffices === o.id).map((c) => c.country)
+
+      this.selectedRegionalOffice =
+        newOffices && newOffices.length > 0
+          ? this.offices
+              .filter((o) => newOffices.includes(o.id))
+              .map((c) => c.regional_office)
+          : []
     },
   },
   mounted() {

@@ -92,6 +92,12 @@ export const getters = {
       : [],
   getSectors: (state) =>
     state.projectStructure.sectors ? [...state.projectStructure.sectors] : [],
+  getInfoSec: (state) =>
+    state.projectStructure.isc ? [...state.projectStructure.isc] : [],
+  getInnovationWays: (state) =>
+    state.projectStructure.innovation_ways
+      ? [...state.projectStructure.innovation_ways]
+      : [],
   getRegionalPriorities: (state) =>
     state.projectStructure.regional_priorities
       ? [...state.projectStructure.regional_priorities]
@@ -110,6 +116,8 @@ export const getters = {
       : [],
   getPhases: (state) =>
     state.projectStructure.phases ? [...state.projectStructure.phases] : [],
+  getStages: (state) =>
+    state.projectStructure.stages ? [...state.projectStructure.stages] : [],
   getCpd: (state) =>
     state.projectStructure.cpd ? [...state.projectStructure.cpd] : [],
   getInnovationCategories: (state) =>

@@ -308,6 +308,39 @@
       <el-row :gutter="20" type="flex">
         <el-col :span="24">
           <custom-required-form-item
+            :error="errors.first('innovation_ways')"
+            :draft-rule="draftRules.innovation_ways"
+            :publish-rule="publishRules.innovation_ways"
+          >
+            <template slot="label">
+              <translate key="ways-label">
+                If this is an innovation initiative, in which way is it
+                innovative?
+              </translate>
+            </template>
+            <multi-selector
+              v-model="innovation_ways"
+              v-validate="rules.innovation_ways"
+              data-vv-name="innovation_ways"
+              data-vv-as="Innovation"
+              source="getInnovationWays"
+            />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  Innovation can be defined as a new or significantly improved
+                  solution that accelerates a result for children or young
+                  people and/or increased organizational efficiency.
+                </translate>
+              </p>
+            </span>
+          </custom-required-form-item>
+        </el-col>
+      </el-row>
+      <el-row v-show="!hideInnovationCategories" :gutter="20" type="flex">
+        <el-col :span="24">
+          <custom-required-form-item
             :error="errors.first('innovation_categories')"
             :draft-rule="draftRules.innovation_categories"
             :publish-rule="publishRules.innovation_categories"
@@ -343,6 +376,7 @@
 </template>
 
 <script>
+import find from 'lodash/find'
 import { mapGetters } from 'vuex'
 import { mapGettersActions } from '@/utilities/form'
 // components
@@ -377,6 +411,8 @@ export default {
       getCapabilityLevelsItems: 'projects/getCapabilityLevels',
       getCapabilityCategoriesItems: 'projects/getCapabilityCategories',
       getCapabilitySubcategoriesItems: 'projects/getCapabilitySubcategories',
+      country_office: 'project/getCountryOffice',
+      innovationWays: 'projects/getInnovationWays',
     }),
     ...mapGettersActions({
       goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],
@@ -413,6 +449,7 @@ export default {
         'setRegionalPriorities',
         0,
       ],
+      innovation_ways: ['project', 'getInnovationWays', 'setInnovationWays', 0],
       innovation_categories: [
         'project',
         'getInnovationCategories',
@@ -423,6 +460,17 @@ export default {
     }),
     shoDHAFields() {
       return this.goal_area === 1
+    },
+    hideInnovationCategories() {
+      const na = find(this.innovationWays, ({ name }) => name === 'N/A')
+      return na && this.innovation_ways.includes(na.id)
+    },
+  },
+  watch: {
+    hideInnovationCategories(hide) {
+      if (hide) {
+        this.innovation_categories = []
+      }
     },
   },
   methods: {
