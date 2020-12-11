@@ -77,7 +77,7 @@
             <custom-required-form-item>
               <template slot="label">
                 <translate key="stages">
-                  Set current and previous stages of initiative
+                  Set the completed phases for this initiative
                 </translate>
               </template>
               <el-col
