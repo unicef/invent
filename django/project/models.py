@@ -394,10 +394,6 @@ class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrdered
         ordering = ['health_category__name', 'name']
 
 
-class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pre = models.CharField(max_length=255)
-
-
 class ApprovalState(models.Model):
     APPROVED = 1
     PENDING = 2
@@ -478,18 +474,6 @@ def process_approval_states(sender, instance, created, **kwargs):
             notify_user_about_approval.apply_async(args=('decline', instance._meta.model_name, instance.pk,))
         elif instance.state == ApprovalState.APPROVED:
             notify_user_about_approval.apply_async(args=('approve', instance._meta.model_name, instance.pk,))
-
-
-class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
-
-
-class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
-
-
-class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
 
 
 class UNICEFResultArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
