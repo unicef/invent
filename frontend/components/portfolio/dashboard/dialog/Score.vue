@@ -161,6 +161,7 @@
                   :key="i.id"
                   :label="i.name"
                   :value="i.id"
+                  class="statement-options"
                 />
               </el-select>
               <el-select
@@ -434,6 +435,14 @@ export default {
         .select-psa {
           input {
             width: 250px;
+          }
+          .el-select__tags-text {
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            vertical-align: middle;
           }
         }
         .question-icon {

@@ -10,6 +10,7 @@
       :key="item.id"
       :label="item.name"
       :value="item.id"
+      :class="optionClass"
     >
     </el-option>
   </el-select>
@@ -22,13 +23,15 @@ export default {
       type: Array,
       required: true,
     },
+    optionClass: {
+      type: String,
+      default: '',
+    },
   },
 }
 </script>
 
 <style lang="less" scoped>
-// @import '~assets/style/variables.less';
-// @import '~assets/style/mixins.less';
 .select {
   width: 100%;
 }
