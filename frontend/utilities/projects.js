@@ -104,6 +104,7 @@ export const projectFields = () => ({
   total_budget: null,
   innovation_ways: [],
   isc: null,
+  phase: null,
 })
 
 export const draftRules = () => {
