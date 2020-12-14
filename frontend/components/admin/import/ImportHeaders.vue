@@ -80,6 +80,11 @@ const blackList = [
   'coverageType',
   'coverage_second_level',
   'interoperability_links',
+  // New invent fields
+  'innovation_ways',
+  'isc',
+  'end_date_note',
+  'research',
 ]
 
 export default {
