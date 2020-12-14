@@ -814,7 +814,6 @@
         "Other Documents/Resources "
     ],
     "Phase of Initiative": [
-        "N/A",
         "Opportunity and Ideation",
         "Preparation and Scoping",
         "Analysis and Design",
@@ -825,9 +824,7 @@
         "Deploying",
         "Scaling Up",
         "Handover or Complete",
-        "Under Review",
-        "Discontinued",
-        "External"
+        "Discontinued"
     ],
     "Partner Type": [
         "Investment",
