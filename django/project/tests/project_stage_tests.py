@@ -30,18 +30,19 @@ class ProjectStageTests(SetupTests):
         self.assertIn("end_date_note", response.json()['draft'])
 
         # add stage without date
-        # stages = [
-        #     {
-        #         'id': 3,
-        #         'date': None,
-        #         'note': None
-        #     }
-        # ]
-        # data['project']['stages'] = stages
-        # url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country_id})
-        # response = self.test_user_client.put(url, data, format="json")
-        # self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
-        # self.assertEqual(response.json(), {'project': {'stages': [{'date': ['This field may not be null.']}]}})
+        stages = [
+            {
+                'id': 3,
+                'date': None,
+                'note': None
+            }
+        ]
+        data['project']['stages'] = stages
+        url = reverse("project-draft", kwargs={"project_id": project_id,
+                                               "country_office_id": self.country_office.id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(response.json(), {'project': {'stages': [{'date': ['This field may not be null.']}]}})
 
         # add stages
         stages = [
