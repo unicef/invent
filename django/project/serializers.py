@@ -123,6 +123,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     stages = StageSerializer(many=True, required=False, allow_empty=True)
+    phase = serializers.IntegerField()
 
     class Meta:
         model = Project
