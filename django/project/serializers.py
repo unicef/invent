@@ -44,7 +44,7 @@ class LinkSerializer(serializers.Serializer):
 
 class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
-    date = serializers.CharField(required=False, max_length=10, allow_null=True)
+    date = serializers.CharField(required=True, max_length=10)
     note = serializers.CharField(required=False, max_length=256, allow_null=True)
 
 
