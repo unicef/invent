@@ -34,10 +34,17 @@ export const defaultSelectedColumns = () => [
   '13',
   '14',
   '15',
-  '16',
-  '17',
+  '18',
+  '19',
   '20',
-  '30',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '40',
+  '41',
 ]
 
 export const state = () => ({
@@ -82,6 +89,96 @@ export const state = () => ({
   programmePlatforms: [],
   platformFunctions: [],
   informationSecurity: null,
+  // to track col with projects keys
+  // we don't track these keys
+  // approved
+  // country_answers
+  // country_custom_answers
+  // country_custom_answers_private
+  // donor_answers
+  // donor_custom_answers
+  // donor_custom_answers_private
+  // favorite
+  // hsc_challenges
+  // id
+  // innovation_categories
+  // organisation
+  // platforms
+  mapColKeys: [
+    { id: '1', label: 'Project name', key: 'name' },
+    { id: '2', label: 'Country', key: 'country' },
+    { id: '3', label: 'Last updated', key: 'modified' },
+    { id: '4', label: 'Unicef Office', key: 'country_office' },
+    { id: '5', label: 'Region', key: 'region' },
+    { id: '6', label: 'Investor', key: 'donors' },
+    {
+      id: '7',
+      label: 'Programme Focal Point Name',
+      key: ['contact_name', 'contact_email'],
+    },
+    {
+      id: '8',
+      label: 'Initiative Description',
+      key: 'implementation_overview',
+    },
+    {
+      id: '10',
+      label: 'Health Focus Areas',
+      key: 'health_focus_areas',
+    },
+    { id: '11', label: 'Goal Area', key: 'goal_area' },
+    { id: '12', label: 'Result Area', key: 'result_area' },
+    {
+      id: '13',
+      label: 'Capability Levels',
+      key: 'capability_levels',
+    },
+    {
+      id: '14',
+      label: 'Capability Categories',
+      key: 'capability_categories',
+    },
+    {
+      id: '15',
+      label: 'Capability Subcategories',
+      key: 'capability_subcategories',
+    },
+    {
+      id: '18',
+      label: 'Multicountry or Regional Office',
+      key: 'regional_office',
+    },
+    { id: '19', label: 'UNICEF Sector', key: 'unicef_sector' },
+    {
+      id: '20',
+      label: 'Innovation Ways',
+      key: 'innovation_ways',
+    },
+    { id: '21', label: 'Phase of Initiative', key: 'stages' },
+    { id: '22', label: 'Hardware platform(s)', key: 'hardware' },
+    {
+      id: '23',
+      label: 'Non-technology platform(s)',
+      key: 'nontech',
+    },
+    {
+      id: '24',
+      label: 'Platform/Product Function',
+      key: 'functions',
+    },
+    { id: '25', label: 'Information security classification', key: 'isc' },
+    {
+      id: '26',
+      label: 'Regional priority(ies)',
+      key: 'regional_priorities',
+    },
+    {
+      id: '40',
+      label: 'Questionnaires Assigned',
+      key: 'questionnaires_assigned',
+    },
+    { id: '41', label: 'Scoring', key: 'scoring' },
+  ],
 })
 export const getters = {
   ...gettersGenerator(),
@@ -493,9 +590,9 @@ export const mutations = {
   SET_DASHBOARD_COLUMNS: (state, columns) => {
     state.columns = [
       ...columns,
-      // todo: set this columns
-      { id: 20, label: 'Questionnaires Assigned' },
-      { id: 30, label: 'Scoring' },
+      // todo: set this columns on the backend
+      { id: 40, label: 'Questionnaires Assigned' },
+      { id: 41, label: 'Scoring' },
     ]
   },
   SET_PROJECT_LIST: (state, projects) => {
@@ -512,7 +609,6 @@ export const mutations = {
     state.pageSize = options.page_size ? +options.page_size : 10
     state.page = options.page ? +options.page : 1
     state.sorting = options.ordering ? options.ordering : null
-    console.log(state.searchString)
     state.searchString = options.q ? options.q : ''
     state.searchIn = options.in ? options.in : searchIn()
     state.filteredCountries = intArrayFromQs(options.country)

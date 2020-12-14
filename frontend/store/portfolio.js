@@ -113,6 +113,9 @@ export const state = () => ({
   ],
   // pagination
   total: 0,
+  // selection
+  selectedRows: [],
+  selectAll: false,
 })
 
 export const getters = {
@@ -124,6 +127,8 @@ export const getters = {
   getStatements: (state) => state.problemStatements,
   getLoading: (state) => state.loading,
   getPortfolios: (state) => state.portfolios,
+  getSelectedRows: (state) => state.selectedRows,
+  getSelectAll: (state) => state.selectAll,
 }
 
 export const actions = {
@@ -297,7 +302,9 @@ export const actions = {
     // set favorite
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
-    // pagination
+    // pagination and initial set
+    commit('SET_SELECT_ALL', false)
+    commit('SET_SELECTED_ROWS', [])
     commit('SET_VALUE', { key: 'total', val: count })
     // projects
     commit('SET_VALUE', {
@@ -405,6 +412,15 @@ export const actions = {
     commit('SET_VALUE', { key: 'managers', val: [] })
     commit('SET_VALUE', { key: 'problemStatements', val: [] })
   },
+  setSelectedRows({ commit, state }, rows) {
+    if (state.selectAll && state.selectedRows.length > rows.length) {
+      commit('SET_SELECT_ALL', false)
+    }
+    commit('SET_SELECTED_ROWS', rows)
+  },
+  setSelectAll({ commit }, all) {
+    commit('SET_SELECT_ALL', all)
+  },
 }
 
 export const mutations = {
@@ -437,6 +453,12 @@ export const mutations = {
   },
   SET_TAB: (state, tab) => {
     state.tab = tab
+  },
+  SET_SELECT_ALL: (state, all) => {
+    state.selectAll = all
+  },
+  SET_SELECTED_ROWS: (state, rows) => {
+    state.selectedRows = rows
   },
 }
 

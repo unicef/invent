@@ -151,9 +151,11 @@
 
 <script>
 import filter from 'lodash/filter'
+import flatten from 'lodash/flatten'
+import pick from 'lodash/pick'
 import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 import ListExport from '@/components/dashboard/ListExport'
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import ProjectLegend from '../common/ProjectLegend'
 import PdfExport from './PdfExport'
 
@@ -175,6 +177,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      mapColKeys: (state) => state.dashboard.mapColKeys,
+    }),
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
       selectedCol: 'dashboard/getSelectedColumns',
@@ -185,6 +190,8 @@ export default {
       projects: 'dashboard/getProjectsBucket',
       dashboardId: 'dashboard/getDashboardId',
       dashboardType: 'dashboard/getDashboardType',
+      getAllColumns: 'dashboard/getAllColumns',
+      getAvailableColumns: 'dashboard/getAvailableColumns',
     }),
     settingsTitle() {
       return `${this.$gettext('main fields')} (${this.selectedCol.length}/${
@@ -195,11 +202,20 @@ export default {
       return this.allSelected ? this.total : this.selectedRows.length
     },
     rowToExport() {
-      return this.allSelected
+      let projects = this.allSelected
         ? this.projects
         : this.projects.filter((p) =>
             this.selectedRows.some((sr) => sr === p.id)
           )
+      let selectedCols = []
+      this.mapColKeys.forEach((i) => {
+        if (this.selectedCol.includes(i.id)) selectedCols.push(i.key)
+      })
+      selectedCols = flatten(selectedCols)
+      projects = projects.map((i) => {
+        return pick(i, selectedCols)
+      })
+      return projects
     },
     showEmailButton() {
       const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA']
@@ -237,7 +253,7 @@ export default {
       }
     },
     popperOpenHandler() {
-      const colFilter = (hide = ['20', '30']) =>
+      const colFilter = (hide = ['40', '41']) =>
         filter(columns, (c) => !hide.includes(c.id))
       const columns = [...this.columns.map((s) => ({ ...s }))]
       this.selectedColumns = colFilter()

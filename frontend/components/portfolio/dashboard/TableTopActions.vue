@@ -59,7 +59,6 @@
           >
             <fa icon="cog" />
           </el-button>
-
           <div class="CustomPopoverList Small ColumnSelector">
             <ul class="ColumnList">
               <li
@@ -132,7 +131,8 @@
 
 <script>
 import filter from 'lodash/filter'
-
+import flatten from 'lodash/flatten'
+import pick from 'lodash/pick'
 import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 // import PdfExport from '@/components/dashboard/PdfExport'
 import ListExport from '@/components/dashboard/ListExport'
@@ -168,15 +168,12 @@ export default {
       forward: (state) => state.portfolio.forward,
       total: (state) => state.portfolio.total,
       portfolioPage: (state) => state.search.filter.portfolio_page,
+      mapColKeys: (state) => state.dashboard.mapColKeys,
+      projects: (state) => state.portfolio.projects,
     }),
     ...mapGetters({
-      selectedRows: 'dashboard/getSelectedRows',
-      allSelected: 'dashboard/getSelectAll',
-      // user: "user/getProfile",
-      projects: 'dashboard/getProjectsBucket',
-      // dashboardId: "dashboard/getDashboardId",
-      // dashboardType: "dashboard/getDashboardType",
-      // settings
+      selectedRows: 'portfolio/getSelectedRows',
+      allSelected: 'portfolio/getSelectAll',
       columns: 'dashboard/getAvailableColumns',
       selectedCol: 'dashboard/getSelectedColumns',
     }),
@@ -187,11 +184,20 @@ export default {
       return this.selectedRows.length === 0
     },
     rowToExport() {
-      return this.allSelected
+      let projects = this.allSelected
         ? this.projects
         : this.projects.filter((p) =>
             this.selectedRows.some((sr) => sr === p.id)
           )
+      let selectedCols = []
+      this.mapColKeys.forEach((i) => {
+        if (this.selectedCol.includes(i.id)) selectedCols.push(i.key)
+      })
+      selectedCols = flatten(selectedCols)
+      projects = projects.map((i) => {
+        return pick(i, selectedCols)
+      })
+      return projects
     },
     // settings
     settingsTitle() {
@@ -202,16 +208,14 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSelectAll: 'dashboard/setSelectAll',
-      loadProjectsBucket: 'dashboard/loadProjectsBucket',
-      setSelectedRows: 'dashboard/setSelectedRows',
+      setSelectAll: 'portfolio/setSelectAll',
+      setSelectedRows: 'portfolio/setSelectedRows',
       moveToState: 'portfolio/moveToState',
       // settings
       setSelectedColumns: 'dashboard/setSelectedColumns',
     }),
-    async toggleSelectAll() {
+    toggleSelectAll() {
       if (!this.allSelected) {
-        await this.loadProjectsBucket()
         this.setSelectAll(true)
       } else {
         this.setSelectAll(false)
@@ -286,7 +290,7 @@ export default {
     },
     // settings
     popperOpenHandler() {
-      const colFilter = (hide = ['20', '30']) =>
+      const colFilter = (hide = ['40', '41']) =>
         filter(columns, (c) => !hide.includes(c.id))
       const columns = [...this.columns.map((s) => ({ ...s }))]
       if (this.$route.name.includes('organisation-portfolio-management-id')) {
@@ -295,7 +299,7 @@ export default {
             this.selectedColumns = columns
             break
           case 'portfolio':
-            this.selectedColumns = colFilter(['20'])
+            this.selectedColumns = colFilter(['40'])
             break
           default:
             this.selectedColumns = colFilter()
