@@ -290,7 +290,7 @@
               data-vv-name="regional_priorities"
               data-vv-as="Regional Priorities"
               source="getRegionalPriorities"
-              :filter="country_office"
+              :filter="officeRegion"
             />
             <span class="Hint">
               <fa icon="info-circle" />
@@ -378,7 +378,7 @@
 
 <script>
 import find from 'lodash/find'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { mapGettersActions } from '@/utilities/form'
 // components
 import MultiSelector from '@/components/project/MultiSelector'
@@ -406,6 +406,9 @@ export default {
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
+    ...mapState({
+      offices: (state) => state.offices.offices,
+    }),
     ...mapGetters({
       modified: 'project/getModified',
       selectedGoalArea: 'project/getGoalAreaDetails',
@@ -465,6 +468,10 @@ export default {
     hideInnovationCategories() {
       const na = find(this.innovationWays, ({ name }) => name === 'N/A')
       return na && this.innovation_ways.includes(na.id)
+    },
+    officeRegion() {
+      const office = find(this.offices, ({ id }) => this.country_office === id)
+      return office ? office.region : null
     },
   },
   watch: {
