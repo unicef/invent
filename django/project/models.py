@@ -690,4 +690,3 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = '[DEPRECATED] Phase of Initiative'
-
