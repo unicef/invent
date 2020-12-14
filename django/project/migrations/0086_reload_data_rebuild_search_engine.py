@@ -3,6 +3,10 @@ from django.core.management import call_command
 from django.db import migrations
 
 
+def update_translation_fields(apps, schema_editor):
+    call_command('update_translation_fields')
+
+
 def add_taxonomies(apps, schema_editor):
     call_command('add_taxonomies', '--verbosity', 0)
 
@@ -27,6 +31,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(update_translation_fields, reverse_code=migrations.RunPython.noop),
         migrations.RunPython(add_taxonomies, reverse_code=migrations.RunPython.noop),
         migrations.RunPython(rebuild_search, reverse_code=migrations.RunPython.noop),
         migrations.RunPython(reorder_stages, reverse_code=migrations.RunPython.noop),
