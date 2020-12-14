@@ -273,7 +273,7 @@ class StageAdmin(SortableAdminMixin, AllObjectsAdmin):
     pass
 
 
-class PhaseAdmin(admin.ModelAdmin):
+class PhaseAdmin(ViewOnlyPermissionMixin, admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
