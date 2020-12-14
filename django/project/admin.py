@@ -248,6 +248,7 @@ class RegionalPriorityAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
     list_display = ['name', 'region']
 
+
 class InnovationCategoryAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
 
