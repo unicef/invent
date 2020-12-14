@@ -685,3 +685,9 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+
+class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = '[DEPRECATED] Phase of Initiative'
+
