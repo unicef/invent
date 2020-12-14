@@ -53,7 +53,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('20') && tab === 2"
+        v-if="selectedColumns.includes('40') && tab === 2"
         :resizable="false"
         :label="$gettext('Questionnaires Assigned') | translate"
         sortable="custom"
@@ -400,8 +400,8 @@ export default {
     }),
     ...mapGetters({
       selectedColumns: 'dashboard/getSelectedColumns',
-      selectedRows: 'dashboard/getSelectedRows',
-      selectAll: 'dashboard/getSelectAll',
+      selectedRows: 'portfolio/getSelectedRows',
+      selectAll: 'portfolio/getSelectAll',
       countryColumns: 'dashboard/getCountryColumns',
       donorColumns: 'dashboard/getDonorColumns',
       getCapabilityLevels: 'projects/getCapabilityLevels',
@@ -420,7 +420,7 @@ export default {
     scoringDisplay() {
       if (this.$route.name.includes('organisation-portfolio-management-id')) {
         return (
-          this.selectedColumns.includes('30') &&
+          this.selectedColumns.includes('41') &&
           (this.tab === 2 || this.tab === 3)
         )
       }
@@ -480,7 +480,7 @@ export default {
       setSearch: 'search/SET_SEARCH',
     }),
     ...mapActions({
-      setSelectedRows: 'dashboard/setSelectedRows',
+      setSelectedRows: 'portfolio/setSelectedRows',
       loadOffices: 'offices/loadOffices',
       getSearch: 'search/getSearch',
       addFavorite: 'projects/addFavorite',

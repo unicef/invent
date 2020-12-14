@@ -1,6 +1,8 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import pickBy from 'lodash/pickBy'
+import pick from 'lodash/pick'
+import flatten from 'lodash/flatten'
 
 export default {
   props: {
@@ -12,6 +14,7 @@ export default {
   computed: {
     ...mapState({
       offices: (state) => state.offices.offices,
+      mapColKeys: (state) => state.dashboard.mapColKeys,
     }),
     ...mapGetters({
       getCountryDetails: 'countries/getCountryDetails',
@@ -28,6 +31,7 @@ export default {
       regions: 'system/getUnicefRegions',
       platforms: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
+      selectedCol: 'dashboard/getSelectedColumns',
     }),
     parsed() {
       if (
@@ -71,7 +75,16 @@ export default {
           country_answers: undefined,
           donor_answers: undefined,
         }
-        return pickBy(parsed, (v) => v !== undefined && v !== null)
+        let selectedCols = []
+        this.mapColKeys.forEach((i) => {
+          if (this.selectedCol.includes(i.id)) selectedCols.push(i.key)
+        })
+        selectedCols = flatten(selectedCols)
+
+        return pick(
+          pickBy(parsed, (v) => v !== undefined && v !== null),
+          selectedCols
+        )
       })
     },
   },
