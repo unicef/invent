@@ -10,8 +10,8 @@
     <div class="content">
       <p>
         <translate>
-          You are not able to move the selected project(s) to portfolio, because
-          some of them have not been reviewd yet.
+          You are not able to move the selected initiative(s) to portfolio,
+          because some of them have not been reviewd yet.
         </translate>
       </p>
       <p>

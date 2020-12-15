@@ -278,6 +278,7 @@
           <donors-list :value="scope.row.donors" :limit="3" show-icon />
         </template>
       </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('7')"
         :resizable="false"
@@ -295,6 +296,7 @@
           </a>
         </template>
       </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('8')"
         :resizable="false"

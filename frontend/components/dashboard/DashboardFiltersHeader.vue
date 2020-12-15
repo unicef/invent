@@ -2,7 +2,7 @@
   <div class="DashboardFiltersHeader">
     <span class="ProjectToShow">
       <translate :parameters="{ total }">
-        {total} project(s) to show
+        {total} initiative(s) to show
       </translate>
     </span>
     <!-- <el-button class="ToggleFiltersButton">
