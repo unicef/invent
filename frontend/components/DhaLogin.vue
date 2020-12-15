@@ -236,7 +236,7 @@ export default {
       )
       if (this.$sentry) {
         this.$sentry.captureMessage(
-          'Un-caught validation error in project page',
+          'Un-caught validation error in initiative page',
           {
             level: 'warning',
             extra: {

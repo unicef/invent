@@ -32,6 +32,18 @@ export default {
       platforms: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
       selectedCol: 'dashboard/getSelectedColumns',
+      // new fields
+      getSectors: 'projects/getSectors',
+      getRegionalPriorities: 'projects/getRegionalPriorities',
+      getInnovationWays: 'projects/getInnovationWays',
+      getInnovationCategories: 'projects/getInnovationCategories',
+      getStages: 'projects/getStages',
+      getHardware: 'projects/getHardware',
+      getNontech: 'projects/getNontech',
+      getFunctions: 'projects/getFunctions',
+      // single new field
+      getRegionalOffices: 'projects/getRegionalOffices',
+      getInfoSec: 'projects/getInfoSec',
     }),
     parsed() {
       if (
@@ -74,13 +86,30 @@ export default {
           platforms: undefined,
           country_answers: undefined,
           donor_answers: undefined,
+          // new fields
+          regional_office: this.parseList(this.getRegionalOffices, [
+            s.regional_office,
+          ]),
+          unicef_sector: this.parseList(this.getSectors, s.unicef_sector),
+          innovation_ways: this.parseList(
+            this.getInnovationWays,
+            s.innovation_ways
+          ),
+          stages: this.parseList(this.getStages, s.stages),
+          hardware: this.parseList(this.getHardware, s.hardware),
+          nontech: this.parseList(this.getNontech, s.nontech),
+          functions: this.parseList(this.getFunctions, s.functions),
+          isc: this.parseList(this.getInfoSec, [s.isc]),
+          regional_priorities: this.parseList(
+            this.getRegionalPriorities,
+            s.regional_priorities
+          ),
         }
         let selectedCols = []
         this.mapColKeys.forEach((i) => {
           if (this.selectedCol.includes(i.id)) selectedCols.push(i.key)
         })
         selectedCols = flatten(selectedCols)
-
         return pick(
           pickBy(parsed, (v) => v !== undefined && v !== null),
           selectedCols
@@ -103,6 +132,12 @@ export default {
         console.warn(e)
         return ''
       }
+    },
+    parseList(list, filter) {
+      return list
+        .filter((tp) => filter.includes(tp.id))
+        .map((i) => i.name)
+        .join(', ')
     },
     parseSingleSelection(id, type) {
       try {

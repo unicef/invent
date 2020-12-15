@@ -8,7 +8,7 @@
       </li>
       <li>
         <translate key="g-item-list-2">
-          Can view when a project is approved/declined
+          Can view when a initiative is approved/declined
         </translate>
       </li>
     </template>

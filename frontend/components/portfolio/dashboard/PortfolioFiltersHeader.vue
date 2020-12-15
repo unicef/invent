@@ -3,7 +3,7 @@
     <fa icon="bars" size="sm" />
     <p>
       <b>{{ total }}</b>
-      <translate>project(s) to show</translate>
+      <translate>initiative(s) to show</translate>
     </p>
   </div>
 </template>

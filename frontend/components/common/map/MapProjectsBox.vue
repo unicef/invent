@@ -11,7 +11,7 @@
           <span class="SubLevelItem" />
           <span class="SubLevelCounter">
             <translate :parameters="{ count: nationalProjects.length }">
-              &nbsp; {count} project(s)
+              &nbsp; {count} initiative(s)
             </translate>
           </span>
         </div>
