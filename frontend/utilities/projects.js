@@ -105,6 +105,7 @@ export const projectFields = () => ({
   innovation_ways: [],
   isc: null,
   phase: null,
+  stages: [],
 })
 
 export const draftRules = () => {

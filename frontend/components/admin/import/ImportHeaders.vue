@@ -85,6 +85,7 @@ const blackList = [
   'isc',
   'end_date_note',
   'research',
+  'stages',
 ]
 
 export default {
