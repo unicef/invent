@@ -56,7 +56,7 @@ class ListResultSerializer(serializers.Serializer):
     end_date = serializers.ReadOnlyField(source="project.data.end_date")
     target_group_reached = serializers.ReadOnlyField(source="project.data.target_group_reached")
     program_targets = serializers.ReadOnlyField(source="project.data.program_targets")
-    program_targets_achieved = serializers.ReadOnlyField(source="project.data.program_targets_archieved")
+    program_targets_achieved = serializers.ReadOnlyField(source="project.data.program_targets_achieved")
     awp = serializers.ReadOnlyField(source="project.data.awp")
     currency = serializers.SerializerMethodField()
     current_achievements = serializers.ReadOnlyField(source="project.data.current_achievements")
