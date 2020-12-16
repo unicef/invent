@@ -101,15 +101,18 @@ class ListResultSerializer(serializers.Serializer):
             return CPD.objects.filter(id__in=obj.project.data.get('cpd')).values_list('name', flat=True)
 
     def get_links(self, obj):
-        if 'links' in obj.project.data:
-            return [f"{LinkSerializer.LINK_TYPE[x['link_type']][1]}: {x['link_url']}"
-                    for x in obj.project.data.get('links')]
+        if obj.project.data.get('links'):
+            return [f"{LinkSerializer.LINK_TYPE[x['link_type']][1]}: {x.get('link_url')}"
+                    for x in obj.project.data.get('links') if x.get('link_url')]
 
     def get_partners(self, obj):
-        if 'partners' in obj.project.data:
-            return [f"{PartnerSerializer.PARTNER_TYPE[p['partner_type']][1]}, {p.get('partner_name')}, "
-                    f"{p.get('partner_email')}, {p.get('partner_contact')}, {p.get('partner_website')}"
-                    for p in obj.project.data.get('partners')]
+        partners_list = []
+        if obj.project.data.get('partners'):
+            for p in obj.project.data.get('partners'):
+                data = [str(PartnerSerializer.PARTNER_TYPE[p.pop('partner_type')][1])]
+                data.extend(p.values())
+                partners_list.append(", ".join(data))
+        return partners_list
 
 
 class PortfolioResultSerializer(ListResultSerializer):
