@@ -106,6 +106,7 @@ export const projectFields = () => ({
   isc: null,
   phase: null,
   stages: [],
+  stagesDraft: null,
 })
 
 export const draftRules = () => {
