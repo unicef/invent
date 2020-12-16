@@ -90,7 +90,7 @@
         </ul>
       </div>
 
-      <div v-if="isTeam || isNewProject" class="NavigationActions">
+      <div v-if="isTeam || isNewProject || isSuper" class="NavigationActions">
         <el-button
           v-if="isDraft"
           :disabled="!!loading"
@@ -239,6 +239,9 @@ export default {
       }
       return false
     },
+    isSuper() {
+      return this.user && this.user.is_superuser
+    },
     project() {
       return this.isDraft || this.isReadOnlyDraft || this.isNewProject
         ? this.draft
@@ -283,9 +286,10 @@ export default {
       })
     },
     goToDraft() {
-      const name = this.isTeam
-        ? 'organisation-initiatives-id-edit'
-        : 'organisation-initiatives-id'
+      const name =
+        this.isTeam || this.isSuper
+          ? 'organisation-initiatives-id-edit'
+          : 'organisation-initiatives-id'
       const localised = this.localePath({
         name,
         params: { ...this.$route.params },
