@@ -25,7 +25,7 @@ export const defaultSelectedColumns = () => [
   '3',
   '4',
   '5',
-  '6',
+  // '6',
   '7',
   '8',
   '10',
@@ -43,6 +43,7 @@ export const defaultSelectedColumns = () => [
   '24',
   '25',
   '26',
+  '27',
   '40',
   '41',
 ]
@@ -103,14 +104,13 @@ export const state = () => ({
   // id
   // innovation_categories
   // organisation
-  // platforms
   mapColKeys: [
     { id: '1', label: 'Project name', key: 'name' },
     { id: '2', label: 'Country', key: 'country' },
     { id: '3', label: 'Last updated', key: 'modified' },
     { id: '4', label: 'Unicef Office', key: 'country_office' },
     { id: '5', label: 'Region', key: 'region' },
-    { id: '6', label: 'Investor', key: 'donors' },
+    // { id: '6', label: 'Investor', key: 'donors' },
     {
       id: '7',
       label: 'Programme Focal Point Name',
@@ -171,6 +171,11 @@ export const state = () => ({
       id: '26',
       label: 'Regional priority(ies)',
       key: 'regional_priorities',
+    },
+    {
+      id: '27',
+      label: 'Software Platforms(s)',
+      key: 'platforms',
     },
     {
       id: '40',
@@ -591,6 +596,7 @@ export const mutations = {
     state.columns = [
       ...columns,
       // todo: set this columns on the backend
+      { id: 27, label: 'Software Platforms(s)' },
       { id: 40, label: 'Questionnaires Assigned' },
       { id: 41, label: 'Scoring' },
     ]

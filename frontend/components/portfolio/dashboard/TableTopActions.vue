@@ -290,7 +290,7 @@ export default {
     },
     // settings
     popperOpenHandler() {
-      const colFilter = (hide = ['40', '41']) =>
+      const colFilter = (hide = ['40', '41', '6']) =>
         filter(columns, (c) => !hide.includes(c.id))
       const columns = [...this.columns.map((s) => ({ ...s }))]
       if (this.$route.name.includes('organisation-portfolio-management-id')) {
@@ -361,5 +361,10 @@ export default {
       }
     }
   }
+}
+
+.ColumnList {
+  max-height: 260px;
+  overflow-y: scroll;
 }
 </style>

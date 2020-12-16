@@ -253,7 +253,7 @@ export default {
       }
     },
     popperOpenHandler() {
-      const colFilter = (hide = ['40', '41']) =>
+      const colFilter = (hide = ['40', '41', '6']) =>
         filter(columns, (c) => !hide.includes(c.id))
       const columns = [...this.columns.map((s) => ({ ...s }))]
       this.selectedColumns = colFilter()
@@ -401,5 +401,10 @@ export default {
       }
     }
   }
+}
+
+.ColumnList {
+  max-height: 260px;
+  overflow-y: scroll;
 }
 </style>

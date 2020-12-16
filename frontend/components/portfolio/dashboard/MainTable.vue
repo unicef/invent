@@ -302,7 +302,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column
+      <!-- <el-table-column
         v-if="selectedColumns.includes('6')"
         :resizable="false"
         :label="$gettext('Investors') | translate"
@@ -311,7 +311,7 @@
         <template slot-scope="scope">
           <donors-list :value="scope.row.donors" :limit="3" show-icon />
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column
         v-if="selectedColumns.includes('7')"
@@ -399,7 +399,7 @@
           $gettext('Programme Innovation/Non-Technology Platforms') | translate
         "
         sortable="custom"
-        width="180"
+        width="300"
       >
         <template slot-scope="scope">
           <platforms-list
@@ -415,7 +415,7 @@
         :resizable="false"
         :label="$gettext('Platform/Product Function') | translate"
         sortable="custom"
-        width="180"
+        width="250"
       >
         <template slot-scope="scope">
           <platforms-list
@@ -427,11 +427,27 @@
       </el-table-column>
 
       <el-table-column
+        v-if="selectedColumns.includes('27')"
+        :resizable="false"
+        :label="$gettext('Software Platforms(s)') | translate"
+        sortable="custom"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <platforms-list
+            class="SimpleList"
+            :platforms="scope.row.platforms"
+            source="getTechnologyPlatforms"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
         v-if="selectedColumns.includes('25')"
         :resizable="false"
         :label="$gettext('Information Security Classification') | translate"
         sortable="custom"
-        width="180"
+        width="220"
       >
         <template slot-scope="scope">
           <list-element
