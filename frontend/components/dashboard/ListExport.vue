@@ -60,7 +60,7 @@ export default {
           country_office: s.country_office
             ? this.offices.find((obj) => obj.id === s.country_office).name || ''
             : '',
-          investors: this.parseDonors(s.donors),
+          // investors: this.parseDonors(s.donors),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
           capability_levels: this.parseFlatList(
@@ -78,12 +78,12 @@ export default {
           goal_area: this.parseSingleSelection(s.goal_area, 'goalAreas'),
           result_area: this.parseSingleSelection(s.result_area, 'resultAreas'),
           region: this.parseSingleSelection(s.region, 'regions'),
-          software: this.parseFlatList(s.platforms, 'platforms'),
+          // software: this.parseFlatList(s.platforms, 'platforms'),
           approved: this.parseBoolean(s.approved),
           ...this.parseCustomQuestions(s.donor_answers),
           donors: undefined,
           organisation: undefined,
-          platforms: undefined,
+          platforms: this.parseFlatList(s.platforms, 'platforms'),
           country_answers: undefined,
           donor_answers: undefined,
           // new fields
