@@ -40,7 +40,7 @@ export const getters = {
   getEndDateNote: (state) => state.end_date_note,
   getStages: (state) => state.stages,
   getStagesDraft: (state, getters, rootState) => {
-    if (!('stagesDraft' in state)) {
+    if (!state.stagesDraft) {
       // initial set
       if ('stages' in rootState.projects.projectStructure) {
         return rootState.projects.projectStructure.stages.map((item) => {
@@ -219,6 +219,8 @@ export const actions = {
       ])
     }
     commit('INIT_PROJECT', clean)
+    commit('SET_STAGES_DRAFT', null)
+    dispatch('loadStagesDraft')
     commit('SET_TEAM', clean.team)
     commit('SET_VIEWERS', clean.viewers)
   },
@@ -696,6 +698,8 @@ export const mutations = {
     state.phase = get(project, 'phase', null)
     state.isc = get(project, 'isc', null)
     state.innovation_ways = get(project, 'innovation_ways', [])
+    state.stages = get(project, 'stages', [])
+    state.stagesDraft = get(project, 'stagesDraft', null)
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project
