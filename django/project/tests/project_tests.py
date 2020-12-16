@@ -1,8 +1,11 @@
 import copy
-from datetime import datetime
-
+import random
 import mock
 import pytz
+
+from datetime import datetime
+
+from django.test import override_settings
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
@@ -1110,3 +1113,40 @@ class ProjectTests(SetupTests):
 
         notify_user_about_approval.assert_called_once_with(args=('decline', 
                                                                  software_2._meta.model_name, software_2.pk))
+
+    @override_settings(MIGRATE_PHASES=True)
+    @mock.patch('project.utils.ID_MAP', {"3": 1, "4": 2, "5": 3, "6": 4, "7": 5, "8": 6})
+    def test_phases_are_migrated_to_stages(self):
+        ID_MAP = {"3": 1, "4": 2, "5": 3, "6": 4, "7": 5, "8": 6}
+
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
+        data = copy.deepcopy(self.project_data)
+        non_migratable_phase = 1
+        data['project'].update(dict(
+            name="Test Project4",
+            phase=non_migratable_phase
+        ))
+        data['project'].pop('stages', None)
+        self.assertFalse(str(non_migratable_phase) in ID_MAP)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        # we have deleted the ignorable phase
+        self.assertTrue('stages' not in response.json()['draft'])
+        self.assertTrue('phase' not in response.json()['draft'])
+        self.assertFalse(response.json()['published'])
+
+        migratable_phase = random.choice(list(ID_MAP.keys()))
+        data['project'].update(dict(
+            name="Test Project5",
+            phase=int(migratable_phase)
+        ))
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        # we have migrated the migratable phase
+        self.assertTrue('stages' in response.json()['draft'])
+        self.assertTrue('phase' not in response.json()['draft'])
+        self.assertFalse(response.json()['published'])
+        self.assertEqual(response.json()['draft']['stages'], [dict(id=ID_MAP[migratable_phase], 
+                                                                   date=response.json()['draft']['modified'])])
