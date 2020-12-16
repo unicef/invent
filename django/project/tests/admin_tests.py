@@ -134,38 +134,6 @@ class TestAdmin(TestCase):
         self.assertFalse(pa.get_published(p))
         self.assertFalse(pa.has_add_permission(self.request))
 
-    def test_project_admin_queryset(self):
-        pa = ProjectAdmin(Project, self.site)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-
-        country = Country.objects.get(id=1)
-        country_id = country.id
-        p_not_in_country = Project.objects.create(name="not in country")
-        p1_draft = Project.objects.create(name="draft in country")
-        p1_draft.draft['country'] = country_id
-        p1_draft.save()
-        p2_published = Project.objects.create(name="published in country")
-        p2_published.draft['country'] = country_id
-        p2_published.data['country'] = country_id
-        p2_published.save()
-
-        # superuser sees it all
-        self.assertEqual(pa.get_queryset(self.request).count(), 3)
-
-        # let's degrade him to a country admin
-        self.user.is_superuser = False
-        self.user.is_staff = False
-        self.user.save()
-        country.users.add(self.user.userprofile)
-
-        self.assertEqual(pa.get_queryset(self.request).count(), 2)
-        self.assertTrue(pa.get_queryset(self.request).filter(name=p1_draft.name).exists())
-        self.assertTrue(pa.get_queryset(self.request).filter(name=p2_published.name).exists())
-        self.assertFalse(pa.get_queryset(self.request).filter(name=p_not_in_country.name).exists())
-
     def test_project_admin_changeform_view(self):
         request = MockRequest()
         request.method = 'GET'
