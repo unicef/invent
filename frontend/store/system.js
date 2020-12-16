@@ -145,6 +145,8 @@ export const actions = {
       commit('SET_REGIONS', data.unicef_regions)
       commit('SET_DATA', { key: 'unicef_regions', value: data.unicef_regions })
       commit('SET_DATA', { key: 'scalePhases', value: data.scale_phases })
+      // columns are coming from
+      // console.log(data.dashboard_columns)
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
         root: true,
       })

@@ -25,7 +25,6 @@ export const defaultSelectedColumns = () => [
   '3',
   '4',
   '5',
-  // '6',
   '7',
   '8',
   '10',
@@ -43,9 +42,27 @@ export const defaultSelectedColumns = () => [
   '24',
   '25',
   '26',
-  '27',
+  // '27',
+  '28',
+  '29',
+  '30',
+  '31',
+  '32',
+  '33',
+  '34',
+  '35',
+  '36',
+  '37',
+  '38',
+  '39',
   '40',
   '41',
+  '42',
+  '43',
+  '44',
+  '60',
+  '61',
+  '62',
 ]
 
 export const state = () => ({
@@ -91,26 +108,12 @@ export const state = () => ({
   platformFunctions: [],
   informationSecurity: null,
   // to track col with projects keys
-  // we don't track these keys
-  // approved
-  // country_answers
-  // country_custom_answers
-  // country_custom_answers_private
-  // donor_answers
-  // donor_custom_answers
-  // donor_custom_answers_private
-  // favorite
-  // hsc_challenges
-  // id
-  // innovation_categories
-  // organisation
   mapColKeys: [
     { id: '1', label: 'Project name', key: 'name' },
     { id: '2', label: 'Country', key: 'country' },
     { id: '3', label: 'Last updated', key: 'modified' },
     { id: '4', label: 'Unicef Office', key: 'country_office' },
     { id: '5', label: 'Region', key: 'region' },
-    // { id: '6', label: 'Investor', key: 'donors' },
     {
       id: '7',
       label: 'Programme Focal Point Name',
@@ -172,17 +175,55 @@ export const state = () => ({
       label: 'Regional priority(ies)',
       key: 'regional_priorities',
     },
+    // { id: '27', label: 'Programme Focal Point Email' },
+    { id: '28', label: 'Annual Work Plan (AWP) Outcome/Activity', key: 'awp' },
+    { id: '29', label: 'Currency', key: 'currency' },
+    { id: '30', label: 'Current Achievements', key: 'current_achievements' },
+    { id: '31', label: 'Funding Needs', key: 'funding_needs' },
     {
-      id: '27',
+      id: '32',
+      label: 'In Country programme document (CPD) and annual work plan?',
+      key: 'cpd',
+    },
+    {
+      id: '33',
+      label: 'Links to website/Current Documentation + URL',
+      key: 'links',
+    },
+    { id: '34', label: 'Overview', key: 'overview' },
+    { id: '35', label: 'Partner Data', key: 'partners' },
+    { id: '36', label: 'Partnership needs', key: 'partnership_needs' },
+    { id: '37', label: 'Program Targets', key: 'program_targets' },
+    {
+      id: '38',
+      label: 'Program Targets Archieved',
+      key: 'program_targets_achieved',
+    },
+    { id: '39', label: 'Start Date', key: 'start_date' },
+    { id: '40', label: 'End Date', key: 'end_date' },
+    {
+      id: '41',
+      label: 'Target Group (Target Population) Reached',
+      key: 'target_group_reached',
+    },
+    { id: '42', label: 'Total Budget', key: 'total_budget' },
+    {
+      id: '43',
+      label: 'Total Budget (Narrative)',
+      key: 'total_budget_narrative',
+    },
+    { id: '44', label: 'Work Breakdown Structure (WBS)', key: 'wbs' },
+    {
+      id: '60',
       label: 'Software Platforms(s)',
       key: 'platforms',
     },
     {
-      id: '40',
+      id: '61',
       label: 'Questionnaires Assigned',
       key: 'questionnaires_assigned',
     },
-    { id: '41', label: 'Scoring', key: 'scoring' },
+    { id: '62', label: 'Scoring', key: 'scoring' },
   ],
 })
 export const getters = {
@@ -596,9 +637,9 @@ export const mutations = {
     state.columns = [
       ...columns,
       // todo: set this columns on the backend
-      { id: 27, label: 'Software Platforms(s)' },
-      { id: 40, label: 'Questionnaires Assigned' },
-      { id: 41, label: 'Scoring' },
+      { id: 60, label: 'Software Platforms(s)' },
+      { id: 61, label: 'Questionnaires Assigned' },
+      { id: 62, label: 'Scoring' },
     ]
   },
   SET_PROJECT_LIST: (state, projects) => {

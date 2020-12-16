@@ -104,6 +104,10 @@ export default {
             this.getRegionalPriorities,
             s.regional_priorities
           ),
+          wbs: s.wbs ? s.wbs[0] : '',
+          partners: s.partners ? s.partners[0] : '',
+          cpd: s.cpd ? s.cpd[0] : '',
+          links: s.links ? s.links[0] : '',
         }
         let selectedCols = []
         this.mapColKeys.forEach((i) => {

@@ -53,7 +53,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('40') && tab === 2"
+        v-if="selectedColumns.includes('61') && tab === 2"
         :resizable="false"
         :label="$gettext('Questionnaires Assigned') | translate"
         sortable="custom"
@@ -427,7 +427,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('27')"
+        v-if="selectedColumns.includes('60')"
         :resizable="false"
         :label="$gettext('Software Platforms(s)') | translate"
         sortable="custom"
@@ -457,6 +457,201 @@
           />
         </template>
       </el-table-column>
+
+      <!-- new table fields -->
+      <el-table-column
+        v-if="selectedColumns.includes('28')"
+        :resizable="false"
+        :label="$gettext('Annual Work Plan (AWP) Outcome/Activity') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.awp }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('29')"
+        :resizable="false"
+        :label="$gettext('Currency') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.currency }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('30')"
+        :resizable="false"
+        :label="$gettext('Current Achievements') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.current_achievements }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('31')"
+        :resizable="false"
+        :label="$gettext('Funding Needs') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.funding_needs }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('32')"
+        :resizable="false"
+        :label="
+          $gettext('In Country programme document (CPD) and annual work plan?')
+            | translate
+        "
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.cpd ? scope.row.cpd[0] : '' }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('33')"
+        :resizable="false"
+        :label="
+          $gettext('Links to website/Current Documentation + URL') | translate
+        "
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.links ? scope.row.links[0] : '' }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('34')"
+        :resizable="false"
+        :label="$gettext('Overview') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.overview }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('35')"
+        :resizable="false"
+        :label="$gettext('Partner Data') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.partners ? scope.row.partners[0] : '' }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('36')"
+        :resizable="false"
+        :label="$gettext('Partnership needs') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.partnership_needs }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('37')"
+        :resizable="false"
+        :label="$gettext('Program Targets') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.program_targets }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('38')"
+        :resizable="false"
+        :label="$gettext('Program Targets Archieved') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.program_targets_achieved }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('39')"
+        :resizable="false"
+        :label="$gettext('Start Date') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.start_date | simpleDateFormat }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('40')"
+        :resizable="false"
+        :label="$gettext('End Date') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.end_date | simpleDateFormat }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('41')"
+        :resizable="false"
+        :label="
+          $gettext('Target Group (Target Population) Reached') | translate
+        "
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.target_group_reached }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('42')"
+        :resizable="false"
+        :label="$gettext('Total Budget') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.total_budget }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('43')"
+        :resizable="false"
+        :label="$gettext('Total Budget (Narrative)') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.total_budget_narrative }}</p>
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="selectedColumns.includes('44')"
+        :resizable="false"
+        :label="$gettext('Work Breakdown Structure (WBS)') | translate"
+        width="240"
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.wbs ? scope.row.wbs[0] : '' }}</p>
+        </template>
+      </el-table-column>
+      <!-- new table fields -->
 
       <el-table-column
         v-for="col in donorColumns"
@@ -508,7 +703,7 @@ import debounce from 'lodash/debounce'
 import ProjectCard from '@/components/common/ProjectCard'
 import CountryItem from '@/components/common/CountryItem'
 import HfaCategoriesList from '@/components/common/list/HfaCategoriesList'
-import DonorsList from '@/components/common/list/DonorsList'
+// import DonorsList from '@/components/common/list/DonorsList'
 import RegionItem from '@/components/common/RegionItem'
 import CustomAnswersCell from '@/components/dashboard/CustomAnswersCell'
 import GoalAreaItem from '@/components/dashboard/GoalAreaItem'
@@ -529,7 +724,7 @@ export default {
     ProjectCard,
     CountryItem,
     HfaCategoriesList,
-    DonorsList,
+    // DonorsList,
     RegionItem,
     CustomAnswersCell,
     CurrentPage,
@@ -584,7 +779,7 @@ export default {
     scoringDisplay() {
       if (this.$route.name.includes('organisation-portfolio-management-id')) {
         return (
-          this.selectedColumns.includes('41') &&
+          this.selectedColumns.includes('62') &&
           (this.tab === 2 || this.tab === 3)
         )
       }

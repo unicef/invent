@@ -290,7 +290,7 @@ export default {
     },
     // settings
     popperOpenHandler() {
-      const colFilter = (hide = ['40', '41', '6']) =>
+      const colFilter = (hide = ['61', '62']) =>
         filter(columns, (c) => !hide.includes(c.id))
       const columns = [...this.columns.map((s) => ({ ...s }))]
       if (this.$route.name.includes('organisation-portfolio-management-id')) {
@@ -299,7 +299,7 @@ export default {
             this.selectedColumns = columns
             break
           case 'portfolio':
-            this.selectedColumns = colFilter(['40'])
+            this.selectedColumns = colFilter(['61'])
             break
           default:
             this.selectedColumns = colFilter()

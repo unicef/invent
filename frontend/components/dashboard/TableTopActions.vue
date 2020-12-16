@@ -253,7 +253,7 @@ export default {
       }
     },
     popperOpenHandler() {
-      const colFilter = (hide = ['40', '41', '6']) =>
+      const colFilter = (hide = ['61', '62']) =>
         filter(columns, (c) => !hide.includes(c.id))
       const columns = [...this.columns.map((s) => ({ ...s }))]
       this.selectedColumns = colFilter()
