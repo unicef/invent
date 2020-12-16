@@ -55,13 +55,7 @@
               <translate>Initiative Name</translate>
             </el-checkbox>
             <el-checkbox label="overview" class="CheckboxSmall">
-              Overview of the <translate>digital health</translate>
-            </el-checkbox>
-            <el-checkbox label="partner" class="CheckboxSmall">
-              <translate>Implementing Partners</translate>
-            </el-checkbox>
-            <el-checkbox label="donor" class="CheckboxSmall">
-              <translate>Investors</translate>
+              <translate>Overview of the digital health</translate>
             </el-checkbox>
           </el-checkbox-group>
         </el-col>
