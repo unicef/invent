@@ -107,8 +107,8 @@ class ListResultSerializer(serializers.Serializer):
 
     def get_partners(self, obj):
         if 'partners' in obj.project.data:
-            return [f"{PartnerSerializer.PARTNER_TYPE[p['partner_type']][1]}, {p['partner_name']}, "
-                    f"{p['partner_email']}, {p['partner_contact']}, {p['partner_website']}"
+            return [f"{PartnerSerializer.PARTNER_TYPE[p['partner_type']][1]}, {p.get('partner_name')}, "
+                    f"{p.get('partner_email')}, {p.get('partner_contact')}, {p.get('partner_website')}"
                     for p in obj.project.data.get('partners')]
 
 
