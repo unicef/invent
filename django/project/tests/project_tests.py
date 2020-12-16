@@ -552,7 +552,7 @@ class ProjectTests(SetupTests):
         p = Project.objects.create(name="test link")
         link = pa.link(p)
 
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
+        expected_link = f"<a target='_blank' href='/en/-/initiatives/{p.id}/edit/'>Edit initiative</a>"
         self.assertEqual(link, expected_link)
 
     def test_project_approval_email(self):
