@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
 from project.models import Portfolio
-from project.serializers import ProjectPortfolioStateManagerSerializer
+from project.serializers import ProjectPortfolioStateManagerSerializer, PartnerSerializer, LinkSerializer
+
+from project.models import CPD
+from country.models import Currency
 
 
 class MapResultSerializer(serializers.Serializer):
@@ -49,6 +52,23 @@ class ListResultSerializer(serializers.Serializer):
     regional_priorities = serializers.ReadOnlyField()
     regional_office = serializers.ReadOnlyField(source='country_office.regional_office.id')
     stages = serializers.ReadOnlyField()
+    start_date = serializers.ReadOnlyField(source="project.data.start_date")
+    end_date = serializers.ReadOnlyField(source="project.data.end_date")
+    target_group_reached = serializers.ReadOnlyField(source="project.data.target_group_reached")
+    program_targets = serializers.ReadOnlyField(source="project.data.program_targets")
+    program_targets_achieved = serializers.ReadOnlyField(source="project.data.program_targets_archieved")
+    awp = serializers.ReadOnlyField(source="project.data.awp")
+    currency = serializers.SerializerMethodField()
+    current_achievements = serializers.ReadOnlyField(source="project.data.current_achievements")
+    funding_needs = serializers.ReadOnlyField(source="project.data.funding_needs")
+    cpd = serializers.SerializerMethodField()
+    overview = serializers.ReadOnlyField(source="project.data.overview")
+    links = serializers.SerializerMethodField()
+    partners = serializers.SerializerMethodField()
+    partnership_needs = serializers.ReadOnlyField(source="project.data.partnership_needs")
+    total_budget = serializers.ReadOnlyField(source="project.data.total_budget")
+    total_budget_narrative = serializers.ReadOnlyField(source="project.data.total_budget_narrative")
+    wbs = serializers.ReadOnlyField(source="project.data.wbs")
 
     def get_country_custom_answers(self, obj):
         if self.context.get('has_country_permission'):
@@ -68,6 +88,28 @@ class ListResultSerializer(serializers.Serializer):
             if private_fields and self.context['donor']:
                 return {donor_id: private_fields[donor_id]
                         for donor_id in private_fields if donor_id == str(self.context['donor'].id)}
+
+    def get_currency(self, obj):  # pragma: no cover
+        if 'currency' in obj.project.data:
+            try:
+                return Currency.objects.get(id=obj.project.data.get('currency')).name
+            except Currency.DoesNotExist:
+                pass
+
+    def get_cpd(self, obj):
+        if 'cpd' in obj.project.data:
+            return CPD.objects.filter(id__in=obj.project.data.get('cpd')).values_list('name', flat=True)
+
+    def get_links(self, obj):
+        if 'links' in obj.project.data:
+            return [f"{LinkSerializer.LINK_TYPE[x['link_type']][1]}: {x['link_url']}"
+                    for x in obj.project.data.get('links')]
+
+    def get_partners(self, obj):
+        if 'partners' in obj.project.data:
+            return [f"{PartnerSerializer.PARTNER_TYPE[p['partner_type']][1]}, {p['partner_name']}, "
+                    f"{p['partner_email']}, {p['partner_contact']}, {p['partner_website']}"
+                    for p in obj.project.data.get('partners')]
 
 
 class PortfolioResultSerializer(ListResultSerializer):
