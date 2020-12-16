@@ -2,23 +2,24 @@ import uuid
 from collections import namedtuple
 from typing import List, Union
 
+from simple_history.models import HistoricalRecords
+
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from simple_history.models import HistoricalRecords
 from django.conf import settings
+from django.db.models import Count, Case, When, IntegerField, F, Q
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
 from country.models import Country, Donor, CountryOffice
 from project.cache import InvalidateCacheMixin
-from project.utils import remove_keys
+from project.utils import remove_keys, migrate_project_phases
 from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
-from django.db.models import Count, Case, When, IntegerField, F, Q
 
 
 class ProjectManager(models.Manager):
@@ -182,6 +183,11 @@ def on_create_init(sender, instance, created, **kwargs):
         from toolkit.models import Toolkit
         Toolkit.objects.get_or_create(project_id=instance.id, defaults=dict(data=toolkit_default))
         ProjectApproval.objects.get_or_create(project_id=instance.id)
+
+
+@receiver(post_save, sender=Project)
+def migrate_project_phases_signal(sender, instance, **kwargs):
+    migrate_project_phases(instance)
 
 
 class PortfolioManager(models.Manager):
