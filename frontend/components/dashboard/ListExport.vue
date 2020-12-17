@@ -72,7 +72,7 @@ export default {
             'capabilityCategories'
           ),
           capability_subcategories: this.parseFlatList(
-            s.capability_categories,
+            s.capability_subcategories,
             'capabilitySubcategories'
           ),
           goal_area: this.parseSingleSelection(s.goal_area, 'goalAreas'),
