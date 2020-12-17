@@ -400,6 +400,7 @@ export const actions = {
     const data = await dispatch('loadProjects', { type: 'list' })
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
+    await dispatch('offices/loadOffices', {}, { root: true })
     const offices = rootState.offices.offices
     commit(
       'SET_PROJECT_LIST',

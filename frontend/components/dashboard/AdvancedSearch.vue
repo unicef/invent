@@ -44,6 +44,7 @@
     <div class="FilterItems">
       <template v-if="selectedGoal && selectedGoal !== 1">
         <filter-item
+          v-if="selectedGoalAreaDetails.capability_level_question !== 'MISSING'"
           :selected="selectedCapabilityLevels"
           :limit="4"
           :label="selectedGoalAreaDetails.capability_level_question"
@@ -59,6 +60,9 @@
           />
         </filter-item>
         <filter-item
+          v-if="
+            selectedGoalAreaDetails.capability_category_question !== 'MISSING'
+          "
           :selected="selectedCapabilityCategories"
           :limit="4"
           :label="selectedGoalAreaDetails.capability_category_question"
@@ -76,6 +80,10 @@
           />
         </filter-item>
         <filter-item
+          v-if="
+            selectedGoalAreaDetails.capability_subcategory_question !==
+            'MISSING'
+          "
           :selected="selectedCapabilitySubcategories"
           :limit="4"
           :label="selectedGoalAreaDetails.capability_subcategory_question"
@@ -332,6 +340,14 @@ export default {
       if (hide) {
         this.innovationCategories = []
       }
+    },
+    selectedGoal() {
+      this.selectedDHI = []
+      this.selectedHFA = []
+      this.selectedHSC = []
+      this.selectedCapabilityLevels = []
+      this.selectedCapabilityCategories = []
+      this.selectedCapabilitySubcategories = []
     },
   },
   mounted() {
