@@ -334,7 +334,7 @@
       <el-table-column
         v-if="selectedColumns.includes('8')"
         :resizable="false"
-        :label="$gettext('Initiative Description') | translate"
+        :label="$gettext('Narrative') | translate"
         width="240"
       >
         <template slot-scope="scope">
@@ -513,7 +513,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.cpd ? scope.row.cpd[0] : '' }}</p>
+          <simple-list :items="scope.row.cpd" />
         </template>
       </el-table-column>
 
@@ -526,7 +526,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.links ? scope.row.links[0] : '' }}</p>
+          <simple-list :items="scope.row.links" />
         </template>
       </el-table-column>
 
@@ -548,7 +548,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.partners ? scope.row.partners[0] : '' }}</p>
+          <simple-list :items="scope.row.partners" />
         </template>
       </el-table-column>
 
@@ -648,7 +648,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.wbs ? scope.row.wbs[0] : '' }}</p>
+          <simple-list :items="scope.row.wbs" />
         </template>
       </el-table-column>
       <!-- new table fields -->
@@ -713,6 +713,7 @@ import CapabilitiesList from '@/components/project/CapabilitiesList'
 import Reviewers from '@/components/portfolio/dashboard/table/Reviewers'
 import Scores from '@/components/portfolio/dashboard/table/Scores'
 import ListElement from '@/components/project/ListElement'
+import SimpleList from '@/components/common/list/SimpleList'
 
 // dialogs
 import Review from '@/components/portfolio/dashboard/dialog/Review'
@@ -737,6 +738,7 @@ export default {
     PlatformsList,
     ListElement,
     Score,
+    SimpleList,
   },
   data() {
     return {
