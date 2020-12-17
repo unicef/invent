@@ -357,7 +357,10 @@ export const getters = {
       in: q ? state.searchIn : undefined,
       country,
       donor,
-      region: state.filteredRegion ? state.filteredRegion : '',
+      region:
+        state.filteredRegion || state.filteredRegion === 0
+          ? state.filteredRegion
+          : '',
       ic: state.innovationCategories,
       fo: state.filteredOffice,
       co: state.filteredCountryOffice,
