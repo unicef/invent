@@ -104,10 +104,10 @@ export default {
             this.getRegionalPriorities,
             s.regional_priorities
           ),
-          wbs: s.wbs ? s.wbs[0] : '',
-          partners: s.partners ? s.partners[0] : '',
-          cpd: s.cpd ? s.cpd[0] : '',
-          links: s.links ? s.links[0] : '',
+          wbs: this.joinSimpleArr(s.wbs),
+          partners: this.joinSimpleArr(s.partners),
+          cpd: this.joinSimpleArr(s.cpd),
+          links: this.joinSimpleArr(s.links),
         }
         let selectedCols = []
         this.mapColKeys.forEach((i) => {
@@ -142,6 +142,9 @@ export default {
         .filter((tp) => filter.includes(tp.id))
         .map((i) => i.name)
         .join(', ')
+    },
+    joinSimpleArr(arr) {
+      return arr ? arr.join(', ') : ''
     },
     parseSingleSelection(id, type) {
       try {

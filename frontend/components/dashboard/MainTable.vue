@@ -300,7 +300,7 @@
       <el-table-column
         v-if="selectedColumns.includes('8')"
         :resizable="false"
-        :label="$gettext('Initiative Description') | translate"
+        :label="$gettext('Narrative') | translate"
         width="240"
       >
         <template slot-scope="scope">
@@ -479,7 +479,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.cpd ? scope.row.cpd[0] : '' }}</p>
+          <simple-list :items="scope.row.cpd" />
         </template>
       </el-table-column>
 
@@ -492,7 +492,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.links ? scope.row.links[0] : '' }}</p>
+          <simple-list :items="scope.row.links" />
         </template>
       </el-table-column>
 
@@ -514,7 +514,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.partners ? scope.row.partners[0] : '' }}</p>
+          <simple-list :items="scope.row.partners" />
         </template>
       </el-table-column>
 
@@ -607,6 +607,7 @@
           <p>{{ scope.row.total_budget_narrative }}</p>
         </template>
       </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('44')"
         :resizable="false"
@@ -614,7 +615,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.wbs ? scope.row.wbs[0] : '' }}</p>
+          <simple-list :items="scope.row.wbs" />
         </template>
       </el-table-column>
       <!-- new table fields -->
@@ -661,7 +662,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import ProjectCard from '@/components/common/ProjectCard'
 import CountryItem from '@/components/common/CountryItem'
 import HfaCategoriesList from '@/components/common/list/HfaCategoriesList'
-import DonorsList from '@/components/common/list/DonorsList'
+// import DonorsList from '@/components/common/list/DonorsList'
 import RegionItem from '@/components/common/RegionItem'
 import CustomAnswersCell from '@/components/dashboard/CustomAnswersCell'
 import GoalAreaItem from '@/components/dashboard/GoalAreaItem'
@@ -669,6 +670,8 @@ import ResultAreaItem from '@/components/dashboard/ResultAreaItem'
 import CurrentPage from '@/components/dashboard/CurrentPage'
 import CapabilitiesList from '@/components/project/CapabilitiesList'
 import PlatformsList from '@/components/project/PlatformsList'
+import SimpleList from '@/components/common/list/SimpleList'
+
 import { mapGettersActions } from '../../utilities/form.js'
 import ListElement from '~/components/project/ListElement'
 
@@ -677,7 +680,7 @@ export default {
     ProjectCard,
     CountryItem,
     HfaCategoriesList,
-    DonorsList,
+    // DonorsList,
     RegionItem,
     CustomAnswersCell,
     CurrentPage,
@@ -686,6 +689,7 @@ export default {
     ResultAreaItem,
     PlatformsList,
     ListElement,
+    SimpleList,
   },
   data() {
     return {
