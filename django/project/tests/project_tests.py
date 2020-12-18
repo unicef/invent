@@ -1148,5 +1148,4 @@ class ProjectTests(SetupTests):
         self.assertTrue('stages' in response.json()['draft'])
         self.assertTrue('phase' not in response.json()['draft'])
         self.assertFalse(response.json()['published'])
-        self.assertEqual(response.json()['draft']['stages'], [dict(id=ID_MAP[migratable_phase], 
-                                                                   date=response.json()['draft']['modified'])])
+        self.assertEqual(response.json()['draft']['stages'], [dict(id=ID_MAP[migratable_phase])])
