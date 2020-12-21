@@ -49,8 +49,8 @@ export const getters = {
           if (included) {
             return {
               ...item,
-              date: included.date,
-              note: included.note,
+              date: included.date || '',
+              note: included.note || '',
               checked: true,
             }
           }

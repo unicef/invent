@@ -257,7 +257,7 @@ export default {
           (i) => i.checked && (i.date === '' || i.date === null)
         ).length > 0
       ) {
-        return this.$gettext('Stage date is required')
+        return this.$gettext('Phase date is required')
       }
       return ''
     },
