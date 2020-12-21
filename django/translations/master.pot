@@ -81,11 +81,11 @@ msgid "{selected} item(s) selected"
 msgstr ""
 
 #: components/dashboard/DashboardFiltersHeader.vue:3
-msgid "{total} project(s) to show"
+msgid "{total} initiative(s) to show"
 msgstr ""
 
 #: components/common/map/MapProjectsBox.vue:12
-msgid "&nbsp; {count} project(s)"
+msgid "&nbsp; {count} initiative(s)"
 msgstr ""
 
 #: components/project/CoverageField.vue:16
@@ -152,7 +152,7 @@ msgstr ""
 msgid "Action cancelled"
 msgstr ""
 
-#: components/portfolio/dashboard/TableTopActions.vue:103
+#: components/portfolio/dashboard/TableTopActions.vue:102
 msgid "Actions:"
 msgstr ""
 
@@ -215,8 +215,8 @@ msgstr ""
 msgid "Add to favorites"
 msgstr ""
 
-#: components/dashboard/MainTable.vue:482
-#: components/portfolio/dashboard/MainTable.vue:387
+#: components/dashboard/MainTable.vue:699
+#: components/portfolio/dashboard/MainTable.vue:748
 msgid "Add to Favorites"
 msgstr ""
 
@@ -331,6 +331,13 @@ msgstr ""
 msgid "and use the system."
 msgstr ""
 
+#: components/dashboard/MainTable.vue:427
+#: components/dashboard/MainTable.vue:904
+#: components/portfolio/dashboard/MainTable.vue:461
+#: components/portfolio/dashboard/MainTable.vue:974
+msgid "Annual Work Plan (AWP) Outcome/Activity"
+msgstr ""
+
 #: components/project/ProjectData.vue:180
 #: components/project/ProjectData.vue:436
 msgid "Annual Work Plan Outcome or Activity"
@@ -373,7 +380,7 @@ msgstr ""
 msgid "Approved by MOH"
 msgstr ""
 
-#: components/admin/import/ImportHeaders.vue:156
+#: components/admin/import/ImportHeaders.vue:163
 msgid "Are you sure? this operation is not reversible"
 msgstr ""
 
@@ -519,7 +526,11 @@ msgstr ""
 msgid "Can update Government map data"
 msgstr ""
 
-#: components/UserPrivileges.vue:9 components/admin/CountryAdmin.vue:178
+#: components/UserPrivileges.vue:9
+msgid "Can view when a initiative is approved/declined"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:178
 msgid "Can view when a project is approved/declined"
 msgstr ""
 
@@ -537,7 +548,7 @@ msgstr ""
 
 #: components/admin/DhaQuestion.vue:144 components/admin/DhaQuestion.vue:182
 #: components/admin/import/ImportDialog.vue:164
-#: components/admin/import/ImportHeaders.vue:160
+#: components/admin/import/ImportHeaders.vue:167
 #: components/dashboard/FilterPresetsActions.vue:173
 #: components/dashboard/TableTopActions.vue:129
 #: components/dialogs/DashboardFiltersDialog.vue:110
@@ -545,8 +556,8 @@ msgstr ""
 #: components/dialogs/EditSubLevelDialog.vue:19
 #: components/dialogs/ProjectApprovalDialog.vue:84
 #: components/dialogs/SaveFilterDialog.vue:29
-#: components/portfolio/dashboard/TableTopActions.vue:83
-#: components/portfolio/dashboard/TableTopActions.vue:244
+#: components/portfolio/dashboard/TableTopActions.vue:82
+#: components/portfolio/dashboard/TableTopActions.vue:248
 #: components/portfolio/dashboard/dialog/Score.vue:201
 #: components/project/ProjectForm.vue:321
 #: components/project/ProjectNavigation.vue:178
@@ -562,8 +573,8 @@ msgstr ""
 
 #: components/dashboard/MainTable.vue:238
 #: components/dashboard/MainTable.vue:525
-#: components/portfolio/dashboard/MainTable.vue:193
-#: components/portfolio/dashboard/MainTable.vue:432
+#: components/portfolio/dashboard/MainTable.vue:272
+#: components/portfolio/dashboard/MainTable.vue:595
 msgid "Capability Categories"
 msgstr ""
 
@@ -573,8 +584,8 @@ msgstr ""
 
 #: components/dashboard/MainTable.vue:222
 #: components/dashboard/MainTable.vue:492
-#: components/portfolio/dashboard/MainTable.vue:177
-#: components/portfolio/dashboard/MainTable.vue:399
+#: components/portfolio/dashboard/MainTable.vue:256
+#: components/portfolio/dashboard/MainTable.vue:562
 msgid "Capability Levels"
 msgstr ""
 
@@ -584,8 +595,8 @@ msgstr ""
 
 #: components/dashboard/MainTable.vue:254
 #: components/dashboard/MainTable.vue:559
-#: components/portfolio/dashboard/MainTable.vue:209
-#: components/portfolio/dashboard/MainTable.vue:466
+#: components/portfolio/dashboard/MainTable.vue:288
+#: components/portfolio/dashboard/MainTable.vue:629
 msgid "Capability Subcategories"
 msgstr ""
 
@@ -679,7 +690,7 @@ msgstr ""
 msgid "Collapse"
 msgstr ""
 
-#: components/admin/import/ImportHeaders.vue:157
+#: components/admin/import/ImportHeaders.vue:164
 msgid "Column Delete"
 msgstr ""
 
@@ -717,7 +728,7 @@ msgid "Completion period"
 msgstr ""
 
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:46
-#: components/portfolio/dashboard/TableTopActions.vue:243
+#: components/portfolio/dashboard/TableTopActions.vue:247
 msgid "Confirm"
 msgstr ""
 
@@ -779,8 +790,8 @@ msgstr ""
 #: components/common/CountrySelect.vue:1 components/common/CountrySelect.vue:12
 #: components/common/ProjectCard.vue:122 components/common/UserDropdown.vue:26
 #: components/dashboard/MainTable.vue:82 components/dashboard/MainTable.vue:180
-#: components/portfolio/dashboard/MainTable.vue:101
-#: components/portfolio/dashboard/MainTable.vue:219
+#: components/portfolio/dashboard/MainTable.vue:116
+#: components/portfolio/dashboard/MainTable.vue:250
 #: components/project/sections/GeneralOverview.vue:104
 #: components/search/AdvancedSearch.vue:19
 #: components/search/AdvancedSearch.vue:50 components/search/SearchBox.vue:83
@@ -862,8 +873,19 @@ msgstr ""
 msgid "Create your search here"
 msgstr ""
 
+#: components/dashboard/MainTable.vue:438
+#: components/dashboard/MainTable.vue:928
+#: components/portfolio/dashboard/MainTable.vue:472
+#: components/portfolio/dashboard/MainTable.vue:998
 #: components/project/sections/ImplementationOverview.vue:298
 msgid "Currency"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:449
+#: components/dashboard/MainTable.vue:952
+#: components/portfolio/dashboard/MainTable.vue:483
+#: components/portfolio/dashboard/MainTable.vue:1022
+msgid "Current Achievements"
 msgstr ""
 
 #: components/common/chart/cStages.vue:33
@@ -934,16 +956,12 @@ msgstr ""
 msgid "DHA Help Center"
 msgstr ""
 
-#: components/dashboard/SearchBox.vue:57
-msgid "digital health"
-msgstr ""
-
 #: components/project/ProjectData.vue:77 components/project/ProjectData.vue:186
 msgid "Digital Health Intervention(s)"
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:122
-#: components/dashboard/AdvancedSearch.vue:291
+#: components/dashboard/AdvancedSearch.vue:130
+#: components/dashboard/AdvancedSearch.vue:301
 #: components/dialogs/DashboardFiltersDialog.vue:14
 #: components/dialogs/DashboardFiltersDialog.vue:42
 #: components/search/AdvancedSearch.vue:147
@@ -1093,6 +1111,13 @@ msgstr ""
 #: components/project/sections/Stages.vue:108
 #: components/project/sections/Stages.vue:282
 msgid "End date"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:564
+#: components/dashboard/MainTable.vue:1223
+#: components/portfolio/dashboard/MainTable.vue:598
+#: components/portfolio/dashboard/MainTable.vue:1293
+msgid "End Date"
 msgstr ""
 
 #: components/project/sections/StageOverview.vue:249
@@ -1267,6 +1292,13 @@ msgstr ""
 msgid "Funding gaps"
 msgstr ""
 
+#: components/dashboard/MainTable.vue:460
+#: components/dashboard/MainTable.vue:980
+#: components/portfolio/dashboard/MainTable.vue:494
+#: components/portfolio/dashboard/MainTable.vue:1050
+msgid "Funding Needs"
+msgstr ""
+
 #: components/project/ProjectNavigation.vue:35
 msgid "General"
 msgstr ""
@@ -1309,8 +1341,8 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:36
 #: components/dashboard/MainTable.vue:137
 #: components/dashboard/MainTable.vue:305
-#: components/portfolio/dashboard/MainTable.vue:140
-#: components/portfolio/dashboard/MainTable.vue:312
+#: components/portfolio/dashboard/MainTable.vue:171
+#: components/portfolio/dashboard/MainTable.vue:375
 #: components/project/ProjectData.vue:66 components/project/ProjectData.vue:167
 #: components/search/AdvancedSearch.vue:30
 #: components/search/AdvancedSearch.vue:70
@@ -1338,10 +1370,12 @@ msgstr ""
 msgid "Hardware platform(s)"
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:157
-#: components/dashboard/AdvancedSearch.vue:362
-#: components/dashboard/MainTable.vue:342
-#: components/dashboard/MainTable.vue:765
+#: components/dashboard/AdvancedSearch.vue:165
+#: components/dashboard/AdvancedSearch.vue:372
+#: components/dashboard/MainTable.vue:344
+#: components/dashboard/MainTable.vue:732
+#: components/portfolio/dashboard/MainTable.vue:378
+#: components/portfolio/dashboard/MainTable.vue:802
 msgid "Hardware Platforms"
 msgstr ""
 
@@ -1363,8 +1397,8 @@ msgid ""
 "              this type, put 0."
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:96
-#: components/dashboard/AdvancedSearch.vue:241
+#: components/dashboard/AdvancedSearch.vue:104
+#: components/dashboard/AdvancedSearch.vue:251
 #: components/search/AdvancedSearch.vue:121
 #: components/search/AdvancedSearch.vue:268
 msgid "Health Focus Area"
@@ -1379,10 +1413,10 @@ msgstr ""
 msgid "Health focus areas"
 msgstr ""
 
-#: components/dashboard/MainTable.vue:308
-#: components/dashboard/MainTable.vue:698
-#: components/portfolio/dashboard/MainTable.vue:265
-#: components/portfolio/dashboard/MainTable.vue:605
+#: components/dashboard/MainTable.vue:310
+#: components/dashboard/MainTable.vue:665
+#: components/portfolio/dashboard/MainTable.vue:344
+#: components/portfolio/dashboard/MainTable.vue:735
 msgid "Health Focus Areas"
 msgstr ""
 
@@ -1391,8 +1425,8 @@ msgstr ""
 msgid "Health system challenges"
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:109
-#: components/dashboard/AdvancedSearch.vue:266
+#: components/dashboard/AdvancedSearch.vue:117
+#: components/dashboard/AdvancedSearch.vue:276
 #: components/dashboard/PdfExport.vue:274
 #: components/search/AdvancedSearch.vue:134
 #: components/search/AdvancedSearch.vue:293
@@ -1576,10 +1610,6 @@ msgstr ""
 msgid "Implementation Overview"
 msgstr ""
 
-#: components/dashboard/SearchBox.vue:60
-msgid "Implementing Partners"
-msgstr ""
-
 #: components/admin/import/ImportFile.vue:126
 msgid "Import"
 msgstr ""
@@ -1596,6 +1626,13 @@ msgstr ""
 msgid ""
 "In addition, you can also only select one Investor for all of the data\n"
 "        from within your spreadsheet."
+msgstr ""
+
+#: components/dashboard/MainTable.vue:471
+#: components/dashboard/MainTable.vue:1006
+#: components/portfolio/dashboard/MainTable.vue:505
+#: components/portfolio/dashboard/MainTable.vue:1076
+msgid "In Country programme document (CPD) and annual work plan?"
 msgstr ""
 
 #: pages/_organisation/terms.vue:399
@@ -1624,8 +1661,10 @@ msgstr ""
 msgid "In-country support to DHA"
 msgstr ""
 
-#: components/dashboard/MainTable.vue:392
-#: components/dashboard/MainTable.vue:869
+#: components/dashboard/MainTable.vue:410
+#: components/dashboard/MainTable.vue:870
+#: components/portfolio/dashboard/MainTable.vue:444
+#: components/portfolio/dashboard/MainTable.vue:940
 msgid "Information Security Classification"
 msgstr ""
 
@@ -1634,8 +1673,8 @@ msgstr ""
 msgid "Information security classification "
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:177
-#: components/dashboard/AdvancedSearch.vue:413
+#: components/dashboard/AdvancedSearch.vue:185
+#: components/dashboard/AdvancedSearch.vue:423
 msgid "Information Security Classification as per Classi"
 msgstr ""
 
@@ -1658,13 +1697,6 @@ msgstr ""
 
 #: components/admin/CountryAdmin.vue:69 components/admin/CountryAdmin.vue:199
 msgid "Initiative approval process"
-msgstr ""
-
-#: components/dashboard/MainTable.vue:297
-#: components/dashboard/MainTable.vue:669
-#: components/portfolio/dashboard/MainTable.vue:254
-#: components/portfolio/dashboard/MainTable.vue:576
-msgid "Initiative Description"
 msgstr ""
 
 #: components/dashboard/PdfExport.vue:394
@@ -1696,6 +1728,10 @@ msgstr ""
 msgid "Initiative start date"
 msgstr ""
 
+#: components/portfolio/dashboard/PortfolioFiltersHeader.vue:5
+msgid "initiative(s) to show"
+msgstr ""
+
 #: components/common/UserProjectsList.vue:54
 msgid "Initiatives you have added to your favorites will appear below."
 msgstr ""
@@ -1711,8 +1747,8 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:108
 #: components/dashboard/MainTable.vue:180
 #: components/dashboard/MainTable.vue:399
-#: components/portfolio/dashboard/MainTable.vue:151
-#: components/portfolio/dashboard/MainTable.vue:340
+#: components/portfolio/dashboard/MainTable.vue:214
+#: components/portfolio/dashboard/MainTable.vue:469
 msgid "Innovation Categories"
 msgstr ""
 
@@ -1738,6 +1774,8 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:84
 #: components/dashboard/MainTable.vue:164
 #: components/dashboard/MainTable.vue:366
+#: components/portfolio/dashboard/MainTable.vue:198
+#: components/portfolio/dashboard/MainTable.vue:436
 msgid "Innovation Ways"
 msgstr ""
 
@@ -1850,10 +1888,8 @@ msgstr ""
 msgid "Investor(s)"
 msgstr ""
 
-#: components/dashboard/MainTable.vue:270
-#: components/dashboard/MainTable.vue:592 components/dashboard/SearchBox.vue:63
-#: components/portfolio/dashboard/MainTable.vue:225
-#: components/portfolio/dashboard/MainTable.vue:499
+#: components/dashboard/MainTable.vue:1
+#: components/portfolio/dashboard/MainTable.vue:1
 msgid "Investors"
 msgstr ""
 
@@ -1879,8 +1915,8 @@ msgstr ""
 #: components/common/ExtendedProjectCard.vue:36
 #: components/dashboard/MainTable.vue:108
 #: components/dashboard/MainTable.vue:242
-#: components/portfolio/dashboard/MainTable.vue:127
-#: components/portfolio/dashboard/MainTable.vue:281
+#: components/portfolio/dashboard/MainTable.vue:142
+#: components/portfolio/dashboard/MainTable.vue:312
 #: components/project/sections/GeneralOverview.vue:305
 msgid "Last updated"
 msgstr ""
@@ -1905,6 +1941,13 @@ msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:396
 msgid "Links to website/Current Documentation"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:485
+#: components/dashboard/MainTable.vue:1035
+#: components/portfolio/dashboard/MainTable.vue:519
+#: components/portfolio/dashboard/MainTable.vue:1105
+msgid "Links to website/Current Documentation + URL"
 msgstr ""
 
 #: components/dashboard/PdfExport.vue:63
@@ -1969,8 +2012,8 @@ msgstr ""
 msgid "low"
 msgstr ""
 
-#: components/dashboard/TableTopActions.vue:190
-#: components/portfolio/dashboard/TableTopActions.vue:198
+#: components/dashboard/TableTopActions.vue:197
+#: components/portfolio/dashboard/TableTopActions.vue:204
 msgid "main fields"
 msgstr ""
 
@@ -2098,6 +2141,13 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: components/dashboard/MainTable.vue:299
+#: components/dashboard/MainTable.vue:637
+#: components/portfolio/dashboard/MainTable.vue:333
+#: components/portfolio/dashboard/MainTable.vue:707
+msgid "Narrative"
+msgstr ""
+
 #: components/project/ProjectData.vue:23 components/project/ProjectData.vue:59
 msgid "Narrative of the initiative"
 msgstr ""
@@ -2146,7 +2196,7 @@ msgstr ""
 msgid "Next phase (incomplete)"
 msgstr ""
 
-#: components/dashboard/ListExport.vue:79
+#: components/dashboard/ListExport.vue:125
 msgid "no"
 msgstr ""
 
@@ -2272,7 +2322,7 @@ msgstr ""
 
 #: components/DhaLogin.vue:234 components/admin/DhaQuestion.vue:143
 #: components/admin/DhaQuestion.vue:181
-#: components/admin/import/ImportHeaders.vue:159
+#: components/admin/import/ImportHeaders.vue:166
 #: components/dashboard/FilterPresetsActions.vue:172
 #: components/project/ProjectForm.vue:159
 #: pages/_organisation/admin/import/_id.vue:283
@@ -2315,7 +2365,14 @@ msgstr ""
 msgid "Other Terms"
 msgstr ""
 
-#: components/search/SearchBox.vue:86
+#: components/dashboard/MainTable.vue:498
+#: components/dashboard/MainTable.vue:1063
+#: components/portfolio/dashboard/MainTable.vue:532
+#: components/portfolio/dashboard/MainTable.vue:1133
+msgid "Overview"
+msgstr ""
+
+#: components/dashboard/SearchBox.vue:57 components/search/SearchBox.vue:86
 msgid "Overview of the digital health"
 msgstr ""
 
@@ -2329,6 +2386,13 @@ msgstr ""
 
 #: components/project/sections/Partners.vue:99
 msgid "Partner contact email"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:509
+#: components/dashboard/MainTable.vue:1086
+#: components/portfolio/dashboard/MainTable.vue:543
+#: components/portfolio/dashboard/MainTable.vue:1156
+msgid "Partner Data"
 msgstr ""
 
 #: components/project/ProjectData.vue:286
@@ -2359,6 +2423,10 @@ msgstr ""
 msgid "Partners"
 msgstr ""
 
+#: components/dashboard/MainTable.vue:520
+#: components/dashboard/MainTable.vue:1113
+#: components/portfolio/dashboard/MainTable.vue:554
+#: components/portfolio/dashboard/MainTable.vue:1183
 #: components/project/ProjectData.vue:216
 #: components/project/ProjectData.vue:510
 msgid "Partnership needs"
@@ -2386,10 +2454,16 @@ msgstr ""
 msgid "Phase completion date"
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:151
-#: components/dashboard/AdvancedSearch.vue:344
+#: components/project/sections/StageOverview.vue:260
+msgid "Phase date is required"
+msgstr ""
+
+#: components/dashboard/AdvancedSearch.vue:159
+#: components/dashboard/AdvancedSearch.vue:354
 #: components/dashboard/MainTable.vue:195
 #: components/dashboard/MainTable.vue:432
+#: components/portfolio/dashboard/MainTable.vue:229
+#: components/portfolio/dashboard/MainTable.vue:502
 msgid "Phase of Initiative"
 msgstr ""
 
@@ -2427,10 +2501,12 @@ msgid ""
 "                programmes."
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:171
-#: components/dashboard/AdvancedSearch.vue:396
-#: components/dashboard/MainTable.vue:376
-#: components/dashboard/MainTable.vue:835
+#: components/dashboard/AdvancedSearch.vue:179
+#: components/dashboard/AdvancedSearch.vue:406
+#: components/dashboard/MainTable.vue:378
+#: components/dashboard/MainTable.vue:802
+#: components/portfolio/dashboard/MainTable.vue:412
+#: components/portfolio/dashboard/MainTable.vue:872
 msgid "Platform/Product Function"
 msgstr ""
 
@@ -2662,10 +2738,24 @@ msgstr ""
 msgid "Profile update error"
 msgstr ""
 
-#: components/dashboard/MainTable.vue:280
-#: components/dashboard/MainTable.vue:624
-#: components/portfolio/dashboard/MainTable.vue:236
-#: components/portfolio/dashboard/MainTable.vue:531
+#: components/dashboard/MainTable.vue:531
+#: components/dashboard/MainTable.vue:1138
+#: components/portfolio/dashboard/MainTable.vue:565
+#: components/portfolio/dashboard/MainTable.vue:1208
+msgid "Program Targets"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:542
+#: components/dashboard/MainTable.vue:1164
+#: components/portfolio/dashboard/MainTable.vue:576
+#: components/portfolio/dashboard/MainTable.vue:1234
+msgid "Program Targets Archieved"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:281
+#: components/dashboard/MainTable.vue:593
+#: components/portfolio/dashboard/MainTable.vue:315
+#: components/portfolio/dashboard/MainTable.vue:663
 msgid "Programme Focal Point Name"
 msgstr ""
 
@@ -2677,10 +2767,12 @@ msgstr ""
 msgid "Programme Focus Area(s)"
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:163
-#: components/dashboard/AdvancedSearch.vue:379
-#: components/dashboard/MainTable.vue:358
-#: components/dashboard/MainTable.vue:799
+#: components/dashboard/AdvancedSearch.vue:171
+#: components/dashboard/AdvancedSearch.vue:389
+#: components/dashboard/MainTable.vue:360
+#: components/dashboard/MainTable.vue:766
+#: components/portfolio/dashboard/MainTable.vue:394
+#: components/portfolio/dashboard/MainTable.vue:836
 msgid "Programme Innovation/Non-Technology Platforms"
 msgstr ""
 
@@ -2705,10 +2797,6 @@ msgstr ""
 
 #: components/common/chart/cStages.vue:13
 msgid "Project start date"
-msgstr ""
-
-#: components/portfolio/dashboard/PortfolioFiltersHeader.vue:5
-msgid "project(s) to show"
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:442
@@ -2834,6 +2922,8 @@ msgid "Region:"
 msgstr ""
 
 #: components/dashboard/MainTable.vue:67 components/dashboard/MainTable.vue:149
+#: components/portfolio/dashboard/MainTable.vue:101
+#: components/portfolio/dashboard/MainTable.vue:219
 msgid "Regional Office"
 msgstr ""
 
@@ -2841,6 +2931,8 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:67
 #: components/dashboard/MainTable.vue:148
 #: components/dashboard/MainTable.vue:333
+#: components/portfolio/dashboard/MainTable.vue:182
+#: components/portfolio/dashboard/MainTable.vue:403
 msgid "Regional Priorities"
 msgstr ""
 
@@ -2862,8 +2954,8 @@ msgid "Reload"
 msgstr ""
 
 #: components/common/Favorite.vue:3 components/common/Favorite.vue:16
-#: components/dashboard/MainTable.vue:483
-#: components/portfolio/dashboard/MainTable.vue:388
+#: components/dashboard/MainTable.vue:700
+#: components/portfolio/dashboard/MainTable.vue:749
 msgid "Remove from Favorites"
 msgstr ""
 
@@ -2895,8 +2987,8 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:51
 #: components/dashboard/MainTable.vue:211
 #: components/dashboard/MainTable.vue:465
-#: components/portfolio/dashboard/MainTable.vue:166
-#: components/portfolio/dashboard/MainTable.vue:372
+#: components/portfolio/dashboard/MainTable.vue:245
+#: components/portfolio/dashboard/MainTable.vue:535
 #: components/project/ProjectData.vue:71 components/project/ProjectData.vue:174
 #: components/search/AdvancedSearch.vue:36
 #: components/search/AdvancedSearch.vue:84
@@ -3188,8 +3280,8 @@ msgstr ""
 msgid "Site Language"
 msgstr ""
 
-#: components/dashboard/AdvancedSearch.vue:136
-#: components/dashboard/AdvancedSearch.vue:317
+#: components/dashboard/AdvancedSearch.vue:144
+#: components/dashboard/AdvancedSearch.vue:327
 #: components/dialogs/DashboardFiltersDialog.vue:143
 #: components/search/AdvancedSearch.vue:161
 #: components/search/AdvancedSearch.vue:344
@@ -3199,6 +3291,13 @@ msgstr ""
 #: components/project/ProjectData.vue:306
 #: components/project/ProjectData.vue:639
 msgid "Software platform(s)"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:394
+#: components/dashboard/MainTable.vue:836
+#: components/portfolio/dashboard/MainTable.vue:428
+#: components/portfolio/dashboard/MainTable.vue:906
+msgid "Software Platforms(s)"
 msgstr ""
 
 #: pages/_organisation/portfolio/innovation/_id.vue:187
@@ -3214,13 +3313,16 @@ msgstr ""
 msgid "Specify URL"
 msgstr ""
 
-#: components/project/sections/StageOverview.vue:260
-msgid "Stage date is required"
-msgstr ""
-
 #: components/project/sections/Stages.vue:28
 #: components/project/sections/Stages.vue:88
 msgid "Start date"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:553
+#: components/dashboard/MainTable.vue:1192
+#: components/portfolio/dashboard/MainTable.vue:587
+#: components/portfolio/dashboard/MainTable.vue:1262
+msgid "Start Date"
 msgstr ""
 
 #: components/portfolio/form/GeneralSettings.vue:57
@@ -3281,6 +3383,13 @@ msgstr ""
 
 #: components/project/ProjectData.vue:89 components/project/ProjectData.vue:220
 msgid "System challenge(s)"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:575
+#: components/dashboard/MainTable.vue:1255
+#: components/portfolio/dashboard/MainTable.vue:609
+#: components/portfolio/dashboard/MainTable.vue:1325
+msgid "Target Group (Target Population) Reached"
 msgstr ""
 
 #: components/common/ProjectLegendContent.vue:84
@@ -3671,6 +3780,20 @@ msgstr ""
 msgid "Toolkit"
 msgstr ""
 
+#: components/dashboard/MainTable.vue:588
+#: components/dashboard/MainTable.vue:1283
+#: components/portfolio/dashboard/MainTable.vue:622
+#: components/portfolio/dashboard/MainTable.vue:1353
+msgid "Total Budget"
+msgstr ""
+
+#: components/dashboard/MainTable.vue:599
+#: components/dashboard/MainTable.vue:1309
+#: components/portfolio/dashboard/MainTable.vue:633
+#: components/portfolio/dashboard/MainTable.vue:1379
+msgid "Total Budget (Narrative)"
+msgstr ""
+
 #: components/project/ProjectData.vue:197
 #: components/project/ProjectData.vue:468
 msgid "Total estimated budget"
@@ -3740,8 +3863,8 @@ msgstr ""
 msgid "UNICEF office"
 msgstr ""
 
-#: components/portfolio/dashboard/MainTable.vue:114
-#: components/portfolio/dashboard/MainTable.vue:248
+#: components/portfolio/dashboard/MainTable.vue:129
+#: components/portfolio/dashboard/MainTable.vue:279
 #: components/project/ProjectData.vue:13 components/project/ProjectData.vue:40
 #: components/search/AdvancedSearch.vue:12
 #: components/search/AdvancedSearch.vue:35
@@ -3750,6 +3873,8 @@ msgstr ""
 
 #: components/dashboard/MainTable.vue:121
 #: components/dashboard/MainTable.vue:273
+#: components/portfolio/dashboard/MainTable.vue:155
+#: components/portfolio/dashboard/MainTable.vue:343
 msgid "UNICEF Sector"
 msgstr ""
 
@@ -3797,7 +3922,7 @@ msgstr ""
 #: components/dashboard/TableTopActions.vue:139
 #: components/dialogs/ProjectApprovalDialog.vue:12
 #: components/dialogs/ProjectApprovalDialog.vue:41
-#: components/portfolio/dashboard/TableTopActions.vue:93
+#: components/portfolio/dashboard/TableTopActions.vue:92
 msgid "Update"
 msgstr ""
 
@@ -4065,7 +4190,7 @@ msgstr ""
 msgid "When will the technology be first deployed?"
 msgstr ""
 
-#: components/portfolio/dashboard/TableTopActions.vue:239
+#: components/portfolio/dashboard/TableTopActions.vue:243
 msgid ""
 "When you move initiatives back to inventory, all completed reviews are "
 "deleted for legacy reasons. Please confirm."
@@ -4145,6 +4270,13 @@ msgid ""
 "            modified?"
 msgstr ""
 
+#: components/dashboard/MainTable.vue:610
+#: components/dashboard/MainTable.vue:1338
+#: components/portfolio/dashboard/MainTable.vue:643
+#: components/portfolio/dashboard/MainTable.vue:1408
+msgid "Work Breakdown Structure (WBS)"
+msgstr ""
+
 #: components/project/ProjectData.vue:186
 #: components/project/ProjectData.vue:446
 msgid "Work Breakdown Structure (WBS) number"
@@ -4155,7 +4287,7 @@ msgstr ""
 msgid "Wrong image format, you can only upload .jpg and .png files"
 msgstr ""
 
-#: components/dashboard/ListExport.vue:79
+#: components/dashboard/ListExport.vue:125
 msgid "yes"
 msgstr ""
 
@@ -4171,8 +4303,8 @@ msgstr ""
 
 #: components/portfolio/dashboard/dialog/Error.vue:11
 msgid ""
-"You are not able to move the selected project(s) to portfolio, because\n"
-"        some of them have not been reviewd yet."
+"You are not able to move the selected initiative(s) to portfolio,\n"
+"        because some of them have not been reviewd yet."
 msgstr ""
 
 #: pages/_organisation/initiatives/_id.vue:36
