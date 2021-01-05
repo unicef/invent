@@ -410,8 +410,8 @@ export default {
     width: 100%;
   }
   .note {
-    width: 678px;
-    margin-left: auto;
+    flex-grow: 1;
+    margin-left: 20px;
   }
 }
 // animation toggle
