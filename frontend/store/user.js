@@ -6,6 +6,11 @@ export const state = () => ({
   user: null,
   profile: null,
   emailVerifyResult: null,
+  feedbackOn: false,
+  feedbackForm: {
+    subject: '',
+    message: ''
+  }
 })
 
 export const getters = {
@@ -181,5 +186,12 @@ export const mutations = {
 
   EMAIL_VERIFY_RESULT: (state, isSuccess) => {
     state.emailVerifyResult = isSuccess
+  },
+
+  SET_FEEDBACK: (state, { feedbackOn, feedbackForm }) => {
+    state.feedbackOn = feedbackOn
+    if (feedbackForm) {
+      state.feedbackForm = Object.assign({}, state.feedbackForm, feedbackForm)
+    }
   },
 }
