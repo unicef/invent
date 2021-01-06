@@ -143,6 +143,10 @@ export default {
     },
   },
   mounted() {
+    if (this.$route.query.reloadAfterImport) {
+      window.location.href = window.location.origin + this.$route.path
+      return
+    }
     if (this.$route.query.reloadDataFromStorage) {
       this.$nextTick(() => {
         this.$nuxt.$loading.start()

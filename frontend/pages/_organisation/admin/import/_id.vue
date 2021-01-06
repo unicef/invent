@@ -338,6 +338,7 @@ export default {
             this.localePath({
               name: 'organisation-initiatives-id-edit',
               params: { id, organisation: this.$route.params.organisation },
+              query: { reloadAfterImport: true },
             })
           )
         } catch (e) {
