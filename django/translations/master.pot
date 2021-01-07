@@ -148,7 +148,7 @@ msgstr ""
 msgid "Achieved programme targets "
 msgstr ""
 
-#: components/project/ProjectForm.vue:334
+#: components/project/ProjectForm.vue:338
 msgid "Action cancelled"
 msgstr ""
 
@@ -218,6 +218,10 @@ msgstr ""
 #: components/dashboard/MainTable.vue:699
 #: components/portfolio/dashboard/MainTable.vue:748
 msgid "Add to Favorites"
+msgstr ""
+
+#: components/EditProfile.vue:52 components/EditProfile.vue:196
+msgid "Add UNICEF Office"
 msgstr ""
 
 #: components/portfolio/form/Managers.vue:14
@@ -412,7 +416,7 @@ msgid ""
 "            termination."
 msgstr ""
 
-#: components/project/ProjectForm.vue:318
+#: components/project/ProjectForm.vue:322
 msgid "Attention"
 msgstr ""
 
@@ -559,11 +563,11 @@ msgstr ""
 #: components/portfolio/dashboard/TableTopActions.vue:82
 #: components/portfolio/dashboard/TableTopActions.vue:248
 #: components/portfolio/dashboard/dialog/Score.vue:201
-#: components/project/ProjectForm.vue:321
+#: components/project/ProjectForm.vue:325
 #: components/project/ProjectNavigation.vue:178
 #: pages/_organisation/admin/import/_id.vue:284
 #: pages/_organisation/admin/import/_id.vue:308
-#: pages/_organisation/admin/import/_id.vue:377
+#: pages/_organisation/admin/import/_id.vue:378
 msgid "Cancel"
 msgstr ""
 
@@ -681,8 +685,8 @@ msgstr ""
 
 #: components/portfolio/form/NewPortfolioForm.vue:176
 #: components/portfolio/form/NewPortfolioForm.vue:209
-#: components/project/ProjectForm.vue:296
-#: components/project/ProjectForm.vue:355
+#: components/project/ProjectForm.vue:300
+#: components/project/ProjectForm.vue:359
 msgid "Close"
 msgstr ""
 
@@ -734,8 +738,8 @@ msgstr ""
 
 #: components/portfolio/form/NewPortfolioForm.vue:174
 #: components/portfolio/form/NewPortfolioForm.vue:207
-#: components/project/ProjectForm.vue:294
-#: components/project/ProjectForm.vue:353
+#: components/project/ProjectForm.vue:298
+#: components/project/ProjectForm.vue:357
 msgid "Congratulation"
 msgstr ""
 
@@ -969,7 +973,7 @@ msgstr ""
 msgid "Digital Health Interventions"
 msgstr ""
 
-#: components/project/ProjectForm.vue:216
+#: components/project/ProjectForm.vue:220
 msgid "Discard changes"
 msgstr ""
 
@@ -989,7 +993,7 @@ msgstr ""
 msgid "Disclosure"
 msgstr ""
 
-#: components/EditProfile.vue:67 components/admin/CountryAdmin.vue:338
+#: components/EditProfile.vue:72 components/admin/CountryAdmin.vue:338
 #: components/admin/DonorAdmin.vue:266
 #: components/portfolio/form/NewPortfolioForm.vue:29
 msgid "Dismiss changes"
@@ -1030,7 +1034,7 @@ msgstr ""
 msgid "Draft or Published"
 msgstr ""
 
-#: components/project/ProjectForm.vue:328
+#: components/project/ProjectForm.vue:332
 msgid "Draft overriden with published version"
 msgstr ""
 
@@ -1226,7 +1230,7 @@ msgstr ""
 msgid "Failed to parse your data, click to manually fix"
 msgstr ""
 
-#: components/project/ProjectForm.vue:156
+#: components/project/ProjectForm.vue:160
 msgid "Failed to restore auto-saved project"
 msgstr ""
 
@@ -1329,7 +1333,7 @@ msgstr ""
 msgid "Go to Dashboard"
 msgstr ""
 
-#: pages/_organisation/admin/import/_id.vue:410
+#: pages/_organisation/admin/import/_id.vue:411
 msgid "Go to My Initiatives"
 msgstr ""
 
@@ -1908,7 +1912,7 @@ msgid "item"
 msgstr ""
 
 #: pages/_organisation/admin/import/_id.vue:332
-#: pages/_organisation/admin/import/_id.vue:411
+#: pages/_organisation/admin/import/_id.vue:412
 msgid "Keep working"
 msgstr ""
 
@@ -2266,7 +2270,7 @@ msgstr ""
 msgid "Note that once this column is deleted, you cannot recover the data."
 msgstr ""
 
-#: pages/_organisation/admin/import/_id.vue:371
+#: pages/_organisation/admin/import/_id.vue:372
 msgid ""
 "Note that once you have saved these initiatives, they will be uploaded to "
 "the DHA. You can access all saved initiatives from your My Initiatives page."
@@ -2316,7 +2320,7 @@ msgid "Official Score"
 msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:231
-#: components/project/ProjectForm.vue:320
+#: components/project/ProjectForm.vue:324
 msgid "Ok"
 msgstr ""
 
@@ -2324,10 +2328,10 @@ msgstr ""
 #: components/admin/DhaQuestion.vue:181
 #: components/admin/import/ImportHeaders.vue:166
 #: components/dashboard/FilterPresetsActions.vue:172
-#: components/project/ProjectForm.vue:159
+#: components/project/ProjectForm.vue:163
 #: pages/_organisation/admin/import/_id.vue:283
 #: pages/_organisation/admin/import/_id.vue:307
-#: pages/_organisation/admin/import/_id.vue:376
+#: pages/_organisation/admin/import/_id.vue:377
 msgid "OK"
 msgstr ""
 
@@ -2569,6 +2573,10 @@ msgstr ""
 msgid "Please provide a detailed narrative of the initiative."
 msgstr ""
 
+#: components/EditProfile.vue:197
+msgid "Please provide an email address: "
+msgstr ""
+
 #: components/project/sections/ImplementationOverview.vue:357
 msgid "Please provide an indication of the funding gaps."
 msgstr ""
@@ -2642,7 +2650,7 @@ msgid ""
 "              applies to."
 msgstr ""
 
-#: components/project/ProjectForm.vue:184
+#: components/project/ProjectForm.vue:188
 msgid "Please select one or more Digital Health Intervetions for this Software"
 msgstr ""
 
@@ -2730,11 +2738,11 @@ msgstr ""
 msgid "Problem Statements"
 msgstr ""
 
-#: components/EditProfile.vue:207
+#: components/EditProfile.vue:220
 msgid "Profile succesfully updated"
 msgstr ""
 
-#: components/EditProfile.vue:221
+#: components/EditProfile.vue:234
 msgid "Profile update error"
 msgstr ""
 
@@ -2902,7 +2910,7 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: components/project/ProjectForm.vue:215
+#: components/project/ProjectForm.vue:219
 msgid "Recover & Reload"
 msgstr ""
 
@@ -3035,7 +3043,7 @@ msgstr ""
 msgid "Save All"
 msgstr ""
 
-#: pages/_organisation/admin/import/_id.vue:374
+#: pages/_organisation/admin/import/_id.vue:375
 msgid "Save all initiatives"
 msgstr ""
 
@@ -3060,11 +3068,11 @@ msgstr ""
 msgid "Save Portfolio"
 msgstr ""
 
-#: components/EditProfile.vue:77
+#: components/EditProfile.vue:82
 msgid "Save settings"
 msgstr ""
 
-#: pages/_organisation/admin/import/_id.vue:385
+#: pages/_organisation/admin/import/_id.vue:386
 msgid "Saving all initiatives has been cancelled"
 msgstr ""
 
@@ -3345,7 +3353,7 @@ msgid "Submit Score"
 msgstr ""
 
 #: pages/_organisation/admin/import/_id.vue:329
-#: pages/_organisation/admin/import/_id.vue:408
+#: pages/_organisation/admin/import/_id.vue:409
 msgid "Success!"
 msgstr ""
 
@@ -3481,7 +3489,7 @@ msgid ""
 "            knowledgeable in that area."
 msgstr ""
 
-#: components/project/ProjectForm.vue:315
+#: components/project/ProjectForm.vue:319
 msgid "The current draft will be overwritten by the published version"
 msgstr ""
 
@@ -3578,7 +3586,7 @@ msgid "There was a problem processing your ticket, please try again"
 msgstr ""
 
 #: components/portfolio/form/NewPortfolioForm.vue:126
-#: components/project/ProjectForm.vue:210
+#: components/project/ProjectForm.vue:214
 msgid ""
 "There was an un-caught validation error an automatic report has been "
 "submitted"
@@ -3636,8 +3644,8 @@ msgid "this"
 msgstr ""
 
 #: components/DhaLogin.vue:180 components/DhaLogin.vue:193
-#: components/DhaLogin.vue:203 components/EditProfile.vue:145
-#: components/EditProfile.vue:153 components/EditProfile.vue:161
+#: components/DhaLogin.vue:203 components/EditProfile.vue:150
+#: components/EditProfile.vue:158 components/EditProfile.vue:166
 #: components/SignupComponent.vue:110 components/SignupComponent.vue:127
 #: components/SignupComponent.vue:142
 msgid "This field is required"
@@ -4009,8 +4017,8 @@ msgstr ""
 #: components/dialogs/DialogsContainer.vue:46
 #: components/dialogs/ProjectApprovalDialog.vue:229
 #: components/portfolio/form/NewPortfolioForm.vue:130
-#: components/project/ProjectForm.vue:157
-#: components/project/ProjectForm.vue:213
+#: components/project/ProjectForm.vue:161
+#: components/project/ProjectForm.vue:217
 #: pages/_organisation/initiatives/_id.vue:37
 msgid "Warning"
 msgstr ""
@@ -4356,15 +4364,15 @@ msgstr ""
 msgid "You must have a UNICEF account to log in."
 msgstr ""
 
-#: components/project/ProjectForm.vue:352
+#: components/project/ProjectForm.vue:356
 msgid "Your draft has been published successfully"
 msgstr ""
 
-#: components/project/ProjectForm.vue:293
+#: components/project/ProjectForm.vue:297
 msgid "Your draft has been saved successfully"
 msgstr ""
 
-#: pages/_organisation/admin/import/_id.vue:405
+#: pages/_organisation/admin/import/_id.vue:406
 msgid ""
 "Your initiatives have been successfully saved as a draft, you can go to your "
 "project inbox or keep working on the import interface"

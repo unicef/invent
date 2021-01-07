@@ -214,6 +214,7 @@ export default {
 
 <style lang="less" scoped>
 .Matrix {
+  position: relative;
   color: #404041;
   background-color: white;
   margin: 5px;
@@ -291,8 +292,8 @@ export default {
       .Content {
         margin: 5px 20px 20px 40px;
         height: 576px;
-        overflow-y: hidden;
-        overflow: scroll;
+        //overflow-y: hidden;
+        overflow: auto;
       }
       .Overlay {
         position: absolute;
@@ -344,8 +345,12 @@ export default {
         }
         .List {
           border-top: 1px solid #eae6e1;
-          padding-top: 24px;
+          margin-top: -5px;
+          //padding-top: 24px;
           .ListLink {
+            &:first-child {
+              margin-top: 24px;
+            }
             a {
               text-decoration: none;
             }
@@ -409,12 +414,12 @@ export default {
     background-image: url('/arrowhead-tl.svg');
   }
   .ArrowTop {
-    left: 0;
+    left: -5px;
   }
   .ArrowRight {
     transform: rotate(90deg);
-    left: 599px;
-    top: 641px;
+    left: 592px;
+    top: 595px;
   }
 }
 </style>
