@@ -273,7 +273,7 @@ export default {
         // will generate custom reviwers rows
         const reviewers = []
         if (this.review.review_scores) {
-          this.review.review_scores.map((i) => {
+          this.review.review_scores.forEach((i) => {
             reviewers[i.reviewer.name] = {
               [type]: i[type],
               [`${type}_comment`]: i[`${type}_comment`],

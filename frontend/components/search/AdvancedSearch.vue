@@ -25,9 +25,24 @@
         :placeholder="$gettext('Country') | translate"
         @change="handleSearch('country', $event)"
       />
+      <filter-select
+        :value="ro"
+        :items="regionalOffices"
+        :disabled="disabledCountries"
+        multiple
+        :placeholder="$gettext('Multicountry or Regional Office ') | translate"
+        @change="handleSearch('ro', $event)"
+      />
     </div>
     <!-- areas -->
     <div class="divider">
+      <filter-select
+        :value="us"
+        :items="sectors"
+        multiple
+        :placeholder="$gettext('Unicef Sectors') | translate"
+        @change="handleSearch('us', $event)"
+      />
       <filter-select
         :value="goal"
         :items="goalAreas"
@@ -42,6 +57,21 @@
         @change="handleSearch('result', $event)"
       />
       <filter-select
+        :value="rp"
+        :items="regionalPriorities"
+        multiple
+        :placeholder="$gettext('Regional Priorities') | translate"
+        @change="handleSearch('rp', $event)"
+      />
+      <filter-select
+        :value="iw"
+        :items="innovationWays"
+        multiple
+        :placeholder="$gettext('Innovation Ways') | translate"
+        @change="handleSearch('iw', $event)"
+      />
+      <filter-select
+        v-if="showIC"
         :value="ic"
         :items="innovationCategories"
         multiple
@@ -173,6 +203,48 @@
         />
       </filter-item>
     </div>
+    <!-- platforms and extras -->
+    <div class="divider">
+      <filter-select
+        :value="stage"
+        :items="stages"
+        multiple
+        :placeholder="$gettext('Phase of Initiative') | translate"
+        @change="handleSearch('stage', $event)"
+      />
+      <filter-select
+        :value="hp"
+        :items="hardwares"
+        multiple
+        :placeholder="$gettext('Hardware Platforms') | translate"
+        @change="handleSearch('hp', $event)"
+      />
+      <filter-select
+        :value="pp"
+        :items="nontechs"
+        multiple
+        :placeholder="
+          $gettext('Programme Innovation/Non-Technology Platforms') | translate
+        "
+        @change="handleSearch('pp', $event)"
+      />
+      <filter-select
+        :value="pf"
+        :items="functions"
+        multiple
+        :placeholder="$gettext('Platform/Product Function') | translate"
+        @change="handleSearch('pf', $event)"
+      />
+      <filter-select
+        :value="is"
+        :items="classifications"
+        multiple
+        :placeholder="
+          $gettext('Information Security Classification') | translate
+        "
+        @change="handleSearch('is', $event)"
+      />
+    </div>
   </div>
 </template>
 
@@ -205,6 +277,11 @@ export default {
     HealthSystemChallengesList,
     CapabilityList,
     SimplePlatformList,
+  },
+  data() {
+    return {
+      showIC: true,
+    }
   },
   computed: {
     ...mapGettersActions({
@@ -244,9 +321,13 @@ export default {
       region: (state) => state.search.filter.region,
       co: (state) => state.search.filter.co,
       country: (state) => state.search.filter.country,
+      ro: (state) => state.search.filter.ro,
       // areas
+      us: (state) => state.search.filter.us,
       goal: (state) => state.search.filter.goal,
       result: (state) => state.search.filter.result,
+      rp: (state) => state.search.filter.rp,
+      iw: (state) => state.search.filter.iw,
       ic: (state) => state.search.filter.ic,
       // another
       partner: (state) => state.search.filter.partner,
@@ -264,14 +345,29 @@ export default {
       cl: (state) => state.search.filter.cl,
       cc: (state) => state.search.filter.cc,
       cs: (state) => state.search.filter.cc,
+      // platforms and extras
+      stage: (state) => state.search.filter.stage,
+      hp: (state) => state.search.filter.hp,
+      pp: (state) => state.search.filter.pp,
+      pf: (state) => state.search.filter.pf,
+      is: (state) => state.search.filter.is,
     }),
     ...mapGetters({
       regions: 'system/getRegions',
+      regionalOffices: 'projects/getRegionalOffices',
       countries: 'countries/getCountries',
       goalAreas: 'projects/getGoalAreas',
       resultAreas: 'projects/getResultAreas',
       innovationCategories: 'projects/getInnovationCategories',
       partners: 'project/getPartners',
+      sectors: 'projects/getSectors',
+      regionalPriorities: 'projects/getRegionalPriorities',
+      innovationWays: 'projects/getInnovationWays',
+      stages: 'projects/getStages',
+      hardwares: 'projects/getHardware',
+      nontechs: 'projects/getNontech',
+      functions: 'projects/getFunctions',
+      classifications: 'projects/getInfoSec',
     }),
     disabledCountries() {
       return !!(this.co && this.co.length > 0 && this.co !== null)
@@ -311,6 +407,11 @@ export default {
       )
     },
     co(newOffices) {
+      if (newOffices.length > 0) {
+        this.setSearch({ key: 'ro', val: [14] })
+      } else {
+        this.setSearch({ key: 'ro', val: [] })
+      }
       this.handleSearch(
         'country',
         Array.isArray(newOffices)
@@ -347,6 +448,14 @@ export default {
     },
     selectedCapabilitySubcategories() {
       this.handleSearch('cs', this.selectedCapabilitySubcategories)
+    },
+    iw(niw) {
+      if (niw.includes(1)) {
+        this.setSearch({ key: 'ic', val: [] })
+        this.showIC = false
+      } else {
+        this.showIC = true
+      }
     },
   },
   mounted() {

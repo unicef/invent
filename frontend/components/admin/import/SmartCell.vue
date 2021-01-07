@@ -388,7 +388,7 @@ export default {
                 if (type) {
                   names.push(list[1])
                 } else {
-                  return
+                  return null
                 }
                 return {
                   link_type: type.id,
@@ -415,7 +415,7 @@ export default {
                 if (type) {
                   names.push(list[1])
                 } else {
-                  return
+                  return null
                 }
                 return {
                   partner_type: type.id,
