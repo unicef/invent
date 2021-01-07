@@ -479,8 +479,6 @@
 </template>
 
 <script>
-import find from 'lodash/find'
-import { mapGetters } from 'vuex'
 import { mapGettersActions } from '@/utilities/form'
 import SingleSelect from '@/components/common/SingleSelect'
 import MultiSelector from '@/components/project/MultiSelector'

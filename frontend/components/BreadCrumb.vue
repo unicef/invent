@@ -19,7 +19,6 @@
 <script>
 import split from 'lodash/split'
 import join from 'lodash/join'
-import each from 'lodash/each'
 
 import { mapState, mapGetters } from 'vuex'
 

@@ -9,8 +9,8 @@ export const state = () => ({
   feedbackOn: false,
   feedbackForm: {
     subject: '',
-    message: ''
-  }
+    message: '',
+  },
 })
 
 export const getters = {

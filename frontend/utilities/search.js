@@ -22,8 +22,10 @@ export const queryStringToObject = (url) => {
   const obj = [...new URLSearchParams(url.split('?')[1])].reduce(
     (a, [k, v]) => {
       if (a[k]) {
+        // eslint-disable-next-line no-sequences
         return (a[k] = typeof a[k] === 'object' ? [...a[k], v] : [a[k], v]), a
       }
+      // eslint-disable-next-line no-sequences
       return (a[k] = v), a
     },
     {}

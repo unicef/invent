@@ -484,15 +484,17 @@ export default {
     partnerLogos: {
       get() {
         return this.country.partner_logos.map((rawLogo) => {
+          let logo
           if (rawLogo.raw || rawLogo.uid) {
-            return rawLogo
+            logo = rawLogo
           } else if (rawLogo.image) {
-            return {
+            logo = {
               url: rawLogo.image,
               name: ('' + rawLogo.image).split('/').pop(),
               id: rawLogo.id,
             }
           }
+          return logo
         })
       },
       set(value) {
