@@ -27,22 +27,18 @@
       >
         <template slot-scope="scope">
           <div class="content">
-            <el-popover
+            <p>{{ scope.row.question.name }}</p>
+            <info-popover
               ref="question"
               placement="right"
               :title="$gettext('Question Description') | translate"
               width="360"
-              trigger="hover"
-              popper-class="score-popover"
             >
               <p>{{ scope.row.question.text }}</p>
-            </el-popover>
-            <p>{{ scope.row.question.name }}</p>
-            <fa
-              v-popover:question
-              class="question-icon"
-              :icon="['fas', 'question-circle']"
-            />
+              <p>
+                <b>{{ scope.row.question.text_bold }}</b>
+              </p>
+            </info-popover>
           </div>
         </template>
       </el-table-column>
@@ -82,7 +78,9 @@
             trigger="hover"
             popper-class="score-popover"
           >
-            <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
+            <div class="text-info">
+              <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
+            </div>
             <fa
               v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
               slot="reference"
@@ -137,16 +135,6 @@
               </template>
             </template>
             <template v-else>
-              <el-popover
-                ref="guidance"
-                placement="left"
-                :title="$gettext('Scoring Guidance') | translate"
-                width="360"
-                trigger="hover"
-                popper-class="score-popover left"
-              >
-                <p>{{ scope.row.question.guidance }}</p>
-              </el-popover>
               <el-select
                 v-if="scope.row.type === 'psa'"
                 v-model="score[scope.row.type]"
@@ -186,11 +174,18 @@
               >
                 <el-option v-for="i in points" :key="i" :label="i" :value="i" />
               </el-select>
-              <fa
-                v-popover:guidance
-                class="question-icon"
-                :icon="['fas', 'question-circle']"
-              />
+              <info-popover
+                ref="guidance"
+                placement="left"
+                :title="$gettext('Scoring Guidance') | translate"
+                width="360"
+                popper-class="score-popover"
+              >
+                <p>{{ scope.row.question.guidance }}</p>
+                <p>
+                  <b>{{ scope.row.question.guidance_bold }}</b>
+                </p>
+              </info-popover>
             </template>
           </div>
         </template>
@@ -217,10 +212,12 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import PsaList from '@/components/portfolio/dashboard/table/PsaList'
+import InfoPopover from '@/components/common/InfoPopover'
 
 export default {
   components: {
     PsaList,
+    InfoPopover,
   },
   data() {
     return {
@@ -341,31 +338,6 @@ export default {
 <style lang="less">
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
-
-.score-popover.el-popover {
-  padding: 0 !important;
-  margin-left: 14px !important;
-  &.left {
-    margin-left: 0px !important;
-    margin-right: 14px !important;
-  }
-  .el-popover__title {
-    font-size: 18px;
-    letter-spacing: -0.5px;
-    line-height: 23px;
-    padding: 20px;
-    border-bottom: 1px solid #eae6e2;
-  }
-  p {
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 21px;
-    padding: 17px 20px 23px;
-  }
-  .popper__arrow {
-    display: inline;
-  }
-}
 
 .dialog-score {
   .el-dialog__body {
