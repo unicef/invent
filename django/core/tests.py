@@ -164,6 +164,13 @@ class TestStaticDataEndpoint(TestCase):
         name_list = [l['name'] for l in response.json()['languages']]
         self.assertEqual(name_list, ['Anglais', 'Français', 'Espagnol', 'Portugais', 'Arabe'])
 
+    def test_review_question_data(self):
+        response = self.client.get(reverse('static-data'), HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        review_questions_data = response.json()['review_questions']
+        self.assertNotEqual(len(review_questions_data['nst']['text_bold']), 0)
+        self.assertNotEqual(len(review_questions_data['ra']['guidance_bold']), 0)
+
 
 def get_temp_image(name='test', ext='png'):
     cover = BytesIO()
