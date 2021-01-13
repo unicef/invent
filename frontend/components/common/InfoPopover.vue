@@ -4,7 +4,9 @@
     popper-class="score-popover"
     v-bind="{ ...$props, ...$attrs }"
   >
-    <slot></slot>
+    <div class="text-info">
+      <slot></slot>
+    </div>
     <fa
       slot="reference"
       class="question-icon"
@@ -34,11 +36,14 @@ export default {}
     padding: 20px;
     border-bottom: 1px solid #eae6e2;
   }
-  p {
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 21px;
+  .text-info {
     padding: 17px 20px 23px;
+    p {
+      font-size: 14px;
+      letter-spacing: 0;
+      line-height: 21px;
+      white-space: pre-line;
+    }
   }
   .popper__arrow {
     display: inline;

@@ -48,7 +48,7 @@
             />
           </div>
           <p key="comment" class="comment">
-            <template v-if="score[`${question}_comment`] === ''">
+            <template v-if="handleCommentShow(score, question)">
               <translate>(no comment)</translate>
             </template>
             <template v-else>
@@ -84,6 +84,7 @@
           <p class="label">
             {{ `${idx + 1}/A: ` }}
             {{ reviewQuestions[question].name }}
+            <translate v-if="question === 'psa'">(optional)</translate>
           </p>
           <p class="sub-label">
             {{ reviewQuestions[question].text }}
@@ -113,6 +114,9 @@
               width="360"
             >
               <p>{{ reviewQuestions[question].guidance }}</p>
+              <p>
+                <b>{{ reviewQuestions[question].guidance_bold }}</b>
+              </p>
             </info-popover>
           </div>
           <p class="label">
@@ -195,23 +199,14 @@ export default {
     }),
     disabled() {
       let disabled = false
-      for (let i = 0; i < this.questionType.length; i++) {
-        if (
-          this.questionType[i] === 'psa' &&
-          (!Array.isArray(this.score[this.questionType[i]]) ||
-            !this.score[this.questionType[i]].length)
-        ) {
-          disabled = true
-          break
+      this.questionType.forEach((type) => {
+        // we allow that psa is optional
+        if (type !== 'psa') {
+          if (this.score[type] === null || this.score[type] === '') {
+            disabled = true
+          }
         }
-        if (
-          this.score[this.questionType[i]] === null ||
-          this.score[this.questionType[i]] === ''
-        ) {
-          disabled = true
-          break
-        }
-      }
+      })
       return disabled
     },
     problemStatements() {
@@ -225,6 +220,12 @@ export default {
       setReviewDialog: 'projects/setReviewDialog',
       addReview: 'projects/addReview',
     }),
+    handleCommentShow(score, question) {
+      return (
+        score[`${question}_comment`] === '' ||
+        score[`${question}_comment`] === null
+      )
+    },
     resetForm(val) {
       this.setReviewDialog(val)
       this.score = {
