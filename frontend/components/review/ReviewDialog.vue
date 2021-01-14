@@ -84,7 +84,7 @@
           <p class="label">
             {{ `${idx + 1}/A: ` }}
             {{ reviewQuestions[question].name }}
-            <translate v-if="question === 'psa'">(optional)</translate>
+            <translate>(optional)</translate>
           </p>
           <p class="sub-label">
             {{ reviewQuestions[question].text }}
@@ -198,15 +198,15 @@ export default {
       reviewersList: 'system/getUserProfilesNoFilter',
     }),
     disabled() {
-      let disabled = false
-      this.questionType.forEach((type) => {
-        // we allow that psa is optional
-        if (type !== 'psa') {
-          if (this.score[type] === null || this.score[type] === '') {
-            disabled = true
-          }
-        }
-      })
+      const disabled = false
+      // this.questionType.forEach((type) => {
+      //   // we allow that psa is optional
+      //   if (type !== 'psa') {
+      //     if (this.score[type] === null || this.score[type] === '') {
+      //       disabled = true
+      //     }
+      //   }
+      // })
       return disabled
     },
     problemStatements() {
