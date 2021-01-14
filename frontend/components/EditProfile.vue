@@ -48,11 +48,6 @@
             >
               <language-select v-model="innerProfile.language" />
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="small" @click="openFeedback">
-                <translate>Add UNICEF Office</translate>
-              </el-button>
-            </el-form-item>
           </el-col>
         </el-row>
 
@@ -189,15 +184,6 @@ export default {
     ...mapActions({
       updateUserProfile: 'user/updateUserProfile',
     }),
-    openFeedback() {
-      this.$store.commit('user/SET_FEEDBACK', {
-        feedbackOn: true,
-        feedbackForm: {
-          subject: this.$gettext('Add UNICEF Office'),
-          message: this.$gettext('Please provide an email address: '),
-        },
-      })
-    },
     dismissChanges() {
       this.innerProfile = {
         ...this.profile,

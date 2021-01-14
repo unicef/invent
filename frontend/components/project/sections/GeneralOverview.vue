@@ -66,16 +66,16 @@
             Which UNICEF Office supports the initiative?
           </translate>
         </template>
-        <template slot="tooltip">
-          <el-tooltip
-            class="item"
-            content="If you encounter an error and/or can not locate the UNICEF Office
-            you would like to see in this list, please send a request with details to invent@unicef.org"
-            placement="right"
-          >
-            <i class="el-icon-warning warning" />
-          </el-tooltip>
-        </template>
+        <!--        <template slot="tooltip">-->
+        <!--          <el-tooltip-->
+        <!--            class="item"-->
+        <!--            content="If you encounter an error and/or can not locate the UNICEF Office-->
+        <!--            you would like to see in this list, please send a request with details to invent@unicef.org"-->
+        <!--            placement="right"-->
+        <!--          >-->
+        <!--            <i class="el-icon-warning warning" />-->
+        <!--          </el-tooltip>-->
+        <!--        </template>-->
         <country-office-select
           v-model="country_office"
           v-validate="rules.country_office"
@@ -90,6 +90,23 @@
               name of the UNICEF country office to show all the field locations.
             </translate>
           </p>
+        </span>
+        <span class="Hint">
+          <br />
+          <fa icon="info-circle" />
+          <translate>
+            If you encounter an error and/or cannot find the correct Unicef
+            office, please let us know
+          </translate>
+          &nbsp;
+          <el-button
+            class="no-padding"
+            type="text"
+            size="mini"
+            @click="openFeedback"
+          >
+            <translate>HERE</translate>
+          </el-button>
         </span>
       </custom-required-form-item>
 
@@ -384,6 +401,15 @@ export default {
     },
   },
   methods: {
+    openFeedback() {
+      this.$store.commit('user/SET_FEEDBACK', {
+        feedbackOn: true,
+        feedbackForm: {
+          subject: this.$gettext('UNICEF Office Issue'),
+          message: this.$gettext('Please provide an email address: '),
+        },
+      })
+    },
     async validate() {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
@@ -417,6 +443,11 @@ export default {
 
   .Date {
     width: 100% !important;
+  }
+
+  .no-padding {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
