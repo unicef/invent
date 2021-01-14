@@ -45,6 +45,9 @@
             <simple-field :header="$gettext('Team members') | translate">
               <team-list :value="project.team" />
             </simple-field>
+            <simple-field :header="$gettext('Viewers') | translate">
+              <team-list :value="project.viewers" />
+            </simple-field>
           </div>
 
           <simple-field
