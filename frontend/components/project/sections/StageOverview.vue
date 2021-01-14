@@ -135,6 +135,8 @@
                     <custom-required-form-item class="stage__input">
                       <el-input
                         :value="stage.note"
+                        maxlength="256"
+                        show-word-limit
                         :placeholder="
                           $gettext('Add note (optional)') | translate
                         "
@@ -194,6 +196,8 @@
                 v-model="end_date_note"
                 v-validate="rules.end_date_note"
                 class="note"
+                maxlength="256"
+                show-word-limit
                 data-vv-name="end_date_note"
                 data-vv-as="End date note"
                 :placeholder="$gettext('Add note (optional)') | translate"
