@@ -16,6 +16,7 @@
       :key="platform.id"
       :label="platform.name"
       :value="platform.id"
+      :disabled="platform.disabled"
     />
   </lazy-el-select>
 </template>
@@ -57,14 +58,39 @@ export default {
   },
   computed: {
     sourceList() {
-      const list = this.$store.getters['projects/' + this.source] || []
+      // source list logic
+      let sourceList
+      const fullList = this.$store.getters['projects/' + this.source] || []
       if (this.filter === null) {
-        return list
+        sourceList = fullList
+      } else if (this.filter && this.filter.length) {
+        sourceList = fullList.filter(({ id }) => this.filter.includes(id))
+      } else {
+        sourceList = fullList.filter(({ region }) => region === this.filter)
       }
-      if (this.filter && this.filter.length) {
-        return list.filter(({ id }) => this.filter.includes(id))
+      // disabled list logic
+      const targets = this.$store.getters['projects/' + this.source].filter(
+        (i) => i.name === 'N/A' || i.name === 'No'
+      )
+      let target
+      targets.forEach((tar) => {
+        if (this.platforms.includes(tar.id)) {
+          target = tar
+        }
+      })
+      if (target !== undefined && this.platforms.includes(target.id)) {
+        sourceList = sourceList.map((i) => {
+          if (i.id === target.id) {
+            return { ...i, disabled: false }
+          }
+          return { ...i, disabled: true }
+        })
+      } else {
+        sourceList = sourceList.map((i) => {
+          return { ...i, disabled: false }
+        })
       }
-      return list.filter(({ region }) => region === this.filter)
+      return sourceList
     },
   },
   watch: {
@@ -82,6 +108,21 @@ export default {
         })
       }
       this.changeHandler(newValue)
+    },
+    platforms(val) {
+      const target = this.sourceList.find((i) => i.name === 'N/A')
+      if (target !== undefined && val.includes(target.id)) {
+        this.platformList = this.sourceList.map((i) => {
+          if (i.name === 'N/A') {
+            return { ...i, disabled: false }
+          }
+          return { ...i, disabled: true }
+        })
+      } else {
+        this.platformList = this.sourceList.map((i) => {
+          return { ...i, disabled: false }
+        })
+      }
     },
   },
   methods: {
