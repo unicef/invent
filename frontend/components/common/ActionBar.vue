@@ -99,9 +99,9 @@
         <search-component />
       </el-col>
       <template v-if="isDashboard">
-        <el-col class="PersonaSelectorWrapper">
-          <persona-selector />
-        </el-col>
+        <!--        <el-col class="PersonaSelectorWrapper">-->
+        <!--          <persona-selector />-->
+        <!--        </el-col>-->
         <el-col class="DashboardFiltersHeaderWrapper">
           <dashboard-filters-header />
         </el-col>
@@ -118,7 +118,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import SearchComponent from '@/components/common/SearchComponent.vue'
-import PersonaSelector from '@/components/dashboard/PersonaSelector'
+// import PersonaSelector from '@/components/dashboard/PersonaSelector'
 import PortfolioFiltersHeader from '@/components/portfolio/dashboard/PortfolioFiltersHeader'
 import BreadCrumb from '@/components/BreadCrumb'
 import DashboardFiltersHeader from '@/components/dashboard/DashboardFiltersHeader'
@@ -126,7 +126,7 @@ import DashboardFiltersHeader from '@/components/dashboard/DashboardFiltersHeade
 export default {
   components: {
     SearchComponent,
-    PersonaSelector,
+    // PersonaSelector,
     PortfolioFiltersHeader,
     DashboardFiltersHeader,
     BreadCrumb,
