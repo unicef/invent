@@ -15,6 +15,7 @@
       :key="newItem.id"
       :label="newItem.name"
       :value="newItem.id"
+      :disabled="newItem.disabled"
       class="new"
     >
       <span class="left">
@@ -35,6 +36,7 @@
       :key="item.id"
       :label="item.name"
       :value="item.id"
+      :disabled="item.disabled"
       :class="`${item.state === 2 ? 'requested' : ''}`"
     >
       <template v-if="item.state === 1">
@@ -90,6 +92,31 @@ export default {
   computed: {
     selected() {
       return 'multiple' in this.$attrs ? [...this.items] : this.items[0]
+    },
+  },
+  watch: {
+    selected(val) {
+      let target
+      const targets = this.availableItems.filter(
+        (i) => i.name === 'N/A' || i.name === 'No'
+      )
+      targets.forEach((tar) => {
+        if (this.selected.includes(tar.id)) {
+          target = tar
+        }
+      })
+      if (target !== undefined && this.selected.includes(target.id)) {
+        this.availableItems = this.availableItems.map((i) => {
+          if (i.id === target.id) {
+            return { ...i, disabled: false }
+          }
+          return { ...i, disabled: true }
+        })
+      } else {
+        this.availableItems = this.availableItems.map((i) => {
+          return { ...i, disabled: false }
+        })
+      }
     },
   },
   mounted() {

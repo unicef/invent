@@ -8,14 +8,14 @@
         :value="region"
         :items="regions"
         :placeholder="$gettext('Region') | translate"
-        @change="handleSearch('region', $event)"
+        @change="handleSearch('region', $event, regions)"
       />
       <filter-select
         :value="co"
         :items="filteredOffices"
         multiple
         :placeholder="$gettext('UNICEF Office') | translate"
-        @change="handleSearch('co', $event)"
+        @change="handleSearch('co', $event, filteredOffices)"
       />
       <filter-select
         :value="country"
@@ -23,7 +23,7 @@
         :disabled="disabledCountries"
         multiple
         :placeholder="$gettext('Country') | translate"
-        @change="handleSearch('country', $event)"
+        @change="handleSearch('country', $event, countries)"
       />
       <filter-select
         :value="ro"
@@ -31,7 +31,7 @@
         :disabled="disabledCountries"
         multiple
         :placeholder="$gettext('Multicountry or Regional Office ') | translate"
-        @change="handleSearch('ro', $event)"
+        @change="handleSearch('ro', $event, regionalOffices)"
       />
     </div>
     <!-- areas -->
@@ -41,34 +41,34 @@
         :items="sectors"
         multiple
         :placeholder="$gettext('Unicef Sectors') | translate"
-        @change="handleSearch('us', $event)"
+        @change="handleSearch('us', $event, sectors)"
       />
       <filter-select
         :value="goal"
         :items="goalAreas"
         :placeholder="$gettext('Goal Area') | translate"
-        @change="handleSearch('goal', $event)"
+        @change="handleSearch('goal', $event, goalAreas)"
       />
       <filter-select
         :value="result"
         :items="filteredResultAreas"
         :disabled="disabledResultAreas"
         :placeholder="$gettext('Result Area') | translate"
-        @change="handleSearch('result', $event)"
+        @change="handleSearch('result', $event, filteredResultAreas)"
       />
       <filter-select
         :value="rp"
         :items="regionalPriorities"
         multiple
         :placeholder="$gettext('Regional Priorities') | translate"
-        @change="handleSearch('rp', $event)"
+        @change="handleSearch('rp', $event, regionalPriorities)"
       />
       <filter-select
         :value="iw"
         :items="innovationWays"
         multiple
         :placeholder="$gettext('Innovation Ways') | translate"
-        @change="handleSearch('iw', $event)"
+        @change="handleSearch('iw', $event, innovationWays)"
       />
       <filter-select
         v-if="showIC"
@@ -76,7 +76,7 @@
         :items="innovationCategories"
         multiple
         :placeholder="$gettext('Innovation Category') | translate"
-        @change="handleSearch('ic', $event)"
+        @change="handleSearch('ic', $event, innovationCategories)"
       />
     </div>
     <!-- portfolio -->
@@ -85,14 +85,14 @@
         :value="sp"
         :items="scalePhases"
         :placeholder="$gettext('Scale Phase') | translate"
-        @change="handleSearch('sp', $event)"
+        @change="handleSearch('sp', $event, scalePhases)"
       />
       <filter-select
         :value="ps"
         :items="problemStatements"
         :placeholder="$gettext('Problem Statement') | translate"
         option-class="statement-options"
-        @change="handleSearch('ps', $event)"
+        @change="handleSearch('ps', $event, problemStatements)"
       />
     </div>
     <!-- goal dependencies -->
@@ -210,14 +210,14 @@
         :items="stages"
         multiple
         :placeholder="$gettext('Phase of Initiative') | translate"
-        @change="handleSearch('stage', $event)"
+        @change="handleSearch('stage', $event, stages)"
       />
       <filter-select
         :value="hp"
         :items="hardwares"
         multiple
         :placeholder="$gettext('Hardware Platforms') | translate"
-        @change="handleSearch('hp', $event)"
+        @change="handleSearch('hp', $event, hardwares)"
       />
       <filter-select
         :value="pp"
@@ -226,14 +226,14 @@
         :placeholder="
           $gettext('Programme Innovation/Non-Technology Platforms') | translate
         "
-        @change="handleSearch('pp', $event)"
+        @change="handleSearch('pp', $event, nontechs)"
       />
       <filter-select
         :value="pf"
         :items="functions"
         multiple
         :placeholder="$gettext('Platform/Product Function') | translate"
-        @change="handleSearch('pf', $event)"
+        @change="handleSearch('pf', $event, functions)"
       />
       <filter-select
         :value="is"
@@ -242,7 +242,7 @@
         :placeholder="
           $gettext('Information Security Classification') | translate
         "
-        @change="handleSearch('is', $event)"
+        @change="handleSearch('is', $event, classifications)"
       />
     </div>
   </div>
@@ -477,8 +477,13 @@ export default {
     deleteFromCollection(id, collectionName) {
       this[collectionName] = this[collectionName].filter((item) => item !== id)
     },
-    handleSearch(key, val) {
-      this.setSearch({ key, val })
+    handleSearch(key, val, items) {
+      const target = items ? items.find((i) => i.name === 'N/A') : undefined
+      if (target !== undefined && val.includes(target.id)) {
+        this.setSearch({ key, val: [target.id] })
+      } else {
+        this.setSearch({ key, val })
+      }
       this.getSearchResults()
     },
     getSearchResults: debounce(function () {

@@ -295,29 +295,38 @@ export const actions = {
   setViewers({ commit }, value) {
     commit('SET_VIEWERS', value)
   },
-  setPlatforms({ commit }, value) {
-    commit('SET_PLATFORMS', value)
+  setPlatforms({ commit, rootGetters }, value) {
+    commit(
+      'SET_PLATFORMS',
+      naFilter(rootGetters['projects/getTechnologyPlatforms'], value)
+    )
   },
-  setSectors({ commit }, value) {
-    commit('SET_SECTORS', value)
+  setSectors({ commit, rootGetters }, value) {
+    commit('SET_SECTORS', naFilter(rootGetters['projects/getSectors'], value))
   },
   setRegionalPriorities({ commit }, value) {
     commit('SET_REGIONAL_PRIORITIES', value)
   },
-  setHardware({ commit }, value) {
-    commit('SET_HARDWARE', value)
+  setHardware({ commit, rootGetters }, value) {
+    commit('SET_HARDWARE', naFilter(rootGetters['projects/getHardware'], value))
   },
-  setNontech({ commit }, value) {
-    commit('SET_NONTECH', value)
+  setNontech({ commit, rootGetters }, value) {
+    commit('SET_NONTECH', naFilter(rootGetters['projects/getNontech'], value))
   },
-  setFunctions({ commit }, value) {
-    commit('SET_FUNCTIONS', value)
+  setFunctions({ commit, rootGetters }, value) {
+    commit(
+      'SET_FUNCTIONS',
+      naFilter(rootGetters['projects/getFunctions'], value)
+    )
   },
   setInfoSec({ commit }, value) {
     commit('SET_DATA', { key: 'isc', value })
   },
-  setInnovationWays({ commit }, value) {
-    commit('SET_DATA', { key: 'innovation_ways', value })
+  setInnovationWays({ commit, rootGetters }, value) {
+    commit('SET_DATA', {
+      key: 'innovation_ways',
+      value: naFilter(rootGetters['projects/getInnovationWays'], value),
+    })
   },
   setOverview({ commit }, value) {
     commit('SET_DATA', { key: 'overview', value })
@@ -337,11 +346,17 @@ export const actions = {
   setPhase({ commit }, value) {
     commit('SET_DATA', { key: 'phase', value })
   },
-  setCpd({ commit }, value) {
-    commit('SET_DATA', { key: 'cpd', value })
+  setCpd({ commit, rootGetters }, value) {
+    commit('SET_DATA', {
+      key: 'cpd',
+      value: naFilter(rootGetters['projects/getCpd'], value),
+    })
   },
-  setInnovationCategories({ commit }, value) {
-    commit('SET_DATA', { key: 'innovation_categories', value })
+  setInnovationCategories({ commit, rootGetters }, value) {
+    commit('SET_DATA', {
+      key: 'innovation_categories',
+      value: naFilter(rootGetters['projects/getInnovationCategories'], value),
+    })
   },
   setLinks({ commit }, value) {
     commit('SET_DATA', { key: 'links', value })
@@ -704,4 +719,19 @@ export const mutations = {
   SET_ORIGINAL: (state, project) => {
     state.original = project
   },
+}
+
+const naFilter = (items, selected) => {
+  const targets = items
+    ? items.filter((i) => i.name === 'N/A' || i.name === 'No')
+    : undefined
+
+  let newSelected = selected
+  targets.forEach((target) => {
+    console.log(target)
+    if (target !== undefined && selected.includes(target.id)) {
+      newSelected = [target.id]
+    }
+  })
+  return newSelected
 }
