@@ -138,14 +138,27 @@
       class="dialog-footer"
     >
       <el-button type="info" @click="resetForm(false)">Cancel</el-button>
-      <el-button
-        type="primary"
-        :loading="loadingReview"
-        :disabled="disabled"
-        @click="handleSubmit"
+      <el-popconfirm
+        :confirm-button-text="$gettext('Yes') | translate"
+        :cancel-button-text="$gettext('No') | translate"
+        icon="el-icon-info"
+        icon-color="#f26a21"
+        :title="
+          $gettext(
+            'Are you sure you want to submit? \nonce submitted, the review can\'t be changed'
+          ) | translate
+        "
+        @confirm="handleSubmit"
       >
-        <translate>Send</translate>
-      </el-button>
+        <el-button
+          slot="reference"
+          type="primary"
+          :loading="loadingReview"
+          :disabled="disabled"
+        >
+          <translate>Send</translate>
+        </el-button>
+      </el-popconfirm>
     </span>
   </el-dialog>
 </template>
@@ -297,6 +310,10 @@ export default {
 
 <style lang="less">
 @import '~assets/style/variables.less';
+
+.el-popconfirm__main {
+  width: 250px;
+}
 
 .el-dialog {
   .el-dialog__header {
