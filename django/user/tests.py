@@ -11,6 +11,7 @@ from rest_framework.authtoken.models import Token
 
 from country.models import Country, Donor
 from .models import Organisation, UserProfile
+from .tasks import send_user_request_to_admins
 
 
 def create_profile_for_user(register_response: Response) -> UserProfile:
@@ -469,7 +470,6 @@ class UserProfileTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
 
-    @override_settings(CELERY_ALWAYS_EAGER=True)
     def test_admin_requests_are_triggering_celery_task(self):
         c = Country.objects.create(code='XXY', name='COUNTRY_TEST')
         c.admins.add(self.user_profile_id)
@@ -478,19 +478,27 @@ class UserProfileTests(APITestCase):
         d.super_admins.add(self.user_profile_id)
 
         u1 = User.objects.create(username="username1", email="user1@user.org")
-        UserProfile.objects.create(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
+        upf1 = UserProfile.objects.create(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
+
+        send_user_request_to_admins(upf1.pk)
 
         u2 = User.objects.create(username="username2", email="user2@user.org")
-        UserProfile.objects.create(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
+        upf2 = UserProfile.objects.create(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
+
+        send_user_request_to_admins(upf2.pk)
 
         u3 = User.objects.create(username="username3", email="user3@user.org")
         upf3 = UserProfile.objects.create(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
+
+        send_user_request_to_admins(upf3.pk)
 
         self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
             str(upf3), upf3.get_account_type_display(), c.name))
 
         u4 = User.objects.create(username="username4", email="user4@user.org")
         upf4 = UserProfile.objects.create(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
+
+        send_user_request_to_admins(upf4.pk)
 
         self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
             str(upf4), upf4.get_account_type_display(), d.name))
@@ -500,6 +508,8 @@ class UserProfileTests(APITestCase):
 
         upf3.account_type = UserProfile.COUNTRY_ADMIN
         upf3.save()
+
+        send_user_request_to_admins(upf3.pk)
 
         self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
             str(upf3), upf3.get_account_type_display(), c.name))
