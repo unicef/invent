@@ -42,7 +42,12 @@ class CustomUserAdmin(UserAdmin):
     organisation.allow_tags = True
 
     def get_list_filter(self, request):
-        return super(CustomUserAdmin, self).get_list_filter(request) + (('userprofile__account_type'),)
+        return super().get_list_filter(request) + ('userprofile__account_type',)
+
+    def lookup_allowed(self, lookup, *args, **kwargs):
+        if lookup == 'userprofile__account_type__exact':
+            return True
+        return super().lookup_allowed(lookup, *args, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
         self.fieldsets[0][1]["fields"] = ('password',)
