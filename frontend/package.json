@@ -43,7 +43,7 @@
     "default-passive-events": "^1.0.10",
     "django-channels": "^1.1.6",
     "dotenv": "^6.2.0",
-    "element-ui": "^2.13.1",
+    "element-ui": "^2.14.1",
     "eventsource-polyfill": "^0.9.6",
     "js-cookie": "^2.2.0",
     "jwt-decode": "^2.2.0",
