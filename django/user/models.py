@@ -92,7 +92,7 @@ def admin_request_on_change(sender, instance, **kwargs):
 @receiver(post_save, sender=UserProfile)
 def admin_request_on_create(sender, instance, created, **kwargs):
     if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
-        send_user_request_to_admins.apply_async(args=(instance.pk,))
+        transaction.on_commit(lambda: send_user_request_to_admins.apply_async(args=(instance.pk, )))
 
 
 @receiver(post_save, sender=UserProfile)
