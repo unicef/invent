@@ -24,6 +24,9 @@ export const getters = {
     }
     return null
   },
+  getAccountApproved: (state) => {
+    return state.profile.account_type_approved
+  },
 }
 
 export const actions = {
