@@ -146,7 +146,7 @@ export const draftRules = () => {
       max: 2048,
     },
     wbs: {
-      max: 200,
+      max: 30,
     },
     unicef_sector: {
       required: false,
