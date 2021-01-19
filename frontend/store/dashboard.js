@@ -350,6 +350,7 @@ export const getters = {
     const country = getters.getFilteredCountries
     // const donor = state.dashboardType === 'donor' ? [state.dashboardId] : null
     const donor = rootGetters['system/getUnicefDonor'].id
+    const viewAs = rootGetters.getAccountApproved ? 'donor' : ''
     return {
       page_size: state.pageSize,
       page: state.page,
@@ -376,7 +377,7 @@ export const getters = {
       cl: state.selectedCapabilityLevels,
       cc: state.selectedCapabilityCategories,
       cs: state.selectedCapabilitySubcategories,
-      view_as: rootGetters['user/getAccountApproved'] ? 'donor' : '',
+      view_as: viewAs,
       sc: state.selectedColumns,
       // new
       ro: state.filteredRegionalOffice,
