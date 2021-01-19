@@ -5,6 +5,8 @@
     width="800px"
     top="8vh"
     custom-class="review-dialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
     @close="resetForm(false)"
     @open="handleReviewFeed()"
   >
