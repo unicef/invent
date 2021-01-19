@@ -19,6 +19,7 @@ export const state = () => ({
   // project review
   loadingReview: false,
   dialogReview: false,
+  errorReview: false,
   currentProjectReview: {},
   problemStatements: [],
 })
@@ -343,6 +344,7 @@ export const actions = {
   async addReview({ state, commit, dispatch }, { id, ...score }) {
     try {
       commit('SET_VALUE', { key: 'loadingReview', val: true })
+      commit('SET_VALUE', { key: 'errorReview', val: false })
       await this.$axios.post(`/api/project-review/${id}/fill/`, {
         ...score,
       })
@@ -352,7 +354,8 @@ export const actions = {
       commit('SET_VALUE', { key: 'loadingReview', val: false })
       commit('SET_VALUE', { key: 'dialogReview', val: false })
     } catch (e) {
-      console.log(e.response.data)
+      commit('SET_VALUE', { key: 'loadingReview', val: false })
+      commit('SET_VALUE', { key: 'errorReview', val: true })
     }
   },
   async setCurrentProject({ commit, dispatch }, id) {
