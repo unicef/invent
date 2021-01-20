@@ -6,5 +6,5 @@ exclude=
     *migrations/*,
     *settings/*,
     .venv/*,
-    reports/*
+    scripts/*
 extend-ignore=W291,E741
