@@ -74,6 +74,15 @@
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
+          <country-custom
+            ref="countryCustom"
+            :use-publish-rules="usePublishRules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+          />
         </el-col>
         <el-col :span="6">
           <project-navigation
@@ -97,6 +106,7 @@ import StageOverview from '@/components/project/sections/StageOverview'
 import Partners from '@/components/project/sections/Partners'
 import Technology from '@/components/project/sections/Technology'
 import DonorCustom from '@/components/project/sections/DonorCustom'
+import CountryCustom from '@/components/project/sections/CountryCustom'
 import ProjectNavigation from '@/components/project/ProjectNavigation'
 
 export default {
@@ -109,6 +119,7 @@ export default {
     Technology,
     DonorCustom,
     ProjectNavigation,
+    CountryCustom,
   },
   $_veeValidate: {
     validator: 'new',
@@ -257,6 +268,7 @@ export default {
         this.$refs.partners.validate(),
         this.$refs.technology.validate(),
         this.$refs.donorCustom.validate(),
+        this.$refs.countryCustom.validate(),
       ])
       console.log('root validations', validations)
       return validations.reduce((a, c) => a && c, true)
@@ -270,6 +282,7 @@ export default {
       this.$refs.partners.clear()
       this.$refs.technology.clear()
       this.$refs.donorCustom.clear()
+      this.$refs.countryCustom.clear()
     },
     async doSaveDraft() {
       this.clearValidation()

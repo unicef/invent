@@ -153,6 +153,25 @@ export const getters = {
       (ca) => ca.question_id === id
     )
   },
+  getCountryAnswers: (state) =>
+    state.country_answers ? [...state.country_answers] : [],
+  getCountryAnswerDetails: (state, getters) => (id) =>
+    getters.getCountryAnswers.find((ca) => ca.question_id === id),
+  getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
+    const country = rootGetters['countries/getCountryDetails'](
+      getters.getCountry
+    )
+    if (country && country.country_questions) {
+      return country.country_questions.map((cq) => {
+        const answer = getters.getCountryAnswerDetails(cq.id)
+        return { question_id: cq.id, answer: answer ? answer.answer : [] }
+      })
+    }
+  },
+  getPublishedCountryAnswerDetails: (state, getters) => (id) =>
+    getters.getPublished.country_custom_answers.find(
+      (ca) => ca.question_id === id
+    ),
   getPublished: (state) => ({
     ...state.published,
     team: state.team,
@@ -184,9 +203,13 @@ export const actions = {
       published.donors.forEach((d) => donorsToFetch.add(d))
       commit('SET_PUBLISHED', Object.freeze(published))
     }
+    const profile = rootGetters['user/getProfile']
     await Promise.all([
-      ...[...donorsToFetch].map((df) =>
-        dispatch('system/loadDonorDetails', df, { root: true })
+      ...[...donorsToFetch].map(
+        (df) => dispatch('system/loadDonorDetails', df, { root: true }),
+        dispatch('countries/loadCountryDetails', profile.country, {
+          root: true,
+        })
       ),
       dispatch('loadTeamViewers', id),
     ])
@@ -406,6 +429,16 @@ export const actions = {
   },
   setLoading({ commit }, value) {
     commit('SET_LOADING', value)
+  },
+  setCountryAnswer({ commit, getters }, answer) {
+    const index = getters.getCountryAnswers.findIndex(
+      (ca) => ca.question_id === answer.question_id
+    )
+    if (index > -1) {
+      commit('UPDATE_COUNTRY_ANSWER', { answer, index })
+    } else {
+      commit('ADD_COUNTRY_ANSWER', answer)
+    }
   },
   setDonorAnswer({ commit, getters }, answer) {
     const index = getters.getDonorsAnswers.findIndex(
@@ -644,6 +677,12 @@ export const mutations = {
   },
   UPDATE_DONOR_ANSWER: (state, { answer, index }) => {
     state.donors_answers.splice(index, 1, answer)
+  },
+  ADD_COUNTRY_ANSWER: (state, answer) => {
+    state.country_answers.push(answer)
+  },
+  UPDATE_COUNTRY_ANSWER: (state, { answer, index }) => {
+    state.country_answers.splice(index, 1, answer)
   },
   SET_PUBLISHED: (state, published) => {
     Vue.set(state, 'published', { ...published })
