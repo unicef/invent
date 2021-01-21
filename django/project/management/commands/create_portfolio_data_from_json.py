@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 import pprint as pp
 import json
 from user.models import User, UserProfile, Organisation
-from country.models import Donor, CountryOffice
+from country.models import Donor, CountryOffice, Country
 from project.models import Project, Portfolio, ProblemStatement, ProjectPortfolioState, ReviewScore
 from project.tests.setup import TestProjectData
 
@@ -24,8 +24,8 @@ class Command(BaseCommand, TestProjectData):
 
     def set_generals(self):
         pp.pprint('Creating background data if needed')
-        self.org = Organisation.objects.get(name='UNICEF')
-        self.d1 = Donor.objects.get(name='UNICEF')
+        self.org, _ = Organisation.objects.get_or_create(name='UNICEF')
+        self.d1, _ = Donor.objects.get_or_create(name='UNICEF')
 
     @staticmethod
     def create_users(users):
@@ -47,7 +47,15 @@ class Command(BaseCommand, TestProjectData):
     def create_projects(self, projects):
         projects_list = []
         for project_data in projects:
-            country_office = CountryOffice.objects.filter(country__name=project_data['country'])[0]
+            offices_in_country = CountryOffice.objects.filter(country__name=project_data['country'])
+            if len(offices_in_country) == 0:
+                country_office = CountryOffice.objects.create(
+                    name=f'{project_data["country"]}: Script-generated office',
+                    country=Country.objects.get(name=project_data['country']),
+                    city=f'Test city in {project_data["country"]}'
+                )
+            else:
+                country_office = offices_in_country[0]
 
             project_gen_data = {"project": {
                 "date": datetime.utcnow(),
