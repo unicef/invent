@@ -111,6 +111,7 @@ export const dateParser = (date) => {
 
 export const apiReadParser = (p) => {
   p = lib.parseCustomAnswers(p)
+  const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers)
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers)
   const research = 'research' in p ? p.research : undefined
 
@@ -119,6 +120,7 @@ export const apiReadParser = (p) => {
     start_date: dateParser(p.start_date),
     end_date: dateParser(p.end_date),
     donor_custom_answers,
+    country_custom_answers,
     research,
   }
 }
@@ -222,6 +224,7 @@ export const apiWriteParser = (
     const value = dataCleaner(p[key])
     result[key] = isEmpty(value) ? undefined : value
   }
+  const country_custom_answers = customCountryAnswerParser(countryCustomAnswers)
   const donor_custom_answers = customDonorAnswerParser(
     donorsCustomAnswers,
     p.donors
@@ -234,6 +237,7 @@ export const apiWriteParser = (
       modified: undefined,
     },
     donor_custom_answers,
+    country_custom_answers,
   }
 }
 

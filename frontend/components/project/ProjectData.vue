@@ -337,6 +337,21 @@
           </simple-field>
         </collapsible-card>
 
+        <collapsible-card
+          v-if="countryQuestions && countryQuestions.length > 0"
+          id="countrycustom"
+          :title="customFieldsName(country.name)"
+        >
+          <custom-readonly-field
+            v-for="question in countryQuestions"
+            :id="question.id"
+            :key="question.id"
+            :question="question.question"
+            :is-draft="isDraft"
+            :type="question.type"
+          />
+        </collapsible-card>
+
         <div v-if="donors && donors.length > 0" id="donorcustom">
           <collapsible-card
             v-for="donor in donors"
@@ -474,6 +489,12 @@ export default {
     },
     lastUpdated() {
       return format(new Date(this.modified), 'DD/MM/YYYY HH:mm')
+    },
+    countryQuestions() {
+      if (this.country) {
+        return this.country.country_questions
+      }
+      return []
     },
     donors() {
       return this.project.donors
