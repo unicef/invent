@@ -235,9 +235,6 @@ export const actions = {
       clean.organisation = rootGetters['system/getUnicefOrganisation'].id
       clean.donors = [donor]
       await Promise.all([
-        dispatch('countries/loadCountryDetails', profile.country, {
-          root: true,
-        }),
         dispatch('system/loadDonorDetails', donor, { root: true }),
       ])
     }
