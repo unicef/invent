@@ -374,21 +374,25 @@ export default {
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0],
     }),
+    officeData() {
+      return this.offices.find((obj) => obj.id === this.country_office)
+    },
     selectedRegion() {
-      const office = this.offices.find((obj) => obj.id === this.country_office)
-      if (office) {
-        const result = this.unicef_regions.find((uf) => uf.id === office.region)
+      if (this.officeData) {
+        const result = this.unicef_regions.find(
+          (uf) => uf.id === this.officeData.region
+        )
         return (result && result.name) || ' ' // N/A
       }
       return ' ' // N/A
     },
     countryOfOffice() {
-      const office = this.offices.find((obj) => obj.id === this.country_office)
-      return office ? this.getCountryDetails(office.country).name : ' ' // N/A
+      return this.officeData
+        ? this.getCountryDetails(this.officeData.country).name
+        : ' ' // N/A
     },
     city() {
-      const office = this.offices.find((obj) => obj.id === this.country_office)
-      return office ? office.city : ' ' // N/A
+      return this.officeData ? this.officeData.city : ' ' // N/A
     },
     regionalOffice() {
       const office = this.regionalOffices.find(
@@ -398,6 +402,17 @@ export default {
     },
     lastUpdated() {
       return format(new Date(this.modified), 'DD/MM/YYYY HH:mm')
+    },
+  },
+  watch: {
+    async country_office() {
+      if (this.officeData) {
+        await this.$store.dispatch(
+          'countries/loadCountryDetails',
+          this.officeData.country
+        )
+        this.country = this.officeData.country
+      }
     },
   },
   methods: {

@@ -203,11 +203,11 @@ export const actions = {
       published.donors.forEach((d) => donorsToFetch.add(d))
       commit('SET_PUBLISHED', Object.freeze(published))
     }
-    const profile = rootGetters['user/getProfile']
+    const country = data.draft ? data.draft.country : data.published.country
     await Promise.all([
       ...[...donorsToFetch].map(
         (df) => dispatch('system/loadDonorDetails', df, { root: true }),
-        dispatch('countries/loadCountryDetails', profile.country, {
+        dispatch('countries/loadCountryDetails', country, {
           root: true,
         })
       ),
