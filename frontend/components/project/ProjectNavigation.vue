@@ -87,6 +87,17 @@
               <translate>Investor fields</translate>
             </el-button>
           </li>
+          <li
+            v-show="showCountryFieldsLink"
+            :class="{ active: active === 'donorcustom' }"
+          >
+            <el-button type="text" @click="scrollTo('countrycustom')">
+              <span class="Step">
+                <fa icon="arrow-right" />
+              </span>
+              <translate>Country fields</translate>
+            </el-button>
+          </li>
         </ul>
       </div>
 
