@@ -11,6 +11,7 @@
           :id="question.id"
           :key="index"
           :draggable="allSaved"
+          :hide-private="hidePrivate"
         />
       </draggable>
     </div>
@@ -52,6 +53,13 @@ export default {
   components: {
     DhaQuestion,
     draggable,
+  },
+
+  props: {
+    hidePrivate: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {

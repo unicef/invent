@@ -322,7 +322,7 @@
       :title="$gettext('Country specific questionnaire') | translate"
       class="Questionnaire"
     >
-      <dha-questionaire ref="customQuestions" />
+      <dha-questionaire ref="customQuestions" hide-private />
     </collapsible-card>
 
     <collapsible-card
