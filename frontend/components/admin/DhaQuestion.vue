@@ -47,6 +47,7 @@
       />
 
       <el-switch
+        v-show="!hidePrivate"
         v-model="question.is_private"
         :active-text="$gettext('Private') | translate"
       />
@@ -76,6 +77,10 @@ export default {
       default: null,
     },
     draggable: {
+      type: Boolean,
+      default: false,
+    },
+    hidePrivate: {
       type: Boolean,
       default: false,
     },
