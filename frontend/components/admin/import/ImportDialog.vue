@@ -99,7 +99,7 @@
         </template>
 
         <div v-if="dialogData.column === 'custom_field'" ref="custom_fields">
-          <el-inputvalue
+          <el-input
             v-if="dialogData.customField.type < 3"
             v-model="dialogData.value[0]"
           />
@@ -108,10 +108,10 @@
             v-if="dialogData.customField.type === 3"
             v-model="dialogData.value[0]"
           >
-            <el-radio label="yes">
+            <el-radio label="Yes">
               <translate>Yes</translate>
             </el-radio>
-            <el-radio label="no">
+            <el-radio label="No">
               <translate>No</translate>
             </el-radio>
           </el-radio-group>
