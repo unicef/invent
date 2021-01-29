@@ -14,10 +14,19 @@
       </el-tooltip>
     </div>
 
-    <el-input
+    <!--    <el-input-->
+    <!--      v-if="type < 3"-->
+    <!--      v-model="innerValue"-->
+    <!--      v-validate="localRules"-->
+    <!--      :data-vv-as="question"-->
+    <!--      :data-vv-scope="'custom_question_' + id"-->
+    <!--      data-vv-name="answer"-->
+    <!--    />-->
+    <character-count-input
       v-if="type < 3"
       v-model="innerValue"
       v-validate="localRules"
+      :rules="{ max: 512 }"
       :data-vv-as="question"
       :data-vv-scope="'custom_question_' + id"
       data-vv-name="answer"
