@@ -59,7 +59,15 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         ** SEARCH PARAMETERS **
 
         `q` search term eg: q=test  
-        `in` search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc]  
+        `in` search in [optional, defaults to all]
+
+        ** SEARCH IN PARAMETERS **
+
+        `name` search in initiative name, eg: in=name
+        `overview` search in overview, eg: in=overview
+        `desc` search in description, eg: in=desc
+        `ach` search in current achievements, eg: in=ach
+        `partner` search in partner names, eg: in=partner
 
         ** STANDARD FILTERS **
 

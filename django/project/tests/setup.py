@@ -132,7 +132,18 @@ class TestProjectData:
                 "note": "stage 2 note",
             }],
             "innovation_ways": [3, 2],
-            "isc": 3
+            "isc": 3,
+            "program_targets": "program targets",
+            "program_targets_achieved": "targets achieved man",
+            "target_group_reached": 1,
+            "current_achievements": "achieved EVERYTHING",
+            "total_budget": 2000,
+            "total_budget_narrative": "small amount, need more",
+            "funding_needs": "yes",
+            "partnership_needs": "yes please",
+            "currency": 2,
+            "awp": "AWP field",
+            "wbs": ["WBS1", "WBS2"]
         }}, org, country, country_office, d1, d2
 
     def create_new_project(self, test_user_client=None, name=None):

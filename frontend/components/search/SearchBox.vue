@@ -76,16 +76,16 @@ export default {
     return {
       optionsVisible: false,
       showSearchBoxTooltip: false,
-      searchIn: ['name', 'org', 'country', 'overview', 'loc'],
+      searchIn: ['name', 'overview', 'desc', 'ach', 'partner'],
       checkboxes: [
         { label: 'name', text: this.$gettext('Initiative Name') },
-        { label: 'org', text: this.$gettext('Organisation') },
-        { label: 'country', text: this.$gettext('Country') },
         {
           label: 'overview',
           text: this.$gettext('Overview of the digital health'),
         },
-        { label: 'loc', text: this.$gettext('Location') },
+        { label: 'desc', text: this.$gettext('Description') },
+        { label: 'ach', text: this.$gettext('Current Achievements') },
+        { label: 'partner', text: this.$gettext('Partner Name') },
       ],
     }
   },

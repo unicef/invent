@@ -110,6 +110,26 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
 
+        data = {"q": "partner 1", "in": "partner"}  # PARTNER
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"q": "new", "in": "desc"}  # DESCRIPTION (overview)
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"q": "over", "in": "overview"}  # OVERVIEW (implementation_overview)
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"q": "everything", "in": "ach"}  # current_achievements
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
     def test_found_in(self):
         url = reverse("search-project-list")
         data = {"q": "overview", "found": ""}
