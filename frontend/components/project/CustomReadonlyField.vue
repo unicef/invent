@@ -91,7 +91,7 @@ export default {
     value() {
       const answer =
         this.type === 5 ? this.answer.answer : this.answer.answer[0]
-      return answer === undefined
+      return !answer || !answer.match
         ? answer
         : answer.match(/.{1,102}/g).join('\n')
     },

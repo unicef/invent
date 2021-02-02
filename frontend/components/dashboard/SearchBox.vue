@@ -57,6 +57,15 @@
             <el-checkbox label="overview" class="CheckboxSmall">
               <translate>Overview of the digital health</translate>
             </el-checkbox>
+            <el-checkbox label="desc" class="CheckboxSmall">
+              <translate>Description</translate>
+            </el-checkbox>
+            <el-checkbox label="ach" class="CheckboxSmall">
+              <translate>Current Achievements</translate>
+            </el-checkbox>
+            <el-checkbox label="partner" class="CheckboxSmall">
+              <translate>Partner Name</translate>
+            </el-checkbox>
           </el-checkbox-group>
         </el-col>
       </transition>

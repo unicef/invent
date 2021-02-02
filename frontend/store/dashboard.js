@@ -11,14 +11,7 @@ import {
   parseCustomAnswers,
 } from '../utilities/api'
 
-export const searchIn = () => [
-  'name',
-  'org',
-  'overview',
-  'partner',
-  'donor',
-  'loc',
-]
+export const searchIn = () => ['name', 'overview', 'partner', 'desc', 'ach']
 export const defaultSelectedColumns = () => [
   '1',
   '2',
