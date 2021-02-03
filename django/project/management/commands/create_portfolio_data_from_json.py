@@ -104,6 +104,7 @@ class Command(BaseCommand, TestProjectData):
             project_team = UserProfile.objects.filter(name__in=project_data['team'])
 
             project.team.set(project_team)
+            project.draft = project_gen_data
             project.data = project_gen_data
             project.make_public_id(country_office.country.id)
             project.save()
