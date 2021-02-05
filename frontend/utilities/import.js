@@ -86,7 +86,7 @@ export const importTemplate = [
     'Funding Needs': 'text',
     'Partnership Needs': 'text',
     'WBS number': '1|2',
-    Currency: 'USD',
+    Currency: 'US Dollar',
     'Total Estimated Budget': '0',
     'Target Group Reached': '0',
     'Links to website/Current Documentation':

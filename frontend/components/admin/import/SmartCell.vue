@@ -25,6 +25,12 @@
             type="textarea"
             :rows="6"
           />
+          <el-input
+            v-if="isNumber"
+            v-model="internalValue"
+            :disabled="disabled"
+            type="number"
+          />
         </div>
 
         <template v-else-if="column === 'team'">
@@ -104,6 +110,7 @@ import chunk from 'lodash/chunk'
 import find from 'lodash/find'
 import compact from 'lodash/compact'
 import pickBy from 'lodash/pickBy'
+import isNaN from 'lodash/isNaN'
 
 export default {
   components: {
@@ -160,6 +167,7 @@ export default {
   data() {
     return {
       active: false,
+      lastColumn: null,
     }
   },
   computed: {
@@ -204,6 +212,9 @@ export default {
         this.column
       )
     },
+    isNumber() {
+      return ['target_group_reached', 'total_budget'].includes(this.column)
+    },
     isTextArea() {
       return [
         'geographic_scope',
@@ -225,8 +236,6 @@ export default {
         'total_budget_narrative',
         'funding_needs',
         'partnership_needs',
-        'total_budget',
-        'target_group_reached',
       ].includes(this.column)
     },
     isForced() {
@@ -344,19 +353,26 @@ export default {
   },
   methods: {
     async validate() {
-      const name = this.nameMapping[this.column] || this.column
+      this.lastColumn = this.column || this.lastColumn
+      const name = this.nameMapping[this.lastColumn] || this.lastColumn
+      if (this.parsingFailed) {
+        this.handleValidation(false, 'parsing failed', this.lastColumn)
+        return
+      }
+      this.handleValidation(true, 'parsing failed', this.lastColumn)
       const { valid, errors } = await this.validator.verify(
         this.apiValue(),
         this.rules,
         { name }
       )
-      this.handleValidation(valid, errors[0], this.column)
+      this.handleValidation(valid, errors[0], this.lastColumn)
     },
     clickHandler() {
       if (
         this.isDate ||
         this.isDisabled ||
         this.isTextArea ||
+        this.isNumber ||
         this.isCoverage
       ) {
         this.active = true
@@ -439,7 +455,13 @@ export default {
       }
     },
     parseNumber() {
-      const result = this.value ? this.value * 1 : null
+      if (isNaN(this.value * 1)) {
+        return {
+          ids: [],
+          names: [],
+        }
+      }
+      const result = this.value * 1
       return {
         ids: [result],
         names: [result],
