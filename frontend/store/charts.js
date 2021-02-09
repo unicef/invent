@@ -111,7 +111,7 @@ export const actions = {
         data: stagesData,
       },
       {
-        borderColor: '#B9B9B9',
+        borderColor: '#777779',
         pointBackgroundColor: 'white',
         fill: false,
         lineTension: 0,
@@ -119,7 +119,7 @@ export const actions = {
         pointStyle: dataInfoFill(labels.length, 'circle', 'circle', 'back'),
         pointRadius: dataInfoFill(labels.length, 5, 0, 'back'),
         pointHoverRadius: dataInfoFill(labels.length, 7, 0, 'back'),
-        pointBorderColor: '#B9B9B9',
+        pointBorderColor: '#777779',
         pointBorderWidth: 2,
         pointRotation: 0,
         data: todayData,

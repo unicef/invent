@@ -1,51 +1,51 @@
 // Angular Material's mixins
-@import "../node_modules/angular-material/src/core/style/variables";
+@import '../node_modules/angular-material/src/core/style/variables';
 
 // WHO MAPS specific variables
 
-$page-min-width:         1280px;
-$page-max-width:         1680px;
-$navigation-width:       280px;
+$page-min-width: 1280px;
+$page-max-width: 1680px;
+$navigation-width: 280px;
 
-$color-primary:          #1CABE2;
-$color-accent:           #F26A21;
-$color-primary-muted:    lighten($color-primary, 4%);
+$color-primary: #1cabe2;
+$color-accent: #f26a21;
+$color-primary-muted: lighten($color-primary, 4%);
 
-$color-black:            #000000;
-$color-gray:             #757575;
-$color-gray-light:       #9D9D9D;
-$color-gray-lighter:     #D6D6D6;
-$color-gray-lightest:    #F2F2F2;
-$color-white:            #FFFFFF;
+$color-black: #000000;
+$color-gray: #757575;
+$color-gray-light: #9d9d9d;
+$color-gray-lighter: #d6d6d6;
+$color-gray-lightest: #f2f2f2;
+$color-white: #ffffff;
 
-$text-primary:           #404041;
-$text-secondary:         #6D6D6D;
-$text-disabled:          #B9B9B9;
+$text-primary: #404041;
+$text-secondary: #6d6d6d;
+$text-disabled: #b9b9b9;
 
-$color-red:              #E2231A;
-$color-red-green:        #FB8C00;
-$color-green:            #00833D;
-$color-blue:             darken($color-primary, 4%);
-$color-lightblue:        #F1FAFE;
+$color-red: #e2231a;
+$color-red-green: #fb8c00;
+$color-green: #00833d;
+$color-blue: darken($color-primary, 4%);
+$color-lightblue: #f1fafe;
 
-$color-map-light:        #E3E5EE;
-$color-map-dark:         #C8CAD5;
-$color-map-hoverempty:   #A1A4AF;
-$color-map-filter-background: #EEEEEE;
+$color-map-light: #e3e5ee;
+$color-map-dark: #c8cad5;
+$color-map-hoverempty: #a1a4af;
+$color-map-filter-background: #eeeeee;
 
-$color-draft:            #FFC20E;
-$color-published:        #00833D;
-$color-approved:         #374EA2;
+$color-draft: #ffc20e;
+$color-published: #00833d;
+$color-approved: #374ea2;
 
-$color-axis1:            #7C3AA4;
-$color-axis2:            #D84315;
-$color-axis3:            #0097A7;
-$color-axis4:            #FAA806;
-$color-axis5:            #558B2F;
-$color-axis6:            #744E42;
+$color-axis1: #7c3aa4;
+$color-axis2: #d84315;
+$color-axis3: #0097a7;
+$color-axis4: #faa806;
+$color-axis5: #558b2f;
+$color-axis6: #744e42;
 
-$color-page-background:  $color-gray-lightest;
+$color-page-background: $color-gray-lightest;
 
-$button-fab-tiny-width: rem(2.400) !default;
-$button-fab-tiny-height: rem(2.400) !default;
-$button-fab-tiny-line-height: rem(2.400) !default;
+$button-fab-tiny-width: rem(2.4) !default;
+$button-fab-tiny-height: rem(2.4) !default;
+$button-fab-tiny-line-height: rem(2.4) !default;
