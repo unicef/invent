@@ -14,7 +14,7 @@
   outline: none;
 
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 }
 
@@ -31,7 +31,7 @@ md-dialog {
     .left {
       padding-bottom: 50px;
       width: 300px;
-      background-color: #EEEEEE;
+      background-color: #eeeeee;
 
       .headline {
         display: block;
@@ -53,10 +53,10 @@ md-dialog {
       }
 
       .axes {
-        border-bottom: 1px solid #D6D6D6;
+        border-bottom: 1px solid #d6d6d6;
 
         &:first-of-type {
-          border-top: 1px solid #D6D6D6;
+          border-top: 1px solid #d6d6d6;
         }
 
         &:nth-of-type(2),
@@ -207,7 +207,6 @@ md-dialog {
     }
 
     .right {
-
       .right-header {
         display: block;
         min-height: 100px;
@@ -324,7 +323,7 @@ md-dialog {
           }
 
           h4 {
-            color: #BC8518;
+            color: #bc8518;
             text-transform: uppercase;
           }
 
@@ -416,7 +415,8 @@ md-dialog {
           }
 
           // Lists
-          ol, ul {
+          ol,
+          ul {
             display: block;
             margin: 20px 0;
             font-size: $body-font-size-base;
@@ -433,12 +433,12 @@ md-dialog {
             padding: 30px 24px 20px;
             width: 240px;
             border-radius: 12px;
-            background: #ECEFF1 url("images/quote.svg") right top no-repeat;
+            background: #eceff1 url('images/quote.svg') right top no-repeat;
 
             h6 {
               margin: 0;
               width: 80%;
-              color: #BC8518;
+              color: #bc8518;
               text-transform: uppercase;
               font-size: $subhead-font-size-base;
             }
@@ -590,7 +590,6 @@ md-dialog {
           }
 
           .content-html {
-
             img,
             .image-wrapper {
               &.float-right {
@@ -633,7 +632,6 @@ md-dialog {
 
             // Titles
             .title-domain {
-
               img {
                 float: right;
               }

@@ -168,7 +168,7 @@ export default {
     .el-tag {
       &:hover {
         background-color: white;
-        border-color: #b9b9b9;
+        border-color: #777779;
       }
     }
   }
