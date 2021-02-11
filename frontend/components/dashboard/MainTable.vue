@@ -583,7 +583,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.target_group_reached }}</p>
+          <p>{{ scope.row.target_group_reached | formatNumber }}</p>
         </template>
       </el-table-column>
 
@@ -594,7 +594,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <p>{{ scope.row.total_budget }}</p>
+          <p>{{ scope.row.total_budget | formatNumber }}</p>
         </template>
       </el-table-column>
 

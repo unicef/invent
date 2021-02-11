@@ -79,15 +79,14 @@
           </translate>
         </template>
 
-        <el-input
+        <el-input-number
           v-model="target_group_reached"
           v-validate="rules.target_group_reached"
           data-vv-name="target_group_reached"
           data-vv-as="Target Group"
-          type="number"
-          min="0"
-          max="100000000"
-          step="1"
+          controls-position="right"
+          :min="0"
+          class="number-input"
         />
         <span class="Hint">
           <fa icon="info-circle" />
@@ -268,15 +267,14 @@
                 What is the total estimated budget for the initiative?
               </translate>
             </template>
-            <el-input
+            <el-input-number
               v-model="total_budget"
               v-validate="rules.total_budget"
               data-vv-name="total_budget"
               data-vv-as="Total Budget"
-              type="number"
-              min="0"
-              max="100000000"
-              step="1"
+              controls-position="right"
+              :min="0"
+              class="number-input"
             />
             <span class="Hint">
               <fa icon="info-circle" />
@@ -617,6 +615,12 @@ export default {
   }
   .btContainer {
     margin-top: 50px;
+  }
+  .number-input {
+    width: 100%;
+    &.el-input-number .el-input__inner {
+      text-align: left;
+    }
   }
 }
 </style>
