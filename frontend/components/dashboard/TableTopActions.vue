@@ -81,7 +81,6 @@
           :compact-mode="viewportSize < 1440"
           force-star
           force-eye
-          force-handshake
           force-globe
           show-label
         />
