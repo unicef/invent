@@ -37,7 +37,7 @@
               <span><translate>Last updated</translate></span>
             </div>
           </el-col>
-          <el-col>
+          <el-col class="legend">
             <project-legend :id="id" />
             <!-- favorite -->
             <favorite
@@ -133,6 +133,10 @@ export default {
 .ExtendedProjectCard {
   margin: 0 auto 20px;
 
+  .legend {
+    padding-top: 7px;
+  }
+
   .FirstRow {
     position: relative;
     padding: 20px 30px 20px;
@@ -185,7 +189,7 @@ export default {
 
     .ProjectLegend {
       .svg-inline--fa {
-        font-size: 14px;
+        font-size: 15px;
       }
     }
   }
