@@ -166,6 +166,7 @@
               <translate key="end-date">
                 Set end phase of initiative
               </translate>
+              &nbsp;
               <tooltip
                 :text="$gettext('Date format: YYYY-MM-DD') | translate"
               />
@@ -182,6 +183,7 @@
             </p>
 
             <el-row type="flex">
+              <!--                :min="start_date"-->
               <safe-date-picker
                 v-model="end_date"
                 v-validate="rules.end_date"
@@ -245,7 +247,7 @@ export default {
     }),
     endDateError() {
       if (
-        this.usePublishRules &&
+        // this.usePublishRules &&
         this.start_date &&
         this.end_date &&
         isAfter(this.start_date, this.end_date)
@@ -297,6 +299,7 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate('start_date'),
         this.$validator.validate('end_date'),
+        Promise.resolve(this.endDateError === ''),
         Promise.resolve(this.stageDateError === ''),
       ])
       console.log('Initiative stages draft validation', validations)
