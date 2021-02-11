@@ -4,18 +4,20 @@
     :class="['ProjectCard', 'rounded', { hovered, HideBorders: hideBorders }]"
     :shadow="cardShadow"
   >
-    <div
-      @click="goToProject"
-      @mouseenter="mouseEnterHandler"
-      @mouseleave="mouseLeaveHandler"
+    <nuxt-link
+      :to="
+        localePath({
+          name: 'organisation-initiatives-id-published',
+          params: { ...$route.params, id: project.id },
+        })
+      "
+      target="_blank"
     >
-      <el-row type="flex">
+      <el-row type="flex" justify="space-between">
         <el-col :span="22">
-          <el-row class="ProjectName">
-            <el-col>
-              {{ project.name }}
-            </el-col>
-          </el-row>
+          <el-col class="ProjectName">
+            {{ project.name }}
+          </el-col>
 
           <el-row type="flex" class="ProjectCountryOrg">
             <el-col v-show="showCountry" class="Country">
@@ -53,7 +55,7 @@
           />
         </el-col>
       </el-row>
-    </div>
+    </nuxt-link>
   </el-card>
 </template>
 
@@ -134,21 +136,7 @@ export default {
       return ''
     },
   },
-  methods: {
-    goToProject() {
-      const path = this.localePath({
-        name: 'organisation-initiatives-id-published',
-        params: { ...this.$route.params, id: this.project.id },
-      })
-      this.$router.push(path)
-    },
-    mouseEnterHandler() {
-      this.hovered = true
-    },
-    mouseLeaveHandler() {
-      this.hovered = false
-    },
-  },
+  methods: {},
 }
 </script>
 

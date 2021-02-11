@@ -1,5 +1,5 @@
 <template>
-  <div :class="`ProjectLegend ${height === 0 ? 'no-padding' : ''}`">
+  <div class="ProjectLegend">
     <project-legend-content
       v-if="!compactMode"
       :id="id"
@@ -87,14 +87,6 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      height: 0,
-    }
-  },
-  mounted() {
-    this.height = this.$refs.legend.$el.clientHeight
-  },
 }
 </script>
 
@@ -105,14 +97,8 @@ export default {
 .ProjectLegend {
   opacity: 1;
   transition: @transitionFade;
-  padding-top: 7px;
   display: flex;
-  justify-content: flex-end;
-  &.no-padding {
-    // total cheat
-    padding-top: 0px;
-    margin-top: -2px;
-  }
+  justify-content: flex-start;
   .OwnerIcon {
     color: @colorOwner;
   }

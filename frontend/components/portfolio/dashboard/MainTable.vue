@@ -27,6 +27,7 @@
         sortable="custom"
         prop="project__name"
         width="240"
+        class-name="project-td"
       >
         <template slot-scope="scope">
           <project-card :project="scope.row" hide-borders show-verified />
@@ -1017,6 +1018,9 @@ export default {
 
     td {
       padding: 10px 16px 10px 12px;
+      &.project-td {
+        padding: 10px 10px 10px 12px;
+      }
       > .cell {
         min-height: 37px;
         line-height: 17px;
