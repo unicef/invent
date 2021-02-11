@@ -165,7 +165,7 @@
             :header="$gettext('Achieved programme targets ') | translate"
           />
           <simple-field
-            :content="project.target_group_reached"
+            :content="project.target_group_reached | formatNumber"
             :header="$gettext('Number of beneficiaries reached') | translate"
           />
 
@@ -201,7 +201,7 @@
           <simple-field
             :header="$gettext('Total estimated budget') | translate"
           >
-            {{ project.total_budget }}
+            {{ project.total_budget | formatNumber }}
             <list-element
               v-if="project.total_budget"
               :value="project.currency"
@@ -389,12 +389,15 @@
 </template>
 
 <script>
+// vuex
+import { mapGetters, mapState, mapActions } from 'vuex'
+// helpers
+import orderBy from 'lodash/orderBy'
+import find from 'lodash/find'
 import { format } from 'date-fns'
+// components
 import handleProjectActions from '@/components/mixins/handleProjectActions'
 import ListElement from '@/components/project/ListElement'
-import find from 'lodash/find'
-import orderBy from 'lodash/orderBy'
-import { mapGetters, mapState, mapActions } from 'vuex'
 // import CountryItem from '../common/CountryItem'
 import StageHistory from '@/components/project/sections/StageHistory'
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList'

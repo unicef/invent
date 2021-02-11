@@ -50,7 +50,6 @@
     "leaflet": "1.3.4",
     "leaflet.markercluster": "^1.4.1",
     "lodash": "^4.17.10",
-    "moment": "^2.24.0",
     "ng-file-upload": "^12.2.13",
     "ng-redux": "^4.0.3",
     "nuxt": "^2.12.2",
