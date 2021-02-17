@@ -14,8 +14,8 @@ def dev():
     env.host_string = DEV_HOST_STRING
     env.name = 'dev'
     env.port = 22
-    env.branch = "development"
-    env.project_root = '/home/tiip/tiip'
+    env.branch = "dev"
+    env.project_root = '~/TIIP'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
@@ -26,8 +26,8 @@ def qa():
     env.host_string = QA_HOST_STRING
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/3.5.24"
-    env.project_root = '/home/tiip/tiip'
+    env.branch = "tags/2.1.5"
+    env.project_root = '~/TIIP'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = '-live'
@@ -39,7 +39,7 @@ def staging():
     env.name = 'staging'
     env.port = 22
     env.branch = "master"
-    env.project_root = '/home/tiip/tiip'
+    env.project_root = '~/TIIP'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
@@ -50,7 +50,7 @@ def production():
     env.host_string = PROD_HOST_STRING
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/3.5.24"
+    env.branch = "tags/2.1.5"
     env.project_root = '/home/tiip/tiip'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
