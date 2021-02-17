@@ -18,18 +18,32 @@
         @submit.native.prevent="loginLocal"
       >
         <fieldset>
-          <el-form-item :label="$gettext('E-mail') | translate" prop="username">
-            <el-input v-model="username" type="text" />
+          <el-form-item
+            data-test="signin-username-item"
+            :label="$gettext('E-mail') | translate"
+            prop="username"
+          >
+            <el-input
+              v-model="username"
+              data-test="signin-username"
+              type="text"
+            />
           </el-form-item>
 
           <el-form-item
+            data-test="signin-password-item"
             :label="$gettext('Password') | translate"
             prop="password"
           >
-            <el-input v-model="password" type="password" />
+            <el-input
+              v-model="password"
+              data-test="signin-password"
+              type="password"
+            />
             <div
               v-if="nonFieldErrors"
               class="el-form-item__error ModifiedFormError"
+              data-test="signin-error"
             >
               {{ nonFieldErrors }}
             </div>
@@ -45,6 +59,7 @@
           >
             <el-col :span="6" class="SecondaryAction">
               <el-button
+                data-test="signin-forgot"
                 type="text"
                 size="small"
                 class="CancelButton"
@@ -54,7 +69,12 @@
               </el-button>
             </el-col>
             <el-col :span="6" class="PrimaryAction">
-              <el-button type="primary" size="medium" native-type="submit">
+              <el-button
+                data-test="signin-submit"
+                type="primary"
+                size="medium"
+                native-type="submit"
+              >
                 <translate>Log in</translate>
               </el-button>
             </el-col>
@@ -102,6 +122,7 @@
           >
             <el-col :span="6" class="SecondaryAction">
               <el-button
+                data-test="back"
                 type="text"
                 size="small"
                 @click="showForgotten = false"
@@ -110,7 +131,12 @@
               </el-button>
             </el-col>
             <el-col :span="6" class="PrimaryAction">
-              <el-button type="primary" size="medium" native-type="submit">
+              <el-button
+                data-test="reset"
+                type="primary"
+                size="medium"
+                native-type="submit"
+              >
                 <translate>Reset</translate>
               </el-button>
             </el-col>
@@ -146,6 +172,7 @@
           <el-col :span="6" class="SecondaryAction" />
           <el-col :span="6" class="PrimaryAction">
             <el-button
+              data-test="back"
               type="primary"
               size="medium"
               @click="successfulReset = false"

@@ -15,7 +15,6 @@
     "precommit:fix": "npm run lint -- --fix",
     "test": "jest",
     "test:w": "jest --watch",
-    "cypress:open": "cypress open",
     "translation:extract": "bash gettext.sh"
   },
   "dependencies": {
@@ -87,7 +86,6 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^26.5.2",
-    "cypress": "^3.1.0",
     "easygettext": "^2.6.4",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",

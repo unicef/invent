@@ -6,9 +6,14 @@
       visible-arrow="false"
       popper-class="CustomPopover UserDropdownPopper"
     >
-      <el-button slot="reference" type="text" class="ButtonPopper">
+      <el-button
+        slot="reference"
+        data-test="user-dropdown"
+        type="text"
+        class="ButtonPopper"
+      >
         <fa icon="user-circle" size="lg" />
-        {{ user.name }}
+        <span>{{ user.name }}</span>
         <fa icon="caret-down" />
       </el-button>
 
@@ -109,7 +114,7 @@
         </div>
 
         <div class="DropdownLink" @click="logout">
-          <el-button type="text">
+          <el-button type="text" data-test="logout-submit">
             <span class="MenuIcon">
               <fa icon="power-off" />
             </span>
