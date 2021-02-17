@@ -49,14 +49,6 @@ services:
     links:
       - django
 
-  nuxt:
-    restart: always
-    build: ./frontend
-    expose:
-      - "3000"
-    links:
-      - django
-
   postgres:
     restart: always
     image: postgres:10.4

@@ -1,0 +1,22 @@
+{
+  "name": "tiip-e2e",
+  "version": "1.0.0",
+  "description": "tiip e2e test project",
+  "author": "info@pulilab.com",
+  "private": true,
+  "scripts": {
+    "cypress:open:dev": "cypress open --config-file cypress.dev.json",
+    "test:dev": "yarn cypress:open:dev",
+    "cypress:open:pro": "cypress open --config-file cypress.pro.json",
+    "test:pro": "yarn cypress:open:pro",
+    "cypress:open:mobile": "cypress open --config viewportWidth=375,viewportHeight=667",
+    "cypress:run": "cypress run",
+    "cypress:run:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
+    "test:headless": "yarn cypress:run"
+  },
+  "devDependencies": {
+    "@cypress/code-coverage": "^3.9.2",
+    "@percy/cypress": "^2.3.4",
+    "cypress": "6.4.0"
+  }
+}

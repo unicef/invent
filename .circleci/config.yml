@@ -95,7 +95,7 @@ jobs:
           command: |
             export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
 
-  deploy:
+  deploy-dev:
     docker:
       - image: circleci/python:3.7.6-stretch
     working_directory: ~/tiip
@@ -113,6 +113,41 @@ jobs:
             fab dev deploy
           no_output_timeout: "20m"
 
+  deploy-qa:
+    docker:
+      - image: circleci/python:3.7.6-stretch
+    working_directory: ~/tiip
+    steps:
+      - checkout
+      - run:
+          name: Install fabric and pycrypto
+          command: |
+            sudo pip install pycrypto
+            sudo pip install Fabric3==1.10.2.post3
+      - run:
+          name: Deploy Over SSH
+          working_directory: ~/tiip/django
+          command: |
+            fab staging deploy
+          no_output_timeout: "20m"
+
+  e2e-dev:
+    docker:
+      - image: cypress/included:4.5.0
+    working_directory: ~/tiip
+    steps:
+      - checkout
+      - run:
+          name: e2e tests against DEV
+          working_directory: ~/tiip/e2e
+          command: |
+            cypress run -C cypress.dev.json
+          no_output_timeout: "20m"
+      - store_artifacts:
+          path: /root/tiip/e2e/cypress/videos
+      - store_artifacts:
+          path: /root/tiip/e2e/cypress/screenshots
+
 workflows:
   build-and-deploy:
     jobs:
@@ -120,15 +155,37 @@ workflows:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
-      - deploy:
+      - deploy-dev:
           requires:
             - build-and-test
           filters:
             branches:
-              only: development
+              only: dev
           post-steps:
             - jira/notify:
                 environment_type: development
                 job_type: deployment
                 issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
                 environment: DEV  # DEV, PROD, QA
+      - e2e-dev:
+          requires:
+            - build-and-test
+            - deploy-dev
+          filters:
+            branches:
+              only: dev
+      - deploy-qa:
+          name: QA Server Deployment
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+(\.[0-9]+)*$/
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: deployment
+                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
+                environment: QA  # DEV, PROD, QA
