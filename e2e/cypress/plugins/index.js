@@ -1,5 +1,5 @@
 // const { percyHealthCheck } = require("@percy/cypress/task");
-const codeCoverageTask = require("@cypress/code-coverage/task");
+// const codeCoverageTask = require("@cypress/code-coverage/task");
 
 module.exports = (on, config) => {
   // on("task", {
@@ -18,6 +18,6 @@ module.exports = (on, config) => {
   //     return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
   //   },
   // });
-  codeCoverageTask(on, config);
-  return config;
+  // codeCoverageTask(on, config);
+  // return config;
 };
