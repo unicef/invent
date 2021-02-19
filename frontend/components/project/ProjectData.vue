@@ -22,6 +22,7 @@
           />
 
           <simple-field
+            v-if="project.implementation_overview"
             :content="project.implementation_overview"
             :header="$gettext('Narrative of the initiative') | translate"
           />
@@ -45,7 +46,10 @@
             <simple-field :header="$gettext('Team members') | translate">
               <team-list :value="project.team" />
             </simple-field>
-            <simple-field :header="$gettext('Viewers') | translate">
+            <simple-field
+              v-if="isEmptyArr(project.viewers)"
+              :header="$gettext('Viewers') | translate"
+            >
               <team-list :value="project.viewers" />
             </simple-field>
           </div>
@@ -73,6 +77,7 @@
           />
 
           <simple-field
+            v-if="resultArea.name"
             :header="$gettext('Result Area') | translate"
             :content="resultArea.name"
           />
@@ -126,6 +131,7 @@
           </template>
 
           <simple-field
+            v-if="isEmptyArr(project.regional_priorities)"
             :header="$gettext('Regional priority(ies)') | translate"
           >
             <platforms-list
@@ -134,7 +140,10 @@
             />
           </simple-field>
 
-          <simple-field :header="$gettext('Innovation(s)') | translate">
+          <simple-field
+            v-if="isEmptyArr(project.innovation_ways)"
+            :header="$gettext('Innovation(s)') | translate"
+          >
             <platforms-list
               :platforms="project.innovation_ways"
               source="getInnovationWays"
@@ -142,7 +151,7 @@
           </simple-field>
 
           <simple-field
-            v-show="!hideInnovationCategories"
+            v-if="isEmptyArr(project.innovation_categories)"
             :header="$gettext('Innovation category(ies)') | translate"
           >
             <platforms-list
@@ -156,108 +165,56 @@
           id="implementation"
           :title="$gettext('3. Implementation Overview') | translate"
         >
-          <simple-field
-            :content="project.program_targets"
-            :header="$gettext('Programme targets') | translate"
-          />
-          <simple-field
-            :content="project.program_targets_achieved"
-            :header="$gettext('Achieved programme targets ') | translate"
-          />
-          <simple-field
-            :content="project.target_group_reached | formatNumber"
-            :header="$gettext('Number of beneficiaries reached') | translate"
-          />
-
-          <simple-field
-            :content="project.current_achievements"
-            :header="$gettext('Initiative achievements') | translate"
-          />
-
-          <simple-field
-            :header="
-              $gettext('Country Programme Document inclusion') | translate
-            "
-          >
-            <platforms-list :platforms="project.cpd" source="getCpd" />
-          </simple-field>
-          <simple-field
-            :content="project.awp"
-            :header="
-              $gettext('Annual Work Plan Outcome or Activity') | translate
-            "
-          />
-          <simple-field
-            :header="
-              $gettext('Work Breakdown Structure (WBS) number') | translate
-            "
-          >
-            <ul>
-              <li v-for="wbs in project.wbs" :key="wbs">
-                <span>{{ wbs }}</span>
-              </li>
-            </ul>
-          </simple-field>
-          <simple-field
-            :header="$gettext('Total estimated budget') | translate"
-          >
-            {{ project.total_budget | formatNumber }}
-            <list-element
-              v-if="project.total_budget"
-              :value="project.currency"
-              source="getCurrencies"
+          <template v-if="showOverview(project, orderedLinkList)">
+            <template v-for="field in overviewFields">
+              <simple-field
+                v-if="
+                  ['cpd', 'wbs'].includes(field.type)
+                    ? isEmptyArr(project[field.type])
+                    : project[field.type]
+                "
+                :key="field.type"
+                :content="
+                  ['cpd', 'wbs', 'total_budget'].includes(field.type)
+                    ? null
+                    : project[field.type]
+                "
+                :header="field.header"
+              >
+                <template v-if="field.type === 'cpd'">
+                  <platforms-list :platforms="project.cpd" source="getCpd" />
+                </template>
+                <template v-if="field.type === 'wbs'">
+                  <ul>
+                    <li v-for="(wbs, i) in project.wbs" :key="`${wbs}${i}`">
+                      <span>{{ wbs }}</span>
+                    </li>
+                  </ul>
+                </template>
+                <template v-if="field.type === 'total_budget'">
+                  {{ project.total_budget }}
+                  <list-element
+                    v-if="project.total_budget"
+                    :value="project.currency"
+                    source="getCurrencies"
+                  />
+                </template>
+              </simple-field>
+            </template>
+            <simple-field
+              v-for="{ link_url, link_type } in orderedLinkList"
+              :key="'link_type' + link_type"
+              :content="link_url"
+              :header="getLinkHeader(link_type)"
+              link
             />
-          </simple-field>
-          <simple-field
-            :content="project.total_budget_narrative"
-            :header="$gettext('Activities covered by budget') | translate"
-          />
-
-          <simple-field
-            :content="project.funding_needs"
-            :header="$gettext('Funding gaps') | translate"
-          />
-          <simple-field
-            :content="project.partnership_needs"
-            :header="$gettext('Partnership needs') | translate"
-          />
-          <simple-field
-            v-for="{ link_url, link_type } in orderedLinkList"
-            :key="'link_type' + link_type"
-            :content="link_url"
-            :header="getLinkHeader(link_type)"
-            link
-          />
-          <!--          <simple-field :header="$gettext('Investor(s)') | translate">-->
-          <!--            <donors-list :value="project.donors" />-->
-          <!--          </simple-field>-->
+          </template>
+          <template v-else>
+            <!-- <translate>
+              There's no implemantation overview for the initiative.
+            </translate> -->
+          </template>
         </collapsible-card>
-
-        <!-- <collapsible-card id="stages" :title="$gettext('4. Phase') | translate">
-          <el-row>
-            <el-col :span="12">
-              <simple-field
-                :content="project.start_date"
-                :header="$gettext('Initiative start date') | translate"
-                date
-              />
-            </el-col>
-          </el-row>
-
-          <simple-field :header="$gettext('Current phase') | translate">
-            <list-element :value="project.phase" source="getPhases" />
-          </simple-field>
-
-          <el-row>
-            <el-col :span="12">
-              <simple-field
-                :content="project.end_date"
-                :header="$gettext('Initiative end date') | translate"
-                date
-              />
-            </el-col>
-          </el-row>
-        </collapsible-card> -->
 
         <!-- stage graph -->
         <stage-history />
@@ -267,68 +224,84 @@
           id="partners"
           :title="$gettext('5. Partners') | translate"
         >
-          <div
-            v-for="partner in project.partners"
-            :key="partner.email"
-            class="Partners"
-          >
-            <simple-field :header="partner.partner_name">
-              <ul>
-                <li>
-                  <translate>Partner type</translate>:
-                  <list-element
-                    :value="partner.partner_type * 1"
-                    source="getPartnerTypes"
-                    root="system"
-                  />
-                </li>
-                <li>
-                  <translate>Partner contact</translate>:
-                  {{ partner.partner_contact }}
-                </li>
-                <li>
-                  <translate>Partner email</translate>:
-                  <a :href="`mailto:${partner.partner_email}`">{{
-                    partner.partner_email
-                  }}</a>
-                </li>
-                <li>
-                  <translate>Partner website</translate>:
-                  <a :href="`mailto:${partner.partner_website}`">{{
-                    partner.partner_website
-                  }}</a>
-                </li>
-              </ul>
-            </simple-field>
-          </div>
+          <template v-if="isEmptyArr(project.partners)">
+            <div
+              v-for="partner in project.partners"
+              :key="partner.email"
+              class="Partners"
+            >
+              <simple-field :header="partner.partner_name">
+                <ul>
+                  <li>
+                    <translate>Partner type</translate>:
+                    <list-element
+                      :value="partner.partner_type * 1"
+                      source="getPartnerTypes"
+                      root="system"
+                    />
+                  </li>
+                  <li>
+                    <translate>Partner contact</translate>:
+                    {{ partner.partner_contact }}
+                  </li>
+                  <li>
+                    <translate>Partner email</translate>:
+                    <a :href="`mailto:${partner.partner_email}`">{{
+                      partner.partner_email
+                    }}</a>
+                  </li>
+                  <li>
+                    <translate>Partner website</translate>:
+                    <a :href="`mailto:${partner.partner_website}`">{{
+                      partner.partner_website
+                    }}</a>
+                  </li>
+                </ul>
+              </simple-field>
+            </div>
+          </template>
+          <template v-else>
+            <!-- <translate>There's no partners for the initiative.</translate> -->
+          </template>
         </collapsible-card>
 
         <collapsible-card
           id="technology"
           :title="$gettext('6. Technology') | translate"
         >
-          <simple-field :header="$gettext('Software platform(s)') | translate">
+          <simple-field
+            v-if="isEmptyArr(project.platforms)"
+            :header="$gettext('Software platform(s)') | translate"
+          >
             <platforms-list :platforms="project.platforms" />
           </simple-field>
 
-          <simple-field :header="$gettext('Hardware platform(s)') | translate">
+          <simple-field
+            v-if="isEmptyArr(project.hardware)"
+            :header="$gettext('Hardware platform(s)') | translate"
+          >
             <platforms-list
               :platforms="project.hardware"
               source="getHardware"
             />
           </simple-field>
           <simple-field
+            v-if="isEmptyArr(project.nontech)"
             :header="$gettext('Non-technology platform(s)') | translate"
           >
             <platforms-list :platforms="project.nontech" source="getNontech" />
           </simple-field>
-          <simple-field :header="$gettext('Platform functions') | translate">
+          <simple-field
+            v-if="isEmptyArr(project.functions)"
+            :header="$gettext('Platform functions') | translate"
+          >
             <platforms-list
               :platforms="project.functions"
               source="getFunctions"
             />
           </simple-field>
           <simple-field
+            v-if="project.isc"
             :header="
               $gettext('Information security classification ') | translate
             "
@@ -338,7 +311,7 @@
         </collapsible-card>
 
         <collapsible-card
-          v-if="countryQuestions && countryQuestions.length > 0"
+          v-if="countryQuestions && isEmptyArr(countryQuestions)"
           id="countrycustom"
           :title="customFieldsName(country.name)"
         >
@@ -352,7 +325,7 @@
           />
         </collapsible-card>
 
-        <div v-if="donors && donors.length > 0" id="donorcustom">
+        <div v-if="donors && isEmptyArr(donors)" id="donorcustom">
           <collapsible-card
             v-for="donor in donors"
             :key="donor.id"
@@ -430,6 +403,53 @@ export default {
     StageHistory,
   },
   mixins: [handleProjectActions],
+  data() {
+    return {
+      overviewFields: [
+        { type: 'program_targets', header: this.$gettext('Program targets') },
+        {
+          type: 'program_targets_achieved',
+          header: this.$gettext('Achieved programme targets'),
+        },
+        {
+          type: 'target_group_reached',
+          header: this.$gettext('Number of beneficiaries reached'),
+        },
+        {
+          type: 'current_achievements',
+          header: this.$gettext('Initiative achievements'),
+        },
+        {
+          type: 'cpd',
+          header: this.$gettext('Country Programme Document inclusion'),
+        },
+        {
+          type: 'awp',
+          header: this.$gettext('Annual Work Plan Outcome or Activity'),
+        },
+        {
+          type: 'wbs',
+          header: this.$gettext('Work Breakdown Structure (WBS) number'),
+        },
+        {
+          type: 'total_budget',
+          header: this.$gettext('Total estimated budget'),
+        },
+        {
+          type: 'total_budget_narrative',
+          header: this.$gettext('Activities covered by budget'),
+        },
+        {
+          type: 'funding_needs',
+          header: this.$gettext('Funding gaps'),
+        },
+        {
+          type: 'partnership_needs',
+          header: this.$gettext('Partnership needs'),
+        },
+      ],
+    }
+  },
   computed: {
     ...mapState({
       office: (state) => state.offices.office,
@@ -517,10 +537,6 @@ export default {
     orderedLinkList() {
       return orderBy(this.project.links, ['link_type'], ['asc'])
     },
-    hideInnovationCategories() {
-      const na = find(this.innovationWays, ({ name }) => name === 'N/A')
-      return na && this.project.innovation_ways.includes(na.id)
-    },
   },
   mounted() {
     this.loadOffice(this.project.country_office)
@@ -536,13 +552,48 @@ export default {
     customFieldsName(name) {
       return this.$gettext('{name} custom fields', { name })
     },
+    showOverview(project, linkList) {
+      const {
+        program_targets,
+        program_targets_achieved,
+        target_group_reached,
+        current_achievements,
+        cpd,
+        awp,
+        wbs,
+        total_budget,
+        total_budget_narrative,
+        funding_needs,
+        partnership_needs,
+      } = project
+      if (
+        cpd.length > 0 ||
+        wbs.length > 0 ||
+        linkList.length > 0 ||
+        program_targets ||
+        program_targets_achieved ||
+        target_group_reached ||
+        current_achievements ||
+        awp ||
+        total_budget ||
+        total_budget_narrative ||
+        funding_needs ||
+        partnership_needs
+      ) {
+        return true
+      }
+      return false
+    },
+    isEmptyArr(arr) {
+      return arr.length > 0
+    },
   },
 }
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .ProjectData {
   .limitPageWidth();
@@ -554,13 +605,10 @@ export default {
 
   > .el-row {
     > .el-col {
-      // form fieldsets
       &:first-child {
         width: calc(100% - @projectAsideNavWidth - 20px);
         margin-right: 20px;
       }
-
-      // aside navigation
       &:last-child {
         width: @projectAsideNavWidth;
       }

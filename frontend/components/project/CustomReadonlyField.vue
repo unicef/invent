@@ -1,19 +1,9 @@
 <template>
-  <simple-field :header="question">
+  <simple-field v-show="value" :header="question">
     <template v-if="type < 5">
-      <!-- <template v-if="type === 1">
-        <a :href="value" target="_blank" class="TextLink">
-          {{ value }}
-        </a>
-      </template>
-      <template v-else> -->
-      <span v-show="value">
+      <span>
         {{ value }}
       </span>
-      <span v-show="!value">
-        <!-- N/A -->
-      </span>
-      <!-- </template> -->
     </template>
     <template v-if="type === 5">
       <ul>
