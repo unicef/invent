@@ -40,3 +40,4 @@ yarn-error.log
 /django/.pytest_cache/
 .history/
 django/.env
+*.icloud
