@@ -5,7 +5,8 @@
   "author": "info@pulilab.com",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--max-old-space-size=4096 HOST=0.0.0.0 nuxt",
+    "dev": "NODE_OPTIONS='--max-old-space-size=4096' HOST=0.0.0.0 nuxt",
+    "dev:win": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "analyze": "nuxt build -a ",

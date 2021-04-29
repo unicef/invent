@@ -11,7 +11,6 @@
           params: { ...$route.params, id: project.id },
         })
       "
-      target="_blank"
     >
       <el-row type="flex" justify="space-between">
         <el-col :span="22">
