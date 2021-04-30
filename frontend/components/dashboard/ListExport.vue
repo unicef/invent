@@ -126,22 +126,23 @@ export default {
       return value ? this.$gettext('yes') : this.$gettext('no')
     },
     parseFlatList(flatList, type) {
-      try {
+      if (typeof flatList === 'object') {
         const all = typeof this[type] === 'function' ? this[type]() : this[type]
         return all
           .filter((cb) => flatList.includes(cb.id))
           .map((cb) => cb.name)
           .join(',')
-      } catch (e) {
-        console.warn(e)
-        return ''
       }
+      return ''
     },
     parseList(list, filter) {
-      return list
-        .filter((tp) => filter.includes(tp.id))
-        .map((i) => i.name)
-        .join(', ')
+      if (typeof filter === 'object') {
+        return list
+          .filter((tp) => filter.includes(tp.id))
+          .map((i) => i.name)
+          .join(', ')
+      }
+      return ''
     },
     joinSimpleArr(arr) {
       return arr ? arr.join(', ') : ''
@@ -172,24 +173,22 @@ export default {
       }
     },
     parseHscChallenges(values) {
-      try {
+      if (typeof values === 'object') {
         return this.hscChallenges
           .reduce((a, c) => {
             c.challenges.forEach((cc) => {
-              if (values.includes(cc.id)) {
+              if (values && values.includes(cc.id)) {
                 a.push(cc.challenge)
               }
             })
             return a
           }, [])
           .join(',')
-      } catch (e) {
-        console.warn(e)
-        return ''
       }
+      return ''
     },
     parseHealthFocusAreas(health_focus_areas) {
-      try {
+      if (typeof health_focus_areas === 'object') {
         return this.getHealthFocusAreas
           .filter((hfa) =>
             hfa.health_focus_areas.some((h) =>
@@ -198,10 +197,8 @@ export default {
           )
           .map((hf) => hf.name)
           .join(',')
-      } catch (e) {
-        console.warn(e)
-        return ''
       }
+      return ''
     },
     parseCustomQuestions(donor_answers, country_answers) {
       let custom = {}
