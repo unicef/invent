@@ -136,34 +136,42 @@
       </div>
     </template>
     <!-- footer -->
-    <span
+    <template
       v-if="!currentProjectReview.complete"
       slot="footer"
       class="dialog-footer"
     >
-      <el-button type="info" @click="resetForm(false)">Cancel</el-button>
-      <el-popconfirm
-        :confirm-button-text="$gettext('Yes') | translate"
-        :cancel-button-text="$gettext('No') | translate"
-        icon="el-icon-info"
-        icon-color="#f26a21"
-        :title="
-          $gettext(
-            'Are you sure you want to submit? \nonce submitted, the review can\'t be changed'
-          ) | translate
-        "
-        @confirm="handleSubmit"
-      >
-        <el-button
-          slot="reference"
-          type="primary"
-          :loading="loadingReview"
-          :disabled="disabled"
-        >
-          <translate>Send</translate>
-        </el-button>
-      </el-popconfirm>
-    </span>
+      <div v-if="!confirmPublishing" class="footer-wrapper">
+        <span>
+          <el-button type="info" @click="resetForm(false)">Cancel</el-button>
+        </span>
+        <span>
+          <el-button type="primary">
+            <translate>Save as Draft</translate>
+          </el-button>
+          <el-button type="success" @click="confirmPublishing = true">
+            <translate>Save and Publish</translate>
+          </el-button>
+        </span>
+      </div>
+      <div v-else class="footer-wrapper confirm">
+        <span class="confirm-text">
+          <strong>Are you sure you want to publish?</strong> <br />
+          Once submitted, the review can't be changed.
+        </span>
+        <span>
+          <el-button text @click="confirmPublishing = false">Cancel</el-button>
+          <el-button
+            type="success"
+            :loading="loadingReview"
+            :disabled="disabled"
+            @click="handleSubmit"
+          >
+            <translate>Submit</translate>
+          </el-button>
+        </span>
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -182,6 +190,7 @@ export default {
   },
   data() {
     return {
+      confirmPublishing: false,
       points: [1, 2, 3, 4, 5],
       score: {
         psa: [],
@@ -352,10 +361,25 @@ export default {
       margin-bottom: 16px;
     }
   }
-  .dialog-footer {
-    display: flex;
-    justify-content: space-between;
+  .el-dialog__footer {
+    padding: 0 !important;
+
+    .footer-wrapper {
+      display: flex;
+      justify-content: space-between;
+      flex: 1;
+      padding: 12px;
+    }
+    .footer-wrapper.confirm {
+      background-color: #fff2cc;
+    }
+    .confirm-text {
+      font-size: 14px;
+      text-align: left;
+      padding-left: 12px;
+    }
   }
+
   .info-box {
     display: flex;
     padding-bottom: 35px;
