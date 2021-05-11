@@ -3,7 +3,7 @@
     :visible="dialogScore"
     modal
     width="1240px"
-    height="1086px"
+    height="490px"
     custom-class="dialog-score"
     @close="setScoreDialog(false)"
     @open="handleScoreFeed()"
@@ -16,7 +16,7 @@
         <i class="el-dialog__close el-icon el-icon-close"></i>
       </button>
     </template>
-    <el-table :data="scoreTable" style="width: 100%" border>
+    <el-table :data="scoreTable" style="width: 100%" height="490px" border>
       <el-table-column
         fixed
         prop="question"
@@ -44,34 +44,68 @@
       </el-table-column>
       <!-- reviewers -->
       <el-table-column
-        v-for="reviewer in reviewersName"
-        :key="reviewer"
-        :label="reviewer"
-        :prop="reviewer"
+        v-for="reviewHeader in reviewHeaders"
+        :key="reviewHeader.id"
+        :label="reviewHeader.reviewer"
+        :prop="reviewHeader.reviewer"
         width="240"
         label-class-name="score-general-header"
         class-name="user-row"
       >
+        <template slot="header">
+          <span>{{ reviewHeader.reviewer }}</span>
+          <span class="to-right">
+            <el-tooltip
+              :content="
+                $gettext(reviewStatuses[reviewHeader.status].title) | translate
+              "
+              placement="top"
+            >
+              <fa
+                class="header-status-icon"
+                :class="reviewStatuses[reviewHeader.status].class"
+                :icon="reviewStatuses[reviewHeader.status].icon"
+                size="lg"
+              />
+            </el-tooltip>
+
+            <el-tooltip
+              :content="$gettext('Delete Review Data') | translate"
+              placement="top"
+            >
+              <confirm-popover
+                placement="bottom"
+                width="240"
+                trigger="click"
+                @confirmed="handleScoreDelete(reviewHeader)"
+              />
+            </el-tooltip>
+          </span>
+        </template>
         <template slot-scope="scope">
           <template v-if="scope.row.type === 'psa'">
             <psa-list
               v-if="
-                Array.isArray(scope.row[reviewer][scope.row.type]) &&
-                scope.row[reviewer][scope.row.type].length
+                Array.isArray(
+                  scope.row[reviewHeader.reviewer][scope.row.type]
+                ) && scope.row[reviewHeader.reviewer][scope.row.type].length
               "
-              :items="scope.row[reviewer][scope.row.type]"
+              :items="scope.row[reviewHeader.reviewer][scope.row.type]"
               :problem-statements="problemStatements"
             />
             <!-- N/A -->
             <p v-else class="na psa"></p>
           </template>
-          <p v-else-if="scope.row[reviewer][scope.row.type]" class="user-score">
-            {{ scope.row[reviewer][scope.row.type] }}
+          <p
+            v-else-if="scope.row[reviewHeader.reviewer][scope.row.type]"
+            class="user-score"
+          >
+            {{ scope.row[reviewHeader.reviewer][scope.row.type] }}
           </p>
           <!-- N/A -->
           <p v-else class="na"></p>
           <el-popover
-            v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+            v-if="scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`]"
             placement="right"
             :title="$gettext('Comment') | translate"
             width="360"
@@ -79,10 +113,16 @@
             popper-class="score-popover"
           >
             <div class="text-info">
-              <p>{{ scope.row[reviewer][`${scope.row.type}_comment`] }}</p>
+              <p>
+                {{
+                  scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`]
+                }}
+              </p>
             </div>
             <fa
-              v-if="scope.row[reviewer][`${scope.row.type}_comment`]"
+              v-if="
+                scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`]
+              "
               slot="reference"
               :class="`comment-icon ${
                 scope.row.type === 'psa' && 'comment-psa'
@@ -213,15 +253,34 @@
 import { mapState, mapActions } from 'vuex'
 import PsaList from '@/components/portfolio/dashboard/table/PsaList'
 import InfoPopover from '@/components/common/InfoPopover'
+import ConfirmPopover from '@/components/common/ConfirmPopover'
 
 export default {
   components: {
     PsaList,
     InfoPopover,
+    ConfirmPopover,
   },
   data() {
     return {
       points: [1, 2, 3, 4, 5],
+      reviewStatuses: [
+        {
+          icon: ['fas', 'clock'],
+          class: 'pending',
+          title: 'Pending',
+        },
+        {
+          icon: ['fas', 'pen'],
+          class: 'inprogress',
+          title: 'In progress',
+        },
+        {
+          icon: ['fas', 'clipboard-check'],
+          class: 'complete',
+          title: 'Completed',
+        },
+      ],
       score: {
         psa: [],
         rnci: null,
@@ -286,14 +345,21 @@ export default {
         }
       })
     },
-    reviewersName() {
+    reviewHeaders() {
+      console.log(this.review.review_scores)
       if (this.review.review_scores) {
-        return this.review.review_scores.map((i) => i.reviewer.name)
+        return this.review.review_scores.map((i) => {
+          return {
+            reviewer: i.reviewer.name,
+            status: this.getRandomStatus(),
+            id: i.id,
+          }
+        })
       }
       return []
     },
     examples() {
-      switch (this.reviewersName.length) {
+      switch (this.reviewHeaders.length) {
         case 0:
           return ['user example 1', 'user example 2']
         case 1:
@@ -307,9 +373,15 @@ export default {
     ...mapActions({
       setScoreDialog: 'portfolio/setScoreDialog',
       addScore: 'portfolio/addScore',
+      removeScore: 'portfolio/removeScore',
     }),
     handleScoreSubmit() {
       this.addScore({ id: this.review.id, data: { ...this.score } })
+    },
+    handleScoreDelete(reviewHeader) {
+      console.log(reviewHeader)
+      this.removeScore({ ...reviewHeader })
+      // this.addScore({ id: this.review.id, data: { ...this.score } })
     },
     handleScoreFeed() {
       this.score = {
@@ -331,6 +403,9 @@ export default {
       }
       return this.score[type] === null ? ' ' : this.score[type] // N/A
     },
+    getRandomStatus() {
+      return Math.floor(Math.random() * (2 + 1) + 0)
+    },
   },
 }
 </script>
@@ -340,8 +415,13 @@ export default {
 @import '~assets/style/mixins.less';
 
 .dialog-score {
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0 !important;
+
   .el-dialog__body {
-    padding: 40px 60px 60px 60px;
+    padding: 40px 60px 60px 60px !important;
+    overflow: hidden !important;
   }
   .dialog-footer {
     display: flex;
@@ -364,6 +444,79 @@ export default {
   .score-general-header {
     border-right: 1px solid @colorWhite;
   }
+
+  .to-right {
+    float: right;
+  }
+
+  .header-status-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+    position: relative;
+    top: 1px;
+  }
+
+  .header-status-icon:hover {
+    opacity: 1;
+  }
+
+  .header-status-icon.pending {
+    color: #b6e5f6;
+  }
+
+  .header-status-icon.inprogress {
+    color: #fbde88;
+  }
+
+  .header-status-icon.complete {
+    color: #71f4a9;
+  }
+
+  .header-icon-btn {
+    background-color: white !important;
+    color: red !important;
+    padding: 2px !important;
+    font-size: 12px;
+    opacity: 0.8;
+    margin-left: 8px;
+  }
+
+  .header-icon-btn:hover {
+    opacity: 1;
+  }
+
+  .header-icon {
+    width: 28px !important;
+    height: 28px !important;
+    cursor: pointer;
+    opacity: 0.8;
+    position: relative;
+    top: 6px;
+  }
+
+  .header-icon:hover {
+    opacity: 1;
+  }
+
+  .remove-icon {
+    background-color: white;
+    color: red;
+    cursor: pointer;
+    opacity: 0.8;
+    outline: none;
+    border-radius: 50%;
+    padding: 2px;
+  }
+
+  .remove-icon:focus {
+    outline-width: 0;
+  }
+
+  .remove-icon:hover {
+    opacity: 1;
+  }
+
   .cell.score-general-header {
     border-right: 1px solid transparent;
   }

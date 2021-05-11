@@ -376,6 +376,18 @@ export const actions = {
       console.log(e.response.data)
     }
   },
+  removeScore({ state, commit, dispatch }, { id }) {
+    try {
+      const scoresRemoved = state.review.review_scores.filter((score) => {
+        return score.id !== id
+      })
+      commit('REMOVE_SCORE', scoresRemoved)
+      // need backend integration and refreshing the projects list
+      // dispatch('getPortfolioProjects')
+    } catch (e) {
+      console.log('removeReview in store', e.response.data)
+    }
+  },
   async getManagerScore({ state, commit, dispatch }, { id, name }) {
     try {
       const { data } = await this.$axios.get(
@@ -459,6 +471,9 @@ export const mutations = {
   },
   SET_SELECTED_ROWS: (state, rows) => {
     state.selectedRows = rows
+  },
+  REMOVE_SCORE: (state, scores) => {
+    state.review.review_scores = scores
   },
 }
 
