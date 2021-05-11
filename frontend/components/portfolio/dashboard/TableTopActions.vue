@@ -238,23 +238,11 @@ export default {
       const tab = this.tab - 1
       switch (tab) {
         case 1:
-          try {
-            await this.$confirm(
-              this.$gettext(
-                'When you move initiatives back to inventory, all completed reviews are deleted for legacy reasons. Please confirm.'
-              ),
-              {
-                confirmButtonText: this.$gettext('Confirm'),
-                cancelButtonText: this.$gettext('Cancel'),
-                type: 'warning',
-              }
-            )
-            await this.moveToState({
-              type: 'remove-project',
-              project: this.selectedRows,
-              tab,
-            })
-          } catch (e) {}
+          await this.moveToState({
+            type: 'remove-project',
+            project: this.selectedRows,
+            tab,
+          })
           break
         case 2:
           await this.moveToState({
