@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import ProjectForm from '../../../components/project/ProjectForm'
+import ProjectForm from '@/components/project/ProjectForm'
 
 export default {
   components: {
