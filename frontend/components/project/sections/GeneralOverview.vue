@@ -251,6 +251,8 @@
               :rules="rules.contact_email"
               data-vv-name="contact_email"
               data-vv-as="Contact email"
+              @blur="addContactToTeam"
+              @keyup.enter.native="addContactToTeam"
             />
           </custom-required-form-item>
         </el-col>
@@ -357,6 +359,7 @@ export default {
       getCountryDetails: 'countries/getCountryDetails',
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
+      userProfiles: 'system/getUserProfilesNoFilter',
     }),
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
@@ -416,6 +419,29 @@ export default {
     },
   },
   methods: {
+    async addContactToTeam() {
+      const validEmail = await this.$validator.validate('contact_email')
+      if (!validEmail || this.contact_email === '') return
+      const teamMember = this.userProfiles.find((user) => {
+        return user.email === this.contact_email
+      })
+      if (teamMember !== undefined) {
+        if (!this.team.includes(teamMember.id)) {
+          const team = this.team.concat(teamMember.id)
+          this.team = team
+        }
+      } else {
+        const addToTeam =
+          validEmail &&
+          (this.contact_email.endsWith('unicef.org') ||
+            this.contact_email.endsWith('pulilab.com')) &&
+          !this.team.includes(this.contact_email)
+        if (addToTeam) {
+          const team = this.team.concat(this.contact_email)
+          this.team = team
+        }
+      }
+    },
     openFeedback() {
       this.$store.commit('user/SET_FEEDBACK', {
         feedbackOn: true,
