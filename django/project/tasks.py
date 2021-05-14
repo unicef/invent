@@ -69,7 +69,7 @@ def project_review_requested_monthly_notification():
     Sends notification if a project needs review by an user - monthly celery task
     """
 
-    incomplete_reviews = ReviewScore.objects.filter(complete=False).filter(
+    incomplete_reviews = ReviewScore.objects.exclude(status=ReviewScore.STATUS_COMPLETE).filter(
         modified__lt=timezone.now() - timezone.timedelta(days=settings.NOTIFICATION_PROJECT_REVIEW_DAYS))
 
     if not incomplete_reviews:  # pragma: no cover

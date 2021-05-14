@@ -2,7 +2,7 @@ from copy import deepcopy
 
 from django.urls import reverse
 
-from project.models import ProblemStatement, ProjectPortfolioState, Project
+from project.models import ProblemStatement, ProjectPortfolioState, Project, ReviewScore
 from project.tests.portfolio_tests import PortfolioSetup
 from user.models import UserProfile
 
@@ -195,7 +195,7 @@ class PortfolioSearchTests(PortfolioSetup):
             'nc': 5,
             'ps': 5,
             'impact': 5,
-            'scale_phase': 6
+            'scale_phase': 6,
         }
 
         pps1 = ProjectPortfolioState.objects.get(project_id=new_project_id, portfolio_id=self.portfolio_id)
@@ -286,7 +286,8 @@ class PortfolioSearchTests(PortfolioSetup):
             'ee': 2,
             'ra': 4,
             'nst': 1,
-            'nst_comment': 'Neither do I'
+            'nst_comment': 'Neither do I',
+            'status': ReviewScore.STATUS_COMPLETE
         }
         url = reverse('review-score-fill', kwargs={"pk": question_id_y})
         response = user_y_client.post(url, partial_data_2, format="json")
@@ -300,7 +301,8 @@ class PortfolioSearchTests(PortfolioSetup):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
         self.assertFalse(response.json()['results']['projects'][0]['review_states']['approved'])
-        self.assertTrue(response.json()['results']['projects'][0]['review_states']['review_scores'][0]['complete'])
+        self.assertEqual(response.json()['results']['projects'][0]['review_states']['review_scores'][0]['status'],
+                         ReviewScore.STATUS_COMPLETE)
 
         # now reviewed, approve project
         pps = ProjectPortfolioState.objects.get(project_id=new_project_id, portfolio_id=self.portfolio_id)

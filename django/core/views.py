@@ -9,7 +9,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
     IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState
-from project.models import Project, ProjectPortfolioState
+from project.models import Project, ProjectPortfolioState, ReviewScore
 from project.serializers import PartnerSerializer, LinkSerializer
 from country.models import Country
 from user.authentication import BearerTokenAuthentication
@@ -126,6 +126,7 @@ class StaticDataView(GenericAPIView):
         data['link_types'] = [{'id': t[0], 'name': t[1]} for t in LinkSerializer.LINK_TYPE]
         data['review_questions'] = REVIEWER_QUESTIONS
         data['scale_phases'] = [{'id': s[0], 'name': s[1]} for s in ProjectPortfolioState.SCALE_CHOICES]
+        data['review_status'] = [{'id': s[0], 'text': s[1]} for s in ReviewScore.STATUS_CHOICES]
 
         return Response(data)
 
