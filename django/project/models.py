@@ -664,7 +664,20 @@ class ReviewScore(BaseScore):
     nc_comment = models.CharField(max_length=255, null=True, blank=True)  # NC - reviewer's comment field
     ps_comment = models.CharField(max_length=255, null=True, blank=True)  # PS - reviewer's comment field
 
-    complete = models.BooleanField(default=False)
+    STATUS_PENDING = 'PD'
+    STATUS_DRAFT = 'DR'
+    STATUS_COMPLETE = 'CMP'
+    STATUS_CHOICES = (
+        (STATUS_PENDING, _('Pending')),
+        (STATUS_DRAFT, _('Draft')),
+        (STATUS_COMPLETE, _('Complete'))
+    )
+
+    status = models.CharField(
+        max_length=3,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING
+    )
 
     def __str__(self):  # pragma: no cover
         return f'{self.reviewer} - {self.portfolio_review.project} - {self.portfolio_review.portfolio}'

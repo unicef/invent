@@ -216,6 +216,28 @@ class ReviewTests(PortfolioSetup):
         response = self.user_1_client.post(url, partial_data, format="json")
         self.assertEqual(response.status_code, 200)
 
+        # read pps data
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': pps_id})
+        response = self.user_1_client.get(url, {}, format="json")
+        self.assertEqual(response.status_code, 200)
+        # no answer was finalized, averages should be empty!
+        empty_averages = \
+            {
+                'ee': None,
+                'nc': None,
+                'nst': None,
+                'ps': None,
+                'ra': None,
+                'ratp': None,
+                'rnci': None
+            }
+        self.assertEqual(response.json()['averages'], empty_averages)
+
+        # Finalize reviewscore
+        url = reverse('review-score-fill', kwargs={"pk": question_id})
+        response = self.user_1_client.post(url, {"status": ReviewScore.STATUS_COMPLETE}, format="json")
+        self.assertEqual(response.status_code, 200)
+
         # add another user review
         user_y_pr_id, user_y_client, user_y_key = self.create_user('jeff@bezos.com', '12345789TIZ', '12345789TIZ')
         url = reverse("portfolio-assign-questionnaire",
@@ -224,6 +246,8 @@ class ReviewTests(PortfolioSetup):
         response = self.user_3_client.post(url, request_data, format="json")
         self.assertEqual(response.status_code, 200)
         question_id_y = response.json()[0]['id']
+        # Score has not been edited yet, so status should be "pending"
+        self.assertEqual(response.json()[0]['status'], ReviewScore.STATUS_PENDING)
 
         partial_data_2 = {
             'ee': 2,
@@ -235,6 +259,15 @@ class ReviewTests(PortfolioSetup):
         url = reverse('review-score-fill', kwargs={"pk": question_id_y})
         response = user_y_client.post(url, partial_data_2, format="json")
         self.assertEqual(response.status_code, 200)
+        # Score is not complete, so it needs to be in DRAFT status (even though we didn't send draft here
+        self.assertEqual(response.json()['status'], ReviewScore.STATUS_DRAFT)
+
+        # Finalize reviewscore
+        url = reverse('review-score-fill', kwargs={"pk": question_id_y})
+        response = user_y_client.post(url, {"status": ReviewScore.STATUS_COMPLETE}, format="json")
+        self.assertEqual(response.status_code, 200)
+        # Score is not complete, so it needs to be in DRAFT status (even though we didn't send draft here
+        self.assertEqual(response.json()['status'], ReviewScore.STATUS_COMPLETE)
 
         # read pps data
         url = reverse('portfolio-project-manager-review', kwargs={'pk': pps_id})
@@ -275,7 +308,7 @@ class ReviewTests(PortfolioSetup):
         """
         # create new portfolio
         response = self.create_portfolio('Matrix test portfolio', "Portfolio for testing matrix output",
-                                         [self.user_3_pr_id],  self.user_2_client)
+                                         [self.user_3_pr_id], self.user_2_client)
         self.assertEqual(response.status_code, 201, response.json())
         portfolio_id = response.json()['id']
         project_ids = list()
@@ -305,6 +338,7 @@ class ReviewTests(PortfolioSetup):
                 'ps': randint(1, 5),
                 'impact': i % 2 + 1,
                 'scale_phase': randint(1, 5),
+                'status': ReviewScore.STATUS_COMPLETE,
             }
             self.review_and_approve_project(pps, scores, self.user_2_client)
             i += 1
@@ -342,7 +376,7 @@ class ReviewTests(PortfolioSetup):
 
         ]
         response = self.create_portfolio('Scores test portfolio', "Portfolio for testing scores output",
-                                         [self.user_3_pr_id],  self.user_2_client, problem_statements)
+                                         [self.user_3_pr_id], self.user_2_client, problem_statements)
         self.assertEqual(response.status_code, 201, response.json())
         portfolio_id = response.json()['id']
         # create new project
@@ -369,7 +403,8 @@ class ReviewTests(PortfolioSetup):
             'ra': 4,
             'nst': 1,
             'nc': 2,
-            'nst_comment': 'Fun times'
+            'nst_comment': 'Fun times',
+            'status': ReviewScore.STATUS_COMPLETE
         }
         url = reverse('review-score-fill', kwargs={"pk": question_id_y})
         response = user_y_client.post(url, partial_data_2, format="json")

@@ -500,7 +500,7 @@ class ReviewScoreBriefSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewScore
-        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review', 'complete')
+        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review', 'status')
 
 
 class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
@@ -512,6 +512,7 @@ class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
 
 
 class ReviewScoreSerializer(serializers.ModelSerializer):
+    status = serializers.ChoiceField(choices=ReviewScore.STATUS_CHOICES)
     reviewer = UserProfileSerializer(read_only=True)
 
     class Meta:
@@ -541,7 +542,7 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_averages(obj):
-        complete_scores = obj.review_scores.filter(complete=True)
+        complete_scores = obj.review_scores.filter(status=ReviewScore.STATUS_COMPLETE)
 
         def calc_avg(in_list: list):
             return (sum(in_list) / len(in_list)) if in_list else None
@@ -615,16 +616,20 @@ class PortfolioStateChangeSerializer(PortfolioSerializer):
 
 
 class ReviewScoreFillSerializer(serializers.ModelSerializer):
+    status = serializers.ChoiceField(required=False, choices=ReviewScore.STATUS_CHOICES, allow_blank=False)
+
     class Meta:
         model = ReviewScore
         fields = ('psa', 'psa_comment', 'rnci', 'rnci_comment', 'ratp', 'ratp_comment', 'ra', 'ra_comment', 'ee',
-                  'ee_comment', 'nst', 'nst_comment', 'nc', 'nc_comment', 'ps', 'ps_comment')
+                  'ee_comment', 'nst', 'nst_comment', 'nc', 'nc_comment', 'ps', 'ps_comment', 'status')
 
     def update(self, instance, validated_data):
         """
-        Override serializer to set 'complete' to True
+        Override serializer to set status
         """
-        instance.complete = True
+        if instance.status != ReviewScore.STATUS_COMPLETE:
+            instance.status = ReviewScore.STATUS_DRAFT
+
         instance = super().update(instance, validated_data)
         return instance
 
@@ -633,6 +638,7 @@ class ReviewScoreDetailedSerializer(serializers.ModelSerializer):
     project = serializers.ReadOnlyField(source='get_project_data')
     portfolio = PortfolioSerializer(read_only=True, source='get_portfolio')
     portfolio_review = ProjectPortfolioStateSerializer(read_only=True)
+    status = serializers.ChoiceField(choices=ReviewScore.STATUS_CHOICES)
 
     class Meta:
         model = ReviewScore

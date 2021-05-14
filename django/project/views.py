@@ -768,11 +768,29 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
 
 
 class ReviewScoreAccessSet(ReviewScoreAccessMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
+    """ Retrieve or destroy an user review
+
+        Returns with a serialized ReviewScore object on success
+    """
     serializer_class = ReviewScoreSerializer
     queryset = ReviewScore.objects.all()
 
 
 class ReviewScoreAnswerViewSet(ReviewScoreReviewerAccessMixin, UpdateModelMixin, GenericViewSet):
+    """ Fill or complete an user review
+
+    `status` is optional, can be used to set a review to complete. Edited `ReviewScore` objects will always have
+    a *draft* status, unless they are set as *complete*
+
+    Allowed values for `status` are:
+
+    * `PD` - pending
+
+    * `DR` - draft
+
+    * `CMP` - complete
+
+    """
     serializer_class = ReviewScoreFillSerializer
     queryset = ReviewScore.objects.all()
 

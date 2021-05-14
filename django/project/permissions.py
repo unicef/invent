@@ -66,7 +66,7 @@ class IsReviewable(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj: ReviewScore):
-        return obj.reviewer.id == request.user.userprofile.id and obj.complete is False
+        return obj.reviewer.id == request.user.userprofile.id and obj.status != ReviewScore.STATUS_COMPLETE
 
 
 class IsReviewerGPOOrManager(permissions.BasePermission):
