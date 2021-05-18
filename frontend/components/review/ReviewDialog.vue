@@ -146,7 +146,7 @@
           <el-button type="info" @click="resetForm(false)">Cancel</el-button>
         </span>
         <span>
-          <el-button type="primary">
+          <el-button type="primary" @click="handleSubmit('DR')">
             <translate>Save as Draft</translate>
           </el-button>
           <el-button type="success" @click="confirmPublishing = true">
@@ -165,7 +165,7 @@
             type="success"
             :loading="loadingReview"
             :disabled="disabled"
-            @click="handleSubmit"
+            @click="handleSubmit('CMP')"
           >
             <translate>Submit</translate>
           </el-button>
@@ -274,10 +274,11 @@ export default {
         ps_comment: '',
       }
     },
-    async handleSubmit() {
+    async handleSubmit(status = 'DR') {
       await this.addReview({
         ...this.score,
         id: this.currentProjectReview.reviewId,
+        status,
       })
       if (this.errorReview) {
         this.$message.error(
