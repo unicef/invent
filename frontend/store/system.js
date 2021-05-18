@@ -19,6 +19,7 @@ export const state = () => ({
   link_types: [],
   donorsLibrary: {},
   review_questions: {},
+  review_statuses: {},
   scalePhases: [],
 })
 
@@ -44,7 +45,6 @@ export const getters = {
       .map((l) => ({ ...l, flag: `/static/flags/${l.flag}` }))
       .filter((l) => l.code !== 'ar')
   },
-
   getLanguageDetails: (state, getters) => (code) => {
     return getters.getLanguages.find((l) => l.code === code)
   },
@@ -62,6 +62,17 @@ export const getters = {
   },
   getQuestions: (state) => {
     return [...state.toolkit_questions]
+  },
+  getReviewStatuses: (state) => {
+    // return [...state.review_statuses]
+    // Object.assign({}, ...data.map(({id, name, foo}) => ({[id]: {name, foo}})))
+    return Object.assign(
+      {},
+      ...state.review_statuses.map(({ id, text }) => ({ [id]: text }))
+    )
+    // return state.review_statuses.map((status) => {
+    //   return { [status.id]: status.text }
+    // })
   },
   getThematicOverview: (state) => {
     const th = state.thematic_overview
@@ -135,6 +146,10 @@ export const actions = {
       commit('SET_DATA', {
         key: 'review_questions',
         value: data.review_questions,
+      })
+      commit('SET_DATA', {
+        key: 'review_statuses',
+        value: data.review_status,
       })
       commit('SET_DOMAINS', data.domains)
       commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults)

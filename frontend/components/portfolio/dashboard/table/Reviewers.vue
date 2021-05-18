@@ -5,11 +5,8 @@
         <p>
           <b>{{ item.reviewer.name }}</b>
         </p>
-        <p v-if="item.complete" class="uppercase">
-          <translate>Complete</translate>
-        </p>
-        <p v-else class="uppercase pending">
-          <translate>Pending</translate>
+        <p class="uppercase" :class="reviewStatuses[item.status]">
+          {{ $gettext(reviewStatuses[item.status]) }}
         </p>
       </div>
     </div>
@@ -21,7 +18,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -33,6 +30,11 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters({
+      reviewStatuses: 'system/getReviewStatuses',
+    }),
   },
   methods: {
     ...mapActions({
@@ -61,11 +63,15 @@ export default {
     margin-bottom: 10px;
   }
 }
-.complete {
-  color: #0eb455;
-}
-.pending {
+.Pending {
   color: @colorBrandGrayDark;
+}
+.Draft {
+  // color: #fbde88;
+  color: #ebb20a;
+}
+.Complete {
+  color: #0eb455;
 }
 .uppercase {
   text-transform: uppercase;
