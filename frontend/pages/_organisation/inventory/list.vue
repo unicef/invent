@@ -28,8 +28,7 @@ export default {
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('countries/loadMapData'),
     ])
-    // await store.dispatch('dashboard/setSearchOptions', { query })
-    await store.dispatch('dashboard/setSearchOptions', {})
+    await store.dispatch('dashboard/setSearchOptions', query)
     try {
       await store.dispatch('dashboard/loadProjectList')
     } catch (e) {
