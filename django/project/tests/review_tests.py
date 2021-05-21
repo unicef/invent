@@ -143,6 +143,7 @@ class ReviewTests(PortfolioSetup):
 
         # Moving project from review state to inventory
         # Try the API with incorrect data
+        pps_ids = {x['id'] for x in pps_data}
         pps_projects = {x['project'] for x in pps_data}
         self.assertEqual(pps_projects, {self.project_rev_id, project_id})
         url = reverse('portfolio-project-remove', kwargs={'pk': self.portfolio_id})
@@ -154,9 +155,17 @@ class ReviewTests(PortfolioSetup):
         self.assertEqual(response.status_code, 400)
         response = self.user_3_client.post(url, {'project': [project_id]}, format="json")
         self.assertEqual(response.status_code, 200, response.json())
+        pps = ProjectPortfolioState.all_objects.get(project_id=project_id)
+        self.assertEqual(pps.is_active, False)
         pps_data = response.json()['review_states']
         self.assertEqual(len(pps_data), 1)
         self.assertEqual(pps_data[0]['project'], self.project_rev_id)
+        # Re-add the project review to the portfolio
+        url = reverse('portfolio-project-add', kwargs={'pk': self.portfolio_id})
+        response = self.user_3_client.post(url, {'project': [project_id]}, format="json")
+        self.assertEqual(response.status_code, 201)
+        pps_ids_2 = {x['id'] for x in response.json()['review_states']}
+        self.assertEqual(pps_ids_2, pps_ids)
 
     def test_review_assign_questions(self):
         url = reverse("portfolio-assign-questionnaire",
@@ -179,8 +188,8 @@ class ReviewTests(PortfolioSetup):
         response = self.user_3_client.delete(url, format="json")
         self.assertEqual(response.status_code, 204)
         # check if it was removed
-        questions = ReviewScore.objects.filter(id=question_id)
-        self.assertEqual(len(questions), 0)
+        qs = ReviewScore.all_objects.filter(id=question_id)
+        self.assertEqual(qs.count(), 0)
 
     def test_review_fill_scores(self):
         # create questions

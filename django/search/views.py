@@ -188,7 +188,8 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             query_params.pop('sp', None)
 
             if portfolio_page == "inventory":
-                qs = qs.exclude(project__review_states__portfolio_id=portfolio_id)
+                qs = qs.exclude(project__review_states__portfolio_id=portfolio_id,
+                                project__review_states__is_active=True)
                 # edge case scenario where we need to ignore all the portfolio reliant query params from here
                 query_params.pop('portfolio', None)
             elif portfolio_page == "review":

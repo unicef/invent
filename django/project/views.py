@@ -161,7 +161,8 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
         elif list_name == 'favorite':
             data = self.favorite_list(request.user)
         elif list_name == 'review':
-            qs = ReviewScore.objects.filter(reviewer=request.user.userprofile). \
+            # Bug: Reverse lookup does not work here for filtering
+            qs = ReviewScore.objects.filter(portfolio_review__is_active=True, reviewer=request.user.userprofile). \
                 exclude(portfolio_review__project__public_id__exact='')
             data_serializer = ReviewScoreDetailedSerializer(qs.all(), many=True)
             data = data_serializer.data
@@ -687,11 +688,17 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
 
     def move_from_inventory_to_review(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
-        projects = Project.objects.filter(id__in=request.data['project']).exclude(review_states__portfolio=portfolio)
+        # For some reason the reverse lookup for ActiveQuerySet fails at this point
+        projects = Project.objects.filter(id__in=request.data['project']).\
+            exclude(review_states__is_active=True, review_states__portfolio=portfolio)
         if len(projects) == 0:
             raise ValidationError({'project': 'Project data is incorrect'})
         # create a new review for each project if needed
         for project in projects:
+            qs_pps = ProjectPortfolioState.all_objects.filter(portfolio=portfolio, project=project, is_active=False)
+            if qs_pps.count() == 1:
+                ReviewScore.all_objects.filter(portfolio_review=qs_pps[0]).update(is_active=True)
+            qs_pps.update(is_active=True)
             ProjectPortfolioState.objects.get_or_create(portfolio=portfolio, project=project)
 
         return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_201_CREATED)
@@ -705,6 +712,7 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
 
         # Remove each review_state from portfolio
         for rev_state in review_states:
+            rev_state.review_scores.all().update(is_active=False)  # disable reviews linked to pps
             rev_state.delete()
         return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_200_OK)
 
@@ -774,6 +782,13 @@ class ReviewScoreAccessSet(ReviewScoreAccessMixin, RetrieveModelMixin, DestroyMo
     """
     serializer_class = ReviewScoreSerializer
     queryset = ReviewScore.objects.all()
+
+    def perform_destroy(self, instance):
+        """ Custom delete for ReviewScore API
+
+            When we delete a review score, we need the hard delete
+        """
+        ReviewScore.objects.filter(id=instance.id).force_delete()
 
 
 class ReviewScoreAnswerViewSet(ReviewScoreReviewerAccessMixin, UpdateModelMixin, GenericViewSet):
