@@ -73,6 +73,9 @@ class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):
     def add_intial_q(self):
         self.query.add_q(Q(is_active=True))
 
+    def force_delete(self):
+        super(ActiveQuerySet, self).delete()
+
 
 class SoftDeleteModel(models.Model):
     is_active = models.BooleanField(default=True)
