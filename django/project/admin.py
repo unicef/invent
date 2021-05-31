@@ -12,6 +12,9 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     Phase
 from core.utils import make_admin_list
 
+from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter, CountryFilter, DescriptionFilter, \
+    RegionFilter
+
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
 
@@ -155,7 +158,10 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
 
 class ProjectAdmin(AllObjectsAdmin):
     list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active']
-    readonly_fields = ['name', 'team', 'viewers', 'link', 'created', 'modified']
+    list_filter = (IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter, RegionFilter, CountryFilter)
+
+    readonly_fields = ['name', 'team', 'viewers', 'link', 'created', 'modified', 'get_overview',
+                       'get_implementation_overview']
     fields = ['is_active'] + readonly_fields
     search_fields = ['name']
 
@@ -171,6 +177,15 @@ class ProjectAdmin(AllObjectsAdmin):
         return True if obj.public_id else False
     get_published.short_description = "Is published?"
     get_published.boolean = True
+
+    def get_overview(self, obj):  # pragma: no cover
+        return obj.data.get('overview') if obj.public_id else obj.draft.get('overview')
+
+    get_overview.short_description = "Overview"
+
+    def get_implementation_overview(self, obj):  # pragma: no cover
+        return obj.data.get('implementation_overview') if obj.public_id else obj.draft.get('implementation_overview')
+    get_implementation_overview.short_description = "Implementation overview"
 
     def link(self, obj):
         if obj.id is None:

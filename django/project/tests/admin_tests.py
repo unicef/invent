@@ -20,6 +20,7 @@ from core.utils import make_admin_list
 
 class TestAdmin(TestCase):
     def setUp(self):
+        super(TestAdmin, self).setUp()
         self.request = MockRequest()
         self.site = AdminSite()
         self.user = User.objects.create_user(username="alma", password="korte")
