@@ -63,18 +63,19 @@ class TestProjectData:
         )
         return country, country_office
 
-    def create_test_data(self, name: str = None, create_relations: bool = False, new_country_only: bool = False):
+    def create_test_data(self, name: str = None, create_relations: bool = False, new_country_only: bool = False,
+                         convert_datetime: bool = False):
         if name is None:
             name = "Test Project1"
 
         if create_relations:
-            org = Organisation.objects.create(name="org1")
+            org, _ = Organisation.objects.get_or_create(name="org1")
 
             country, country_office = self.create_new_country_and_office(
                 name="country1", country_code='CTR1', project_approval=True)
 
-            d1 = Donor.objects.create(name="Donor1", code="donor1")
-            d2 = Donor.objects.create(name="Donor2", code="donor2")
+            d1, _ = Donor.objects.get_or_create(name="Donor1", code="donor1")
+            d2, _ = Donor.objects.get_or_create(name="Donor2", code="donor2")
         else:
             if new_country_only:
                 country, country_office = self.create_new_country_and_office(project_approval=False)
@@ -86,7 +87,7 @@ class TestProjectData:
             d2 = self.d2
 
         return {"project": {
-            "date": datetime.utcnow(),
+            "date": str(datetime.utcnow()) if convert_datetime else datetime.utcnow(),
             "name": name,
             "organisation": org.id,
             "contact_name": "name1",
