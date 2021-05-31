@@ -51,7 +51,7 @@ def production():
     env.name = 'production'
     env.port = 22
     env.branch = "tags/2.1.5"
-    env.project_root = '/home/tiip/tiip'
+    env.project_root = '~/TIIP'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = '-live'
@@ -114,7 +114,7 @@ def deploy():
         run('git fetch')
         if env.name == 'production':
             with warn_only():
-                run('rm ~/tiip/nginx/conf.d/production.conf')
+                run('rm ~/TIIP/nginx/conf.d/production.conf')
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
         time.sleep(10)
