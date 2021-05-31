@@ -376,17 +376,15 @@ export const actions = {
       console.log(e.response.data)
     }
   },
-  removeScore({ state, commit, dispatch }, { id }) {
-    try {
-      const scoresRemoved = state.review.review_scores.filter((score) => {
-        return score.id !== id
+  async removeScore({ commit, dispatch }, { id }) {
+    return await this.$axios
+      .delete(`/api/project-review/${id}/`)
+      .then((res) => {
+        if (res.status === 204) {
+          commit('REMOVE_SCORE', id)
+          dispatch('getPortfolioProjects')
+        }
       })
-      commit('REMOVE_SCORE', scoresRemoved)
-      // need backend integration and refreshing the projects list
-      // dispatch('getPortfolioProjects')
-    } catch (e) {
-      console.log('removeReview in store', e.response.data)
-    }
   },
   async getManagerScore({ state, commit, dispatch }, { id, name }) {
     try {
@@ -472,8 +470,9 @@ export const mutations = {
   SET_SELECTED_ROWS: (state, rows) => {
     state.selectedRows = rows
   },
-  REMOVE_SCORE: (state, scores) => {
-    state.review.review_scores = scores
+  REMOVE_SCORE: (state, id) => {
+    const index = state.review.review_scores.findIndex((i) => i.id === id)
+    state.review.review_scores.splice(index, 1)
   },
 }
 

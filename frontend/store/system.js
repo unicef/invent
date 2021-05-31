@@ -64,15 +64,10 @@ export const getters = {
     return [...state.toolkit_questions]
   },
   getReviewStatuses: (state) => {
-    // return [...state.review_statuses]
-    // Object.assign({}, ...data.map(({id, name, foo}) => ({[id]: {name, foo}})))
     return Object.assign(
       {},
       ...state.review_statuses.map(({ id, text }) => ({ [id]: text }))
     )
-    // return state.review_statuses.map((status) => {
-    //   return { [status.id]: status.text }
-    // })
   },
   getThematicOverview: (state) => {
     const th = state.thematic_overview
