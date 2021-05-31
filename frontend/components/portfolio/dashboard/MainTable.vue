@@ -1026,6 +1026,7 @@ export default {
         line-height: 17px;
         word-break: normal;
         padding: 0;
+        overflow: initial !important;
         p {
           position: relative;
           margin: 0;
