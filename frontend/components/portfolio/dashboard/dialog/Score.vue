@@ -264,23 +264,23 @@ export default {
   data() {
     return {
       points: [1, 2, 3, 4, 5],
-      reviewStatuses: [
-        {
+      reviewStatuses: {
+        PD: {
           icon: ['fas', 'clock'],
           class: 'pending',
           title: 'Pending',
         },
-        {
+        DR: {
           icon: ['fas', 'pen'],
-          class: 'inprogress',
-          title: 'In progress',
+          class: 'draft',
+          title: 'Draft',
         },
-        {
+        CMP: {
           icon: ['fas', 'clipboard-check'],
           class: 'complete',
           title: 'Completed',
         },
-      ],
+      },
       score: {
         psa: [],
         rnci: null,
@@ -351,7 +351,7 @@ export default {
         return this.review.review_scores.map((i) => {
           return {
             reviewer: i.reviewer.name,
-            status: this.getRandomStatus(),
+            status: i.status,
             id: i.id,
           }
         })
@@ -379,9 +379,21 @@ export default {
       this.addScore({ id: this.review.id, data: { ...this.score } })
     },
     handleScoreDelete(reviewHeader) {
-      console.log(reviewHeader)
+      console.log('reviewHeader', reviewHeader)
       this.removeScore({ ...reviewHeader })
-      // this.addScore({ id: this.review.id, data: { ...this.score } })
+        .then((res) => {
+          this.$message({
+            message: this.$gettext('Reviewer removed'),
+            type: 'success',
+          })
+        })
+        .catch((error) => {
+          console.log(error)
+          this.$message({
+            message: this.$gettext('Error removing reviewer'),
+            type: 'error',
+          })
+        })
     },
     handleScoreFeed() {
       this.score = {
@@ -402,9 +414,6 @@ export default {
         return this.scalePhases.find((i) => i.id === this.score[type]).name
       }
       return this.score[type] === null ? ' ' : this.score[type] // N/A
-    },
-    getRandomStatus() {
-      return Math.floor(Math.random() * (2 + 1) + 0)
     },
   },
 }
@@ -454,7 +463,7 @@ export default {
     height: 16px;
     opacity: 0.8;
     position: relative;
-    top: 1px;
+    top: 0;
   }
 
   .header-status-icon:hover {
@@ -465,7 +474,7 @@ export default {
     color: #b6e5f6;
   }
 
-  .header-status-icon.inprogress {
+  .header-status-icon.draft {
     color: #fbde88;
   }
 
