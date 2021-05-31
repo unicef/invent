@@ -248,6 +248,13 @@ def rebuild_db():
     local("cat ./dump.sql | docker exec -i $(docker-compose ps -q postgres) psql -Upostgres")
 
 
+def add_base_db_data():
+    """
+    Adds basic data set to the db, like organizations, country and unicef offices
+    """
+    local("cat ./project/test-data/basic_data.sql | docker exec -i $(docker-compose ps -q postgres) psql -Upostgres")
+
+
 def backup_db():
     local("docker-compose exec postgres pg_dumpall -U postgres -c > ./dump.sql")
 
