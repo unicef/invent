@@ -10,9 +10,9 @@
         </translate>
       </el-button>
       <list-export :projects="rowToExport">
-        <template #default="{ parsed }">
+        <template #default="{ parsedScores }">
           <xlsx-workbook>
-            <xlsx-sheet :collection="parsed" sheet-name="export" />
+            <xlsx-sheet :collection="parsedScores" sheet-name="export" />
             <xlsx-download
               disable-wrapper-click
               :options="{ bookType: exportType.toLowerCase() }"
@@ -47,7 +47,7 @@
           v-model="columnSelectorOpen"
           :title="settingsTitle"
           placement="bottom-end"
-          width="220"
+          width="264"
           trigger="click"
           popper-class="CustomPopover TableSettingsDropdown"
           @show="popperOpenHandler"
@@ -67,7 +67,19 @@
                 :class="['Item', { Selected: c.selected }]"
                 @click="c.selected = !c.selected"
               >
-                <fa icon="check" />
+                <fa icon="check"></fa>
+                <info-popover
+                  v-if="c.id === '61' || c.id == '62'"
+                  placement="right"
+                  width="360"
+                  class="hint-icon"
+                  :icon="['fas', 'info-circle']"
+                >
+                  <translate
+                    >This field will appear horizontally in the exported
+                    projects' row.</translate
+                  >
+                </info-popover>
                 {{ c.label }}
               </li>
             </ul>
@@ -136,6 +148,7 @@ import pick from 'lodash/pick'
 import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 // import PdfExport from '@/components/dashboard/PdfExport'
 import ListExport from '@/components/dashboard/ListExport'
+import InfoPopover from '@/components/common/InfoPopover'
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -146,6 +159,7 @@ export default {
     XlsxSheet,
     XlsxDownload,
     ListExport,
+    InfoPopover,
   },
   data() {
     return {
@@ -310,6 +324,16 @@ export default {
 <style lang="less" scoped>
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
+
+.hint-icon {
+  position: absolute;
+  right: 32px;
+  top: 1px;
+}
+
+::v-deep .hint-icon .question-icon {
+  font-size: 14px;
+}
 
 .actions {
   display: flex;

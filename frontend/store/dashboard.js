@@ -102,7 +102,7 @@ export const state = () => ({
   informationSecurity: null,
   // to track col with projects keys
   mapColKeys: [
-    { id: '1', label: 'Project name', key: 'name' },
+    { id: '1', label: 'Initiative name', key: 'name' },
     { id: '2', label: 'Country', key: 'country' },
     { id: '3', label: 'Last updated', key: 'modified' },
     { id: '4', label: 'Unicef Office', key: 'country_office' },
@@ -214,7 +214,8 @@ export const state = () => ({
     {
       id: '61',
       label: 'Questionnaires Assigned',
-      key: 'questionnaires_assigned',
+      // key: 'questionnaires_assigned',
+      key: 'review_states', // needs for the scores
     },
     { id: '62', label: 'Scoring', key: 'scoring' },
   ],
