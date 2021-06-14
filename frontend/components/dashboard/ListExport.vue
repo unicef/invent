@@ -11,10 +11,320 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      officialScoreFields: [
+        this.$gettext('Problem Statement Alignment (Official Score)'),
+        this.$gettext('Reach: Number of Children Impacted (Official Score)'),
+        this.$gettext('Reach: Addressing Target Populations (Official Score)'),
+        this.$gettext('Risk Assessment (Official Score)'),
+        this.$gettext('Evidence of Effectiveness (Official Score)'),
+        this.$gettext('Newness of Solution (Tool) (Official Score)'),
+        this.$gettext('Newness of Challenge (Official Score)'),
+        this.$gettext('Path to Scale (Official Score)'),
+        this.$gettext('Impact (Official Score)'),
+        this.$gettext('Scale Phase (Official Score)'),
+      ],
+      reviewScoresFields: [
+        this.$gettext('Reviewer Name'),
+        this.$gettext('Review Status'),
+        this.$gettext('Problem Statement Alignment'),
+        this.$gettext('Comments'),
+        this.$gettext('Reach: Number of Children Impacted'),
+        this.$gettext('Comments'),
+        this.$gettext('Reach: Addressing Target Populations'),
+        this.$gettext('Comments'),
+        this.$gettext('Risk Assessment'),
+        this.$gettext('Comments'),
+        this.$gettext('Evidence of Effectiveness'),
+        this.$gettext('Comments'),
+        this.$gettext('Newness of Solution (Tool)'),
+        this.$gettext('Comments'),
+        this.$gettext('Newness of Challenge'),
+        this.$gettext('Comments'),
+        this.$gettext('Path to Scale'),
+        this.$gettext('Comments'),
+      ],
+      colKeyValues: [
+        {
+          id: '1',
+          label: 'Initiative Name',
+          key: 'name',
+          parse: (name) => name || '',
+        },
+        {
+          id: '2',
+          label: 'Country',
+          key: 'country',
+          parse: (country) => this.parseCountry(country),
+        },
+        {
+          id: '3',
+          label: 'Last updated',
+          key: 'modified',
+          parse: (datetime) => datetime || '',
+        },
+        {
+          id: '4',
+          label: 'Unicef Office',
+          key: 'country_office',
+          parse: (country_office) =>
+            country_office
+              ? this.offices.find((obj) => obj.id === country_office).name || ''
+              : '',
+        },
+        {
+          id: '5',
+          label: 'Region',
+          key: 'region',
+          parse: (region) => this.parseSingleSelection(region, 'regions'),
+        },
+        {
+          id: '7',
+          label: 'Programme Focal Point Name',
+          // key: ['contact_name', 'contact_email'],
+          key: 'contact_name',
+          parse: (contact_name) => contact_name || '',
+        },
+        {
+          id: '8',
+          label: 'Initiative Description',
+          key: 'implementation_overview',
+          parse: (implementation_overview) => implementation_overview || '',
+        },
+        {
+          id: '10',
+          label: 'Health Focus Areas',
+          key: 'health_focus_areas',
+          parse: (health_focus_areas) =>
+            this.parseHealthFocusAreas(health_focus_areas),
+        },
+        {
+          id: '11',
+          label: 'Goal Area',
+          key: 'goal_area',
+          parse: (goal_area) =>
+            this.parseSingleSelection(goal_area, 'goalAreas'),
+        },
+        {
+          id: '12',
+          label: 'Result Area',
+          key: 'result_area',
+          parse: (result_area) =>
+            this.parseSingleSelection(result_area, 'resultAreas'),
+        },
+        {
+          id: '13',
+          label: 'Capability Levels',
+          key: 'capability_levels',
+          parse: (capability_levels) =>
+            this.parseFlatList(capability_levels, 'capabilityLevels'),
+        },
+        {
+          id: '14',
+          label: 'Capability Categories',
+          key: 'capability_categories',
+          parse: (capability_categories) =>
+            this.parseFlatList(capability_categories, 'capabilityCategories'),
+        },
+        {
+          id: '15',
+          label: 'Capability Subcategories',
+          key: 'capability_subcategories',
+          parse: (capability_subcategories) =>
+            this.parseFlatList(
+              capability_subcategories,
+              'capabilitySubcategories'
+            ),
+        },
+        {
+          id: '18',
+          label: 'Multicountry or Regional Office',
+          key: 'regional_office',
+          parse: (regional_office) =>
+            this.parseList(this.getRegionalOffices, [regional_office]),
+        },
+        {
+          id: '19',
+          label: 'UNICEF Sector',
+          key: 'unicef_sector',
+          parse: (unicef_sector) =>
+            this.parseList(this.getSectors, unicef_sector),
+        },
+        {
+          id: '20',
+          label: 'Innovation Ways',
+          key: 'innovation_ways',
+          parse: (innovation_ways) =>
+            this.parseList(this.getInnovationWays, innovation_ways),
+        },
+        {
+          id: '21',
+          label: 'Phase of Initiative',
+          key: 'stages',
+          parse: (stages) => this.parseList(this.getStages, stages),
+        },
+        {
+          id: '22',
+          label: 'Hardware platform(s)',
+          key: 'hardware',
+          parse: (hardware) => this.parseList(this.getHardware, hardware),
+        },
+        {
+          id: '23',
+          label: 'Non-technology platform(s)',
+          key: 'nontech',
+          parse: (nontech) => this.parseList(this.getNontech, nontech),
+        },
+        {
+          id: '24',
+          label: 'Platform/Product Function',
+          key: 'functions',
+          parse: (functions) => this.parseList(this.getFunctions, functions),
+        },
+        {
+          id: '25',
+          label: 'Information security classification',
+          key: 'isc',
+          parse: (isc) => this.parseList(this.getInfoSec, [isc]),
+        },
+        {
+          id: '26',
+          label: 'Regional priority(ies)',
+          key: 'regional_priorities',
+          parse: (regional_priorities) =>
+            this.parseList(this.getRegionalPriorities, regional_priorities),
+        },
+        // { id: '27', label: 'Programme Focal Point Email' },
+        {
+          id: '28',
+          label: 'Annual Work Plan (AWP) Outcome/Activity',
+          key: 'awp',
+          parse: (awp) => awp || '',
+        },
+        {
+          id: '29',
+          label: 'Currency',
+          key: 'currency',
+          parse: (currency) => currency || '',
+        },
+        {
+          id: '30',
+          label: 'Current Achievements',
+          key: 'current_achievements',
+          parse: (current_achievements) => current_achievements || '',
+        },
+        {
+          id: '31',
+          label: 'Funding Needs',
+          key: 'funding_needs',
+          parse: (funding_needs) => funding_needs || '',
+        },
+        {
+          id: '32',
+          label: 'In Country programme document (CPD) and annual work plan?',
+          key: 'cpd',
+          parse: (cpd) => this.joinSimpleArr(cpd),
+        },
+        {
+          id: '33',
+          label: 'Links to website/Current Documentation + URL',
+          key: 'links',
+          parse: (links) => this.joinSimpleArr(links),
+        },
+        {
+          id: '34',
+          label: 'Overview',
+          key: 'overview',
+          parse: (overview) => overview,
+        },
+        {
+          id: '35',
+          label: 'Partner Data',
+          key: 'partners',
+          parse: (links) => this.joinSimpleArr(links),
+        },
+        {
+          id: '36',
+          label: 'Partnership needs',
+          key: 'partnership_needs',
+          parse: (partnership_needs) => partnership_needs || '',
+        },
+        {
+          id: '37',
+          label: 'Program Targets',
+          key: 'program_targets',
+          parse: (program_targets) => program_targets || '',
+        },
+        {
+          id: '38',
+          label: 'Program Targets Archieved',
+          key: 'program_targets_achieved',
+          parse: (program_targets_achieved) => program_targets_achieved || '',
+        },
+        {
+          id: '39',
+          label: 'Start Date',
+          key: 'start_date',
+          parse: (start_date) => start_date || '',
+        },
+        {
+          id: '40',
+          label: 'End Date',
+          key: 'end_date',
+          parse: (end_date) => end_date || '',
+        },
+        {
+          id: '41',
+          label: 'Target Group (Target Population) Reached',
+          key: 'target_group_reached',
+          parse: (target_group_reached) => target_group_reached || '',
+        },
+        {
+          id: '42',
+          label: 'Total Budget',
+          key: 'total_budget',
+          parse: (total_budget) => total_budget || '',
+        },
+        {
+          id: '43',
+          label: 'Total Budget (Narrative)',
+          key: 'total_budget_narrative',
+          parse: (total_budget_narrative) => total_budget_narrative || '',
+        },
+        {
+          id: '44',
+          label: 'Work Breakdown Structure (WBS)',
+          key: 'wbs',
+          parse: (wbs) => this.joinSimpleArr(wbs),
+        },
+        {
+          id: '60',
+          label: 'Software Platforms(s)',
+          key: 'platforms',
+          parse: (platforms) => this.parseFlatList(platforms, 'platforms'),
+        },
+        {
+          id: '62',
+          label: 'Scoring',
+          key: 'review_states',
+          parse: (review_states) => this.parseScores(review_states),
+        },
+        {
+          id: '61',
+          label: 'Questionnaires Assigned',
+          key: 'review_states',
+          parse: (review_states) => this.parseReviews(review_states),
+        },
+      ],
+    }
+  },
   computed: {
     ...mapState({
       offices: (state) => state.offices.offices,
       mapColKeys: (state) => state.dashboard.mapColKeys,
+      scalePhases: (state) => state.system.scalePhases,
+      portfolioPage: (state) => state.search.filter.portfolio_page,
     }),
     ...mapGetters({
       getCountryDetails: 'countries/getCountryDetails',
@@ -32,6 +342,7 @@ export default {
       platforms: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
       selectedCol: 'dashboard/getSelectedColumns',
+      review_statuses: 'system/getReviewStatuses',
       // new fields
       getSectors: 'projects/getSectors',
       getRegionalPriorities: 'projects/getRegionalPriorities',
@@ -45,6 +356,76 @@ export default {
       getRegionalOffices: 'projects/getRegionalOffices',
       getInfoSec: 'projects/getInfoSec',
     }),
+    parsedScores() {
+      if (
+        !this.projects ||
+        !this.projects[0] ||
+        typeof this.projects !== 'object'
+      ) {
+        return null
+      }
+      const parsed = []
+      const exportCols = []
+
+      // create header row
+      // let newLine = []
+      let row = []
+      this.colKeyValues.forEach((i) => {
+        if (this.selectedCol.includes(i.id)) {
+          if (i.id !== '61' && i.id !== '62') {
+            row.push(this.$gettext(i.label))
+          }
+          exportCols.push(i)
+        }
+      })
+      if (this.portfolioPage === 'review') {
+        // official score header
+        if (this.selectedCol.includes('62')) {
+          row.push(...['', ...this.officialScoreFields])
+        }
+        if (this.selectedCol.includes('61')) {
+          // get the max of reviews per project
+          const maxReviewColGroups = this.projects.reduce((maxGroup, p) => {
+            return p.review_states.review_scores.length > maxGroup
+              ? p.review_states.review_scores.length
+              : maxGroup
+          }, 0)
+          for (let i = 0; i < maxReviewColGroups; i++) {
+            row.push(...['', ...this.reviewScoresFields])
+          }
+        }
+      }
+      parsed.push(row)
+
+      let cell
+      this.projects.forEach((p) => {
+        row = []
+        exportCols.forEach((col) => {
+          if (p[col.key] && col.id !== '61') {
+            cell = col.parse(p[col.key])
+            if (Array.isArray(cell)) {
+              row.push(...cell)
+            } else {
+              row.push(cell)
+            }
+          } else if (col.id !== '61') {
+            row.push('')
+          }
+        })
+
+        // generate reviews
+        if (
+          this.portfolioPage === 'review' &&
+          this.selectedCol.includes('61')
+        ) {
+          row.push(...this.parseReviews(p.review_states.review_scores))
+        }
+
+        parsed.push(row)
+      })
+
+      return parsed
+    },
     parsed() {
       if (
         !this.projects ||
@@ -227,10 +608,52 @@ export default {
       }
       return custom
     },
+    parseScores(projectScores) {
+      const scores = [''] // to make a gap
+      scores.push(this.parseList(this.scalePhases, projectScores.psa))
+      scores.push(projectScores.rnci || '')
+      scores.push(projectScores.ratp || '')
+      scores.push(projectScores.ra || '')
+      scores.push(projectScores.ee || '')
+      scores.push(projectScores.nst || '')
+      scores.push(projectScores.nc || '')
+      scores.push(projectScores.ps || '')
+      scores.push(projectScores.impact || '')
+      scores.push(
+        this.parseSingleSelection(projectScores.scale_phase, 'scalePhases')
+      )
+      return scores
+    },
+    parseReviews(projectReviews) {
+      const reviews = []
+      projectReviews.forEach((review) => {
+        reviews.push('')
+        reviews.push(review.reviewer.name || '')
+        reviews.push(this.review_statuses[review.status])
+        reviews.push(this.parseList(this.scalePhases, review.psa))
+        reviews.push(review.reviewer.psa_comment || '')
+        reviews.push(review.rnci || '')
+        reviews.push(review.rnci_comment || '')
+        reviews.push(review.ratp || '')
+        reviews.push(review.ratp_comment || '')
+        reviews.push(review.ra || '')
+        reviews.push(review.ra_comment || '')
+        reviews.push(review.ee || '')
+        reviews.push(review.ee_comment || '')
+        reviews.push(review.nst || '')
+        reviews.push(review.nst_comment || '')
+        reviews.push(review.nc || '')
+        reviews.push(review.nc_comment || '')
+        reviews.push(review.ps || '')
+        reviews.push(review.ps_comment || '')
+      })
+      return reviews
+    },
   },
   render() {
     return this.$scopedSlots.default({
       parsed: this.parsed,
+      parsedScores: this.parsedScores,
     })
   },
 }

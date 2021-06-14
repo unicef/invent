@@ -7,16 +7,19 @@
     <div class="text-info">
       <slot></slot>
     </div>
-    <fa
-      slot="reference"
-      class="question-icon"
-      :icon="['fas', 'question-circle']"
-    />
+    <fa slot="reference" class="question-icon" :icon="icon" />
   </el-popover>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    icon: {
+      type: Array,
+      default: () => ['fas', 'question-circle'],
+    },
+  },
+}
 </script>
 
 <style lang="less">
