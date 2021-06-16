@@ -106,7 +106,7 @@ def backup():
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
 
 
-def deploy():
+def deploy(tag=None):
     db_up = None
     """Updates the server and restarts the apps"""
     with cd(env.project_root):
