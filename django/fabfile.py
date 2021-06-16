@@ -115,8 +115,12 @@ def deploy():
         if env.name == 'production':
             with warn_only():
                 run('rm ~/TIIP/nginx/conf.d/production.conf')
-        run('git checkout %s' % env.branch)
-        run('git pull origin %s' % env.branch)
+        if tag:
+            run('git fetch --all --tags')
+            run('git checkout tags/%s' % tag)
+        else:
+            run('git checkout %s' % env.branch)
+            run('git pull origin %s' % env.branch)
         time.sleep(10)
 
         if env.name == 'dev':
