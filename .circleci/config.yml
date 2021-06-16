@@ -128,7 +128,7 @@ jobs:
           name: Deploy Over SSH
           working_directory: ~/tiip/django
           command: |
-            fab staging deploy
+            fab qa deploy:<< pipeline.git.tag >>
           no_output_timeout: "20m"
 
   e2e-dev:
@@ -137,6 +137,9 @@ jobs:
     working_directory: ~/tiip
     steps:
       - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
       - run:
           name: e2e tests against DEV
           working_directory: ~/tiip/e2e
