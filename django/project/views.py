@@ -162,7 +162,8 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
             data = self.favorite_list(request.user)
         elif list_name == 'review':
             # Bug: Reverse lookup does not work here for filtering
-            qs = ReviewScore.objects.filter(portfolio_review__is_active=True, reviewer=request.user.userprofile). \
+            qs = ReviewScore.objects.exclude(status=ReviewScore.STATUS_COMPLETE).\
+                filter(portfolio_review__is_active=True, reviewer=request.user.userprofile). \
                 exclude(portfolio_review__project__public_id__exact='')
             data_serializer = ReviewScoreDetailedSerializer(qs.all(), many=True)
             data = data_serializer.data
