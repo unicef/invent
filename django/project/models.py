@@ -703,10 +703,10 @@ class ReviewScore(BaseScore):
         unique_together = ('reviewer', 'portfolio_review')
         default_manager_name = 'objects'
 
-    def get_project_data(self):
+    def get_project_data(self):  # pragma: no cover
         return self.portfolio_review.project.to_representation()
 
-    def get_portfolio(self):
+    def get_portfolio(self):  # pragma: no cover
         return self.portfolio_review.portfolio
 
 

@@ -305,8 +305,7 @@ class ReviewTests(PortfolioSetup):
         url_rev_list = reverse("project-list", kwargs={'list_name': 'review'})
         response = self.user_1_client.get(url_rev_list)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['project']['id'], self.project_rev_id)
+        self.assertEqual(len(response.json()), 0)  # do not show completed reviews in this view
 
     def test_portfolio_matrix_output(self):
         """
