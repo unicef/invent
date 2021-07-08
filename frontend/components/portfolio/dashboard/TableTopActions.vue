@@ -26,8 +26,14 @@
                   class="IconLeft"
                   @click="exportRows(download)"
                 >
-                  <span>
+                  <fa icon="download" />
+                  <span v-show="selectedRows.length === 0">
                     <translate>Export selected</translate>
+                  </span>
+                  <span v-show="selected">
+                    <translate :parameters="{ selected }">
+                      Export {selected} selected
+                    </translate>
                   </span>
                 </el-button>
               </template>
@@ -75,10 +81,12 @@
                   class="hint-icon"
                   :icon="['fas', 'info-circle']"
                 >
-                  <translate
-                    >This field will appear horizontally in the exported
-                    projects' row.</translate
-                  >
+                  <translate v-if="c.id === '61'" key="noexport">
+                    This field represents the reviewers' scores and inputs assigned to the project. They will be exported horizontally in the projects' row.
+                  </translate>
+                  <translate v-else>
+                    Official scores will be exported horizontally in the projects' row.
+                  </translate>
                 </info-popover>
                 {{ c.label }}
               </li>
@@ -93,6 +101,16 @@
                     @click="columnSelectorOpen = false"
                   >
                     <translate>Cancel</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="deselectAllCols"
+                  >
+                    <translate>Deselect all</translate>
                   </el-button>
                 </el-col>
                 <el-col>
@@ -228,6 +246,9 @@ export default {
       // settings
       setSelectedColumns: 'dashboard/setSelectedColumns',
     }),
+    deselectAllCols() {
+      this.selectedColumns.map((c) => (c.selected = false))
+    },
     toggleSelectAll() {
       if (!this.allSelected) {
         this.setSelectAll(true)

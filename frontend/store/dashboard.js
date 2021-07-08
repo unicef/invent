@@ -214,10 +214,9 @@ export const state = () => ({
     {
       id: '61',
       label: 'Questionnaires Assigned',
-      // key: 'questionnaires_assigned',
       key: 'review_states', // needs for the scores
     },
-    { id: '62', label: 'Scoring', key: 'scoring' },
+    { id: '62', label: 'Scoring', key: 'review_states' },
   ],
 })
 export const getters = {

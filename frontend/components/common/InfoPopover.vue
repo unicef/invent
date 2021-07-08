@@ -37,11 +37,12 @@ export default {
     letter-spacing: -0.5px;
     line-height: 23px;
     padding: 20px;
+    margin-bottom: 0;
     border-bottom: 1px solid #eae6e2;
   }
   .text-info {
-    padding: 17px 20px 23px;
-    p {
+    padding: 17px 20px;
+    span {
       font-size: 14px;
       letter-spacing: 0;
       line-height: 21px;
