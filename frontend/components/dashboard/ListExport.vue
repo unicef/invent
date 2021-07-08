@@ -368,7 +368,6 @@ export default {
       const exportCols = []
 
       // create header row
-      // let newLine = []
       let row = []
       this.colKeyValues.forEach((i) => {
         if (this.selectedCol.includes(i.id)) {
