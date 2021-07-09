@@ -10,7 +10,11 @@
         </p>
       </div>
     </div>
-    <p class="assing" @click="handleReview(id)">
+    <p
+      v-if="portfolioPage === 'review'"
+      class="assing"
+      @click="handleReview(id)"
+    >
       <fa icon="plus" />
       <translate>Assign Reviewers</translate>
     </p>
@@ -18,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -32,6 +36,9 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      portfolioPage: (state) => state.search.filter.portfolio_page,
+    }),
     ...mapGetters({
       reviewStatuses: 'system/getReviewStatuses',
     }),
