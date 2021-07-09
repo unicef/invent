@@ -113,11 +113,7 @@
             popper-class="score-popover"
           >
             <div class="text-info">
-              <p>
-                {{
-                  scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`]
-                }}
-              </p>
+              <p>{{ scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`] }}</p>
             </div>
             <fa
               v-if="
@@ -346,7 +342,6 @@ export default {
       })
     },
     reviewHeaders() {
-      console.log(this.review.review_scores)
       if (this.review.review_scores) {
         return this.review.review_scores.map((i) => {
           return {

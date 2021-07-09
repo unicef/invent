@@ -322,7 +322,8 @@ export default {
             this.selectedColumns = columns
             break
           case 'portfolio':
-            this.selectedColumns = colFilter(['61'])
+            // this.selectedColumns = colFilter(['61'])
+            this.selectedColumns = columns
             break
           default:
             this.selectedColumns = colFilter()

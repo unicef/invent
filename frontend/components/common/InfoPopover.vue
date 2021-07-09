@@ -42,10 +42,12 @@ export default {
   }
   .text-info {
     padding: 17px 20px;
-    span {
+    span,
+    p {
       font-size: 14px;
       letter-spacing: 0;
       line-height: 21px;
+      text-align: left;
       white-space: pre-line;
     }
   }

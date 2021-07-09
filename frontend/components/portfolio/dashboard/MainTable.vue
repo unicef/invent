@@ -54,7 +54,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('61') && tab === 2"
+        v-if="selectedColumns.includes('61') && tab > 1"
         :resizable="false"
         :label="$gettext('Questionnaires Assigned') | translate"
         sortable="custom"
