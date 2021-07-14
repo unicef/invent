@@ -690,14 +690,15 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
     def move_from_inventory_to_review(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
         # For some reason the reverse lookup for ActiveQuerySet fails at this point
+        projects_in_portfolio = list(portfolio.review_states.all().values_list('project', flat=True))
         projects = Project.objects.filter(id__in=request.data['project']).\
-            exclude(review_states__is_active=True, review_states__portfolio=portfolio)
+            exclude(id__in=projects_in_portfolio)
         if len(projects) == 0:
             raise ValidationError({'project': 'Project data is incorrect'})
         # create a new review for each project if needed
         for project in projects:
             qs_pps = ProjectPortfolioState.all_objects.filter(portfolio=portfolio, project=project, is_active=False)
-            if qs_pps.count() == 1:
+            if qs_pps:
                 ReviewScore.all_objects.filter(portfolio_review=qs_pps[0]).update(is_active=True)
             qs_pps.update(is_active=True)
             ProjectPortfolioState.objects.get_or_create(portfolio=portfolio, project=project)
