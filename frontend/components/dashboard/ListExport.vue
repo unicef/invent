@@ -360,7 +360,8 @@ export default {
       if (
         !this.projects ||
         !this.projects[0] ||
-        typeof this.projects !== 'object'
+        typeof this.projects !== 'object' ||
+        (this.portfolioPage !== 'portfolio' && this.projects[0].review_states == null)
       ) {
         return null
       }
