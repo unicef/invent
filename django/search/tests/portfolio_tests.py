@@ -254,17 +254,34 @@ class PortfolioSearchTests(PortfolioSetup):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'details': 'No such portfolio'})
 
-        url = reverse("search-project-list")
         data = {"portfolio": 999, "type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'details': 'No such portfolio'})
 
-        url = reverse("search-project-list")
         data = {"portfolio": self.portfolio_id, "type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
         response = self.user_2_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 3)
+
+        # create a second portfolio
+        response = self.create_portfolio("Test Portfolio 2", "Port-o-folio 2", [self.user_3_pr_id], self.user_2_client)
+        self.assertEqual(response.status_code, 201, response.json())
+        new_portfolio_id = response.json()['id']
+
+        # check the inventory, it should be all 5 existing projects
+        data = {"portfolio": new_portfolio_id, "type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
+        response = self.user_2_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 5)
+
+        # Moving project from inventory to review state
+        self.move_project_to_portfolio(new_portfolio_id, self.project2_id, 201)
+
+        data = {"portfolio": new_portfolio_id, "type": "portfolio", "ps": 99, "sp": 99, "portfolio_page": "inventory"}
+        response = self.user_2_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 4)
 
     def test_portfolio_review_tab_for_managers(self):
         new_project_id, project_data, org, country, *_ = self.create_new_project(

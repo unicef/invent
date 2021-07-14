@@ -24,7 +24,7 @@ def dev():
 def qa():
     """Configure qa"""
     env.host_string = QA_HOST_STRING
-    env.name = 'production'
+    env.name = 'staging'
     env.port = 22
     env.branch = "tags/2.1.5"
     env.project_root = '~/TIIP'

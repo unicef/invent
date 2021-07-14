@@ -11,7 +11,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from core.views import get_object_or_400, PortfolioAccessMixin
 from country.models import Donor, Country
-from project.models import Portfolio
+from project.models import Portfolio, ProjectPortfolioState
 from .serializers import MapResultSerializer, ListResultSerializer, PortfolioResultSerializer
 from .models import ProjectSearch
 
@@ -188,8 +188,9 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             query_params.pop('sp', None)
 
             if portfolio_page == "inventory":
-                qs = qs.exclude(project__review_states__portfolio_id=portfolio_id,
-                                project__review_states__is_active=True)
+                active_reviews_for_portfolio = list(
+                    ProjectPortfolioState.objects.filter(portfolio=portfolio_id).values_list('pk', flat=True))
+                qs = qs.exclude(project__review_states__in=active_reviews_for_portfolio)
                 # edge case scenario where we need to ignore all the portfolio reliant query params from here
                 query_params.pop('portfolio', None)
             elif portfolio_page == "review":
