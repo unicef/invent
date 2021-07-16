@@ -9013,6 +9013,11 @@ nuxt-i18n@^6.0.2:
     klona "^2.0.4"
     vue-i18n "^8.18.1"
 
+nuxt-matomo@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/nuxt-matomo/-/nuxt-matomo-1.2.4.tgz#2cd3f212996e0c35ade08f23563987438608e469"
+  integrity sha512-09cIWnj6v58CMbEDS+mVTnJ97BaO/fJaQDPk31sa27jejcD80bIvNowkAJMj4OcVWMeeIVTljClMHE6249cFtw==
+
 nuxt-purgecss@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/nuxt-purgecss/-/nuxt-purgecss-0.2.1.tgz#5cabb515beaff96cfb833b3ce13caecec953daca"
