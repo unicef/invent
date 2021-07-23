@@ -500,7 +500,7 @@ class ReviewScoreBriefSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewScore
-        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review', 'status')
+        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review', 'status', 'overall_reviewer_feedback')
 
 
 class ProjectPortfolioStateSerializer(serializers.ModelSerializer):

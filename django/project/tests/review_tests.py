@@ -412,7 +412,8 @@ class ReviewTests(PortfolioSetup):
             'nst': 1,
             'nc': 2,
             'nst_comment': 'Fun times',
-            'status': ReviewScore.STATUS_COMPLETE
+            'status': ReviewScore.STATUS_COMPLETE,
+            'overall_reviewer_feedback': "Hablatykova Kalashnikova"
         }
         url = reverse('review-score-fill', kwargs={"pk": question_id_y})
         response = user_y_client.post(url, partial_data_2, format="json")
@@ -429,7 +430,8 @@ class ReviewTests(PortfolioSetup):
             'nc': 5,
             'ps': 5,
             'impact': 5,
-            'scale_phase': 6
+            'scale_phase': 6,
+            'overall_reviewer_feedback': "Roger-roger"
         }
         url = reverse('portfolio-project-manager-review', kwargs={'pk': portfolio_review_id})
         response = self.user_3_client.post(url, review_data_complete, format="json")
