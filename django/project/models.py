@@ -619,6 +619,7 @@ class BaseScore(SoftDeleteModel, ExtendedModel):
     nst = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Solution (Tool)
     nc = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Newness of Challenge
     ps = models.IntegerField(choices=BASE_CHOICES, null=True, blank=True)  # Path to Scale
+    overall_reviewer_feedback = models.CharField(max_length=1024, null=True, blank=True)
 
     objects = BaseScoreManager.as_manager()
 
