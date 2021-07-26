@@ -1,6 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
 
-
 REVIEWER_QUESTIONS = {
     'psa': {'name': _('Problem Statement Alignment'),
             'text': _(
@@ -100,5 +99,11 @@ REVIEWER_QUESTIONS = {
                     'text_bold': _(''),
                     'guidance': _('Consult IDIA scale phases for guidance.'),
                     'guidance_bold': _(''),
-                    }
+                    },
+    'overal_summary': {'name': _('Overall Summary'),
+                       'text': _('TBD (text)'),
+                       'text_bold': _('TBD, but in BOLD (text)'),
+                       'guidance': _('TBD (guidance)'),
+                       'guidance_bold': _('TBD, but in BOLD (guidance)'),
+                       },
 }
