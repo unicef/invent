@@ -621,7 +621,8 @@ class ReviewScoreFillSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewScore
         fields = ('psa', 'psa_comment', 'rnci', 'rnci_comment', 'ratp', 'ratp_comment', 'ra', 'ra_comment', 'ee',
-                  'ee_comment', 'nst', 'nst_comment', 'nc', 'nc_comment', 'ps', 'ps_comment', 'status')
+                  'ee_comment', 'nst', 'nst_comment', 'nc', 'nc_comment', 'ps', 'ps_comment',
+                  'overall_reviewer_feedback', 'status')
 
     def update(self, instance, validated_data):
         """
@@ -629,7 +630,6 @@ class ReviewScoreFillSerializer(serializers.ModelSerializer):
         """
         if instance.status != ReviewScore.STATUS_COMPLETE:
             instance.status = ReviewScore.STATUS_DRAFT
-
         instance = super().update(instance, validated_data)
         return instance
 

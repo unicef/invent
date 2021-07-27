@@ -403,6 +403,26 @@ class ReviewTests(PortfolioSetup):
         response = self.user_3_client.post(url, request_data, format="json")
         self.assertEqual(response.status_code, 200)
         question_id_y = response.json()[0]['id']
+        # do a partial update of the review by the user
+        url = reverse('review-score-fill', kwargs={"pk": question_id_y})
+        partial_data = {
+            'overall_reviewer_feedback': "I'll finish this later, BRB"
+        }
+        response = user_y_client.patch(url, partial_data, format="json")
+        expected_patch_response_1 = {
+            'psa': [], 'psa_comment': None, 'rnci': None, 'rnci_comment': None, 'ratp': None, 'ratp_comment': None,
+            'ra': None, 'ra_comment': None, 'ee': None, 'ee_comment': None, 'nst': None, 'nst_comment': None,
+            'nc': None, 'nc_comment': None, 'ps': None, 'ps_comment': None,
+            'overall_reviewer_feedback': "I'll finish this later, BRB", 'status': 'DR'}
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected_patch_response_1)
+        partial_data = {
+            'nc': 1
+        }
+        expected_patch_response_1['nc'] = 1
+        response = user_y_client.patch(url, partial_data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected_patch_response_1)
 
         # fill the answer with the user
         partial_data_2 = {
@@ -413,9 +433,8 @@ class ReviewTests(PortfolioSetup):
             'nc': 2,
             'nst_comment': 'Fun times',
             'status': ReviewScore.STATUS_COMPLETE,
-            'overall_reviewer_feedback': "Hablatykova Kalashnikova"
+
         }
-        url = reverse('review-score-fill', kwargs={"pk": question_id_y})
         response = user_y_client.post(url, partial_data_2, format="json")
         self.assertEqual(response.status_code, 200)
 
