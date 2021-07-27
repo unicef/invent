@@ -149,6 +149,7 @@ urlpatterns = [
     path('project-review/manager/<int:pk>/',
          view=views.ProjectPortfolioStateManagerViewSet.as_view({
              'get': 'retrieve',
-             'post': 'update'
+             'post': 'update',
+             'patch': 'partial_update'
          }), name='portfolio-project-manager-review')
 ]

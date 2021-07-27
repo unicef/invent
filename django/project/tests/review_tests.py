@@ -437,7 +437,12 @@ class ReviewTests(PortfolioSetup):
         }
         response = user_y_client.post(url, partial_data_2, format="json")
         self.assertEqual(response.status_code, 200)
-
+        # write partial managerial review
+        review_data_partial = {'overall_reviewer_feedback': "Roger-roger"}
+        url = reverse('portfolio-project-manager-review', kwargs={'pk': portfolio_review_id})
+        response = self.user_3_client.patch(url, review_data_partial, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['overall_reviewer_feedback'], 'Roger-roger')
         # write managerial review
         review_data_complete = {
             'psa': [problem_statements[0].id, problem_statements[1].id, problem_statements[2].id],
@@ -452,7 +457,6 @@ class ReviewTests(PortfolioSetup):
             'scale_phase': 6,
             'overall_reviewer_feedback': "Roger-roger"
         }
-        url = reverse('portfolio-project-manager-review', kwargs={'pk': portfolio_review_id})
         response = self.user_3_client.post(url, review_data_complete, format="json")
         self.assertEqual(response.status_code, 200)
 
