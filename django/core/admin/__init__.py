@@ -13,6 +13,9 @@ from modeltranslation.translator import translator
 from user.models import UserProfile
 from .widgets import AdminArrayField
 
+from import_export.admin import ExportActionMixin
+from core.resources import UserResource
+
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
@@ -20,10 +23,11 @@ class UserProfileInline(admin.StackedInline):
     can_delete = False
 
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(ExportActionMixin, UserAdmin):
     list_display = ('userprofile', 'country', 'type', 'organisation', 'is_staff', 'is_superuser')
     search_fields = ('userprofile__name', 'email', 'userprofile__country__name', 'userprofile__organisation__name')
     inlines = (UserProfileInline,)
+    resource_class = UserResource
 
     def country(self, obj):
         return obj.userprofile.country
