@@ -93,8 +93,15 @@
               :items="scope.row[reviewHeader.reviewer][scope.row.type]"
               :problem-statements="problemStatements"
             />
-            <!-- N/A -->
-            <p v-else class="na psa">N/A</p>
+            <p v-else class="na psa">
+              <span
+                v-if="
+                  scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`]
+                "
+                >N/A</span
+              >
+              <span v-else>—</span>
+            </p>
           </template>
           <p
             v-else-if="scope.row[reviewHeader.reviewer][scope.row.type]"
@@ -103,12 +110,13 @@
             {{ scope.row[reviewHeader.reviewer][scope.row.type] }}
           </p>
           <p
-            v-else-if="scope.row[reviewHeader.reviewer][scope.row.type] ==='overal_summary'"
-            class="user-score"
+            v-else-if="
+              scope.row.type === 'overal_summary' &&
+              scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`]
+            "
           >
-            {{ scope.row[reviewHeader.reviewer][scope.row.type] }}
+            &nbsp;
           </p>
-          <!-- N/A -->
           <p v-else class="na">—</p>
           <el-popover
             v-if="
@@ -131,7 +139,9 @@
               "
               slot="reference"
               :class="`comment-icon ${
-                scope.row.type === 'psa' && 'comment-psa'
+                (scope.row.type === 'psa' ||
+                  scope.row.type === 'overal_summary') &&
+                'comment-psa'
               }`"
               :icon="['fas', 'comment-alt']"
             />
@@ -365,8 +375,11 @@ export default {
         if (this.review.review_scores) {
           this.review.review_scores.forEach((i) => {
             reviewers[i.reviewer.name] = {
-              [type]: i[type],
-              [`${type}_comment`]: i[`${type}_comment`],
+              [type]: type === 'overal_summary' ? '' : i[type],
+              [`${type}_comment`]:
+                type === 'overal_summary'
+                  ? i.overall_reviewer_feedback
+                  : i[`${type}_comment`],
             }
           })
         }

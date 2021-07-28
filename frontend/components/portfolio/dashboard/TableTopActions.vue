@@ -9,7 +9,7 @@
           Deselect all {total} initiatives
         </translate>
       </el-button>
-      <list-export :projects="rowToExport">
+      <ListExport :projects="rowToExport">
         <template #default="{ parsedScores }">
           <xlsx-workbook>
             <xlsx-sheet :collection="parsedScores" sheet-name="export" />
@@ -40,7 +40,7 @@
             </xlsx-download>
           </xlsx-workbook>
         </template>
-      </list-export>
+      </ListExport>
       <el-select v-model="exportType" :disabled="disabled" size="small">
         <el-option label="CSV" value="CSV" />
         <el-option label="XLSX" value="XLSX" />

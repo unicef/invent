@@ -22,6 +22,7 @@ export default {
         this.$gettext('Newness of Solution (Tool) (Official Score)'),
         this.$gettext('Newness of Challenge (Official Score)'),
         this.$gettext('Path to Scale (Official Score)'),
+        this.$gettext('Overall Summary (Official Score)'),
         this.$gettext('Impact (Official Score)'),
         this.$gettext('Scale Phase (Official Score)'),
       ],
@@ -44,6 +45,7 @@ export default {
         this.$gettext('Comments'),
         this.$gettext('Path to Scale'),
         this.$gettext('Comments'),
+        this.$gettext('Overall Summary'),
       ],
       colKeyValues: [
         {
@@ -618,6 +620,7 @@ export default {
       scores.push(projectScores.nst || '')
       scores.push(projectScores.nc || '')
       scores.push(projectScores.ps || '')
+      scores.push(projectScores.overall_reviewer_feedback || '')
       scores.push(projectScores.impact || '')
       scores.push(
         this.parseSingleSelection(projectScores.scale_phase, 'scalePhases')
@@ -646,6 +649,7 @@ export default {
         reviews.push(review.nc_comment || '')
         reviews.push(review.ps || '')
         reviews.push(review.ps_comment || '')
+        reviews.push(review.overall_reviewer_feedback || '')
       })
       return reviews
     },
