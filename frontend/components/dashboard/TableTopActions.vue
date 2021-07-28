@@ -17,7 +17,7 @@
         </el-button>
 
         <div class="Separator" />
-        <list-export :projects="rowToExport">
+        <ListExport :projects="rowToExport">
           <template #default="{ parsed }">
             <xlsx-workbook>
               <xlsx-sheet :collection="parsed" sheet-name="export" />
@@ -48,7 +48,7 @@
               </xlsx-download>
             </xlsx-workbook>
           </template>
-        </list-export>
+        </ListExport>
         <el-select v-model="exportType" size="small">
           <el-option label="CSV" value="CSV" />
           <el-option label="XLSX" value="XLSX" />
