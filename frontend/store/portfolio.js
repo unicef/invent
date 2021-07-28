@@ -108,6 +108,7 @@ export const state = () => ({
     'nst',
     'nc',
     'ps',
+    'overal_summary',
     'impact',
     'scale_phase',
   ],
@@ -372,6 +373,29 @@ export const actions = {
       // interface setters
       commit('SET_VALUE', { key: 'loadingScore', val: false })
       commit('SET_VALUE', { key: 'dialogScore', val: false })
+    } catch (e) {
+      console.log(e.response.data)
+    }
+  },
+  async updateScoreSummary(
+    { state, commit, dispatch },
+    { id, overall_reviewer_feedback }
+  ) {
+    try {
+      commit('SET_VALUE', { key: 'loadingScore', val: true })
+      const res = await this.$axios.patch(
+        `/api/project-review/manager/${id}/`,
+        { overall_reviewer_feedback }
+      )
+      // dispatch('getPortfolioProjects')
+      if (res.status === 200 && res.statusText === 'OK') {
+        const newReview = {
+          ...state.review,
+          overall_reviewer_feedback: res.data.overall_reviewer_feedback,
+        }
+        commit('SET_VALUE', { key: 'review', val: newReview })
+        commit('SET_VALUE', { key: 'loadingScore', val: false })
+      }
     } catch (e) {
       console.log(e.response.data)
     }

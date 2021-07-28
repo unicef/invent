@@ -957,11 +957,18 @@ export default {
           -webkit-line-clamp: 4;
           -webkit-box-orient: vertical;
           // With 17 in the calc the fixed columns and the rest of the table go out of sync
-          max-height: calc(16.5px * 4);
+          // max-height: calc(16.5px * 4);
+          // but it should be 15, based on the line-height
+          max-height: calc(15px * 4);
           font-size: @fontSizeSmall;
           letter-spacing: 0;
           line-height: 15px;
           font-weight: 100;
+          &.clamped {
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
         }
 
         a {
