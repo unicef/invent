@@ -80,13 +80,14 @@
                   width="360"
                   class="hint-icon"
                   :icon="['fas', 'info-circle']"
-                >
-                  <translate v-if="c.id === '61'" key="noexport">
-                    This field represents the reviewers' scores and inputs assigned to the project. They will be exported horizontally in the projects' row.
-                  </translate>
-                  <translate v-else>
-                    Official scores will be exported horizontally in the projects' row.
-                  </translate>
+                  ><translate v-if="c.id === '61'" key="noexport"
+                    >This field represents the reviewers' scores and inputs
+                    assigned to the project. They will be exported horizontally
+                    in the projects' row.</translate
+                  ><translate v-else
+                    >Official scores will be exported horizontally in the
+                    projects' row.</translate
+                  >
                 </info-popover>
                 {{ c.label }}
               </li>

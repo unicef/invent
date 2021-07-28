@@ -4,7 +4,7 @@
     popper-class="score-popover"
     v-bind="{ ...$props, ...$attrs }"
   >
-    <div class="text-info">
+    <div class="text-info" :class="{ 'no-title': !this.$attrs.title }">
       <slot></slot>
     </div>
     <fa slot="reference" class="question-icon" :icon="icon" />
@@ -28,6 +28,7 @@ export default {
 .score-popover.el-popover {
   padding: 0 !important;
   margin-left: 14px !important;
+  border: none;
   &.left {
     margin-left: 0px !important;
     margin-right: 14px !important;
@@ -41,7 +42,10 @@ export default {
     border-bottom: 1px solid #eae6e2;
   }
   .text-info {
-    padding: 17px 20px;
+    padding: 0;
+    &.no-title {
+      padding: 17px 20px;
+    }
     span,
     p {
       font-size: 14px;
@@ -49,6 +53,7 @@ export default {
       line-height: 21px;
       text-align: left;
       white-space: pre-line;
+      margin: 16px 20px;
     }
   }
   .popper__arrow {

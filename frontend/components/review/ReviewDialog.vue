@@ -82,7 +82,15 @@
         :key="question"
         class="question"
       >
-        <template v-if="!(question === 'impact' || question === 'scale_phase')">
+        <template
+          v-if="
+            !(
+              question === 'overal_summary' ||
+              question === 'scale_phase' ||
+              question === 'scale_phase'
+            )
+          "
+        >
           <p class="label">
             {{ `${idx + 1}/A: ` }}
             {{ reviewQuestions[question].name }}
