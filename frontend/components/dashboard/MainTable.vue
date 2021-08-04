@@ -3,7 +3,7 @@
     <el-table
       ref="mainTable"
       :data="initiativesList"
-      :max-height="tableMaxHeight"
+      height="calc(100vh - 350px)"
       :row-class-name="rowClassCalculator"
       :stripe="false"
       :border="true"
@@ -767,8 +767,9 @@ export default {
     if (this.offices.length === 0) {
       this.loadOffices()
     }
+    this.restorePageSize()
     setTimeout(() => {
-      this.fixTableHeight()
+      // this.fixTableHeight()
       this.fixSorting(this.$route.query.ordering)
       if (this.selectAll) {
         this.$refs.mainTable.clearSelection()
@@ -785,6 +786,7 @@ export default {
       loadOffices: 'offices/loadOffices',
       addFavorite: 'projects/addFavorite',
       removeFavorite: 'projects/removeFavorite',
+      restorePageSize: 'dashboard/restorePageSize',
     }),
     customHeaderRenderer(h, { column, $index }) {
       return h('span', { attrs: { title: column.label } }, column.label)

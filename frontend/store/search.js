@@ -87,7 +87,7 @@ export const actions = {
             problem_statement_matrix,
           },
         },
-      } = await this.$axios.get(`api/search${query}`)
+      } = await this.$axios.get(`api/search/${query}`)
       dispatch(
         'matrixes/setPortfolioMatrix',
         { ambition_matrix, risk_impact_matrix, problem_statement_matrix },
@@ -118,7 +118,11 @@ export const actions = {
     commit('SET_SEARCH', { key: 'ps', val: '' })
     commit('SET_SEARCH', { key: 'sp', val: '' })
     commit('SET_SEARCH', { key: 'page', val: 1 })
-    commit('SET_SEARCH', { key: 'page_size', val: 10 })
+    let pageSize = 10
+    if (process.browser) {
+      pageSize = parseInt(localStorage.getItem('pageSizePortfolio'))
+    }
+    commit('SET_SEARCH', { key: 'page_size', val: pageSize })
     commit('SET_SEARCH', { key: 'sw', val: [] })
     commit('SET_SEARCH', { key: 'dhi', val: [] })
     commit('SET_SEARCH', { key: 'hfa', val: [] })
@@ -149,5 +153,11 @@ export const mutations = {
   },
   SET_SEARCH(state, { key, val }) {
     state.filter[key] = val
+  },
+  setPageSize(state, pageSize) {
+    if (process.browser) {
+      localStorage.setItem('pageSizePortfolio', pageSize)
+    }
+    state.filter.page_size = pageSize
   },
 }

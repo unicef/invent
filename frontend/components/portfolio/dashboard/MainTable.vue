@@ -841,6 +841,7 @@ export default {
   methods: {
     ...mapMutations({
       setSearch: 'search/SET_SEARCH',
+      setPageSize: 'search/setPageSize',
     }),
     ...mapActions({
       setSelectedRows: 'portfolio/setSelectedRows',
@@ -918,7 +919,7 @@ export default {
       console.log(`this will mark or unmark ${id}`)
     },
     sizeChange(val) {
-      this.setSearch({ key: 'page_size', val })
+      this.setPageSize(val)
       this.getSearchResults()
     },
     pagClick(val) {
