@@ -250,7 +250,7 @@ export const actions = {
   async getPortfolioProjects({ state, commit, dispatch }) {
     try {
       dispatch('getPortfolioDetails', { id: state.currentPortfolioId })
-      const baseUrl = `api/search?portfolio=${state.currentPortfolioId}&type=portfolio&portfolio_page=`
+      const baseUrl = `api/search/?portfolio=${state.currentPortfolioId}&type=portfolio&portfolio_page=`
       const results = await Promise.all([
         this.$axios.get(`${baseUrl}inventory`),
         this.$axios.get(`${baseUrl}review`),
