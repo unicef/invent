@@ -388,15 +388,16 @@ export const actions = {
         { overall_reviewer_feedback }
       )
       // dispatch('getPortfolioProjects')
+      commit('SET_VALUE', { key: 'loadingScore', val: false })
       if (res.status === 200 && res.statusText === 'OK') {
         const newReview = {
           ...state.review,
           overall_reviewer_feedback: res.data.overall_reviewer_feedback,
         }
         commit('SET_VALUE', { key: 'review', val: newReview })
-        commit('SET_VALUE', { key: 'loadingScore', val: false })
       }
     } catch (e) {
+      commit('SET_VALUE', { key: 'loadingScore', val: false })
       console.log(e.response.data)
     }
   },
