@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from country.models import Country, CountryOffice, Currency
 
-from project.serializers import LinkSerializer
+from project.serializers import LinkSerializer, PartnerSerializer
 
 
 class ProjectResource(resources.ModelResource):  # pragma: no cover
@@ -69,7 +69,7 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         return project.data if project.public_id != '' else project.draft
 
     def dehydrate_published(self, project):
-        return "True" if project.public_id == '' else "False"
+        return "True" if project.public_id != '' else "False"
 
     def dehydrate_contact(self, project):
         data = self.get_data_member(project)
@@ -133,7 +133,7 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         return self.get_data_member(project).get('program_targets_achieved')
 
     def dehydrate_beneficiaries_number(self, project):
-        return self.get_data_member(project).get('target_group_reached')
+        return self.get_data_member(project).get('target_group_reached', 0)
 
     def dehydrate_current_achievements(self, project):
         return self.get_data_member(project).get('current_achievements')
@@ -157,15 +157,15 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         try:
             currency_code = Currency.objects.get(id=data.get('currency')).code
         except Currency.DoesNotExist:
-            pass
-        budget = data.get('total_budget')
-        return " ".join([str(budget), currency_code]) if budget else None
+            currency_code = ""
+        budget = data['total_budget'] if 'total_budget' in data else 0
+        return " ".join([str(budget), currency_code])
 
     def dehydrate_total_budget_narrative(self, project):
         return self.get_data_member(project).get('total_budget_narrative')
 
     def dehydrate_funding_needs(self, project):
-        return self.get_data_member(project).get('funding_needs')
+        return self.get_data_member(project).get('funding_needs', 0)
 
     def dehydrate_partnership_needs(self, project):
         return self.get_data_member(project).get('partnership_needs')
@@ -173,9 +173,12 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
     def dehydrate_links(self, project):
         links_list = self.get_data_member(project).get('links')
         link_types = {link[0]: link[1] for link in LinkSerializer.LINK_TYPE}
+        link_types[''] = "unknown"
         links = []
         for link_data in links_list:
-            links.append(f'{link_types[link_data["link_type"]]}: {link_data["link_url"]}')
+            l_type = link_types[link_data.get("link_type", "")]
+            l_url = link_data.get('link_url', "unknown")
+            links.append(f'{l_type}: {l_url}')
         return ', '.join(links) if links else None
 
     def dehydrate_stages(self, project):
@@ -196,10 +199,16 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         return ', '.join(stages)
 
     def dehydrate_partners(self, project):
-        return ', '.join(
-            [f'{partner.get("partner_name")} ({partner.get("partner_contact")} - {partner.get("partner_email")})'
-             for partner in self.get_data_member(project).get('partners')]) \
-            if self.get_data_member(project).get('partners') else None
+        if 'partners' not in self.get_data_member(project):
+            return None
+        p_type_lookup = {p[0]: p[1] for p in PartnerSerializer.PARTNER_TYPE}
+        partners = []
+        for partner in self.get_data_member(project)['partners']:
+            p_type = p_type_lookup[partner['partner_type']] if 'partner_type' in partner else "n/a"
+            p_string = f'{p_type}: {partner.get("partner_name")} ({partner.get("partner_contact")} - ' \
+                       f'{partner.get("partner_email")} - {partner.get("partner_website")})'
+            partners.append(p_string)
+        return ', '.join(partners)
 
     def dehydrate_software_platforms(self, project):
         ids = self.get_data_member(project).get('platforms')
