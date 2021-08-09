@@ -250,15 +250,20 @@ export default {
       problemStatementMatrix: 'matrixes/getProblemStatementMatrix',
       name: 'portfolio/getName',
       description: 'portfolio/getDescription',
+      selectedColumns: 'dashboard/getSelectedColumns',
     }),
   },
   mounted() {
     this.getSearch()
+    this.setSelectedColumns(
+      this.selectedColumns.filter((s) => s !== '61' && s !== '62')
+    )
   },
   methods: {
     ...mapActions({
       loadProjectsMap: 'search/loadProjectsMap',
       getSearch: 'search/getSearch',
+      setSelectedColumns: 'dashboard/setSelectedColumns',
     }),
     navigate(id) {
       this.$store.dispatch('search/resetSearch')

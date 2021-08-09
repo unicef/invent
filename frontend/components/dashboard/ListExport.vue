@@ -360,10 +360,10 @@ export default {
     }),
     parsedScores() {
       if (
-        !this.projects ||
-        !this.projects[0] ||
-        typeof this.projects !== 'object' ||
-        (this.portfolioPage !== 'portfolio' && this.projects[0].review_states == null)
+        (!this.projects ||
+          !this.projects[0] ||
+          typeof this.projects !== 'object') &&
+        this.projects[0]?.review_states
       ) {
         return null
       }
@@ -380,7 +380,10 @@ export default {
           exportCols.push(i)
         }
       })
-      if (this.portfolioPage !== 'inventory') {
+      if (
+        this.portfolioPage !== 'inventory' &&
+        this.projects[0]?.review_states
+      ) {
         // official score header
         if (this.selectedCol.includes('62')) {
           row.push(...['', ...this.officialScoreFields])
@@ -418,7 +421,8 @@ export default {
         // generate reviews
         if (
           this.portfolioPage !== 'inventory' &&
-          this.selectedCol.includes('61')
+          this.selectedCol.includes('61') &&
+          this.projects[0]?.review_states
         ) {
           row.push(...this.parseReviews(p.review_states.review_scores))
         }
