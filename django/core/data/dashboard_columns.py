@@ -41,5 +41,5 @@ DASHBOARD_COLUMNS = [
     {'id': 42, 'label': _('Total Budget')},
     {'id': 43, 'label': _('Total Budget (Narrative)')},
     {'id': 44, 'label': _('Work Breakdown Structure (WBS)')},
-    {'id': 45, 'label': _('Innovation Categories')},
+    {'id': 17, 'label': _('Innovation Categories')},
 ]
