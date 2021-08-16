@@ -54,10 +54,10 @@ class UserResource(resources.ModelResource):  # pragma: no cover
                         'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser', 'is_gpo')
 
     def dehydrate_last_login(self, user: User):
-        return user.last_login.date()
+        return user.last_login.date() if user.last_login else 'None'
 
     def dehydrate_date_joined(self, user: User):
-        return user.date_joined.date()
+        return user.date_joined.date() if user.date_joined else 'None'
 
     def dehydrate_is_active(self, user: User):
         return user.is_active
@@ -69,26 +69,27 @@ class UserResource(resources.ModelResource):  # pragma: no cover
         return user.is_superuser
 
     def dehydrate_is_gpo(self, user: User):
-        return user.userprofile.global_portfolio_owner if user.userprofile else False
+        return user.userprofile.global_portfolio_owner if hasattr(user, 'userprofile') else False
 
     def dehydrate_name(self, user: User):
-        return user.userprofile.name if user.userprofile else 'None'
+        return user.userprofile.name if hasattr(user, 'userprofile') else 'None'
 
     def dehydrate_email(self, user: User):
         return user.email
 
     def dehydrate_account_type(self, user: User):
         account_types = {x[0]: x[1] for x in UserProfile.ACCOUNT_TYPE_CHOICES}
-        return account_types[user.userprofile.account_type] if user.userprofile else 'None'
+        return account_types[user.userprofile.account_type] if hasattr(user, 'userprofile') else 'None'
 
     def dehydrate_organization(self, user: User):
-        return user.userprofile.organisation.name if user.userprofile and user.userprofile.organisation else 'None'
+        return user.userprofile.organisation.name \
+            if hasattr(user, 'userprofile') and user.userprofile.organisation else 'None'
 
     def dehydrate_country(self, user: User):
-        return user.userprofile.country.name if user.userprofile and user.userprofile.country else 'None'
+        return user.userprofile.country.name if hasattr(user, 'userprofile') and user.userprofile.country else 'None'
 
     def dehydrate_donor(self, user: User):
-        return user.userprofile.donor.name if user.userprofile and user.userprofile.donor else 'None'
+        return user.userprofile.donor.name if hasattr(user, 'userprofile') and user.userprofile.donor else 'None'
 
     def dehydrate_language(self, user: User):
-        return user.userprofile.language if user.userprofile else 'None'
+        return user.userprofile.language if hasattr(user, 'userprofile') else 'None'
