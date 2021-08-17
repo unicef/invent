@@ -332,13 +332,6 @@ export const getters = {
   getGovernmentFinanced: (state) => state.governmentFinanced,
   getSelectAll: (state) => state.selectAll,
   getPageSize: (state) => state.pageSize,
-  getPageSizeLocalStorage: (state) => {
-    let pageSize = state.pageSize
-    if (process.browser) {
-      pageSize = localStorage.getItem('pageSizeInventory')
-    }
-    return pageSize
-  },
   getTotal: (state) => state.total,
   getNextPage: (state) => state.nextPage,
   getPreviousPage: (state) => state.previousPage,
@@ -601,15 +594,16 @@ export const actions = {
   },
   setPageSize({ commit }, size) {
     if (process.browser) {
-      localStorage.setItem('pageSizeInventory', size)
+      localStorage.setItem('pageSize', size)
     }
     commit('SET_PAGE_SIZE', size)
     commit('SET_CURRENT_PAGE', 1)
   },
-  restorePageSize({ state, commit }) {
-    let pageSize = state.pageSize
+  restorePageSize({ commit }) {
+    let pageSize = 10
     if (process.browser) {
-      pageSize = parseInt(localStorage.getItem('pageSizeInventory'))
+      const lsPageSize = localStorage.getItem('pageSize')
+      pageSize = lsPageSize ? parseInt(lsPageSize) : 10
     }
     commit('SET_PAGE_SIZE', pageSize)
     commit('SET_CURRENT_PAGE', 1)

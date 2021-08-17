@@ -120,7 +120,8 @@ export const actions = {
     commit('SET_SEARCH', { key: 'page', val: 1 })
     let pageSize = 10
     if (process.browser) {
-      pageSize = parseInt(localStorage.getItem('pageSizePortfolio'))
+      const lsPageSize = localStorage.getItem('pageSize')
+      pageSize = lsPageSize ? parseInt(lsPageSize) : 10
     }
     commit('SET_SEARCH', { key: 'page_size', val: pageSize })
     commit('SET_SEARCH', { key: 'sw', val: [] })
@@ -156,7 +157,7 @@ export const mutations = {
   },
   setPageSize(state, pageSize) {
     if (process.browser) {
-      localStorage.setItem('pageSizePortfolio', pageSize)
+      localStorage.setItem('pageSize', pageSize)
     }
     state.filter.page_size = pageSize
   },
