@@ -389,7 +389,7 @@ export const actions = {
       )
       // dispatch('getPortfolioProjects')
       commit('SET_VALUE', { key: 'loadingScore', val: false })
-      if (res.status === 200 && res.statusText === 'OK') {
+      if (res.status === 200) {
         const newReview = {
           ...state.review,
           overall_reviewer_feedback: res.data.overall_reviewer_feedback,
