@@ -131,6 +131,7 @@
             popper-class="score-popover"
           >
             <div class="text-info">
+              <!-- should not contain whitespace -->
               <p>{{ scope.row[reviewHeader.reviewer][`${scope.row.type}_comment`] }}</p>
             </div>
             <fa

@@ -161,6 +161,13 @@ export default {
             this.parseList(this.getInnovationWays, innovation_ways),
         },
         {
+          id: '17',
+          label: 'Innovation Categories',
+          key: 'innovation_categories',
+          parse: (innovation_categories) =>
+            this.parseList(this.getInnovationCategories, innovation_categories),
+        },
+        {
           id: '21',
           label: 'Phase of Initiative',
           key: 'stages',
@@ -481,6 +488,10 @@ export default {
           innovation_ways: this.parseList(
             this.getInnovationWays,
             s.innovation_ways
+          ),
+          innovation_categories: this.parseList(
+            this.getInnovationCategories,
+            s.innovation_categories
           ),
           stages: this.parseList(this.getStages, s.stages),
           hardware: this.parseList(this.getHardware, s.hardware),
