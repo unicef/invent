@@ -85,17 +85,12 @@
         :key="question"
         class="question"
       >
-        <template
-          v-if="
-            !(
-              question === 'overal_summary' ||
-              question === 'scale_phase' ||
-              question === 'scale_phase'
-            )
-          "
-        >
+        <template v-if="!(question === 'overal_summary')">
           <p class="label">
-            {{ `${idx + 1}/A: ` }}
+            <span v-if="question === 'impact' || question === 'scale_phase'">
+              {{ `${idx}/A: ` }}
+            </span>
+            <span v-else>{{ `${idx + 1}/A: ` }}</span>
             {{ reviewQuestions[question].name }}
             <translate>(optional)</translate>
           </p>
@@ -133,7 +128,14 @@
             </info-popover>
           </div>
           <p class="label">
-            {{ `${idx + 1}/B: ` }}<translate>Add comment (optional)</translate>
+            <span v-if="question === 'impact' || question === 'scale_phase'">
+              {{ `${idx}/B: ` }}
+              <translate>Add comment (optional)</translate>
+            </span>
+            <span v-else>
+              {{ `${idx + 1}/B: ` }}
+              <translate>Add comment (optional)</translate>
+            </span>
           </p>
           <el-input
             v-model="score[`${question}_comment`]"

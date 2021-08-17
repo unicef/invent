@@ -29,6 +29,7 @@ export const defaultSelectedColumns = () => [
   '18',
   '19',
   '20',
+  '17', // 45 renumbered
   '21',
   '22',
   '23',
@@ -138,6 +139,11 @@ export const state = () => ({
       id: '15',
       label: 'Capability Subcategories',
       key: 'capability_subcategories',
+    },
+    {
+      id: '17',
+      label: 'Innovation Categories',
+      key: 'innovation_categories',
     },
     {
       id: '18',

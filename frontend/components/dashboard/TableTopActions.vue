@@ -133,6 +133,16 @@
                   <el-button
                     type="text"
                     size="small"
+                    class="CancelButton"
+                    @click="deselectAllCols"
+                  >
+                    <translate>Deselect all</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    type="text"
+                    size="small"
                     class="PrimaryButton"
                     @click="updateColumns"
                   >
@@ -262,6 +272,9 @@ export default {
         this.selectedColumns.filter((s) => s.selected).map((s) => s.id)
       )
       this.columnSelectorOpen = false
+    },
+    deselectAllCols() {
+      this.selectedColumns.map((c) => (c.selected = false))
     },
     async toggleSelectAll() {
       if (!this.allSelected) {
