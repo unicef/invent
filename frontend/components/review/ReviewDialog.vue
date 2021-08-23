@@ -85,12 +85,18 @@
         :key="question"
         class="question"
       >
-        <template v-if="!(question === 'overal_summary')">
+        <!-- <template v-if="!(question === 'overal_summary')"> -->
+        <template
+          v-if="
+            !(
+              question === 'overal_summary' ||
+              question === 'impact' ||
+              question === 'scale_phase'
+            )
+          "
+        >
           <p class="label">
-            <span v-if="question === 'impact' || question === 'scale_phase'">
-              {{ `${idx}/A: ` }}
-            </span>
-            <span v-else>{{ `${idx + 1}/A: ` }}</span>
+            {{ `${idx + 1}/A: ` }}
             {{ reviewQuestions[question].name }}
             <translate>(optional)</translate>
           </p>
@@ -128,14 +134,7 @@
             </info-popover>
           </div>
           <p class="label">
-            <span v-if="question === 'impact' || question === 'scale_phase'">
-              {{ `${idx}/B: ` }}
-              <translate>Add comment (optional)</translate>
-            </span>
-            <span v-else>
-              {{ `${idx + 1}/B: ` }}
-              <translate>Add comment (optional)</translate>
-            </span>
+            {{ `${idx + 1}/B: ` }}<translate>Add comment (optional)</translate>
           </p>
           <el-input
             v-model="score[`${question}_comment`]"
@@ -149,8 +148,7 @@
       </div>
       <div class="question">
         <p class="label">
-          {{ `${questionType.length}:` }}
-          Overall Summary <translate class="mr-8">(optional)</translate>
+          9: <translate class="mr-8">Overall Summary (optional)</translate>
           <info-popover
             placement="right"
             :title="$gettext('Scoring Guidance') | translate"
