@@ -12,7 +12,7 @@ from rest_framework import status
 from country.models import Country
 from project.admin import ProjectAdmin, DigitalStrategyAdmin, TechnologyPlatformAdmin, PortfolioAdmin
 from user.models import UserProfile
-from project.models import Project, DigitalStrategy, TechnologyPlatform, Portfolio
+from project.models import Project, DigitalStrategy, TechnologyPlatform, Portfolio, ProjectVersion
 
 from project.tests.setup import MockRequest
 from core.utils import make_admin_list
@@ -220,3 +220,26 @@ class TestAdmin(TestCase):
         self.assertEqual(software.state, TechnologyPlatform.DECLINED)
 
         notify_user_about_approval.assert_called_once_with(args=('decline', software._meta.model_name, software.pk))
+
+    def test_project_admin_version(self):
+        """
+        Basically an edge-case test since we're using a brand new project which was not made through API
+        """
+        pa = ProjectAdmin(Project, AdminSite())
+        p = Project.objects.create(name="test link")
+        p.team.add(self.userprofile.id)
+        self.assertEqual(pa.versions(p), 0)
+        self.assertEqual(pa.versions_detailed(p), '')
+        ProjectVersion.objects.create(project=p, data=p.draft, name=p.name,
+                                      user=p.team.first())
+
+        self.assertEqual(pa.versions(p), 1)
+        self.assertEqual(pa.versions_detailed(p)[-15:], 'Initial version')
+
+        p.name = 'New name'
+        p.save()
+        ProjectVersion.objects.create(project=p, data=p.draft, name=p.name,
+                                      user=p.team.first())
+
+        self.assertEqual(pa.versions(p), 2)
+        self.assertEqual(pa.versions_detailed(p)[-16:], 'name was changed')

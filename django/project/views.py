@@ -19,7 +19,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
     HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
-    ApprovalState, Stage, Phase
+    ApprovalState, Stage, Phase, ProjectVersion
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
@@ -295,6 +295,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            original_data = {
+                'name': project.name,
+                'data': copy.deepcopy(project.data)
+            }
+
             instance = data_serializer.save()
             if country_answers:
                 country_answers.context['project'] = instance
@@ -304,6 +309,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
             instance.save()
+
+            project.refresh_from_db()  # need to do this due to JSONfield
+            if project.name != original_data['name'] or project.data != original_data['data']:
+                ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                              data=project.data, published=True)
 
         project.reset_approval()
 
@@ -318,6 +328,9 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         project.unpublish()
         data = project.to_representation(draft_mode=True)
+
+        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                      data=project.data, published=False)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
@@ -407,6 +420,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             instance.team.add(request.user.userprofile)
 
         data = instance.to_representation(draft_mode=True)
+
+        instance.refresh_from_db()
+        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                      data=instance.draft, published=False)
+
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
@@ -469,6 +487,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            original_data = {
+                'name': project.name,
+                'data': copy.deepcopy(project.draft),
+            }
             instance = data_serializer.save()
             if country_answers:
                 country_answers.context['project'] = instance
@@ -481,6 +503,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
+
+        instance.refresh_from_db()
+        if instance.name != original_data['name'] or instance.draft != original_data['data']:
+            ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                          data=instance.draft, published=False)
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 

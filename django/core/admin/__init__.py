@@ -19,7 +19,6 @@ from core.resources import UserResource
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
-    readonly_fields = ('odk_sync',)
     can_delete = False
 
 

@@ -9,7 +9,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage, \
-    Phase
+    Phase, ProjectVersion
 from core.utils import make_admin_list
 
 from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter, CountryFilter, DescriptionFilter, \
@@ -19,7 +19,8 @@ from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter,
 import scheduler.celery # noqa
 
 from import_export.admin import ExportActionMixin
-from project.resources import ProjectResource
+from .resources import ProjectResource
+from .utils import project_status_change, project_status_change_str
 
 
 class ViewOnlyPermissionMixin:
@@ -160,10 +161,10 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
 
 
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
-    list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active']
+    list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions']
     list_filter = (IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter, RegionFilter, CountryFilter)
 
-    readonly_fields = ['name', 'team', 'viewers', 'link', 'created', 'modified', 'data', 'draft']
+    readonly_fields = ['name', 'team', 'viewers', 'link', 'created', 'modified', 'data', 'draft', 'versions_detailed']
     fields = ['is_active'] + readonly_fields
     search_fields = ['name']
     resource_class = ProjectResource
@@ -185,6 +186,39 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
         if obj.id is None:
             return '-'
         return mark_safe(f"<a target='_blank' href='/en/-/initiatives/{obj.id}/edit/'>Edit initiative</a>")
+
+    def has_add_permission(self, request):
+        return False
+
+    @staticmethod
+    def versions(obj):
+        return ProjectVersion.objects.filter(project=obj).count()
+
+    @staticmethod
+    def versions_detailed(obj):
+        results_list = list()
+        prev_version = None
+        for version in ProjectVersion.objects.filter(project=obj):
+            if prev_version is None:
+                results_list.append(f'{version.version} - {version.created} - Initial version')
+            else:
+                status_change = project_status_change(prev_version, version)
+                results_list.append(
+                    f'{version.version} - {version.created} - {project_status_change_str(status_change)}')
+            prev_version = version
+        return '\n'.join(results_list)
+
+
+class ProjectVersionAdmin(admin.ModelAdmin):
+    model = ProjectVersion
+    fields = ['modified', 'project', 'user', 'version', 'data']
+    readonly_fields = fields
+    search_fields = ['project__name']
+
+    list_display = ['modified', 'project', 'version']
+
+    def get_project_name(self, obj):  # pragma: no cover
+        return obj.project.name
 
     def has_add_permission(self, request):
         return False
@@ -281,6 +315,7 @@ admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(ProjectVersion, ProjectVersionAdmin)
 admin.site.register(Portfolio, PortfolioAdmin)
 admin.site.register(UNICEFGoal, UNICEFGoalAdmin)
 admin.site.register(UNICEFResultArea, UNICEFResultAreaAdmin)
