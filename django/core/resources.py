@@ -13,7 +13,6 @@ class UserResource(resources.ModelResource):  # pragma: no cover
      - Stats:
        - last login
        - date joined
-       - ODK Synced
      - Permissions:
        - Active
        - Staff Status
@@ -31,7 +30,6 @@ class UserResource(resources.ModelResource):  # pragma: no cover
     # Stats
     last_login = Field(column_name=_('Last login date'))
     date_joined = Field(column_name=_('Date joined'))
-    is_odk_synced = Field(column_name=_('Synced to ODK?'))
     # Permissions
     is_active = Field(column_name=_('Active?'))
     is_staff = Field(column_name=_('Staff member?'))

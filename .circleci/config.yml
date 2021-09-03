@@ -13,7 +13,6 @@ jobs:
           PGUSER: postgres
           DATABASE_URL: ''
           CI_RUN: True
-          ODK_SYNC_ENABLED: False
           REDIS_URL: 127.0.0.1
       - image: circleci/postgres:10.9-alpine-postgis-ram
         environment:

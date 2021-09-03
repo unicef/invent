@@ -65,9 +65,6 @@ class Project(SoftDeleteModel, ExtendedModel):
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
-    odk_etag = models.CharField(null=True, blank=True, max_length=64)
-    odk_id = models.CharField(null=True, blank=True, max_length=64)
-    odk_extra_data = JSONField(default=dict)
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
@@ -175,6 +172,29 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.data = {}
         self.save()
         self.search.reset()
+
+
+class ProjectVersion(ExtendedModel):
+    version = models.IntegerField(default=1)
+    project = models.ForeignKey(Project, blank=False, null=True, on_delete=models.CASCADE, related_name='versions')
+    name = models.CharField(max_length=255)
+    data = JSONField(default=dict)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='project_versions', blank=True,
+                             null=True)
+    published = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('project', 'version')
+        ordering = ['modified']
+
+    def save(self, *args, **kwargs):
+        """
+        Custom save method to auto-increment the version field
+        """
+        if not self.id:
+            qs = ProjectVersion.objects.filter(project=self.project)
+            self.version = qs.count() + 1
+        super().save(*args, **kwargs)
 
 
 @receiver(post_save, sender=Project)

@@ -9,7 +9,7 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel
-from .tasks import sync_user_to_odk, send_user_request_to_admins
+from .tasks import send_user_request_to_admins
 
 
 def set_password(self, raw_password):  # pragma: no cover
@@ -61,7 +61,6 @@ class UserProfile(ExtendedModel):
     country = models.ForeignKey('country.Country', null=True, on_delete=models.SET_NULL)
     donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
-    odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
     global_portfolio_owner = models.BooleanField(default=False)
     filters = HStoreField(default=dict, blank=True)
 
@@ -93,19 +92,3 @@ def admin_request_on_change(sender, instance, **kwargs):
 def admin_request_on_create(sender, instance, created, **kwargs):
     if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
         transaction.on_commit(lambda: send_user_request_to_admins.apply_async(args=(instance.pk, )))
-
-
-@receiver(post_save, sender=UserProfile)
-def odk_sync_on_created(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
-        if created:
-            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.user.pk, False)))
-
-
-@receiver(post_save, sender=User)
-def odk_sync_on_pass_update(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
-        if created:
-            instance._set_password = False
-        elif getattr(instance, '_set_password', False):
-            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.pk, True)))
