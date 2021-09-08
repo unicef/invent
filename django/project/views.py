@@ -21,6 +21,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
     HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
     ApprovalState, Stage, Phase, ProjectVersion
 from project.permissions import InCountryAdminForApproval
+from search.views import ResultsSetPagination
 from toolkit.models import Toolkit, ToolkitVersion
 from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
@@ -133,20 +134,24 @@ class ProjectPublicViewSet(ViewSet):
         )
 
 
-class ProjectListViewSet(TokenAuthMixin, ViewSet):
-    @staticmethod
-    def member_list(user):
+class ProjectListViewSet(TokenAuthMixin, GenericViewSet):
+    pagination_class = ResultsSetPagination
+
+    def member_list(self, user):
         data = []
-        for project in Project.objects.member_of(user):
+        qs = Project.objects.member_of(user).order_by('-modified')
+        page = self.paginate_queryset(qs)
+        for project in page:
             published = project.to_representation()
             draft = project.to_representation(draft_mode=True)
             data.append(project.to_response_dict(published=published, draft=draft))
         return data
 
-    @staticmethod
-    def favorite_list(user):
+    def favorite_list(self, user):
         data = []
-        for project in Project.objects.published_only().filter(favorited_by=user.userprofile):
+        qs = Project.objects.published_only().filter(favorited_by=user.userprofile).order_by('-modified')
+        page = self.paginate_queryset(qs)
+        for project in page:
             published = project.to_representation()
             data.append(project.to_response_dict(published=published, draft=None))
         return data
@@ -164,12 +169,14 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
             # Bug: Reverse lookup does not work here for filtering
             qs = ReviewScore.objects.exclude(status=ReviewScore.STATUS_COMPLETE).\
                 filter(portfolio_review__is_active=True, reviewer=request.user.userprofile). \
-                exclude(portfolio_review__project__public_id__exact='')
-            data_serializer = ReviewScoreDetailedSerializer(qs.all(), many=True)
+                exclude(portfolio_review__project__public_id__exact='').order_by('-id')
+            page = self.paginate_queryset(qs)
+            data_serializer = ReviewScoreDetailedSerializer(page, many=True)
             data = data_serializer.data
         else:
             raise ValidationError({'list_name': 'Unknown list type'})  # pragma: no cover
-        return Response(data)
+
+        return self.get_paginated_response(data)
 
 
 class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):

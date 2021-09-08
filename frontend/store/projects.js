@@ -258,8 +258,8 @@ export const actions = {
       const { data } = await this.$axios.get(
         '/api/projects/user-list/member-of/'
       )
-      data.sort((a, b) => b.id - a.id)
-      commit('SET_USER_PROJECT_LIST', data)
+      data.results.sort((a, b) => b.id - a.id)
+      commit('SET_USER_PROJECT_LIST', data.results)
     } catch (error) {
       console.error('projects/loadUserProjects failed')
       return Promise.reject(error)
@@ -279,8 +279,8 @@ export const actions = {
       // for review case
       if (state.tab === 2) {
         let { data } = results[state.tab - 1]
-        data.sort((a, b) => b.id - a.id)
-        data = data.map((p) => {
+        data.results.sort((a, b) => b.id - a.id)
+        data = data.results.map((p) => {
           const project = p.project
           return {
             reviewId: p.id,
@@ -295,8 +295,8 @@ export const actions = {
         commit('SET_VALUE', { key: 'userProjects', val: data })
       } else {
         let { data } = results[state.tab - 1]
-        data.sort((a, b) => b.id - a.id)
-        data = data.map((p) => {
+        data.results.sort((a, b) => b.id - a.id)
+        data = data.results.map((p) => {
           const project =
             p.published && p.published.name ? p.published : p.draft
           return {
