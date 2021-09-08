@@ -256,7 +256,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[0]['published'].get("name"), "Test Project1")
+        self.assertEqual(response.json()['results'][0]['published'].get("name"), "Test Project1")
 
     def test_make_version(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
@@ -354,7 +354,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[0]['published']['name'], "Test Project1")
+        self.assertEqual(response.json()['results'][0]['published']['name'], "Test Project1")
 
     def test_project_group_list_team(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -652,7 +652,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 0)
+        self.assertEqual(response.json()['count'], 0)
 
     def test_admins_access_all_projects_as_viewer(self):
         # Create a test user with profile.
@@ -731,7 +731,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-list", kwargs={'list_name': 'member-of'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 0)
+        self.assertEqual(response.json()['count'], 0)
 
     def test_map_project_country_view(self):
         url = reverse("project-map")
@@ -947,7 +947,7 @@ class ProjectTests(SetupTests):
         # get user's favorite list
         url_fav_list = reverse("project-list", kwargs={'list_name': 'favorite'})
         response = user_x_client.get(url_fav_list)
-        self.assertEqual(len(response.json()), 0)
+        self.assertEqual(response.json()['count'], 0)
         # add projects[0] to the user's favorite list
         url_add = reverse('projects-add-favorite', kwargs={'pk': project_ids[0]})
         response = user_x_client.put(url_add, format="json")
@@ -966,8 +966,9 @@ class ProjectTests(SetupTests):
         # check favorite list
         response = user_x_client.get(url_fav_list)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 3)
-        self.assertEqual(set([p['id'] for p in response.json()]), {project_ids[0], project_ids[1], project_ids[2]})
+        self.assertEqual(response.json()['count'], 3)
+        self.assertEqual(set([p['id'] for p in response.json()['results']]),
+                         {project_ids[0], project_ids[1], project_ids[2]})
         # unpublish projects[1]
         url = reverse('project-unpublish', kwargs={'project_id': project_ids[1]})
         response = self.test_user_client.put(url, format='json')
@@ -980,8 +981,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['favorite'], [project_ids[0], project_ids[2]])
         response = user_x_client.get(url_fav_list)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
-        self.assertEqual(set([p['id'] for p in response.json()]), {project_ids[0], project_ids[2]})
+        self.assertEqual(response.json()['count'], 2)
+        self.assertEqual(set([p['id'] for p in response.json()['results']]), {project_ids[0], project_ids[2]})
         # remove project from the user's favorite list
         url_remove = reverse('projects-remove-favorite', kwargs={'pk': project_ids[0]})
         response = user_x_client.put(url_remove, format="json")
@@ -989,8 +990,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['favorite'], [project_ids[2]])
         response = user_x_client.get(url_fav_list)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual([p['id'] for p in response.json()], [project_ids[2]])
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual([p['id'] for p in response.json()['results']], [project_ids[2]])
 
     @mock.patch('project.views.notify_superusers_about_new_pending_approval.apply_async')
     def test_technology_platform_create(self, notify_superusers_about_new_pending_approval):
