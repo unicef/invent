@@ -16,6 +16,11 @@ export const state = () => ({
   ],
   tab: 1,
   loadingProject: true,
+  pageSize: 10,
+  page: 1,
+  total: 0,
+  nextPage: 0,
+  previousPage: 0,
   // project review
   loadingReview: false,
   dialogReview: false,
@@ -250,6 +255,9 @@ export const getters = {
       )
     }
   },
+  getPageSize: (state) => state.pageSize,
+  getTotal: (state) => state.total,
+  getCurrentPage: (state) => state.page,
 }
 
 export const actions = {
@@ -270,15 +278,36 @@ export const actions = {
     commit('SET_VALUE', { key: 'userProjects', val: [] })
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
+    let reviewPage = 1
+    let initiativePage = 1
+    let favoritesPages = 1
+    switch (state.tab) {
+      case 0:
+        initiativePage = state.page
+        break
+      case 1:
+        reviewPage = state.page
+        break
+      case 2:
+        favoritesPages = state.page
+        break
+    }
     try {
       const results = await Promise.all([
-        this.$axios.get(`/api/projects/user-list/member-of/`),
-        this.$axios.get(`/api/projects/user-list/review/`),
-        this.$axios.get(`/api/projects/user-list/favorite/`),
+        this.$axios.get(
+          `/api/projects/user-list/member-of/?page_size=${state.pageSize}&page=${reviewPage}`
+        ),
+        this.$axios.get(
+          `/api/projects/user-list/review/?page_size=${state.pageSize}&page=${initiativePage}`
+        ),
+        this.$axios.get(
+          `/api/projects/user-list/favorite/?page_size=${state.pageSize}&page=${favoritesPages}`
+        ),
       ])
       // for review case
       if (state.tab === 2) {
         let { data } = results[state.tab - 1]
+        commit('SET_VALUE', { key: 'total', val: data.count })
         data.results.sort((a, b) => b.id - a.id)
         data = data.results.map((p) => {
           const project = p.project
@@ -295,6 +324,7 @@ export const actions = {
         commit('SET_VALUE', { key: 'userProjects', val: data })
       } else {
         let { data } = results[state.tab - 1]
+        commit('SET_VALUE', { key: 'total', val: data.count })
         data.results.sort((a, b) => b.id - a.id)
         data = data.results.map((p) => {
           const project =
@@ -318,19 +348,19 @@ export const actions = {
             id: 1,
             name: 'My initiatives',
             icon: 'star',
-            total: results[0].data.length,
+            total: results[0].data.count,
           },
           {
             id: 2,
             name: 'My reviews',
             icon: 'comment-alt',
-            total: results[1].data.length,
+            total: results[1].data.count,
           },
           {
             id: 3,
             name: 'My favorites',
             icon: 'heart',
-            total: results[2].data.length,
+            total: results[2].data.count,
           },
         ],
       })
@@ -415,7 +445,7 @@ export const actions = {
   // get every project or initiative
   async setTab({ state, commit, dispatch }, val) {
     commit('SET_VALUE', { key: 'tab', val })
-    // update initiatives/projects by tab click
+    commit('SET_VALUE', { key: 'page', val: 1 })
     await dispatch('getInitiatives')
   },
   addFavorite({ state, commit, dispatch }, { id, type }) {
@@ -457,13 +487,33 @@ export const actions = {
       return e
     }
   },
-
   // state interaction handlers
   setCurrentProjectReview({ commit }, val) {
     commit('SET_VALUE', { key: 'currentProjectReview', val })
   },
   setReviewDialog({ commit }, val) {
     commit('SET_VALUE', { key: 'dialogReview', val })
+  },
+  setPageSize({ commit, dispatch }, size) {
+    if (process.browser) {
+      localStorage.setItem('pageSize', size)
+    }
+    commit('SET_VALUE', { key: 'pageSize', val: size })
+    commit('SET_VALUE', { key: 'page', val: 1 })
+    dispatch('getInitiatives')
+  },
+  restorePageSize({ commit }) {
+    let pageSize = 10
+    if (process.browser) {
+      const lsPageSize = localStorage.getItem('pageSize')
+      pageSize = lsPageSize ? parseInt(lsPageSize) : 10
+    }
+    commit('SET_VALUE', { key: 'pageSize', val: pageSize })
+    commit('SET_VALUE', { key: 'page', val: 1 })
+  },
+  setCurrentPage({ commit, dispatch }, page) {
+    commit('SET_VALUE', { key: 'page', val: page })
+    dispatch('getInitiatives')
   },
 }
 
