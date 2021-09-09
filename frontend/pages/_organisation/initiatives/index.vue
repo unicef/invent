@@ -44,12 +44,14 @@ export default {
     } else {
       await this.setTab(1)
     }
+    this.restorePageSize()
   },
   methods: {
     ...mapActions({
       setTab: 'projects/setTab',
       setCurrentProjectReview: 'projects/setCurrentProjectReview',
       setReviewDialog: 'projects/setReviewDialog',
+      restorePageSize: 'projects/restorePageSize',
     }),
   },
 }
