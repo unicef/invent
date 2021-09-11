@@ -161,11 +161,13 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
 
 
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
-    list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions']
-    list_filter = (IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter, RegionFilter, CountryFilter)
+    list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions',
+                    'featured', 'featured_rank']
+    list_filter = ('featured', IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter,
+                   RegionFilter, CountryFilter)
 
     readonly_fields = ['name', 'team', 'viewers', 'link', 'created', 'modified', 'data', 'draft', 'versions_detailed']
-    fields = ['is_active'] + readonly_fields
+    fields = ['is_active', 'featured', 'featured_rank'] + readonly_fields
     search_fields = ['name']
     resource_class = ProjectResource
 

@@ -1150,3 +1150,43 @@ class ProjectTests(SetupTests):
         self.assertTrue('phase' not in response.json()['draft'])
         self.assertFalse(response.json()['published'])
         self.assertEqual(response.json()['draft']['stages'], [dict(id=ID_MAP[migratable_phase])])
+
+    def test_project_landing_blocks(self):
+        project_id2, project_data, org, c, uoffice, d1, d2 = self.create_new_project(name="Test Project 2")
+        project_id3, project_data, org, c, uoffice, d1, d2 = self.create_new_project(name="Test Project 3")
+        project_id4, project_data, org, c, uoffice, d1, d2 = self.create_new_project(name="Test Project 4")
+        project_id5, project_data, org, c, uoffice, d1, d2 = self.create_new_project(name="Test Project 5 not mine")
+
+        p1 = Project.objects.get(id=self.project_id)
+        p2 = Project.objects.get(id=project_id2)
+        p3 = Project.objects.get(id=project_id3)
+        p4 = Project.objects.get(id=project_id4)
+        p1.featured = True
+        p1.featured_rank = 1
+        p1.save()
+        p2.featured = True
+        p2.featured_rank = 2
+        p2.save()
+        p3.featured = True
+        p3.featured_rank = 3
+        p3.save()
+        p4.featured = True
+        p4.featured_rank = 4
+        p4.save()
+
+        user2_profile_id, test_user_client, test_user_key = self.create_user('user2@unicef.org', 'A@r!1234', 'A@r!1234')
+        p5 = Project.objects.get(id=project_id5)
+        p5.team.set([user2_profile_id])
+        p4.team.set([self.user_profile_id, user2_profile_id])
+
+        url = reverse("project-landing")
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['my_initiatives_count'], 4)
+        self.assertEqual(len(data['my_initiatives']), 3)
+        self.assertEqual(len(data['recents']), 3)
+        self.assertEqual(len(data['featured']), 4)
+
+        response = test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)

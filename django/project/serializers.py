@@ -643,3 +643,54 @@ class ReviewScoreDetailedSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewScore
         fields = '__all__'
+
+
+class ProjectCardSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    team = serializers.SerializerMethodField()
+    is_draft = serializers.SerializerMethodField()
+    unicef_office = serializers.SerializerMethodField()
+    country = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        read_only_fields = ('id', 'name', 'modified', 'is_draft', 'description', 'unicef_office', 'country', 'team')
+        fields = read_only_fields
+
+    @staticmethod
+    def get_name(obj):
+        return obj.name if obj.public_id else obj.draft.get('name', '')
+
+    @staticmethod
+    def get_is_draft(obj):
+        return obj.public_id == ''
+
+    @staticmethod
+    def get_description(obj):
+        data = obj.data if obj.public_id else obj.draft
+        return data.get('implementation_overview', '')
+
+    @staticmethod
+    def get_unicef_office(obj):
+        data = obj.data if obj.public_id else obj.draft
+        return data.get('country_office', '')
+
+    @staticmethod
+    def get_country(obj):
+        return obj.get_country_id(draft_mode=obj.public_id == '')
+
+    def get_team(self, obj):
+        qs = obj.team.all()
+        request = self.context.get('request')
+        user_in_team = request and request.user and request.user.userprofile and obj.team.filter(
+            id=request.user.userprofile.id).exists()
+
+        if user_in_team:
+            my_index = list(qs.values_list('id', flat=True)).index(request.user.userprofile.id)
+            team_list = list(qs)
+            if my_index != 0:
+                team_list.insert(0, team_list.pop(my_index))
+
+            return UserProfileSerializer(team_list, many=True).data
+        return UserProfileSerializer(qs, many=True).data
