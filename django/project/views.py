@@ -32,7 +32,8 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ReviewScoreSerializer, ReviewScoreFillSerializer, ReviewScoreBriefSerializer, \
     ProjectPortfolioStateManagerSerializer, PortfolioSerializer, \
     PortfolioStateChangeSerializer, ReviewScoreDetailedSerializer, TechnologyPlatformCreateSerializer, \
-    HardwarePlatformCreateSerializer, NontechPlatformCreateSerializer, PlatformFunctionCreateSerializer
+    HardwarePlatformCreateSerializer, NontechPlatformCreateSerializer, PlatformFunctionCreateSerializer, \
+    ProjectCardSerializer
 from user.serializers import UserProfileSerializer
 from .tasks import notify_superusers_about_new_pending_approval
 
@@ -177,6 +178,28 @@ class ProjectListViewSet(TokenAuthMixin, GenericViewSet):
             raise ValidationError({'list_name': 'Unknown list type'})  # pragma: no cover
 
         return self.get_paginated_response(data)
+
+
+class ProjectLandingBlocks(TokenAuthMixin, ViewSet):
+    """
+    Provides data for the project blocks on the landing page:
+    1. My initiatives block
+    2. Recent updates block
+    3. Featured initiatives block
+    """
+    def list(self, request, *args, **kwargs):
+        my_initiatives_qs = Project.objects.member_of(request.user)
+        my_initiatives_count = my_initiatives_qs.count()
+        my_initiatives = my_initiatives_qs.order_by('-modified')[:3]
+        recently_updated = Project.objects.published_only().order_by('-modified')[:3]
+        featured = Project.objects.published_only().filter(featured=True).order_by('featured_rank')
+
+        data = dict(my_initiatives=ProjectCardSerializer(my_initiatives, many=True, context=dict(request=request)).data,
+                    my_initiatives_count=my_initiatives_count,
+                    recents=ProjectCardSerializer(recently_updated, many=True, context=dict(request=request)).data,
+                    featured=ProjectCardSerializer(featured, many=True, context=dict(request=request)).data)
+
+        return Response(data)
 
 
 class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):

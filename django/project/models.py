@@ -70,6 +70,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     objects = ProjectQuerySet.as_manager()
     # added here to avoid circular imports
     favorited_by = models.ManyToManyField(UserProfile, related_name='favorite_projects', blank=True)
+    featured = models.BooleanField(default=False)
+    featured_rank = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):  # pragma: no cover
         return self.name
