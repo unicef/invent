@@ -22,23 +22,23 @@
         :style="`z-Index: ${(showCards.length - index) * 10};
                  inset: ${index * 5}px;
                  transform: translateX(${(index - 0) * 6}px);
-                 background-image: url(${card.cover})`"
+                 background-image: url(${card.thumbnail})`"
       >
-        <div v-if="card.cover" class="details">
+        <div v-if="card.thumbnail" class="details">
           <div class="title" @click="openProject(card)">{{ card.name }}</div>
           <div class="team">
             <Location :location-info="locationInfo(card)" class="bright" />
             <AvatarTeam :team="card.team" :max-avatars="10" />
           </div>
         </div>
-        <div v-if="!card.cover" class="title">
+        <div v-if="!card.thumbnail" class="title">
           {{ card.name }}
         </div>
-        <div v-if="!card.cover" class="team">
+        <div v-if="!card.thumbnail" class="team">
           <Location :location-info="locationInfo(card)" />
           <AvatarTeam :team="card.team" :max-avatars="10" />
         </div>
-        <div v-if="!card.cover">
+        <div v-if="!card.thumbnail">
           <p class="desc">
             {{ card.description }}
           </p>

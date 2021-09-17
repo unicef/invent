@@ -164,7 +164,6 @@ export default {
       return {
         name: this.user.name,
         email: this.user.email,
-        picture: 'https://thispersondoesnotexist.com/image', // this.user?.picture,
         colorScheme: {
           text: '#FFFFFF',
           background: '#CB7918',

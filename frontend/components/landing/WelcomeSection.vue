@@ -41,7 +41,7 @@ export default {
       user: 'user/getProfile',
     }),
     url() {
-      return this.$gettext('/en/-/terms')
+      return this.$gettext('https://unicef.sharepoint.com/sites/OOI/SitePages/INVENT.aspx')
     },
   },
 }

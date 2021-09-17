@@ -4,10 +4,8 @@
       <h2><translate>Register your Digital Health Initiative</translate></h2>
       <p>
         <translate
-          >Please complete the questions below to include your initiative
-          information in the Digital Health Atlas. These questions document your
-          initiative's health focus area(s), software features and national
-          scale.</translate
+          >Please complete the questions below to include your initiative information in the Digital Health Atlas. These
+          questions document your initiative's health focus area(s), software features and national scale.</translate
         >
       </p>
     </div>
