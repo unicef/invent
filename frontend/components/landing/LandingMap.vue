@@ -1,6 +1,7 @@
 <template>
   <div :class="['DhaMap', 'LandingMap', { Searched: isSearched }]">
     <no-ssr>
+      <SearchComponent />
       <l-map
         ref="mainMap"
         :zoom="zoom"
@@ -11,11 +12,7 @@
       >
         <l-tilelayer :url="tileServer" />
 
-        <custom-marker-cluster
-          ref="markerCluster"
-          :options="clusterOptions"
-          :total="countriesPin.length"
-        >
+        <custom-marker-cluster ref="markerCluster" :options="clusterOptions" :total="countriesPin.length">
           <country-center-marker
             v-for="pin in countriesPin"
             :key="pin.id"
@@ -51,6 +48,7 @@
 import NoSSR from 'vue-no-ssr'
 import MapMixin from '@/components/mixins/MapMixin'
 
+import SearchComponent from '@/components/common/SearchComponent.vue'
 import CountryCenterMarker from '@/components/common/map/CountryCenterMarker'
 import CountryDetailsOverlay from '@/components/common/map/CountryDetailsOverlay'
 import WorldZoomButton from '@/components/common/map/WorldZoomButton'
@@ -58,6 +56,7 @@ import WorldZoomButton from '@/components/common/map/WorldZoomButton'
 export default {
   components: {
     'no-ssr': NoSSR,
+    SearchComponent,
     CountryCenterMarker,
     CountryDetailsOverlay,
     WorldZoomButton,

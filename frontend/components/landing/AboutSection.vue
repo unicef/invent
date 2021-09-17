@@ -1,68 +1,52 @@
 <template>
   <div class="AboutSection">
-    <el-row type="flex">
-      <el-col class="AboutSectionLeft">
-        <h4>{{ title }}</h4>
-        <p>{{ permanentFooterText }}</p>
-        <p v-show="countryText">
-          {{ countryText }}
-        </p>
-      </el-col>
-      <el-col class="AboutSectionRight">
-        <div class="WhoSupporter">
-          <h4><translate>Global Support to DHA</translate></h4>
-          <div class="SupporterLogos">
-            <div class="Partner">
-              <img src="/static/partners/logo-who.png" alt="WHO" />
-            </div>
-            <div class="Partner">
-              <img src="static/partners/logo-hrp-new-cropped.png" alt="HRP" />
-            </div>
-            <div class="Partner">
-              <img
-                src="/static/partners/logo-path_new-color.png"
-                style="height: 42px"
-                alt="PATH"
-              />
-            </div>
-            <div class="Partner">
-              <img
-                src="/static/partners/logo-digital_square.png"
-                style="height: 54px"
-                alt="Digital Square"
-              />
-            </div>
-            <div class="Partner">
-              <img src="/static/partners/logo-unfpa.png" alt="UNFPA" />
-            </div>
-            <div class="Partner">
-              <img
-                src="/static/partners/unicef-logo-vertical.png"
-                alt="UNICEF"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-if="partnerLogos" class="CountrySupporter">
-          <h4><translate>In-country support to DHA</translate></h4>
-          <div class="SupporterLogos">
-            <div
-              v-for="(logo, index) in partnerLogos"
-              :key="index"
-              class="Partner"
-            >
-              <img :src="logo.image_url" alt="PartnerLogo" />
-            </div>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+    <div class="about">
+      <translate>About INVENT</translate>
+    </div>
+    <div class="decription">
+      {{ permanentFooterText }}
+    </div>
+    <div class="partners">
+      <div v-for="partner in partners" :key="partner.name">
+        <img :src="partner.logo" :alt="partner.name" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  data() {
+    return {
+      partners: [
+        {
+          name: 'WHO',
+          logo: '/static/partners/logo-who.png',
+        },
+        {
+          name: 'HRP',
+          logo: 'static/partners/logo-hrp-new-cropped.png',
+        },
+        {
+          name: 'UNICEF',
+          logo: '/static/partners/unicef-logo-vertical.png',
+        },
+        {
+          name: 'Digital Square',
+          logo: '/static/partners/logo-digital_square.png',
+        },
+        {
+          name: 'UNFPA',
+          logo: '/static/partners/logo-unfpa.png',
+        },
+        {
+          name: 'PATH',
+          logo: '/static/partners/logo-path_new-color.png',
+        },
+      ],
+    }
+  },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData',
@@ -72,9 +56,7 @@ export default {
       return this.landingData !== null
     },
     title() {
-      return this.countrySpecific
-        ? this.landingData.footer_title
-        : this.landingPageDefaults.footer_title
+      return this.countrySpecific ? this.landingData.footer_title : this.landingPageDefaults.footer_title
     },
     permanentFooterText() {
       return this.landingPageDefaults.permanent_footer
@@ -87,9 +69,7 @@ export default {
     },
     partnerLogos() {
       if (this.countrySpecific) {
-        return this.landingData.partner_logos.length > 0
-          ? this.landingData.partner_logos
-          : null
+        return this.landingData.partner_logos.length > 0 ? this.landingData.partner_logos : null
       }
       return null
     },
@@ -102,48 +82,43 @@ export default {
 @import '../../assets/style/mixins.less';
 
 .AboutSection {
-  .limitPageWidth();
+  // .limitPageWidth();
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: @colorWhite;
+  max-width: 1240px;
+  margin: 72px auto;
 
-  > .el-row {
-    align-items: stretch;
-  }
-
-  h4 {
+  .about {
+    text-align: center;
     color: @colorTextPrimary;
-    margin: 0 0 20px;
+    font-size: @fontSizeTitle;
+    margin: 46px 0 34px 0;
   }
 
-  p {
-    font-size: @fontSizeSmall;
-    line-height: 18px;
+  .decription {
+    text-align: center;
     color: @colorTextPrimary;
+    font-size: @fontSizeMedium;
+    margin-bottom: 32px;
+    width: 1068px;
   }
 
-  .AboutSectionLeft {
-    min-width: 360px;
-    max-width: 360px;
-    margin-right: 30px;
-    padding: 40px;
-  }
-
-  .AboutSectionRight {
-    padding: 40px 30px;
-
-    .SupporterLogos {
-      .clearfix();
-
-      .Partner {
-        float: left;
-        display: inline-flex;
-        height: 60px;
-        margin: 10px 80px 20px 0;
-
-        img {
-          width: auto;
-          height: 50px;
-          align-self: center;
-        }
+  .partners {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 18px 24px;
+    width: 610px;
+    height: 180px;
+    margin-bottom: 60px;
+    div {
+      flex-basis: 33.3333333%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        height: 44px;
       }
     }
   }

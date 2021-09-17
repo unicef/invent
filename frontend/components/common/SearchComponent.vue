@@ -1,50 +1,44 @@
 <template>
   <div v-click-outside="hide" class="SearchComponent">
-    <transition name="el-fade-in">
+    <transition name="el-zoom-in-top">
       <div v-show="shown" class="SearchPopper">
         <el-card :body-style="{ padding: '0px' }">
           <el-row type="flex" class="SearchBig">
             <el-col :span="24">
               <el-input
+                ref="searchcontrol"
                 v-model="localSearchString"
-                :placeholder="$gettext('Create your search here') | translate"
+                :placeholder="$gettext('Type something') | translate"
                 @keyup.enter.native="search"
               >
                 <fa slot="prepend" icon="search" />
                 <template slot="append">
-                  <el-button class="SearchClear" @click="clearSearch">
-                    <fa icon="times" />
-                  </el-button>
-                  <el-button class="SearchSubmit" @click="search">
-                    <fa icon="arrow-right" />
-                  </el-button>
+                  <transition name="el-fade-in">
+                    <div v-if="localSearchString" class="flex">
+                      <el-button class="SearchClear" @click="clearSearch">
+                        <fa icon="times" />
+                      </el-button>
+                      <el-button class="SearchSubmit" @click="search">
+                        <fa icon="arrow-right" />
+                      </el-button>
+                    </div>
+                  </transition>
                 </template>
               </el-input>
             </el-col>
           </el-row>
 
           <div class="SearchResultsWrapper">
-            <el-row type="flex" align="middle" class="SearchResultsHeader">
-              <el-col v-show="hasResults" class="SearchResultsCounter">
-                <translate :parameters="{ num: results.length }">
-                  {num} result(s):
+            <div class="SearchResultsHeader">
+              <transition name="el-zoom-in-center">
+                <translate v-show="hasResults" class="SearchResultsCounter" :parameters="{ num: results.length }">
+                  {num} result(s)
                 </translate>
-              </el-col>
-              <el-col class="AdvancedSearchLink">
-                <nuxt-link
-                  :to="
-                    localePath({
-                      name: 'organisation-inventory',
-                      params: $route.params,
-                    })
-                  "
-                  class="NuxtLink IconRight"
-                >
-                  <span><translate>Advanced search</translate></span
-                  ><fa icon="angle-right" />
-                </nuxt-link>
-              </el-col>
-            </el-row>
+              </transition>
+              <LinkAction :url="inventoryUrl" chevron="right">
+                <translate>Advanced search</translate>
+              </LinkAction>
+            </div>
 
             <el-row v-show="!hasResults">
               <el-col class="SearchResultsNope">
@@ -52,45 +46,35 @@
                   <fa icon="info-circle" size="lg" />
                   <span>
                     <translate>
-                      You can use filters to further refine your search. Note
-                      that these filters can be saved by selecting Filters and
-                      naming your filter. These can then be viewed at a later
-                      time after you log in.
+                      You can use filters to further refine your search. Note that these filters can be saved by
+                      selecting Filters and naming your filter. These can then be viewed at a later time after you log
+                      in.
                     </translate>
                   </span>
                 </p>
               </el-col>
             </el-row>
-
-            <el-row
-              v-for="project in results"
-              v-show="hasResults"
-              :key="project.id"
-              class="SearchResultItem"
-            >
-              <el-col>
-                <project-card
-                  :project="project"
-                  :found-in="getFoundIn(project.id)"
-                  show-found-in
-                  show-country
-                  show-organisation
-                  show-arrow-on-over
-                />
-              </el-col>
-            </el-row>
+            <div class="SearchResults">
+              <ResultCard
+                v-for="project in results"
+                v-show="hasResults"
+                :key="project.id"
+                :project="project"
+                :found-in="getFoundIn(project.id)"
+                class="SearchResultItem"
+              />
+            </div>
           </div>
         </el-card>
       </div>
     </transition>
 
-    <el-button
-      v-show="!shown && !searchString"
-      class="SearchButton"
-      @click="show"
-    >
-      <fa icon="search" />
-    </el-button>
+    <transition name="el-zoom-in-top">
+      <el-button v-show="!shown && !searchString" class="SearchButton" @click="show">
+        <fa icon="search" />
+        <translate key="st">Quick search</translate>
+      </el-button>
+    </transition>
 
     <div v-show="searchString && !shown" class="SearchShadow" @click="show">
       <el-row type="flex" align="middle">
@@ -104,9 +88,7 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            <translate :parameters="{ num: results.length }">
-              {num} result(s)
-            </translate>
+            <translate :parameters="{ num: results.length }"> {num} result(s) </translate>
           </span>
         </el-col>
         <el-col>
@@ -122,15 +104,17 @@
 <script>
 import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapActions } from 'vuex'
+import LinkAction from '@/components/common/LinkAction.vue'
+import ResultCard from '@/components/landing/parts/ResultCard.vue'
 import { mapGettersActions } from '../../utilities/form.js'
-import ProjectCard from './ProjectCard'
 
 export default {
   directives: {
     ClickOutside,
   },
   components: {
-    ProjectCard,
+    LinkAction,
+    ResultCard,
   },
   data() {
     return {
@@ -147,6 +131,12 @@ export default {
     ...mapGettersActions({
       searchString: ['landing', 'getSearchString', 'setSearchString', 0],
     }),
+    inventoryUrl() {
+      return this.localePath({
+        name: 'organisation-inventory',
+        params: this.$route.params,
+      })
+    },
     hasResults() {
       return this.results.length > 0
     },
@@ -170,12 +160,19 @@ export default {
     },
     clearSearch() {
       this.searchString = null
+      this.localSearchString = ''
+      this.$nextTick(() => {
+        this.$refs.searchcontrol.$el.getElementsByTagName('input')[0].focus()
+      })
     },
     search() {
       this.searchString = this.localSearchString
     },
     show() {
       this.shown = true
+      this.$nextTick(() => {
+        this.$refs.searchcontrol.$el.getElementsByTagName('input')[0].focus()
+      })
     },
     hide() {
       this.shown = false
@@ -189,28 +186,39 @@ export default {
 @import '../../assets/style/mixins.less';
 
 .SearchComponent {
+  position: absolute;
+  top: 40px;
+  right: 100px;
+  z-index: 2000;
   .SearchButton {
-    background-color: transparent;
-    width: @actionBarHeight;
+    background-color: #4fc8f3;
     height: @actionBarHeight;
-    padding: 0;
+    padding: 15px 30px;
     margin: 0;
     text-align: center;
-    color: @colorWhite;
-
-    .svg-inline--fa {
-      font-size: 20px;
+    border-radius: 5px;
+    span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      // width: @actionBarHeight;
       color: @colorWhite;
+      .svg-inline--fa {
+        font-size: 20px;
+        color: @colorWhite;
+      }
     }
   }
 }
 
 .SearchPopper {
   position: absolute;
-  right: 40px;
+  right: 0;
   top: 0;
   z-index: 2010;
-  width: 400px;
+  width: 520px;
+  border-radius: 5px;
+  overflow: hidden;
   box-shadow: 5px 5px 20px 10px rgba(0, 0, 0, 0.15);
 
   > .el-card {
@@ -221,6 +229,8 @@ export default {
 
   .SearchBig {
     height: @actionBarHeight;
+    background-color: #ffffff;
+    box-shadow: 0 1px 1px 0 #d8d1c9;
 
     .el-input,
     .el-input__inner {
@@ -253,12 +263,15 @@ export default {
       width: @actionBarHeight * 2;
       height: @actionBarHeight;
       padding: 0;
-
-      .el-button {
-        width: @actionBarHeight;
-        height: @actionBarHeight;
-        margin: 0;
-        padding: 0;
+      background-color: transparent;
+      .flex {
+        display: flex;
+        .el-button {
+          width: @actionBarHeight;
+          height: @actionBarHeight;
+          margin: 0;
+          padding: 0;
+        }
       }
     }
 
@@ -277,42 +290,37 @@ export default {
 
     .SearchSubmit {
       border: 0;
-      background-color: @colorBrandAccent;
+      // background-color: @colorBrandAccent;
+      background-color: #4fc8f3;
 
       .svg-inline--fa {
         font-size: 18px;
         color: @colorWhite;
       }
-
-      &:hover {
-        background-color: @colorBrandAccentLight;
-      }
     }
   }
 
   .SearchResultsWrapper {
-    max-height: calc(@landingMapHeight - 36px);
+    max-height: calc(@landingMapHeight - 128px);
     overflow-y: auto;
 
     @media screen and (max-height: 694px) {
-      max-height: calc(@landingMapMinHeight - 36px);
+      max-height: calc(@landingMapMinHeight - 128px);
     }
   }
 
   .SearchResultsHeader {
+    display: flex;
+    align-items: center;
     height: 56px;
     padding: 0 20px;
-    border-top: 1px solid @colorTextMuted;
 
     .SearchResultsCounter {
-      width: 100%;
-      font-size: @fontSizeSmall;
-      font-weight: 700;
-      color: @colorTextSecondary;
-    }
-
-    .AdvancedSearchLink {
-      width: auto;
+      flex: 1;
+      font-size: @fontSizeBase;
+      font-weight: bold;
+      color: #7995a2;
+      letter-spacing: 0;
     }
   }
 
@@ -325,23 +333,32 @@ export default {
       margin: 0;
       font-size: @fontSizeSmall;
       line-height: 18px;
-      color: @colorTextSecondary;
+      color: #7995a2;
 
       .svg-inline--fa {
         margin-right: 6px;
-        color: @colorTextMuted;
+        color: #7995a2;
+        position: relative;
+        top: 3px;
       }
     }
   }
-
-  .SearchResultItem {
-    margin: 0 10px 8px;
+  .SearchResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .SearchResultItem {
+      margin-bottom: 10px;
+      &:hover {
+        background-color: hsl(0deg 0% 97%);
+      }
+    }
   }
 }
 
 .SearchShadow {
   position: relative;
-  width: 400px;
+  width: 520px;
   height: @actionBarHeight;
   background-color: @colorGrayLightest;
 

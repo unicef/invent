@@ -3,6 +3,7 @@ import forOwn from 'lodash/forOwn'
 import get from 'lodash/get'
 
 export const state = () => ({
+  landingProjects: [],
   userProjects: [],
   currentProject: null,
   projectStructure: {},
@@ -39,6 +40,7 @@ const getTodayString = () => {
 }
 
 export const getters = {
+  getLandingProjects: (state) => state.landingProjects,
   getUserProjectList: (state) => [...state.userProjects.map((p) => ({ ...p }))],
   getGoalAreas: (state) => get(state, 'projectStructure.goal_areas', []),
   getRegionalOffices: (state) => get(state, 'projectStructure.regional_offices', []),
@@ -223,6 +225,60 @@ export const getters = {
 }
 
 export const actions = {
+  async loadLandingProjects({ commit, rootGetters }) {
+    try {
+      const { data } = await this.$axios.get('/api/projects/landing/')
+      const regions = rootGetters['system/getRegions']
+      const countries = rootGetters['countries/getCountries'].map((c) => {
+        return {
+          ...c,
+          unicef_region: regions.find((r) => r.id === c.unicef_region),
+        }
+      })
+      const offices = rootGetters['offices/getOffices'].map((o) => {
+        return {
+          ...o,
+          region: regions.find((r) => r.id === o.region),
+        }
+      })
+
+      const my_initiatives = data.my_initiatives.map((p) => {
+        return {
+          ...p,
+          country: countries.find((c) => c.id === p.country),
+          unicef_office: offices.find((o) => o.id === p.unicef_office),
+        }
+      })
+
+      const recents = data.recents.map((p) => {
+        return {
+          ...p,
+          country: countries.find((c) => c.id === p.country),
+          unicef_office: offices.find((o) => o.id === p.unicef_office),
+        }
+      })
+
+      const featured = data.featured.map((p) => {
+        return {
+          ...p,
+          country: countries.find((c) => c.id === p.country),
+          unicef_office: offices.find((o) => o.id === p.unicef_office),
+        }
+      })
+      commit('SET_VALUE', {
+        key: 'landingProjects',
+        val: {
+          my_initiatives_count: data.my_initiatives_count,
+          my_initiatives,
+          recents,
+          featured,
+        },
+      })
+    } catch (error) {
+      console.error('projects/landing failed')
+      return Promise.reject(error)
+    }
+  },
   async loadUserProjects({ commit }) {
     try {
       const { data } = await this.$axios.get('/api/projects/user-list/member-of/')

@@ -4,6 +4,16 @@ export const state = () => ({
   current: 0,
 })
 
+export const getters = {
+  getOffices(state) {
+    return state.offices
+  },
+  getOfficeDetails: (state) => (id) => {
+    const office = state.offices.find((o) => o.id === id)
+    return office || undefined
+  },
+}
+
 export const mutations = {
   SET_OFFICES: (state, arr) => {
     state.offices = arr

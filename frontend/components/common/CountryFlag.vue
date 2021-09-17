@@ -1,5 +1,5 @@
 <template>
-  <img :class="['CountryFlag', { small }]" :src="countryFlagUrl" />
+  <img :class="['CountryFlag', `${size}`]" :src="countryFlagUrl" />
 </template>
 
 <script>
@@ -9,9 +9,12 @@ export default {
       type: String,
       default: null,
     },
-    small: {
-      type: Boolean,
-      default: false,
+    size: {
+      type: String,
+      default: '',
+      validator: (value) => {
+        return ['', 'small', 'tiny'].includes(value)
+      },
     },
   },
   computed: {
@@ -32,7 +35,9 @@ export default {
 .CountryFlag {
   &.small {
     height: 16px;
-    width: 24px;
+  }
+  &.tiny {
+    height: 12px;
   }
 }
 </style>

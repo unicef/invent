@@ -11,11 +11,11 @@
 
 <script>
 import HeadMixin from '@/layouts/HeadMixin'
-import DhaFooter from '../components/common/DhaFooter.vue'
-import TopBar from '../components/common/TopBar.vue'
-import ActionBar from '../components/common/ActionBar.vue'
-import DialogsContainer from '../components/dialogs/DialogsContainer.vue'
-import DjangoFeedback from '../components/DjangoFeedback.vue'
+import DhaFooter from '@/components/common/DhaFooter.vue'
+import TopBar from '@/components/common/TopBar.vue'
+import ActionBar from '@/components/common/ActionBar.vue'
+import DialogsContainer from '@/components/dialogs/DialogsContainer.vue'
+import DjangoFeedback from '@/components/DjangoFeedback.vue'
 
 export default {
   components: {
@@ -43,6 +43,7 @@ export default {
         'index-signup',
         'auth',
         'organisation-reset-key',
+        'organisation',
       ]
       if (this.$route && this.$route.name) {
         return !hiddenOn.includes(this.pureRoute)
