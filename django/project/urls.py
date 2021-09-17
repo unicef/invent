@@ -87,6 +87,11 @@ urlpatterns = [
              'put': 'add'
          }),
          name="projects-add-favorite"),
+    path('projects/<int:pk>/image/',
+         view=views.ProjectImageUploadViewSet.as_view({
+             'put': 'update'
+         }),
+         name="projects-add-image"),
     path('projects/favorites/remove/<int:pk>',
          view=views.ProjectModifyFavoritesViewSet.as_view({
              'put': 'remove'

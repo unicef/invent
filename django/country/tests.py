@@ -18,9 +18,9 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from core.tests import get_temp_image
 from country.admin import CountryAdmin
 from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion, CountryOffice
+from project.utils import get_temp_image
 from user.models import UserProfile
 from django.utils.six import StringIO
 from django.conf import settings

@@ -18,6 +18,7 @@ from rest_framework.test import APIClient
 
 from country.models import Country, Donor
 from project.admin import ProjectAdmin
+from project.utils import get_temp_image
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, \
     HSCChallenge, HSCGroup, ProjectApproval, Stage
@@ -1190,3 +1191,14 @@ class ProjectTests(SetupTests):
 
         response = test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, 200)
+
+    def test_project_add_image(self):
+        url = reverse("projects-add-image", kwargs={"pk": self.project_id})
+        image = get_temp_image("image")
+        data = {
+            "image": image
+        }
+        response = self.test_user_client.put(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('source_images/image.png' in response.json()['image'])
+        self.assertTrue(response.json()['thumbnail'])
