@@ -193,7 +193,7 @@ class ProjectLandingBlocks(TokenAuthMixin, ViewSet):
         my_initiatives_count = my_initiatives_qs.count()
         my_initiatives = my_initiatives_qs.order_by('-modified')[:3]
         recently_updated = Project.objects.published_only().order_by('-modified')[:3]
-        featured = Project.objects.published_only().filter(featured=True).order_by('featured_rank')
+        featured = Project.objects.published_only().filter(featured=True).order_by('-featured_rank')
 
         data = dict(my_initiatives=ProjectCardSerializer(my_initiatives, many=True, context=dict(request=request)).data,
                     my_initiatives_count=my_initiatives_count,
