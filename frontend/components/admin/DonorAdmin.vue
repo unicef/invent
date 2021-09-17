@@ -32,12 +32,18 @@
             :disabled="notSDA"
             :auto-upload="false"
             :files.sync="logo"
-            :limit="1"
+            preview-title="Logo image"
+            @clear="logo = []"
           />
         </el-form-item>
 
         <el-form-item :label="$gettext('Cover image') | translate" prop="cover">
-          <file-upload :disabled="notSDA" :files.sync="cover" :limit="1" />
+          <file-upload
+            :disabled="notSDA"
+            :files.sync="cover"
+            preview-title="Cover image"
+            @clear="cover = []"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Cover text') | translate">

@@ -2,24 +2,12 @@
   <div class="ProjectData">
     <el-row type="flex">
       <el-col :span="18">
-        <collapsible-card
-          id="general"
-          :title="$gettext('1. General Overview') | translate"
-        >
-          <simple-field
-            :content="project.name"
-            :header="$gettext('Initiative Name') | translate"
-          />
+        <collapsible-card id="general" :title="$gettext('1. General Overview') | translate">
+          <simple-field :content="project.name" :header="$gettext('Initiative Name') | translate" />
 
-          <simple-field
-            :header="$gettext('UNICEF Office') | translate"
-            :content="location"
-          />
+          <simple-field :header="$gettext('UNICEF Office') | translate" :content="location" />
 
-          <simple-field
-            :content="project.overview"
-            :header="$gettext('Overview of the initiative') | translate"
-          />
+          <simple-field :content="project.overview" :header="$gettext('Overview of the initiative') | translate" />
 
           <simple-field
             v-if="project.implementation_overview"
@@ -27,18 +15,22 @@
             :header="$gettext('Narrative of the initiative') | translate"
           />
 
+          <el-row v-if="project.coverImage.length > 0">
+            <el-col :span="12">
+              <simple-field :header="$gettext(`Initiative's cover image`) | translate">
+                <a :href="project.coverImage[0].url" target="_blank">
+                  <img :src="project.coverImage[0].url" class="cover" />
+                </a>
+              </simple-field>
+            </el-col>
+          </el-row>
+
           <el-row>
             <el-col :span="12">
-              <simple-field
-                :content="project.contact_name"
-                :header="$gettext('Contact name') | translate"
-              />
+              <simple-field :content="project.contact_name" :header="$gettext('Contact name') | translate" />
             </el-col>
             <el-col :span="12">
-              <simple-field
-                :content="project.contact_email"
-                :header="$gettext('Contact email') | translate"
-              />
+              <simple-field :content="project.contact_email" :header="$gettext('Contact email') | translate" />
             </el-col>
           </el-row>
 
@@ -46,35 +38,20 @@
             <simple-field :header="$gettext('Team members') | translate">
               <team-list :value="project.team" />
             </simple-field>
-            <simple-field
-              v-if="isEmptyArr(project.viewers)"
-              :header="$gettext('Viewers') | translate"
-            >
+            <simple-field v-if="isEmptyArr(project.viewers)" :header="$gettext('Viewers') | translate">
               <team-list :value="project.viewers" />
             </simple-field>
           </div>
 
-          <simple-field
-            :header="$gettext('Last Updated') | translate"
-            :content="lastUpdated"
-          />
+          <simple-field :header="$gettext('Last Updated') | translate" :content="lastUpdated" />
         </collapsible-card>
 
-        <collapsible-card
-          id="categorization"
-          :title="$gettext('2. Categorization') | translate"
-        >
+        <collapsible-card id="categorization" :title="$gettext('2. Categorization') | translate">
           <simple-field :header="$gettext('Sector') | translate">
-            <platforms-list
-              :platforms="project.unicef_sector"
-              source="getSectors"
-            />
+            <platforms-list :platforms="project.unicef_sector" source="getSectors" />
           </simple-field>
 
-          <simple-field
-            :header="$gettext('Goal Area') | translate"
-            :content="goalArea.name"
-          />
+          <simple-field :header="$gettext('Goal Area') | translate" :content="goalArea.name" />
 
           <simple-field
             v-if="resultArea.name"
@@ -83,15 +60,11 @@
           />
 
           <template v-if="goalArea && goalArea.id && goalArea.id === 1">
-            <simple-field
-              :header="$gettext('Digital Health Intervention(s)') | translate"
-            >
+            <simple-field :header="$gettext('Digital Health Intervention(s)') | translate">
               <DhiList :values="project.dhis" />
             </simple-field>
 
-            <simple-field
-              :header="$gettext('Programme Focus Area(s)') | translate"
-            >
+            <simple-field :header="$gettext('Programme Focus Area(s)') | translate">
               <health-focus-areas-list :value="project.health_focus_areas" />
             </simple-field>
 
@@ -100,13 +73,7 @@
             </simple-field>
           </template>
 
-          <template
-            v-else-if="
-              goalArea &&
-              goalArea.id &&
-              goalArea.capability_level_question !== 'MISSING'
-            "
-          >
+          <template v-else-if="goalArea && goalArea.id && goalArea.capability_level_question !== 'MISSING'">
             <simple-field :header="goalArea.capability_level_question">
               <CapabilitiesList
                 :value="project.capability_levels"
@@ -134,51 +101,28 @@
             v-if="isEmptyArr(project.regional_priorities)"
             :header="$gettext('Regional priority(ies)') | translate"
           >
-            <platforms-list
-              :platforms="project.regional_priorities"
-              source="getRegionalPriorities"
-            />
+            <platforms-list :platforms="project.regional_priorities" source="getRegionalPriorities" />
           </simple-field>
 
-          <simple-field
-            v-if="isEmptyArr(project.innovation_ways)"
-            :header="$gettext('Innovation(s)') | translate"
-          >
-            <platforms-list
-              :platforms="project.innovation_ways"
-              source="getInnovationWays"
-            />
+          <simple-field v-if="isEmptyArr(project.innovation_ways)" :header="$gettext('Innovation(s)') | translate">
+            <platforms-list :platforms="project.innovation_ways" source="getInnovationWays" />
           </simple-field>
 
           <simple-field
             v-if="isEmptyArr(project.innovation_categories)"
             :header="$gettext('Innovation category(ies)') | translate"
           >
-            <platforms-list
-              :platforms="project.innovation_categories"
-              source="getInnovationCategories"
-            />
+            <platforms-list :platforms="project.innovation_categories" source="getInnovationCategories" />
           </simple-field>
         </collapsible-card>
 
-        <collapsible-card
-          id="implementation"
-          :title="$gettext('3. Implementation Overview') | translate"
-        >
+        <collapsible-card id="implementation" :title="$gettext('3. Implementation Overview') | translate">
           <template v-if="showOverview(project, orderedLinkList)">
             <template v-for="field in overviewFields">
               <simple-field
-                v-if="
-                  ['cpd', 'wbs'].includes(field.type)
-                    ? isEmptyArr(project[field.type])
-                    : project[field.type]
-                "
+                v-if="['cpd', 'wbs'].includes(field.type) ? isEmptyArr(project[field.type]) : project[field.type]"
                 :key="field.type"
-                :content="
-                  ['cpd', 'wbs', 'total_budget'].includes(field.type)
-                    ? null
-                    : project[field.type]
-                "
+                :content="['cpd', 'wbs', 'total_budget'].includes(field.type) ? null : project[field.type]"
                 :header="field.header"
               >
                 <template v-if="field.type === 'cpd'">
@@ -193,11 +137,7 @@
                 </template>
                 <template v-if="field.type === 'total_budget'">
                   {{ project.total_budget }}
-                  <list-element
-                    v-if="project.total_budget"
-                    :value="project.currency"
-                    source="getCurrencies"
-                  />
+                  <list-element v-if="project.total_budget" :value="project.currency" source="getCurrencies" />
                 </template>
               </simple-field>
             </template>
@@ -220,25 +160,14 @@
         <stage-history />
         <!-- stage graph -->
 
-        <collapsible-card
-          id="partners"
-          :title="$gettext('5. Partners') | translate"
-        >
+        <collapsible-card id="partners" :title="$gettext('5. Partners') | translate">
           <template v-if="isEmptyArr(project.partners)">
-            <div
-              v-for="partner in project.partners"
-              :key="partner.email"
-              class="Partners"
-            >
+            <div v-for="partner in project.partners" :key="partner.email" class="Partners">
               <simple-field :header="partner.partner_name">
                 <ul>
                   <li>
                     <translate>Partner type</translate>:
-                    <list-element
-                      :value="partner.partner_type * 1"
-                      source="getPartnerTypes"
-                      root="system"
-                    />
+                    <list-element :value="partner.partner_type * 1" source="getPartnerTypes" root="system" />
                   </li>
                   <li>
                     <translate>Partner contact</translate>:
@@ -246,15 +175,11 @@
                   </li>
                   <li>
                     <translate>Partner email</translate>:
-                    <a :href="`mailto:${partner.partner_email}`">{{
-                      partner.partner_email
-                    }}</a>
+                    <a :href="`mailto:${partner.partner_email}`">{{ partner.partner_email }}</a>
                   </li>
                   <li>
                     <translate>Partner website</translate>:
-                    <a :href="`mailto:${partner.partner_website}`">{{
-                      partner.partner_website
-                    }}</a>
+                    <a :href="`mailto:${partner.partner_website}`">{{ partner.partner_website }}</a>
                   </li>
                 </ul>
               </simple-field>
@@ -265,47 +190,21 @@
           </template>
         </collapsible-card>
 
-        <collapsible-card
-          id="technology"
-          :title="$gettext('6. Technology') | translate"
-        >
-          <simple-field
-            v-if="isEmptyArr(project.platforms)"
-            :header="$gettext('Software platform(s)') | translate"
-          >
+        <collapsible-card id="technology" :title="$gettext('6. Technology') | translate">
+          <simple-field v-if="isEmptyArr(project.platforms)" :header="$gettext('Software platform(s)') | translate">
             <platforms-list :platforms="project.platforms" />
           </simple-field>
 
-          <simple-field
-            v-if="isEmptyArr(project.hardware)"
-            :header="$gettext('Hardware platform(s)') | translate"
-          >
-            <platforms-list
-              :platforms="project.hardware"
-              source="getHardware"
-            />
+          <simple-field v-if="isEmptyArr(project.hardware)" :header="$gettext('Hardware platform(s)') | translate">
+            <platforms-list :platforms="project.hardware" source="getHardware" />
           </simple-field>
-          <simple-field
-            v-if="isEmptyArr(project.nontech)"
-            :header="$gettext('Non-technology platform(s)') | translate"
-          >
+          <simple-field v-if="isEmptyArr(project.nontech)" :header="$gettext('Non-technology platform(s)') | translate">
             <platforms-list :platforms="project.nontech" source="getNontech" />
           </simple-field>
-          <simple-field
-            v-if="isEmptyArr(project.functions)"
-            :header="$gettext('Platform functions') | translate"
-          >
-            <platforms-list
-              :platforms="project.functions"
-              source="getFunctions"
-            />
+          <simple-field v-if="isEmptyArr(project.functions)" :header="$gettext('Platform functions') | translate">
+            <platforms-list :platforms="project.functions" source="getFunctions" />
           </simple-field>
-          <simple-field
-            v-if="project.isc"
-            :header="
-              $gettext('Information security classification ') | translate
-            "
-          >
+          <simple-field v-if="project.isc" :header="$gettext('Information security classification ') | translate">
             <list-element :value="project.isc" source="getInfoSec" />
           </simple-field>
         </collapsible-card>
@@ -326,11 +225,7 @@
         </collapsible-card>
 
         <div v-if="donors && isEmptyArr(donors)" id="donorcustom">
-          <collapsible-card
-            v-for="donor in donors"
-            :key="donor.id"
-            :title="customFieldsName(donor.name)"
-          >
+          <collapsible-card v-for="donor in donors" :key="donor.id" :title="customFieldsName(donor.name)">
             <custom-readonly-field
               v-for="question in donor.donor_questions"
               :id="question.id"
@@ -494,18 +389,14 @@ export default {
     },
     selectedRegion() {
       if (this.office) {
-        const result = this.unicef_regions.find(
-          (uf) => uf.id === this.office.region
-        )
+        const result = this.unicef_regions.find((uf) => uf.id === this.office.region)
         return (result && result.name) || ' ' // N/A
       }
       return ' ' // N/A
     },
     selectedRegionOffice() {
       if (this.office) {
-        const office = this.regionalOffices.find(
-          (obj) => obj.id === this.office.regional_office
-        )
+        const office = this.regionalOffices.find((obj) => obj.id === this.office.regional_office)
         return office ? office.name : ''
       }
       return ''
@@ -525,9 +416,7 @@ export default {
         .filter((d) => d.donor_questions && d.donor_questions.length > 0)
     },
     resultArea() {
-      const result = this.resultAreas.find(
-        (r) => r.id === this.project.result_area
-      )
+      const result = this.resultAreas.find((r) => r.id === this.project.result_area)
       return result || {}
     },
     goalArea() {
@@ -597,6 +486,10 @@ export default {
 
 .ProjectData {
   .limitPageWidth();
+
+  .cover {
+    max-width: 100%;
+  }
 
   .Loader {
     display: block;

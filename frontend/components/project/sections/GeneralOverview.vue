@@ -1,20 +1,13 @@
 <template>
   <div id="general" class="GeneralOverview">
-    <collapsible-card
-      ref="collapsible"
-      key="general"
-      :title="$gettext('General overview') | translate"
-      show-legend
-    >
+    <collapsible-card ref="collapsible" key="general" :title="$gettext('General overview') | translate" show-legend>
       <custom-required-form-item
         :error="errors.first('name')"
         :draft-rule="draftRules.name"
         :publish-rule="publishRules.name"
       >
         <template slot="label">
-          <translate key="project-name">
-            What is the name of the initiative?
-          </translate>
+          <translate key="project-name"> What is the name of the initiative? </translate>
         </template>
         <template slot="tooltip">
           <el-tooltip
@@ -39,32 +32,23 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              An easy to understand name for your initiative. We recommend using
-              descriptive names that describe what your initiative does. Please
-              avoid acronyms, clever names/puns as well as the name of a
-              specific technology or platform (e.g. RapidPro) as those can make
-              it hard to search for an initiative. For large, potentially public
-              initiatives, please do a quick search on the web for your
-              initiative's name to make sure that name isn't already being used,
-              as it can cause confusion.
+              An easy to understand name for your initiative. We recommend using descriptive names that describe what
+              your initiative does. Please avoid acronyms, clever names/puns as well as the name of a specific
+              technology or platform (e.g. RapidPro) as those can make it hard to search for an initiative. For large,
+              potentially public initiatives, please do a quick search on the web for your initiative's name to make
+              sure that name isn't already being used, as it can cause confusion.
             </translate>
           </p>
         </span>
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="
-          errors.first('country_office')
-            ? errors.first('country_office').replace('_', ' ')
-            : undefined
-        "
+        :error="errors.first('country_office') ? errors.first('country_office').replace('_', ' ') : undefined"
         :draft-rule="draftRules.country_office"
         :publish-rule="publishRules.country_office"
       >
         <template slot="label">
-          <translate key="country_office">
-            Which UNICEF Office supports the initiative?
-          </translate>
+          <translate key="country_office"> Which UNICEF Office supports the initiative? </translate>
         </template>
         <!--        <template slot="tooltip">-->
         <!--          <el-tooltip-->
@@ -86,8 +70,8 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              The name of the country or field office location. Start typing the
-              name of the UNICEF country office to show all the field locations.
+              The name of the country or field office location. Start typing the name of the UNICEF country office to
+              show all the field locations.
             </translate>
           </p>
         </span>
@@ -95,16 +79,10 @@
           <br />
           <fa icon="info-circle" />
           <translate>
-            If you encounter an error and/or cannot find the correct Unicef
-            office, please let us know
+            If you encounter an error and/or cannot find the correct Unicef office, please let us know
           </translate>
           &nbsp;
-          <el-button
-            class="no-padding"
-            type="text"
-            size="mini"
-            @click="openFeedback"
-          >
+          <el-button class="no-padding" type="text" size="mini" @click="openFeedback">
             <translate>HERE</translate>
           </el-button>
         </span>
@@ -126,16 +104,14 @@
 
       <custom-required-form-item>
         <template slot="label">
-          <translate key="region"> Region </translate>
+          <translate key="region">Region</translate>
         </template>
         {{ selectedRegion }}
       </custom-required-form-item>
 
       <custom-required-form-item>
         <template slot="label">
-          <translate key="multi-or-regional-office">
-            Multicountry or Regional Office
-          </translate>
+          <translate key="multi-or-regional-office">Multicountry or Regional Office</translate>
         </template>
         {{ regionalOffice }}
       </custom-required-form-item>
@@ -146,9 +122,7 @@
         :publish-rule="publishRules.overview"
       >
         <template slot="label">
-          <translate key="overview">
-            Please provide a brief overview of the initiative.
-          </translate>
+          <translate key="overview">Please provide a brief overview of the initiative.</translate>
         </template>
         <template slot="tooltip">
           <el-tooltip
@@ -173,11 +147,9 @@
           <fa icon="info-circle" />
           <p>
             <translate
-              >This short description provides a clear understanding of the
-              purpose and target group to a reader who does not know anything
-              about the initiative. It should be 10-15 words or less and include
-              the technology or innovation, programme function and target
-              beneficiary.
+              >This short description provides a clear understanding of the purpose and target group to a reader who
+              does not know anything about the initiative. It should be 10-15 words or less and include the technology
+              the technology or innovation, programme function and target beneficiary.
             </translate>
           </p>
         </span>
@@ -189,9 +161,7 @@
         :publish-rule="publishRules.implementation_overview"
       >
         <template slot="label">
-          <translate key="implementation-overview">
-            Please provide a detailed narrative of the initiative.
-          </translate>
+          <translate key="implementation-overview"> Please provide a detailed narrative of the initiative. </translate>
         </template>
 
         <character-count-input
@@ -206,13 +176,35 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              What the initiative aims to achieve, detailing the purpose,
-              summarizing the approach, solution and intended impact, and
-              specifying current and planned activities during deployment.
+              What the initiative aims to achieve, detailing the purpose, summarizing the approach, solution and
+              intended impact, and specifying current and planned activities during deployment.
             </translate>
           </p>
         </span>
       </custom-required-form-item>
+
+      <el-form-item>
+        <template slot="label">
+          <translate key="cover">Upload initiative’s cover image</translate>
+        </template>
+        <file-upload
+          :files.sync="coverImage"
+          accept=".jpg,.jpeg,.png"
+          preview-title="Cover image"
+          @clear="coverImage = []"
+        />
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Upload the best quality image you have for the initiative. Uploaded image will be formatted to match the
+              pages in the future, and the better quality the original image, the better result it will have displayed
+              on invent. Image should be .png or .jpg and minimum height: 520px.
+            </translate>
+          </p>
+        </span>
+      </el-form-item>
+
       <el-row :gutter="20" type="flex">
         <el-col :span="12">
           <custom-required-form-item
@@ -221,9 +213,7 @@
             :publish-rule="publishRules.contact_name"
           >
             <template slot="label">
-              <translate key="contact-name">
-                Who is the focal point of contact for this initiative?
-              </translate>
+              <translate key="contact-name">Who is the focal point of contact for this initiative?</translate>
             </template>
 
             <character-count-input
@@ -266,28 +256,19 @@
           :publish-rule="publishRules.team"
         >
           <template slot="label">
-            <translate key="team">
-              Who else should be able to modify this initiative's entry?
-            </translate>
+            <translate key="team">Who else should be able to modify this initiative's entry?</translate>
           </template>
 
-          <team-selector
-            v-model="team"
-            v-validate="rules.team"
-            data-vv-name="team"
-            data-vv-as="Team"
-          />
+          <team-selector v-model="team" v-validate="rules.team" data-vv-name="team" data-vv-as="Team" />
 
           <span class="Hint">
             <fa icon="info-circle" />
             <p>
-              <translate>
-                These team members can modify entries on "+ New Initiative"
-                page.
-              </translate>
+              <translate>These team members can modify entries on "+ New Initiative" page.</translate>
             </p>
           </span>
         </custom-required-form-team-item>
+
         <custom-required-form-team-item
           v-model="viewers"
           :error="errors.first('viewers')"
@@ -296,25 +277,16 @@
         >
           <template slot="label">
             <translate key="viewers">
-              Who should receive updates that this initiative has been added or
-              modified?
+              Who should receive updates that this initiative has been added or modified?
             </translate>
           </template>
 
-          <team-selector
-            v-model="viewers"
-            v-validate="rules.viewers"
-            data-vv-name="viewers"
-            data-vv-as="Viewers"
-          />
+          <team-selector v-model="viewers" v-validate="rules.viewers" data-vv-name="viewers" data-vv-as="Viewers" />
 
           <span class="Hint">
             <fa icon="info-circle" />
             <p>
-              <translate>
-                These team members will receive a notification when an
-                initiative has been added.
-              </translate>
+              <translate>These team members will receive a notification when an initiative has been added.</translate>
             </p>
           </span>
         </custom-required-form-team-item>
@@ -334,6 +306,7 @@
 import { format } from 'date-fns'
 import { mapGetters, mapState } from 'vuex'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
+import FileUpload from '@/components/common/FileUpload'
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 import CollapsibleCard from '../CollapsibleCard'
@@ -347,6 +320,7 @@ export default {
     CountryOfficeSelect,
     TeamSelector,
     CustomRequiredFormTeamItem,
+    FileUpload,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
@@ -366,12 +340,8 @@ export default {
       country: ['project', 'getCountry', 'setCountry', 0],
       country_office: ['project', 'getCountryOffice', 'setCountryOffice', 0],
       overview: ['project', 'getOverview', 'setOverview', 0],
-      implementation_overview: [
-        'project',
-        'getImplementationOverview',
-        'setImplementationOverview',
-        0,
-      ],
+      coverImage: ['project', 'getCoverImage', 'setCoverImage', 0],
+      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       contact_name: ['project', 'getContactName', 'setContactName', 0],
       contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
@@ -382,25 +352,19 @@ export default {
     },
     selectedRegion() {
       if (this.officeData) {
-        const result = this.unicef_regions.find(
-          (uf) => uf.id === this.officeData.region
-        )
+        const result = this.unicef_regions.find((uf) => uf.id === this.officeData.region)
         return (result && result.name) || ' ' // N/A
       }
       return ' ' // N/A
     },
     countryOfOffice() {
-      return this.officeData
-        ? this.getCountryDetails(this.officeData.country).name
-        : ' ' // N/A
+      return this.officeData ? this.getCountryDetails(this.officeData.country).name : ' ' // N/A
     },
     city() {
       return this.officeData ? this.officeData.city : ' ' // N/A
     },
     regionalOffice() {
-      const office = this.regionalOffices.find(
-        (obj) => obj.id === this.office.regional_office
-      )
+      const office = this.regionalOffices.find((obj) => obj.id === this.office.regional_office)
       return office ? office.name : ''
     },
     lastUpdated() {
@@ -410,10 +374,7 @@ export default {
   watch: {
     async country_office() {
       if (this.officeData) {
-        await this.$store.dispatch(
-          'countries/loadCountryDetails',
-          this.officeData.country
-        )
+        await this.$store.dispatch('countries/loadCountryDetails', this.officeData.country)
         this.country = this.officeData.country
       }
     },
@@ -433,8 +394,7 @@ export default {
       } else {
         const addToTeam =
           validEmail &&
-          (this.contact_email.endsWith('unicef.org') ||
-            this.contact_email.endsWith('pulilab.com')) &&
+          (this.contact_email.endsWith('unicef.org') || this.contact_email.endsWith('pulilab.com')) &&
           !this.team.includes(this.contact_email)
         if (addToTeam) {
           const team = this.team.concat(this.contact_email)

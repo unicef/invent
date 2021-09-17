@@ -30,9 +30,7 @@ export const interoperabilityLinksMapper = (links) => {
       }
     })
   } else {
-    console.warn(
-      'Invalid or malformed input passed to api/interoperabilityLinksMapper'
-    )
+    console.warn('Invalid or malformed input passed to api/interoperabilityLinksMapper')
   }
   return result
 }
@@ -45,9 +43,7 @@ export const platformsMapper = (collection) => {
     collection.forEach((p) => {
       platforms.push(p.id)
       if (p.strategies && Array.isArray(p.strategies)) {
-        digitalHealthInterventions.push(
-          ...p.strategies.map((s) => ({ id: s, platform: p.id }))
-        )
+        digitalHealthInterventions.push(...p.strategies.map((s) => ({ id: s, platform: p.id })))
       }
     })
   } else {
@@ -63,26 +59,16 @@ export const countryCustomFieldMapper = (collection) => {
       customAnswers.push({ question_id: +key, answer: collection[key] })
     }
   } else {
-    console.warn(
-      'Invalid or malformed input passed to api/countryCustomFieldMapper'
-    )
+    console.warn('Invalid or malformed input passed to api/countryCustomFieldMapper')
   }
   return customAnswers
 }
 
 export const donorCustomFieldMapper = (collection) => {
   const customAnswers = []
-  if (
-    typeof collection === 'object' &&
-    !Array.isArray(collection) &&
-    collection
-  ) {
+  if (typeof collection === 'object' && !Array.isArray(collection) && collection) {
     for (const donor in collection) {
-      if (
-        typeof collection[donor] === 'object' &&
-        !Array.isArray(collection) &&
-        collection
-      ) {
+      if (typeof collection[donor] === 'object' && !Array.isArray(collection) && collection) {
         for (const key in collection[donor]) {
           customAnswers.push({
             question_id: +key,
@@ -95,9 +81,7 @@ export const donorCustomFieldMapper = (collection) => {
       }
     }
   } else {
-    console.warn(
-      'Invalid or malformed input passed to api/countryCustomFieldMapper'
-    )
+    console.warn('Invalid or malformed input passed to api/countryCustomFieldMapper')
   }
   return customAnswers
 }
@@ -114,9 +98,11 @@ export const apiReadParser = (p) => {
   const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers)
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers)
   const research = 'research' in p ? p.research : undefined
+  const cover = p.image ? [{ name: p.image.substring(p.image.lastIndexOf('/') + 1), url: p.image }] : []
 
   return {
     ...p,
+    coverImage: cover,
     start_date: dateParser(p.start_date),
     end_date: dateParser(p.end_date),
     donor_custom_answers,
@@ -125,8 +111,7 @@ export const apiReadParser = (p) => {
   }
 }
 
-export const isNullUndefinedOrEmptyString = (value) =>
-  value === null || value === undefined || value === ''
+export const isNullUndefinedOrEmptyString = (value) => value === null || value === undefined || value === ''
 
 export const isEmpty = (value) => {
   if (Array.isArray(value)) {
@@ -152,25 +137,16 @@ export const interoperabilityLinkWriteParser = (links) => {
   for (const link in links) {
     const value = { ...links[link] }
     value.selected = value.selected ? true : undefined
-    value.link =
-      !value.selected || lib.isNullUndefinedOrEmptyString(value.link)
-        ? undefined
-        : value.link
+    value.link = !value.selected || lib.isNullUndefinedOrEmptyString(value.link) ? undefined : value.link
     const item = { id: link, ...value }
     result.push(item)
   }
-  return result
-    .sort((a, b) => a.index - b.index)
-    .map((r) => ({ ...r, index: undefined }))
+  return result.sort((a, b) => a.index - b.index).map((r) => ({ ...r, index: undefined }))
 }
 
 export const platformsWriteParser = (platforms, digitalHealthInterventions) => {
   return platforms.map((p) => {
-    const strategies = [
-      ...digitalHealthInterventions
-        .filter((dhi) => dhi.platform === p)
-        .map((f) => f.id),
-    ]
+    const strategies = [...digitalHealthInterventions.filter((dhi) => dhi.platform === p).map((f) => f.id)]
     return { id: p, strategies: strategies || [] }
   })
 }
@@ -214,21 +190,14 @@ export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
   return result
 }
 
-export const apiWriteParser = (
-  p,
-  countryCustomAnswers,
-  donorsCustomAnswers
-) => {
+export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
   const result = {}
   for (const key in p) {
     const value = dataCleaner(p[key])
     result[key] = isEmpty(value) ? undefined : value
   }
   const country_custom_answers = customCountryAnswerParser(countryCustomAnswers)
-  const donor_custom_answers = customDonorAnswerParser(
-    donorsCustomAnswers,
-    p.donors
-  )
+  const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors)
   return {
     project: {
       ...result,
@@ -292,9 +261,7 @@ export const parseCustomAnswers = (r) => {
     r.donors.forEach((d) => {
       donor_answers[d] = {
         ...(r.donor_custom_answers ? r.donor_custom_answers[d] : null),
-        ...(r.donor_custom_answers_private
-          ? r.donor_custom_answers_private[d]
-          : null),
+        ...(r.donor_custom_answers_private ? r.donor_custom_answers_private[d] : null),
       }
     })
   }
