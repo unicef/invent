@@ -1,6 +1,6 @@
 <template>
   <div class="InitiativeCard" :class="{ Small: minimal }">
-    <div v-if="project.cover" class="cover" :style="`background-image: url(${project.cover})`"></div>
+    <div v-if="project.thumbnail" class="cover" :style="`background-image: url(${project.thumbnail})`"></div>
     <div class="project">
       <nuxt-link :to="projectUrl">
         <h1>{{ title }}</h1>
@@ -103,7 +103,7 @@ export default {
   &.Small {
     height: 78px;
     margin-bottom: 15px;
-    .cover {
+    .thumbnail {
       flex-basis: 104px;
     }
     .project {
@@ -174,6 +174,7 @@ export default {
     }
     .location {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 8px;
       color: #7995a2;

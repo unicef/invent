@@ -451,6 +451,16 @@ export const actions = {
     draft.stages = newStages(state.stagesDraft)
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers)
     const { data } = await this.$axios.post(`api/projects/draft/${draft.country_office}/`, parsed)
+
+    const formData = new FormData()
+    const file = state.coverImage.length > 0 ? state.coverImage[0].raw : ''
+    formData.append('image', file)
+    await this.$axios.put(`api/projects/${data.id}/image/`, formData, {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    })
+
     dispatch('projects/addProjectToList', data, { root: true })
     await dispatch('saveTeamViewers', data.id)
     dispatch('setLoading', false)
@@ -466,14 +476,19 @@ export const actions = {
       draft.stages = newStages(state.stagesDraft)
       const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers)
 
-      const formData = new FormData()
-      const file = state.coverImage.length > 0 ? state.coverImage[0].raw : ''
-      formData.append('image', file)
-      await this.$axios.put(`api/projects/${id}/image/`, formData, {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
+      let file = ''
+      if (state.coverImage.length > 0) {
+        file = state.coverImage[0].status === 'ready' ? state.coverImage[0].raw : 'nochange'
+      }
+      if (file !== 'nochange') {
+        const formData = new FormData()
+        formData.append('image', file)
+        await this.$axios.put(`api/projects/${id}/image/`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+        })
+      }
 
       const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country_office}/`, parsed)
       await dispatch('setProject', { data, id })
@@ -493,12 +508,28 @@ export const actions = {
     // hack to avoid phase error
     // draft.phase = 0
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers)
+
+    let file = ''
+    if (state.coverImage.length > 0) {
+      file = state.coverImage[0].status === 'ready' ? state.coverImage[0].raw : 'nochange'
+    }
+    if (file !== 'nochange') {
+      const formData = new FormData()
+      formData.append('image', file)
+      await this.$axios.put(`api/projects/${id}/image/`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      })
+    }
+
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country_office}/`, parsed)
     const parsedResponse = apiReadParser(data.draft)
     commit('SET_PUBLISHED', Object.freeze(parsedResponse))
     await dispatch('setProject', { data, id })
     dispatch('setLoading', false)
   },
+
   async unpublishProject({ dispatch }, id) {
     dispatch('setLoading', 'unpublish')
     const { data } = await this.$axios.put(`/api/projects/unpublish/${id}/`)
