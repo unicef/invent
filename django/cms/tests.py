@@ -9,10 +9,10 @@ from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
-from core.tests import get_temp_image
 from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
 from country.models import Country
+from project.utils import get_temp_image
 from user.models import UserProfile, Organisation
 from user.tests import create_profile_for_user
 

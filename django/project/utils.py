@@ -1,5 +1,7 @@
 from typing import Dict, List, Tuple, Union
 
+from io import BytesIO
+from PIL import Image
 from django.conf import settings
 from .data_files.phase_mapping_table import ID_MAP
 
@@ -52,3 +54,12 @@ def project_status_change_str(status_dict: dict) -> str:  # pragma: no cover
         changes.append('name was changed')
 
     return ', '.join(changes)
+
+
+def get_temp_image(name='test', ext='png'):
+    cover = BytesIO()
+    image = Image.new('RGBA', size=(100, 100))
+    image.save(cover, 'png')
+    cover.name = '{}.{}'.format(name, ext)
+    cover.seek(0)
+    return cover

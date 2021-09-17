@@ -3,6 +3,7 @@ from collections import namedtuple
 from typing import List, Union
 
 from simple_history.models import HistoricalRecords
+from sorl.thumbnail import ImageField, get_thumbnail
 
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
@@ -73,8 +74,24 @@ class Project(SoftDeleteModel, ExtendedModel):
     featured = models.BooleanField(default=False)
     featured_rank = models.PositiveSmallIntegerField(default=0)
 
+    image = ImageField(upload_to='source_images', null=True, blank=True)
+
     def __str__(self):  # pragma: no cover
         return self.name
+
+    @property
+    def thumbnail(self):
+        try:
+            if self.image:
+                return get_thumbnail(self.image, f'x{settings.THUMBNAIL_HEIGHT}')
+            else:  # pragma: no cover
+                return None
+        except OSError:  # pragma: no cover
+            return None
+
+    @property
+    def image_url(self):
+        return self.image.url if self.image else None
 
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
@@ -113,6 +130,8 @@ class Project(SoftDeleteModel, ExtendedModel):
             name=self.draft.get('name', '') if draft_mode else self.name,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
             modified=self.modified,
+            image=self.image_url,
+            thumbnail=self.thumbnail.url if self.thumbnail else None
         )
 
         data.update(extra_data)

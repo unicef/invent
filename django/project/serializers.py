@@ -652,10 +652,12 @@ class ProjectCardSerializer(serializers.ModelSerializer):
     is_draft = serializers.SerializerMethodField()
     unicef_office = serializers.SerializerMethodField()
     country = serializers.SerializerMethodField()
+    thumbnail = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
-        read_only_fields = ('id', 'name', 'modified', 'is_draft', 'description', 'unicef_office', 'country', 'team')
+        read_only_fields = ('id', 'name', 'modified', 'is_draft', 'description',
+                            'unicef_office', 'country', 'team', 'thumbnail')
         fields = read_only_fields
 
     @staticmethod
@@ -694,3 +696,19 @@ class ProjectCardSerializer(serializers.ModelSerializer):
 
             return UserProfileSerializer(team_list, many=True).data
         return UserProfileSerializer(qs, many=True).data
+
+    @staticmethod
+    def get_thumbnail(obj):
+        return obj.thumbnail.url if obj.thumbnail else None
+
+
+class ProjectImageUploadSerializer(serializers.ModelSerializer):
+    thumbnail = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        fields = ('id', 'image', 'image_url', 'thumbnail')
+
+    @staticmethod
+    def get_thumbnail(obj):
+        return obj.thumbnail.url if obj.thumbnail else None

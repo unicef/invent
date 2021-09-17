@@ -1,3 +1,4 @@
+sorl-thumbnail==12.7.0
 amqp==2.3.2
 anyjson==0.3.3
 appnope==0.1.0
