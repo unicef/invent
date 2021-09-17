@@ -1,6 +1,6 @@
 <template>
-  <div :class="`user-projects-list ${landing && 'landing'}`">
-    <p v-if="!landing" class="headline">
+  <div class="user-projects-list">
+    <p class="headline">
       {{ headline[tab - 1] }}
     </p>
     <div v-loading="loadingProject" class="loading-mask">
@@ -45,29 +45,15 @@ export default {
     ReviewDialog,
     CurrentPage,
   },
-  props: {
-    limit: {
-      type: Number,
-      default: null,
-    },
-    landing: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
       headline: [
-        this.$gettext(
-          'Here are all the initiatives you are a Member or a Viewer of'
-        ),
+        this.$gettext('Here are all the initiatives you are a Member or a Viewer of'),
         this.$gettext(
           'Any initiatives you have been requested to review as part of the innovation portfolio review process will appear below. Please complete review for any initiatives marked “Unscored” below.'
         ),
-        this.$gettext(
-          'Initiatives you have added to your favorites will appear below.'
-        ),
+        this.$gettext('Initiatives you have added to your favorites will appear below.'),
       ],
     }
   },
@@ -86,9 +72,7 @@ export default {
       currentPage: ['projects', 'getCurrentPage', 'setCurrentPage', 0],
     }),
     limited() {
-      return this.limit && this.projects.length > 3
-        ? this.projects.slice(0, this.limit)
-        : this.projects
+      return this.limit && this.projects.length > 3 ? this.projects.slice(0, this.limit) : this.projects
     },
     hasProjects() {
       return this.projects.length > 0
@@ -98,9 +82,7 @@ export default {
     },
     paginationOrderStr() {
       const loc = this.$i18n.locale
-      return loc === 'ar'
-        ? 'sizes, next, slot, prev'
-        : 'sizes, prev, slot, next'
+      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
     },
   },
 }
@@ -116,9 +98,6 @@ export default {
 }
 .user-projects-list {
   padding: 50px 80px 60px;
-  &.landing {
-    padding: 40px 24px 10px;
-  }
   .headline {
     font-size: 14px;
     letter-spacing: 0;

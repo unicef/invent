@@ -1,26 +1,12 @@
 <template>
   <div v-scroll-class:TopBarMin="180" class="TopBar">
-    <el-row
-      type="flex"
-      justify="space-between"
-      :class="{ TopBarInner: true, IsAuth: auth }"
-    >
+    <el-row type="flex" justify="space-between" :class="{ TopBarInner: true, IsAuth: auth }">
       <el-col class="LogoHolder">
-        <nuxt-link
-          :to="localePath({ name: 'organisation', params: $route.params })"
-        >
+        <nuxt-link :to="localePath({ name: 'organisation', params: $route.params })">
           <el-row type="flex" align="middle">
             <el-col class="LogoUnicef">
-              <img
-                class="UnicefLogoNormal"
-                src="/unicef-logo-banner.svg"
-                alt="Unicef"
-              />
-              <img
-                class="UnicefLogoLong"
-                src="/unicef-logo-horizontal.svg"
-                alt="Unicef"
-              />
+              <img class="UnicefLogoNormal" src="/unicef-logo-banner.svg" alt="Unicef" />
+              <img class="UnicefLogoLong" src="/unicef-logo-horizontal.svg" alt="Unicef" />
             </el-col>
           </el-row>
         </nuxt-link>
@@ -28,12 +14,7 @@
 
       <el-col v-if="!errorPage" class="RightPart">
         <!-- ANON MODE -->
-        <el-row
-          :class="{ AnonView: !user, LoggedInView: user }"
-          type="flex"
-          justify="end"
-          align="middle"
-        >
+        <el-row :class="{ AnonView: !user, LoggedInView: user }" type="flex" justify="end" align="middle">
           <template v-if="!user">
             <el-col>
               <language-selector />
@@ -53,9 +34,7 @@
               <div>
                 <nuxt-link
                   key="portfolioBtn"
-                  :to="
-                    localePath({ name: 'organisation-portfolio-innovation' })
-                  "
+                  :to="localePath({ name: 'organisation-portfolio-innovation' })"
                   class="HeaderBtn"
                   data-test="menu-portfolio-link"
                 >
@@ -65,9 +44,7 @@
               <div v-if="displayManager">
                 <nuxt-link
                   key="managerBtn"
-                  :to="
-                    localePath({ name: 'organisation-portfolio-management' })
-                  "
+                  :to="localePath({ name: 'organisation-portfolio-management' })"
                   class="HeaderBtn"
                 >
                   <translate>Portfolio Manager</translate>
@@ -93,7 +70,7 @@
                   <translate>New initiative</translate>
                 </nuxt-link>
               </div>
-              <user-dropdown />
+              <UserDropdown />
             </el-col>
           </template>
 
@@ -103,11 +80,7 @@
                 <div class="Separator" />
               </el-col>
               <el-col>
-                <img
-                  :src="countryFlag"
-                  alt="country flag"
-                  class="CountryFlag"
-                />
+                <img :src="countryFlag" alt="country flag" class="CountryFlag" />
               </el-col>
               <el-col>
                 <div class="CountryName">
@@ -129,11 +102,7 @@
                   })
                 "
               >
-                <img
-                  class="LogoWHOxDHA"
-                  alt="WHO logo small"
-                  src="/logo-whoxdha.svg"
-                />
+                <img class="LogoWHOxDHA" alt="WHO logo small" src="/logo-whoxdha.svg" />
               </nuxt-link>
             </div>
           </el-col>
@@ -269,6 +238,8 @@ export default {
 
     > .el-row > .el-col {
       width: auto;
+      height: 34px;
+      line-height: 34px;
     }
   }
 

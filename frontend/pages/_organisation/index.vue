@@ -1,63 +1,44 @@
 <template>
   <div class="LandingPage">
+    <WelcomeSection />
+    <InitiativesSection />
     <div class="MapBoxContainer">
-      <welcome-box />
-      <landing-map v-if="!showCoverImage" />
-      <country-projects-box />
-
-      <div
-        v-if="showCoverImage"
-        :style="{ backgroundImage: `url(${landingData.cover_url})` }"
-        class="CoverImageBg"
-      />
+      <LandingMap v-if="!showCoverImage" />
+      <div v-if="showCoverImage" :style="{ backgroundImage: `url(${landingData.cover_url})` }" class="CoverImageBg" />
     </div>
-
-    <div class="InfoSignupContainer">
-      <el-row type="flex">
-        <el-col class="InfoBoxWrapper">
-          <info-box />
-        </el-col>
-        <el-col class="CentralBoxWrapper">
-          <central-box />
-        </el-col>
-      </el-row>
-    </div>
-
-    <about-section />
+    <AboutSection />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import LandingMap from '@/components/landing/LandingMap.vue'
-import WelcomeBox from '@/components/landing/WelcomeBox.vue'
-import CountryProjectsBox from '@/components/landing/CountryProjectsBox.vue'
-import InfoBox from '@/components/landing/InfoBox.vue'
-import CentralBox from '@/components/landing/CentralBox.vue'
+import WelcomeSection from '@/components/landing/WelcomeSection.vue'
+import InitiativesSection from '@/components/landing/InitiativesSection.vue'
 import AboutSection from '@/components/landing/AboutSection.vue'
 
 export default {
   components: {
     LandingMap,
-    WelcomeBox,
-    InfoBox,
-    CentralBox,
+    WelcomeSection,
+    InitiativesSection,
     AboutSection,
-    CountryProjectsBox,
   },
   async fetch({ store }) {
     await store.dispatch('landing/resetSearch')
     await store.dispatch('dashboard/setDashboardSection', 'map')
     await Promise.all([
-      store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('countries/loadMapData'),
+      store.dispatch('offices/loadOffices'),
+      store.dispatch('projects/loadLandingProjects'),
     ])
     await store.dispatch('dashboard/loadProjectsMap')
   },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData',
+      landingProjects: 'projects/getLandingProjects',
     }),
     showCoverImage() {
       return this.landingData && this.landingData.cover
@@ -88,35 +69,6 @@ export default {
   .CoverImage {
     width: 100%;
     height: auto;
-  }
-
-  .InfoSignupContainer {
-    margin: 40px 0;
-
-    > .el-row {
-      align-items: stretch;
-    }
-
-    .InfoBoxWrapper {
-      min-width: 400px;
-      max-width: 400px;
-      margin-left: 40px;
-      margin-right: 30px;
-      background-color: @colorWhite;
-    }
-
-    .CentralBoxWrapper {
-      margin-right: 40px;
-      background-color: @colorBrandPrimary;
-    }
-
-    .SignupBox {
-      padding: 0 40px;
-    }
-
-    .SingupComponent {
-      min-height: auto !important;
-    }
   }
 
   h2 {

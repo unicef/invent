@@ -1,11 +1,6 @@
 <template>
   <div class="ActionBar">
-    <el-row
-      type="flex"
-      justify="space-between"
-      align="middle"
-      class="InnerActionBar"
-    >
+    <el-row type="flex" justify="space-between" align="middle" class="InnerActionBar">
       <bread-crumb />
 
       <el-col class="ActionBarTabs">
@@ -95,9 +90,6 @@
         </el-row>
       </el-col>
 
-      <el-col v-if="isHome" class="SearchComponentWrapper">
-        <search-component />
-      </el-col>
       <template v-if="isDashboard">
         <!--        <el-col class="PersonaSelectorWrapper">-->
         <!--          <persona-selector />-->
@@ -117,7 +109,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import SearchComponent from '@/components/common/SearchComponent.vue'
 // import PersonaSelector from '@/components/dashboard/PersonaSelector'
 import PortfolioFiltersHeader from '@/components/portfolio/dashboard/PortfolioFiltersHeader'
 import BreadCrumb from '@/components/BreadCrumb'
@@ -125,7 +116,6 @@ import DashboardFiltersHeader from '@/components/dashboard/DashboardFiltersHeade
 
 export default {
   components: {
-    SearchComponent,
     // PersonaSelector,
     PortfolioFiltersHeader,
     DashboardFiltersHeader,
@@ -136,16 +126,12 @@ export default {
       userProfile: 'user/getProfile',
     }),
     isAdmin() {
-      return (
-        this.$route.path.includes('/admin') ||
-        this.$route.path.endsWith('/edit-profile')
-      )
+      return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile')
     },
     allowCountryAdmin() {
       if (this.userProfile) {
         return (
-          (['CA', 'SCA'].includes(this.userProfile.account_type) &&
-            this.userProfile.account_type_approved) ||
+          (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) ||
           this.userProfile.is_superuser
         )
       }
@@ -154,8 +140,7 @@ export default {
     allowDonorAdmin() {
       if (this.userProfile) {
         return (
-          (['DA', 'SDA'].includes(this.userProfile.account_type) &&
-            this.userProfile.account_type_approved) ||
+          (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) ||
           this.userProfile.is_superuser
         )
       }

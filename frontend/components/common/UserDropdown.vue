@@ -3,30 +3,21 @@
     <el-popover
       v-model="shown"
       placement="bottom-end"
-      visible-arrow="false"
+      :visible-arrow="false"
       popper-class="CustomPopover UserDropdownPopper"
     >
-      <el-button
-        slot="reference"
-        data-test="user-dropdown"
-        type="text"
-        class="ButtonPopper"
-      >
-        <fa icon="user-circle" size="lg" />
-        <span>{{ user.name }}</span>
-        <fa icon="caret-down" />
-      </el-button>
+      <Avatar slot="reference" data-test="user-dropdown" :user="profile" :show-hint="false" />
 
       <div class="DropdownContent">
         <!-- User info block -->
         <div class="UserInfoSection">
           <div class="Item">
-            <div class="ItemTitle">
-              <translate>Email</translate>
-            </div>
-            {{ user.email }}
+            <Profile :user="profile" />
           </div>
+        </div>
+        <div class="Divider" />
 
+        <div class="UserInfoSection">
           <div class="Item">
             <div class="ItemTitle">
               <translate>Country</translate>
@@ -128,6 +119,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Avatar from '@/components/common/Avatar.vue'
+import Profile from '@/components/common/Profile.vue'
 import LanguageSelect from './LanguageSelect'
 import CountryItem from './CountryItem'
 
@@ -135,6 +128,8 @@ export default {
   components: {
     LanguageSelect,
     CountryItem,
+    Avatar,
+    Profile,
   },
   data() {
     return {
@@ -149,18 +144,10 @@ export default {
       return this.user && this.user.is_superuser
     },
     isUserCA() {
-      return (
-        (this.user.account_type_approved &&
-          ['CA', 'SCA'].includes(this.user.account_type)) ||
-        this.isSuperUser
-      )
+      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser
     },
     isUserDA() {
-      return (
-        (this.user.account_type_approved &&
-          ['DA', 'SDA'].includes(this.user.account_type)) ||
-        this.isSuperUser
-      )
+      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser
     },
     currentLanguage: {
       get() {
@@ -172,6 +159,18 @@ export default {
         window.location.href = path
         this.shown = false
       },
+    },
+    profile() {
+      return {
+        name: this.user.name,
+        email: this.user.email,
+        picture: 'https://thispersondoesnotexist.com/image', // this.user?.picture,
+        colorScheme: {
+          text: '#FFFFFF',
+          background: '#CB7918',
+          border: 'none',
+        },
+      }
     },
   },
   methods: {
@@ -194,8 +193,14 @@ export default {
 @import '../../assets/style/variables.less';
 @import '../../assets/style/mixins.less';
 
+.UserDropdown {
+  margin-left: 18px;
+}
+
 .UserDropdownPopper {
-  transform: translate(10px, -30px);
+  transform: translate(10px, -46px);
+  border-radius: 5px;
+  border: none;
 }
 
 .ButtonPopper {
@@ -230,11 +235,10 @@ export default {
   padding: 0 0 10px 0;
 
   .UserInfoSection {
-    padding: 16px 20px 4px;
+    padding: 16px 20px 0px;
     font-size: @fontSizeBase;
 
     .Item {
-      display: block;
       margin-bottom: 12px;
       padding-right: 5px;
 
@@ -265,7 +269,7 @@ export default {
 
   .Divider {
     .SeparatorStyleHorizontal();
-    margin: 0 0 10px;
+    // margin: 0 0 10px;
   }
 
   .DropdownLink {

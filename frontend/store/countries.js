@@ -31,9 +31,7 @@ export const getters = {
     const types = rootGetters['system/getSubLevelTypes']
     try {
       let first = types.find((t) => t.name === c.map_data.first_sub_level.name)
-      let second = types.find(
-        (t) => t.name === c.map_data.second_sub_level.name
-      )
+      let second = types.find((t) => t.name === c.map_data.second_sub_level.name)
       first = first ? first.displayName : c.map_data.first_sub_level.name
       second = second ? second.displayName : c.map_data.second_sub_level.name
       return { first, second }
@@ -117,9 +115,7 @@ export const actions = {
       try {
         const country = getters.getCountries.find((c) => c.id === id)
         const { data } = await this.$axios.get(
-          `/static/country-geodata/${country.code.toLowerCase()}.json?version=${
-            country.map_version
-          }`
+          `/static/country-geodata/${country.code.toLowerCase()}.json?version=${country.map_version}`
         )
         Object.freeze(data)
         commit('UPDATE_JSON_LIBRARY', { id, data })
