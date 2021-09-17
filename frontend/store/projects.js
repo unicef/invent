@@ -41,8 +41,7 @@ const getTodayString = () => {
 export const getters = {
   getUserProjectList: (state) => [...state.userProjects.map((p) => ({ ...p }))],
   getGoalAreas: (state) => get(state, 'projectStructure.goal_areas', []),
-  getRegionalOffices: (state) =>
-    get(state, 'projectStructure.regional_offices', []),
+  getRegionalOffices: (state) => get(state, 'projectStructure.regional_offices', []),
   getResultAreas: (state) => get(state, 'projectStructure.result_areas', []),
   getCapabilityLevels: (state) => (id) => {
     const all = get(state, 'projectStructure.capability_levels', [])
@@ -57,31 +56,17 @@ export const getters = {
     return id ? all.filter((i) => i.goal_area_id === id) : all
   },
   getHealthFocusAreas: (state) =>
-    state.projectStructure.health_focus_areas
-      ? [...state.projectStructure.health_focus_areas]
-      : [],
-  getHisBucket: (state) =>
-    state.projectStructure.his_bucket
-      ? [...state.projectStructure.his_bucket]
-      : [],
+    state.projectStructure.health_focus_areas ? [...state.projectStructure.health_focus_areas] : [],
+  getHisBucket: (state) => (state.projectStructure.his_bucket ? [...state.projectStructure.his_bucket] : []),
   getHscChallenges: (state) =>
-    state.projectStructure.hsc_challenges
-      ? [...state.projectStructure.hsc_challenges]
-      : [],
+    state.projectStructure.hsc_challenges ? [...state.projectStructure.hsc_challenges] : [],
   getInteroperabilityLinks: (state) =>
-    state.projectStructure.interoperability_links
-      ? [...state.projectStructure.interoperability_links]
-      : [],
+    state.projectStructure.interoperability_links ? [...state.projectStructure.interoperability_links] : [],
   getInteroperabilityStandards: (state) =>
-    state.projectStructure.interoperability_standards
-      ? [...state.projectStructure.interoperability_standards]
-      : [],
-  getLicenses: (state) =>
-    state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
+    state.projectStructure.interoperability_standards ? [...state.projectStructure.interoperability_standards] : [],
+  getLicenses: (state) => (state.projectStructure.licenses ? [...state.projectStructure.licenses] : []),
   getDigitalHealthInterventions: (state) =>
-    state.projectStructure.strategies
-      ? [...state.projectStructure.strategies]
-      : [],
+    state.projectStructure.strategies ? [...state.projectStructure.strategies] : [],
   getDigitalHealthInterventionDetails: (state, getters) => (id) => {
     for (const category of getters.getDigitalHealthInterventions) {
       for (const group of category.subGroups) {
@@ -93,43 +78,22 @@ export const getters = {
     }
   },
   getTechnologyPlatforms: (state) =>
-    state.projectStructure.technology_platforms
-      ? [...state.projectStructure.technology_platforms]
-      : [],
-  getSectors: (state) =>
-    state.projectStructure.sectors ? [...state.projectStructure.sectors] : [],
-  getInfoSec: (state) =>
-    state.projectStructure.isc ? [...state.projectStructure.isc] : [],
+    state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
+  getSectors: (state) => (state.projectStructure.sectors ? [...state.projectStructure.sectors] : []),
+  getInfoSec: (state) => (state.projectStructure.isc ? [...state.projectStructure.isc] : []),
   getInnovationWays: (state) =>
-    state.projectStructure.innovation_ways
-      ? [...state.projectStructure.innovation_ways]
-      : [],
+    state.projectStructure.innovation_ways ? [...state.projectStructure.innovation_ways] : [],
   getRegionalPriorities: (state) =>
-    state.projectStructure.regional_priorities
-      ? [...state.projectStructure.regional_priorities]
-      : [],
-  getHardware: (state) =>
-    state.projectStructure.hardware ? [...state.projectStructure.hardware] : [],
-  getNontech: (state) =>
-    state.projectStructure.nontech ? [...state.projectStructure.nontech] : [],
-  getFunctions: (state) =>
-    state.projectStructure.functions
-      ? [...state.projectStructure.functions]
-      : [],
-  getCurrencies: (state) =>
-    state.projectStructure.currencies
-      ? [...state.projectStructure.currencies]
-      : [],
-  getPhases: (state) =>
-    state.projectStructure.phases ? [...state.projectStructure.phases] : [],
-  getStages: (state) =>
-    state.projectStructure.stages ? [...state.projectStructure.stages] : [],
-  getCpd: (state) =>
-    state.projectStructure.cpd ? [...state.projectStructure.cpd] : [],
+    state.projectStructure.regional_priorities ? [...state.projectStructure.regional_priorities] : [],
+  getHardware: (state) => (state.projectStructure.hardware ? [...state.projectStructure.hardware] : []),
+  getNontech: (state) => (state.projectStructure.nontech ? [...state.projectStructure.nontech] : []),
+  getFunctions: (state) => (state.projectStructure.functions ? [...state.projectStructure.functions] : []),
+  getCurrencies: (state) => (state.projectStructure.currencies ? [...state.projectStructure.currencies] : []),
+  getPhases: (state) => (state.projectStructure.phases ? [...state.projectStructure.phases] : []),
+  getStages: (state) => (state.projectStructure.stages ? [...state.projectStructure.stages] : []),
+  getCpd: (state) => (state.projectStructure.cpd ? [...state.projectStructure.cpd] : []),
   getInnovationCategories: (state) =>
-    state.projectStructure.innovation_categories
-      ? [...state.projectStructure.innovation_categories]
-      : [],
+    state.projectStructure.innovation_categories ? [...state.projectStructure.innovation_categories] : [],
   getToolkitVersions: (state) => [...state.currentProjectToolkitVersions],
   getCoverageVersions: (state) => [...state.currentProjectCoverageVersions],
   getProjectDetails: (state, getters, rootState, rootGetters) => (p) => {
@@ -235,9 +199,7 @@ export const getters = {
       return coverageVersion.reduce(
         (ret, versionObj, vInd) => {
           ret.data[vInd] = {}
-          ret.data[vInd].date = versionObj.modified
-            ? versionObj.modified.split('T')[0]
-            : todayString
+          ret.data[vInd].date = versionObj.modified ? versionObj.modified.split('T')[0] : todayString
 
           versionObj.data.forEach((distrObj) => {
             forOwn(distrObj, (val, key) => {
@@ -263,9 +225,7 @@ export const getters = {
 export const actions = {
   async loadUserProjects({ commit }) {
     try {
-      const { data } = await this.$axios.get(
-        '/api/projects/user-list/member-of/'
-      )
+      const { data } = await this.$axios.get('/api/projects/user-list/member-of/')
       data.results.sort((a, b) => b.id - a.id)
       commit('SET_USER_PROJECT_LIST', data.results)
     } catch (error) {
@@ -294,15 +254,9 @@ export const actions = {
     }
     try {
       const results = await Promise.all([
-        this.$axios.get(
-          `/api/projects/user-list/member-of/?page_size=${state.pageSize}&page=${reviewPage}`
-        ),
-        this.$axios.get(
-          `/api/projects/user-list/review/?page_size=${state.pageSize}&page=${initiativePage}`
-        ),
-        this.$axios.get(
-          `/api/projects/user-list/favorite/?page_size=${state.pageSize}&page=${favoritesPages}`
-        ),
+        this.$axios.get(`/api/projects/user-list/member-of/?page_size=${state.pageSize}&page=${reviewPage}`),
+        this.$axios.get(`/api/projects/user-list/review/?page_size=${state.pageSize}&page=${initiativePage}`),
+        this.$axios.get(`/api/projects/user-list/favorite/?page_size=${state.pageSize}&page=${favoritesPages}`),
       ])
       // for review case
       if (state.tab === 2) {
@@ -327,8 +281,7 @@ export const actions = {
         commit('SET_VALUE', { key: 'total', val: data.count })
         data.results.sort((a, b) => b.id - a.id)
         data = data.results.map((p) => {
-          const project =
-            p.published && p.published.name ? p.published : p.draft
+          const project = p.published && p.published.name ? p.published : p.draft
           return {
             ...p,
             ...project,
@@ -477,10 +430,7 @@ export const actions = {
   },
   async setNewItem({ commit, dispatch }, { type, name }) {
     try {
-      const { data } = await this.$axios.post(
-        `/api/projects/${type}-request/`,
-        { name }
-      )
+      const { data } = await this.$axios.post(`/api/projects/${type}-request/`, { name })
       await dispatch('loadProjectStructure', true)
       return data.id
     } catch (e) {

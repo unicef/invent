@@ -24,10 +24,7 @@ export default {
   async fetch({ store, params, error }) {
     store.dispatch('landing/resetSearch')
     await fetchProjectData(store, params, error)
-    if (
-      !store.state.project.published ||
-      store.state.project.published.name === null
-    ) {
+    if (!store.state.project.published || store.state.project.published.name === null) {
       error({
         statusCode: 404,
         message: 'Initiative is not published',

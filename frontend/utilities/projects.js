@@ -92,6 +92,7 @@ export const projectFields = () => ({
   partners: [],
   links: [],
   overview: '',
+  coverImage: [],
   program_targets: '',
   program_targets_achieved: '',
   current_achievements: '',
