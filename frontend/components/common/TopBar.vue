@@ -191,14 +191,14 @@ export default {
 
   .LogoHolder {
     display: flex;
-    align-self: flex-start;
+    // align-self: flex-start;
     width: auto;
 
     .LogoWHO {
       width: 100%;
 
       img {
-        height: 48px;
+        height: 56px;
       }
     }
 
@@ -213,6 +213,9 @@ export default {
 
     .LogoUnicef {
       width: 100%;
+      display: flex;
+      position: relative;
+      top: 2px;
 
       img.UnicefLogoNormal {
         padding-bottom: 10px;
