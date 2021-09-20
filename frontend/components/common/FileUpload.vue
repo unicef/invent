@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     imagePreviewTitle() {
-      return this.$gettext(`${this.previewTitle} preview`)
+      return `${this.previewTitle} ${this.$gettext('preview')}`
     },
   },
   methods: {
