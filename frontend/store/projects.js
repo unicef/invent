@@ -310,8 +310,8 @@ export const actions = {
     }
     try {
       const results = await Promise.all([
-        this.$axios.get(`/api/projects/user-list/member-of/?page_size=${state.pageSize}&page=${reviewPage}`),
-        this.$axios.get(`/api/projects/user-list/review/?page_size=${state.pageSize}&page=${initiativePage}`),
+        this.$axios.get(`/api/projects/user-list/member-of/?page_size=${state.pageSize}&page=${initiativePage}`),
+        this.$axios.get(`/api/projects/user-list/review/?page_size=${state.pageSize}&page=${reviewPage}`),
         this.$axios.get(`/api/projects/user-list/favorite/?page_size=${state.pageSize}&page=${favoritesPages}`),
       ])
       // for review case
