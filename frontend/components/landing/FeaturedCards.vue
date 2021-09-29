@@ -28,7 +28,7 @@
           <div class="title" @click="openProject(card)">{{ card.name }}</div>
           <div class="team">
             <Location :location-info="locationInfo(card)" class="bright" />
-            <AvatarTeam :team="card.team" :max-avatars="10" />
+            <AvatarTeam :team="team(card)" :max-avatars="10" />
           </div>
         </div>
         <div v-if="!card.thumbnail" class="title">
@@ -36,7 +36,7 @@
         </div>
         <div v-if="!card.thumbnail" class="team">
           <Location :location-info="locationInfo(card)" />
-          <AvatarTeam :team="card.team" :max-avatars="10" />
+          <AvatarTeam :team="team(card)" :max-avatars="10" />
         </div>
         <div v-if="!card.thumbnail">
           <p class="desc">
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Header from '@/components/landing/parts/Header.vue'
 import LinkAction from '@/components/common/LinkAction.vue'
 import Location from '@/components/landing/parts/Location.vue'
@@ -77,6 +78,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      currentUser: 'user/getProfile',
+    }),
     showCards() {
       const toSlice = this.projects.length - this.currentCard > 3 ? this.currentCard + 3 : this.projects.length
       return this.projects.slice(this.currentCard, toSlice)
@@ -89,6 +93,21 @@ export default {
     },
   },
   methods: {
+    team(project) {
+      const team = project.team.map((member) => {
+        if (member.id === this.currentUser.id) {
+          return {
+            ...member,
+            colorScheme: {
+              text: '#FFFFFF',
+              background: '#CB7918',
+              border: '2px solid #FFF',
+            },
+          }
+        } else return member
+      })
+      return team
+    },
     locationInfo(project) {
       return {
         countryCode: project.country?.code,
