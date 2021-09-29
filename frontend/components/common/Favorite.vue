@@ -1,27 +1,13 @@
 <template>
   <p class="heart">
     <template v-if="favorite">
-      <el-tooltip
-        :content="$gettext('Remove from Favorites') | translate"
-        placement="bottom"
-      >
-        <fa
-          class="heart-full"
-          :icon="['fas', 'heart']"
-          @click="removeFavorite({ id, type })"
-        />
+      <el-tooltip :content="$gettext('Remove from Favorites') | translate" placement="bottom">
+        <fa class="heart-full" :icon="['fas', 'heart']" @click="removeFavorite({ id, type })" />
       </el-tooltip>
     </template>
     <template v-else>
-      <el-tooltip
-        :content="$gettext('Add to favorites') | translate"
-        placement="bottom"
-      >
-        <fa
-          class="heart-empty"
-          :icon="['far', 'heart']"
-          @click="addFavorite({ id, type })"
-        />
+      <el-tooltip :content="$gettext('Add to favorites') | translate" placement="bottom">
+        <fa class="heart-empty" :icon="['far', 'heart']" @click="addFavorite({ id, type })" />
       </el-tooltip>
     </template>
   </p>

@@ -289,7 +289,7 @@ export const actions = {
       return Promise.reject(error)
     }
   },
-  async getInitiatives({ state, commit, dispatch, rootGetters }) {
+  async getInitiatives({ state, commit, dispatch, rootGetters }, itemsOnPage = 0) {
     commit('SET_VALUE', { key: 'loadingProject', val: true })
     commit('SET_VALUE', { key: 'userProjects', val: [] })
     await dispatch('user/refreshProfile', {}, { root: true })
@@ -305,7 +305,7 @@ export const actions = {
         reviewPage = state.page
         break
       case 3:
-        favoritesPages = state.page
+        favoritesPages = itemsOnPage === 1 && state.page > 1 ? state.page - 1 : state.page
         break
     }
     try {
@@ -468,7 +468,7 @@ export const actions = {
       await this.$axios.put(`/api/projects/favorites/${action}/${id}`)
       switch (type) {
         case 'initiatives':
-          await dispatch('getInitiatives')
+          await dispatch('getInitiatives', state.userProjects.length)
           break
         case 'inventory':
           await dispatch('dashboard/loadProjectList', {}, { root: true })
