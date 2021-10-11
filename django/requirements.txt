@@ -34,7 +34,7 @@ django-modeltranslation==0.13-beta1
 django-redis==4.9.0
 django-rest-auth==0.9.5
 django-rosetta==0.8.1
-django-simplefeedback==0.8
+django-simplefeedback==0.9
 django-simple-history==2.4.0
 django-ordered-model==2.1.0
 djangorestframework==3.8.2
