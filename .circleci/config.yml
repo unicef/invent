@@ -127,7 +127,7 @@ jobs:
           name: Deploy Over SSH
           working_directory: ~/tiip/django
           command: |
-            fab qa deploy:<< pipeline.git.tag >>
+            fab staging deploy:<< pipeline.git.tag >>
           no_output_timeout: "20m"
 
   e2e-dev:
