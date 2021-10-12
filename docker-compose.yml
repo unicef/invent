@@ -4,6 +4,8 @@ services:
   django:
     restart: always
     build: ./django
+    env_file:
+      - ./django/.env
     expose:
       - "8000"
     links:
