@@ -21,28 +21,16 @@ def dev():
     env.webpack_options = ''
 
 
-def qa():
-    """Configure qa"""
+def staging():
+    """Configure staging"""
     env.host_string = QA_HOST_STRING
     env.name = 'staging'
     env.port = 22
-    env.branch = "tags/2.1.5"
+    env.branch = "dev"
     env.project_root = '~/TIIP'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = '-live'
-
-
-def staging():
-    """Configure staging"""
-    env.host_string = TEST_HOST_STRING
-    env.name = 'staging'
-    env.port = 22
-    env.branch = "master"
-    env.project_root = '~/TIIP'
-    env.backend_root = 'django'
-    env.frontend_root = 'frontend'
-    env.webpack_options = ''
 
 
 def production():
@@ -135,7 +123,7 @@ def deploy(tag=None):
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(
                 env.project_root, env.project_root)
         elif env.name == 'staging':
-            options = "-f {}/docker-compose.yml -f {}/docker-compose.test.yml ".format(
+            options = "-f {}/docker-compose.yml -f {}/docker-compose.qa.yml ".format(
                 env.project_root, env.project_root)
         elif env.name == 'production':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.prod.yml ".format(
