@@ -63,6 +63,8 @@ class UserProfile(ExtendedModel):
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     global_portfolio_owner = models.BooleanField(default=False)
     filters = HStoreField(default=dict, blank=True)
+    manager_of = models.ManyToManyField('country.CountryOffice', related_name="country_managers",
+                                        verbose_name='Country Manager Of', blank=True)
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""

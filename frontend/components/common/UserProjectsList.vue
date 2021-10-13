@@ -1,7 +1,31 @@
 <template>
   <div class="user-projects-list">
-    <p class="headline">
-      {{ headline[tab - 1] }}
+    <p v-if="tab === 1" key="own" class="headline">
+      <translate>Here are all the initiatives you are a</translate>
+      <fa icon="star" class="OwnerIcon" />
+      <translate tag="strong">Member</translate>
+      <translate>or</translate>
+      <fa icon="eye" class="ViewerIcon" />
+      <translate tag="strong">Viewer</translate>
+      <translate>of.</translate>
+    </p>
+    <p v-if="tab === 4" key="country" class="headline">
+      <translate>Here are all the initiatives you are</translate>
+      <translate tag="strong">Country Manager</translate>
+      <translate>of.</translate>
+    </p>
+    <p v-if="tab === 2" key="review" class="headline">
+      <translate>
+        Any initiatives you have been requested to review as part of the innovation portfolio review process will appear below.
+      </translate>
+      <br />
+      <translate>Please complete review for any initiatives marked</translate>
+      <fa icon="comment-slash" class="UnscoredIcon" />
+      <translate tag="strong" class="UnscoredIcon">Unscored</translate>
+      <translate>below.</translate>
+    </p>
+    <p v-if="tab === 3" key="favorite" class="headline">
+      <translate>Initiatives you have added to your favorites will appear below.</translate>
     </p>
     <div v-loading="loadingProject" class="loading-mask">
       <template v-if="!loadingProject">
@@ -48,13 +72,6 @@ export default {
   data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
-      headline: [
-        this.$gettext('Here are all the initiatives you are a Member or a Viewer of'),
-        this.$gettext(
-          'Any initiatives you have been requested to review as part of the innovation portfolio review process will appear below. Please complete review for any initiatives marked “Unscored” below.'
-        ),
-        this.$gettext('Initiatives you have added to your favorites will appear below.'),
-      ],
     }
   },
   computed: {
@@ -97,13 +114,28 @@ export default {
   min-height: 500px;
 }
 .user-projects-list {
-  padding: 50px 80px 60px;
+  padding: 40px 80px 60px;
   .headline {
     font-size: 14px;
     letter-spacing: 0;
     line-height: 20px;
     text-align: center;
-    margin-bottom: 52px;
+    margin: 0 0 40px 0;
+    .OwnerIcon {
+      color: @colorOwner;
+    }
+    .ViewerIcon {
+      color: @colorViewer;
+    }
+    .DonorIcon {
+      color: @colorDonor;
+    }
+    .CountryAdminIcon {
+      color: @colorCountryAdmin;
+    }
+    .UnscoredIcon {
+      color: @colorBrandAccent;
+    }
   }
 }
 

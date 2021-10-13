@@ -19,6 +19,8 @@ from core.resources import UserResource
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
+    readonly_fields = ['filters']
+    filter_horizontal = ['manager_of']
     can_delete = False
 
 

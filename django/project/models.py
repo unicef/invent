@@ -100,6 +100,13 @@ class Project(SoftDeleteModel, ExtendedModel):
         country_id = self.get_country_id(draft_mode)
         return Country.objects.get(id=int(country_id)) if country_id else None
 
+    def get_country_office_id(self):
+        if not self.public_id:
+            co_id = self.draft.get('country_office')
+        else:
+            co_id = self.data.get('country_office')
+        return co_id
+
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
