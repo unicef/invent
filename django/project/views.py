@@ -1,8 +1,10 @@
 import copy
 from collections import OrderedDict
 
+from django.contrib.postgres.fields.jsonb import KeyTextTransform
 from django.db import transaction
-from django.db.models import QuerySet
+from django.db.models import QuerySet, IntegerField, Q
+from django.db.models.functions import Cast
 from rest_framework import status
 from rest_framework.exceptions import ValidationError, PermissionDenied
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
@@ -158,6 +160,27 @@ class ProjectListViewSet(TokenAuthMixin, GenericViewSet):
             data.append(project.to_response_dict(published=published, draft=None))
         return data
 
+    def country_manager_list(self, user):
+        data = []
+        user_managed_offices = list(user.userprofile.manager_of.values_list('id', flat=True))
+
+        if not user_managed_offices:
+            qs = Project.objects.none()
+        else:
+            qs = Project.objects.annotate(
+                co_id=Cast(KeyTextTransform('country_office', 'data'), output_field=IntegerField())).annotate(
+                draft_co_id=Cast(KeyTextTransform('country_office', 'draft'), output_field=IntegerField()))
+
+            qs = qs.filter(
+                Q(co_id__in=user_managed_offices) | Q(draft_co_id__in=user_managed_offices)).order_by('-modified')
+
+        page = self.paginate_queryset(qs)
+        for project in page:
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return data
+
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
@@ -167,6 +190,8 @@ class ProjectListViewSet(TokenAuthMixin, GenericViewSet):
             data = self.member_list(request.user)
         elif list_name == 'favorite':
             data = self.favorite_list(request.user)
+        elif list_name == 'country-manager':
+            data = self.country_manager_list(request.user)
         elif list_name == 'review':
             # Bug: Reverse lookup does not work here for filtering
             qs = ReviewScore.objects.exclude(status=ReviewScore.STATUS_COMPLETE).\
@@ -218,7 +243,12 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         else:  # LOGGED IN
             is_member = project.is_member(self.request.user)
             is_country_user_or_admin = project.is_country_user_or_admin(self.request.user)
-            if is_member or is_country_user_or_admin or self.request.user.is_superuser:
+            is_country_manager = False
+            co_id = project.get_country_office_id()
+            if co_id:
+                is_country_manager = self.request.user.userprofile.manager_of.filter(id=co_id).exists()
+
+            if is_member or is_country_user_or_admin or is_country_manager or self.request.user.is_superuser:
                 data = project.get_member_data()
                 draft = project.get_member_draft()
             else:

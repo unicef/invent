@@ -10,11 +10,9 @@
         :class="`${item.id === tab && 'active'}`"
         @click="$emit('handleTab', item.id)"
       >
-        <fa :icon="item.icon" />
+        <fa :icon="item.icon" size="lg" />
         {{ $gettext(item.name) | translate }}
-        <template v-if="item.total">
-          {{ ` (${item.total})` }}
-        </template>
+        {{ ` (${item.total})` }}
       </p>
     </div>
   </div>
@@ -82,7 +80,7 @@ export default {
       text-transform: uppercase;
       letter-spacing: 0;
       line-height: 18px;
-      padding-bottom: 17px;
+      padding-bottom: 16px;
       margin: 0 32px 0 0;
       border-bottom: 3px solid transparent;
       svg {
@@ -91,6 +89,7 @@ export default {
       }
       &.active {
         color: @colorTextPrimary;
+        font-weight: bold;
         border-bottom: 3px solid @colorBrandPrimary;
         svg {
           color: @colorTextPrimary;

@@ -230,9 +230,11 @@ class CountryListSerializer(serializers.ModelSerializer):
 
 
 class CountryOfficeSerializer(serializers.ModelSerializer):
+    managers = UserProfileSerializer(many=True, source='country_managers')
+
     class Meta:
         model = CountryOffice
-        fields = ('id', 'name', 'region', 'country', 'regional_office', 'city')
+        fields = ('id', 'name', 'region', 'country', 'regional_office', 'city', 'managers')
 
 
 DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",

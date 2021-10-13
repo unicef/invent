@@ -12,6 +12,7 @@ export const state = () => ({
   // initiatives tabs
   tabs: [
     { id: 1, name: 'My initiatives', icon: 'star', total: 1 },
+    { id: 4, name: 'Country manager', icon: 'globe-africa', total: 1 },
     { id: 2, name: 'My reviews', icon: 'comment-alt', total: 1 },
     { id: 3, name: 'My favorites', icon: 'heart', total: 1 },
   ],
@@ -292,11 +293,13 @@ export const actions = {
   async getInitiatives({ state, commit, dispatch, rootGetters }, itemsOnPage = 0) {
     commit('SET_VALUE', { key: 'loadingProject', val: true })
     commit('SET_VALUE', { key: 'userProjects', val: [] })
+    await dispatch('offices/loadOffices', {}, { root: true })
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
     let reviewPage = 1
     let initiativePage = 1
     let favoritesPages = 1
+    let countryManagerPages = 1
     switch (state.tab) {
       case 1:
         initiativePage = state.page
@@ -307,12 +310,18 @@ export const actions = {
       case 3:
         favoritesPages = itemsOnPage === 1 && state.page > 1 ? state.page - 1 : state.page
         break
+      case 4:
+        countryManagerPages = itemsOnPage === 1 && state.page > 1 ? state.page - 1 : state.page
+        break
     }
     try {
       const results = await Promise.all([
         this.$axios.get(`/api/projects/user-list/member-of/?page_size=${state.pageSize}&page=${initiativePage}`),
         this.$axios.get(`/api/projects/user-list/review/?page_size=${state.pageSize}&page=${reviewPage}`),
         this.$axios.get(`/api/projects/user-list/favorite/?page_size=${state.pageSize}&page=${favoritesPages}`),
+        this.$axios.get(
+          `/api/projects/user-list/country-manager/?page_size=${state.pageSize}&page=${countryManagerPages}`
+        ),
       ])
       // for review case
       if (state.tab === 2) {
@@ -321,12 +330,14 @@ export const actions = {
         data.results.sort((a, b) => b.id - a.id)
         data = data.results.map((p) => {
           const project = p.project
+          const office = rootGetters['offices/getOfficeDetails'](project.country_office)
+          const isCountryManager = office.managers.findIndex((m) => m.id === user.id) > -1
           return {
             reviewId: p.id,
             ...p,
             ...project,
             favorite: user ? user.favorite.includes(p.project.id) : undefined,
-            isMember: user ? user.member.includes(p.id) : undefined,
+            isMember: user ? user.member.includes(p.id) || isCountryManager : undefined,
             isViewer: user ? user.viewer.includes(p.id) : undefined,
             isPublished: true,
           }
@@ -338,11 +349,13 @@ export const actions = {
         data.results.sort((a, b) => b.id - a.id)
         data = data.results.map((p) => {
           const project = p.published && p.published.name ? p.published : p.draft
+          const office = rootGetters['offices/getOfficeDetails'](project.country_office)
+          const isCountryManager = office.managers.findIndex((m) => m.id === user.id) > -1
           return {
             ...p,
             ...project,
             favorite: user ? user.favorite.includes(p.id) : undefined,
-            isMember: user ? user.member.includes(p.id) : undefined,
+            isMember: user ? user.member.includes(p.id) || isCountryManager : undefined,
             isViewer: user ? user.viewer.includes(p.id) : undefined,
             isPublished: !!(p.published && p.published.name),
           }
@@ -358,6 +371,12 @@ export const actions = {
             name: 'My initiatives',
             icon: 'star',
             total: results[0].data.count,
+          },
+          {
+            id: 4,
+            name: 'Country manager',
+            icon: 'globe-africa',
+            total: results[3].data.count,
           },
           {
             id: 2,

@@ -298,3 +298,65 @@ class PermissionTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn("last_version", response.json()['published'])
+
+    def test_country_manager_can_update_project_groups(self):
+        user_profile_id, test_user_client, _ = self.create_user('country_manager@tester.com',
+                                                                'asdkjfh78y87', 'asdkjfh78y87')
+        profile = UserProfile.objects.get(id=user_profile_id)
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        groups = {
+            "team": [user_profile_id],
+            "viewers": []
+        }
+        response = test_user_client.put(url, groups, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+        profile.manager_of.add(self.country_office.id)
+
+        response = test_user_client.put(url, groups, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'], [user_profile_id])
+        self.assertEqual(response.json()['viewers'], [])
+
+    def test_country_manager_can_retrieve_project_data(self):
+        user_profile_id, test_user_client, _ = self.create_user('country_manager@tester.com',
+                                                                'asdkjfh78y87', 'asdkjfh78y87')
+        profile = UserProfile.objects.get(id=user_profile_id)
+
+        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+
+        # filtering checks
+        members_only_fields = ["start_date", "end_date"]
+        for key in members_only_fields:
+            self.assertNotIn(key, response.json()['published'])
+
+        profile.manager_of.add(self.country_office.id)
+
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+
+        # filtering checks
+        for key in members_only_fields:
+            self.assertIn(key, response.json()['published'])
+
+    def test_country_manager_can_update_project_data(self):
+        user_profile_id, test_user_client, _ = self.create_user('country_manager@tester.com',
+                                                                'asdkjfh78y87', 'asdkjfh78y87')
+        profile = UserProfile.objects.get(id=user_profile_id)
+
+        url = reverse("project-publish", kwargs={"project_id": self.project_id,
+                                                 "country_office_id": self.country_office.id})
+        response = test_user_client.put(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+        profile.manager_of.add(self.country_office.id)
+
+        response = test_user_client.put(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 200)

@@ -1202,3 +1202,21 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertTrue('source_images/image.png' in response.json()['image'])
         self.assertTrue(response.json()['thumbnail'])
+
+    def test_country_manager_projects(self):
+        # create 5 projects
+        project_co_dict = dict()
+        for _ in range(5):
+            project_id, project_data, org, country, country_office, d1, d2 = self.create_new_project()
+            project_co_dict[project_id] = country_office.id
+
+        url = reverse("project-list", kwargs={'list_name': 'country-manager'})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.json()['count'], 0)
+
+        # add our user as a country manager of the country offices
+        self.userprofile.manager_of.set(list(set(project_co_dict.values())))
+
+        url = reverse("project-list", kwargs={'list_name': 'country-manager'})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.json()['count'], 5)

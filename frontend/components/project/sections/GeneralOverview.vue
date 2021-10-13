@@ -88,32 +88,49 @@
         </span>
       </custom-required-form-item>
 
-      <custom-required-form-item>
-        <template slot="label">
-          <translate key="field-offices"> City </translate>
-        </template>
-        {{ city }}
-      </custom-required-form-item>
+      <el-row :gutter="20" type="flex">
+        <el-col :span="12">
+          <custom-required-form-item>
+            <template slot="label">
+              <translate key="field-offices"> City </translate>
+            </template>
+            {{ city }}
+          </custom-required-form-item>
+        </el-col>
+        <el-col :span="12">
+          <custom-required-form-item>
+            <template slot="label">
+              <translate key="country"> Country </translate>
+            </template>
+            {{ countryOfOffice }}
+          </custom-required-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20" type="flex">
+        <el-col :span="12">
+          <custom-required-form-item>
+            <template slot="label">
+              <translate key="region">Region</translate>
+            </template>
+            {{ selectedRegion }}
+          </custom-required-form-item>
+        </el-col>
+        <el-col :span="12">
+          <custom-required-form-item>
+            <template slot="label">
+              <translate key="multi-or-regional-office">Multicountry or Regional Office</translate>
+            </template>
+            {{ regionalOffice }}
+          </custom-required-form-item>
+        </el-col>
+      </el-row>
 
       <custom-required-form-item>
-        <template slot="label">
-          <translate key="country"> Country </translate>
+        <template #label>
+          <translate>INVENT country focal point(s)</translate>
         </template>
-        {{ countryOfOffice }}
-      </custom-required-form-item>
-
-      <custom-required-form-item>
-        <template slot="label">
-          <translate key="region">Region</translate>
-        </template>
-        {{ selectedRegion }}
-      </custom-required-form-item>
-
-      <custom-required-form-item>
-        <template slot="label">
-          <translate key="multi-or-regional-office">Multicountry or Regional Office</translate>
-        </template>
-        {{ regionalOffice }}
+        {{ countryManagers }}
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -353,15 +370,20 @@ export default {
     selectedRegion() {
       if (this.officeData) {
         const result = this.unicef_regions.find((uf) => uf.id === this.officeData.region)
-        return (result && result.name) || ' ' // N/A
+        return (result && result.name) || '-' // N/A
       }
       return ' ' // N/A
     },
     countryOfOffice() {
-      return this.officeData ? this.getCountryDetails(this.officeData.country).name : ' ' // N/A
+      return this.officeData ? this.getCountryDetails(this.officeData.country).name : '-' // N/A
+    },
+    countryManagers() {
+      return this.officeData?.managers.length > 0
+        ? this.officeData?.managers.map((m) => `${m.name} (${m.email})`).join(', ')
+        : '-'
     },
     city() {
-      return this.officeData ? this.officeData.city : ' ' // N/A
+      return this.officeData ? this.officeData.city : '-' // N/A
     },
     regionalOffice() {
       const office = this.regionalOffices.find((obj) => obj.id === this.office.regional_office)

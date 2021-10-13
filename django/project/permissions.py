@@ -16,7 +16,13 @@ class InTeamOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return request.user.is_superuser or obj.team.filter(id=request.user.userprofile.id).exists()
+        is_country_manager = False
+        co_id = obj.get_country_office_id()
+        if co_id:
+            is_country_manager = request.user.userprofile.manager_of.filter(id=co_id).exists()
+
+        return request.user.is_superuser or is_country_manager or obj.team.filter(
+            id=request.user.userprofile.id).exists()
 
 
 class InCountryAdminForApproval(permissions.BasePermission):
