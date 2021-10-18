@@ -15,16 +15,6 @@
             :header="$gettext('Narrative of the initiative') | translate"
           />
 
-          <el-row v-if="project.coverImage.length > 0">
-            <el-col :span="12">
-              <simple-field :header="$gettext(`Initiative's cover image`) | translate">
-                <a :href="project.coverImage[0].url" target="_blank">
-                  <img :src="project.coverImage[0].url" class="cover" />
-                </a>
-              </simple-field>
-            </el-col>
-          </el-row>
-
           <el-row>
             <el-col :span="12">
               <simple-field :content="project.contact_name" :header="$gettext('Contact name') | translate" />
