@@ -130,7 +130,12 @@
         <template #label>
           <translate>INVENT country focal point(s)</translate>
         </template>
-        {{ countryManagers }}
+        <ul v-if="countryManagers.length > 0" class="ma-0">
+          <li v-for="manager in countryManagers" :key="manager.id">{{ manager.name }} ({{ manager.email }})</li>
+        </ul>
+        <span v-else>
+          <i><translate>No country manager assigned to the office.</translate></i>
+        </span>
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -378,9 +383,7 @@ export default {
       return this.officeData ? this.getCountryDetails(this.officeData.country).name : '-' // N/A
     },
     countryManagers() {
-      return this.officeData?.managers.length > 0
-        ? this.officeData?.managers.map((m) => `${m.name} (${m.email})`).join(', ')
-        : '-'
+      return this.officeData?.managers.length > 0 ? this.officeData?.managers : []
     },
     city() {
       return this.officeData ? this.officeData.city : '-' // N/A
@@ -471,6 +474,9 @@ export default {
   .no-padding {
     padding-top: 0;
     padding-bottom: 0;
+  }
+  .ma-0 {
+    margin: 0;
   }
 }
 

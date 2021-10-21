@@ -24,7 +24,7 @@
             </el-col>
           </el-row>
 
-          <div class="GrayArea">
+          <el-row class="GrayArea">
             <el-col :span="12">
               <simple-field :header="$gettext('Team members') | translate">
                 <team-list :value="project.team" />
@@ -35,10 +35,15 @@
                 <team-list :value="project.viewers" />
               </simple-field>
             </el-col>
-          </div>
+          </el-row>
 
           <simple-field :header="$gettext('INVENT country focal point(s)') | translate">
-            {{ countryManagers }}
+            <ul v-if="countryManagers.length > 0" class="ma-0">
+              <li v-for="manager in countryManagers" :key="manager.id">{{ manager.name }} ({{ manager.email }})</li>
+            </ul>
+            <span v-else>
+              <i><translate>No country manager assigned to the office.</translate></i>
+            </span>
           </simple-field>
 
           <simple-field :header="$gettext('Last Updated') | translate" :content="lastUpdated" />
@@ -386,9 +391,7 @@ export default {
       return {}
     },
     countryManagers() {
-      return this.office?.managers?.length > 0
-        ? this.office?.managers.map((m) => `${m.name} (${m.email})`).join(', ')
-        : '-'
+      return this.office?.managers?.length > 0 ? this.office?.managers : []
     },
     selectedRegion() {
       if (this.office) {
@@ -614,6 +617,9 @@ export default {
         margin-right: 8px;
       }
     }
+  }
+  .ma-0 {
+    margin: 0;
   }
 }
 </style>
