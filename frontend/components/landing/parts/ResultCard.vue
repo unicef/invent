@@ -70,6 +70,7 @@ export default {
         overview: this.$gettext('Implementation Overview'),
         partner: this.$gettext('Partners'),
         region: this.$gettext('Region'),
+        id: this.$gettext('Initiative ID'),
       }
       if (this.foundIn) {
         return this.foundIn.map((f) => nameMApping[f]).join(', ')

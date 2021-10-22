@@ -16,6 +16,7 @@ from user.models import Organisation
 class ProjectSearch(ExtendedModel):
     SEARCH_BY = {
         # query_param: QuerySet param | eg: in=name&in=overview
+        "id": "project__id",
         "name": "project__name",
         "overview": "project__data__implementation_overview",
         "desc": "project__data__overview",
@@ -95,7 +96,15 @@ class ProjectSearch(ExtendedModel):
         q = Q()
 
         for field in selected_fields:
-            q |= Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term})
+            if field == "id":
+                try:
+                    search_id = int(search_term)
+                except ValueError:
+                    pass
+                else:
+                    q |= Q(**{"{}__exact".format(cls.SEARCH_BY[field]): search_id})
+            else:
+                q |= Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term})
 
         return queryset.filter(q) if selected_fields else queryset
 

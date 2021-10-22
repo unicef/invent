@@ -12,7 +12,7 @@ export const state = () => ({
   filter: {
     // ** SEARCH PARAMETERS **
     q: '',
-    in: ['name', 'overview', 'desc', 'ach', 'partner'],
+    in: ['name', 'overview', 'desc', 'ach', 'partner', 'id'],
     // ** FILTER PARAMETERS **
     country: [], // `country` eg: country=1&country=2
     sw: [], // `sw` eg: sw=1&sw=2
@@ -105,7 +105,7 @@ export const actions = {
     commit('SET_SEARCH', { key: 'q', val: '' })
     commit('SET_SEARCH', {
       key: 'in',
-      val: ['name', 'overview', 'desc', 'ach', 'partner'],
+      val: ['name', 'overview', 'desc', 'ach', 'partner', 'id'],
     })
     commit('SET_SEARCH', { key: 'region', val: '' })
     commit('SET_SEARCH', { key: 'country', val: [] })

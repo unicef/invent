@@ -13,12 +13,7 @@
     </el-row>
     <el-row type="flex" class="search-options">
       <el-col class="search-options-header">
-        <el-button
-          type="text"
-          size="small"
-          class="MutedButton IconRight"
-          @click="toggleOptionsVisibility"
-        >
+        <el-button type="text" size="small" class="MutedButton IconRight" @click="toggleOptionsVisibility">
           <translate>Select fields to include in your search</translate>
           <fa v-show="optionsVisible" icon="caret-up" />
           <fa v-show="!optionsVisible" icon="caret-down" />
@@ -35,11 +30,7 @@
           popper-class="search-box-tooltip"
           manual
         >
-          <el-button
-            type="text"
-            class="MutedButton"
-            @click="showSearchBoxTooltip = !showSearchBoxTooltip"
-          >
+          <el-button type="text" class="MutedButton" @click="showSearchBoxTooltip = !showSearchBoxTooltip">
             <fa icon="question-circle" />
           </el-button>
         </el-tooltip>
@@ -47,13 +38,9 @@
 
       <transition name="slide-fade">
         <el-col v-show="optionsVisible" class="search-options-body">
-          <el-checkbox-group
-            v-model="searchIn"
-            class="OnePerRow CheckboxSmall"
-            @change="handleSearch('in', $event)"
-          >
+          <el-checkbox-group v-model="searchIn" class="OnePerRow CheckboxSmall" @change="handleSearch('in', $event)">
             <el-checkbox
-              v-for="checkbox in checkboxes"
+              v-for="checkbox in searchInOptions"
               :key="checkbox.label"
               :label="checkbox.label"
               class="CheckboxSmall"
@@ -76,8 +63,8 @@ export default {
     return {
       optionsVisible: false,
       showSearchBoxTooltip: false,
-      searchIn: ['name', 'overview', 'desc', 'ach', 'partner'],
-      checkboxes: [
+      searchIn: ['name', 'overview', 'desc', 'ach', 'partner', 'id'],
+      searchInOptions: [
         { label: 'name', text: this.$gettext('Initiative Name') },
         {
           label: 'overview',
@@ -86,6 +73,7 @@ export default {
         { label: 'desc', text: this.$gettext('Description') },
         { label: 'ach', text: this.$gettext('Current Achievements') },
         { label: 'partner', text: this.$gettext('Partner Name') },
+        { label: 'id', text: this.$gettext('Initiative ID') },
       ],
     }
   },

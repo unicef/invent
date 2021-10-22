@@ -63,6 +63,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
 
         ** SEARCH IN PARAMETERS **
 
+        `id` search in initiative id, eg: in=id
         `name` search in initiative name, eg: in=name
         `overview` search in overview, eg: in=overview
         `desc` search in description, eg: in=desc
@@ -198,8 +199,9 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             query_params._mutable = False
 
         if search_term:
-            if len(search_term) < 2:
-                raise ValidationError("Search term must be at least two characters long.")
+            # 2021.10.21: DEPRECATED BECAUSE OF ID SEARCH
+            # if len(search_term) < 2:
+            #     raise ValidationError("Search term must be at least two characters long.")
 
             search_in = query_params.getlist('in')
             qs = self.search(queryset=qs, search_term=search_term, search_in=search_in)
