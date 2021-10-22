@@ -140,13 +140,16 @@ export const getters = {
     }
   },
   getPublishedDonorsAnswerDetails: (state, getters) => (id) => {
-    return getters.getPublished.donor_custom_answers.find((ca) => ca.question_id === id)
+    const published = getters.getPublished
+    return published.donor_custom_answers
+      ? published.donor_custom_answers.find((ca) => ca.question_id === id)
+      : undefined
   },
   getCountryAnswers: (state) => (state.country_answers ? [...state.country_answers] : []),
   getCountryAnswerDetails: (state, getters) => (id) => getters.getCountryAnswers.find((ca) => ca.question_id === id),
   getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
     const country = rootGetters['countries/getCountryDetails'](getters.getCountry)
-    if (country && country.country_questions) {
+    if (country && country?.country_questions) {
       return country.country_questions.map((cq) => {
         const answer = getters.getCountryAnswerDetails(cq.id)
         return { question_id: cq.id, answer: answer ? answer.answer : [] }

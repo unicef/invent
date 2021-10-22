@@ -13,10 +13,7 @@
               <translate>Draft</translate>
             </el-button>
             <el-button
-              :class="[
-                'PublishedButton',
-                { Active: isPublished && published.name },
-              ]"
+              :class="['PublishedButton', { Active: isPublished && published.name }]"
               :disabled="isPublished || !published.name"
               @click="goToPublished"
             >
@@ -76,10 +73,7 @@
               <translate>Technology</translate>
             </el-button>
           </li>
-          <li
-            v-show="showDonorFieldsLink"
-            :class="{ active: active === 'donorcustom' }"
-          >
+          <li v-show="showDonorFieldsLink" :class="{ active: active === 'donorcustom' }">
             <el-button type="text" @click="scrollTo('donorcustom')">
               <span class="Step">
                 <fa icon="arrow-right" />
@@ -87,10 +81,7 @@
               <translate>Investor fields</translate>
             </el-button>
           </li>
-          <li
-            v-show="showCountryFieldsLink"
-            :class="{ active: active === 'donorcustom' }"
-          >
+          <li v-show="showCountryFieldsLink" :class="{ active: active === 'donorcustom' }">
             <el-button type="text" @click="scrollTo('countrycustom')">
               <span class="Step">
                 <fa icon="arrow-right" />
@@ -102,13 +93,7 @@
       </div>
 
       <div v-if="isTeam || isNewProject || isSuper" class="NavigationActions">
-        <el-button
-          v-if="isDraft"
-          :disabled="!!loading"
-          type="primary"
-          size="medium"
-          @click="$emit('publishProject')"
-        >
+        <el-button v-if="isDraft" :disabled="!!loading" type="primary" size="medium" @click="$emit('publishProject')">
           <fa v-show="loading === 'publish'" icon="spinner" spin />
           <translate>Publish</translate>
         </el-button>
@@ -144,16 +129,10 @@
           :hide-after="parseInt(3200, 10)"
         >
           <div slot="content">
-            {{ $gettext('The action will update the timestamp') | translate
-            }}<br />
+            {{ $gettext('The action will update the timestamp') | translate }}<br />
             {{ $gettext('of the initiative to the current date.') | translate }}
           </div>
-          <el-button
-            :disabled="!!loading"
-            type="primary"
-            size="medium"
-            @click="$emit('handleClickLatest')"
-          >
+          <el-button :disabled="!!loading" type="primary" size="medium" @click="$emit('handleClickLatest')">
             <fa v-show="loading === 'latest'" icon="spinner" spin />
             <translate>Publish as latest</translate>
             <fa icon="question-circle" />
@@ -172,21 +151,11 @@
           <translate>Unpublish</translate>
         </el-button>
 
-        <el-button
-          v-if="isPublished || isReadOnlyDraft"
-          type="text"
-          class="GoToDashboard"
-          @click="goToDashboard"
-        >
+        <el-button v-if="isPublished || isReadOnlyDraft" type="text" class="GoToDashboard" @click="goToDashboard">
           <translate>Go to Dashboard</translate>
         </el-button>
 
-        <el-button
-          v-if="isNewProject"
-          type="text"
-          class="CancelButton WithHint"
-          @click="goToDashboard"
-        >
+        <el-button v-if="isNewProject" type="text" class="CancelButton WithHint" @click="goToDashboard">
           <translate>Cancel</translate>
           <span class="ButtonHint">
             <translate>Return to the Dashboard</translate>
@@ -235,28 +204,21 @@ export default {
     },
     anon() {
       if (this.user) {
-        return (
-          !this.user.is_superuser &&
-          ![...this.user.member, ...this.user.viewer].includes(
-            +this.$route.params.id
-          )
-        )
+        return !this.user.is_superuser && ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id)
       }
       return true
     },
     isTeam() {
-      if (this.user) {
-        return this.user.member.includes(+this.$route.params.id)
-      }
-      return false
+      return this.user
+        ? this.user.member.includes(+this.$route.params.id) ||
+            this.user.manager_of.includes(this.project.country_office)
+        : false
     },
     isSuper() {
       return this.user && this.user.is_superuser
     },
     project() {
-      return this.isDraft || this.isReadOnlyDraft || this.isNewProject
-        ? this.draft
-        : this.published
+      return this.isDraft || this.isReadOnlyDraft || this.isNewProject ? this.draft : this.published
     },
     showCountryFieldsLink() {
       const country = this.getCountryDetails(this.project.country)
@@ -269,11 +231,7 @@ export default {
       if (this.project && this.project.donors) {
         for (const donor of this.project.donors) {
           const details = this.getDonorDetails(donor)
-          if (
-            details &&
-            details.donor_questions &&
-            details.donor_questions.length > 0
-          ) {
+          if (details && details.donor_questions && details.donor_questions.length > 0) {
             return true
           }
         }
@@ -297,10 +255,7 @@ export default {
       })
     },
     goToDraft() {
-      const name =
-        this.isTeam || this.isSuper
-          ? 'organisation-initiatives-id-edit'
-          : 'organisation-initiatives-id'
+      const name = this.isTeam || this.isSuper ? 'organisation-initiatives-id-edit' : 'organisation-initiatives-id'
       const localised = this.localePath({
         name,
         params: { ...this.$route.params },
