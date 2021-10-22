@@ -6,6 +6,7 @@ export const searchIn = () => [
   'overview',
   'partner',
   'donor',
+  'id'
 ]
 
 export const stateGenerator = () => ({
@@ -22,15 +23,11 @@ export const stateGenerator = () => ({
 
 export const gettersGenerator = () => ({
   getProjectsMap(state) {
-    const map = state.projectsMap
-      ? state.projectsMap.map((r) => ({ ...r }))
-      : []
+    const map = state.projectsMap ? state.projectsMap.map((r) => ({ ...r })) : []
     return [...map]
   },
   getCountryPins(state, getters, rootState, rootGetters) {
-    const polyLabeled = rootGetters['countries/getCountries'].filter(
-      (c) => c.lat
-    )
+    const polyLabeled = rootGetters['countries/getCountries'].filter((c) => c.lat)
     return polyLabeled.map((c) => ({
       id: c.id,
       latlng: { lat: c.lat, lon: c.lon },
@@ -42,11 +39,7 @@ export const gettersGenerator = () => ({
       .map((c) => rootGetters['countries/getCountryDetails'](c.id))
     const pins = []
     selectedPolyLabeled.forEach((sp) => {
-      if (
-        sp.map_data &&
-        sp.map_data.first_sub_level &&
-        sp.map_data.first_sub_level.elements
-      ) {
+      if (sp.map_data && sp.map_data.first_sub_level && sp.map_data.first_sub_level.elements) {
         sp.map_data.first_sub_level.elements.forEach((e) => {
           if (e && e.polyCenter) {
             const id = e.id
@@ -60,8 +53,7 @@ export const gettersGenerator = () => ({
   getSelectedCountry: (state) => state.selectedCountry,
   getCurrentZoom: (state) => state.currentZoom,
   getActiveCountry: (state) => state.activeCountry,
-  getCountryProjects: (state) => (id) =>
-    state.projectsMap.filter((p) => p.country === id),
+  getCountryProjects: (state) => (id) => state.projectsMap.filter((p) => p.country === id),
   getMapReady: (state) => state.mapReady,
   getProjectBoxActiveTab: (state) => state.projectBoxActiveTab,
   getActiveSubLevel: (state) => state.activeSubLevel,
@@ -69,10 +61,7 @@ export const gettersGenerator = () => ({
   getSearchIn: (state) => state.searchIn,
   getLoading: (state) => state.loading,
   getSearchParameters: (state) => {
-    const q =
-      state.searchString && state.searchString.length > 1
-        ? state.searchString
-        : undefined
+    const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined
     return {
       page_size: 999999,
       q,
