@@ -7,7 +7,7 @@
           <el-button-group class="SwitchButtons">
             <el-button
               :class="['DraftButton', { Active: isDraft || isReadOnlyDraft }]"
-              :disabled="isDraft || anon"
+              :disabled="isDraft || !canEdit"
               @click="goToDraft"
             >
               <translate>Draft</translate>
@@ -202,11 +202,15 @@ export default {
     isReadOnlyDraft() {
       return this.route === 'organisation-initiatives-id'
     },
-    anon() {
+    canEdit() {
       if (this.user) {
-        return !this.user.is_superuser && ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id)
+        return (
+          this.user.is_superuser ||
+          this.user.member.includes(this.project.id) ||
+          this.user.manager_of.includes(this.project.country_office)
+        )
       }
-      return true
+      return false
     },
     isTeam() {
       return this.user

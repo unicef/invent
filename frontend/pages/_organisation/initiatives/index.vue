@@ -16,7 +16,6 @@ import { mapState, mapActions } from 'vuex'
 
 import UserProjectList from '@/components/common/UserProjectsList'
 import Tabs from '@/components/common/Tabs'
-// import toInteger from 'lodash/toInteger'
 
 export default {
   components: {
@@ -32,19 +31,6 @@ export default {
   },
   mounted() {
     this.restorePageSize()
-    /* 
-      don't think this is needed here
-      if (this.$route.query.review) {
-      // filter popup for open an id
-      await this.setTab(2)
-      const review = this.projects.find((i) => i.reviewId === toInteger(this.$route.query.review))
-      if (review) {
-        await this.setCurrentProjectReview(review)
-        this.setReviewDialog(true)
-      }
-    } else {
-      await this.setTab(1)
-    } */
   },
   methods: {
     ...mapActions({
