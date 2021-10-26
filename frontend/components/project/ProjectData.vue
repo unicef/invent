@@ -37,13 +37,13 @@
             </el-col>
           </el-row>
 
-          <simple-field :header="$gettext('INVENT country focal point(s)') | translate">
-            <ul v-if="countryManagers.length > 0" class="ma-0">
+          <simple-field
+            v-if="countryManagers.length > 0"
+            :header="$gettext('INVENT country focal point(s)') | translate"
+          >
+            <ul class="ma-0">
               <li v-for="manager in countryManagers" :key="manager.id">{{ manager.name }} ({{ manager.email }})</li>
             </ul>
-            <span v-else>
-              <i><translate>No country manager assigned to the office.</translate></i>
-            </span>
           </simple-field>
 
           <simple-field :header="$gettext('Last Updated') | translate" :content="lastUpdated" />
@@ -242,7 +242,7 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <project-navigation
+        <ProjectNavigation
           @handleClickUnPublish="
             handleClickUnPublish(
               {

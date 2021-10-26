@@ -126,16 +126,13 @@
         </el-col>
       </el-row>
 
-      <custom-required-form-item>
+      <custom-required-form-item v-if="countryManagers.length > 0">
         <template #label>
           <translate>INVENT country focal point(s)</translate>
         </template>
-        <ul v-if="countryManagers.length > 0" class="ma-0">
+        <ul class="ma-0">
           <li v-for="manager in countryManagers" :key="manager.id">{{ manager.name }} ({{ manager.email }})</li>
         </ul>
-        <span v-else>
-          <i><translate>No country manager assigned to the office.</translate></i>
-        </span>
       </custom-required-form-item>
 
       <custom-required-form-item
