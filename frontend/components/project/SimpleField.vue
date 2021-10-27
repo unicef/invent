@@ -29,6 +29,7 @@
 
 <script>
 import { format } from 'date-fns'
+import { isNumber } from 'lodash'
 
 export default {
   props: {
@@ -60,7 +61,11 @@ export default {
       if (this.date) {
         return format(this.content, 'DD/MM/YYYY')
       }
-      return this.content
+      var resultContent = this.content
+      if (isNumber(this.content)){
+        resultContent = this.$options.filters.formatNumber(this.content)
+      }
+      return resultContent
     },
     evenLines() {
       return this.content.match(/.{1,102}/g).join('\n')

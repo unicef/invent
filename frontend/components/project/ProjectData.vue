@@ -139,7 +139,7 @@
                   </ul>
                 </template>
                 <template v-if="field.type === 'total_budget'">
-                  {{ project.total_budget }}
+                  {{ project.total_budget | formatNumber }}
                   <list-element v-if="project.total_budget" :value="project.currency" source="getCurrencies" />
                 </template>
               </simple-field>
