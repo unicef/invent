@@ -18,14 +18,6 @@
         </span>
       </p>
     </template>
-    <template v-if="showHandshake">
-      <p>
-        <fa icon="handshake" class="DonorIcon" />
-        <span v-show="showLabel">
-          <translate>Investor</translate>
-        </span>
-      </p>
-    </template>
     <template v-if="showGlobe">
       <p>
         <fa icon="globe-africa" class="CountryAdminIcon" />
@@ -59,10 +51,6 @@ export default {
       default: false,
     },
     forceEye: {
-      type: Boolean,
-      default: false,
-    },
-    forceHandshake: {
       type: Boolean,
       default: false,
     },
@@ -129,9 +117,6 @@ export default {
     },
     showEye() {
       return this.forceEye || (!this.isMember && this.isViewer)
-    },
-    showHandshake() {
-      return this.forceHandshake || (this.isDonor && !this.isTeam)
     },
     showGlobe() {
       return this.forceGlobe || (this.isCountry && !this.isTeam)

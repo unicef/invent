@@ -8,7 +8,6 @@
       :country="country"
       :force-star="forceStar"
       :force-eye="forceEye"
-      :force-handshake="forceHandshake"
       :force-globe="forceGlobe"
       :show-label="showLabel"
     />
@@ -25,7 +24,6 @@
         :country="country"
         :force-star="forceStar"
         :force-eye="forceEye"
-        :force-handshake="forceHandshake"
         :force-globe="forceGlobe"
         :show-label="showLabel"
       />
@@ -67,10 +65,6 @@ export default {
       default: false,
     },
     forceEye: {
-      type: Boolean,
-      default: false,
-    },
-    forceHandshake: {
       type: Boolean,
       default: false,
     },
