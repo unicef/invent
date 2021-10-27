@@ -28,7 +28,7 @@
           </li>
           <template v-if="showDonor">
             <div class="el-popover__title">
-              <fa icon="handshake" />
+              <!-- <fa icon="handshake" /> -->
               <translate>Investor View</translate>
             </div>
             <li :class="{ Active: donorActive }" @click="setPersona('donor')">
@@ -92,7 +92,9 @@ export default {
         ? 'user-circle'
         : this.countryActive
         ? 'globe-africa'
-        : 'handshake'
+        : ''
+        // : 'handshake' //it was deprecated everywhere, but as of now the PersonaSelector.vue is not imported in ActionBar.vue so this file requires deletion
+        // TODO: decision on deletion 
     },
     donor() {
       if (this.user && this.user.donor) {
