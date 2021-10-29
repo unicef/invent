@@ -11,7 +11,7 @@
     </p>
     <p v-if="tab === 4" key="country" class="headline">
       <translate>Here are all the initiatives you are</translate>
-      <translate tag="strong">Country Manager</translate>
+      <translate tag="strong">Country FOCAL POINT</translate>
       <translate>of.</translate>
     </p>
     <p v-if="tab === 2" key="review" class="headline">

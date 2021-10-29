@@ -12,7 +12,7 @@ export const state = () => ({
   // initiatives tabs
   tabs: [
     { id: 1, name: 'My initiatives', icon: 'star', total: 1 },
-    { id: 4, name: 'Country manager', icon: 'globe-africa', total: 1 },
+    { id: 4, name: 'Country focal point', icon: 'globe-africa', total: 1 },
     { id: 2, name: 'My reviews', icon: 'comment-alt', total: 1 },
     { id: 3, name: 'My favorites', icon: 'heart', total: 1 },
   ],
@@ -374,7 +374,7 @@ export const actions = {
           },
           {
             id: 4,
-            name: 'Country manager',
+            name: 'Country focal point',
             icon: 'globe-africa',
             total: results[3].data.count,
           },
