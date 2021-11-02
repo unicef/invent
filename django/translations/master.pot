@@ -64,7 +64,7 @@ msgstr ""
 msgid "{name} (me)"
 msgstr ""
 
-#: components/project/ProjectData.vue:183
+#: components/project/ProjectData.vue:186
 #: components/project/sections/CountryCustom.vue:33
 #: components/project/sections/DonorCustom.vue:32
 msgid "{name} custom fields"
@@ -121,11 +121,11 @@ msgstr ""
 msgid "1. General Overview"
 msgstr ""
 
-#: components/project/ProjectData.vue:44 components/project/ProjectData.vue:149
+#: components/project/ProjectData.vue:44 components/project/ProjectData.vue:151
 msgid "2. Categorization"
 msgstr ""
 
-#: components/project/ProjectData.vue:92 components/project/ProjectData.vue:294
+#: components/project/ProjectData.vue:92 components/project/ProjectData.vue:296
 msgid "3. Implementation Overview"
 msgstr ""
 
@@ -135,12 +135,12 @@ msgid "4. Completion of initiative phases"
 msgstr ""
 
 #: components/project/ProjectData.vue:125
-#: components/project/ProjectData.vue:364
+#: components/project/ProjectData.vue:366
 msgid "5. Partners"
 msgstr ""
 
 #: components/project/ProjectData.vue:155
-#: components/project/ProjectData.vue:439
+#: components/project/ProjectData.vue:441
 msgid "6. Technology"
 msgstr ""
 
@@ -360,11 +360,10 @@ msgstr ""
 msgid "Annual Work Plan Outcome or Activity"
 msgstr ""
 
-#: components/common/UserProjectsList.vue:20
+#: components/common/UserProjectsList.vue:17
 msgid ""
 "Any initiatives you have been requested to review as part of the innovation "
-"portfolio review process will appear below. Please complete review for any "
-"initiatives marked “Unscored” below."
+"portfolio review process will appear below."
 msgstr ""
 
 #: pages/_organisation/terms.vue:219
@@ -457,13 +456,17 @@ msgstr ""
 msgid "Before adding another question please save the previous one"
 msgstr ""
 
+#: components/common/UserProjectsList.vue:24
+msgid "below."
+msgstr ""
+
 #: pages/_organisation/portfolio/innovation/_id.vue:59
 msgid ""
 "By clicking on a problem statement you can add or remove it\n"
 "                  from your current filter settings."
 msgstr ""
 
-#: components/dashboard/SearchBox.vue:16 components/dashboard/SearchBox.vue:82
+#: components/dashboard/SearchBox.vue:16 components/dashboard/SearchBox.vue:74
 #: components/search/SearchBox.vue:16 components/search/SearchBox.vue:74
 msgid ""
 "By selecting these fields, you will limit the search to only data included "
@@ -600,7 +603,7 @@ msgstr ""
 #: components/portfolio/dashboard/dialog/Score.vue:141
 #: components/portfolio/dashboard/dialog/Score.vue:3
 #: components/project/ProjectForm.vue:216
-#: components/project/ProjectNavigation.vue:128
+#: components/project/ProjectNavigation.vue:124
 #: pages/_organisation/admin/import/_id.vue:122
 #: pages/_organisation/admin/import/_id.vue:146
 #: pages/_organisation/admin/import/_id.vue:216
@@ -642,7 +645,7 @@ msgstr ""
 msgid "Capability Subcategories:"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:35
+#: components/project/ProjectNavigation.vue:32
 #: components/project/sections/Categorization.vue:2
 #: components/project/sections/Categorization.vue:76
 msgid "Categorization"
@@ -685,7 +688,7 @@ msgid ""
 "                initiative by topic/focus area."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:69
+#: components/project/sections/GeneralOverview.vue:71
 #: components/project/sections/GeneralOverview.vue:1
 msgid "City"
 msgstr ""
@@ -800,7 +803,7 @@ msgstr ""
 msgid "Contact {selected} selected"
 msgstr ""
 
-#: components/project/ProjectData.vue:28 components/project/ProjectData.vue:107
+#: components/project/ProjectData.vue:18 components/project/ProjectData.vue:79
 msgid "Contact email"
 msgstr ""
 
@@ -808,7 +811,7 @@ msgstr ""
 msgid "Contact Email"
 msgstr ""
 
-#: components/project/ProjectData.vue:25 components/project/ProjectData.vue:98
+#: components/project/ProjectData.vue:15 components/project/ProjectData.vue:70
 msgid "Contact name"
 msgstr ""
 
@@ -843,7 +846,7 @@ msgstr ""
 #: components/landing/parts/ResultCard.vue:49
 #: components/portfolio/dashboard/MainTable.vue:40
 #: components/portfolio/dashboard/MainTable.vue:230
-#: components/project/sections/GeneralOverview.vue:76
+#: components/project/sections/GeneralOverview.vue:79
 #: components/project/sections/GeneralOverview.vue:1
 #: components/search/AdvancedSearch.vue:8
 #: components/search/AdvancedSearch.vue:47
@@ -851,7 +854,7 @@ msgid "Country"
 msgstr ""
 
 #: components/common/ActionBar.vue:27
-#: components/common/ProjectLegendContent.vue:32
+#: components/common/ProjectLegendContent.vue:24
 #: components/common/ProjectLegendContent.vue:4
 #: components/common/UserDropdown.vue:57
 msgid "Country admin"
@@ -865,8 +868,12 @@ msgstr ""
 msgid "Country center pin"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:83
+#: components/project/ProjectNavigation.vue:80
 msgid "Country fields"
+msgstr ""
+
+#: components/common/UserProjectsList.vue:13
+msgid "Country FOCAL POINT"
 msgstr ""
 
 #: components/admin/CountryAdmin.vue:10 components/admin/CountryAdmin.vue:91
@@ -936,7 +943,7 @@ msgid "Currency"
 msgstr ""
 
 #: components/dashboard/MainTable.vue:189
-#: components/dashboard/MainTable.vue:631 components/dashboard/SearchBox.vue:40
+#: components/dashboard/MainTable.vue:631 components/dashboard/SearchBox.vue:16
 #: components/portfolio/dashboard/MainTable.vue:201
 #: components/portfolio/dashboard/MainTable.vue:683
 #: components/search/SearchBox.vue:17
@@ -984,7 +991,7 @@ msgstr ""
 msgid "Delete Review Data"
 msgstr ""
 
-#: components/dashboard/SearchBox.vue:37
+#: components/dashboard/SearchBox.vue:15
 #: components/landing/parts/ResultCard.vue:53
 #: components/portfolio/form/GeneralSettings.vue:12
 #: components/portfolio/form/GeneralSettings.vue:1
@@ -1028,7 +1035,7 @@ msgid "DHA Help Center"
 msgstr ""
 
 #: components/project/ProjectData.vue:54 components/project/ProjectData.vue:1
-#: components/project/ProjectData.vue:177
+#: components/project/ProjectData.vue:179
 msgid "Digital Health Intervention(s)"
 msgstr ""
 
@@ -1052,7 +1059,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:102
+#: components/project/ProjectNavigation.vue:99
 msgid "Discard draft"
 msgstr ""
 
@@ -1354,7 +1361,7 @@ msgstr ""
 msgid "First and Last Name"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:165
+#: components/project/sections/GeneralOverview.vue:184
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Focal Point Email"
 msgstr ""
@@ -1408,12 +1415,12 @@ msgstr ""
 msgid "Funding Needs"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:27
+#: components/project/ProjectNavigation.vue:24
 msgid "General"
 msgstr ""
 
 #: components/project/sections/GeneralOverview.vue:2
-#: components/project/sections/GeneralOverview.vue:81
+#: components/project/sections/GeneralOverview.vue:83
 msgid "General overview"
 msgstr ""
 
@@ -1430,7 +1437,7 @@ msgstr ""
 msgid "Go back to login"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:124
+#: components/project/ProjectNavigation.vue:120
 msgid "Go to Dashboard"
 msgstr ""
 
@@ -1447,7 +1454,7 @@ msgstr ""
 #: components/dashboard/MainTable.vue:52 components/dashboard/MainTable.vue:248
 #: components/portfolio/dashboard/MainTable.vue:64
 #: components/portfolio/dashboard/MainTable.vue:300
-#: components/project/ProjectData.vue:49 components/project/ProjectData.vue:164
+#: components/project/ProjectData.vue:49 components/project/ProjectData.vue:166
 #: components/search/AdvancedSearch.vue:14
 #: components/search/AdvancedSearch.vue:71
 msgid "Goal Area"
@@ -1470,7 +1477,7 @@ msgid "Government Viewers"
 msgstr ""
 
 #: components/project/ProjectData.vue:160
-#: components/project/ProjectData.vue:458
+#: components/project/ProjectData.vue:460
 msgid "Hardware platform(s)"
 msgstr ""
 
@@ -1565,8 +1572,12 @@ msgstr ""
 msgid "HERE"
 msgstr ""
 
-#: components/common/UserProjectsList.vue:19
-msgid "Here are all the initiatives you are a Member or a Viewer of"
+#: components/common/UserProjectsList.vue:12
+msgid "Here are all the initiatives you are"
+msgstr ""
+
+#: components/common/UserProjectsList.vue:3
+msgid "Here are all the initiatives you are a"
 msgstr ""
 
 #: components/admin/VueMapCustomizer.vue:55
@@ -1749,7 +1760,7 @@ msgid ""
 "reach children."
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:43
+#: components/project/ProjectNavigation.vue:40
 msgid "Implementation"
 msgstr ""
 
@@ -1820,7 +1831,7 @@ msgid "Information Security Classification"
 msgstr ""
 
 #: components/project/ProjectData.vue:169
-#: components/project/ProjectData.vue:500
+#: components/project/ProjectData.vue:502
 msgid "Information security classification "
 msgstr ""
 
@@ -1853,8 +1864,14 @@ msgstr ""
 msgid "Initiative Description:"
 msgstr ""
 
+#: components/dashboard/SearchBox.vue:18
+#: components/landing/parts/ResultCard.vue:58
+#: components/search/SearchBox.vue:19
+msgid "Initiative ID"
+msgstr ""
+
 #: components/dashboard/MainTable.vue:4 components/dashboard/MainTable.vue:94
-#: components/dashboard/SearchBox.vue:31
+#: components/dashboard/SearchBox.vue:10
 #: components/portfolio/dashboard/MainTable.vue:4
 #: components/portfolio/dashboard/MainTable.vue:100
 #: components/project/ProjectData.vue:5 components/project/ProjectData.vue:47
@@ -1870,15 +1887,11 @@ msgstr ""
 msgid "initiative phases"
 msgstr ""
 
-#: components/project/ProjectData.vue:70
-msgid "Initiative's cover image"
-msgstr ""
-
 #: components/portfolio/dashboard/PortfolioFiltersHeader.vue:5
 msgid "initiative(s) to show"
 msgstr ""
 
-#: components/common/UserProjectsList.vue:23
+#: components/common/UserProjectsList.vue:27
 msgid "Initiatives you have added to your favorites will appear below."
 msgstr ""
 
@@ -1902,7 +1915,7 @@ msgstr ""
 msgid "Innovation Category"
 msgstr ""
 
-#: components/project/ProjectData.vue:87 components/project/ProjectData.vue:278
+#: components/project/ProjectData.vue:87 components/project/ProjectData.vue:280
 msgid "Innovation category(ies)"
 msgstr ""
 
@@ -1924,7 +1937,7 @@ msgstr ""
 msgid "Innovation Ways"
 msgstr ""
 
-#: components/project/ProjectData.vue:83 components/project/ProjectData.vue:264
+#: components/project/ProjectData.vue:83 components/project/ProjectData.vue:266
 msgid "Innovation(s)"
 msgstr ""
 
@@ -1944,6 +1957,12 @@ msgstr ""
 msgid "INVENT"
 msgstr ""
 
+#: components/project/ProjectData.vue:35 components/project/ProjectData.vue:128
+#: components/project/sections/GeneralOverview.vue:107
+#: components/project/sections/GeneralOverview.vue:1
+msgid "INVENT country focal point(s)"
+msgstr ""
+
 #: components/landing/WelcomeSection.vue:6
 msgid ""
 "INVENT provides a one-stop-shop to explore, discover, connect and contribute"
@@ -1955,8 +1974,6 @@ msgstr ""
 
 #: components/admin/import/ImportDetails.vue:19
 #: components/common/ProjectCard.vue:63
-#: components/common/ProjectLegendContent.vue:24
-#: components/common/ProjectLegendContent.vue:4
 #: components/landing/parts/ResultCard.vue:50
 msgid "Investor"
 msgstr ""
@@ -1973,7 +1990,7 @@ msgstr ""
 msgid "Investor Admins"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:75
+#: components/project/ProjectNavigation.vue:72
 msgid "Investor fields"
 msgstr ""
 
@@ -2010,7 +2027,7 @@ msgid ""
 "            Annual Work Plan?"
 msgstr ""
 
-#: components/common/Tabs.vue:25
+#: components/common/Tabs.vue:26
 msgid "item"
 msgstr ""
 
@@ -2023,14 +2040,18 @@ msgstr ""
 #: components/dashboard/MainTable.vue:40 components/dashboard/MainTable.vue:213
 #: components/portfolio/dashboard/MainTable.vue:52
 #: components/portfolio/dashboard/MainTable.vue:265
-#: components/project/sections/GeneralOverview.vue:209
+#: components/project/sections/GeneralOverview.vue:228
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Last updated"
 msgstr ""
 
 #: components/common/ProjectBar.vue:13 components/project/ProjectData.vue:41
-#: components/project/ProjectData.vue:141
+#: components/project/ProjectData.vue:143
 msgid "Last Updated"
+msgstr ""
+
+#: components/landing/NewsSection.vue:3
+msgid "Latest news"
 msgstr ""
 
 #: components/landing/FeaturedCards.vue:40
@@ -2161,6 +2182,10 @@ msgstr ""
 msgid "Me"
 msgstr ""
 
+#: components/common/UserProjectsList.vue:5
+msgid "Member"
+msgstr ""
+
 #: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:29
 msgid "Message"
 msgstr ""
@@ -2219,7 +2244,7 @@ msgstr ""
 msgid "Move to Review"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:90
+#: components/project/sections/GeneralOverview.vue:98
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Multicountry or Regional Office"
 msgstr ""
@@ -2382,7 +2407,7 @@ msgid ""
 msgstr ""
 
 #: components/project/ProjectData.vue:163
-#: components/project/ProjectData.vue:472
+#: components/project/ProjectData.vue:474
 msgid "Non-technology platform(s)"
 msgstr ""
 
@@ -2444,9 +2469,14 @@ msgstr ""
 msgid "Numeric field"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:108
-#: components/project/ProjectNavigation.vue:375
+#: components/project/ProjectNavigation.vue:104
+#: components/project/ProjectNavigation.vue:372
 msgid "of the initiative to the current date."
+msgstr ""
+
+#: components/common/UserProjectsList.vue:9
+#: components/common/UserProjectsList.vue:14
+msgid "of."
 msgstr ""
 
 #: components/admin/import/ImportDetails.vue:12
@@ -2501,6 +2531,10 @@ msgstr ""
 msgid "Opps, it seems your review have some errors."
 msgstr ""
 
+#: components/common/UserProjectsList.vue:6
+msgid "or"
+msgstr ""
+
 #: components/landing/SignupBox.vue:9
 msgid "or technologist, sign up below."
 msgstr ""
@@ -2543,7 +2577,7 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: components/dashboard/SearchBox.vue:34 components/search/SearchBox.vue:14
+#: components/dashboard/SearchBox.vue:13 components/search/SearchBox.vue:14
 msgid "Overview of the digital health"
 msgstr ""
 
@@ -2576,7 +2610,7 @@ msgstr ""
 msgid "Partner logos"
 msgstr ""
 
-#: components/dashboard/SearchBox.vue:43 components/search/SearchBox.vue:18
+#: components/dashboard/SearchBox.vue:17 components/search/SearchBox.vue:18
 msgid "Partner Name"
 msgstr ""
 
@@ -2594,7 +2628,7 @@ msgstr ""
 
 #: components/common/ProjectCard.vue:68
 #: components/landing/parts/ResultCard.vue:56
-#: components/project/ProjectNavigation.vue:59
+#: components/project/ProjectNavigation.vue:56
 #: components/project/sections/Partners.vue:2
 #: components/project/sections/Partners.vue:40
 msgid "Partners"
@@ -2652,7 +2686,7 @@ msgid "Phase of Initiative"
 msgstr ""
 
 #: components/BreadCrumb.vue:27 components/common/ProjectBar.vue:77
-#: components/project/ProjectNavigation.vue:51
+#: components/project/ProjectNavigation.vue:48
 msgid "Phases"
 msgstr ""
 
@@ -2674,7 +2708,7 @@ msgid "Pick a day"
 msgstr ""
 
 #: components/project/ProjectData.vue:166
-#: components/project/ProjectData.vue:486
+#: components/project/ProjectData.vue:488
 msgid "Platform functions"
 msgstr ""
 
@@ -2704,6 +2738,10 @@ msgstr ""
 msgid ""
 "Please be as specific as possible about the partnership needs.\n"
 "              They could be NGO, academic, financial, private, etc."
+msgstr ""
+
+#: components/common/UserProjectsList.vue:21
+msgid "Please complete review for any initiatives marked"
 msgstr ""
 
 #: pages/_organisation/initiatives/create.vue:5
@@ -2749,17 +2787,17 @@ msgid ""
 "            the Annual Work Plan."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:97
+#: components/project/sections/GeneralOverview.vue:116
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Please provide a brief overview of the initiative."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:120
+#: components/project/sections/GeneralOverview.vue:139
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Please provide a detailed narrative of the initiative."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:105
+#: components/project/sections/GeneralOverview.vue:108
 msgid "Please provide an email address: "
 msgstr ""
 
@@ -2986,7 +3024,7 @@ msgid "Programme Focal Point Name:"
 msgstr ""
 
 #: components/project/ProjectData.vue:58 components/project/ProjectData.vue:5
-#: components/project/ProjectData.vue:187
+#: components/project/ProjectData.vue:189
 msgid "Programme Focus Area(s)"
 msgstr ""
 
@@ -3061,16 +3099,16 @@ msgid "Provide the website of the partner, if available."
 msgstr ""
 
 #: components/admin/import/ImportFile.vue:98
-#: components/project/ProjectNavigation.vue:92
+#: components/project/ProjectNavigation.vue:89
 msgid "Publish"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:113
+#: components/project/ProjectNavigation.vue:109
 msgid "Publish as latest"
 msgstr ""
 
 #: components/common/ExtendedProjectCard.vue:47
-#: components/project/ProjectNavigation.vue:14
+#: components/project/ProjectNavigation.vue:11
 #: pages/_organisation/initiatives/_id/published.vue:7
 msgid "Published"
 msgstr ""
@@ -3139,6 +3177,10 @@ msgstr ""
 msgid "Reach: Number of Children Impacted (Official Score)"
 msgstr ""
 
+#: components/landing/parts/NewsCard.vue:10
+msgid "Read the Story"
+msgstr ""
+
 #: components/dialogs/ProjectApprovalDialog.vue:33
 #: components/dialogs/ProjectApprovalDialog.vue:92
 #: components/dialogs/ProjectApprovalDialog.vue:161
@@ -3163,7 +3205,7 @@ msgstr ""
 #: components/landing/parts/ResultCard.vue:57
 #: components/portfolio/dashboard/MainTable.vue:28
 #: components/portfolio/dashboard/MainTable.vue:192
-#: components/project/sections/GeneralOverview.vue:83
+#: components/project/sections/GeneralOverview.vue:90
 #: components/project/sections/GeneralOverview.vue:1
 #: components/search/AdvancedSearch.vue:6
 #: components/search/AdvancedSearch.vue:32
@@ -3190,7 +3232,7 @@ msgstr ""
 msgid "Regional Priorities"
 msgstr ""
 
-#: components/project/ProjectData.vue:79 components/project/ProjectData.vue:250
+#: components/project/ProjectData.vue:79 components/project/ProjectData.vue:252
 msgid "Regional priority(ies)"
 msgstr ""
 
@@ -3241,7 +3283,7 @@ msgstr ""
 #: components/dashboard/MainTable.vue:82 components/dashboard/MainTable.vue:344
 #: components/portfolio/dashboard/MainTable.vue:94
 #: components/portfolio/dashboard/MainTable.vue:396
-#: components/project/ProjectData.vue:51 components/project/ProjectData.vue:170
+#: components/project/ProjectData.vue:51 components/project/ProjectData.vue:172
 #: components/search/AdvancedSearch.vue:15
 #: components/search/AdvancedSearch.vue:78
 msgid "Result Area"
@@ -3251,7 +3293,7 @@ msgstr ""
 msgid "Result Area:"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:130
+#: components/project/ProjectNavigation.vue:126
 msgid "Return to the Dashboard"
 msgstr ""
 
@@ -3324,7 +3366,7 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:97
+#: components/project/ProjectNavigation.vue:94
 msgid "Save draft"
 msgstr ""
 
@@ -3383,7 +3425,7 @@ msgstr ""
 msgid "Scoring: {name}"
 msgstr ""
 
-#: components/project/ProjectData.vue:45 components/project/ProjectData.vue:153
+#: components/project/ProjectData.vue:45 components/project/ProjectData.vue:155
 msgid "Sector"
 msgstr ""
 
@@ -3592,7 +3634,7 @@ msgid "Software"
 msgstr ""
 
 #: components/project/ProjectData.vue:156
-#: components/project/ProjectData.vue:445
+#: components/project/ProjectData.vue:447
 msgid "Software platform(s)"
 msgstr ""
 
@@ -3690,7 +3732,7 @@ msgid "System Admins"
 msgstr ""
 
 #: components/project/ProjectData.vue:62 components/project/ProjectData.vue:9
-#: components/project/ProjectData.vue:197
+#: components/project/ProjectData.vue:199
 msgid "System challenge(s)"
 msgstr ""
 
@@ -3701,7 +3743,7 @@ msgstr ""
 msgid "Target Group (Target Population) Reached"
 msgstr ""
 
-#: components/common/ProjectLegendContent.vue:44
+#: components/common/ProjectLegendContent.vue:40
 msgid "Team member"
 msgstr ""
 
@@ -3710,11 +3752,11 @@ msgstr ""
 msgid "Team Member"
 msgstr ""
 
-#: components/project/ProjectData.vue:33 components/project/ProjectData.vue:117
+#: components/project/ProjectData.vue:24 components/project/ProjectData.vue:92
 msgid "Team members"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:67
+#: components/project/ProjectNavigation.vue:64
 #: components/project/sections/Technology.vue:2
 #: components/project/sections/Technology.vue:49
 msgid "Technology"
@@ -3746,8 +3788,8 @@ msgstr ""
 msgid "Thank you"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:106
-#: components/project/ProjectNavigation.vue:373
+#: components/project/ProjectNavigation.vue:103
+#: components/project/ProjectNavigation.vue:370
 msgid "The action will update the timestamp"
 msgstr ""
 
@@ -3907,11 +3949,11 @@ msgstr ""
 msgid "There's no partners for the initiative."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:184
+#: components/project/sections/GeneralOverview.vue:203
 msgid "These team members can modify entries on \"+ New Initiative\" page."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:201
+#: components/project/sections/GeneralOverview.vue:220
 msgid ""
 "These team members will receive a notification when an initiative has been "
 "added."
@@ -3954,7 +3996,7 @@ msgstr ""
 msgid "Third Party Sites"
 msgstr ""
 
-#: components/TranslateWrapper.vue:22
+#: components/TranslateWrapper.vue:23
 msgid "this"
 msgstr ""
 
@@ -3997,7 +4039,7 @@ msgid ""
 "              receiving benefits from the initiative."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:110
+#: components/project/sections/GeneralOverview.vue:129
 msgid ""
 "This short description provides a clear understanding of the purpose and "
 "target group to a reader who\n"
@@ -4176,7 +4218,7 @@ msgstr ""
 msgid "Type something"
 msgstr ""
 
-#: components/dashboard/SearchBox.vue:4 components/dashboard/SearchBox.vue:32
+#: components/dashboard/SearchBox.vue:4 components/dashboard/SearchBox.vue:24
 #: components/search/SearchBox.vue:4 components/search/SearchBox.vue:24
 msgid "Type something..."
 msgstr ""
@@ -4222,7 +4264,7 @@ msgstr ""
 msgid "UNICEF Office"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:104
+#: components/project/sections/GeneralOverview.vue:107
 msgid "UNICEF Office Issue"
 msgstr ""
 
@@ -4271,10 +4313,11 @@ msgstr ""
 
 #: components/common/ProjectCardActions.vue:68
 #: components/common/ProjectCardActions.vue:9
-#: components/project/ProjectNavigation.vue:120
+#: components/project/ProjectNavigation.vue:116
 msgid "Unpublish"
 msgstr ""
 
+#: components/common/UserProjectsList.vue:23
 #: components/review/ReviewStateInfo.vue:7
 msgid "Unscored"
 msgstr ""
@@ -4299,12 +4342,12 @@ msgstr ""
 msgid "Upload file"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:137
+#: components/project/sections/GeneralOverview.vue:156
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Upload initiative’s cover image"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:143
+#: components/project/sections/GeneralOverview.vue:162
 msgid ""
 "Upload the best quality image you have for the initiative. Uploaded image "
 "will be formatted to match the\n"
@@ -4374,11 +4417,12 @@ msgstr ""
 
 #: components/common/ProjectLegendContent.vue:16
 #: components/common/ProjectLegendContent.vue:4
+#: components/common/UserProjectsList.vue:8
 msgid "Viewer"
 msgstr ""
 
-#: components/admin/DonorAdmin.vue:47 components/project/ProjectData.vue:36
-#: components/project/ProjectData.vue:129
+#: components/admin/DonorAdmin.vue:47 components/project/ProjectData.vue:29
+#: components/project/ProjectData.vue:109
 msgid "Viewers"
 msgstr ""
 
@@ -4393,7 +4437,7 @@ msgstr ""
 #: components/dialogs/ProjectApprovalDialog.vue:121
 #: components/portfolio/form/NewPortfolioForm.vue:76
 #: components/project/ProjectForm.vue:70 components/project/ProjectForm.vue:115
-#: pages/_organisation/initiatives/_id.vue:29
+#: pages/_organisation/initiatives/_id.vue:28
 msgid "Warning"
 msgstr ""
 
@@ -4577,7 +4621,7 @@ msgstr ""
 msgid "What regional priorities are addressed by the initiative?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:127
+#: components/project/sections/GeneralOverview.vue:146
 msgid ""
 "What the initiative aims to achieve, detailing the purpose, summarizing the "
 "approach, solution and\n"
@@ -4665,17 +4709,17 @@ msgstr ""
 msgid "Which UNICEF Office supports the initiative?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:176
+#: components/project/sections/GeneralOverview.vue:195
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Who else should be able to modify this initiative's entry?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:156
+#: components/project/sections/GeneralOverview.vue:175
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Who is the focal point of contact for this initiative?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:191
+#: components/project/sections/GeneralOverview.vue:210
 #: components/project/sections/GeneralOverview.vue:1
 msgid ""
 "Who should receive updates that this initiative has been added or modified?"
