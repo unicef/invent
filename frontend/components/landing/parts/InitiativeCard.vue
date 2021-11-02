@@ -115,7 +115,7 @@ export default {
       .updated {
         position: absolute;
         right: 0;
-        top: 4px;
+        bottom: 0;
         color: #7995a2;
         font-size: @fontSizeSmall;
       }
