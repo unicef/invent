@@ -18,16 +18,17 @@
           <fa icon="book-reader" size="lg" />
         </div>
         <div class="text">
-          <translate>Visit INVENT Wiki</translate>
+          <translate>Learn about INVENT</translate>
           <fa icon="arrow-right" />
         </div>
       </a>
+      <!--  I leave it here in case they change their mind
       <p>
         <translate>
           The Wiki is designed to provide an overview of the less well-known features of the site and to share a vision
           for the direction of the platform.
         </translate>
-      </p>
+      </p> -->
     </div>
   </div>
 </template>
