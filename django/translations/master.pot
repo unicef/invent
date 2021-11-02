@@ -2054,6 +2054,10 @@ msgstr ""
 msgid "Latest news"
 msgstr ""
 
+#: components/landing/WelcomeSection.vue:20
+msgid "Learn about INVENT"
+msgstr ""
+
 #: components/landing/FeaturedCards.vue:40
 msgid "Learn more"
 msgstr ""
@@ -3923,7 +3927,7 @@ msgid ""
 "              “as is” basis."
 msgstr ""
 
-#: components/landing/WelcomeSection.vue:25
+#: components/landing/WelcomeSection.vue:3
 msgid ""
 "The Wiki is designed to provide an overview of the less well-known features "
 "of the site and to share a vision\n"
@@ -4424,10 +4428,6 @@ msgstr ""
 #: components/admin/DonorAdmin.vue:47 components/project/ProjectData.vue:29
 #: components/project/ProjectData.vue:109
 msgid "Viewers"
-msgstr ""
-
-#: components/landing/WelcomeSection.vue:20
-msgid "Visit INVENT Wiki"
 msgstr ""
 
 #: components/DhaLogin.vue:70 components/admin/DhaQuestion.vue:79
