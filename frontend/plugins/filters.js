@@ -5,6 +5,8 @@ Vue.filter('simpleDateFormat', (value) => {
   return value ? format(value, 'DD/MM/YYYY') : ''
 })
 
-Vue.filter('formatNumber', (value) => {
-  return new Intl.NumberFormat().format(value)
-})
+export default ({store}) => {
+  Vue.filter('formatNumber', (value) => {
+    return new Intl.NumberFormat(store.$i18n.localeProperties.iso).format(value)
+  })
+}
