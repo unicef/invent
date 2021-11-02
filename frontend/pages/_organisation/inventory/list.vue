@@ -73,7 +73,7 @@ export default {
         this.$router.replace({ ...this.$route, query })
         this.load()
       }
-    }, 100),
+    }, 350),
     async load() {
       this.$nuxt.$loading.start()
       await this.loadProjectList()
