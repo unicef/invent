@@ -27,7 +27,11 @@
         />
       </div>
     </div>
-    <FeaturedCards class="featured-wrapper" :projects="landingProjects.featured" />
+    <FeaturedCards
+      v-if="landingProjects.featured.length > 0"
+      class="featured-wrapper"
+      :projects="landingProjects.featured"
+    />
   </div>
 </template>
 
