@@ -35,6 +35,7 @@ export default {
       store.dispatch('countries/loadMapData'),
       store.dispatch('offices/loadOffices'),
       store.dispatch('projects/loadLandingProjects'),
+      store.dispatch('landing/loadNewsFeed'),
     ])
     await store.dispatch('dashboard/loadProjectsMap')
   },

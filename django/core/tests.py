@@ -1,5 +1,6 @@
 from django.contrib.admin import AdminSite
 from django.contrib.admin.widgets import AdminTextInputWidget
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.forms.fields import CharField
 from django.test import TestCase
 from django.test.client import Client
@@ -8,7 +9,9 @@ from rest_framework.reverse import reverse
 
 from core.admin import CustomUserAdmin
 from core.admin.widgets import AdminArrayFieldWidget, AdminArrayField, NoneReadOnlyAdminArrayFieldWidget
+from core.models import NewsItem
 from country.models import Country
+from project.utils import get_temp_image
 from user.models import UserProfile
 
 
@@ -167,3 +170,32 @@ class TestStaticDataEndpoint(TestCase):
         review_questions_data = response.json()['review_questions']
         self.assertNotEqual(len(review_questions_data['nst']['text_bold']), 0)
         self.assertNotEqual(len(review_questions_data['ra']['guidance_bold']), 0)
+
+
+class TestNewsFeed(TestCase):
+    def test_news_feed(self):
+        url = reverse("news-feed")
+        data = {
+            "title_en": "test_en",
+            "title_fr": "test_fr",
+            "description": "test desc",
+            "image": SimpleUploadedFile('test.jpg', content=get_temp_image().getvalue()),
+            "alt_text": "test_alt",
+            "link": "https://invent.unicef.org",
+            "link_text": "Read less >",
+        }
+        news_item = NewsItem.objects.create(**data)
+        str(news_item)
+        response = self.client.get(url)
+        response_data = response.json()[0]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response_data['title'], data['title_en'])
+        self.assertEqual(response_data['description'], data['description'])
+        self.assertEqual(response_data['alt_text'], data['alt_text'])
+        self.assertEqual(response_data['link'], data['link'])
+        self.assertEqual(response_data['link_text'], data['link_text'])
+        self.assertIsNotNone(response_data['thumbnail'])
+
+        response = self.client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['title'], data['title_fr'])
