@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.db import models
 from django.db.models import QuerySet
 from django.db.models.query_utils import Q
 from modeltranslation.manager import MultilingualQuerySet
+from sorl.thumbnail import ImageField, get_thumbnail
 
 
 class GetObjectOrNoneMixin(object):
@@ -129,3 +131,30 @@ class ExtendedNameOrderedSoftDeletedModel(SoftDeleteModel, ExtendedModel):
 
     def __str__(self):
         return self.name
+
+
+class NewsItem(ExtendedModel):
+    title = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=1024, blank=True)
+    alt_text = models.CharField(max_length=128, blank=True)
+    link = models.URLField()
+    link_text = models.CharField(max_length=64, default="Read more >")
+    visible = models.BooleanField(default=True)
+    image = ImageField(upload_to='news_images', null=True, blank=True)
+    order = models.PositiveIntegerField(default=0, blank=False, null=False)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"{self.id}-{self.title}"
+
+    @property
+    def thumbnail(self):
+        try:
+            if self.image:
+                return get_thumbnail(self.image, f'x{settings.THUMBNAIL_HEIGHT}')
+            else:  # pragma: no cover
+                return None
+        except OSError:  # pragma: no cover
+            return None

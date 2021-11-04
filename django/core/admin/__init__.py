@@ -8,13 +8,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.postgres.fields.array import ArrayField
 from django.forms.widgets import MediaDefiningClass
+from modeltranslation.admin import TranslationAdmin
 from modeltranslation.translator import translator
-
+from adminsortable2.admin import SortableAdminMixin
 from user.models import UserProfile
 from .widgets import AdminArrayField
 
 from import_export.admin import ExportActionMixin
 from core.resources import UserResource
+from ..models import NewsItem
 
 
 class UserProfileInline(admin.StackedInline):
@@ -115,6 +117,11 @@ class ArrayFieldMixin(object):
 
     class Media:
         js = ('arrayfield.js',)
+
+
+@admin.register(NewsItem)
+class NewsFeedAdmin(SortableAdminMixin, TranslationAdmin):
+    list_display = ('order', '__str__', 'link', 'visible')
 
 
 admin.site.login_form = CustomAuthenticationForm

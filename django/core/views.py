@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.utils.translation import ugettext
 
+from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
@@ -22,6 +24,8 @@ from .data.toolkit_questions import TOOLKIT_QUESTIONS
 from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
 from .data.review_questions import REVIEWER_QUESTIONS
+from .models import NewsItem
+from .serializers import NewsItemSerializer
 
 
 class TokenAuthMixin:
@@ -137,3 +141,8 @@ class StaticDataView(GenericAPIView):
                               'name': ugettext(name),
                               'flag': self.flag_mapping.get(code, '')})
         return languages
+
+
+class NewsFeedView(mixins.ListModelMixin, GenericViewSet):
+    queryset = NewsItem.objects.filter(visible=True)
+    serializer_class = NewsItemSerializer
