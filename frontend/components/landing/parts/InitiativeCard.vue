@@ -1,6 +1,6 @@
 <template>
   <div class="InitiativeCard" :class="{ Small: minimal }">
-    <div v-if="project.thumbnail" class="cover" :style="`background-image: url(${project.thumbnail})`"></div>
+    <div v-if="project.thumbnail" class="cover" :style="background"></div>
     <div class="project">
       <nuxt-link :to="projectUrl">
         <h1>{{ title }}</h1>
@@ -44,6 +44,9 @@ export default {
     ...mapGetters({
       currentUser: 'user/getProfile',
     }),
+    background() {
+      return this.project.thumbnail ? `background-image: url(${this.project.thumbnail})` : ''
+    },
     title() {
       return this.project?.name
     },
