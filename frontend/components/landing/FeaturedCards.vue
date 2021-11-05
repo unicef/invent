@@ -22,7 +22,7 @@
         :style="`z-Index: ${(showCards.length - index) * 10};
                  inset: ${index * 5}px;
                  transform: translateX(${(index - 0) * 6}px);
-                 background-image: url(${card.thumbnail})`"
+                 ${background(card.thumbnail)}`"
       >
         <div v-if="card.thumbnail" class="details">
           <div class="title" @click="openProject(card)">{{ card.name }}</div>
@@ -93,6 +93,9 @@ export default {
     },
   },
   methods: {
+    background(thumbnail) {
+      return thumbnail ? `background-image: url(${thumbnail});` : ''
+    },
     team(project) {
       const team = project.team.map((member) => {
         if (member.id === this.currentUser.id) {
