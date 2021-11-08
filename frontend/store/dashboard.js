@@ -252,18 +252,14 @@ export const getters = {
       g.view_as === undefined
     )
   },
-  getProjectsList: (state) => [
-    ...state.projectsList.map((r) => parseCustomAnswers(r)),
-  ],
+  getProjectsList: (state) => [...state.projectsList.map((r) => parseCustomAnswers(r))],
   getProjectsBucket: (state, getters) =>
     state.selectAll
       ? [...state.projectsBucket.map((r) => parseCustomAnswers(r))]
       : getters.getProjectsList,
   getCountryColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'country') {
-      const country = rootGetters['countries/getCountryDetails'](
-        state.dashboardId
-      )
+      const country = rootGetters['countries/getCountryDetails'](state.dashboardId)
       return country && country.country_questions
         ? customColumnsMapper(country.country_questions, 'c')
         : []
@@ -342,10 +338,7 @@ export const getters = {
   getDashboardId: (state) => state.dashboardId,
   getDashboardSection: (state) => state.dashboardSection,
   getSearchParameters: (state, getters, rootState, rootGetters) => {
-    const q =
-      state.searchString && state.searchString.length > 1
-        ? state.searchString
-        : ''
+    const q = state.searchString
     const country = getters.getFilteredCountries
     // const donor = state.dashboardType === 'donor' ? [state.dashboardId] : null
     const donor = rootGetters['system/getUnicefDonor'].id
@@ -358,10 +351,7 @@ export const getters = {
       in: q ? state.searchIn : undefined,
       country,
       donor,
-      region:
-        state.filteredRegion || state.filteredRegion === 0
-          ? state.filteredRegion
-          : '',
+      region: state.filteredRegion || state.filteredRegion === 0 ? state.filteredRegion : '',
       ic: state.innovationCategories,
       fo: state.filteredOffice,
       co: state.filteredCountryOffice,
