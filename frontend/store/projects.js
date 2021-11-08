@@ -231,9 +231,7 @@ export const actions = {
       const { data } = await this.$axios.get('/api/projects/landing/')
       const regions = rootGetters['system/getRegions']
       let countries = rootGetters['countries/getCountries']
-      console.log('🚀 ~ file: projects.js ~ line 234 ~ loadLandingProjects ~ countries', countries)
       if (countries.length === 0) {
-        console.log('empty countries??')
         await dispatch('countries/loadMapData', {}, { root: true })
         countries = rootGetters['countries/getCountries']
       }
