@@ -3,6 +3,7 @@ from import_export.fields import Field
 from django.utils.translation import ugettext_lazy as _
 
 from user.models import UserProfile
+from project.models import Project
 from django.contrib.auth.models import User
 
 
@@ -43,13 +44,42 @@ class UserResource(resources.ModelResource):  # pragma: no cover
     country = Field(column_name=_('Country'))
     donor = Field(column_name=_('Donor'))
     language = Field(column_name=_('Language'))
+    initiatives_where_team_member = Field(column_name=_('Initiatives where team member'))
+    initiatives_where_viewer = Field(column_name=_('Initiatives where viewer'))
+    initiatives_where_invent_focal_point = Field(column_name=_('Initiatives where INVENT focal point'))
+    favorited_initiatives = Field(column_name=_('Favorited initiatives'))
 
     class Meta:
         model = User
         fields = ('id', 'name', 'email', 'account_type', 'organization', 'country', 'donor', 'groups', 'language',
-                  'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser', 'is_gpo')
-        export_order = ('id', 'name', 'email', 'account_type', 'organization', 'country', 'donor', 'groups', 'language',
-                        'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser', 'is_gpo')
+                  'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser', 'is_gpo',
+                  'initiatives_where_team_member', 'initiatives_where_viewer',
+                  'initiatives_where_invent_focal_point', 'favorited_initiatives')
+        export_order = ('id', 'name', 'email', 'account_type', 'organization', 'country', 'donor', 'groups',
+                        'language', 'last_login', 'date_joined', 'is_active',
+                        'is_staff', 'is_superuser', 'is_gpo', 
+                        'initiatives_where_team_member', 'initiatives_where_viewer',
+                        'initiatives_where_invent_focal_point', 'favorited_initiatives')
+
+    def dehydrate_favorited_initiatives(self, user: User):
+        favorite_count = Project.objects.filter(favorited_by=user.userprofile).count() \
+            if hasattr(user, 'userprofile') \
+            else 0
+        return favorite_count
+
+    def dehydrate_initiatives_where_invent_focal_point(self, user: User):
+        focal_point_counter = user.userprofile.manager_of.all().count() if hasattr(user, 'userprofile') else 0
+        return focal_point_counter
+
+    def dehydrate_initiatives_where_viewer(self, user: User):
+        viewer_counter = Project.objects.filter(viewers=user.userprofile).count() \
+            if hasattr(user, 'userprofile') \
+            else 0
+        return viewer_counter
+
+    def dehydrate_initiatives_where_team_member(self, user: User):
+        team_at_counter = Project.objects.filter(team=user.userprofile).count() if hasattr(user, 'userprofile') else 0
+        return team_at_counter
 
     def dehydrate_last_login(self, user: User):
         return user.last_login.date() if user.last_login else 'None'
