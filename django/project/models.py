@@ -2,6 +2,8 @@ import uuid
 from collections import namedtuple
 from typing import List, Union
 
+from django.contrib.postgres.fields.jsonb import KeyTextTransform
+from django.db.models.functions import Cast
 from simple_history.models import HistoricalRecords
 from sorl.thumbnail import ImageField, get_thumbnail
 
@@ -48,6 +50,19 @@ class ProjectManager(models.Manager):
 
     def draft_only(self):
         return self.filter(public_id='')
+
+    def country_managers_projects(self, user):
+        user_managed_offices = list(user.userprofile.manager_of.values_list('id', flat=True))
+        if not user_managed_offices:
+            qs = self.none()
+        else:
+            qs = self.annotate(
+                co_id=Cast(KeyTextTransform('country_office', 'data'), output_field=IntegerField())).annotate(
+                draft_co_id=Cast(KeyTextTransform('country_office', 'draft'), output_field=IntegerField()))
+
+            qs = qs.filter(
+                Q(co_id__in=user_managed_offices) | Q(draft_co_id__in=user_managed_offices)).order_by('-modified')
+        return qs
 
 
 class ProjectQuerySet(ActiveQuerySet, ProjectManager):

@@ -160,5 +160,9 @@ urlpatterns = [
              'get': 'retrieve',
              'post': 'update',
              'patch': 'partial_update'
-         }), name='portfolio-project-manager-review')
+         }), name='portfolio-project-manager-review'),
+    path('country-manager-export/',
+         view=views.CountryManagerExportView.as_view({
+             'get': 'retrieve',
+         }), name='country-manager-export')
 ]
