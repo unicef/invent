@@ -6,9 +6,66 @@
         <h1>{{ title }}</h1>
       </nuxt-link>
       <div v-if="minimal" class="updated"><translate>Updated: </translate> {{ lastChange }}</div>
-      <div v-if="project.is_draft" class="draft">
-        <translate>draft</translate>
+      <div class="left-top">
+        <div v-if="project.is_draft" class="draft">
+          <translate>draft</translate>
+        </div>
+        <div class="popup-menu" v-if="showActions">
+          <i class="el-icon-more rotate-90 more-icon" @click="toggleMiniMenu()"></i>
+        </div>
+        <div tabindex="0" ref="popover" @focusout="menuVisible = false" v-if="showActions">
+          <el-popover placement="top-end" width="170" v-model="menuVisible">
+            <nuxt-link
+              v-if="!project.is_draft"
+              :to="
+                localePath({
+                  name: 'organisation-initiatives-id-published',
+                  params: {
+                    id: project.id,
+                    organisation: $route.params.organisation,
+                  },
+                })
+              "
+              class="NuxtLink IconLeft popover-button"
+            >
+              <fa icon="arrow-right" />
+              <translate>View Published</translate>
+            </nuxt-link>
+            <nuxt-link
+              :to="
+                localePath({
+                  name: 'organisation-initiatives-id',
+                  params: {
+                    id: project.id,
+                    organisation: $route.params.organisation,
+                  },
+                })
+              "
+              class="NuxtLink IconLeft popover-button"
+            >
+              <fa icon="arrow-right" />
+              <translate>View Draft</translate>
+            </nuxt-link>
+            <nuxt-link
+              v-if="showActions"
+              :to="
+                localePath({
+                  name: 'organisation-initiatives-id-edit',
+                  params: {
+                    id: project.id,
+                    organisation: $route.params.organisation,
+                  },
+                })
+              "
+              class="NuxtLink IconLeft popover-button"
+            >
+              <fa icon="edit" />
+              <translate>Edit</translate>
+            </nuxt-link>
+          </el-popover>
+        </div>
       </div>
+
       <Location :location-info="locationInfo" :size="locationSize" />
 
       <div v-if="!minimal" class="bottom">
@@ -30,6 +87,11 @@ export default {
     Location,
     AvatarTeam,
   },
+  data() {
+    return {
+      menuVisible: false,
+    }
+  },
   props: {
     project: {
       type: Object,
@@ -38,6 +100,18 @@ export default {
     minimal: {
       type: Boolean,
       default: false,
+    },
+    showActions: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
+    toggleMiniMenu() {
+      this.menuVisible = !this.menuVisible
+      if (this.menuVisible) {
+        this.$refs.popover.focus()
+      }
     },
   },
   computed: {
@@ -88,6 +162,15 @@ export default {
           organisation: this.$route.params.organisation,
         },
       })
+    },
+    showViewDraft() {
+      return this.project.isViewer || this.project.isMember
+    },
+    showEditDraft() {
+      return this.project.isMember
+    },
+    showViewPublished() {
+      return this.project.isPublished
     },
   },
 }
@@ -141,10 +224,48 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 16px 24px;
-    .draft {
+    margin-right: 16px;
+    .left-top {
       position: absolute;
       top: 0;
       right: 0;
+      display: inline-block;
+      width: auto;
+    }
+    /deep/ .el-popover {
+      top: 0;
+      right: 0;
+      border: 0px;
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.18);
+      border-radius: 0px;
+      padding: 0;
+    }
+    .popover-button {
+      display: block;
+      padding: 10px;
+      padding-left: 15px;
+      text-decoration: none;
+    }
+    .popover-button:hover {
+      background-color: #e8f6fd;
+      text-decoration: none;
+    }
+    .popup-menu {
+      display: inline-block;
+    }
+    .rotate-90 {
+      transform: rotate(90deg);
+    }
+    .more-icon {
+      color: #7995a2;
+    }
+    .more-icon:hover {
+      color: black;
+      cursor: pointer;
+    }
+    .draft {
+      vertical-align: top;
+      display: inline-block;
       padding: 5px 9px 3px 9px;
       color: @colorTextPrimary;
       font-weight: bold;
