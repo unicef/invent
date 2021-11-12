@@ -13,7 +13,7 @@
         </template>
       </Header>
       <div class="content">
-        <InitiativeCard v-for="project in landingProjects.my_initiatives" :key="project.id" :project="project" />
+        <InitiativeCard v-for="project in landingProjects.my_initiatives" :key="project.id" :showActions="true" :project="project" />
         <Header v-if="showRecents.length > 0" :postion="recentHeaderPosition">
           <template #title>
             {{ recentTitle }}
