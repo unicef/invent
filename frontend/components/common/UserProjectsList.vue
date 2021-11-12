@@ -9,14 +9,21 @@
       <translate tag="strong">Viewer</translate>
       <translate>of.</translate>
     </p>
-    <p v-if="tab === 4" key="country" class="headline">
-      <translate>Here are all the initiatives you are</translate>
-      <translate tag="strong">Country FOCAL POINT</translate>
-      <translate>of.</translate>
-    </p>
+    <el-row v-if="tab === 4" key="country" class="headline" type="flex" :justify="justifyRuleByCount(tab)">
+      <div class="grid-content">
+        <translate>Here are all the initiatives you are</translate>
+        <translate tag="strong">Country FOCAL POINT</translate>
+        <translate>of.</translate>
+      </div>
+      <a @click="downloadExport(tabCount(tab))" v-if="tabCount(tab) > 0" class="NuxtLink IconLeft pointer-cursor">
+        <fa icon="file-download" />
+        <translate>Export {{ tabCount(tab) }} Initiatives</translate>
+      </a>
+    </el-row>
     <p v-if="tab === 2" key="review" class="headline">
       <translate>
-        Any initiatives you have been requested to review as part of the innovation portfolio review process will appear below.
+        Any initiatives you have been requested to review as part of the innovation portfolio review process will appear
+        below.
       </translate>
       <br />
       <translate>Please complete review for any initiatives marked</translate>
@@ -78,6 +85,7 @@ export default {
     ...mapState({
       projects: (state) => state.projects.userProjects,
       tab: (state) => state.projects.tab,
+      tabs: (state) => state.projects.tabs,
       loadingProject: (state) => state.projects.loadingProject,
     }),
     ...mapGetters({
@@ -100,6 +108,41 @@ export default {
     paginationOrderStr() {
       const loc = this.$i18n.locale
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
+    },
+  },
+  methods: {
+    async downloadExport(count) {
+      await window.$nuxt
+        .$axios({
+          url: '/api/country-manager-export/',
+          method: 'GET',
+          responseType: 'blob',
+        })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          const date = new Date()
+          const dateString = [
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDay(),
+            date.getHours(),
+            date.getMinutes(),
+          ].join('_')
+          link.setAttribute('download', 'Export_' + dateString + '_' + count + '_Initiatives.xlsx')
+          document.body.appendChild(link)
+          link.click()
+        })
+    },
+    justifyRuleByCount(tab) {
+      if (this.tabCount(tab) > 0) {
+        return 'space-between'
+      }
+      return 'center'
+    },
+    tabCount(tab) {
+      return this.tabs.filter((x) => x.id == tab)[0].total || ''
     },
   },
 }
@@ -135,6 +178,9 @@ export default {
     }
     .UnscoredIcon {
       color: @colorBrandAccent;
+    }
+    .pointer-cursor {
+      cursor: pointer;
     }
   }
 }

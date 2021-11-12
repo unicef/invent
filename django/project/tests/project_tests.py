@@ -1220,3 +1220,9 @@ class ProjectTests(SetupTests):
         url = reverse("project-list", kwargs={'list_name': 'country-manager'})
         response = self.test_user_client.get(url)
         self.assertEqual(response.json()['count'], 5)
+
+    def test_country_manager_export(self):
+        response = self.test_user_client.get(reverse("country-manager-export"))
+        self.assertTrue(response.content)
+        self.assertTrue('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        in response._content_type_for_repr)
