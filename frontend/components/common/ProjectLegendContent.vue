@@ -22,7 +22,7 @@
       <p>
         <fa icon="globe-africa" class="CountryAdminIcon" />
         <span v-show="showLabel">
-          <translate>Country admin</translate>
+          <translate>Country focal point</translate>
         </span>
       </p>
     </template>
@@ -66,13 +66,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    countryOffice: {
+      type: Number,
+      default: null
+    }
   },
   data() {
     return {
       member: this.$gettext('Team member'),
     }
   },
-
   computed: {
     ...mapGetters({
       userProfile: 'user/getProfile',
@@ -112,16 +115,19 @@ export default {
       }
       return false
     },
+    isFocalPoint(){
+      return this.userProfile.manager_of.includes(this.countryOffice)
+    },
     showStar() {
-      return this.forceStar || this.isMember
+      return this.forceStar || (this.isMember && !this.isFocalPoint)
     },
     showEye() {
       return this.forceEye || (!this.isMember && this.isViewer)
     },
     showGlobe() {
-      return this.forceGlobe || (this.isCountry && !this.isTeam)
+      return this.forceGlobe || this.isFocalPoint
     },
-  },
+  }
 }
 </script>
 
