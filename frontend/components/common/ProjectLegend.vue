@@ -10,6 +10,7 @@
       :force-eye="forceEye"
       :force-globe="forceGlobe"
       :show-label="showLabel"
+      :country-office="countryOffice"
     />
     <el-popover
       v-if="compactMode"
@@ -26,6 +27,7 @@
         :force-eye="forceEye"
         :force-globe="forceGlobe"
         :show-label="showLabel"
+        :country-office="countryOffice"
       />
       <el-button
         slot="reference"
@@ -80,7 +82,11 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
+    countryOffice: {
+      type: Number,
+      default: null
+    }
+  }
 }
 </script>
 

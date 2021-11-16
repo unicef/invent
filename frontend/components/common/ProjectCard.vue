@@ -51,6 +51,7 @@
             :id="project.id"
             :donors="project.donors"
             :country="project.country"
+            :country-office="project.country_office"
           />
         </el-col>
       </el-row>
