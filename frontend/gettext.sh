@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -eo pipefail
+unset command_not_found_handle
 
 input_vue_files="$(find ./components ./pages ./layouts -type f -name '*.vue')"
 #input_js_glob="./angular/**/*.+(js|html)"
