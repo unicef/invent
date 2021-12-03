@@ -65,34 +65,34 @@ jobs:
             - frontend/node_modules
           key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
-      - run:
-          name: backend flake8
-          working_directory: ~/tiip/django
-          command: pipenv run flake8
-
-      - run:
-          name: backend makemigrations
-          working_directory: ~/tiip/django
-          command: |
-            pipenv run python manage.py makemigrations --noinput
-
-      - run:
-          name: backend migrations
-          working_directory: ~/tiip/django
-          command: |
-            pipenv run python manage.py migrate
-
-      - run:
-          name: backend unit tests
-          working_directory: ~/tiip/django
-          command: |
-            pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
-
-      - run:
-          name: backend check for commited migrations
-          working_directory: ~/tiip/django
-          command: |
-            export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
+#      - run:
+#          name: backend flake8
+#          working_directory: ~/tiip/django
+#          command: pipenv run flake8
+#
+#      - run:
+#          name: backend makemigrations
+#          working_directory: ~/tiip/django
+#          command: |
+#            pipenv run python manage.py makemigrations --noinput
+#
+#      - run:
+#          name: backend migrations
+#          working_directory: ~/tiip/django
+#          command: |
+#            pipenv run python manage.py migrate
+#
+#      - run:
+#          name: backend unit tests
+#          working_directory: ~/tiip/django
+#          command: |
+#            pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+#
+#      - run:
+#          name: backend check for commited migrations
+#          working_directory: ~/tiip/django
+#          command: |
+#            export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
 
       - run:
           name: run translations extraction
@@ -167,6 +167,7 @@ workflows:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
+      - translations-check
 #      - translations-approval:
 #          type: approval
 #      - translations-commit:
