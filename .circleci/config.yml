@@ -97,13 +97,13 @@ jobs:
 #          command: |
 #            export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
 
-#      - run:
-#          name: install gettext
-#          command: sudo apt-get update && sudo apt-get install -y gettext
+      - run:
+          name: install gettext
+          command: sudo apt-get update && sudo apt-get install -y gettext
       - run:
           name: run translations extraction
           working_directory: ~/tiip/frontend
-          command: bash gettext.sh 2> /dev/null || exit 1
+          command: bash gettext.sh
       - run:
           name: check translations diff
           working_directory: ~/tiip
