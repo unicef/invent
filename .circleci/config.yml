@@ -29,7 +29,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v6-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - v7-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - restore_cache:
           keys:
@@ -48,17 +48,18 @@ jobs:
           working_directory: ~/tiip/frontend
           command: npm install
 
-      - run:
-          name: install mapshaper
-          working_directory: ~/tiip
-          command: sudo npm install -g mapshaper
+#      - run:
+#          name: install mapshaper
+#          working_directory: ~/tiip
+#          command: sudo npm install -g mapshaper
 
       - save_cache:
           paths:
             - "django/.venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
-          key: v6-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - "./.venv/lib/python3.7/site-packages"
+          key: v7-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - save_cache:
           paths:
@@ -95,14 +96,19 @@ jobs:
 #            export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
 
       - run:
+          name: install gettext
+          command: sudo apt-get update && sudo apt-get install -y gettext
+      - run:
           name: run translations extraction
           working_directory: ~/tiip/frontend
           command: bash gettext.sh
-
       - run:
           name: check translations diff
           working_directory: ~/tiip
           command: git status
+      - run:
+          name: check diff
+          command: git diff django/translations/master.pot
 
   deploy-dev:
     docker:
