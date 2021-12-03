@@ -167,14 +167,12 @@ workflows:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
-      - translations-check
 #      - translations-approval:
 #          type: approval
 #      - translations-commit:
       - deploy-dev:
           requires:
             - build-and-test
-            - translations-check
           filters:
             branches:
               only: dev
