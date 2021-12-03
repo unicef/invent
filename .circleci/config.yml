@@ -29,7 +29,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v7-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - v8-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - restore_cache:
           keys:
@@ -55,11 +55,13 @@ jobs:
 
       - save_cache:
           paths:
+            - "Pipfile.lock"
+            - ".venv"
             - "django/.venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
             - "./.venv/lib/python3.7/site-packages"
-          key: v7-dependencies-b-{{ checksum "django/requirements.txt" }}
+          key: v8-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - save_cache:
           paths:
@@ -101,7 +103,7 @@ jobs:
       - run:
           name: run translations extraction
           working_directory: ~/tiip/frontend
-          command: bash gettext.sh
+          command: bash gettext.sh 2> /dev/null || exit 1
       - run:
           name: check translations diff
           working_directory: ~/tiip
