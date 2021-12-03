@@ -55,7 +55,7 @@ jobs:
 
       - save_cache:
           paths:
-            - "Pipfile.lock"
+            - "django/Pipfile.lock"
             - ".venv"
             - "django/.venv"
             - "/usr/local/bin"
@@ -110,7 +110,7 @@ jobs:
           command: git status
       - run:
           name: check diff
-          command: export TERM=xterm && git diff django/translations/master.pot
+          command: export TERM=xterm && git --no-pager diff django/translations/master.pot && git --no-pager diff --stat django/translations/master.pot
 
   deploy-dev:
     docker:
