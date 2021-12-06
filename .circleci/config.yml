@@ -48,10 +48,10 @@ jobs:
           working_directory: ~/tiip/frontend
           command: npm install
 
-#      - run:
-#          name: install mapshaper
-#          working_directory: ~/tiip
-#          command: sudo npm install -g mapshaper
+      - run:
+          name: install mapshaper
+          working_directory: ~/tiip
+          command: sudo npm install -g mapshaper
 
       - save_cache:
           paths:
