@@ -68,49 +68,34 @@ jobs:
             - frontend/node_modules
           key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
-#      - run:
-#          name: backend flake8
-#          working_directory: ~/tiip/django
-#          command: pipenv run flake8
-#
-#      - run:
-#          name: backend makemigrations
-#          working_directory: ~/tiip/django
-#          command: |
-#            pipenv run python manage.py makemigrations --noinput
-#
-#      - run:
-#          name: backend migrations
-#          working_directory: ~/tiip/django
-#          command: |
-#            pipenv run python manage.py migrate
-#
-#      - run:
-#          name: backend unit tests
-#          working_directory: ~/tiip/django
-#          command: |
-#            pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
-#
-#      - run:
-#          name: backend check for commited migrations
-#          working_directory: ~/tiip/django
-#          command: |
-#            export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
+      - run:
+          name: backend flake8
+          working_directory: ~/tiip/django
+          command: pipenv run flake8
 
       - run:
-          name: install gettext
-          command: sudo apt-get update && sudo apt-get install -y gettext
+          name: backend makemigrations
+          working_directory: ~/tiip/django
+          command: |
+            pipenv run python manage.py makemigrations --noinput
+
       - run:
-          name: run translations extraction
-          working_directory: ~/tiip/frontend
-          command: bash gettext.sh
+          name: backend migrations
+          working_directory: ~/tiip/django
+          command: |
+            pipenv run python manage.py migrate
+
       - run:
-          name: check and commit translations if applicable
-          working_directory: ~/tiip
-          command: bash auto_commit_translation_changes.sh
+          name: backend unit tests
+          working_directory: ~/tiip/django
+          command: |
+            pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+
       - run:
-          name: check diff
-          command: export TERM=xterm && git --no-pager diff django/translations/master.pot && git --no-pager diff --stat django/translations/master.pot
+          name: backend check for commited migrations
+          working_directory: ~/tiip/django
+          command: |
+            export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
 
   deploy-dev:
     docker:
@@ -146,7 +131,7 @@ jobs:
           working_directory: ~/tiip/django
           command: |
             fab staging deploy:<< pipeline.git.tag >>
-          no_output_timeout: "20m"
+          no_output_timeout: "30m"
 
   e2e-dev:
     docker:
@@ -175,21 +160,18 @@ workflows:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
-#      - translations-approval:
-#          type: approval
-#      - translations-commit:
-#      - deploy-dev:
-#          requires:
-#            - build-and-test
-#          filters:
-#            branches:
-#              only: dev
-#          post-steps:
-#            - jira/notify:
-#                environment_type: development
-#                job_type: deployment
-#                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
-#                environment: DEV  # DEV, PROD, QA
+      - deploy-dev:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: dev
+          post-steps:
+            - jira/notify:
+                environment_type: development
+                job_type: deployment
+                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
+                environment: DEV  # DEV, PROD, QA
 #      - e2e-dev:
 #          requires:
 #            - build-and-test
