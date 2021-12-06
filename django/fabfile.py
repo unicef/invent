@@ -223,9 +223,11 @@ def _migrate_db():
 def _import_geodata():
     run('python geodata_import.py')
 
+
 def _update_translations_frontend():
     with warn_only():
         run("docker-compose exec django python manage.py update_translations master.pot")
+
 
 def _update_translations_backend():
     with warn_only():
