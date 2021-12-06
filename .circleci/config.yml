@@ -105,9 +105,9 @@ jobs:
           working_directory: ~/tiip/frontend
           command: bash gettext.sh
       - run:
-          name: check translations diff
+          name: check and commit translations if applicable
           working_directory: ~/tiip
-          command: git status
+          command: bash auto_commit_translation_changes.sh
       - run:
           name: check diff
           command: export TERM=xterm && git --no-pager diff django/translations/master.pot && git --no-pager diff --stat django/translations/master.pot
