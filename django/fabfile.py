@@ -110,6 +110,18 @@ def deploy(tag=None):
             run('git pull origin %s' % env.branch)
         time.sleep(10)
 
+        # Translation generation: checks and commit if needs update
+        if tag:
+            with cd(env.frontend_root):
+                run('bash gettext.sh')
+                run("export TERM=xterm && git --no-pager diff django/translations/master.pot")
+                run("export TERM=xterm && git --no-pager diff --stat django/translations/master.pot")
+            with warn_only():
+                result = run('bash auto_commit_translation_changes.sh')
+                if result.return_code == 1:
+                    print("Skipping this deploy, translations have been updated. Triggering new tag and deployment.")
+                    return
+
         backend_env_file_path = "{}/{}/.env".format(env.project_root, env.backend_root)
         run('[ -f {} ] || echo "DEPLOY_VERSION=0.0.0" > {}'.format(
             backend_env_file_path, backend_env_file_path))
@@ -148,6 +160,11 @@ def deploy(tag=None):
             run('docker-compose {}restart rabbitmq'.format(options))
 
         time.sleep(5)
+
+        if tag:
+            _update_translations_frontend()
+            _update_translations_backend()
+            time.sleep(10)
 
         # handle backend
         with cd(env.backend_root):
@@ -206,6 +223,14 @@ def _migrate_db():
 def _import_geodata():
     run('python geodata_import.py')
 
+def _update_translations_frontend():
+    with warn_only():
+        run("docker-compose exec django python manage.py update_translations master.pot")
+
+def _update_translations_backend():
+    with warn_only():
+        run("docker-compose exec django django-admin makemessages -a")
+        run("docker-compose exec django django-admin compilemessages")
 
 # LOCAL STUFF #
 
