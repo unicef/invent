@@ -82,6 +82,7 @@ class CountryTests(APITestCase):
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
         self.assertIn("id", response_keys)
+        self.assertIn("regions", response_keys)
 
     def test_get_countries(self):
         Country.objects.exclude(id=self.country.id).delete()
@@ -802,12 +803,12 @@ class CountryOfficeTests(APITestCase):
 
         country_office_1, _ = CountryOffice.objects.get_or_create(
             name='Country Office 1',
-            region=Country.UNICEF_REGIONS[0][0],
+            region=CountryOffice.REGIONS[0][0],
             country=self.country
         )
         country_office_2, _ = CountryOffice.objects.get_or_create(
             name='Country Office 2',
-            region=Country.UNICEF_REGIONS[1][0],
+            region=CountryOffice.REGIONS[1][0],
             country=self.country
         )
 
@@ -1310,7 +1311,9 @@ class CountryAdminTests(TestCase):
         ma = CountryAdmin(Country, self.site)
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
         translate_bools = ['is_translated_{}'.format(language_code) for language_code, _ in settings.LANGUAGES]
-        self.assertEqual(ma.get_list_display(self.request), ['name', 'code', 'project_approval'] + translate_bools)
+        self.assertEqual(ma.get_list_display(self.request),
+                         ['name', 'code', 'project_approval', 'regions'] + translate_bools)
+        self.assertEqual(ma.regions(ma.get_queryset(self.request)[0]), [])
 
 
 class CountryManagementCommandTest(TestCase):

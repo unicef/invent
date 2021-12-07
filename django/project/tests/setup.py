@@ -50,13 +50,11 @@ class TestProjectData:
             country_code = f'CTR{country_rand}'
 
         country, _ = Country.objects.get_or_create(name=name, code=country_code,
-                                                   project_approval=project_approval,
-                                                   region=Country.REGIONS[0][0],
-                                                   unicef_region=Country.UNICEF_REGIONS[0][0])
+                                                   project_approval=project_approval)
 
         country_office, _ = CountryOffice.objects.get_or_create(
             name=f'Test Country Office ({name})',
-            region=Country.UNICEF_REGIONS[0][0],
+            region=CountryOffice.REGIONS[0][0],
             regional_office=RegionalOffice.objects.get_or_create(name='RO test')[0],
             country=country,
             city="Zion"

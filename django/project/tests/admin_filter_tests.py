@@ -1,6 +1,6 @@
 from django.test import RequestFactory
 
-from country.models import Country
+from country.models import Country, CountryOffice
 from project.admin import ProjectAdmin
 from user.models import UserProfile
 from project.models import Project
@@ -129,7 +129,7 @@ class TestAdminFilters(TestAdmin, SetupTests):
         filter = RegionFilter(None, {'region': '0'}, Project, ProjectAdmin)
         changelist = self.admin.get_changelist_instance(self.request)
         choices = list(filter.choices(changelist))
-        regions = {x[0]: x[1] for x in Country.UNICEF_REGIONS}
+        regions = {x[0]: x[1] for x in CountryOffice.REGIONS}
         for choice in choices[1:]:
             region = regions[int(choice['query_string'].split("=")[-1])]
             self.assertEqual(choice['display'], region)
