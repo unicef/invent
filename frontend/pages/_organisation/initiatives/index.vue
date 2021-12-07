@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tabs :tabs="tabs" :tab="tab" @handleTab="setTab">
+    <tabs :tabs="tabList" :tab="tab" @handleTab="setTab">
       <template slot="title">
         <h2>
           <translate>My Initiatives</translate>
@@ -27,7 +27,11 @@ export default {
       tabs: (state) => state.projects.tabs,
       tab: (state) => state.projects.tab,
       projects: (state) => state.projects.userProjects,
+      user: (state) => state.user.profile,
     }),
+    tabList() {
+      return this.user.manager_of.length > 0 ? this.tabs : this.tabs.filter((t) => t.id !== 4)
+    },
   },
   mounted() {
     this.restorePageSize()
