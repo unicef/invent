@@ -53,28 +53,7 @@ class UserManagement(models.Model):
 
 
 class Country(UserManagement, LandingPageCommon):
-    REGIONS = [
-        (0, _('African Region')),
-        (1, _('Region of the Americas')),
-        (2, _('South-East Asia Region')),
-        (3, _('European Region')),
-        (4, _('Eastern Mediterranean Region')),
-        (5, _('Western Pacific Region'))
-    ]
-
-    UNICEF_REGIONS = [
-        (0, _('EAPR')),
-        (1, _('ECAR')),
-        (2, _('ESAR')),
-        (3, _('LACR')),
-        (4, _('MENA')),
-        (5, _('SAR')),
-        (6, _('WCAR')),
-        (7, _('HQ'))
-    ]
-
     code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
-    region = models.IntegerField(choices=REGIONS, null=True, blank=True)
     map_data = JSONField(default=dict, blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
@@ -82,11 +61,13 @@ class Country(UserManagement, LandingPageCommon):
     lat = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
     lon = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
 
-    unicef_region = models.IntegerField(choices=UNICEF_REGIONS, null=True, blank=True)
-
     class Meta:
         verbose_name_plural = "Countries"
         ordering = ('id',)
+
+    @property
+    def regions(self):
+        return list(set(self.countryoffice_set.values_list('region', flat=True)))
 
 
 class RegionalOffice(InvalidateCacheMixin, models.Model):
@@ -100,8 +81,19 @@ class RegionalOffice(InvalidateCacheMixin, models.Model):
 
 
 class CountryOffice(ExtendedModel):
+    REGIONS = [
+        (0, _('EAPR')),
+        (1, _('ECAR')),
+        (2, _('ESAR')),
+        (3, _('LACR')),
+        (4, _('MENA')),
+        (5, _('SAR')),
+        (6, _('WCAR')),
+        (7, _('HQ'))
+    ]
+
     name = models.CharField(max_length=256)
-    region = models.IntegerField(choices=Country.UNICEF_REGIONS, null=True, blank=True)
+    region = models.IntegerField(choices=REGIONS, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     regional_office = models.ForeignKey(RegionalOffice, on_delete=models.SET_NULL, null=True, blank=True)
     city = models.CharField(max_length=256, null=True, blank=True)

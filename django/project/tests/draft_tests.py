@@ -2,7 +2,7 @@ import copy
 
 from django.urls import reverse
 
-from country.models import CountryOffice, Country
+from country.models import CountryOffice
 from project.models import Project, HealthFocusArea, HealthCategory
 
 from project.tests.setup import SetupTests
@@ -164,7 +164,7 @@ class ProjectDraftTests(SetupTests):
 
         new_country_office = CountryOffice.objects.create(
             name='Test Country Office 2',
-            region=Country.UNICEF_REGIONS[0][0],
+            region=CountryOffice.REGIONS[0][0],
             country=self.country
         )
 
@@ -181,7 +181,7 @@ class ProjectDraftTests(SetupTests):
 
         new_country_office = CountryOffice.objects.create(
             name='Test Country Office 2',
-            region=Country.UNICEF_REGIONS[0][0],
+            region=CountryOffice.REGIONS[0][0],
             country=self.country
         )
         data['project'].update(country_office=new_country_office.id)
@@ -197,7 +197,7 @@ class ProjectDraftTests(SetupTests):
 
         new_country_office = CountryOffice.objects.create(
             name='Test Country Office 2',
-            region=Country.UNICEF_REGIONS[0][0],
+            region=CountryOffice.REGIONS[0][0],
             country=self.country
         )
 

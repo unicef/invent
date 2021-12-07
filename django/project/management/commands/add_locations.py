@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
             CountryOffice.objects.create(
                 name=unicef_office,
-                region=[y for x, y in Country.UNICEF_REGIONS].index(region),
+                region=[y for x, y in CountryOffice.REGIONS].index(region),
                 regional_office=RegionalOffice.objects.get(name=regional_office),
                 city=city,
                 country=country

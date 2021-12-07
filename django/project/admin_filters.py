@@ -121,7 +121,7 @@ class RegionFilter(admin.SimpleListFilter):
     title = _('Region')
 
     def lookups(self, request, model_admin):
-        return Country.UNICEF_REGIONS
+        return CountryOffice.REGIONS
 
     def queryset(self, request, queryset):
         if self.value() is None:

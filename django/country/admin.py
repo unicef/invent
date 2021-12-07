@@ -10,7 +10,7 @@ from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
 
 @admin.register(Country)
 class CountryAdmin(AllObjectsAdmin):
-    list_display = ('name', 'code', 'project_approval')
+    list_display = ('name', 'code', 'project_approval', 'regions')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
 
@@ -26,14 +26,17 @@ class CountryAdmin(AllObjectsAdmin):
         fields = super(CountryAdmin, self).get_fields(request, obj)
         return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data',
                                                                             'users', 'admins', 'super_admins',
-                                                                            'lat', 'lon', 'map_activated_on',
-                                                                            'region', 'unicef_region']]
+                                                                            'lat', 'lon', 'map_activated_on']]
 
     def has_add_permission(self, request):  # pragma: no cover
         return False
 
     def has_delete_permission(self, request, obj=None):  # pragma: no cover
         return False
+
+    @staticmethod
+    def regions(obj):
+        return [CountryOffice.REGIONS[r][1] for r in obj.regions]
 
 
 @admin.register(RegionalOffice)

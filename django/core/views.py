@@ -13,7 +13,7 @@ from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManage
     IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState
 from project.models import Project, ProjectPortfolioState, ReviewScore
 from project.serializers import PartnerSerializer, LinkSerializer
-from country.models import Country
+from country.models import CountryOffice
 from user.authentication import BearerTokenAuthentication
 
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
@@ -124,7 +124,7 @@ class StaticDataView(GenericAPIView):
         data['thematic_overview'] = THEMATIC_OVERVIEW
         data['toolkit_questions'] = TOOLKIT_QUESTIONS
         data['sub_level_types'] = SUB_LEVEL_TYPES
-        data['unicef_regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.UNICEF_REGIONS]
+        data['unicef_regions'] = [{'id': reg[0], 'name': reg[1]} for reg in CountryOffice.REGIONS]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
         data['partner_types'] = [{'id': t[0], 'name': t[1]} for t in PartnerSerializer.PARTNER_TYPE]
         data['link_types'] = [{'id': t[0], 'name': t[1]} for t in LinkSerializer.LINK_TYPE]

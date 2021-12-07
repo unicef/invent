@@ -29,7 +29,7 @@ class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewS
 
 
 class CountryLandingListPageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Country.objects.only('id', 'name', 'code')
+    queryset = Country.objects.only('id', 'name', 'code', 'lat', 'lon')
     serializer_class = CountryListSerializer
 
 

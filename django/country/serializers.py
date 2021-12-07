@@ -226,7 +226,7 @@ class CountrySerializer(SuperAdminCountrySerializer):
 class CountryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ('id', 'name', 'code', 'lat', 'lon', 'unicef_region')
+        fields = ('id', 'name', 'code', 'lat', 'lon', 'regions')
 
 
 class CountryOfficeSerializer(serializers.ModelSerializer):
