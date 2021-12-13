@@ -1,4 +1,6 @@
 from import_export import resources
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
+
 from project.models import Project, UNICEFSector, UNICEFGoal, InnovationCategory, CPD, Stage, TechnologyPlatform, \
     HardwarePlatform, NontechPlatform, ISC, PlatformFunction, UNICEFResultArea, InnovationWay
 from import_export.fields import Field
@@ -61,6 +63,12 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         model = Project
         fields = ('id', 'name', 'published', 'contact', 'team', 'modified')
         export_order = ('id', 'name', 'published', 'modified', 'contact', 'team', 'overview')
+
+    def export_field(self, field, obj):
+        data = super().export_field(field, obj)
+        if isinstance(data, str):
+            data = ILLEGAL_CHARACTERS_RE.sub('', data)
+        return data
 
     def get_data_member(self, project):
         """
