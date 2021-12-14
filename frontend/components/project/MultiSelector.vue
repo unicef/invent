@@ -134,10 +134,22 @@ export default {
 </script>
 
 <style lang="less">
-//@import "../../assets/style/variables.less";
-//@import "../../assets/style/mixins.less";
-
 .PlatformSelector {
   width: 100%;
+}
+
+.AdvancedSearch > div .el-select .el-select__tags::-webkit-scrollbar {
+  display: none;
+}
+.AdvancedSearch > div .el-select .el-select__tags {
+  overflow-x: scroll !important;
+}
+
+.el-select .el-select__tags .el-tag__close {
+  top: -1px;
+  right: 3px;
+  margin-right: -5px;
+  margin-top: -3px;
+  position: sticky;
 }
 </style>
