@@ -1186,7 +1186,7 @@ class ProjectTests(SetupTests):
         data = response.json()
         self.assertEqual(data['my_initiatives_count'], 4)
         self.assertEqual(len(data['my_initiatives']), 3)
-        self.assertEqual(len(data['recents']), 3)
+        self.assertEqual(len(data['recents']), 1)
         self.assertEqual(len(data['featured']), 4)
 
         response = test_user_client.get(url, format="json")
