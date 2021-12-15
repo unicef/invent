@@ -98,7 +98,7 @@ export default {
     flex-basis: 144px;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center bottom;
+    background-position: center;
   }
   .project {
     position: relative;

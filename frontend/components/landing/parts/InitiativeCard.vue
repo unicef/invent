@@ -10,11 +10,11 @@
         <div v-if="project.is_draft" class="draft">
           <translate>draft</translate>
         </div>
-        <div class="popup-menu" v-if="showActions">
+        <div v-if="showActions" class="popup-menu">
           <i class="el-icon-more rotate-90 more-icon" @click="toggleMiniMenu()"></i>
         </div>
-        <div tabindex="0" ref="popover" @focusout="menuVisible = false" v-if="showActions">
-          <el-popover placement="top-end" width="170" v-model="menuVisible">
+        <div v-if="showActions" ref="popover" tabindex="0" @focusout="menuVisible = false">
+          <el-popover v-model="menuVisible" placement="top-end" width="170">
             <nuxt-link
               v-if="!project.is_draft"
               :to="
@@ -87,11 +87,6 @@ export default {
     Location,
     AvatarTeam,
   },
-  data() {
-    return {
-      menuVisible: false,
-    }
-  },
   props: {
     project: {
       type: Object,
@@ -106,13 +101,10 @@ export default {
       default: false,
     },
   },
-  methods: {
-    toggleMiniMenu() {
-      this.menuVisible = !this.menuVisible
-      if (this.menuVisible) {
-        this.$refs.popover.focus()
-      }
-    },
+  data() {
+    return {
+      menuVisible: false,
+    }
   },
   computed: {
     ...mapGetters({
@@ -173,6 +165,14 @@ export default {
       return this.project.isPublished
     },
   },
+  methods: {
+    toggleMiniMenu() {
+      this.menuVisible = !this.menuVisible
+      if (this.menuVisible) {
+        this.$refs.popover.focus()
+      }
+    },
+  },
 }
 </script>
 
@@ -215,7 +215,7 @@ export default {
     flex-basis: 213px;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center bottom;
+    background-position: center;
   }
 
   .project {
