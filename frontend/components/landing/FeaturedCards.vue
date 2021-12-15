@@ -179,7 +179,7 @@ export default {
       box-shadow: 1px 2px 4px #0000001f;
       background-repeat: no-repeat;
       background-size: cover;
-      background-position: center bottom;
+      background-position: center;
       .title {
         font-size: @fontSizeHeadline;
         color: @colorBrandPrimary;
