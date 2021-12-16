@@ -250,7 +250,7 @@ export default {
         // this.usePublishRules &&
         this.start_date &&
         this.end_date &&
-        isAfter(this.start_date, this.end_date)
+        isAfter(new Date(this.start_date), new Date(this.end_date))
       ) {
         return this.$gettext('End date must be after Start date')
       }

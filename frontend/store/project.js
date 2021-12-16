@@ -33,10 +33,16 @@ export const getters = {
   getOrganisation: (state) => state.organisation,
   getCountry: (state) => state.country,
   getCountryOffice: (state) => state.country_office,
-  getModified: (state) => state.modified,
+  getModified: (state) => isNaN(new Date(state.modified).getTime())
+    ? ''
+    : (new Date(state.modified)),
   getImplementationOverview: (state) => state.implementation_overview,
-  getStartDate: (state) => epochCheck(state.start_date),
-  getEndDate: (state) => epochCheck(state.end_date, false),
+  getEndDate: (state) => isNaN(new Date(state.end_date).getTime())
+    ? ''
+    : (new Date(state.end_date)),
+  getStartDate: (state) => isNaN(new Date(state.start_date).getTime())
+    ? ''
+    : (new Date(state.start_date)),
   getResearch: (state) => state.research,
   getEndDateNote: (state) => state.end_date_note,
   getStages: (state) => state.stages,
@@ -266,10 +272,10 @@ export const actions = {
     commit('SET_IMPLEMENTATION_OVERVIEW', value)
   },
   setStartDate({ commit }, value) {
-    commit('SET_START_DATE', value)
+    commit('SET_START_DATE', (value == null) ? "" : value)
   },
   setEndDate({ commit }, value) {
-    commit('SET_END_DATE', value)
+    commit('SET_END_DATE', (value == null) ? "" : value)
   },
   setResearch({ commit }, value) {
     commit('SET_RESEARCH', value)
@@ -675,10 +681,13 @@ export const mutations = {
     state.organisation = get(project, 'organisation', null)
     state.country = get(project, 'country', null)
     state.country_office = get(project, 'country_office', null)
-    state.modified = get(project, 'modified', null)
     state.implementation_overview = get(project, 'implementation_overview', '')
-    state.start_date = new Date(get(project, 'start_date', ''))
-    state.end_date = new Date(get(project, 'end_date', ''))
+    state.start_date = (get(project, 'start_date', "") !== "")
+      ? new Date(get(project, 'start_date', ""))
+      : ""
+    state.end_date = (get(project, 'end_date', "") !== "")
+      ? new Date(get(project, 'end_date', ""))
+      : ""
     state.research = project.research
     state.end_date_note = get(project, 'end_date_note', '')
     state.stages = get(project, 'stages', [])
@@ -695,7 +704,9 @@ export const mutations = {
     state.dhis = get(project, 'dhis', [])
     state.health_focus_areas = get(project, 'health_focus_areas', [])
     state.hsc_challenges = get(project, 'hsc_challenges', [])
-    state.modified = get(project, 'modified', new Date())
+    state.modified = (get(project, 'modified', "") !== "")
+      ? new Date(get(project, 'modified', ""))
+      : ""
     state.donors = get(project, 'donors', [])
     state.country_answers = get(project, 'country_custom_answers', [])
     state.donors_answers = get(project, 'donor_custom_answers', [])
