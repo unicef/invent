@@ -41,6 +41,9 @@
       <template v-if="person.organisation">
         <organisation-item :id="person.organisation" />
       </template>
+      <template v-else>
+        <br/>
+      </template>
       <span class="email"
         ><small>{{ person.email }}</small></span
       >
