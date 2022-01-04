@@ -4196,7 +4196,7 @@ msgstr ""
 #: components/project/DonorSelector.vue:9
 #: components/project/FacilitySelector.vue:2
 #: components/project/FacilitySelector.vue:25
-#: components/project/TeamSelector.vue:1 components/project/TeamSelector.vue:16
+#: components/project/TeamSelector.vue:1 components/project/TeamSelector.vue:17
 msgid "Type and select a name"
 msgstr ""
 
