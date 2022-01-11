@@ -71,6 +71,7 @@ export default {
   }
 
   .content {
+    box-sizing: border-box;
     position: absolute;
     z-index: 5;
     display: flex;
@@ -78,6 +79,7 @@ export default {
     justify-content: flex-end;
     bottom: 0;
     height: 213px;
+    width: 100%;
     padding: 28px;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #00000082 100%);
 
