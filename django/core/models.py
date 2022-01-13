@@ -147,7 +147,7 @@ class NewsItem(ExtendedModel):
         ordering = ['-order', '-id']
 
     def __str__(self):
-        return f"{self.id}-{self.title}"
+        return self.title if self.title else 'No title'
 
     @property
     def thumbnail(self):
