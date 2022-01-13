@@ -144,7 +144,7 @@ class NewsItem(ExtendedModel):
     order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     class Meta:
-        ordering = ['order', 'id']
+        ordering = ['-order', '-id']
 
     def __str__(self):
         return f"{self.id}-{self.title}"
