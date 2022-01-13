@@ -121,7 +121,7 @@ class ArrayFieldMixin(object):
 
 @admin.register(NewsItem)
 class NewsFeedAdmin(SortableAdminMixin, TranslationAdmin):
-    list_display = ('order', '__str__', 'link', 'visible')
+    list_display = ('__str__', 'order', 'link', 'visible')
 
 
 admin.site.login_form = CustomAuthenticationForm
