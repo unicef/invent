@@ -303,7 +303,7 @@ export default {
             this.localePath({
               name: 'organisation-inventory-list',
               params: this.$route.params,
-              query: { country: [this.profile.country] },
+              // query: { country: [this.profile.country] },
             })
           )
         }
