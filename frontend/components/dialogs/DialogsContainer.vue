@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { mapGettersActions } from '../..//utilities/form'
 import DigitalHealthInterventionsDialog from './DigitalHealthInterventionsDialog'
 import DashboardFiltersDialog from './DashboardFiltersDialog'
@@ -29,11 +30,8 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      showEmptyProfileWarning: [
-        'layout',
-        'getShowEmptyProfileWarning',
-        'setShowEmptyProfileWarning',
-      ],
+      showEmptyProfileWarning: ['layout', 'getShowEmptyProfileWarning', 'setShowEmptyProfileWarning'],
+      showNoUnicefOrgOrDonor: ['layout', 'getshowNoUnicefOrgOrDonor', 'setShowNoUnicefOrgOrDonor'],
     }),
   },
   watch: {
@@ -41,26 +39,44 @@ export default {
       immediate: true,
       handler(show) {
         if (show) {
+          this.$alert(this.$gettext('Please fill your profile first'), this.$gettext('Warning'), {
+            confirmButtonText: 'OK',
+            callback: (action) => {
+              this.showEmptyProfileWarning = false
+              this.$router.replace(
+                this.localePath({
+                  name: 'organisation-edit-profile',
+                  params: { organisation: '-' },
+                  query: undefined,
+                })
+              )
+            },
+          })
+        }
+      },
+    },
+    showNoUnicefOrgOrDonor: {
+      immediate: true,
+      handler(show) {
+        if (show) {
           this.$alert(
-            this.$gettext('Please fill your profile first'),
+            this.$gettext('UNICEF donor or organisation record not found. Make sure these records exists.'),
             this.$gettext('Warning'),
             {
               confirmButtonText: 'OK',
-              callback: (action) => {
-                this.showEmptyProfileWarning = false
-                this.$router.replace(
-                  this.localePath({
-                    name: 'organisation-edit-profile',
-                    params: { organisation: '-' },
-                    query: undefined,
-                  })
-                )
+              callback: () => {
+                this.showNoUnicefOrgOrDonor = false
               },
             }
           )
         }
       },
     },
+  },
+  methods: {
+    ...mapActions({
+      logout: 'user/doLogout',
+    }),
   },
 }
 </script>
