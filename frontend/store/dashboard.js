@@ -59,7 +59,7 @@ export const defaultSelectedColumns = () => [
   '62',
 ]
 
-export const state = () => ({
+const DEFAULT_QUERY = {
   ...stateGenerator(),
   searchIn: searchIn(),
   columns: [],
@@ -224,7 +224,9 @@ export const state = () => ({
     },
     { id: '62', label: 'Scoring', key: 'review_states' },
   ],
-})
+}
+
+export const state = () => (DEFAULT_QUERY)
 export const getters = {
   ...gettersGenerator(),
   getSearched: (state, getters) => {
@@ -344,16 +346,16 @@ export const getters = {
     const donor = rootGetters['system/getUnicefDonor'].id
     const viewAs = rootGetters.getAccountApproved ? 'donor' : ''
     return {
-      page_size: state.pageSize,
-      page: state.page,
-      ordering: state.sorting,
-      q,
-      in: q ? state.searchIn : undefined,
+      page_size: state.pageSize === DEFAULT_QUERY.pageSize ? undefined : state.pageSize,
+      page: state.page === DEFAULT_QUERY.page ? undefined : state.page,
+      ordering: state.sorting === null ? undefined : state.sorting,
+      q: (q === null || q === '') ? undefined : q,
+      in: state.searchIn.filter(x => !DEFAULT_QUERY.searchIn.includes(x)).concat(DEFAULT_QUERY.searchIn.filter(x => !state.searchIn.includes(x))).length ? state.searchIn : undefined,
       country,
-      donor,
-      region: state.filteredRegion || state.filteredRegion === 0 ? state.filteredRegion : '',
+      donor: donor == 20 ? undefined : donor,
+      region: (state.filteredRegion === DEFAULT_QUERY.filteredRegion || state.filteredRegion === "") ? undefined : state.filteredRegion,
       ic: state.innovationCategories,
-      fo: state.filteredOffice,
+      fo: state.filteredOffice === null ? undefined : state.filteredOffice,
       co: state.filteredCountryOffice,
       gov: state.governmentFinanced ? [1, 2] : undefined,
       approved: state.governmentApproved ? 1 : undefined,
@@ -361,23 +363,26 @@ export const getters = {
       dhi: state.selectedDHI,
       hfa: state.selectedHFA,
       hsc: state.selectedHSC,
-      goal: state.selectedGoal ? state.selectedGoal : '',
-      result: state.selectedResult ? state.selectedResult : '',
+      goal: state.selectedGoal === null ? undefined : state.selectedGoal,
+      result: state.selectedResult === null ? undefined : state.selectedResult,
       cl: state.selectedCapabilityLevels,
       cc: state.selectedCapabilityCategories,
       cs: state.selectedCapabilitySubcategories,
-      view_as: viewAs,
-      sc: state.selectedColumns,
+      view_as: viewAs === '' ? undefined : viewAs,
+      sc: state.selectedColumns.filter(x => !DEFAULT_QUERY.selectedColumns.includes(x)).concat(DEFAULT_QUERY.selectedColumns.filter(x => !state.selectedColumns.includes(x))).length ? state.selectedColumns : undefined,
+      country,
       // new
       ro: state.filteredRegionalOffice,
       us: state.sectors,
       rp: state.regionalPriorities,
+      // pi: state.stage === null ? undefined : state.stage,
       iw: state.innovationWays,
-      stage: state.stage,
+      stage: intArrayFromQs(state.stage),
+
       hp: state.hardwarePlatforms,
       pp: state.programmePlatforms,
       pf: state.platformFunctions,
-      is: state.informationSecurity,
+      is: state.informationSecurity === DEFAULT_QUERY.informationSecurity ? undefined : state.informationSecurity,
     }
   },
 }
@@ -683,8 +688,8 @@ export const mutations = {
     state.hardwarePlatforms = intArrayFromQs(options.hp)
     state.programmePlatforms = intArrayFromQs(options.pp)
     state.platformFunctions = intArrayFromQs(options.pf)
-    state.stage = options.pi ? +options.pi : null
-    state.informationSecurity = options.is ? +options.is : null
+    state.stage = intArrayFromQs(options.stage)
+    state.informationSecurity = intArrayFromQs(options.is)
 
     state.selectedDHI = intArrayFromQs(options.dhi)
     state.selectedHFA = intArrayFromQs(options.hfa)
