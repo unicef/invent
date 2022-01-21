@@ -14,7 +14,7 @@ export const getters = {
   getSaveFiltersDialogState: (state) => state.saveFiltersDialogState,
   getSendEmailDialogState: (state) => state.sendEmailDialogState,
   getShowEmptyProfileWarning: (state) => state.showEmptyProfileWarning,
-  getshowNoUnicefOrgOrDonor: (state) => state.showNoUnicefOrgOrDonor,
+  getShowNoUnicefOrgOrDonor: (state) => state.showNoUnicefOrgOrDonor,
   getEditSubLevelDialogState: (state) => state.editSubLevelDialogState,
 }
 

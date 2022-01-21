@@ -31,7 +31,7 @@ export default {
   computed: {
     ...mapGettersActions({
       showEmptyProfileWarning: ['layout', 'getShowEmptyProfileWarning', 'setShowEmptyProfileWarning'],
-      showNoUnicefOrgOrDonor: ['layout', 'getshowNoUnicefOrgOrDonor', 'setShowNoUnicefOrgOrDonor'],
+      showNoUnicefOrgOrDonor: ['layout', 'getShowNoUnicefOrgOrDonor', 'setShowNoUnicefOrgOrDonor'],
     }),
   },
   watch: {
