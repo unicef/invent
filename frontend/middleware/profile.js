@@ -1,6 +1,6 @@
 export default function ({ store, redirect, app, route }) {
   const profile = store.getters['user/getProfile']
-  const noUnicef = store.getters['layout/getshowNoUnicefOrgOrDonor']
+  const noUnicef = store.getters['layout/getShowNoUnicefOrgOrDonor']
   const donorTypes = ['D', 'DA', 'SDA']
   const routeName = route.name.split('___')[0]
   if (noUnicef) return
