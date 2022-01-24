@@ -1,6 +1,0 @@
-{
-  "name": "AssessmentModule",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./assessmentModule.js"
-}
