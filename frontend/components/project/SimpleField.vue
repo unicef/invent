@@ -68,7 +68,7 @@ export default {
       return resultContent
     },
     evenLines() {
-      return this.content.match(/.{1,102}/g).join('\n')
+      return this.content.match(/.{1,102}/g)?.join('\n')
     },
   },
 }
