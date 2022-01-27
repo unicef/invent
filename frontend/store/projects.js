@@ -233,7 +233,7 @@ export const actions = {
       let countries = rootGetters['countries/getCountries']
       if (countries.length === 0) {
         await dispatch('countries/loadMapData', {}, { root: true })
-        countries = rootGetters['countries/getCountries']
+      countries = rootGetters['countries/getCountries']
       }
       countries.map((c) => {
         return {
@@ -353,7 +353,7 @@ export const actions = {
         commit('SET_VALUE', { key: 'total', val: data.count })
         data.results.sort((a, b) => b.id - a.id)
         data = data.results.map((p) => {
-          const project = p.published && p.published.name ? p.published : p.draft
+          const project = p.public_id ? p.published : p.draft
           const office = rootGetters['offices/getOfficeDetails'](project.country_office)
           const isCountryManager = office.managers.findIndex((m) => m.id === user.id) > -1
           return {
@@ -362,7 +362,7 @@ export const actions = {
             favorite: user ? user.favorite.includes(p.id) : undefined,
             isMember: user ? user.member.includes(p.id) || isCountryManager : undefined,
             isViewer: user ? user.viewer.includes(p.id) : undefined,
-            isPublished: !!(p.published && p.published.name),
+            isPublished: !!p.public_id,
           }
         })
         commit('SET_VALUE', { key: 'userProjects', val: data })
@@ -399,9 +399,8 @@ export const actions = {
       })
       commit('SET_VALUE', { key: 'loadingProject', val: false })
     } catch (e) {
-      console.log(e.response.data)
+      console.error('portfolio/loadPortfolioProjects failed', e.response)
       commit('SET_VALUE', { key: 'loadingProject', val: false })
-      console.error('portfolio/loadPortfolioProjects failed')
     }
   },
   async addReview({ state, commit, dispatch }, { id, ...score }) {

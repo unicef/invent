@@ -31,6 +31,7 @@ export const defaultSelectedColumns = () => [
   '20',
   '17', // 45 renumbered
   '21',
+  '63',
   '22',
   '23',
   '24',
@@ -157,6 +158,7 @@ const DEFAULT_QUERY = {
       key: 'innovation_ways',
     },
     { id: '21', label: 'Phase of Initiative', key: 'stages' },
+    { id: '63', label: 'Current phase', key: 'current_phase' },
     { id: '22', label: 'Hardware platform(s)', key: 'hardware' },
     {
       id: '23',
@@ -226,7 +228,7 @@ const DEFAULT_QUERY = {
   ],
 }
 
-export const state = () => (DEFAULT_QUERY)
+export const state = () => DEFAULT_QUERY
 export const getters = {
   ...gettersGenerator(),
   getSearched: (state, getters) => {

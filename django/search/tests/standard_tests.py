@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from country.models import Donor, DonorCustomQuestion, CountryCustomQuestion, RegionalOffice
-from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
+from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge, Stage
 from project.tests.setup import SetupTests
 
 
@@ -410,18 +410,30 @@ class SearchTests(SetupTests):
         self.assertEqual(response.json()['count'], 1)
 
     def test_filter_stage(self):
+        stages = Stage.objects.all()
         url = reverse("search-project-list")
         data = {"stage": 300}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 0)
 
-        data = {"stage": 1}
+        # Stage 1 & Stage 2 are set for both projects, that means the current_phase for both will be Stage 3
+        data = {"stage": stages[0].id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"stage": stages[1].id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"stage": stages[2].id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 2)
 
-        url = url + '?stage=1&stage=300'
+        url = url + f'?stage={stages[2].id}&stage=300'
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 2)

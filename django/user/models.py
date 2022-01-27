@@ -25,6 +25,9 @@ PBKDF2PasswordHasher.iterations = 30000
 class Organisation(ExtendedModel):
     name = models.CharField(unique=True, max_length=255)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):  # pragma: no cover
         return self.name
 

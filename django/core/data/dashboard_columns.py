@@ -18,6 +18,7 @@ DASHBOARD_COLUMNS = [
     {'id': 19, 'label': _('UNICEF Sector')},
     {'id': 20, 'label': _('Innovation Ways')},
     {'id': 21, 'label': _('Phase of Initiative')},
+    {'id': 63, 'label': _('Current Phase')},
     {'id': 22, 'label': _('Hardware platform(s)')},
     {'id': 23, 'label': _('Non-technology platform(s)')},
     {'id': 24, 'label': _('Function(s) of Platform')},
