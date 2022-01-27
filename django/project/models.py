@@ -1,6 +1,6 @@
 import uuid
 from collections import namedtuple
-from typing import List, Union
+from typing import List, Union, Dict
 
 from django.contrib.postgres.fields.jsonb import KeyTextTransform
 from django.db.models.functions import Cast
@@ -786,6 +786,36 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+    @classmethod
+    def get_discontinued(cls):
+        """
+        Hardcoded for now. Object with this name must exist in the DB to work.
+        """
+        return cls.objects.get(name='Discontinued')
+
+    @classmethod
+    def calc_current_phase(cls, stages: List[Dict]):
+        discontinued_id = cls.get_discontinued().id
+        all_stages = list(cls.objects.order_by('order').values_list('id', flat=True))
+        one_before_discontinued_id = all_stages[all_stages.index(discontinued_id) - 1]
+
+        if not stages:  # when no phases are selected the current phase is the first one
+            return all_stages[0]
+
+        stage_ids = [stage['id'] for stage in stages]
+        selected_stages = cls.objects.filter(id__in=stage_ids).order_by('order')
+        last_stage = selected_stages.last()
+
+        if last_stage.id == discontinued_id:
+            current = discontinued_id
+        elif last_stage.id == one_before_discontinued_id:
+            current = last_stage.id
+        elif last_stage.id == all_stages[-1]:
+            current = last_stage.id
+        else:
+            current = all_stages[all_stages.index(last_stage.id) + 1]
+        return current
 
 
 class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):

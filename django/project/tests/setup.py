@@ -5,6 +5,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
 from country.models import Country, Donor, CountryOffice, RegionalOffice
+from project.models import Stage
 from user.models import Organisation, UserProfile
 from user.tests import create_profile_for_user
 
@@ -84,6 +85,7 @@ class TestProjectData:
             d1 = self.d1
             d2 = self.d2
 
+        stages = Stage.objects.all()
         return {"project": {
             "date": str(datetime.utcnow()) if convert_datetime else datetime.utcnow(),
             "name": name,
@@ -122,11 +124,11 @@ class TestProjectData:
             "links": [dict(link_type=0, link_url="https://website.com"),
                       dict(link_type=1, link_url="https://sharepoint.directory")],
             "stages": [{
-                "id": 1,
+                "id": stages[0].id,
                 "date": str(datetime.today().date()),
                 "note": "stage 1 note",
             }, {
-                "id": 2,
+                "id": stages[1].id,
                 "date": str(datetime.today().date()),
                 "note": "stage 2 note",
             }],

@@ -171,7 +171,13 @@ export default {
           id: '21',
           label: 'Phase of Initiative',
           key: 'stages',
-          parse: (stages) => this.parseList(this.getStages, stages),
+          parse: (stages) => this.parseListWithObjects(this.getStages, stages),
+        },
+        {
+          id: '63',
+          label: 'Current Phase',
+          key: 'current_phase',
+          parse: (phaseId) => this.parseSingleSelection(phaseId, 'getStages'),
         },
         {
           id: '22',
@@ -493,7 +499,8 @@ export default {
             this.getInnovationCategories,
             s.innovation_categories
           ),
-          stages: this.parseList(this.getStages, s.stages),
+          stages: this.parseListWithObjects(this.getStages, s.stages),
+          current_phase: this.parseSingleSelection(this.getStages, s.current_phase),
           hardware: this.parseList(this.getHardware, s.hardware),
           nontech: this.parseList(this.getNontech, s.nontech),
           functions: this.parseList(this.getFunctions, s.functions),
@@ -530,6 +537,16 @@ export default {
           .filter((cb) => flatList.includes(cb.id))
           .map((cb) => cb.name)
           .join(',')
+      }
+      return ''
+    },
+    parseListWithObjects(list, filter) {
+      if (typeof filter === 'object' || Array.isArray(filter)) {
+        const filterIDs = filter.map((item) => item.id)
+        return list
+          .filter((tp) => filterIDs.includes(tp.id))
+          .map((i) => i.name)
+          .join(', ')
       }
       return ''
     },

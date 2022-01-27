@@ -16,7 +16,7 @@ from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
-    ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction
+    ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction, Stage
 
 
 class PartnerSerializer(serializers.Serializer):
@@ -125,6 +125,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
 
     stages = StageSerializer(many=True, required=False, allow_empty=True)
     phase = serializers.IntegerField(required=False)
+    current_phase = serializers.IntegerField(required=False)
 
     class Meta:
         model = Project
@@ -165,6 +166,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         validated_data['country'] = self.co.country.id
         validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
+        validated_data['current_phase'] = Stage.calc_current_phase(validated_data.get('stages', []))
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
@@ -197,6 +199,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     def create(self, validated_data):
         validated_data['country'] = self.co.country.id
         validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
+        validated_data['current_phase'] = Stage.calc_current_phase(validated_data.get('stages', []))
         return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
@@ -208,6 +211,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
         validated_data['country'] = self.co.country.id
         validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
+        validated_data['current_phase'] = Stage.calc_current_phase(validated_data.get('stages', []))
         instance.draft = validated_data
         return instance
 

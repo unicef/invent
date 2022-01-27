@@ -48,6 +48,7 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
 
     # Completion of initiative phases (stages)
     stages = Field(column_name=_('Completion of initiative phases'))
+    current_phase = Field(column_name=_('Current phase'))
 
     # Partners
     partners = Field(column_name=_('Partners'))
@@ -205,6 +206,13 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         if end_date:
             stages.append(f'End ({end_date})')
         return ', '.join(stages)
+
+    def dehydrate_current_phase(self, project):
+        stage_id = self.get_data_member(project).get('current_phase')
+        try:
+            return Stage.objects.get(id=stage_id).name
+        except Exception:
+            return _('No phase data')
 
     def dehydrate_partners(self, project):
         if 'partners' not in self.get_data_member(project):

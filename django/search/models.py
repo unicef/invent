@@ -48,7 +48,7 @@ class ProjectSearch(ExtendedModel):
         "ic": "innovation_categories",
         "portfolio": "project__review_states",
         "ro": "country_office__regional_office",
-        "stage": "stages",
+        "stage": "project__data__current_phase",
         "iw": "innovation_ways",
         "us": "unicef_sector",
         "hp": "hardware",
@@ -70,7 +70,6 @@ class ProjectSearch(ExtendedModel):
     dhi_categories = ArrayField(models.IntegerField(), default=list)
     hsc = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
-    stages = ArrayField(models.IntegerField(), default=list)
 
     # UNICEF fields
     capability_levels = ArrayField(models.IntegerField(), default=list)
@@ -129,11 +128,11 @@ class ProjectSearch(ExtendedModel):
         if selected_fields:
             for field in selected_fields:
                 if query_params[field]:
-                    if field in ["country", "co", "region", "goal", "result", "ro", "is"]:
+                    if field in ["country", "co", "region", "goal", "result", "ro", "is", "stage"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field in ["donor", "sw", "dhi", "hfa", "hsc",
-                                   "cl", "cc", "cs", "ic", "stage",
+                                   "cl", "cc", "cs", "ic",
                                    "iw", "us", "hp", "pp", "pf", "rp"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
@@ -186,7 +185,6 @@ class ProjectSearch(ExtendedModel):
             self.donors = [int(x) for x in project.data.get("donors", [])]
 
             self.software = project.data.get('platforms')
-            self.stages = [int(x['id']) for x in project.data.get("stages", [])]
             self.hsc = project.data.get('hsc_challenges')
             self.dhi_categories = list(set(filter(None.__ne__,
                                                   [DigitalStrategy.get_parent_id(int(id), 'parent') for

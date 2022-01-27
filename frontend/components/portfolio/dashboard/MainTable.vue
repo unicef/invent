@@ -30,7 +30,7 @@
         class-name="project-td"
       >
         <template slot-scope="scope">
-          <project-card :project="scope.row" hide-borders show-verified />
+          <ProjectCard :project="scope.row" hide-borders show-verified />
           <el-tooltip
             :content="scope.row.favorite ? removeFavoriteText : addFavoriteText"
             placement="bottom"
@@ -62,7 +62,7 @@
         width="511"
       >
         <template slot-scope="scope">
-          <reviewers
+          <Reviewers
             v-if="scope.row.review_states"
             :id="scope.row.id"
             :items="scope.row.review_states.review_scores"
@@ -78,7 +78,7 @@
         width="221"
       >
         <template slot-scope="scope">
-          <scores
+          <Scores
             v-if="scope.row.review_states"
             :scores="scope.row.review_states"
             :name="scope.row.name"
@@ -108,7 +108,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <list-element
+          <ListElement
             :value="scope.row.regional_office"
             source="getRegionalOffices"
           />
@@ -124,7 +124,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <country-item :id="scope.row.country" :show-flag="false" />
+          <CountryItem :id="scope.row.country" :show-flag="false" />
         </template>
       </el-table-column>
 
@@ -162,7 +162,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.unicef_sector"
             source="getSectors"
@@ -189,7 +189,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.regional_priorities"
             source="getRegionalPriorities"
@@ -205,7 +205,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.innovation_ways"
             source="getInnovationWays"
@@ -220,7 +220,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.innovation_categories"
             source="getInnovationCategories"
@@ -236,11 +236,23 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
-            :platforms="scope.row.stages"
+            :platforms="stageIDs(scope.row.stages)"
             source="getStages"
           />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('63')"
+        :resizable="false"
+        :label="$gettext('Current Phase') | translate"
+        sortable="custom"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <PlatformsList class="SimpleList" :platforms="[scope.row.current_phase]" source="getStages" />
         </template>
       </el-table-column>
 
@@ -368,7 +380,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <custom-answers-cell
+          <CustomAnswersCell
             :id="col.originalId"
             :row="scope.row"
             :type="col.type"
@@ -385,7 +397,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.hardware"
             source="getHardware"
@@ -403,7 +415,7 @@
         width="300"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.nontech"
             source="getNontech"
@@ -419,7 +431,7 @@
         width="250"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.functions"
             source="getFunctions"
@@ -435,7 +447,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
+          <PlatformsList
             class="SimpleList"
             :platforms="scope.row.platforms"
             source="getTechnologyPlatforms"
@@ -451,7 +463,7 @@
         width="220"
       >
         <template slot-scope="scope">
-          <list-element
+          <ListElement
             class="SimpleList"
             :value="scope.row.isc"
             source="getInfoSec"
@@ -514,7 +526,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <simple-list :items="scope.row.cpd" />
+          <SimpleList :items="scope.row.cpd" />
         </template>
       </el-table-column>
 
@@ -527,7 +539,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <simple-list :items="scope.row.links" />
+          <SimpleList :items="scope.row.links" />
         </template>
       </el-table-column>
 
@@ -549,7 +561,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <simple-list :items="scope.row.partners" />
+          <SimpleList :items="scope.row.partners" />
         </template>
       </el-table-column>
 
@@ -649,7 +661,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <simple-list :items="scope.row.wbs" />
+          <SimpleList :items="scope.row.wbs" />
         </template>
       </el-table-column>
       <!-- new table fields -->
@@ -663,7 +675,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <custom-answers-cell
+          <CustomAnswersCell
             :id="col.originalId"
             :row="scope.row"
             :type="col.type"
@@ -929,6 +941,9 @@ export default {
     getSearchResults: debounce(function () {
       this.getSearch()
     }, 350),
+    stageIDs(stageList) {
+      return stageList ? stageList.map((stage) => stage.id) : []
+    },
   },
 }
 </script>

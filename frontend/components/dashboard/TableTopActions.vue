@@ -18,9 +18,9 @@
 
         <div class="Separator" />
         <ListExport :projects="rowToExport">
-          <template #default="{ parsed }">
+          <template #default="{ parsedScores }">
             <xlsx-workbook>
-              <xlsx-sheet :collection="parsed" sheet-name="export" />
+              <xlsx-sheet :collection="parsedScores" sheet-name="export" />
               <xlsx-download
                 disable-wrapper-click
                 :options="{ bookType: exportType.toLowerCase() }"
@@ -91,7 +91,7 @@
           v-model="columnSelectorOpen"
           :title="settingsTitle"
           placement="bottom-end"
-          width="220"
+          width="420"
           trigger="click"
           popper-class="CustomPopover TableSettingsDropdown"
           @show="popperOpenHandler"

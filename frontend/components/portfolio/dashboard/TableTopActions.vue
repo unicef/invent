@@ -53,7 +53,7 @@
           v-model="columnSelectorOpen"
           :title="settingsTitle"
           placement="bottom-end"
-          width="264"
+          width="420"
           trigger="click"
           popper-class="CustomPopover TableSettingsDropdown"
           @show="popperOpenHandler"

@@ -13,12 +13,7 @@
       @select-all="selectHandler"
       @sort-change="sortChanged"
     >
-      <el-table-column
-        :resizable="false"
-        type="selection"
-        align="center"
-        width="45"
-      />
+      <el-table-column :resizable="false" type="selection" align="center" width="45" />
       <el-table-column
         v-if="selectedColumns.includes('1')"
         :resizable="false"
@@ -31,10 +26,7 @@
       >
         <template slot-scope="scope">
           <project-card :project="scope.row" hide-borders show-verified />
-          <el-tooltip
-            :content="scope.row.favorite ? removeFavoriteText : addFavoriteText"
-            placement="bottom"
-          >
+          <el-tooltip :content="scope.row.favorite ? removeFavoriteText : addFavoriteText" placement="bottom">
             <div class="favorite">
               <fa
                 v-if="scope.row.favorite"
@@ -74,10 +66,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <list-element
-            :value="scope.row.regional_office"
-            source="getRegionalOffices"
-          />
+          <ListElement :value="scope.row.regional_office" source="getRegionalOffices" />
         </template>
       </el-table-column>
 
@@ -128,11 +117,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
-            class="SimpleList"
-            :platforms="scope.row.unicef_sector"
-            source="getSectors"
-          />
+          <PlatformsList class="SimpleList" :platforms="scope.row.unicef_sector" source="getSectors" />
         </template>
       </el-table-column>
 
@@ -202,11 +187,19 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
-            class="SimpleList"
-            :platforms="scope.row.stages"
-            source="getStages"
-          />
+          <PlatformsList class="SimpleList" :platforms="stageIDs(scope.row.stages)" source="getStages" />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('63')"
+        :resizable="false"
+        :label="$gettext('Current Phase') | translate"
+        sortable="custom"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <PlatformsList class="SimpleList" :platforms="[scope.row.current_phase]" source="getStages" />
         </template>
       </el-table-column>
 
@@ -288,11 +281,7 @@
       >
         <template slot-scope="scope">
           <span>{{ scope.row.contact_name }}</span>
-          <a
-            :href="`mailto:${scope.row.contact_email}`"
-            :rel="`email`"
-            class="TextLink"
-          >
+          <a :href="`mailto:${scope.row.contact_email}`" :rel="`email`" class="TextLink">
             {{ scope.row.contact_email }}
           </a>
         </template>
@@ -316,12 +305,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <HfaCategoriesList
-            :value="scope.row.health_focus_areas"
-            :limit="3"
-            value-is-child
-            show-check
-          />
+          <HfaCategoriesList :value="scope.row.health_focus_areas" :limit="3" value-is-child show-check />
         </template>
       </el-table-column>
 
@@ -334,12 +318,7 @@
         width="240"
       >
         <template slot-scope="scope">
-          <custom-answers-cell
-            :id="col.originalId"
-            :row="scope.row"
-            :type="col.type"
-            :limit="3"
-          />
+          <CustomAnswersCell :id="col.originalId" :row="scope.row" :type="col.type" :limit="3" />
         </template>
       </el-table-column>
 
@@ -351,29 +330,19 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
-            class="SimpleList"
-            :platforms="scope.row.hardware"
-            source="getHardware"
-          />
+          <PlatformsList class="SimpleList" :platforms="scope.row.hardware" source="getHardware" />
         </template>
       </el-table-column>
 
       <el-table-column
         v-if="selectedColumns.includes('23')"
         :resizable="false"
-        :label="
-          $gettext('Programme Innovation/Non-Technology Platforms') | translate
-        "
+        :label="$gettext('Programme Innovation/Non-Technology Platforms') | translate"
         sortable="custom"
         width="300"
       >
         <template slot-scope="scope">
-          <platforms-list
-            class="SimpleList"
-            :platforms="scope.row.nontech"
-            source="getNontech"
-          />
+          <PlatformsList class="SimpleList" :platforms="scope.row.nontech" source="getNontech" />
         </template>
       </el-table-column>
 
@@ -385,11 +354,7 @@
         width="250"
       >
         <template slot-scope="scope">
-          <platforms-list
-            class="SimpleList"
-            :platforms="scope.row.functions"
-            source="getFunctions"
-          />
+          <PlatformsList class="SimpleList" :platforms="scope.row.functions" source="getFunctions" />
         </template>
       </el-table-column>
 
@@ -401,11 +366,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
-            class="SimpleList"
-            :platforms="scope.row.platforms"
-            source="getTechnologyPlatforms"
-          />
+          <PlatformsList class="SimpleList" :platforms="scope.row.platforms" source="getTechnologyPlatforms" />
         </template>
       </el-table-column>
 
@@ -417,11 +378,7 @@
         width="220"
       >
         <template slot-scope="scope">
-          <list-element
-            class="SimpleList"
-            :value="scope.row.isc"
-            source="getInfoSec"
-          />
+          <ListElement class="SimpleList" :value="scope.row.isc" source="getInfoSec" />
         </template>
       </el-table-column>
 
@@ -473,10 +430,7 @@
       <el-table-column
         v-if="selectedColumns.includes('32')"
         :resizable="false"
-        :label="
-          $gettext('In Country programme document (CPD) and annual work plan?')
-            | translate
-        "
+        :label="$gettext('In Country programme document (CPD) and annual work plan?') | translate"
         width="240"
       >
         <template slot-scope="scope">
@@ -487,9 +441,7 @@
       <el-table-column
         v-if="selectedColumns.includes('33')"
         :resizable="false"
-        :label="
-          $gettext('Links to website/Current Documentation + URL') | translate
-        "
+        :label="$gettext('Links to website/Current Documentation + URL') | translate"
         width="240"
       >
         <template slot-scope="scope">
@@ -577,9 +529,7 @@
       <el-table-column
         v-if="selectedColumns.includes('41')"
         :resizable="false"
-        :label="
-          $gettext('Target Group (Target Population) Reached') | translate
-        "
+        :label="$gettext('Target Group (Target Population) Reached') | translate"
         width="240"
       >
         <template slot-scope="scope">
@@ -725,9 +675,7 @@ export default {
     }),
     paginationOrderStr() {
       const loc = this.$i18n.locale
-      return loc === 'ar'
-        ? 'sizes, next, slot, prev'
-        : 'sizes, prev, slot, next'
+      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
     },
   },
   watch: {
@@ -810,9 +758,7 @@ export default {
       return date ? format(date, 'DD/MM/YYYY HH:mm') : ' ' // N/A
     },
     fixTableHeight() {
-      const maxHeight = window
-        .getComputedStyle(this.$el)
-        .getPropertyValue('max-height')
+      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height')
       this.tableMaxHeight = +maxHeight.replace('px', '')
       this.$refs.mainTable.doLayout()
     },
@@ -829,19 +775,14 @@ export default {
     alignFixedTableWidthForRTL() {
       const locale = this.$i18n.locale
       if (locale === 'ar') {
-        const rawTableWidth = document.querySelector('.el-table__header')
-          .offsetWidth
+        const rawTableWidth = document.querySelector('.el-table__header').offsetWidth
         const fixedFieldWidths = 275
         const toShowBorder = 1
 
         const toAlignWidth = rawTableWidth - fixedFieldWidths - toShowBorder
 
-        const fixedTableHeader = document.querySelector(
-          '.el-table__fixed-header-wrapper'
-        )
-        const fixedTableBody = document.querySelector(
-          '.el-table__fixed-body-wrapper'
-        )
+        const fixedTableHeader = document.querySelector('.el-table__fixed-header-wrapper')
+        const fixedTableBody = document.querySelector('.el-table__fixed-body-wrapper')
 
         if (fixedTableBody && fixedTableHeader) {
           fixedTableHeader.style.left = -toAlignWidth + 'px'
@@ -853,6 +794,9 @@ export default {
       const office = this.offices.find((obj) => obj.id === id)
       return office ? office.name : ' ' // N/A
     },
+    stageIDs(stageList) {
+      return stageList ? stageList.map((stage) => stage.id) : []
+    },
   },
 }
 </script>
@@ -863,10 +807,7 @@ export default {
 
 .MainTable {
   margin: 0 40px 120px;
-  max-height: calc(
-    100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight -
-      @appFooterHeight - 93px
-  );
+  max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
 
   .SimpleList {
     ul {

@@ -209,7 +209,7 @@
         :value="stage"
         :items="stages"
         multiple
-        :placeholder="$gettext('Phase of Initiative') | translate"
+        :placeholder="$gettext('Current Phase of Initiative') | translate"
         @change="handleSearch('stage', $event, stages)"
       />
       <filter-select
