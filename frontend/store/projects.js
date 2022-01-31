@@ -1,5 +1,4 @@
 import isEmpty from 'lodash/isEmpty'
-import forOwn from 'lodash/forOwn'
 import get from 'lodash/get'
 
 export const state = () => ({
@@ -7,8 +6,6 @@ export const state = () => ({
   userProjects: [],
   currentProject: null,
   projectStructure: {},
-  currentProjectToolkitVersions: [],
-  currentProjectCoverageVersions: [],
   // initiatives tabs
   tabs: [
     { id: 1, name: 'My initiatives', icon: 'star', total: 1 },
@@ -97,8 +94,6 @@ export const getters = {
   getCpd: (state) => (state.projectStructure.cpd ? [...state.projectStructure.cpd] : []),
   getInnovationCategories: (state) =>
     state.projectStructure.innovation_categories ? [...state.projectStructure.innovation_categories] : [],
-  getToolkitVersions: (state) => [...state.currentProjectToolkitVersions],
-  getCoverageVersions: (state) => [...state.currentProjectCoverageVersions],
   getProjectDetails: (state, getters, rootState, rootGetters) => (p) => {
     if (p) {
       const user = rootGetters['user/getProfile']
@@ -119,106 +114,6 @@ export const getters = {
     // Utility method for retro-compatibility
     const p = rootGetters['project/getOriginal']
     return getters.getProjectDetails(p)
-  },
-  getMapsAxisData: (state, getters, rootState, rootGetters) => {
-    const axis = rootGetters['system/getAxis']
-    const chartAxis = { labels: axis.map((a) => a.name), data: [] }
-    const toolkitVersion = getters.getToolkitVersions
-    const toolkitData = rootGetters['toolkit/getToolkitData']
-    const todayString = getTodayString()
-    if (toolkitVersion.length > 0) {
-      // Data from versions
-      chartAxis.data = toolkitVersion.map((version) => {
-        return {
-          date: version.modified.split('T')[0],
-          axis1: version.data[0].axis_score / 100,
-          axis2: version.data[1].axis_score / 100,
-          axis3: version.data[2].axis_score / 100,
-          axis4: version.data[3].axis_score / 100,
-          axis5: version.data[4].axis_score / 100,
-          axis6: version.data[5].axis_score / 100,
-        }
-      })
-    }
-
-    // Current data (from tooltip)
-
-    if (toolkitData.length === 6) {
-      const lastAxisData = {
-        axis1: toolkitData[0].axis_score / 100,
-        axis2: toolkitData[1].axis_score / 100,
-        axis3: toolkitData[2].axis_score / 100,
-        axis4: toolkitData[3].axis_score / 100,
-        axis5: toolkitData[4].axis_score / 100,
-        axis6: toolkitData[5].axis_score / 100,
-        date: todayString,
-      }
-      chartAxis.data.push(lastAxisData)
-    }
-    return chartAxis
-  },
-  getMapsDomainData: (state, getters, rootState, rootGetters) => {
-    const domains = rootGetters['system/getDomains']
-    const axes = rootGetters['system/getAxis']
-    const chartData = { labels: axes.map((a) => a.name) }
-    const toolkitVersion = getters.getToolkitVersions
-    const toolkitData = rootGetters['toolkit/getToolkitData']
-    const todayString = getTodayString()
-    axes.forEach((axis, axInd) => {
-      chartData[axis.name] = {
-        labels: domains.filter((d) => d.axis === axis.id).map((df) => df.name),
-        data: [],
-      }
-      if (toolkitVersion.length > 0) {
-        chartData[axis.name].data = toolkitVersion.map((version) => {
-          const ret = {}
-          ret.date = version.modified.split('T')[0]
-          version.data[axInd].domains.forEach((domain, domainInd) => {
-            ret['axis' + (domainInd + 1)] = domain.domain_percentage / 100
-          })
-          return ret
-        })
-      }
-      if (toolkitData.length > 0) {
-        const current = { date: todayString }
-        toolkitData[axInd].domains.forEach((dom, ii) => {
-          current['axis' + (ii + 1)] = dom.domain_percentage / 100
-        })
-        chartData[axis.name].data.push(current)
-      }
-    })
-    return chartData
-  },
-  getCoverageData: (state, getters) => {
-    const coverageVersion = getters.getCoverageVersions
-    const projectData = getters.getCurrentProject
-    if (projectData) {
-      const coverage = projectData.coverage ? projectData.coverage.slice() : []
-      coverage.push(Object.assign({}, projectData.national_level_deployment))
-      coverageVersion.push({ data: coverage })
-
-      const todayString = getTodayString()
-
-      return coverageVersion.reduce(
-        (ret, versionObj, vInd) => {
-          ret.data[vInd] = {}
-          ret.data[vInd].date = versionObj.modified ? versionObj.modified.split('T')[0] : todayString
-
-          versionObj.data.forEach((distrObj) => {
-            forOwn(distrObj, (val, key) => {
-              const labels = ['clients', 'facilities', 'health_workers']
-              const index = labels.indexOf(key)
-              if (index > -1) {
-                const name = `axis${index + 1}`
-                ret.data[vInd][name] = (ret.data[vInd][name] || 0) + val
-              }
-            })
-          })
-          return ret
-        },
-        { labels: [], data: [] }
-      )
-    }
   },
   getPageSize: (state) => state.pageSize,
   getTotal: (state) => state.total,
@@ -420,31 +315,9 @@ export const actions = {
       commit('SET_VALUE', { key: 'errorReview', val: true })
     }
   },
-  async setCurrentProject({ commit, dispatch }, id) {
+  setCurrentProject({ commit, dispatch }, id) {
     id = parseInt(id, 10)
-    try {
-      await dispatch('loadProjectDetails', id)
-    } catch (e) {
-      console.error('projects/setCurrentProject failed')
-      return Promise.reject(e)
-    }
     commit('SET_CURRENT_PROJECT', id)
-  },
-  async loadProjectDetails({ commit, rootGetters }, projectId) {
-    const profile = rootGetters['user/getProfile']
-    try {
-      if (projectId && profile) {
-        const [toolkitVersions, coverageVersions] = await Promise.all([
-          this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
-          this.$axios.get(`/api/projects/${projectId}/coverage/versions/`),
-        ])
-        commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data)
-        commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data)
-      }
-    } catch (error) {
-      console.error('projects/loadProjectDetails failed')
-      return Promise.reject(error)
-    }
   },
   async snapShotProject({ state, dispatch }) {
     const id = state.currentProject
@@ -569,17 +442,9 @@ export const mutations = {
   SET_PROJECT_STRUCTURE: (state, structure) => {
     state.projectStructure = structure
   },
-  SET_CURRENT_PROJECT_TOOLKIT: (state, toolkit) => {
-    state.currentProjectToolkitVersions = toolkit
-  },
-  SET_CURRENT_PROJECT_COVERAGE_VERSIONS: (state, coverage) => {
-    state.currentProjectCoverageVersions = coverage
-  },
   RESET_PROJECTS_DATA: (state) => {
     state.userProjects = []
     state.currentProject = null
     state.projectStructure = {}
-    state.currentProjectToolkitVersions = []
-    state.currentProjectCoverageVersions = []
   },
 }

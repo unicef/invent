@@ -94,25 +94,6 @@
         >
           <translate>Phases</translate>
         </nuxt-link>
-        <!--
-        <nuxt-link :to="localePath({name: 'organisation-initiatives-id-assessment', params: {id, organisation: $route.params.organisation}})">
-          <translate>Assessment</translate>
-        </nuxt-link>
-        <nuxt-link
-          v-if="isTeam"
-          :class="{'Active': isUpdateScoreActive}"
-          :to="localePath({name: 'organisation-initiatives-id-toolkit', params: {id, organisation: $route.params.organisation}})"
-        >
-          <translate>Update score</translate>
-        </nuxt-link>
-        <nuxt-link
-          v-if="isTeam"
-          :class="{'Active': isScorecardActive}"
-          :to="localePath({name: 'organisation-initiatives-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})"
-        >
-          <translate>Summary score</translate>
-        </nuxt-link>
-        -->
       </div>
     </div>
   </div>
@@ -161,12 +142,6 @@ export default {
         this.route === 'organisation-initiatives-id-edit' ||
         this.route === 'organisation-initiatives-id'
       )
-    },
-    isUpdateScoreActive() {
-      return this.route === 'organisation-initiatives-id-toolkit'
-    },
-    isScorecardActive() {
-      return this.route === 'organisation-initiatives-id-toolkit-scorecard'
     },
     isTeam() {
       if (this.user) {

@@ -367,8 +367,8 @@ class CountryTests(APITestCase):
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_en_email_text = outgoing_emails[2].as_string()
-        self.assertTrue("test3@foo.com" in outgoing_emails[2].values())
+        outgoing_en_email_text = outgoing_emails[3].as_string()
+        self.assertTrue("test3@foo.com" in outgoing_emails[3].values())
         self.assertTrue('You have been selected as the <b>System Admin</b> within the Digital Health Atlas for ' +
                         '<b>{}</b>. Use the link below to begin updating your country information.'.format(
                             self.country.name)
@@ -376,9 +376,8 @@ class CountryTests(APITestCase):
         self.assertTrue('/en/-/admin/country' in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
-
-        outgoing_fr_email_text = outgoing_emails[3].as_string()
-        self.assertTrue("test4@foo.com" in outgoing_emails[3].values())
+        outgoing_fr_email_text = outgoing_emails[2].as_string()
+        self.assertTrue("test4@foo.com" in outgoing_emails[2].values())
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
 
@@ -1090,16 +1089,16 @@ class DonorTests(APITestCase):
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_en_email_text = outgoing_emails[2].as_string()
-        self.assertTrue("test3@foo.com" in outgoing_emails[2].values())
+        outgoing_en_email_text = outgoing_emails[3].as_string()
+        self.assertTrue("test3@foo.com" in outgoing_emails[3].values())
         self.assertTrue('You have been selected as System Admin for {}'.format(self.donor.name)
                         in outgoing_en_email_text)
         self.assertTrue('/en/-/admin/donor' in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_fr_email_text = outgoing_emails[3].as_string()
-        self.assertTrue("test4@foo.com" in outgoing_emails[3].values())
+        outgoing_fr_email_text = outgoing_emails[2].as_string()
+        self.assertTrue("test4@foo.com" in outgoing_emails[2].values())
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
 

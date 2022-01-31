@@ -56,7 +56,6 @@ export default {
         'organisation-admin-import',
         'organisation-admin-import-id',
         'organisation-email-confirmation',
-        'organisation-cms',
       ],
     }
   },

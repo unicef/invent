@@ -533,8 +533,5 @@ export default {
       }
     }
   }
-
-  .GetToolkit {
-  }
 }
 </style>

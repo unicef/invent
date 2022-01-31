@@ -9,7 +9,6 @@ export const state = () => ({
   axis: [],
   domains: [],
   landing_page_defaults: {},
-  toolkit_questions: [],
   sub_level_types: [],
   organisations: [],
   donors: [],
@@ -59,9 +58,6 @@ export const getters = {
   },
   getDomains: (state) => {
     return [...state.domains]
-  },
-  getQuestions: (state) => {
-    return [...state.toolkit_questions]
   },
   getReviewStatuses: (state) => {
     return Object.assign(
@@ -150,7 +146,6 @@ export const actions = {
       commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults)
       commit('SET_LANGUAGES', data.languages)
       commit('SET_THEMATIC_OVERVIEW', data.thematic_overview)
-      commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions)
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types)
       commit('SET_REGIONS', data.unicef_regions)
       commit('SET_DATA', { key: 'unicef_regions', value: data.unicef_regions })
@@ -240,10 +235,6 @@ export const mutations = {
 
   SET_THEMATIC_OVERVIEW: (state, value) => {
     state.thematic_overview = value
-  },
-
-  SET_TOOLKIT_QUESTIONS: (state, value) => {
-    state.toolkit_questions = value
   },
 
   SET_SUB_LEVEL_TYPES: (state, value) => {

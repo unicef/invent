@@ -25,8 +25,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
     ApprovalState, Stage, Phase, ProjectVersion
 from project.permissions import InCountryAdminForApproval
 from search.views import ResultsSetPagination
-from toolkit.models import Toolkit, ToolkitVersion
-from .models import Project, CoverageVersion, TechnologyPlatform, DigitalStrategy, \
+from .models import Project, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
 from user.models import UserProfile
 from .resources import ProjectResource
@@ -575,72 +574,6 @@ class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-
-
-class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
-    def create(self, request, project_id):
-        """
-        Makes versions out of Toolkit and coverage data for the project.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        self.check_object_permissions(request, project)
-
-        if not project.public_id:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
-        last_cov_ver = CoverageVersion.objects.filter(project_id=project_id).order_by("-version").first()
-        if not last_cov_ver:
-            # No versions yet.
-            new_version = 1
-        else:
-            new_version = last_cov_ver.version + 1
-
-        current_cov = project.data.get("coverage", [])
-        current_cov += [project.data.get('national_level_deployment', {})]
-
-        new_cov_ver = CoverageVersion(project_id=project_id, version=new_version, data=current_cov)
-        new_cov_ver.save()
-
-        # Make a new version from current toolkit.
-        last_toolkit_ver = ToolkitVersion.objects.filter(project_id=project_id).order_by("-version").first()
-        if not last_toolkit_ver:
-            # No versions yet.
-            new_version = 1
-        else:
-            new_version = last_toolkit_ver.version + 1
-        current_toolkit = get_object_or_400(Toolkit, "No such Toolkit", project_id=project_id).data
-        new_toolkit_ver = ToolkitVersion(project_id=project_id, version=new_version, data=current_toolkit)
-        new_toolkit_ver.save()
-        data = {
-            "coverage": {
-                "last_version": new_cov_ver.version,
-                "last_version_date": new_cov_ver.modified
-            },
-            "toolkit": {
-                "last_version": new_toolkit_ver.version,
-                "last_version_date": new_toolkit_ver.modified
-            }
-        }
-        return Response(data, status=status.HTTP_201_CREATED)
-
-    def toolkit_versions(self, request, project_id):
-        """
-        Retrieves all toolkit versions for the given project_id.
-        """
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        self.check_object_permissions(request, project)
-
-        toolkit_versions = ToolkitVersion.objects.filter(project_id=project_id) \
-            .order_by("version").values("version", "data", "modified")
-        return Response(toolkit_versions)
-
-    def coverage_versions(self, request, project_id):
-        """
-        Retrieves all coverage versions for the given project_id.
-        """
-        coverage_versions = CoverageVersion.objects.filter(project_id=project_id) \
-            .order_by("version").values("version", "data", "modified")
-        return Response(coverage_versions)
 
 
 class MapProjectCountryViewSet(ListModelMixin, GenericViewSet):

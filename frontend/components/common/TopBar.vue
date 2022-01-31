@@ -257,12 +257,7 @@ export default {
     font-weight: 700;
   }
 
-  .HeaderBtn
-    // TODO: Remove Angular Material
-    // hacking Toolkit md-button :(
-  ,.HeaderBtn.md-button
-    //
- {
+  .HeaderBtn {
     position: relative;
     height: 24px;
     margin: 0 5px;
@@ -274,29 +269,8 @@ export default {
     text-decoration: none;
     transition: @transitionAll;
 
-    // hacking Toolkit md-button :(
-    min-height: auto;
-    min-width: auto;
-    overflow: visible;
-    background-color: transparent !important;
-
-    &.md-ink-ripple {
-      > span {
-        letter-spacing: 0 !important;
-      }
-
-      &::before {
-        top: -15px !important;
-      }
-    }
-
-    > .md-ripple-container {
-      display: none;
-    }
-    //
-
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: -17px;
       left: 0;
@@ -329,10 +303,6 @@ export default {
     .svg-inline--fa {
       margin-right: 6px;
     }
-  }
-
-  .HeaderBtn.md-button {
-    transform: translateY(-1px);
   }
 
   .Separator {

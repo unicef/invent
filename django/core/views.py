@@ -11,16 +11,13 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
     IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState
-from project.models import Project, ProjectPortfolioState, ReviewScore
+from project.models import ProjectPortfolioState, ReviewScore
 from project.serializers import PartnerSerializer, LinkSerializer
 from country.models import CountryOffice
 from user.authentication import BearerTokenAuthentication
 
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
-from .data.domains import AXIS, DOMAINS
 from .data.search_filters import SEARCH_FILTERS
-from .data.thematic_overview import THEMATIC_OVERVIEW
-from .data.toolkit_questions import TOOLKIT_QUESTIONS
 from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
 from .data.review_questions import REVIEWER_QUESTIONS
@@ -67,16 +64,6 @@ class ReviewScoreReviewerAccessMixin:
     permission_classes = (IsAuthenticated, IsReviewable)
 
 
-class CheckProjectAccessMixin(object):
-    """
-    This method needs to be used with an APIView (or ViewSet) that implements `check_object_permissions`
-    """
-
-    def check_project_permission(self, request, project_id):
-        project = get_object_or_400(Project, "No such project.", id=project_id)
-        self.check_object_permissions(request, project)
-
-
 class Http400(APIException):
     """
     Represents 400 error to be raised inside APIs for immediate error response.
@@ -119,10 +106,6 @@ class StaticDataView(GenericAPIView):
         data['languages'] = language_data
         data['search_filters'] = SEARCH_FILTERS
         data['landing_page_defaults'] = LANDING_PAGE_DEFAULTS
-        data['axis'] = AXIS
-        data['domains'] = DOMAINS
-        data['thematic_overview'] = THEMATIC_OVERVIEW
-        data['toolkit_questions'] = TOOLKIT_QUESTIONS
         data['sub_level_types'] = SUB_LEVEL_TYPES
         data['unicef_regions'] = [{'id': reg[0], 'name': reg[1]} for reg in CountryOffice.REGIONS]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
