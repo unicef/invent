@@ -56,21 +56,6 @@ urlpatterns = [
             'get': 'project_structure'
         }),
         name="get-project-structure"),
-    url(r"^projects/(?P<project_id>\d+)/version/$",
-        view=views.ProjectVersionViewSet.as_view({
-            'post': 'create'
-        }),
-        name="make-version"),
-    url(r"^projects/(?P<project_id>\d+)/coverage/versions/$",
-        view=views.ProjectVersionViewSet.as_view({
-            'get': 'coverage_versions'
-        }),
-        name="get-coverage-versions"),
-    url(r"^projects/(?P<project_id>\d+)/toolkit/versions/$",
-        view=views.ProjectVersionViewSet.as_view({
-            'get': 'toolkit_versions'
-        }),
-        name="get-toolkit-versions"),
     url(r"^projects/(?P<pk>\d+)/groups/$",
         view=views.ProjectGroupViewSet.as_view({
             'get': 'retrieve',

@@ -372,8 +372,7 @@ export default {
         this.isDate ||
         this.isDisabled ||
         this.isTextArea ||
-        this.isNumber ||
-        this.isCoverage
+        this.isNumber
       ) {
         this.active = true
         return

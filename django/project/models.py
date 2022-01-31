@@ -21,7 +21,6 @@ from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, Acti
 from country.models import Country, Donor, CountryOffice
 from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys, migrate_project_phases
-from toolkit.toolkit_data import toolkit_default
 from user.models import UserProfile
 
 
@@ -70,8 +69,7 @@ class ProjectQuerySet(ActiveQuerySet, ProjectManager):
 
 
 class Project(SoftDeleteModel, ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private",
-                               "last_version", "last_version_date", "start_date", "end_date")
+    FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private", "start_date", "end_date")
     FIELDS_FOR_LOGGED_IN = ("contact_email", "contact_name")
 
     name = models.CharField(max_length=255)
@@ -158,11 +156,6 @@ class Project(SoftDeleteModel, ExtendedModel):
 
         data.update(extra_data)
 
-        if not draft_mode:
-            last_version = CoverageVersion.objects.filter(project_id=self.pk).order_by("-version").first()
-            if last_version:
-                data.update(last_version=last_version.version, last_version_date=last_version.modified)
-
         return data
 
     def to_response_dict(self, published, draft):
@@ -243,8 +236,6 @@ class ProjectVersion(ExtendedModel):
 @receiver(post_save, sender=Project)
 def on_create_init(sender, instance, created, **kwargs):
     if created:
-        from toolkit.models import Toolkit
-        Toolkit.objects.get_or_create(project_id=instance.id, defaults=dict(data=toolkit_default))
         ProjectApproval.objects.get_or_create(project_id=instance.id)
 
 
@@ -385,12 +376,6 @@ class ProjectApproval(ExtendedModel):
 
     def __str__(self):
         return "Approval for {}".format(self.project.name)
-
-
-class CoverageVersion(ExtendedModel):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    version = models.IntegerField()
-    data = JSONField()
 
 
 class File(ExtendedModel):

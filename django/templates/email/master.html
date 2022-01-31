@@ -1,4 +1,4 @@
-<!-- To make css inline use this tool: https://inliner.cm/ -->
+<!-- To make css inline use this tool: https://templates.mailchimp.com/resources/inline-css/ -->
 
 {% load utils %}
 {% load staticfiles %}
@@ -494,29 +494,6 @@
                           </tbody>
                         </table>
                         <!-- /TEMPLATE: DONOR ADMIN -->
-
-
-                        <!-- TEMPLATE: FLAG CONTENT -->
-                        {% elif type == "flag_content" %}
-                        <h1>{% trans "Reported content!" %}</h1>
-                        <h2>{% trans "Notification" %}</h2>
-                        <p>{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                          <tbody>
-                            <tr>
-                              <td align="left">
-                                <table border="0" cellpadding="0" cellspacing="0">
-                                  <tbody>
-                                    <tr>
-                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to see content" %}</a> </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <!-- /TEMPLATE: FLAG CONTENT -->
 
 
                         <!-- TEMPLATE: STATUS REPORT -->

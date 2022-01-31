@@ -259,50 +259,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['results'][0]['published'].get("name"), "Test Project1")
 
-    def test_make_version(self):
-        url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url, format="json")
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('coverage', response.json())
-        self.assertIn('toolkit', response.json())
-        self.assertIn('last_version', response.json()['coverage'])
-        self.assertIn('last_version_date', response.json()['coverage'])
-        self.assertIn('last_version', response.json()['toolkit'])
-        self.assertIn('last_version_date', response.json()['toolkit'])
-
-    def test_make_version_wrong_id(self):
-        url = reverse("make-version", kwargs={"project_id": 999})
-        response = self.test_user_client.post(url, format="json")
-        self.assertEqual(response.status_code, 400)
-
-    def test_get_toolkit_versions(self):
-        url = reverse("make-version", kwargs={"project_id": self.project_id})
-        self.test_user_client.post(url, format="json")
-        url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-
-    def test_version_numbers_increasing(self):
-        url = reverse("make-version", kwargs={"project_id": self.project_id})
-        self.test_user_client.post(url, format="json")
-        self.test_user_client.post(url, format="json")
-        url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
-        self.assertEqual(response.json()[1]["version"], 2)
-
-    def test_retrieve_last_version(self):
-        url = reverse("make-version", kwargs={"project_id": self.project_id})
-        self.test_user_client.post(url, format="json")
-        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("last_version"), 1)
-        self.assertIn("last_version_date", response.json()['published'])
-
     def test_create_project_adds_owner_to_team(self):
         url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
         data = copy.deepcopy(self.project_data)

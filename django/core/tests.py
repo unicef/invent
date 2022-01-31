@@ -135,10 +135,6 @@ class TestStaticDataEndpoint(TestCase):
         self.assertIn('languages', response.json())
         self.assertIn('search_filters', response.json())
         self.assertIn('landing_page_defaults', response.json())
-        self.assertIn('axis', response.json())
-        self.assertIn('domains', response.json())
-        self.assertIn('thematic_overview', response.json())
-        self.assertIn('toolkit_questions', response.json())
         self.assertIn('sub_level_types', response.json())
         self.assertIn('review_questions', response.json())
 

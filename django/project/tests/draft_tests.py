@@ -132,11 +132,6 @@ class ProjectDraftTests(SetupTests):
         hfa = HealthFocusArea.objects.all().first()
         self.assertEqual(str(hfa), '[Adolescent and Youth Health] Adolescents and communicable diseases')
 
-    def test_make_version_for_draft(self):
-        url = reverse("make-version", kwargs={"project_id": self.project_draft_id})
-        response = self.test_user_client.post(url, format="json")
-        self.assertEqual(response.status_code, 406)
-
     def test_project_create_can_send_blank_fields_in(self):
         # add one new project where health_focus_areas is empty
         project_data = copy.copy(self.project_data)

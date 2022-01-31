@@ -281,24 +281,6 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.json()['published']['country_custom_answers'], {'1': ['1'], '2': ['2']})
         self.assertFalse('country_custom_answers_private' in response.json()['published'])
 
-    def test_members_receive_last_version_info(self):
-        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertNotIn("last_version", response.json())
-
-        url = reverse("make-version", kwargs={"project_id": self.project_id})
-        self.test_user_client.post(url, format="json")
-        url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-
-        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("last_version", response.json()['published'])
-
     def test_country_manager_can_update_project_groups(self):
         user_profile_id, test_user_client, _ = self.create_user('country_manager@tester.com',
                                                                 'asdkjfh78y87', 'asdkjfh78y87')
