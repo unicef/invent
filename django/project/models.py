@@ -1,4 +1,5 @@
 import uuid
+from copy import deepcopy
 from collections import namedtuple
 from typing import List, Union, Dict
 
@@ -127,10 +128,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         return self.get_country().user_in_groups(user.userprofile) if self.get_country() else False
 
     def get_member_data(self):
-        return self.data
+        return deepcopy(self.data)
 
     def get_member_draft(self):
-        return self.draft
+        return deepcopy(self.draft)
 
     def get_non_member_data(self):
         return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY)

@@ -213,11 +213,11 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
 
 class ProjectVersionAdmin(admin.ModelAdmin):
     model = ProjectVersion
-    fields = ['modified', 'project', 'user', 'version', 'data']
+    fields = ['modified', 'project', 'user', 'version', 'data', 'published']
     readonly_fields = fields
     search_fields = ['project__name']
 
-    list_display = ['modified', 'project', 'version']
+    list_display = ['modified', 'project', 'published', 'version']
 
     def get_project_name(self, obj):  # pragma: no cover
         return obj.project.name
