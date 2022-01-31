@@ -24,6 +24,7 @@ from project.models import Project, DigitalStrategy, TechnologyPlatform, \
     HSCChallenge, HSCGroup, ProjectApproval, Stage
 from project.tasks import send_project_approval_digest, notify_superusers_about_new_pending_approval, \
     notify_user_about_approval
+from project.models import ProjectVersion
 
 from project.tests.setup import SetupTests, MockRequest
 from user.tests import create_profile_for_user
@@ -753,6 +754,36 @@ class ProjectTests(SetupTests):
 
         project.refresh_from_db()
         self.assertEqual(project.data, {})
+
+        self.check_project_search_init_state(project)
+
+    def test_unpublish_project_version_data(self):
+        data = copy.deepcopy(self.project_data)
+        data['project']['name'] = 'test unpublish data versioning content'
+        # create project draft
+        url = reverse('project-create', kwargs={'country_office_id': self.country_office.id})
+        response = self.test_user_client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        resp_data = response.json()
+        project = Project.objects.get(id=resp_data['id'])
+
+        self.check_project_search_init_state(project)
+
+        # publish project
+        url = reverse('project-publish', kwargs={'project_id': resp_data['id'],
+                                                 'country_office_id': self.country_office.id})
+        response = self.test_user_client.put(url, data, format='json')
+        resp_data = response.json()
+
+        project.refresh_from_db()
+
+        # unpublish project
+        url = reverse('project-unpublish', kwargs={'project_id': resp_data['id']})
+        response = self.test_user_client.put(url, format='json')
+        resp_data = response.json()
+
+        project.refresh_from_db()
+        self.assertEqual(project.draft, ProjectVersion.objects.filter(project_id=resp_data['id']).last().data)
 
         self.check_project_search_init_state(project)
 
