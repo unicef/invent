@@ -231,7 +231,7 @@
       <el-table-column
         v-if="selectedColumns.includes('21')"
         :resizable="false"
-        :label="$gettext('Phase of Initiative') | translate"
+        :label="$gettext('Completed phases') | translate"
         sortable="custom"
         width="180"
       >

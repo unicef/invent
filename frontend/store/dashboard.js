@@ -157,7 +157,7 @@ const DEFAULT_QUERY = {
       label: 'Innovation Ways',
       key: 'innovation_ways',
     },
-    { id: '21', label: 'Phase of Initiative', key: 'stages' },
+    { id: '21', label: 'Completed phases', key: 'stages' },
     { id: '63', label: 'Current phase', key: 'current_phase' },
     { id: '22', label: 'Hardware platform(s)', key: 'hardware' },
     {

@@ -10,12 +10,11 @@ export const nameInventMapping = {
   regional_priorities: 'Regional Priorities',
   innovation_categories: 'Innovation Categories',
   cpd: 'In Country programme document (CPD)',
-  phase: 'Phase of Initiative',
+  phase: 'Completed phases',
   currency: 'Currency',
   wbs: 'WBS number',
   partners: 'Partners',
   links: 'Links to website/Current Documentation',
-
   overview: 'Overview',
   program_targets: 'Program Targets',
   program_targets_achieved: 'Program Targets Achieved',

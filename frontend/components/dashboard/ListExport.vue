@@ -169,13 +169,13 @@ export default {
         },
         {
           id: '21',
-          label: 'Phase of Initiative',
+          label: 'Completed phases',
           key: 'stages',
           parse: (stages) => this.parseListWithObjects(this.getStages, stages),
         },
         {
           id: '63',
-          label: 'Current Phase',
+          label: 'Current phase',
           key: 'current_phase',
           parse: (phaseId) => this.parseSingleSelection(phaseId, 'getStages'),
         },
