@@ -766,6 +766,12 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
+#: components/dashboard/MainTable.vue:76 components/dashboard/MainTable.vue:332
+#: components/portfolio/dashboard/MainTable.vue:88
+#: components/portfolio/dashboard/MainTable.vue:382
+msgid "Completed phases"
+msgstr ""
+
 #: components/project/sections/StageOverview.vue:2
 #: components/project/sections/StageOverview.vue:53
 msgid "Completion of initiative phases"
@@ -967,7 +973,7 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:220
 #: components/search/AdvancedSearch.vue:59
 #: components/search/AdvancedSearch.vue:263
-msgid "Current Phase of Initiative"
+msgid "Current phase of Initiative"
 msgstr ""
 
 #: components/admin/import/ImportFile.vue:81
@@ -2694,12 +2700,6 @@ msgstr ""
 
 #: components/project/sections/StageOverview.vue:49
 msgid "Phase date is required"
-msgstr ""
-
-#: components/dashboard/MainTable.vue:76 components/dashboard/MainTable.vue:332
-#: components/portfolio/dashboard/MainTable.vue:88
-#: components/portfolio/dashboard/MainTable.vue:382
-msgid "Phase of Initiative"
 msgstr ""
 
 #: components/BreadCrumb.vue:27 components/common/ProjectBar.vue:77
