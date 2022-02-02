@@ -11,7 +11,7 @@
     "model": "sites.site",
     "pk": 2,
     "fields": {
-      "domain": "dev.whomaps.pulilab.com",
+      "domain": "dev.example.org",
       "name": "dev"
     }
   },
@@ -19,7 +19,7 @@
     "model": "sites.site",
     "pk": 3,
     "fields": {
-      "domain": "digitalhealthatlas.org",
+      "domain": "example.org",
       "name": "production"
     }
   },
@@ -27,7 +27,7 @@
     "model": "sites.site",
     "pk": 4,
     "fields": {
-      "domain": "qa.whomaps.pulilab.com",
+      "domain": "qa.example.org",
       "name": "staging"
     }
   }

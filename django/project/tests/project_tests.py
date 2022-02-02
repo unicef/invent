@@ -837,8 +837,8 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, groups, format="json")
 
         self.assertEqual(
-            response.json(), {'new_team_emails': {'0': ['Incorrect email address.', 'Enter a valid email address.']},
-                              'new_viewer_emails': {'0': ['Incorrect email address.', 'Enter a valid email address.']}})
+            response.json(), {'new_team_emails': {'0': ['Enter a valid email address.']},
+                              'new_viewer_emails': {'0': ['Enter a valid email address.']}})
 
     def test_add_new_users_by_email(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})

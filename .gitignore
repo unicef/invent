@@ -25,6 +25,7 @@ diff.txt
 dump.*
 django/celerybeat-schedule
 django/celerybeat-schedule.*
+django/tiip/settings_deployed.py
 .floo
 .flooignore
 .sublimelinterrc
@@ -41,3 +42,5 @@ yarn-error.log
 .history/
 django/.env
 *.icloud
+init-letsencrypt.qa.sh
+init-letsencrypt.dev.sh
