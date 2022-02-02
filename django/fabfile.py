@@ -1,11 +1,14 @@
 import time
 from fabric.api import local, run, cd, env
 from fabric.context_managers import warn_only
+from environs import Env
+secret_env = Env()
+secret_env.read_env()
 
 # ENVIRONMENTS #
-PROD_HOST_STRING = ''
-DEV_HOST_STRING = 'root@dev.invent.pulilab.com'
-QA_HOST_STRING = 'root@qa.invent.pulilab.com'
+PROD_HOST_STRING = secret_env.str('PROD_HOST_STRING', default='')
+DEV_HOST_STRING = secret_env.str('DEV_HOST_STRING', default='')
+QA_HOST_STRING = secret_env.str('QA_HOST_STRING', default='')
 
 
 def dev():

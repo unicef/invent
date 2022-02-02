@@ -146,19 +146,18 @@ class TestStaticDataEndpoint(TestCase):
                          [{'code': 'en', 'flag': 'gb.png', 'name': 'English'},
                           {'code': 'fr', 'flag': 'fr.png', 'name': 'French'},
                           {'code': 'es', 'flag': 'es.png', 'name': 'Spanish'},
-                          {'code': 'pt', 'flag': 'pt.png', 'name': 'Portuguese'},
-                          {'code': 'ar', 'flag': 'sa.png', 'name': 'Arabic'}])
+                          {'code': 'pt', 'flag': 'pt.png', 'name': 'Portuguese'}])
 
     def test_name_translation(self):
         response = self.client.get(reverse('static-data'), HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         name_list = [l['name'] for l in response.json()['languages']]
-        self.assertEqual(name_list, ['English', 'French', 'Spanish', 'Portuguese', 'Arabic'])
+        self.assertEqual(name_list, ['English', 'French', 'Spanish', 'Portuguese'])
 
         response = self.client.get(reverse('static-data'), HTTP_ACCEPT_LANGUAGE='fr')
         self.assertEqual(response.status_code, 200)
         name_list = [l['name'] for l in response.json()['languages']]
-        self.assertEqual(name_list, ['Anglais', 'Français', 'Espagnol', 'Portugais', 'Arabe'])
+        self.assertEqual(name_list, ['Anglais', 'Français', 'Espagnol', 'Portugais'])
 
     def test_review_question_data(self):
         response = self.client.get(reverse('static-data'), HTTP_ACCEPT_LANGUAGE='en')

@@ -107,7 +107,8 @@ jobs:
           name: Install fabric and pycrypto
           command: |
             sudo pip install pycrypto
-            sudo pip install Fabric3==1.10.2.post3
+            sudo pip install Fabric3==1.14.post1
+            sudo pip install environs
       - run:
           name: Deploy Over SSH
           working_directory: ~/tiip/django
@@ -125,7 +126,8 @@ jobs:
           name: Install fabric and pycrypto
           command: |
             sudo pip install pycrypto
-            sudo pip install Fabric3==1.10.2.post3
+            sudo pip install Fabric3==1.14.post1
+            sudo pip install environs
       - run:
           name: Deploy Over SSH
           working_directory: ~/tiip/django

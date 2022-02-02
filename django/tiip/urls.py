@@ -13,8 +13,8 @@ from country.views import CountryOfficeViewSet, CountryLandingPageViewSet, Count
 from project.views import ProjectPublicViewSet
 from user.views import OrganisationViewSet
 
-admin.site.site_header = 'UNICEF T4D & Innovation Inventory Portal'
-API_TITLE = 'UNICEF T4D & Innovation Inventory Portal API'
+admin.site.site_header = settings.PROJECT_NAME
+API_TITLE = f'{settings.PROJECT_NAME} API'
 API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
@@ -33,10 +33,10 @@ if settings.DEBUG:  # pragma: no cover
     urlpatterns.append(url(r'^api/devdocs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)))
 
 api_info = openapi.Info(
-    title='UNICEF T4D & Innovation Inventory Portal API',
+    title=API_TITLE,
     default_version='v1',
-    description='UNICEF T4D & Innovation Inventory Portal API',
-    contact=openapi.Contact(email="f@pulilab.com"),
+    description=API_TITLE,
+    contact=openapi.Contact(email=settings.API_MAINTAINER),
 )
 
 api_info_router = SimpleRouter()
