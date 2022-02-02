@@ -3,23 +3,12 @@ from django.db import models, transaction
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password, PBKDF2PasswordHasher
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel
 from .tasks import send_user_request_to_admins
-
-
-def set_password(self, raw_password):  # pragma: no cover
-    self.password = make_password(raw_password)
-    self._password = raw_password
-    self._set_password = True  # inject this to detect password change
-
-
-User.set_password = set_password
-PBKDF2PasswordHasher.iterations = 30000
 
 
 class Organisation(ExtendedModel):
