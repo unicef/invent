@@ -1,9 +1,9 @@
 export default function ({ store, redirect, app, route }) {
   const profile = store.getters['user/getProfile']
-  const noUnicef = store.getters['layout/getShowNoUnicefOrgOrDonor']
+  // const noUnicef = store.getters['layout/getShowNoUnicefOrgOrDonor']
   const donorTypes = ['D', 'DA', 'SDA']
   const routeName = route.name.split('___')[0]
-  if (noUnicef) return
+  // if (noUnicef) return
   if (
     routeName !== 'organisation-edit-profile' &&
     profile &&
