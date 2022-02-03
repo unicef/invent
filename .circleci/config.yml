@@ -160,6 +160,7 @@ jobs:
       - image: cypress/included:4.5.0
     working_directory: ~/tiip
     steps:
+      - run: echo "E2E Runner"
       - when:
           condition:
             equal: [ true, "${<< parameters.deploy_e2e_enabled >>}" ]
