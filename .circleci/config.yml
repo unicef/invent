@@ -109,7 +109,7 @@ jobs:
       - checkout
       - when:
           condition:
-            equal: [ true, ${<< parameters.deploy_dev_enabled >>} ]
+            equal: [ true, "${<< parameters.deploy_dev_enabled >>}" ]
           steps:
             - run:
                 name: Install fabric and pycrypto
