@@ -106,14 +106,11 @@ jobs:
       - image: circleci/python:3.7.6-stretch
     working_directory: ~/tiip
     steps:
-      - run: echo "${<< parameters.deploy_dev_enabled >>}"
-      - run: echo << parameters.deploy_dev_enabled >>
-      - run: echo ${<< parameters.deploy_dev_enabled >>}
+      - checkout
       - when:
           condition:
-            equal: [ "true", "${<< parameters.deploy_dev_enabled >>}" ]
+            equal: [ true, ${<< parameters.deploy_dev_enabled >>} ]
           steps:
-            - checkout
             - run:
                 name: Install fabric and pycrypto
                 command: |
