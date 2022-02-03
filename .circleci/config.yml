@@ -106,6 +106,9 @@ jobs:
       - image: circleci/python:3.7.6-stretch
     working_directory: ~/tiip
     steps:
+      - run: echo "${<< parameters.deploy_dev_enabled >>}"
+      - run: echo << parameters.deploy_dev_enabled >>
+      - run: echo ${<< parameters.deploy_dev_enabled >>}
       - when:
           condition:
             equal: [ "true", "${<< parameters.deploy_dev_enabled >>}" ]
