@@ -1,8 +1,8 @@
 ## Command to run
 
-`fab up` - start all backend instances in daemon mode
-`fab down` - stop all backend instances and make backup of db
-`fab migrate` - to run new migrations
+`fab up` - start all backend instances in daemon mode  
+`fab down` - stop all backend instances and make backup of db  
+`fab migrate` - to run new migrations  
 `docker-compose build` - if there were new django requirements
 
 ## Project structure
@@ -33,7 +33,7 @@ http://localhost/admin -- backend admin
 
 On production, install a cron for the user (`crontab -e`) to autobackup the DB
 
-```0 4 * * * cd /home/whomaps/tiip/django && fab backup_prod```
+```0 4 * * * cd /path/to/project/django && fab backup_prod```
 
 
 ## Rebuilding search
