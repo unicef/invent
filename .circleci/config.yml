@@ -107,8 +107,7 @@ jobs:
     working_directory: ~/tiip
     steps:
       - when:
-        condition:
-          equal: [ true, "${<< parameters.deploy_dev_enabled >>}" ]
+        equal: [ true, "${<< parameters.deploy_dev_enabled >>}" ]
         steps:
           - checkout
           - run:
@@ -134,8 +133,7 @@ jobs:
     working_directory: ~/tiip
     steps:
       - when:
-        condition:
-          equal: [ true, "${<< parameters.deploy_qa_enabled >>}" ]
+        equal: [ true, "${<< parameters.deploy_qa_enabled >>}" ]
         steps:
           - checkout
           - run:
@@ -161,8 +159,7 @@ jobs:
     working_directory: ~/tiip
     steps:
       - when:
-        condition:
-          equal: [ true, "${<< parameters.deploy_e2e_enabled >>}" ]
+        equal: [ true, "${<< parameters.deploy_e2e_enabled >>}" ]
         steps:
           - checkout
           - run:
