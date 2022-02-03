@@ -164,20 +164,20 @@ jobs:
           condition:
             equal: [ true, "${<< parameters.deploy_e2e_enabled >>}" ]
           steps:
-            - checkout
-            - run:
-                name: Install Dependencies
-                command: yarn install --frozen-lockfile
-            - run:
-                name: e2e tests against DEV
-                working_directory: ~/tiip/e2e
-                command: |
-                  cypress run -C cypress.dev.json
-                no_output_timeout: "20m"
-            - store_artifacts:
-                path: /root/tiip/e2e/cypress/videos
-            - store_artifacts:
-                path: /root/tiip/e2e/cypress/screenshots
+          - checkout
+          - run:
+              name: Install Dependencies
+              command: yarn install --frozen-lockfile
+          - run:
+              name: e2e tests against DEV
+              working_directory: ~/tiip/e2e
+              command: |
+                cypress run -C cypress.dev.json
+              no_output_timeout: "20m"
+          - store_artifacts:
+              path: /root/tiip/e2e/cypress/videos
+          - store_artifacts:
+              path: /root/tiip/e2e/cypress/screenshots
 
 workflows:
   build-and-deploy:
