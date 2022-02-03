@@ -108,7 +108,7 @@ jobs:
     steps:
       - when:
           condition:
-            equal: [ true, "${<< parameters.deploy_dev_enabled >>}" ]
+            equal: [ "true", "${<< parameters.deploy_dev_enabled >>}" ]
           steps:
             - checkout
             - run:
