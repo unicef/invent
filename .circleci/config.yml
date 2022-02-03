@@ -107,21 +107,22 @@ jobs:
     working_directory: ~/tiip
     steps:
       - when:
-        equal: [ true, "${<< parameters.deploy_dev_enabled >>}" ]
-        steps:
-          - checkout
-          - run:
-              name: Install fabric and pycrypto
-              command: |
-                sudo pip install pycrypto
-                sudo pip install Fabric3==1.14.post1
-                sudo pip install environs
-          - run:
-              name: Deploy Over SSH
-              working_directory: ~/tiip/django
-              command: |
-                fab dev deploy
-              no_output_timeout: "20m"
+          condition:
+            equal: [ true, "${<< parameters.deploy_dev_enabled >>}" ]
+          steps:
+            - checkout
+            - run:
+                name: Install fabric and pycrypto
+                command: |
+                  sudo pip install pycrypto
+                  sudo pip install Fabric3==1.14.post1
+                  sudo pip install environs
+            - run:
+                name: Deploy Over SSH
+                working_directory: ~/tiip/django
+                command: |
+                  fab dev deploy
+                no_output_timeout: "20m"
 
   deploy-qa:
     parameters:
@@ -133,21 +134,22 @@ jobs:
     working_directory: ~/tiip
     steps:
       - when:
-        equal: [ true, "${<< parameters.deploy_qa_enabled >>}" ]
-        steps:
-          - checkout
-          - run:
-              name: Install fabric and pycrypto
-              command: |
-                sudo pip install pycrypto
-                sudo pip install Fabric3==1.14.post1
-                sudo pip install environs
-          - run:
-              name: Deploy Over SSH
-              working_directory: ~/tiip/django
-              command: |
-                fab staging deploy:<< pipeline.git.tag >>
-              no_output_timeout: "30m"
+          condition:
+            equal: [ true, "${<< parameters.deploy_qa_enabled >>}" ]
+          steps:
+            - checkout
+            - run:
+                name: Install fabric and pycrypto
+                command: |
+                  sudo pip install pycrypto
+                  sudo pip install Fabric3==1.14.post1
+                  sudo pip install environs
+            - run:
+                name: Deploy Over SSH
+                working_directory: ~/tiip/django
+                command: |
+                  fab staging deploy:<< pipeline.git.tag >>
+                no_output_timeout: "30m"
 
   e2e-dev:
     parameters:
@@ -159,22 +161,23 @@ jobs:
     working_directory: ~/tiip
     steps:
       - when:
-        equal: [ true, "${<< parameters.deploy_e2e_enabled >>}" ]
-        steps:
-          - checkout
-          - run:
-              name: Install Dependencies
-              command: yarn install --frozen-lockfile
-          - run:
-              name: e2e tests against DEV
-              working_directory: ~/tiip/e2e
-              command: |
-                cypress run -C cypress.dev.json
-              no_output_timeout: "20m"
-          - store_artifacts:
-              path: /root/tiip/e2e/cypress/videos
-          - store_artifacts:
-              path: /root/tiip/e2e/cypress/screenshots
+          condition:
+            equal: [ true, "${<< parameters.deploy_e2e_enabled >>}" ]
+          steps:
+            - checkout
+            - run:
+                name: Install Dependencies
+                command: yarn install --frozen-lockfile
+            - run:
+                name: e2e tests against DEV
+                working_directory: ~/tiip/e2e
+                command: |
+                  cypress run -C cypress.dev.json
+                no_output_timeout: "20m"
+            - store_artifacts:
+                path: /root/tiip/e2e/cypress/videos
+            - store_artifacts:
+                path: /root/tiip/e2e/cypress/screenshots
 
 workflows:
   build-and-deploy:
