@@ -121,10 +121,6 @@ jobs:
           no_output_timeout: "20m"
 
   deploy-qa:
-    parameters:
-      deploy_qa_enabled:
-        type: env_var_name
-        default: DEPLOY_QA_ENABLED
     docker:
       - image: circleci/python:3.7.6-stretch
     working_directory: ~/tiip
@@ -144,10 +140,6 @@ jobs:
           no_output_timeout: "30m"
 
   e2e-dev:
-    parameters:
-      deploy_e2e_enabled:
-        type: env_var_name
-        default: DEPLOY_E2E_ENABLED
     docker:
       - image: cypress/included:4.5.0
     working_directory: ~/tiip
@@ -169,42 +161,53 @@ jobs:
 
 workflows:
   build-and-deploy:
+    when:
+      equal: [ https://github.com/pulilab/TIIP, << pipeline.project.git_url >> ]
     jobs:
       - build-and-test:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
-#      - deploy-dev:
-#          requires:
-#            - build-and-test
-#          filters:
-#            branches:
-#              only: dev
-#          post-steps:
-#            - jira/notify:
-#                environment_type: development
-#                job_type: deployment
-#                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
-#                environment: DEV  # DEV, PROD, QA
-#      - e2e-dev:
-#          requires:
-#            - build-and-test
-#            - deploy-dev
-#          filters:
-#            branches:
-#              only: dev
-#      - deploy-qa:
-#          name: QA Server Deployment
-#          requires:
-#            - build-and-test
-#          filters:
-#            branches:
-#              ignore: /.*/
-#            tags:
-#              only: /^[0-9]+(\.[0-9]+)*$/
-#          post-steps:
-#            - jira/notify:
-#                environment_type: staging
-#                job_type: deployment
-#                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
-#                environment: QA  # DEV, PROD, QA
+      - deploy-dev:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: dev
+          post-steps:
+            - jira/notify:
+                environment_type: development
+                job_type: deployment
+                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
+                environment: DEV  # DEV, PROD, QA
+      - e2e-dev:
+          requires:
+            - build-and-test
+            - deploy-dev
+          filters:
+            branches:
+              only: dev
+      - deploy-qa:
+          name: QA Server Deployment
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+(\.[0-9]+)*$/
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: deployment
+                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
+                environment: QA  # DEV, PROD, QA
+  build-and-test-only:
+    when:
+      not:
+        equal: [ https://github.com/pulilab/TIIP, << pipeline.project.git_url >> ]
+    jobs:
+      - build-and-test:
+          filters:
+            tags:
+              only: /^[0-9]+(\.[0-9]+)*$/
