@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/unicef/invent.svg?style=svg)](https://circleci.com/gh/unicef/invent)
+
 ## Command to run
 
 `fab up` - start all backend instances in daemon mode  
