@@ -1,4 +1,5 @@
-[![CircleCI](https://circleci.com/gh/unicef/invent.svg?style=svg)](https://circleci.com/gh/unicef/invent)
+[![CircleCI](https://circleci.com/gh/unicef/invent.svg?style=shield)](https://circleci.com/gh/unicef/invent)
+[![Documentation Status](https://readthedocs.org/projects/unicef-invent/badge/?version=latest)](https://unicef-invent.readthedocs.io/en/latest/?badge=latest)
 
 ## Developer documentation
 
