@@ -1,5 +1,9 @@
 [![CircleCI](https://circleci.com/gh/unicef/invent.svg?style=svg)](https://circleci.com/gh/unicef/invent)
 
+## Developer documentation
+
+[https://unicef-invent.readthedocs.io](https://unicef-invent.readthedocs.io/en/latest/)
+
 ## Command to run
 
 `fab up` - start all backend instances in daemon mode  
