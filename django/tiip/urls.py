@@ -9,8 +9,9 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.routers import SimpleRouter
 
+from core.views import StaticDataView
 from country.views import CountryOfficeViewSet, CountryLandingPageViewSet, CountryLandingListPageViewSet
-from project.views import ProjectPublicViewSet
+from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet
 from user.views import OrganisationViewSet
 
 admin.site.site_header = settings.PROJECT_NAME
@@ -46,10 +47,15 @@ api_info_router.register(r'api/landing-country', CountryLandingListPageViewSet, 
 api_info_router.register(r'api/organisations', OrganisationViewSet, base_name='organisation')
 
 api_info_urlpatterns = [
-    url(r"^api/", include("search.urls")),
-    url(r"^api/projects/structure/",
+    url("^api/", include("search.urls")),
+    url("^api/projects/structure/",
         view=ProjectPublicViewSet.as_view({'get': 'project_structure'}),
         name="get-project-structure"),
+    url("^api/portfolio/active-list/",
+        view=PortfolioActiveListViewSet.as_view({'get': 'list'}),
+        name="portfolio-list-active"),
+    url('^api/static-data/$', view=StaticDataView.as_view(),
+        name='static-data'),
 ]
 api_info_urlpatterns += api_info_router.urls
 
