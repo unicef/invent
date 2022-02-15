@@ -148,6 +148,10 @@ urlpatterns = [
          }), name='portfolio-project-manager-review'),
     path('country-manager-export/',
          view=views.CountryManagerExportView.as_view({
-             'get': 'retrieve',
-         }), name='country-manager-export')
+             'get': 'retrieve'
+         }), name='country-manager-export'),
+    path('problem-statement/',
+         view=views.ProblemStatementListViewSet.as_view({
+             'get': 'list'
+         }), name='problem-statement-list'),
 ]

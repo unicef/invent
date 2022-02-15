@@ -22,7 +22,7 @@ from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
 from .data.review_questions import REVIEWER_QUESTIONS
 from .models import NewsItem
-from .serializers import NewsItemSerializer
+from .serializers import NewsItemSerializer, StaticDataSerializer
 
 
 class TokenAuthMixin:
@@ -94,6 +94,7 @@ def get_object_or_400(cls, error_message="No such object.", select_for_update=Fa
 
 
 class StaticDataView(GenericAPIView):
+    serializer_class = StaticDataSerializer
     flag_mapping = {'en': 'gb.png',
                     'fr': 'fr.png',
                     'es': 'es.png',
@@ -115,7 +116,7 @@ class StaticDataView(GenericAPIView):
         data['scale_phases'] = [{'id': s[0], 'name': s[1]} for s in ProjectPortfolioState.SCALE_CHOICES]
         data['review_status'] = [{'id': s[0], 'text': s[1]} for s in ReviewScore.STATUS_CHOICES]
 
-        return Response(data)
+        return Response(StaticDataSerializer(data).data)
 
     def get_language_data(self):
         languages = []
