@@ -2,7 +2,7 @@ import Vue from 'vue'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { apiReadParser, apiWriteParser, APIError } from '@/utilities/api'
-import { projectFields, epochCheck, newStages } from '@/utilities/projects'
+import { projectFields, newStages } from '@/utilities/projects'
 
 const cleanState = () => ({
   ...projectFields(),
@@ -268,10 +268,10 @@ export const actions = {
     commit('SET_IMPLEMENTATION_OVERVIEW', value)
   },
   setStartDate({ commit }, value) {
-    commit('SET_START_DATE', (value == null) ? "" : value)
+    commit('SET_START_DATE', value == null ? '' : value)
   },
   setEndDate({ commit }, value) {
-    commit('SET_END_DATE', (value == null) ? "" : value)
+    commit('SET_END_DATE', value == null ? '' : value)
   },
   setResearch({ commit }, value) {
     commit('SET_RESEARCH', value)
@@ -568,10 +568,29 @@ export const actions = {
   loadStagesDraft({ state, getters, dispatch }) {
     dispatch('setStagesDraft', getters.getStagesDraft)
   },
+  prepareStages({ state, commit, rootState }, version = 'draft') {
+    const project = version === 'draft' ? { ...state } : state.published
+    let preparedStages = []
+    if ('stages' in rootState.projects.projectStructure) {
+      preparedStages = rootState.projects.projectStructure.stages.map((item) => {
+        const included = project.stages && project.stages.find((i) => i.id === item.id)
+        if (included) {
+          return {
+            ...item,
+            date: included.date || '',
+            note: included.note || '',
+            checked: true,
+          }
+        }
+        return { ...item, date: '', note: '', checked: false }
+      })
+    }
+    commit('SET_DATA', { key: 'stagesPrepared', value: preparedStages })
+  },
 }
 
 export const mutations = {
-  SET_DATA: (state, { value, key }) => {
+  SET_DATA: (state, { key, value }) => {
     state[key] = value
   },
   SET_NAME: (state, name) => {
@@ -678,12 +697,8 @@ export const mutations = {
     state.country = get(project, 'country', null)
     state.country_office = get(project, 'country_office', null)
     state.implementation_overview = get(project, 'implementation_overview', '')
-    state.start_date = (get(project, 'start_date', "") !== "")
-      ? get(project, 'start_date', "")
-      : ""
-    state.end_date = (get(project, 'end_date', "") !== "")
-      ? get(project, 'end_date', "")
-      : ""
+    state.start_date = get(project, 'start_date', '') !== '' ? get(project, 'start_date', '') : ''
+    state.end_date = get(project, 'end_date', '') !== '' ? get(project, 'start_date', '') : ''
     state.research = project.research
     state.end_date_note = get(project, 'end_date_note', '')
     state.stages = get(project, 'stages', [])
@@ -700,9 +715,7 @@ export const mutations = {
     state.dhis = get(project, 'dhis', [])
     state.health_focus_areas = get(project, 'health_focus_areas', [])
     state.hsc_challenges = get(project, 'hsc_challenges', [])
-    state.modified = (get(project, 'modified', "") !== "")
-      ? new Date(get(project, 'modified', ""))
-      : ""
+    state.modified = get(project, 'modified', '') !== '' ? new Date(get(project, 'modified', '')) : ''
     state.donors = get(project, 'donors', [])
     state.country_answers = get(project, 'country_custom_answers', [])
     state.donors_answers = get(project, 'donor_custom_answers', [])
