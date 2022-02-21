@@ -500,7 +500,7 @@ export default {
             s.innovation_categories
           ),
           stages: this.parseListWithObjects(this.getStages, s.stages),
-          current_phase: this.parseSingleSelection(this.getStages, s.current_phase),
+          current_phase: this.parseSingleSelection(s.current_phase, 'getStages'),
           hardware: this.parseList(this.getHardware, s.hardware),
           nontech: this.parseList(this.getNontech, s.nontech),
           functions: this.parseList(this.getFunctions, s.functions),
