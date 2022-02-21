@@ -697,8 +697,8 @@ export const mutations = {
     state.country = get(project, 'country', null)
     state.country_office = get(project, 'country_office', null)
     state.implementation_overview = get(project, 'implementation_overview', '')
-    state.start_date = get(project, 'start_date', '') !== '' ? new Date(get(project, 'start_date', '')) : ''
-    state.end_date = get(project, 'end_date', '') !== '' ? new Date(get(project, 'end_date', '')) : ''
+    state.start_date = get(project, 'start_date', '') !== '' ? get(project, 'start_date', '') : ''
+    state.end_date = get(project, 'end_date', '') !== '' ? get(project, 'start_date', '') : ''
     state.research = project.research
     state.end_date_note = get(project, 'end_date_note', '')
     state.stages = get(project, 'stages', [])

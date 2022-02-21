@@ -47,7 +47,6 @@ export default {
     ...mapState({
       chartdata: (state) => state.charts.stages.chartdata,
       options: (state) => state.charts.stages.options,
-      stagesDraft: (state) => state.project.stagesDraft,
       stagesPrepared: (state) => state.project.stagesPrepared,
       project: (state) => state.project,
     }),
@@ -80,7 +79,6 @@ export default {
   methods: {
     ...mapActions({
       getStageData: 'charts/getStageData',
-      loadStagesDraft: 'project/loadStagesDraft',
       prepareStages: 'project/prepareStages',
     }),
   },
