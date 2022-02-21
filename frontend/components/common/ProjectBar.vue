@@ -30,10 +30,7 @@
                 <translate>Contact person</translate>
               </div>
               <div class="Info">
-                <a
-                  :href="`mailto:${project.contact_email}`"
-                  class="NuxtLink Small IconRight"
-                >
+                <a :href="`mailto:${project.contact_email}`" class="NuxtLink Small IconRight">
                   {{ project.contact_name }}
                   <fa icon="envelope" />
                 </a>
@@ -41,7 +38,6 @@
             </el-col>
             <el-col v-if="isPublished" :span="2" class="InfoSection">
               <favorite :id="project.id" :favorite="favorite" />
-              <!-- <project-legend :id="project.id" /> -->
             </el-col>
           </el-row>
         </el-col>
@@ -84,14 +80,7 @@
         >
           <translate>Initiative</translate>
         </nuxt-link>
-        <nuxt-link
-          :to="
-            localePath({
-              name: 'organisation-initiatives-id-stages',
-              params: { id, organisation: $route.params.organisation },
-            })
-          "
-        >
+        <nuxt-link :to="stagesUrl">
           <translate>Phases</translate>
         </nuxt-link>
       </div>
@@ -105,12 +94,10 @@ import { mapGetters } from 'vuex'
 import Favorite from '@/components/common/Favorite'
 import toInteger from 'lodash/toInteger'
 import OrganisationItem from './OrganisationItem'
-// import ProjectLegend from './ProjectLegend'
 
 export default {
   components: {
     OrganisationItem,
-    // ProjectLegend,
     Favorite,
   },
   computed: {
@@ -143,6 +130,17 @@ export default {
         this.route === 'organisation-initiatives-id'
       )
     },
+    stagesUrl() {
+      const versionRoute =
+        this.route === 'organisation-initiatives-id-published' ||
+        this.route === 'organisation-initiatives-id-published-stages'
+          ? 'organisation-initiatives-id-published-stages'
+          : 'organisation-initiatives-id-stages'
+      return this.localePath({
+        name: versionRoute,
+        params: { id: this.id, organisation: this.$route.params.organisation },
+      })
+    },
     isTeam() {
       if (this.user) {
         return this.user.member.includes(+this.$route.params.id)
@@ -151,10 +149,7 @@ export default {
     },
     isViewer() {
       if (this.user) {
-        return (
-          this.user.is_superuser ||
-          this.user.viewer.includes(+this.$route.params.id)
-        )
+        return this.user.is_superuser || this.user.viewer.includes(+this.$route.params.id)
       }
       return true
     },
@@ -272,10 +267,6 @@ export default {
 
       &:hover {
         color: @colorTextPrimary;
-
-        // &::before {
-        //   transform: translateY(3px);
-        // }
       }
     }
   }

@@ -60,11 +60,11 @@ export const projectFields = () => ({
   organisation: null,
   country: null,
   country_office: null,
-  modified: "",
+  modified: null,
   implementation_overview: null,
   research: false,
-  start_date: "",
-  end_date: "",
+  start_date: null,
+  end_date: null,
   end_date_note: null,
   contact_name: null,
   contact_email: null,
@@ -108,6 +108,7 @@ export const projectFields = () => ({
   phase: null,
   stages: [],
   stagesDraft: null,
+  stagesPrepared: null,
 })
 
 export const draftRules = () => {

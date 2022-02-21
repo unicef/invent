@@ -1,11 +1,6 @@
 <template>
   <section>
-    <line-chart
-      v-if="loaded"
-      :chartdata="chartdata"
-      :options="options"
-      class="graph__line"
-    />
+    <LineChart v-if="loaded" :chartdata="chartdata" :options="options" class="graph__line" />
     <section class="graph__legend">
       <ul class="legend">
         <li><translate>Legend:</translate></li>
@@ -35,9 +30,7 @@
         </li>
       </ul>
       <p>
-        <translate>
-          The date under a phase represents when that phase was completed.
-        </translate>
+        <translate>The date under a phase represents when that phase was completed.</translate>
       </p>
     </section>
   </section>
@@ -55,11 +48,28 @@ export default {
       chartdata: (state) => state.charts.stages.chartdata,
       options: (state) => state.charts.stages.options,
       stagesDraft: (state) => state.project.stagesDraft,
+      stagesPrepared: (state) => state.project.stagesPrepared,
+      project: (state) => state.project,
     }),
+    route() {
+      return this.$route.name.split('__')[0]
+    },
+    isPublished() {
+      return (
+        this.route === 'organisation-initiatives-id-published' ||
+        this.route === 'organisation-initiatives-id-published-stages'
+      )
+    },
+    showProjectVersion() {
+      return this.isPublished ? 'published' : 'draft'
+    },
+    showProject() {
+      return this.isPublished ? this.project.published : this.project
+    },
   },
   async mounted() {
-    await this.loadStagesDraft()
-    this.getStageData(this.stagesDraft)
+    this.prepareStages(this.showProjectVersion)
+    this.getStageData({ stages: this.stagesPrepared, project: this.showProject })
     await setTimeout(() => {
       this.loaded = true
     }, 250)
@@ -71,6 +81,7 @@ export default {
     ...mapActions({
       getStageData: 'charts/getStageData',
       loadStagesDraft: 'project/loadStagesDraft',
+      prepareStages: 'project/prepareStages',
     }),
   },
 }
