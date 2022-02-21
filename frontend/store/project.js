@@ -37,12 +37,8 @@ export const getters = {
     ? ''
     : (new Date(state.modified)),
   getImplementationOverview: (state) => state.implementation_overview,
-  getEndDate: (state) => isNaN(new Date(state.end_date).getTime())
-    ? ''
-    : (new Date(state.end_date)),
-  getStartDate: (state) => isNaN(new Date(state.start_date).getTime())
-    ? ''
-    : (new Date(state.start_date)),
+  getEndDate: (state) => state.end_date,
+  getStartDate: (state) => state.start_date,
   getResearch: (state) => state.research,
   getEndDateNote: (state) => state.end_date_note,
   getStages: (state) => state.stages,
@@ -683,10 +679,10 @@ export const mutations = {
     state.country_office = get(project, 'country_office', null)
     state.implementation_overview = get(project, 'implementation_overview', '')
     state.start_date = (get(project, 'start_date', "") !== "")
-      ? new Date(get(project, 'start_date', ""))
+      ? get(project, 'start_date', "")
       : ""
     state.end_date = (get(project, 'end_date', "") !== "")
-      ? new Date(get(project, 'end_date', ""))
+      ? get(project, 'end_date', "")
       : ""
     state.research = project.research
     state.end_date_note = get(project, 'end_date_note', '')
