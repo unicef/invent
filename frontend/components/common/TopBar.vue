@@ -220,7 +220,7 @@ export default {
   }
 
   .RightPart {
-    padding: 14px 0;
+    padding: 9px 0;
 
     > .el-row > .el-col {
       width: auto;
