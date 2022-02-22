@@ -60,10 +60,14 @@ export default {
   span {
     position: relative;
     &.divider {
+      display: flex;
+      align-items: center;
       &::before {
         content: '';
         border: 1px solid @colorBrandGrayLight;
         margin-right: 8px;
+        height: 18px;
+        display: inline-block;
       }
     }
   }

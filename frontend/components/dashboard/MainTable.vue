@@ -805,6 +805,10 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
+.el-table table {
+  width: 0px;
+}
+
 .MainTable {
   margin: 0 40px 120px;
   max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
