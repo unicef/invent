@@ -13,6 +13,7 @@ export default {
   },
   data() {
     return {
+      problemStatements: [],
       officialScoreFields: [
         this.$gettext('Problem Statement Alignment (Official Score)'),
         this.$gettext('Reach: Number of Children Impacted (Official Score)'),
@@ -323,13 +324,13 @@ export default {
           id: '62',
           label: 'Scoring',
           key: 'review_states',
-          parse: (review_states) => this.parseScores(review_states),
+          parse: (review_states) => this.parseReviewState(review_states),
         },
         {
           id: '61',
           label: 'Questionnaires Assigned',
           key: 'review_states',
-          parse: (review_states) => this.parseReviews(review_states),
+          parse: (review_scores) => this.parseReviews(review_scores),
         },
       ],
     }
@@ -393,10 +394,7 @@ export default {
           exportCols.push(i)
         }
       })
-      if (
-        this.portfolioPage !== 'inventory' &&
-        this.projects[0]?.review_states
-      ) {
+      if (this.portfolioPage !== 'inventory' && this.projects[0]?.review_states) {
         // official score header
         if (this.selectedCol.includes('62')) {
           row.push(...['', ...this.officialScoreFields])
@@ -446,11 +444,7 @@ export default {
       return parsed
     },
     parsed() {
-      if (
-        !this.projects ||
-        !this.projects[0] ||
-        typeof this.projects !== 'object'
-      ) {
+      if (!this.projects || !this.projects[0] || typeof this.projects !== 'object') {
         return null
       }
       return this.projects.map((s) => {
@@ -463,18 +457,9 @@ export default {
           // investors: this.parseDonors(s.donors),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
-          capability_levels: this.parseFlatList(
-            s.capability_levels,
-            'capabilityLevels'
-          ),
-          capability_categories: this.parseFlatList(
-            s.capability_categories,
-            'capabilityCategories'
-          ),
-          capability_subcategories: this.parseFlatList(
-            s.capability_subcategories,
-            'capabilitySubcategories'
-          ),
+          capability_levels: this.parseFlatList(s.capability_levels, 'capabilityLevels'),
+          capability_categories: this.parseFlatList(s.capability_categories, 'capabilityCategories'),
+          capability_subcategories: this.parseFlatList(s.capability_subcategories, 'capabilitySubcategories'),
           goal_area: this.parseSingleSelection(s.goal_area, 'goalAreas'),
           result_area: this.parseSingleSelection(s.result_area, 'resultAreas'),
           region: this.parseSingleSelection(s.region, 'regions'),
@@ -487,28 +472,17 @@ export default {
           country_answers: undefined,
           donor_answers: undefined,
           // new fields
-          regional_office: this.parseList(this.getRegionalOffices, [
-            s.regional_office,
-          ]),
+          regional_office: this.parseList(this.getRegionalOffices, [s.regional_office]),
           unicef_sector: this.parseList(this.getSectors, s.unicef_sector),
-          innovation_ways: this.parseList(
-            this.getInnovationWays,
-            s.innovation_ways
-          ),
-          innovation_categories: this.parseList(
-            this.getInnovationCategories,
-            s.innovation_categories
-          ),
+          innovation_ways: this.parseList(this.getInnovationWays, s.innovation_ways),
+          innovation_categories: this.parseList(this.getInnovationCategories, s.innovation_categories),
           stages: this.parseListWithObjects(this.getStages, s.stages),
           current_phase: this.parseSingleSelection(s.current_phase, 'getStages'),
           hardware: this.parseList(this.getHardware, s.hardware),
           nontech: this.parseList(this.getNontech, s.nontech),
           functions: this.parseList(this.getFunctions, s.functions),
           isc: this.parseList(this.getInfoSec, [s.isc]),
-          regional_priorities: this.parseList(
-            this.getRegionalPriorities,
-            s.regional_priorities
-          ),
+          regional_priorities: this.parseList(this.getRegionalPriorities, s.regional_priorities),
           wbs: this.joinSimpleArr(s.wbs),
           partners: this.joinSimpleArr(s.partners),
           cpd: this.joinSimpleArr(s.cpd),
@@ -527,6 +501,14 @@ export default {
     },
   },
   methods: {
+    async getProblemStatements() {
+      try {
+        const { data } = await this.$axios.get('api/problem-statement/')
+        this.problemStatements = [...data]
+      } catch (e) {
+        console.error(e)
+      }
+    },
     parseBoolean(value) {
       return value ? this.$gettext('yes') : this.$gettext('no')
     },
@@ -605,11 +587,7 @@ export default {
     parseHealthFocusAreas(health_focus_areas) {
       if (typeof health_focus_areas === 'object') {
         return this.getHealthFocusAreas
-          .filter((hfa) =>
-            hfa.health_focus_areas.some((h) =>
-              health_focus_areas.includes(h.id)
-            )
-          )
+          .filter((hfa) => hfa.health_focus_areas.some((h) => health_focus_areas.includes(h.id)))
           .map((hf) => hf.name)
           .join(',')
       }
@@ -642,21 +620,19 @@ export default {
       }
       return custom
     },
-    parseScores(projectScores) {
+    parseReviewState(projectReviewState) {
       const scores = [''] // to make a gap
-      scores.push(this.parseList(this.scalePhases, projectScores.psa))
-      scores.push(projectScores.rnci || '')
-      scores.push(projectScores.ratp || '')
-      scores.push(projectScores.ra || '')
-      scores.push(projectScores.ee || '')
-      scores.push(projectScores.nst || '')
-      scores.push(projectScores.nc || '')
-      scores.push(projectScores.ps || '')
-      scores.push(projectScores.overall_reviewer_feedback || '')
-      scores.push(projectScores.impact || '')
-      scores.push(
-        this.parseSingleSelection(projectScores.scale_phase, 'scalePhases')
-      )
+      scores.push(this.parseList(this.problemStatements, projectReviewState.psa))
+      scores.push(projectReviewState.rnci || '')
+      scores.push(projectReviewState.ratp || '')
+      scores.push(projectReviewState.ra || '')
+      scores.push(projectReviewState.ee || '')
+      scores.push(projectReviewState.nst || '')
+      scores.push(projectReviewState.nc || '')
+      scores.push(projectReviewState.ps || '')
+      scores.push(projectReviewState.overall_reviewer_feedback || '')
+      scores.push(projectReviewState.impact || '')
+      scores.push(this.parseSingleSelection(projectReviewState.scale_phase, 'scalePhases'))
       return scores
     },
     parseReviews(projectReviews) {
@@ -687,6 +663,9 @@ export default {
     },
   },
   render() {
+    if (this.problemStatements.length === 0) {
+      this.getProblemStatements()
+    }
     return this.$scopedSlots.default({
       parsed: this.parsed,
       parsedScores: this.parsedScores,
