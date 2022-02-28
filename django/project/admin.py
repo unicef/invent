@@ -19,6 +19,7 @@ from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter,
 import scheduler.celery # noqa
 
 from import_export.admin import ExportActionMixin
+from import_export_celery.admin_actions import create_export_job_action
 from .resources import ProjectResource
 from .utils import project_status_change, project_status_change_str
 
@@ -161,6 +162,7 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
 
 
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
+    actions = (create_export_job_action,)
     list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions',
                     'featured', 'featured_rank']
     list_filter = ('featured', IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter,
@@ -309,6 +311,28 @@ class StageAdmin(SortableAdminMixin, AllObjectsAdmin):
 class PhaseAdmin(ViewOnlyPermissionMixin, admin.ModelAdmin):
     ordering = search_fields = ['name']
 
+
+class JobWithStatusMixin:
+    def job_status_info(self, obj):
+        job_status = cache.get(self.direction + "_job_status_%s" % obj.pk)
+        if job_status:
+            return job_status
+        else:
+            return obj.job_status
+
+class ExportJobAdmin(JobWithStatusMixin, admin.ModelAdmin):
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = super(admin.ModelAdmin, self).get_readonly_fields(request, obj)
+        if obj:
+            return (
+                    "modSel",
+                    "app_label",
+                    "file",
+                    "job_status_info",
+                    "author",
+                    "updated_by",
+                )
+        return readonly_fields
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)

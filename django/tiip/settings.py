@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'scheduler',
     'simple-feedback',
     'import_export',
+    'import_export_celery',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -74,6 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.ExceptionLoggingMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
+    'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
 ROOT_URLCONF = 'tiip.urls'
