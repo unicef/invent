@@ -1,7 +1,7 @@
 from import_export import resources
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 
-from project.models import Project, UNICEFSector, UNICEFGoal, InnovationCategory, CPD, Stage, TechnologyPlatform, \
+from .models import Project, UNICEFSector, UNICEFGoal, InnovationCategory, CPD, Stage, TechnologyPlatform, \
     HardwarePlatform, NontechPlatform, ISC, PlatformFunction, UNICEFResultArea, InnovationWay
 from import_export.fields import Field
 from django.utils.translation import ugettext_lazy as _
