@@ -312,28 +312,6 @@ class PhaseAdmin(ViewOnlyPermissionMixin, admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
-class JobWithStatusMixin:
-    def job_status_info(self, obj):
-        job_status = cache.get(self.direction + "_job_status_%s" % obj.pk)
-        if job_status:
-            return job_status
-        else:
-            return obj.job_status
-
-class ExportJobAdmin(JobWithStatusMixin, admin.ModelAdmin):
-    def get_readonly_fields(self, request, obj=None):
-        readonly_fields = super(admin.ModelAdmin, self).get_readonly_fields(request, obj)
-        if obj:
-            return (
-                    "modSel",
-                    "app_label",
-                    "file",
-                    "job_status_info",
-                    "author",
-                    "updated_by",
-                )
-        return readonly_fields
-
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)

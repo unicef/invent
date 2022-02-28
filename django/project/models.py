@@ -205,7 +205,7 @@ class Project(SoftDeleteModel, ExtendedModel):
         return stale_ids
 
     @classmethod
-    def export_resource_classes(cls):
+    def export_resource_classes(cls):  # pragma: no cover
         from project.resources import ProjectResource
         return {
             'projects': ('Projects', ProjectResource)
