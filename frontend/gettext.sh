@@ -8,7 +8,7 @@ output_file="../django/translations/master.pot"
 
 vue_translations=${workdir}/vue.pot
 
-./node_modules/easygettext/src/extract-cli.js --startDelimiter '' --endDelimiter '' --output ${vue_translations} ${input_vue_files}
+./node_modules/easygettext/src/extract-cli.js --removeHTMLWhitespaces --startDelimiter '' --endDelimiter '' --output ${vue_translations} ${input_vue_files}
 
 merged_pot=${workdir}/merged.pot
 msgcat ${vue_translations} > ${merged_pot}
