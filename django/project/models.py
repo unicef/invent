@@ -276,6 +276,8 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         choices=STATUS_CHOICES,
         default=STATUS_DRAFT
     )
+    investment_to_date = models.PositiveIntegerField(default=0)
+    innovation_hub = models.NullBooleanField()
     objects = PortfolioQuerySet.as_manager()
 
     def get_ambition_matrix(self, project_ids: Union[List[int], None] = None):
