@@ -316,7 +316,6 @@ class SolutionAdmin(ArrayFieldMixin, admin.ModelAdmin):
     filter_horizontal = ['portfolios', 'countries', 'problem_statements']
 
 
-
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)

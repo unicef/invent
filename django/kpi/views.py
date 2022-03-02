@@ -1,6 +1,5 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.mixins import ListModelMixin
-from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 
 from core.views import TokenAuthMixin

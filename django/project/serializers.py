@@ -16,8 +16,8 @@ from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
-    ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction, Stage, \
-    Solution
+    ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction, \
+    Stage, Solution
 
 
 class PartnerSerializer(serializers.Serializer):
