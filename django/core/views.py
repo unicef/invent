@@ -11,7 +11,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
     IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState
-from project.models import ProjectPortfolioState, ReviewScore
+from project.models import ProjectPortfolioState, ReviewScore, Solution, Portfolio
 from project.serializers import PartnerSerializer, LinkSerializer
 from country.models import CountryOffice
 from user.authentication import BearerTokenAuthentication
@@ -115,6 +115,8 @@ class StaticDataView(GenericAPIView):
         data['review_questions'] = REVIEWER_QUESTIONS
         data['scale_phases'] = [{'id': s[0], 'name': s[1]} for s in ProjectPortfolioState.SCALE_CHOICES]
         data['review_status'] = [{'id': s[0], 'text': s[1]} for s in ReviewScore.STATUS_CHOICES]
+        data['solution_phases'] = [{'id': s[0], 'name': s[1]} for s in Solution.PHASES]
+        data['portfolio_status'] = [{'id': s[0], 'text': s[1]} for s in Portfolio.STATUS_CHOICES]
 
         return Response(StaticDataSerializer(data).data)
 
