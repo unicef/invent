@@ -294,19 +294,12 @@ export default {
         if (this.profile.country) {
           this.setSelectedCountry(this.profile.country)
         }
-        if (this.$route.query && this.$route.query.next) {
-          const path = this.$route.query.next
-          const query = { ...this.$route.query, next: undefined }
-          this.$router.push({ path, query })
-        } else {
-          this.$router.push(
-            this.localePath({
-              name: 'organisation-inventory-list',
-              params: this.$route.params,
-              // query: { country: [this.profile.country] },
-            })
-          )
-        }
+        this.$router.push(
+          this.localePath({
+            name: 'index',
+            params: this.$route.params,
+          })
+        )
       } catch (e) {
         this.handleRoutingErrors(e)
       }
