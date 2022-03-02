@@ -1,69 +1,60 @@
-(function() {
+if (!$) {
+    $ = django.jQuery
+}
 
-    if (!$) {
-        $ = django.jQuery
+function deleteTextInput(element) {
+    let liElement = element.parentNode;
+    let ulElement = liElement.parentNode;
+
+    if ($('li', ulElement).length > 2) {
+        ulElement.removeChild(liElement)
     }
-
-    function deleteTextInput(element) {
-        var liElement = element.parentNode
-        var ulElement = liElement.parentNode
-
-        if ($('li', ulElement).length > 2) {
-            ulElement.removeChild(liElement)
-        }
-        else {
-            $(liElement).find('input').val('')
-        }
+    else {
+        $(liElement).find('input').val('')
     }
+}
 
-    function addNewInputElement(element) {
-        var ulElement = element.parentNode
-        var liElement = $(ulElement.parentNode)
+function addNewInputElement(element) {
+    let ulElement = element.parentNode;
+    let liElement = $(ulElement.parentNode);
 
-        var elementCounter = liElement.data('element-counter')
-        elementCounter++
-        liElement.data('element-counter', elementCounter)
+    let elementCounter = liElement.data('element-counter');
+    elementCounter++;
+    liElement.data('element-counter', elementCounter);
 
-        var elementName = liElement.attr('id') + '_' + elementCounter
+    let elementName = liElement.attr('id') + '_' + elementCounter;
 
-        var clonedItem = liElement.children(":first").clone()
-        clonedItem.find('input').attr('name', elementName).attr('id', 'id_'+elementName).val('')
-        clonedItem.find('select').attr('name', elementName).attr('id', 'id_'+elementName)
-        clonedItem.find('select option:first').attr('selected', true)
-        clonedItem.insertBefore(liElement.find('li:last'))
+    let clonedItem = liElement.children(":first").clone();
+    // clonedItem.find('input').attr('name', elementName).attr('id', 'id_'+elementName).val('');
+    // clonedItem.find('select').attr('name', elementName).attr('id', 'id_'+elementName);
+    clonedItem.attr('name', elementName).attr('id', 'id_'+elementName);
+    clonedItem.find('select option:first').attr('selected', true);
+    clonedItem.insertBefore(liElement.find('li:last'));
+}
+
+$(document).on('click', '.add-arraywidget-item', function(e) {
+    e.preventDefault();
+    addNewInputElement(e.target)
+});
+
+$(document).on('click', '.delete-arraywidget-item', function(e) {
+    e.preventDefault();
+    deleteTextInput(e.target)
+});
+
+$(document).on("change", '#fields-group td.field-type select', function(e) {
+    let parent = e.target.parentNode.parentNode;
+    let list = $('.arrayfield-list', parent);
+    let value = +e.target.value;
+
+    if (value === 4 || value === 5 ) {
+        list.show()
     }
-
-    function showHideOptionsField(selector) {
-        var showValues = [4, 5];
-        var row = selector.closest('.form-row');
-        var list = row.querySelector('.field-options .arrayfield-list');
-        var value = parseInt(selector.value, 10);
-
-        if (showValues.includes(value)) {
-            list.style.display = 'block';
-        } else {
-            list.style.display = 'none'
-        }
+    else {
+        list.hide()
     }
+});
 
-
-    $(document).on('click', '.add-arraywidget-item', function(e) {
-        e.preventDefault()
-        addNewInputElement(e.target)
-    })
-
-    $(document).on('click', '.delete-arraywidget-item', function(e) {
-        e.preventDefault()
-        deleteTextInput(e.target)
-    })
-
-    $(document).on("change", '#fields-group .form-row td.field-type select', function(e) {
-        showHideOptionsField(e.target);
-    })
-
-    $( document ).ready(function() {
-        $('#fields-2-group .arrayfield-list').show()
-        document.querySelectorAll('#fields-group .form-row.dynamic-fields td.field-type select')
-            .forEach(showHideOptionsField)
-    })
-})()
+$( document ).ready(function() {
+    $('.arrayfield-list').show();
+});
