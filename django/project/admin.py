@@ -3,13 +3,13 @@ from django.contrib.admin import SimpleListFilter
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from adminsortable2.admin import SortableAdminMixin
-from core.admin import AllObjectsAdmin
+from core.admin import AllObjectsAdmin, ArrayFieldMixin
 from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     HealthCategory, HSCChallenge, Project, HSCGroup, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage, \
-    Phase, ProjectVersion
+    Phase, ProjectVersion, Solution
 from core.utils import make_admin_list
 
 from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter, CountryFilter, DescriptionFilter, \
@@ -310,6 +310,13 @@ class PhaseAdmin(ViewOnlyPermissionMixin, admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
+class SolutionAdmin(ArrayFieldMixin, admin.ModelAdmin):
+    ordering = search_fields = ['name']
+    list_display = ['__str__', 'phase', 'people_reached']
+    filter_horizontal = ['portfolios', 'countries', 'problem_statements']
+
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
@@ -336,3 +343,4 @@ admin.site.register(ISC, ISCAdmin)
 admin.site.register(ProjectImportV2, ProjectImportAdmin)
 admin.site.register(Stage, StageAdmin)
 admin.site.register(Phase, PhaseAdmin)
+admin.site.register(Solution, SolutionAdmin)
