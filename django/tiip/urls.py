@@ -11,7 +11,9 @@ from rest_framework.routers import SimpleRouter
 
 from core.views import StaticDataView
 from country.views import CountryOfficeViewSet, CountryLandingPageViewSet, CountryLandingListPageViewSet
-from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet, ProblemStatementListViewSet
+from kpi.views import SolutionKPIViewSet
+from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet, ProblemStatementListViewSet, \
+    SolutionListViewSet
 from user.views import OrganisationViewSet
 
 admin.site.site_header = settings.PROJECT_NAME
@@ -42,10 +44,11 @@ api_info = openapi.Info(
 )
 
 api_info_router = SimpleRouter()
-api_info_router.register(r'api/countryoffices', CountryOfficeViewSet, base_name='countryoffice')
-api_info_router.register(r'api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
-api_info_router.register(r'api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
-api_info_router.register(r'api/organisations', OrganisationViewSet, base_name='organisation')
+api_info_router.register('api/countryoffices', CountryOfficeViewSet, base_name='countryoffice')
+api_info_router.register('api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
+api_info_router.register('api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
+api_info_router.register('api/organisations', OrganisationViewSet, base_name='organisation')
+api_info_router.register('api/kpi/solutions', SolutionKPIViewSet, base_name="solutions-kpi")
 
 api_info_urlpatterns = [
     path("api/", include("search.urls")),
