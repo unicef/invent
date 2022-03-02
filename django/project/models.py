@@ -809,3 +809,20 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = '[DEPRECATED] Phase of Initiative'
+
+
+class Solution(ExtendedNameOrderedSoftDeletedModel):
+    PHASES = [
+        (0, _('Pilot')),
+        (1, _('Acceleration')),
+        (2, _('Scale')),
+    ]
+
+    portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
+    countries = models.ManyToManyField(Country)
+    problem_statements = models.ManyToManyField(ProblemStatement)
+    regions = ArrayField(models.IntegerField(choices=CountryOffice.REGIONS))
+    phase = models.IntegerField(choices=PHASES)
+    people_reached = models.PositiveIntegerField()
+    open_source_frontier_tech = models.BooleanField()
+    learning_investment = models.BooleanField()
