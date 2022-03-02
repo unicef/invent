@@ -32,6 +32,7 @@ services:
     volumes:
       - ./django:/src
       - log_data:/var/log/django
+      - ./django/media:/usr/share/django/media:rw
     command: /usr/local/bin/celery -A scheduler worker -B -l info
 
   nginx:

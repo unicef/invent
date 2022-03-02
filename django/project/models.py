@@ -204,6 +204,13 @@ class Project(SoftDeleteModel, ExtendedModel):
             p.save()
         return stale_ids
 
+    @classmethod
+    def export_resource_classes(cls):  # pragma: no cover
+        from project.resources import ProjectResource
+        return {
+            'projects': ('Projects', ProjectResource)
+        }
+
     def unpublish(self):
         self.public_id = ''
         self.data = {}

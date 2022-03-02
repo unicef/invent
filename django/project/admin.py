@@ -19,6 +19,7 @@ from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter,
 import scheduler.celery # noqa
 
 from import_export.admin import ExportActionMixin
+from import_export_celery.admin_actions import create_export_job_action
 from .resources import ProjectResource
 from .utils import project_status_change, project_status_change_str
 
@@ -161,6 +162,7 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
 
 
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
+    actions = (create_export_job_action,)
     list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions',
                     'featured', 'featured_rank']
     list_filter = ('featured', IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter,
