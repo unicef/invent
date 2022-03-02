@@ -154,4 +154,8 @@ urlpatterns = [
          view=views.ProblemStatementListViewSet.as_view({
              'get': 'list'
          }), name='problem-statement-list'),
+    path('solution/',
+         view=views.SolutionListViewSet.as_view({
+             'get': 'list'
+         }), name='solution-list'),
 ]
