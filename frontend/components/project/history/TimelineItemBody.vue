@@ -8,24 +8,17 @@
       <StatusBadge v-if="teamMember" :status="version.status" />
     </div>
     <div v-if="showChanges" class="changes">
-      <div v-for="(change, index) in shownChanges" :key="index" class="change">
-        <div class="field">{{ index + 1 }}) {{ change.fieldTitle }}</div>
-        <div class="value old">
-          <i class="el-icon-remove-outline"></i>
-          <div v-if="change.oldValue">
-            {{ change.oldValue }}
-          </div>
-          <div v-else>N/A</div>
-        </div>
-        <div class="value">
-          <i class="el-icon-circle-plus-outline"></i>
-          <div>
-            {{ change.newValue }}
-          </div>
-        </div>
-      </div>
+      <transition-group tag="div" name="version">
+        <component
+          :is="changes.component"
+          v-for="(changes, i) in shownChanges"
+          :key="changes.key"
+          :index="i"
+          :changes="changes"
+        />
+      </transition-group>
       <div v-if="!showAll && moreToShow > 0" class="showall" @click="showAll = !showAll">
-        <translate>Show all changes (+{{ moreToShow }})</translate>
+        <translate>Show all changes</translate> (+{{ moreToShow }})
       </div>
     </div>
   </div>
@@ -33,11 +26,24 @@
 
 <script>
 import StatusBadge from '@/components/project/history/StatusBadge.vue'
-import { Boolean } from 'pdfmake/build/pdfmake'
+import ValueText from '@/components/project/history/values/ValueText.vue'
+import ValuePhases from '@/components/project/history/values/ValuePhases.vue'
+import ValueWebsites from '@/components/project/history/values/ValueWebsites.vue'
+import ValueTags from '@/components/project/history/values/ValueTags.vue'
+import ValuePartners from '@/components/project/history/values/ValuePartners.vue'
+import SimpleMessage from '@/components/project/history/values/SimpleMessage.vue'
+import ValueCoverImage from '@/components/project/history/values/ValueCoverImage.vue'
 
 export default {
   components: {
     StatusBadge,
+    ValueText,
+    ValuePhases,
+    ValueWebsites,
+    ValueTags,
+    ValuePartners,
+    SimpleMessage,
+    ValueCoverImage,
   },
   props: {
     version: {
@@ -52,6 +58,11 @@ export default {
   data() {
     return {
       actions: {
+        // Additional states.. will implement on integration
+        // created
+        // a draft version was present
+        // a published version was found
+        // no data
         noversion: this.$gettext('A published version was found'),
         draft: this.$gettext('Saved draft by'),
         published: this.$gettext('Published by'),
@@ -77,7 +88,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '~assets/style/variables.less';
 
 .TimeLineItemBody {
@@ -91,6 +102,7 @@ export default {
   margin-bottom: 20px;
   border-radius: 8px;
   min-height: 60px;
+  max-width: 480px;
   &::before {
     content: '';
     position: absolute;
@@ -160,26 +172,12 @@ export default {
     .change {
       border-bottom: 1px solid #eae6e1;
       padding-bottom: 15px;
+      margin-bottom: 15px;
       &:only-child,
       &:last-child {
         border-bottom: none;
+        margin-bottom: 0;
         padding-bottom: 0;
-      }
-      .field {
-        font-weight: bold;
-      }
-      .value {
-        display: flex;
-        gap: 10px;
-        margin-left: 19px;
-        margin-top: 10px;
-        color: @colorTextPrimary;
-        &.old {
-          color: @colorTextMuted;
-        }
-      }
-      i {
-        margin-top: 1px;
       }
     }
     .showall {
@@ -187,6 +185,13 @@ export default {
       margin-top: 1px;
       color: @colorBrandPrimary;
     }
+  }
+  .version-enter {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  .version-enter-active {
+    transition: all 0.4s ease;
   }
 }
 </style>

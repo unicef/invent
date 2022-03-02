@@ -1,16 +1,14 @@
 <template>
-  <div>One event</div>
+  <span>{{ changes.message }}</span>
 </template>
 
 <script>
 export default {
   props: {
-    info: {
+    changes: {
       type: Object,
       required: true,
     },
   },
 }
 </script>
-
-<style></style>

@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="visible" top="30vh" width="800px" @opened="showTimeline = true">
-    <template #title>
+    <template v-if="projectHistory" #title>
       <div class="header">
         <div class="title">
           <translate :parameters="{ title: projectHistory.title }"> History of ’{title}’ </translate>
@@ -12,11 +12,18 @@
             class="change"
             >Version {currentVersion} on {changed}
           </translate>
+          <el-switch v-model="projectHistory.teamMember" active-text="Team member" style="margin-left: auto;" />
         </div>
       </div>
     </template>
     <Timeline v-if="showTimeline">
-      <TimeLineItem
+      <!-- 
+        As each timeline item can be totally different structure, it's very clean
+        if we provide the component dynamically based on the prepared data from 
+        the backend.
+        -->
+      <component
+        :is="version.component"
         v-for="(version, index) in projectHistory.versions"
         :key="version.version"
         :version="version"
@@ -35,171 +42,27 @@
 <script>
 import Timeline from '@/components/project/history/Timeline'
 import StatusBadge from '@/components/project/history/StatusBadge'
-import TimeLineItem from '@/components/project/history/TimeLineItem'
+import TimelineItem from '@/components/project/history/TimelineItem'
+import TimelineItemNoData from '@/components/project/history/TimelineItemNoData'
 
 export default {
   components: {
     Timeline,
     StatusBadge,
-    TimeLineItem,
+    TimelineItem,
+    TimelineItemNoData,
   },
+  loading: false,
   data() {
     return {
       visible: false,
       showTimeline: false,
-      projectHistory: {
-        title: 'EduTrac - Online Information Platform',
-        currentVersion: 5,
-        changed: '2022-01-23',
-        status: 'draft',
-        teamMember: false,
-        versions: [
-          {
-            status: 'unpublished',
-            version: 5,
-            changed: '2022-01-23',
-            user: {
-              name: 'Ian Doe',
-              email: 'id@pulilab.com',
-              colorScheme: {
-                text: '#FFFFFF',
-                background: '#CB7918',
-                border: 'none',
-              },
-            },
-            changes: [
-              {
-                field: '',
-                fieldTitle: 'Overview of the digital health implementation',
-                oldValue: '', // N/A
-                newValue:
-                  'The ministry is using EduTrac to monitor education indicators that need to be collected on a more frequent basis… More',
-              },
-            ],
-          },
-          {
-            status: 'draft',
-            version: 4,
-            changed: '2022-01-23',
-            user: {
-              name: 'Joe Doe',
-              email: 'jd@pulilab.com',
-              colorScheme: {
-                text: '#FFFFFF',
-                background: '#CB7918',
-                border: 'none',
-              },
-            },
-            changes: [
-              {
-                field: '',
-                fieldTitle: 'Completion of initiative phases',
-                oldValue: '‘Opportunity and Ideation’ on 06-06-2021', // N/A
-                newValue: '‘Piloting and Evidence Generation’ on 20-10-2021',
-              },
-              {
-                field: '',
-                fieldTitle: 'UNICEF Office',
-                oldValue: '', // N/A
-                newValue: 'UNICEF Uganda, Kampala, Uganda, ESAR',
-              },
-              {
-                field: '',
-                fieldTitle: 'Overview of the digital health implementation',
-                oldValue: '', // N/A
-                newValue:
-                  'The ministry is using EduTrac to monitor education indicators that need to be collected on a more frequent basis… More',
-              },
-              {
-                field: '',
-                fieldTitle: 'Overview of the digital health implementation',
-                oldValue: '', // N/A
-                newValue:
-                  'The ministry is using EduTrac to monitor education indicators that need to be collected on a more frequent basis… More',
-              },
-            ],
-          },
-          {
-            status: 'published',
-            version: 3,
-            changed: '2022-01-23',
-            user: {
-              name: 'Joe Doe',
-              email: 'jd@pulilab.com',
-              colorScheme: {
-                text: '#FFFFFF',
-                background: '#CB7918',
-                border: 'none',
-              },
-            },
-            changes: [
-              {
-                field: '',
-                fieldTitle: 'Overview of the digital health implementation',
-                oldValue: '', // N/A
-                newValue:
-                  'The ministry is using EduTrac to monitor education indicators that need to be collected on a more frequent basis… More',
-              },
-            ],
-          },
-          {
-            status: 'draft',
-            version: 2,
-            changed: '2022-01-23',
-            user: {
-              name: 'Joe Doe',
-              email: 'jd@pulilab.com',
-              colorScheme: {
-                text: '#FFFFFF',
-                background: '#CB7918',
-                border: 'none',
-              },
-            },
-            changes: [
-              {
-                field: '',
-                fieldTitle: 'Overview of the digital health implementation',
-                oldValue: '', // N/A
-                newValue:
-                  'The ministry is using EduTrac to monitor education indicators that need to be collected on a more frequent basis… More',
-              },
-            ],
-          },
-          {
-            status: 'draft',
-            version: 1,
-            changed: '2022-01-23',
-            user: {
-              name: 'Joe Doe',
-              email: 'jd@pulilab.com',
-              colorScheme: {
-                text: '#FFFFFF',
-                background: '#CB7918',
-                border: 'none',
-              },
-            },
-            changes: [
-              {
-                field: '',
-                fieldTitle: 'Overview of the digital health implementation',
-                oldValue: '', // N/A
-                newValue:
-                  'The ministry is using EduTrac to monitor education indicators that need to be collected on a more frequent basis… More',
-              },
-            ],
-          },
-          {
-            status: 'noversion',
-            version: 0,
-            changed: '2022-01-23',
-            changes: [],
-          },
-        ],
-      },
+      projectHistory: {},
     }
   },
   methods: {
-    open() {
+    open(id) {
+      this.getProjectHistory(id)
       this.visible = true
     },
     timelineStack(row) {
@@ -207,6 +70,10 @@ export default {
         row,
         rows: this.projectHistory.versions.length,
       }
+    },
+    async getProjectHistory(id) {
+      const { data } = await this.$axios.get('mock/project.versions.json')
+      this.projectHistory = data.projects.find((p) => (p.id = id))
     },
   },
 }

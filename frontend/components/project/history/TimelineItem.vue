@@ -1,9 +1,14 @@
 <template>
   <div class="TimeLineItem">
     <div class="event">
-      <translate tag="div" :parameters="{ version: version.version }" class="version">Version {version}</translate>
+      <translate v-if="version.version" tag="div" :parameters="{ version: version.version }" class="version">Version {version}</translate>
       <div>{{ version.changed }}</div>
-      <translate tag="div" :parameters="{ changes: version.changes.length }" class="changed">
+      <translate
+        v-if="version.changes.length > 0"
+        tag="div"
+        :parameters="{ changes: version.changes.length }"
+        class="changed"
+      >
         {changes} changes
       </translate>
     </div>
@@ -19,6 +24,7 @@ import Avatar from '@/components/common/Avatar.vue'
 import TimelineItemBody from '@/components/project/history/TimelineItemBody.vue'
 
 export default {
+  name: 'TimeLineItem',
   components: {
     Avatar,
     TimelineItemBody,
@@ -67,7 +73,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '~assets/style/variables.less';
 
 .TimeLineItem {
