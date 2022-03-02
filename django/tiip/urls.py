@@ -59,6 +59,9 @@ api_info_urlpatterns = [
     path('api/problem-statement/',
          view=ProblemStatementListViewSet.as_view({'get': 'list'}),
          name='problem-statement-list'),
+    path('api/solution/',
+         view=SolutionListViewSet.as_view({'get': 'list'}),
+         name='solution-list'),
 ]
 api_info_urlpatterns += api_info_router.urls
 
