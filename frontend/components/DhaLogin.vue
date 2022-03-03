@@ -294,7 +294,7 @@ export default {
         if (this.profile.country) {
           this.setSelectedCountry(this.profile.country)
         }
-        if (this.$route.query?.next) {
+        if (this.$route.query?.next && this.$route.query?.next.search(/auth\/$/) < 0) {
           const path = this.$route.query.next
           const query = { ...this.$route.query, next: undefined }
           this.$router.push({ path, query })
