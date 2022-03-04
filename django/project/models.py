@@ -844,3 +844,18 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     def regions_display(self):
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
 
+
+class CountrySolution(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    people_reached = models.PositiveIntegerField()
+    region = models.IntegerField(choices=CountryOffice.REGIONS)
+
+    class Meta:
+        order_with_respect_to = 'country'
+        unique_together = [
+            ('country', 'solution'),
+        ]
+
+    def __str__(self):  # pragma: no cover
+        return f"{self.solution} in {self.country}"
