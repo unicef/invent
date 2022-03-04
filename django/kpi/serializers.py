@@ -2,10 +2,10 @@ from rest_framework import serializers
 
 from kpi.models import SolutionLog
 from project.models import Portfolio, Solution
+from project.serializers import SolutionSerializer
 
 
-class SolutionKPISerializer(serializers.ModelSerializer):
-
+class SolutionKPISerializer(SolutionSerializer):
     class Meta:
         model = Solution
         fields = ('id', 'people_reached', 'phase', 'regions', 'countries', 'problem_statements',
@@ -13,14 +13,12 @@ class SolutionKPISerializer(serializers.ModelSerializer):
 
 
 class PortfolioKPISerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Portfolio
         fields = ('id', 'investment_to_date', 'innovation_hub', 'problem_statements', 'solutions', 'status')
 
 
 class SolutionLogSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = SolutionLog
         fields = ('id', 'date', 'modified', 'data')
