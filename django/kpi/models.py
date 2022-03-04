@@ -23,6 +23,7 @@ class LogBase(models.Model):
 
 class SolutionLog(LogBase):
     """
+    `data` should reflect the following structure:
     [
       {
         "date": "YYYY-MM",
@@ -50,7 +51,11 @@ class SolutionLog(LogBase):
                 "<choice_int>"
               ],
               "countries": [
-                "<country_id>"
+                {
+                    "id": "<country_id>",
+                    "region": "<choice_int>",
+                    "people_reached": 8888
+                 }
               ],
               "open_source_frontier_tech": true,
               "learning_investment": true,
