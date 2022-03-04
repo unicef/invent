@@ -891,11 +891,11 @@ class CountryManagerExportView(TokenAuthMixin, GenericViewSet):
         return response
 
 
-class ProblemStatementListViewSet(ListModelMixin, GenericViewSet):
+class ProblemStatementListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = ProblemStatement.objects.all()
     serializer_class = ProblemStatementSerializer
 
 
-class SolutionListViewSet(ListModelMixin, GenericViewSet):
+class SolutionListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
