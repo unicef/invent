@@ -15,7 +15,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.db.models import Count, Case, When, IntegerField, F, Q
+from django.db.models import Count, Case, When, IntegerField, F, Q, Sum
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -835,4 +835,12 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     @property
     def people_reached(self):
         return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
+
+    @property
+    def regions(self) -> List:
+        return list(set(self.countrysolution_set.values_list('region', flat=True)))
+
+    @property
+    def regions_display(self):
+        return [CountryOffice.REGIONS[r][1] for r in self.regions]
 
