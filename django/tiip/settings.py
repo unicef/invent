@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'country',
     'search',
     'scheduler',
+    'kpi',
     'simple-feedback',
     'import_export',
     'import_export_celery',

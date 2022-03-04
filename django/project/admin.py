@@ -9,7 +9,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage, \
-    Phase, ProjectVersion
+    Phase, ProjectVersion, Solution, CountrySolution
 from core.utils import make_admin_list
 
 from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter, CountryFilter, DescriptionFilter, \
@@ -312,6 +312,19 @@ class PhaseAdmin(ViewOnlyPermissionMixin, admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
+class CountrySolutionInline(admin.TabularInline):
+    model = CountrySolution
+    extra = 1
+
+
+class SolutionAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+    list_display = ['__str__', 'phase', 'people_reached']
+    filter_horizontal = ['portfolios', 'problem_statements']
+    readonly_fields = ['people_reached', 'regions_display']
+    inlines = (CountrySolutionInline,)
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
@@ -338,3 +351,4 @@ admin.site.register(ISC, ISCAdmin)
 admin.site.register(ProjectImportV2, ProjectImportAdmin)
 admin.site.register(Stage, StageAdmin)
 admin.site.register(Phase, PhaseAdmin)
+admin.site.register(Solution, SolutionAdmin)

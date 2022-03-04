@@ -15,7 +15,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.db.models import Count, Case, When, IntegerField, F, Q
+from django.db.models import Count, Case, When, IntegerField, F, Q, Sum
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -283,6 +283,8 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         choices=STATUS_CHOICES,
         default=STATUS_DRAFT
     )
+    investment_to_date = models.PositiveIntegerField(default=0)
+    innovation_hub = models.NullBooleanField()
     objects = PortfolioQuerySet.as_manager()
 
     def get_ambition_matrix(self, project_ids: Union[List[int], None] = None):
@@ -814,3 +816,46 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = '[DEPRECATED] Phase of Initiative'
+
+
+class Solution(ExtendedNameOrderedSoftDeletedModel):
+    PHASES = [
+        (0, _('Pilot')),
+        (1, _('Acceleration')),
+        (2, _('Scale')),
+    ]
+
+    portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
+    countries = models.ManyToManyField(Country, through='CountrySolution')
+    problem_statements = models.ManyToManyField(ProblemStatement)
+    phase = models.IntegerField(choices=PHASES)
+    open_source_frontier_tech = models.BooleanField()
+    learning_investment = models.BooleanField()
+
+    @property
+    def people_reached(self):
+        return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
+
+    @property
+    def regions(self) -> List:
+        return list(set(self.countrysolution_set.values_list('region', flat=True)))
+
+    @property
+    def regions_display(self):
+        return [CountryOffice.REGIONS[r][1] for r in self.regions]
+
+
+class CountrySolution(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    people_reached = models.PositiveIntegerField()
+    region = models.IntegerField(choices=CountryOffice.REGIONS)
+
+    class Meta:
+        order_with_respect_to = 'country'
+        unique_together = [
+            ('country', 'solution'),
+        ]
+
+    def __str__(self):  # pragma: no cover
+        return f"{self.solution} in {self.country}"

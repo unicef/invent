@@ -22,7 +22,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
     HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
-    ApprovalState, Stage, Phase, ProjectVersion, ProblemStatement
+    ApprovalState, Stage, Phase, ProjectVersion, ProblemStatement, Solution
 from project.permissions import InCountryAdminForApproval
 from search.views import ResultsSetPagination
 from .models import Project, TechnologyPlatform, DigitalStrategy, \
@@ -36,7 +36,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectPortfolioStateManagerSerializer, PortfolioSerializer, \
     PortfolioStateChangeSerializer, ReviewScoreDetailedSerializer, TechnologyPlatformCreateSerializer, \
     HardwarePlatformCreateSerializer, NontechPlatformCreateSerializer, PlatformFunctionCreateSerializer, \
-    ProjectCardSerializer, ProjectImageUploadSerializer, ProblemStatementSerializer
+    ProjectCardSerializer, ProjectImageUploadSerializer, ProblemStatementSerializer, SolutionSerializer
 from user.serializers import UserProfileSerializer
 from .tasks import notify_superusers_about_new_pending_approval
 
@@ -891,6 +891,11 @@ class CountryManagerExportView(TokenAuthMixin, GenericViewSet):
         return response
 
 
-class ProblemStatementListViewSet(ListModelMixin, GenericViewSet):
+class ProblemStatementListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = ProblemStatement.objects.all()
     serializer_class = ProblemStatementSerializer
+
+
+class SolutionListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    queryset = Solution.objects.all()
+    serializer_class = SolutionSerializer
