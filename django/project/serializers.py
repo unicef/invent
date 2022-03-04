@@ -17,7 +17,7 @@ from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
     ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction, \
-    Stage, Solution
+    Stage, Solution, CountrySolution
 
 
 class PartnerSerializer(serializers.Serializer):
@@ -740,8 +740,21 @@ class ProjectImageUploadSerializer(serializers.ModelSerializer):
         return obj.thumbnail.url if obj.thumbnail else None
 
 
+class CountrySolutionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='country.id')
+
+    class Meta:
+        model = CountrySolution
+        fields = ('id', 'people_reached', 'region')
+
+
 class SolutionSerializer(serializers.ModelSerializer):
+    regions = serializers.ListField(child=serializers.IntegerField(), max_length=8, min_length=0)
+    people_reached = serializers.IntegerField(read_only=True)
+    countries = CountrySolutionSerializer(source='countrysolution_set', many=True)
 
     class Meta:
         model = Solution
-        fields = '__all__'
+        fields = ('id', 'created', 'modified', 'name', 'regions', 'phase', 'countries',
+                  'people_reached', 'open_source_frontier_tech', 'learning_investment',
+                  'portfolios', 'problem_statements')
