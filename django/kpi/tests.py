@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework.reverse import reverse
 
 from country.models import Country, CountryOffice
-from project.models import Portfolio, Solution, ProblemStatement
+from project.models import Portfolio, Solution, ProblemStatement, CountrySolution
 from project.tests.setup import TestProjectData
 from user.models import UserProfile
 from user.tests import create_profile_for_user
@@ -51,18 +51,21 @@ class SolutionKPITests(TestProjectData, APITestCase):
         ps_1 = ProblemStatement.objects.all()[0]
         ps_2 = ProblemStatement.objects.all()[1]
         self.sol_1 = Solution.objects.create(
-            name="Solution 1", regions=[CountryOffice.REGIONS[0][0], CountryOffice.REGIONS[1][0]],
-            phase=Solution.PHASES[0][0], people_reached=123, open_source_frontier_tech=False, learning_investment=True
+            name="Solution 1", phase=Solution.PHASES[0][0], open_source_frontier_tech=False,
+            learning_investment=True
         )
+        CountrySolution.objects.create(country=self.country_1, solution=self.sol_1, region=CountryOffice.REGIONS[0][0],
+                                       people_reached=100)
+        CountrySolution.objects.create(country=self.country_2, solution=self.sol_1, region=CountryOffice.REGIONS[1][0],
+                                       people_reached=23)
         self.sol_1.portfolios.set([self.port1_resp.json()['id'], self.port2_resp.json()['id']])
-        self.sol_1.countries.set([self.country_1, self.country_2])
         self.sol_1.problem_statements.set([ps_1, ps_2])
         self.sol_2 = Solution.objects.create(
-            name="Solution 2", regions=[CountryOffice.REGIONS[1][0], CountryOffice.REGIONS[2][0]],
-            phase=Solution.PHASES[1][0], people_reached=456, open_source_frontier_tech=True, learning_investment=True
+            name="Solution 2", phase=Solution.PHASES[1][0], open_source_frontier_tech=True, learning_investment=True
         )
+        CountrySolution.objects.create(country=self.country_1, solution=self.sol_2, region=CountryOffice.REGIONS[3][0],
+                                       people_reached=400)
         self.sol_2.portfolios.set([self.port1_resp.json()['id']])
-        self.sol_2.countries.set([self.country_1])
         self.sol_2.problem_statements.set([ps_1, ps_2])
 
     def test_solutions_kpi_two_snapshot_differences(self):
@@ -74,7 +77,8 @@ class SolutionKPITests(TestProjectData, APITestCase):
         port2.investment_to_date = 999
         port2.save()
 
-        self.sol_2.countries.set([self.country_1, self.country_2])
+        CountrySolution.objects.create(country=self.country_2, solution=self.sol_2, region=CountryOffice.REGIONS[3][0],
+                                       people_reached=56)
         self.sol_2.portfolios.set([self.port1_resp.json()['id'], self.port2_resp.json()['id']])
 
         generate_date = generate_date + timedelta(days=30)
@@ -95,3 +99,8 @@ class SolutionKPITests(TestProjectData, APITestCase):
         self.assertNotEqual(past_snapshot['portfolios'][1]['solutions'], current_snapshot['portfolios'][1]['solutions'])
         self.assertNotEqual(past_snapshot['solutions'][1]['countries'], current_snapshot['solutions'][1]['countries'])
         self.assertNotEqual(past_snapshot['solutions'][1]['portfolios'], current_snapshot['solutions'][1]['portfolios'])
+        self.assertEqual(past_snapshot['solutions'][1]['people_reached'], 400)
+        self.assertEqual(current_snapshot['solutions'][1]['people_reached'], 456)
+        self.assertEqual(past_snapshot['solutions'][0]['regions'],
+                         [CountryOffice.REGIONS[0][0], CountryOffice.REGIONS[1][0]])
+        self.assertEqual(self.sol_1.regions_display, [CountryOffice.REGIONS[0][1], CountryOffice.REGIONS[1][1]])
