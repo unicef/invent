@@ -826,10 +826,13 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     ]
 
     portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
-    countries = models.ManyToManyField(Country)
+    countries = models.ManyToManyField(Country, through='CountrySolution')
     problem_statements = models.ManyToManyField(ProblemStatement)
-    regions = ArrayField(models.IntegerField(choices=CountryOffice.REGIONS))
     phase = models.IntegerField(choices=PHASES)
-    people_reached = models.PositiveIntegerField()
     open_source_frontier_tech = models.BooleanField()
     learning_investment = models.BooleanField()
+
+    @property
+    def people_reached(self):
+        return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
+
