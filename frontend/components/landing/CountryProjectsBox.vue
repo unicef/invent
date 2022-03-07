@@ -1,9 +1,7 @@
 <template>
   <div class="CountryProjectsBox">
-    <map-projects-box
+    <MapProjectsBox
       :active-country.sync="activeCountry"
-      :active-tab.sync="activeTab"
-      :active-sub-level="activeSubLevel"
       :selected-country="selectedCountry"
       :current-sub-level-projects="currentSubLevelProjects"
       :filtered-projects="filteredProjects"
@@ -14,7 +12,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-
 import MapProjectsBox from '../common/map/MapProjectsBox'
 
 export default {
@@ -26,10 +23,7 @@ export default {
     ...mapGetters({
       getActiveCountry: 'landing/getActiveCountry',
       selectedCountry: 'landing/getSelectedCountry',
-      getActiveTab: 'landing/getProjectBoxActiveTab',
-      activeSubLevel: 'landing/getActiveSubLevel',
-      currentSubLevelProjects:
-        'landing/getSelectedCountryCurrentSubLevelProjects',
+      currentSubLevelProjects: 'landing/getSelectedCountryCurrentSubLevelProjects',
       filteredProjects: 'landing/getActiveTabProjects',
       nationalProjects: 'landing/getSelectedCountryNationalProjects',
     }),
@@ -39,14 +33,6 @@ export default {
       },
       set(value) {
         this.setActiveCountry(value)
-      },
-    },
-    activeTab: {
-      get() {
-        return this.getActiveTab
-      },
-      set(value) {
-        this.setActiveTab(value)
       },
     },
   },
