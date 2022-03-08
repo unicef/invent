@@ -12,8 +12,6 @@
   </div>
 </template>
 
-innovationPerformanceFeature
-
 <script>
 export default {
   computed: {
