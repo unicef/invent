@@ -50,6 +50,11 @@
                   <translate>Portfolio Manager</translate>
                 </nuxt-link>
               </div>
+              <div v-if="innovationPerformanceTitle">
+                <nuxt-link key="kpiBtn" :to="localePath({ name: 'organisation-innovation-kpi' })" class="HeaderBtn">
+                  {{ innovationPerformanceTitle }}
+                </nuxt-link>
+              </div>
               <div>
                 <nuxt-link
                   key="myInitiativesBtn"
@@ -153,13 +158,17 @@ export default {
         (this.user && this.user.manager.length > 0)
       )
     },
+    innovationPerformanceTitle() {
+      const titleTranslation = this.$gettext('innovation_performance_title')
+      return titleTranslation === 'innovation_performance_title' || '' ? '' : titleTranslation
+    },
   },
 }
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .TopBar {
   .TopBarInner {
