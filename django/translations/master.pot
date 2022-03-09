@@ -1833,7 +1833,7 @@ msgstr ""
 msgid "Innovation category(ies)"
 msgstr ""
 
-#: pages/_organisation/innovation-kpi.vue:3
+#: pages/_organisation/innovation-performance.vue:3
 msgid "Innovation Performance is disabled"
 msgstr ""
 
@@ -1855,11 +1855,12 @@ msgstr ""
 msgid "Innovation Ways"
 msgstr ""
 
-#: components/common/TopBar.vue:59 pages/_organisation/innovation-kpi.vue:4
+#: components/common/TopBar.vue:59
+#: pages/_organisation/innovation-performance.vue:4
 msgid "innovation_performance_title"
 msgstr ""
 
-#: pages/_organisation/innovation-kpi.vue:8
+#: pages/_organisation/innovation-performance.vue:8
 msgid "innovation_performance_url"
 msgstr ""
 
@@ -2707,7 +2708,7 @@ msgid ""
 "etc."
 msgstr ""
 
-#: pages/_organisation/innovation-kpi.vue:12
+#: pages/_organisation/innovation-performance.vue:11
 msgid "Please provide proper content URL!"
 msgstr ""
 
