@@ -159,8 +159,8 @@ export default {
       )
     },
     innovationPerformanceTitle() {
-      const titleTranslation = this.$gettext('innovation_performace_title')
-      return titleTranslation === 'innovation_performace_title' || '' ? '' : titleTranslation
+      const titleTranslation = this.$gettext('innovation_performance_title')
+      return titleTranslation === 'innovation_performance_title' || '' ? '' : titleTranslation
     },
   },
 }

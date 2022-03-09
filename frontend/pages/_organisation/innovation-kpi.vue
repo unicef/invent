@@ -1,11 +1,14 @@
 <template>
   <div class="SectionWrapper">
     <div class="StoryWrapper">
-      <iframe v-if="innovationPerformanceUrl && innovationPerformanceFeature" :src="innovationPerformanceUrl" />
+      <iframe v-if="innovationPerformanceUrl" seamless :src="innovationPerformanceUrl" />
+      <!--       
+      Comment out for the duration of introduction        
+      
       <div v-if="!innovationPerformanceFeature" class="disabled">
         <translate>Innovation Performance is disabled</translate>
-      </div>
-      <div v-if="innovationPerformanceFeature && !innovationPerformanceUrl" class="disabled">
+      </div> -->
+      <div v-else class="disabled">
         <translate>Please provide proper content URL!</translate>
       </div>
     </div>
@@ -16,8 +19,8 @@
 export default {
   computed: {
     innovationPerformanceFeature() {
-      const title = this.$gettext('innovation_performace_title')
-      return !(title === 'innovation_performace_title' || '')
+      const title = this.$gettext('innovation_performance_title')
+      return !(title === 'innovation_performance_title' || '')
     },
     innovationPerformanceUrl() {
       const url = this.$gettext('innovation_performance_url')
