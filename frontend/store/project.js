@@ -33,9 +33,7 @@ export const getters = {
   getOrganisation: (state) => state.organisation,
   getCountry: (state) => state.country,
   getCountryOffice: (state) => state.country_office,
-  getModified: (state) => isNaN(new Date(state.modified).getTime())
-    ? ''
-    : (new Date(state.modified)),
+  getModified: (state) => state.modified,
   getImplementationOverview: (state) => state.implementation_overview,
   getEndDate: (state) => state.end_date,
   getStartDate: (state) => state.start_date,
@@ -715,7 +713,7 @@ export const mutations = {
     state.dhis = get(project, 'dhis', [])
     state.health_focus_areas = get(project, 'health_focus_areas', [])
     state.hsc_challenges = get(project, 'hsc_challenges', [])
-    state.modified = get(project, 'modified', '') !== '' ? new Date(get(project, 'modified', '')) : ''
+    state.modified = get(project, 'modified', '')
     state.donors = get(project, 'donors', [])
     state.country_answers = get(project, 'country_custom_answers', [])
     state.donors_answers = get(project, 'donor_custom_answers', [])

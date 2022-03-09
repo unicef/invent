@@ -390,7 +390,7 @@ export default {
       return office ? office.name : ''
     },
     lastUpdated() {
-      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm')
+      return this.modified ? format(new Date(this.modified), 'DD/MM/YYYY HH:mm') : ''
     },
   },
   watch: {
