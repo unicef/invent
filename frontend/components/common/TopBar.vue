@@ -51,7 +51,11 @@
                 </nuxt-link>
               </div>
               <div v-if="innovationPerformanceTitle">
-                <nuxt-link key="kpiBtn" :to="localePath({ name: 'organisation-innovation-kpi' })" class="HeaderBtn">
+                <nuxt-link
+                  key="kpiBtn"
+                  :to="localePath({ name: 'organisation-innovation-performance' })"
+                  class="HeaderBtn"
+                >
                   {{ innovationPerformanceTitle }}
                 </nuxt-link>
               </div>
