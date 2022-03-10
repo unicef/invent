@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
+from core.views import TokenAuthMixin
 from user.models import UserProfile
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
@@ -43,23 +44,23 @@ class DonorLandingListPageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet
     serializer_class = DonorListSerializer
 
 
-class AdminPermissionMixin:
+class AdminPermissionMixin(TokenAuthMixin):
     permission_classes = (IsAuthenticated, InAdminOrReadOnly,)
 
 
-class SuperAdminPermissionMixin:
+class SuperAdminPermissionMixin(TokenAuthMixin):
     permission_classes = (IsAuthenticated, InSuperAdmin,)
 
 
-class CountryAdminPermissionMixin:
+class CountryAdminPermissionMixin(TokenAuthMixin):
     permission_classes = (IsAuthenticated, InCountryAdminOrReadOnly,)
 
 
-class CountrySuperAdminPermissionMixin:
+class CountrySuperAdminPermissionMixin(TokenAuthMixin):
     permission_classes = (IsAuthenticated, InCountrySuperAdmin,)
 
 
-class DonorSuperAdminPermissionMixin:
+class DonorSuperAdminPermissionMixin(TokenAuthMixin):
     permission_classes = (IsAuthenticated, InDonorSuperAdmin,)
 
 
