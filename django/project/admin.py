@@ -5,8 +5,8 @@ from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from adminsortable2.admin import SortableAdminMixin
 from core.admin import AllObjectsAdmin
-from .models import ProblemStatement, TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, HSCChallenge, Project, HSCGroup, \
+from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
+    HealthCategory, HSCChallenge, Project, HSCGroup, ProblemStatement, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage, \
@@ -21,7 +21,7 @@ import scheduler.celery # noqa
 
 from import_export.admin import ExportActionMixin
 from import_export_celery.admin_actions import create_export_job_action
-from .resources import ProjectResource
+from .resources import ProjectResource, ProblemStatementResource
 from .utils import project_status_change, project_status_change_str
 
 
@@ -288,6 +288,12 @@ class PortfolioAdmin(AllObjectsAdmin):
     managers_list.short_description = "Assigned managers"
 
 
+class ProblemStatementAdmin(ExportActionMixin, admin.ModelAdmin):
+    model = ProblemStatement
+    resource_class = ProblemStatementResource
+    list_display = ['id', 'name', 'description', 'portfolio']
+
+
 class ResultAreaInline(ViewOnlyInlineMixin, admin.TabularInline):
     model = UNICEFResultArea
 
@@ -401,4 +407,5 @@ admin.site.register(ISC, ISCAdmin)
 admin.site.register(ProjectImportV2, ProjectImportAdmin)
 admin.site.register(Stage, StageAdmin)
 admin.site.register(Phase, PhaseAdmin)
+admin.site.register(ProblemStatement, ProblemStatementAdmin)
 admin.site.register(Solution, SolutionAdmin)
