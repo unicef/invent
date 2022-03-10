@@ -359,4 +359,3 @@ admin.site.register(Stage, StageAdmin)
 admin.site.register(Phase, PhaseAdmin)
 admin.site.register(ProblemStatement, ProblemStatementAdmin)
 admin.site.register(Solution, SolutionAdmin)
-
