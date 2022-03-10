@@ -231,6 +231,7 @@ class ProjectVersionAdmin(admin.ModelAdmin):
 
 class ProblemStatementsInline(admin.TabularInline):
     model = ProblemStatement
+    extra = 1
 
 
 class PortfolioForm(forms.ModelForm):
@@ -279,15 +280,7 @@ class PortfolioAdmin(AllObjectsAdmin):
                     'created', 'icon', 'managers_list', 'is_active', 'innovation_hub', 'investment_to_date']
     inlines = [ProblemStatementsInline]
     form = PortfolioForm
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):  # pragma: no cover
-        from django.contrib.admin import widgets
-        vertical = False  # change to True if you prefer boxes to be stacked vertically
-        kwargs['widget'] = widgets.FilteredSelectMultiple(
-            db_field.verbose_name,
-            vertical,
-        )
-        return super(PortfolioAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+    filter_horizontal = ['managers']
 
     def managers_list(self, obj):
         return make_admin_list(obj.managers.all())
