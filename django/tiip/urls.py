@@ -11,7 +11,9 @@ from rest_framework.routers import SimpleRouter
 
 from core.views import StaticDataView
 from country.views import CountryOfficeViewSet, CountryLandingPageViewSet, CountryLandingListPageViewSet
-from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet, ProblemStatementListViewSet
+from kpi.views import SolutionKPIViewSet
+from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet, ProblemStatementListViewSet, \
+    SolutionListViewSet
 from user.views import OrganisationViewSet
 
 admin.site.site_header = settings.PROJECT_NAME
@@ -26,6 +28,7 @@ urlpatterns = [
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
     url(r"^api/", include("simple-feedback.urls")),
+    url(r"^api/kpi/", include("kpi.urls")),
     url(r'^translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
     url(r'^translation/', include('rosetta.urls'))
 ]
@@ -41,10 +44,11 @@ api_info = openapi.Info(
 )
 
 api_info_router = SimpleRouter()
-api_info_router.register(r'api/countryoffices', CountryOfficeViewSet, base_name='countryoffice')
-api_info_router.register(r'api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
-api_info_router.register(r'api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
-api_info_router.register(r'api/organisations', OrganisationViewSet, base_name='organisation')
+api_info_router.register('api/countryoffices', CountryOfficeViewSet, base_name='countryoffice')
+api_info_router.register('api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
+api_info_router.register('api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
+api_info_router.register('api/organisations', OrganisationViewSet, base_name='organisation')
+api_info_router.register('api/kpi/solutions', SolutionKPIViewSet, base_name="solutions-kpi")
 
 api_info_urlpatterns = [
     path("api/", include("search.urls")),
@@ -59,6 +63,9 @@ api_info_urlpatterns = [
     path('api/problem-statement/',
          view=ProblemStatementListViewSet.as_view({'get': 'list'}),
          name='problem-statement-list'),
+    path('api/solution/',
+         view=SolutionListViewSet.as_view({'get': 'list'}),
+         name='solution-list'),
 ]
 api_info_urlpatterns += api_info_router.urls
 

@@ -3,61 +3,30 @@
     <div v-if="showMapProjectBox" class="MapProjectBox">
       <el-row type="flex" class="CountryHeader">
         <el-col>
-          <country-item :id="activeCountry" />
+          <CountryItem :id="activeCountry" />
         </el-col>
       </el-row>
       <div class="CountrySubHeader">
-        <div v-if="showNational">
+        <div>
           <span class="SubLevelItem" />
           <span class="SubLevelCounter">
-            <translate :parameters="{ count: nationalProjects.length }">
-              &nbsp; {count} initiative(s)
-            </translate>
+            <translate :parameters="{ count: nationalProjects.length }"> &nbsp; {count} initiative(s) </translate>
           </span>
         </div>
       </div>
-      <!-- -->
       <el-row class="ProjectsList">
         <el-col>
-          <div v-show="showSubLevelHint" class="HintText">
-            <fa icon="info-circle" size="lg" />
-            <translate
-              >Click on the map to view the digital health project
-              information.</translate
-            >
-          </div>
-
           <div v-show="showNoProjectToShow" class="HintText">
             <fa icon="info-circle" size="lg" />
             <translate>No project to show...</translate>
           </div>
-
-          <div v-if="showSubNational" class="PlainList SubNational">
-            <project-card
-              v-for="p in currentSubLevelProjects"
-              :key="p.id"
-              :project="p"
-              show-organisation
-              show-arrow-on-over
-            />
-          </div>
-          <div v-if="showNational" class="PlainList National">
-            <project-card
-              v-for="p in nationalProjects"
-              :key="p.id"
-              :project="p"
-              show-organisation
-              show-arrow-on-over
-            />
+          <div class="PlainList National">
+            <MapProjectCard v-for="project in nationalProjects" :key="project.id" :project="project" />
           </div>
         </el-col>
       </el-row>
 
-      <el-button
-        circle
-        class="CloseBox CancelButton"
-        @click="closeCountryProjextBox"
-      >
+      <el-button circle class="CloseBox CancelButton" @click="closeCountryProjextBox">
         <fa icon="times" />
       </el-button>
     </div>
@@ -66,12 +35,12 @@
 
 <script>
 import CountryItem from '../CountryItem'
-import ProjectCard from '../ProjectCard'
+import MapProjectCard from './MapProjectCard'
 
 export default {
   components: {
     CountryItem,
-    ProjectCard,
+    MapProjectCard,
   },
   props: {
     selectedCountry: {
@@ -81,10 +50,6 @@ export default {
     activeCountry: {
       type: Number,
       default: null,
-    },
-    activeTab: {
-      type: String,
-      required: true,
     },
     activeSubLevel: {
       type: String,
@@ -104,18 +69,6 @@ export default {
     },
   },
   computed: {
-    showTabbedView() {
-      return this.activeCountry && !this.selectedCountry
-    },
-    showSubNational() {
-      return false
-    },
-    showNational() {
-      return true
-    },
-    showSubLevelHint() {
-      return false
-    },
     showMapProjectBox() {
       return this.activeCountry
     },
@@ -129,9 +82,6 @@ export default {
   methods: {
     closeCountryProjextBox() {
       this.$emit('update:activeCountry', null)
-    },
-    tabChangeHandler(tab) {
-      this.$emit('update:activeTab', tab.name)
     },
   },
 }
@@ -185,23 +135,7 @@ export default {
 
   .ProjectsList {
     max-height: 475px;
-    overflow: scroll;
-
-    .el-tabs__header {
-      margin: 0;
-      background-color: @colorWhite;
-
-      .el-tabs__nav-wrap {
-        padding: 0 20px;
-      }
-    }
-
-    .el-tabs__item {
-      // Changes to this padding value will require a change on the JS too.
-      padding: 0 12px;
-    }
-
-    .el-tabs__content,
+    overflow: auto;
     .PlainList {
       .ProjectCard {
         margin: 0 10px 8px;

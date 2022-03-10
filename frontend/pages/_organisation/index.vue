@@ -5,6 +5,7 @@
     <NewsSection />
     <div class="MapBoxContainer">
       <LandingMap v-if="!showCoverImage" />
+      <CountryProjectsBox />
       <div v-if="showCoverImage" :style="{ backgroundImage: `url(${landingData.cover_url})` }" class="CoverImageBg" />
     </div>
     <AboutSection />
@@ -15,6 +16,7 @@
 import { mapGetters } from 'vuex'
 import LandingMap from '@/components/landing/LandingMap.vue'
 import WelcomeSection from '@/components/landing/WelcomeSection.vue'
+import CountryProjectsBox from '@/components/landing/CountryProjectsBox.vue'
 import InitiativesSection from '@/components/landing/InitiativesSection.vue'
 import NewsSection from '@/components/landing/NewsSection.vue'
 import AboutSection from '@/components/landing/AboutSection.vue'
@@ -23,6 +25,7 @@ export default {
   components: {
     LandingMap,
     WelcomeSection,
+    CountryProjectsBox,
     InitiativesSection,
     NewsSection,
     AboutSection,

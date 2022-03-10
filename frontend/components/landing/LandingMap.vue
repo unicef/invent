@@ -67,10 +67,10 @@ export default {
 
 <style lang="less">
 @import '~assets/style/variables.less';
-@import '~assets/style/mixins.less';
 
 .LandingMap {
   height: @landingMapHeight;
   min-height: @landingMapMinHeight;
+  max-height: @landingMapMaxHeight;
 }
 </style>

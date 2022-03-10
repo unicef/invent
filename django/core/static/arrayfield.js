@@ -25,10 +25,11 @@ function addNewInputElement(element) {
     let elementName = liElement.attr('id') + '_' + elementCounter;
 
     let clonedItem = liElement.children(":first").clone();
-    clonedItem.find('input').attr('name', elementName).attr('id', 'id_'+elementName).val('');
-    clonedItem.find('select').attr('name', elementName).attr('id', 'id_'+elementName);
+    // clonedItem.find('input').attr('name', elementName).attr('id', 'id_'+elementName).val('');
+    // clonedItem.find('select').attr('name', elementName).attr('id', 'id_'+elementName);
+    clonedItem.attr('name', elementName).attr('id', 'id_'+elementName);
     clonedItem.find('select option:first').attr('selected', true);
-    clonedItem.insertBefore(liElement.find('li:last'))
+    clonedItem.insertBefore(liElement.find('li:last'));
 }
 
 $(document).on('click', '.add-arraywidget-item', function(e) {
@@ -55,5 +56,5 @@ $(document).on("change", '#fields-group td.field-type select', function(e) {
 });
 
 $( document ).ready(function() {
-    $('#fields-2-group .arrayfield-list').show()
+    $('.arrayfield-list').show();
 });
