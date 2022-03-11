@@ -1,5 +1,10 @@
 from allauth.account.models import EmailAddress, EmailConfirmation
 from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
+from import_export_celery.models.importjob import ImportJob
+from import_export_celery.models.exportjob import ExportJob
+from import_export_celery.admin import ExportJobAdmin
+from django.contrib.admin.sites import NotRegistered
+from django.apps import apps as proj_apps
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
@@ -132,3 +137,29 @@ admin.site.unregister(EmailConfirmation)
 admin.site.unregister(SocialAccount)
 admin.site.unregister(SocialToken)
 admin.site.unregister(SocialApp)
+admin.site.unregister(ImportJob)
+
+# renaming the admin section name
+iec = proj_apps.get_app_config('import_export_celery')
+iec.verbose_name = "Generate Export"
+
+# the order of the loaded apps might change, and here we check if its registered or not
+try:
+    admin.site.unregister(ExportJob)
+except NotRegistered:
+    pass
+
+
+# extending the exclude list with 'site_of_origin'
+class ExportJobAdminNew(ExportJobAdmin):
+    exclude = ('job_status', 'site_of_origin',)
+
+
+# the order of loaded apps might require this try
+try:
+    admin.site.unregister(ExportJob)
+except NotRegistered:
+    pass
+
+# after the unregistering we register the django-import-export-celery ExportJobAdmin again
+admin.site.register(ExportJob, ExportJobAdminNew)
