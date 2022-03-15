@@ -21,6 +21,7 @@ export default {
   components: {
     ProjectData,
   },
+  scrollToTop: true,
   async fetch({ store, params, error }) {
     store.dispatch('landing/resetSearch')
     await fetchProjectData(store, params, error)
