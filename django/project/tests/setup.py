@@ -147,7 +147,7 @@ class TestProjectData:
             "wbs": ["WBS1", "WBS2"]
         }}, org, country, country_office, d1, d2
 
-    def create_new_project(self, test_user_client=None, name=None):
+    def create_new_project(self, test_user_client=None, name=None, new_country_only=True):
         if test_user_client is None:
             test_user_client = self.test_user_client
 
@@ -156,7 +156,7 @@ class TestProjectData:
         else:
             project_name = name
         project_data, org, country, country_office, d1, d2 = self.create_test_data(name=project_name,
-                                                                                   new_country_only=True)
+                                                                                   new_country_only=new_country_only)
 
         # Create project draft
         url = reverse("project-create", kwargs={"country_office_id": country_office.id})
