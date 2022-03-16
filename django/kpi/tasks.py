@@ -35,3 +35,15 @@ def update_country_inclusion_log_task(current_date=None):
     Task to update country inclusion by regions statistics
     Needs to run daily - overwrites this month's tasks
     """
+    from project.models import ProjectVersion
+    from country.models import Country, CountryOffice
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
+
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    log_entry, _ = CountryInclusionLog.objects.get_or_create(date=log_date)
+    included_countries = Country.objects.filter(is_included=True)
+    included_mco = RegionalOffice.objects.filter(is_included=True)
+    max_number = included_countries.count() + included_mco.count()
