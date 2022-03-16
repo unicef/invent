@@ -47,3 +47,20 @@ def update_country_inclusion_log_task(current_date=None):
     included_countries = Country.objects.filter(is_included=True)
     included_mco = RegionalOffice.objects.filter(is_included=True)
     max_number = included_countries.count() + included_mco.count()
+
+    """
+    Keep a tab on included objects
+    inclusion = {type__object_id: True|False}
+    """
+    inclusion = {}
+    regions = {}
+    for country in included_countries:
+        inclusion[f'c__{country.id}'] = False
+        for region in country.regions:
+            regions.setdefault(region, {})
+            regions[region][f'c__{country.id}'] = False
+    for mco in included_mco:
+        inclusion[f'mco__{mco.id}'] = False
+        for region in list(set(mco.countryoffice_set.values_list('region', flat=True))):
+            regions.setdefault(region, {})
+            regions[region][f'mco__{mco.id}'] = False
