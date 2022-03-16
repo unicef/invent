@@ -111,3 +111,75 @@ class SolutionKPITests(TestProjectData, APITestCase):
         self.assertEqual(past_snapshot['solutions'][0]['regions'],
                          [CountryOffice.REGIONS[0][0], CountryOffice.REGIONS[1][0]])
         self.assertEqual(self.sol_1.regions_display, [CountryOffice.REGIONS[0][1], CountryOffice.REGIONS[1][1]])
+
+    def test_country_inclusions_by_regions(self):
+        self.country, _ = Country.objects.get_or_create(name='Test Country Inclusion', code='XY',
+                                                        project_approval=False, is_included=True)
+        region = CountryOffice.REGIONS[0][0]
+        self.country_office, _ = CountryOffice.objects.get_or_create(
+            name='Test Country Office',
+            region=region,
+            regional_office=RegionalOffice.objects.get_or_create(name='RO test')[0],
+            country=self.country,
+            city="Zion"
+        )
+
+        project_id, project_data, org, country, country_office, d1, d2 = self.create_new_project(
+            new_country_only=False)
+        project = Project.objects.get(id=project_id)
+
+        new_country, _ = Country.objects.get_or_create(name='Test Country Inclusion 2', code='XYX',
+                                                       project_approval=False, is_included=True)
+        new_region = CountryOffice.REGIONS[1][0]
+        new_country_office, _ = CountryOffice.objects.get_or_create(
+            name='Test Country Office2',
+            region=new_region,
+            regional_office=RegionalOffice.objects.get_or_create(name='RO test')[0],
+            country=new_country,
+            city="Zion"
+        )
+        new_data = copy(project.data)
+        new_data['country_office'] = new_country_office.id
+
+        ProjectVersion.objects.create(project=project, user=self.userprofile, name=project.name,
+                                      data=new_data, published=True)
+
+        update_country_inclusion_log_task(current_date=timezone.now().date() + timedelta(days=1))
+        log = CountryInclusionLog.objects.get()
+
+        self.assertEqual(log.data['countries'], 1)
+        self.assertEqual(log.data['max_countries'], 2)
+        self.assertEqual(log.data['regions'][0]['countries'], 0)
+        self.assertEqual(log.data['regions'][0]['max_countries'], 1)
+        self.assertEqual(log.data['regions'][1]['countries'], 1)
+        self.assertEqual(log.data['regions'][1]['max_countries'], 1)
+        self.assertEqual(log.data['regions'][1]['id'], new_region)
+        self.assertNotEqual(log.data['regions'][1]['id'], region)
+
+        new_regional_office, _ = RegionalOffice.objects.get_or_create(name='RO inclusion test', is_included=True)
+        new_region = CountryOffice.REGIONS[2][0]
+        new_country_office, _ = CountryOffice.objects.get_or_create(
+            name='Test Country Office3',
+            region=new_region,
+            regional_office=new_regional_office,
+            country=new_country,
+            city="Zion"
+        )
+        new_data['country_office'] = new_country_office.id
+
+        ProjectVersion.objects.create(project=project, user=self.userprofile, name=project.name,
+                                      data=new_data, published=True)
+
+        update_country_inclusion_log_task(current_date=timezone.now().date() + timedelta(days=1))
+        log.refresh_from_db()
+
+        self.assertEqual(log.data['countries'], 1)
+        self.assertEqual(log.data['max_countries'], 3)
+        self.assertEqual(log.data['regions'][0]['countries'], 0)
+        self.assertEqual(log.data['regions'][0]['max_countries'], 1)
+        self.assertEqual(log.data['regions'][1]['countries'], 0)
+        self.assertEqual(log.data['regions'][1]['max_countries'], 1)
+        self.assertEqual(log.data['regions'][2]['id'], new_region)
+        self.assertEqual(log.data['regions'][2]['countries'], 1)
+        self.assertEqual(log.data['regions'][2]['max_countries'], 2)
+        self.assertEqual(len(new_country.regions), 2)
