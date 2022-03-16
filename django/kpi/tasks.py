@@ -2,7 +2,8 @@ from scheduler.celery import app
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-from .models import SolutionLog
+from country.models import RegionalOffice
+from .models import SolutionLog, CountryInclusionLog
 from .serializers import PortfolioKPISerializer, SolutionKPISerializer
 
 
@@ -26,3 +27,11 @@ def update_solution_log_task(current_date=None):
 
     log_entry.data = dict(portfolios=portfolios.data, solutions=solutions.data)
     log_entry.save()
+
+
+@app.task(name='country_inclusion_log_task')
+def update_country_inclusion_log_task(current_date=None):
+    """
+    Task to update country inclusion by regions statistics
+    Needs to run daily - overwrites this month's tasks
+    """
