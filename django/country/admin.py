@@ -3,6 +3,9 @@ from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
 from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
+from .resources import CountryOfficeResource
+
+from import_export.admin import ExportActionMixin
 
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -56,6 +59,7 @@ class DonorAdmin(admin.ModelAdmin):
 
 
 @admin.register(CountryOffice)
-class CountryOfficeAdmin(admin.ModelAdmin):
+class CountryOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
+    resource_class = CountryOfficeResource
     list_display = ('id', 'name', 'region', 'regional_office')
     search_fields = ['name']
