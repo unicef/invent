@@ -82,3 +82,36 @@ def update_country_inclusion_log_task(current_date=None):
             inclusion[f'c__{co.country.id}'] = True
             regions[co.region][f'c__{co.country.id}'] = True
 
+    """
+    Calculate results
+    """
+    countries_included = 0
+    for obj_id, included in inclusion.items():
+        if included:
+            countries_included += 1
+
+    region_results = []
+    for region_id, region_name in CountryOffice.REGIONS:
+        countries_included_by_region = 0
+        if region_id in regions.keys():
+            for obj_id, included in regions[region_id].items():
+                if included:
+                    countries_included_by_region += 1
+            region_results.append(
+                {
+                    'id': region_id,
+                    'countries': countries_included_by_region,
+                    'max_countries': len(regions[region_id].keys())
+                }
+            )
+        else:
+            region_results.append(
+                {
+                    'id': region_id,
+                    'countries': 0,
+                    'max_countries': 0
+                }
+            )
+
+    log_entry.data = dict(regions=region_results, countries=countries_included, max_countries=max_number)
+    log_entry.save()
