@@ -2,13 +2,43 @@ from import_export import resources
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 
 from .models import Project, UNICEFSector, UNICEFGoal, InnovationCategory, CPD, Stage, TechnologyPlatform, \
-    HardwarePlatform, NontechPlatform, ISC, PlatformFunction, UNICEFResultArea, InnovationWay
+    HardwarePlatform, NontechPlatform, ISC, PlatformFunction, UNICEFResultArea, InnovationWay, ProblemStatement
 from import_export.fields import Field
 from django.utils.translation import ugettext_lazy as _
 
 from country.models import Country, CountryOffice, Currency
 
 from project.serializers import LinkSerializer, PartnerSerializer
+
+
+class ProblemStatementResource(resources.ModelResource):  # pragma: no cover
+    portfolio_id = Field(column_name=_('Portfolio ID'))
+    portfolio_name = Field(column_name=_('Portfolio Name'))
+    id = Field(column_name=_('ID'))
+    name = Field(column_name=_('Label'))
+    description = Field(column_name=_('Narrative'))
+
+    class Meta:
+        model = ProblemStatement
+        fields = ('id', 'name', 'portfolio_id', 'portfolio_name', 'description')
+        export_order = ('portfolio_id', 'portfolio_name', 'id', 'name', 'description')
+
+    def dehydrate_portfolio_id(self, problem_statement):
+        portfolio_id = getattr(problem_statement.portfolio, 'id', '')
+        return portfolio_id
+
+    def dehydrate_portfolio_name(self, problem_statement):
+        portfolio_name = getattr(problem_statement.portfolio, 'name', '')
+        return portfolio_name
+
+    def dehydrate_id(self, problem_statement):
+        return problem_statement.id
+
+    def dehydrate_name(self, problem_statement):
+        return problem_statement.name
+
+    def dehydrate_description(self, problem_statement):
+        return problem_statement.description
 
 
 class ProjectResource(resources.ModelResource):  # pragma: no cover

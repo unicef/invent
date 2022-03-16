@@ -21,6 +21,7 @@ export default {
   components: {
     ProjectForm,
   },
+  scrollToTop: true,
 }
 </script>
 
