@@ -64,3 +64,21 @@ def update_country_inclusion_log_task(current_date=None):
         for region in list(set(mco.countryoffice_set.values_list('region', flat=True))):
             regions.setdefault(region, {})
             regions[region][f'mco__{mco.id}'] = False
+
+    """
+    Fill the tab according to data
+    """
+    qs = ProjectVersion.objects.exclude(published=False) \
+        .exclude(project__public_id='') \
+        .filter(created__date__month=date.month) \
+        .order_by('project_id', '-modified') \
+        .distinct('project_id')
+    for version in qs:
+        co = CountryOffice.objects.get(id=int(version.data['country_office']))
+        if not co.regional_office.is_empty_option and co.regional_office.is_included:
+            inclusion[f'mco__{co.regional_office.id}'] = True
+            regions[co.region][f'mco__{co.regional_office.id}'] = True
+        elif co.country.is_included:
+            inclusion[f'c__{co.country.id}'] = True
+            regions[co.region][f'c__{co.country.id}'] = True
+
