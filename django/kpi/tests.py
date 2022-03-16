@@ -1,15 +1,18 @@
+from copy import copy
 from datetime import date, timedelta
 
+from django.utils import timezone
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.reverse import reverse
 
-from country.models import Country, CountryOffice
-from project.models import Portfolio, Solution, ProblemStatement, CountrySolution
+from country.models import Country, CountryOffice, Donor, RegionalOffice
+from project.models import Portfolio, Solution, ProblemStatement, CountrySolution, ProjectVersion, Project
 from project.tests.setup import TestProjectData
-from user.models import UserProfile
+from user.models import UserProfile, Organisation
 from user.tests import create_profile_for_user
+from .models import CountryInclusionLog
 
-from .tasks import update_solution_log_task
+from .tasks import update_solution_log_task, update_country_inclusion_log_task
 
 
 class SolutionKPITests(TestProjectData, APITestCase):
@@ -41,6 +44,11 @@ class SolutionKPITests(TestProjectData, APITestCase):
         self.userprofile.global_portfolio_owner = True
         self.userprofile.save()
 
+        self.org, _ = Organisation.objects.get_or_create(name="org1")
+        self.d1, _ = Donor.objects.get_or_create(name="Donor1", code="donor1")
+        self.d2, _ = Donor.objects.get_or_create(name="Donor2", code="donor2")
+
+    def test_solutions_kpi_two_snapshot_differences(self):
         self.port1_resp = self.create_portfolio(name='Test Portfolio 1', description='Testing solutions 1',
                                                 user_client=self.test_user_client, managers=[self.user_profile_id])
         self.port2_resp = self.create_portfolio(name='Test Portfolio 2', description='Testing solutions 2',
@@ -68,7 +76,6 @@ class SolutionKPITests(TestProjectData, APITestCase):
         self.sol_2.portfolios.set([self.port1_resp.json()['id']])
         self.sol_2.problem_statements.set([ps_1, ps_2])
 
-    def test_solutions_kpi_two_snapshot_differences(self):
         generate_date = date.today() - timedelta(days=30)
         update_solution_log_task(generate_date)
 
