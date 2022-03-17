@@ -21,7 +21,7 @@ import scheduler.celery # noqa
 
 from import_export.admin import ExportActionMixin
 from import_export_celery.admin_actions import create_export_job_action
-from .resources import ProjectResource, ProblemStatementResource
+from .resources import ProjectResource, ProblemStatementResource, PortfolioResource
 from .utils import project_status_change, project_status_change_str
 
 
@@ -276,7 +276,8 @@ class PortfolioForm(forms.ModelForm):
                                                  (164, 'emergency')])}
 
 
-class PortfolioAdmin(AllObjectsAdmin):
+class PortfolioAdmin(ExportActionMixin, AllObjectsAdmin):
+    resource_class = PortfolioResource
     list_display = ['__str__', 'description', 'status',
                     'created', 'icon', 'managers_list', 'is_active', 'innovation_hub', 'investment_to_date']
     inlines = [ProblemStatementsInline]
