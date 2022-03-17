@@ -183,3 +183,8 @@ class SolutionKPITests(TestProjectData, APITestCase):
         self.assertEqual(log.data['regions'][2]['countries'], 1)
         self.assertEqual(log.data['regions'][2]['max_countries'], 2)
         self.assertEqual(len(new_country.regions), 2)
+
+        url = reverse("country-inclusion-kpi-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(log.data, response.json()[0]['data'])
