@@ -831,10 +831,15 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     phase = models.IntegerField(choices=PHASES)
     open_source_frontier_tech = models.BooleanField()
     learning_investment = models.BooleanField()
+    people_reached_override = models.PositiveIntegerField(help_text="Override country based calculation", null=True,
+                                                          blank=True)
 
     @property
     def people_reached(self):
-        return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
+        if self.people_reached_override:  # pragma: no cover
+            return self.people_reached_override
+        else:
+            return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
 
     @property
     def regions(self) -> List:
