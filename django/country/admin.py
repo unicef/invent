@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
 from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
-from .resources import CountryOfficeResource
+from .resources import CountryOfficeResource, RegionalOfficeResource, CountryResource
 
 from import_export.admin import ExportActionMixin
 
@@ -12,7 +12,8 @@ from import_export.admin import ExportActionMixin
 
 
 @admin.register(Country)
-class CountryAdmin(AllObjectsAdmin):
+class CountryAdmin(ExportActionMixin, AllObjectsAdmin):
+    resource_class = CountryResource
     list_display = ('name', 'code', 'project_approval', 'regions')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
@@ -43,7 +44,8 @@ class CountryAdmin(AllObjectsAdmin):
 
 
 @admin.register(RegionalOffice)
-class RegionalOfficeAdmin(admin.ModelAdmin):
+class RegionalOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
+    resource_class = RegionalOfficeResource
     list_display = ('id', 'name')
     ordering = search_fields = ['name']
 
