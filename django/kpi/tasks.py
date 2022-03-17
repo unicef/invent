@@ -70,6 +70,7 @@ def update_country_inclusion_log_task(current_date=None):
     """
     qs = ProjectVersion.objects.exclude(published=False) \
         .exclude(project__public_id='') \
+        .filter(created__date__year=date.year) \
         .filter(created__date__month=date.month) \
         .order_by('project_id', '-modified') \
         .distinct('project_id')
