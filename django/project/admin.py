@@ -163,6 +163,7 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
 
 
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
+    create_export_job_action.short_description = _("Generate export in the background")
     actions = (create_export_job_action,)
     list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions',
                     'featured', 'featured_rank']
