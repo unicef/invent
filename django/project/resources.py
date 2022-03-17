@@ -2,13 +2,60 @@ from import_export import resources
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 
 from .models import Project, UNICEFSector, UNICEFGoal, InnovationCategory, CPD, Stage, TechnologyPlatform, \
-    HardwarePlatform, NontechPlatform, ISC, PlatformFunction, UNICEFResultArea, InnovationWay, ProblemStatement
+    HardwarePlatform, NontechPlatform, ISC, PlatformFunction, UNICEFResultArea, InnovationWay, \
+    ProblemStatement, Portfolio
 from import_export.fields import Field
 from django.utils.translation import ugettext_lazy as _
 
 from country.models import Country, CountryOffice, Currency
 
 from project.serializers import LinkSerializer, PartnerSerializer
+
+
+class PortfolioResource(resources.ModelResource):
+    managers = Field(column_name=_('Managers of the portfolio'))
+    id = Field(column_name=_('ID'))
+    is_active = Field(column_name=_('Is Active'))
+    name = Field(column_name=_('Name'))
+    description = Field(column_name=_('Description'))
+    icon = Field(column_name=_('Icon'))
+    status = Field(column_name=_('Status'))
+    investment_to_date = Field(column_name=_('Investment to date'))
+    innovation_hub = Field(column_name=_('Innovation Hub'))
+
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'is_active', 'name', 'description', 'icon',
+                  'managers', 'status', 'investment_to_date', 'innovation_hub')
+        export_order = ('id', 'name', 'description', 'managers', 'icon',
+                        'is_active', 'status', 'investment_to_date', 'innovation_hub')
+
+    def dehydrate_managers(self, portfolio):  # pragma: no cover
+        return ', '.join([manager.user.email for manager in portfolio.managers.all()])
+
+    def dehydrate_id(self, portfolio):  # pragma: no cover
+        return portfolio.id
+
+    def dehydrate_is_active(self, portfolio):  # pragma: no cover
+        return bool(portfolio.is_active)
+
+    def dehydrate_name(self, portfolio):  # pragma: no cover
+        return portfolio.name
+
+    def dehydrate_description(self, portfolio):  # pragma: no cover
+        return portfolio.description
+
+    def dehydrate_icon(self, portfolio):  # pragma: no cover
+        return portfolio.icon
+
+    def dehydrate_status(self, portfolio):  # pragma: no cover
+        return portfolio.status
+
+    def dehydrate_investment_to_date(self, portfolio):  # pragma: no cover
+        return portfolio.investment_to_date
+
+    def dehydrate_innovation_hub(self, portfolio):  # pragma: no cover
+        return portfolio.innovation_hub
 
 
 class ProblemStatementResource(resources.ModelResource):  # pragma: no cover
