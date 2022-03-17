@@ -14,7 +14,7 @@ from import_export.admin import ExportActionMixin
 @admin.register(Country)
 class CountryAdmin(ExportActionMixin, AllObjectsAdmin):
     resource_class = CountryResource
-    list_display = ('name', 'code', 'project_approval', 'regions')
+    list_display = ('name', 'code', 'is_included', 'regions')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
 
@@ -46,7 +46,7 @@ class CountryAdmin(ExportActionMixin, AllObjectsAdmin):
 @admin.register(RegionalOffice)
 class RegionalOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
     resource_class = RegionalOfficeResource
-    list_display = ('id', 'name')
+    list_display = ('id', 'name', 'is_included', 'is_empty_option')
     ordering = search_fields = ['name']
 
 

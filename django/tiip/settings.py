@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'simple_history',
     'sorl.thumbnail',
     'user',
+    'import_export_celery',
     'core',
     'project',
     'country',
@@ -60,7 +61,6 @@ INSTALLED_APPS = [
     'kpi',
     'simple-feedback',
     'import_export',
-    'import_export_celery',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
