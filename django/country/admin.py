@@ -10,7 +10,7 @@ from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
 
 @admin.register(Country)
 class CountryAdmin(AllObjectsAdmin):
-    list_display = ('name', 'code', 'project_approval', 'regions')
+    list_display = ('name', 'code', 'is_included', 'regions')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
 
@@ -41,7 +41,7 @@ class CountryAdmin(AllObjectsAdmin):
 
 @admin.register(RegionalOffice)
 class RegionalOfficeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
+    list_display = ('id', 'name', 'is_included', 'is_empty_option')
     ordering = search_fields = ['name']
 
 

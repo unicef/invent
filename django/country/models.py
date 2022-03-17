@@ -61,6 +61,8 @@ class Country(UserManagement, LandingPageCommon):
     lat = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
     lon = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
 
+    is_included = models.BooleanField(default=False, help_text="Included in KPI calculations")
+
     class Meta:
         verbose_name_plural = "Countries"
         ordering = ('id',)
@@ -72,6 +74,8 @@ class Country(UserManagement, LandingPageCommon):
 
 class RegionalOffice(InvalidateCacheMixin, models.Model):
     name = models.CharField(max_length=256)
+    is_included = models.BooleanField(default=False, help_text="Included in KPI calculations")
+    is_empty_option = models.BooleanField(default=False, help_text="If there is an object to represent N/A, None")
 
     def __str__(self):  # pragma: no cover
         return self.name

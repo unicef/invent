@@ -72,3 +72,26 @@ class SolutionLog(LogBase):
     ]
     """
     pass
+
+
+class CountryInclusionLog(LogBase):
+    """
+    `data` should reflect the following structure:
+    [
+      {
+        "date": "YYYY-MM",
+        "data": {
+          "regions": [
+            {
+              "id": "<region_id>",
+              "countries":"<int>",
+              "max_countries":"<int>"
+            }
+          ],
+          "countries":"<int>",
+          "max_countries":"<int>"
+        }
+      }
+    ]
+    """
+    pass

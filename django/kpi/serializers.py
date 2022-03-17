@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from kpi.models import SolutionLog
+from kpi.models import SolutionLog, CountryInclusionLog
 from project.models import Portfolio, Solution
 from project.serializers import SolutionSerializer
 
@@ -31,3 +31,9 @@ class SolutionLogDataSerializer(serializers.Serializer):
 
 class SolutionLogVerboseSerializer(SolutionLogSerializer):
     data = SolutionLogDataSerializer()
+
+
+class CountryInclusionLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CountryInclusionLog
+        fields = ('id', 'date', 'modified', 'data')
