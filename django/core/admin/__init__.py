@@ -150,9 +150,19 @@ except NotRegistered:
     pass
 
 
-# extending the exclude list with 'site_of_origin'
+# extending the exclude list
 class ExportJobAdminNew(ExportJobAdmin):
-    exclude = ('job_status', 'site_of_origin',)
+    exclude = ('job_status', 'site_of_origin', 'app_label', 'model', )
+
+    readonly_fields = (
+        "job_status_info",
+        "author",
+        "updated_by",
+        # "app_label",
+        # "model",
+        "file",
+        "processing_initiated",
+    )
 
 
 # the order of loaded apps might require this try

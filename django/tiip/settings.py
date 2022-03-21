@@ -18,9 +18,9 @@ DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = ['*']
 
 PROJECT_NAME = env.str('PROJECT_NAME', default='Example')
-DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default='john@example.org')
+DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default='invent@unicef.org')
 # Developer email who can be reached for API inquiries
-API_MAINTAINER = env.str('API_MAINTAINER', default='john@example.org')
+API_MAINTAINER = env.str('API_MAINTAINER', default='invent@unicef.org')
 
 # Application definition
 
