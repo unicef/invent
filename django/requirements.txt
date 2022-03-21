@@ -113,3 +113,4 @@ django-import-export==2.5.0
 django-import-export-celery==1.1.6
 sentry-sdk
 environs
+django-jsoneditor
