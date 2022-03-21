@@ -77,9 +77,9 @@ def update_country_inclusion_log_task(current_date=None):
     for version in qs:
         try:
             co = CountryOffice.objects.get(id=int(version.data['country_office']))
-        except CountryOffice.DoesNotExist:
+        except CountryOffice.DoesNotExist:  # pragma: no cover
             pass
-        except KeyError:
+        except KeyError:  # pragma: no cover
             pass
         else:
             if not co.regional_office.is_empty_option and co.regional_office.is_included:
