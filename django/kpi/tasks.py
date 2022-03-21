@@ -70,18 +70,24 @@ def update_country_inclusion_log_task(current_date=None):
     """
     qs = ProjectVersion.objects.exclude(published=False) \
         .exclude(project__public_id='') \
-        .filter(created__date__year=date.year) \
-        .filter(created__date__month=date.month) \
+        .filter(created__date__lte=date) \
         .order_by('project_id', '-modified') \
         .distinct('project_id')
+
     for version in qs:
-        co = CountryOffice.objects.get(id=int(version.data['country_office']))
-        if not co.regional_office.is_empty_option and co.regional_office.is_included:
-            inclusion[f'mco__{co.regional_office.id}'] = True
-            regions[co.region][f'mco__{co.regional_office.id}'] = True
-        elif co.country.is_included:
-            inclusion[f'c__{co.country.id}'] = True
-            regions[co.region][f'c__{co.country.id}'] = True
+        try:
+            co = CountryOffice.objects.get(id=int(version.data['country_office']))
+        except CountryOffice.DoesNotExist:
+            pass
+        except KeyError:
+            pass
+        else:
+            if not co.regional_office.is_empty_option and co.regional_office.is_included:
+                inclusion[f'mco__{co.regional_office.id}'] = True
+                regions[co.region][f'mco__{co.regional_office.id}'] = True
+            elif co.country.is_included:
+                inclusion[f'c__{co.country.id}'] = True
+                regions[co.region][f'c__{co.country.id}'] = True
 
     """
     Calculate results
