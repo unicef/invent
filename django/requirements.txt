@@ -113,4 +113,4 @@ django-import-export==2.5.0
 sentry-sdk
 environs
 # django-import-export-celery==1.1.6
-git+https://github.com/GergelyKovach/django-import-export-celery
+git+https://github.com/pulilab/django-import-export-celery
