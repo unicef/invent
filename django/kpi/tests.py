@@ -183,3 +183,92 @@ class SolutionKPITests(TestProjectData, APITestCase):
         self.assertEqual(log.data['regions'][2]['countries'], 1)
         self.assertEqual(log.data['regions'][2]['max_countries'], 2)
         self.assertEqual(len(new_country.regions), 2)
+
+        url = reverse("country-inclusion-kpi-list")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(log.data, response.json()[0]['data'])
+
+    def test_country_inclusion_aggregations_by_month(self):
+        self.country, _ = Country.objects.get_or_create(name='Test Country Inclusion', code='XY',
+                                                        project_approval=False, is_included=True)
+        region = CountryOffice.REGIONS[0][0]
+        self.country_office, _ = CountryOffice.objects.get_or_create(
+            name='Test Country Office',
+            region=region,
+            regional_office=RegionalOffice.objects.get_or_create(name='RO test')[0],
+            country=self.country,
+            city="Zion"
+        )
+
+        self.create_new_project(new_country_only=False)
+
+        project_id_2, project_data_2, org, country, country_office, d1, d2 = self.create_new_project(
+            new_country_only=False)
+        project_2 = Project.objects.get(id=project_id_2)
+
+        new_country, _ = Country.objects.get_or_create(name='Test Country Inclusion 2', code='XYX',
+                                                       project_approval=False, is_included=True)
+        region = CountryOffice.REGIONS[0][0]
+        new_country_office, _ = CountryOffice.objects.get_or_create(
+            name='Test Country Office2',
+            region=region,
+            regional_office=RegionalOffice.objects.get_or_create(name='RO test')[0],
+            country=new_country,
+            city="Zion"
+        )
+        new_data = copy(project_2.data)
+        new_data['country_office'] = new_country_office.id
+
+        ProjectVersion.objects.create(project=project_2, user=self.userprofile, name=project_2.name,
+                                      data=new_data, published=True)
+
+        future_date = timezone.now() + timedelta(days=60)
+        project_2.versions.filter(published=True).update(created=future_date)
+
+        update_country_inclusion_log_task(current_date=timezone.now().date() + timedelta(days=1))
+        log = CountryInclusionLog.objects.get()
+
+        self.assertEqual(log.data['countries'], 1)
+        self.assertEqual(log.data['max_countries'], 2)
+        self.assertEqual(log.data['regions'][0]['countries'], 1)
+        self.assertEqual(log.data['regions'][0]['max_countries'], 2)
+
+        project_id_3, project_data_3, org, country, country_office, d1, d2 = self.create_new_project(
+            new_country_only=False)
+        project_3 = Project.objects.get(id=project_id_3)
+
+        new_country, _ = Country.objects.get_or_create(name='Test Country Inclusion 3', code='XY2',
+                                                       project_approval=False, is_included=True)
+        new_country_office, _ = CountryOffice.objects.get_or_create(
+            name='Test Country Office3',
+            region=region,
+            regional_office=RegionalOffice.objects.get_or_create(name='RO test')[0],
+            country=new_country,
+            city="Zion"
+        )
+        new_data = copy(project_3.data)
+        new_data['country_office'] = new_country_office.id
+
+        ProjectVersion.objects.create(project=project_3, user=self.userprofile, name=project_3.name,
+                                      data=new_data, published=True)
+
+        past_date = timezone.now() - timedelta(days=120)
+        project_3.versions.filter(published=True).update(created=past_date)
+
+        update_country_inclusion_log_task(current_date=timezone.now().date() + timedelta(days=1))
+        log.refresh_from_db()
+
+        self.assertEqual(log.data['countries'], 2)
+        self.assertEqual(log.data['max_countries'], 3)
+        self.assertEqual(log.data['regions'][0]['countries'], 2)
+        self.assertEqual(log.data['regions'][0]['max_countries'], 3)
+
+        project_2.versions.filter(published=True).update(created=past_date)
+        update_country_inclusion_log_task(current_date=timezone.now().date() + timedelta(days=1))
+        log.refresh_from_db()
+
+        self.assertEqual(log.data['countries'], 3)
+        self.assertEqual(log.data['max_countries'], 3)
+        self.assertEqual(log.data['regions'][0]['countries'], 3)
+        self.assertEqual(log.data['regions'][0]['max_countries'], 3)

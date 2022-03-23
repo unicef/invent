@@ -4,7 +4,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from core.views import TokenAuthMixin
 from .models import SolutionLog, CountryInclusionLog
-from .serializers import SolutionLogSerializer, SolutionLogVerboseSerializer, CountryInclusionLogSerializer
+from .serializers import SolutionLogSerializer, SolutionLogVerboseSerializer, CountryInclusionLogSerializer, \
+    CountryInclusionVerboseSerializer
 
 
 class SolutionKPIViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
@@ -25,3 +26,7 @@ class CountryInclusionKPIViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet)
     """
     queryset = CountryInclusionLog.objects.all()
     serializer_class = CountryInclusionLogSerializer
+
+    @swagger_auto_schema(responses={200: CountryInclusionVerboseSerializer(many=True)})
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)

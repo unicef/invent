@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'djcelery_email',
     'simple_history',
     'sorl.thumbnail',
+    'jsoneditor',
     'user',
     'import_export_celery',
     'core',

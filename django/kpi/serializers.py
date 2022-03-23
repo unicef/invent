@@ -37,3 +37,19 @@ class CountryInclusionLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryInclusionLog
         fields = ('id', 'date', 'modified', 'data')
+
+
+class RegionSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    countries = serializers.IntegerField()
+    max_countries = serializers.IntegerField()
+
+
+class CountryInclusionDataSerializer(serializers.Serializer):
+    regions = RegionSerializer(many=True)
+    countries = serializers.IntegerField()
+    max_countries = serializers.IntegerField()
+
+
+class CountryInclusionVerboseSerializer(CountryInclusionLogSerializer):
+    data = CountryInclusionDataSerializer()

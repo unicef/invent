@@ -11,7 +11,7 @@ from rest_framework.routers import SimpleRouter
 
 from core.views import StaticDataView
 from country.views import CountryOfficeViewSet, CountryLandingPageViewSet, CountryLandingListPageViewSet
-from kpi.views import SolutionKPIViewSet
+from kpi.views import SolutionKPIViewSet, CountryInclusionKPIViewSet
 from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet, ProblemStatementListViewSet, \
     SolutionListViewSet
 from user.views import OrganisationViewSet
@@ -49,6 +49,7 @@ api_info_router.register('api/landing-country', CountryLandingPageViewSet, base_
 api_info_router.register('api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
 api_info_router.register('api/organisations', OrganisationViewSet, base_name='organisation')
 api_info_router.register('api/kpi/solutions', SolutionKPIViewSet, base_name="solutions-kpi")
+api_info_router.register('api/kpi/country-inclusion', CountryInclusionKPIViewSet, base_name="country-inclusion-kpi")
 
 api_info_urlpatterns = [
     path("api/", include("search.urls")),
