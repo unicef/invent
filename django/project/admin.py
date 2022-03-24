@@ -295,7 +295,7 @@ class ProblemStatementAdmin(ExportActionMixin, admin.ModelAdmin):
     resource_class = ProblemStatementResource
     list_display = ['id', 'name', 'description', 'portfolio', 'is_active']
 
-    def get_queryset(self, request):
+    def get_queryset(self, request):  # pragma: no cover
         return self.model.all_objects.all()
 
 
