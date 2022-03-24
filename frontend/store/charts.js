@@ -16,15 +16,15 @@ export const state = () => ({
 })
 
 export const actions = {
-  getStageData({ commit, rootState }, stages) {
+  getStageData({ commit, rootState }, { stages, project }) {
     // phases
     const phases = [''].concat(stages.map((i) => i.name))
     // notes
     const notes = [''].concat(stages.map((i) => i.note))
 
     // labels
-    const start = formatDate(rootState.project.start_date)
-    const end = formatDate(rootState.project.end_date)
+    const start = formatDate(project.start_date)
+    const end = formatDate(project.end_date)
     const today = formatDate(new Date())
 
     const labels = [start].concat(
@@ -46,7 +46,7 @@ export const actions = {
     if (end && end !== '1970-01-01') {
       data.push(data[data.length - 1])
       labels.push([end, 'Ended'])
-      notes.push(rootState.project.end_date_note)
+      notes.push(project.end_date_note)
     }
 
     const lLen = labels.length

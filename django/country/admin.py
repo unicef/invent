@@ -3,14 +3,18 @@ from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
 from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
+from .resources import CountryOfficeResource, RegionalOfficeResource, CountryResource
+
+from import_export.admin import ExportActionMixin
 
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 
 
 @admin.register(Country)
-class CountryAdmin(AllObjectsAdmin):
-    list_display = ('name', 'code', 'project_approval', 'regions')
+class CountryAdmin(ExportActionMixin, AllObjectsAdmin):
+    resource_class = CountryResource
+    list_display = ('name', 'code', 'is_included', 'regions')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
 
@@ -40,8 +44,9 @@ class CountryAdmin(AllObjectsAdmin):
 
 
 @admin.register(RegionalOffice)
-class RegionalOfficeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
+class RegionalOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
+    resource_class = RegionalOfficeResource
+    list_display = ('id', 'name', 'is_included', 'is_empty_option')
     ordering = search_fields = ['name']
 
 
@@ -56,6 +61,7 @@ class DonorAdmin(admin.ModelAdmin):
 
 
 @admin.register(CountryOffice)
-class CountryOfficeAdmin(admin.ModelAdmin):
+class CountryOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
+    resource_class = CountryOfficeResource
     list_display = ('id', 'name', 'region', 'regional_office')
     search_fields = ['name']

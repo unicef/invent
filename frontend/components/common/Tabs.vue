@@ -12,7 +12,9 @@
       >
         <fa :icon="item.icon" size="lg" />
         {{ $gettext(item.name) | translate }}
-        {{ ` (${item.total})` }}
+        <template v-if="item.total">
+          {{ ` (${item.total})` }}
+        </template>
       </p>
     </div>
   </div>

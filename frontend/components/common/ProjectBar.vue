@@ -40,7 +40,6 @@
             </el-col>
             <el-col v-if="isPublished" :span="2" class="InfoSection">
               <favorite :id="project.id" :favorite="favorite" />
-              <!-- <project-legend :id="project.id" /> -->
             </el-col>
           </el-row>
         </el-col>
@@ -83,14 +82,7 @@
         >
           <translate>Initiative</translate>
         </nuxt-link>
-        <nuxt-link
-          :to="
-            localePath({
-              name: 'organisation-initiatives-id-stages',
-              params: { id, organisation: $route.params.organisation },
-            })
-          "
-        >
+        <nuxt-link :to="stagesUrl">
           <translate>Phases</translate>
         </nuxt-link>
       </div>
@@ -106,12 +98,10 @@ import Favorite from '@/components/common/Favorite'
 import ProjectHistoryDialog from '@/components/dialogs/ProjectHistoryDialog'
 import toInteger from 'lodash/toInteger'
 import OrganisationItem from './OrganisationItem'
-// import ProjectLegend from './ProjectLegend'
 
 export default {
   components: {
     OrganisationItem,
-    // ProjectLegend,
     Favorite,
     ProjectHistoryDialog,
   },
@@ -144,6 +134,17 @@ export default {
         this.route === 'organisation-initiatives-id-edit' ||
         this.route === 'organisation-initiatives-id'
       )
+    },
+    stagesUrl() {
+      const versionRoute =
+        this.route === 'organisation-initiatives-id-published' ||
+        this.route === 'organisation-initiatives-id-published-stages'
+          ? 'organisation-initiatives-id-published-stages'
+          : 'organisation-initiatives-id-stages'
+      return this.localePath({
+        name: versionRoute,
+        params: { id: this.id, organisation: this.$route.params.organisation },
+      })
     },
     isTeam() {
       if (this.user) {
@@ -276,10 +277,6 @@ export default {
 
       &:hover {
         color: @colorTextPrimary;
-
-        // &::before {
-        //   transform: translateY(3px);
-        // }
       }
     }
   }

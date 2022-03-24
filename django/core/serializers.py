@@ -71,4 +71,5 @@ class StaticDataSerializer(serializers.Serializer):
     review_questions = serializers.DictField()
     scale_phases = NameIDSerializer(many=True)
     review_status = TextIDSerializer(many=True)
-    portfolio_project_phases = NameIDSerializer(many=True, required=False)
+    solution_phases = NameIDSerializer(many=True, required=False)
+    portfolio_status = TextIDSerializer(many=True)

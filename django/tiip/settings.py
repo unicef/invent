@@ -51,12 +51,15 @@ INSTALLED_APPS = [
     'djcelery_email',
     'simple_history',
     'sorl.thumbnail',
+    'jsoneditor',
     'user',
+    'import_export_celery',
     'core',
     'project',
     'country',
     'search',
     'scheduler',
+    'kpi',
     'simple-feedback',
     'import_export',
 ]
@@ -74,6 +77,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.ExceptionLoggingMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
+    'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
 ROOT_URLCONF = 'tiip.urls'

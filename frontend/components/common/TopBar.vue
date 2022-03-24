@@ -50,6 +50,15 @@
                   <translate>Portfolio Manager</translate>
                 </nuxt-link>
               </div>
+              <div v-if="innovationPerformanceTitle">
+                <nuxt-link
+                  key="kpiBtn"
+                  :to="localePath({ name: 'organisation-innovation-performance' })"
+                  class="HeaderBtn"
+                >
+                  {{ innovationPerformanceTitle }}
+                </nuxt-link>
+              </div>
               <div>
                 <nuxt-link
                   key="myInitiativesBtn"
@@ -76,10 +85,10 @@
 
           <el-col v-if="countrySpecific" class="CountryHolder">
             <el-row type="flex">
-              <el-col>
+              <el-col class="CountryHolder">
                 <div class="Separator" />
               </el-col>
-              <el-col>
+              <el-col class="CountryHolder">
                 <img :src="countryFlag" alt="country flag" class="CountryFlag" />
               </el-col>
               <el-col>
@@ -88,23 +97,6 @@
                 </div>
               </el-col>
             </el-row>
-          </el-col>
-
-          <el-col v-if="customOrganisation" class="CountrySpecificMenu">
-            <div class="Separator" />
-            <div>
-              <nuxt-link
-                key="whoLandingBtn"
-                :to="
-                  localePath({
-                    name: 'organisation',
-                    params: { organisation: '-' },
-                  })
-                "
-              >
-                <img class="LogoWHOxDHA" alt="WHO logo small" src="/logo-whoxdha.svg" />
-              </nuxt-link>
-            </div>
           </el-col>
         </el-row>
       </el-col>
@@ -170,13 +162,17 @@ export default {
         (this.user && this.user.manager.length > 0)
       )
     },
+    innovationPerformanceTitle() {
+      const titleTranslation = this.$gettext('innovation_performance_title')
+      return titleTranslation === 'innovation_performance_title' || '' ? '' : titleTranslation
+    },
   },
 }
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .TopBar {
   .TopBarInner {
@@ -237,7 +233,7 @@ export default {
   }
 
   .RightPart {
-    padding: 14px 0;
+    padding: 9px 0;
 
     > .el-row > .el-col {
       width: auto;
@@ -312,7 +308,8 @@ export default {
   }
 
   .CountryHolder {
-    height: 24px;
+    display: flex;
+    align-items: center;
 
     .CountryFlag {
       height: 14px;

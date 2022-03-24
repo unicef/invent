@@ -1,15 +1,16 @@
 from django.contrib import admin
+from django import forms
 from django.contrib.admin import SimpleListFilter
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from adminsortable2.admin import SortableAdminMixin
 from core.admin import AllObjectsAdmin
 from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, HSCChallenge, Project, HSCGroup, \
+    HealthCategory, HSCChallenge, Project, HSCGroup, ProblemStatement, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage, \
-    Phase, ProjectVersion
+    Phase, ProjectVersion, Solution, CountrySolution
 from core.utils import make_admin_list
 
 from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter, CountryFilter, DescriptionFilter, \
@@ -19,7 +20,8 @@ from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter,
 import scheduler.celery # noqa
 
 from import_export.admin import ExportActionMixin
-from .resources import ProjectResource
+from import_export_celery.admin_actions import create_export_job_action
+from .resources import ProjectResource, ProblemStatementResource, PortfolioResource
 from .utils import project_status_change, project_status_change_str
 
 
@@ -161,6 +163,8 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
 
 
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
+    create_export_job_action.short_description = _("Generate export in the background")
+    actions = (create_export_job_action,)
     list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions',
                     'featured', 'featured_rank']
     list_filter = ('featured', IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter,
@@ -226,14 +230,70 @@ class ProjectVersionAdmin(admin.ModelAdmin):
         return False
 
 
-class PortfolioAdmin(AllObjectsAdmin):
-    list_display = ['__str__', 'description', 'status', 'created', 'icon', 'managers_list', 'is_active']
-    fields = ['name', 'description', 'status', 'managers', 'icon', 'is_active']
+class ProblemStatementsInline(admin.TabularInline):
+    model = ProblemStatement
+    extra = 1
+
+
+class PortfolioForm(forms.ModelForm):
+    class Meta:
+        model = Portfolio
+        fields = ['name', 'description', 'status', 'is_active',
+                  'managers', 'icon', 'innovation_hub', 'investment_to_date']
+        labels = {'investment_to_date': 'Cumulative investment.'}
+        widgets = {'innovation_hub': forms.CheckboxInput,
+                   'icon': forms.Select(choices=[(1, 'education'),
+                                                 (2, 'nutrition'),
+                                                 (3, 'health'),
+                                                 (4, 'child_protection'),
+                                                 (5, 'wash'),
+                                                 (6, 'aids'),
+                                                 (7, 'social_inclusion'),
+                                                 (8, 'food_health'),
+                                                 (9, 'affected_population'),
+                                                 (10, 'children'),
+                                                 (11, 'gender_balance'),
+                                                 (14, 'infant'),
+                                                 (15, 'breast_feeding'),
+                                                 (16, 'children_with_disabilities'),
+                                                 (27, 'pregnant'),
+                                                 (29, 'mental_health'),
+                                                 (30, 'mother_and_baby'),
+                                                 (34, '5year_old_girl'),
+                                                 (38, 'conflict'),
+                                                 (42, 'tsunami'),
+                                                 (45, 'epidemic'),
+                                                 (52, 'tent'),
+                                                 (69, 'medical_supplies'),
+                                                 (70, 'vaccines'),
+                                                 (71, 'psychosocial_support'),
+                                                 (72, 'headquarters'),
+                                                 (73, 'regional_office'),
+                                                 (92, 'partnership'),
+                                                 (97, 'advocacy'),
+                                                 (113, 'innovation'),
+                                                 (116, 'community_building'),
+                                                 (164, 'emergency')])}
+
+
+class PortfolioAdmin(ExportActionMixin, AllObjectsAdmin):
+    resource_class = PortfolioResource
+    list_display = ['__str__', 'description', 'status',
+                    'created', 'icon', 'managers_list', 'is_active', 'innovation_hub', 'investment_to_date']
+    inlines = [ProblemStatementsInline]
+    form = PortfolioForm
+    filter_horizontal = ['managers']
 
     def managers_list(self, obj):
         return make_admin_list(obj.managers.all())
 
     managers_list.short_description = "Assigned managers"
+
+
+class ProblemStatementAdmin(ExportActionMixin, admin.ModelAdmin):
+    model = ProblemStatement
+    resource_class = ProblemStatementResource
+    list_display = ['id', 'name', 'description', 'portfolio']
 
 
 class ResultAreaInline(ViewOnlyInlineMixin, admin.TabularInline):
@@ -310,6 +370,19 @@ class PhaseAdmin(ViewOnlyPermissionMixin, admin.ModelAdmin):
     ordering = search_fields = ['name']
 
 
+class CountrySolutionInline(admin.TabularInline):
+    model = CountrySolution
+    extra = 1
+
+
+class SolutionAdmin(admin.ModelAdmin):
+    ordering = search_fields = ['name']
+    list_display = ['__str__', 'phase', 'people_reached']
+    filter_horizontal = ['portfolios', 'problem_statements']
+    readonly_fields = ['people_reached', 'regions_display']
+    inlines = (CountrySolutionInline,)
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
@@ -336,3 +409,5 @@ admin.site.register(ISC, ISCAdmin)
 admin.site.register(ProjectImportV2, ProjectImportAdmin)
 admin.site.register(Stage, StageAdmin)
 admin.site.register(Phase, PhaseAdmin)
+admin.site.register(ProblemStatement, ProblemStatementAdmin)
+admin.site.register(Solution, SolutionAdmin)

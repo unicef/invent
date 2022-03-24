@@ -197,7 +197,7 @@ export default {
 }
 
 .UserDropdownPopper {
-  transform: translate(10px, -46px);
+  transform: translate(10px, -50px);
   border-radius: 5px;
   border: none;
 }

@@ -44,6 +44,7 @@ export default {
         'auth',
         'organisation-reset-key',
         'organisation',
+        'organisation-innovation-performance',
       ]
       if (this.$route && this.$route.name) {
         return !hiddenOn.includes(this.pureRoute)
