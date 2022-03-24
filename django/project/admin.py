@@ -293,7 +293,10 @@ class PortfolioAdmin(ExportActionMixin, AllObjectsAdmin):
 class ProblemStatementAdmin(ExportActionMixin, admin.ModelAdmin):
     model = ProblemStatement
     resource_class = ProblemStatementResource
-    list_display = ['id', 'name', 'description', 'portfolio']
+    list_display = ['id', 'name', 'description', 'portfolio', 'is_active']
+
+    def get_queryset(self, request):  # pragma: no cover
+        return self.model.all_objects.all()
 
 
 class ResultAreaInline(ViewOnlyInlineMixin, admin.TabularInline):
