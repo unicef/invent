@@ -150,7 +150,6 @@ except NotRegistered:
     pass
 
 
-# extending the exclude list
 class ExportJobAdminNew(ExportJobAdmin):
     exclude = ('job_status', 'site_of_origin', 'app_label', 'model', )
 
@@ -158,8 +157,6 @@ class ExportJobAdminNew(ExportJobAdmin):
         "job_status_info",
         "author",
         "updated_by",
-        # "app_label",
-        # "model",
         "file",
         "processing_initiated",
     )
