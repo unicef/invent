@@ -119,6 +119,8 @@ class PortfolioTests(PortfolioSetup):
         response = self.create_portfolio("Test Portfolio 2", "Port-o-folio", [self.user_2_pr_id], self.user_2_client)
         self.assertEqual(response.status_code, 201, response.json())
         self.portfolio_id_2 = response.json()['id']
+        
+        self.assertEqual(Portfolio.objects.get(id=response.json()['id']).landscape_review, False)
 
         url = reverse("portfolio-list")
         response = self.user_2_client.get(url)  # GMO users see all portfolios in this list
