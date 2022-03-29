@@ -67,9 +67,6 @@ class SolutionKPITests(TestProjectData, APITestCase):
         CountrySolution.objects.create(country=self.country_2, solution=self.sol_1, region=CountryOffice.REGIONS[1][0],
                                        people_reached=23)
 
-        self.assertEqual(Portfolio.objects.get(id=self.port1_resp.json()['id']).landscape_review, False)
-        self.assertEqual(Portfolio.objects.get(id=self.port2_resp.json()['id']).landscape_review, False)
-
         self.sol_1.portfolios.set([self.port1_resp.json()['id'], self.port2_resp.json()['id']])
         self.sol_1.problem_statements.set([ps_1, ps_2])
         self.sol_2 = Solution.objects.create(
@@ -102,6 +99,9 @@ class SolutionKPITests(TestProjectData, APITestCase):
 
         past_snapshot = response.json()[0]['data']
         current_snapshot = response.json()[1]['data']
+
+        self.assertEqual(past_snapshot['portfolios'][0]['landscape_review'], False)
+        self.assertEqual(current_snapshot['portfolios'][0]['landscape_review'], False)
 
         self.assertEqual(past_snapshot['portfolios'][0]['status'], current_snapshot['portfolios'][0]['status'])
         self.assertNotEqual(past_snapshot['portfolios'][1]['status'], current_snapshot['portfolios'][1]['status'])
