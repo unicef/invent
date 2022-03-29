@@ -239,8 +239,8 @@ class PortfolioForm(forms.ModelForm):
     class Meta:
         model = Portfolio
         fields = ['name', 'description', 'status', 'is_active',
-                  'managers', 'icon', 'innovation_hub', 'investment_to_date']
-        labels = {'investment_to_date': 'Cumulative investment.'}
+                  'managers', 'icon', 'innovation_hub', 'landscape_review', 'investment_to_date']
+        labels = {'investment_to_date': 'Cumulative investment.', 'landscape_review': 'Completed landscape review'}
         widgets = {'innovation_hub': forms.CheckboxInput,
                    'icon': forms.Select(choices=[(1, 'education'),
                                                  (2, 'nutrition'),
@@ -278,7 +278,7 @@ class PortfolioForm(forms.ModelForm):
 
 class PortfolioAdmin(ExportActionMixin, AllObjectsAdmin):
     resource_class = PortfolioResource
-    list_display = ['__str__', 'description', 'status',
+    list_display = ['__str__', 'description', 'status', 'landscape_review',
                     'created', 'icon', 'managers_list', 'is_active', 'innovation_hub', 'investment_to_date']
     inlines = [ProblemStatementsInline]
     form = PortfolioForm

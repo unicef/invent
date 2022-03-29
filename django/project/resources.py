@@ -22,13 +22,14 @@ class PortfolioResource(resources.ModelResource):
     status = Field(column_name=_('Status'))
     investment_to_date = Field(column_name=_('Investment to date'))
     innovation_hub = Field(column_name=_('Innovation Hub'))
+    landscape_review = Field(column_name=_('Completed landscape review'))
 
     class Meta:
         model = Portfolio
         fields = ('id', 'is_active', 'name', 'description', 'icon',
-                  'managers', 'status', 'investment_to_date', 'innovation_hub')
+                  'managers', 'status', 'investment_to_date', 'innovation_hub', 'landscape_review')
         export_order = ('id', 'name', 'description', 'managers', 'icon',
-                        'is_active', 'status', 'investment_to_date', 'innovation_hub')
+                        'is_active', 'status', 'investment_to_date', 'innovation_hub', 'landscape_review')
 
     def dehydrate_managers(self, portfolio):  # pragma: no cover
         return ', '.join([manager.user.email for manager in portfolio.managers.all()])
@@ -56,6 +57,9 @@ class PortfolioResource(resources.ModelResource):
 
     def dehydrate_innovation_hub(self, portfolio):  # pragma: no cover
         return portfolio.innovation_hub
+
+    def dehydrate_landscape_review(self, portfolio):  # pragma: no cover
+        return portfolio.landscape_review
 
 
 class ProblemStatementResource(resources.ModelResource):  # pragma: no cover
