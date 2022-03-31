@@ -8,8 +8,50 @@ from import_export.fields import Field
 from django.utils.translation import ugettext_lazy as _
 
 from country.models import Country, CountryOffice, Currency
+from .models import Solution
 
 from project.serializers import LinkSerializer, PartnerSerializer
+
+
+class SolutionsResource(resources.ModelResource):
+    name = Field(column_name=_('Solution name'))
+    portfolio_list = Field(column_name=_('Portfolios'))
+    phase = Field(column_name=_('Phase'))
+    open_source_frontier_tech = Field(column_name=_('Open source frontier tech'))
+    learning_investment = Field(column_name=_('Learning investment'))
+    people_reached = Field(column_name=_('People reached [if empty -> sum of countries]'))
+    list_of_countries = Field(column_name=_('Countries [Country - Region - People reached]'))
+
+    class Meta:
+        model = Solution
+        fields = ('name', 'portfolio_list', 'phase', 'open_source_frontier_tech',
+                  'learning_investment', 'people_reached', 'list_of_countries',)
+        export_order = ('name', 'portfolio_list', 'phase', 'open_source_frontier_tech',
+                        'learning_investment', 'people_reached', 'list_of_countries',)
+
+    def dehydrate_name(self, solution):  # pragma: no cover
+        return solution.name
+
+    def dehydrate_portfolio_list(self, solution):  # pragma: no cover
+        return ", ".join([po.name for po in list(solution.portfolios.all())])
+
+    def dehydrate_phase(self, solution):  # pragma: no cover
+        return solution.phase
+
+    def dehydrate_open_source_frontier_tech(self, solution):  # pragma: no cover
+        return solution.open_source_frontier_tech
+
+    def dehydrate_learning_investment(self, solution):  # pragma: no cover
+        return solution.learning_investment
+
+    def dehydrate_people_reached(self, solution):  # pragma: no cover
+        return solution.people_reached
+
+    def dehydrate_list_of_countries(self, solution):  # pragma: no cover
+        countries_with_data = solution.countrysolution_set.all()
+        countries_with_people_reached = ['{} - {} - {}'.format(cwd.country, CountryOffice.REGIONS[cwd.region][1],
+                                                               cwd.people_reached) for cwd in countries_with_data]
+        return ', '.join(countries_with_people_reached)
 
 
 class PortfolioResource(resources.ModelResource):
