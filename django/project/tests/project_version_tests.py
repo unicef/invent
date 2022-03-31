@@ -2,8 +2,11 @@ import copy
 from datetime import datetime, timedelta
 
 from rest_framework.reverse import reverse
+from rest_framework.test import APIClient
+
 from project.tests.setup import SetupTests
 from project.models import ProjectVersion, Project
+from user.tests import create_profile_for_user
 
 
 class MockRequest:
@@ -135,3 +138,55 @@ class ProjectVersionTests(SetupTests):
         self.assertEqual(result_area_change['added'], new_data['project']['result_area'])
         self.assertIsNone(result_area_change['removed'])
         self.assertFalse(result_area_change['special'])
+
+    def test_project_history_public_view(self):
+        new_data = copy.deepcopy(self.project_data)
+        new_data['project']['name'] = new_data['project']['name'] + ' changed'
+
+        publish_url = reverse("project-publish", kwargs={"project_id": self.project_id,
+                                                         "country_office_id": self.country_office.id})
+        draft_url = reverse("project-draft", kwargs={"project_id": self.project_id,
+                                                     "country_office_id": self.country_office.id})
+        response = self.test_user_client.put(draft_url, new_data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # create a new user who is not a team member
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user_viewer@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201, response.json())
+        create_profile_for_user(response)
+
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        url = reverse("project-versions-retrieve", kwargs={"pk": self.project_id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), ProjectVersion.objects.filter(project_id=self.project_id,
+                                                                             published=True).count())
+
+        # publish new version with one extra change
+        new_data['project']['contact_name'] = new_data['project']['contact_name'] + ' changed'
+        response = self.test_user_client.put(publish_url, new_data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # public user should find only one extra version with the two changes that happened during the draft + publish
+        url = reverse("project-versions-retrieve", kwargs={"pk": self.project_id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), ProjectVersion.objects.filter(project_id=self.project_id,
+                                                                             published=True).count())
+
+        last_version = response.json()[-1]
+        changes = last_version['changes']
+        name_change = [ch for ch in changes if ch['field'] == 'name'][0]
+        self.assertEqual(name_change['added'], new_data['project']['name'])
+        self.assertEqual(name_change['removed'], self.project_data['project']['name'])
+
+        contact_name_change = [ch for ch in changes if ch['field'] == 'contact_name'][0]
+        self.assertEqual(contact_name_change['added'], new_data['project']['contact_name'])
+        self.assertEqual(contact_name_change['removed'], self.project_data['project']['contact_name'])
