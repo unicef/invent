@@ -767,3 +767,44 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectVersion
         fields = ('id', 'version', 'modified', 'user', 'changes', 'published')
+
+    @staticmethod
+    def get_changes(obj):
+        if obj.version == 1:
+            return []
+        try:
+            previous_version = obj.project.versions.get(version=obj.version - 1)
+        except ProjectVersion.DoesNotExist:  # pragma: no cover
+            return []
+
+        current = obj.data
+        previous = previous_version.data
+
+        if current == previous:
+            return []
+
+        keys_added = set(current.keys()) - set(previous.keys())
+        keys_removed = set(previous.keys()) - set(current.keys())
+        keys_intersect = set(previous.keys()) & set(current.keys())
+
+        changes = []
+        for k in keys_added:
+            changes.append(dict(field=k, added=current[k], removed=None, special=False))
+
+        for k in keys_removed:
+            changes.append(dict(field=k, added=None, removed=previous[k], special=False))
+
+        for k in keys_intersect:
+            if current[k] != previous[k]:
+                if isinstance(current[k], list):
+                    if len(current[k]) > 0:
+                        if isinstance(current[k][0], list) or isinstance(current[k][0], dict):
+                            changes.append(dict(field=k, added=None, removed=None, special=True))
+                        elif isinstance(previous[k], list):
+                            changes.append(dict(field=k,
+                                                added=list(set(current[k]) - set(previous[k])),
+                                                removed=list(set(previous[k]) - set(current[k])),
+                                                special=False))
+                else:
+                    changes.append(dict(field=k, added=current[k], removed=previous[k], special=False))
+        return changes
