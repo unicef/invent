@@ -768,14 +768,18 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
         model = ProjectVersion
         fields = ('id', 'version', 'modified', 'user', 'changes', 'published')
 
-    @staticmethod
-    def get_changes(obj):
+    def get_changes(self, obj):
         if obj.version == 1:
             return []
+
+        versions = list(self.instance)
         try:
-            previous_version = obj.project.versions.get(version=obj.version - 1)
-        except ProjectVersion.DoesNotExist:  # pragma: no cover
+            if versions.index(obj) == 0:
+                return []
+        except ValueError:  # pragma: no cover
             return []
+        else:
+            previous_version = versions[versions.index(obj) - 1]
 
         current = obj.data
         previous = previous_version.data
