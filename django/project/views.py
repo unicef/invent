@@ -902,11 +902,16 @@ class SolutionListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     serializer_class = SolutionSerializer
 
 
-class ProjectVersionHistoryViewSet(RetrieveModelMixin, GenericViewSet):
+class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectVersionHistorySerializer
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = self.serializer_class(instance.versions.all(), many=True)
+        if request.user.is_superuser or instance.team.filter(id=request.user.userprofile.id).exists() or \
+                instance.viewers.filter(id=request.user.userprofile.id).exists():
+            serializer = self.serializer_class(instance.versions.all(), many=True)
+        else:
+            serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
+
         return Response(serializer.data)
