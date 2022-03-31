@@ -17,7 +17,7 @@ from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
     ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction, \
-    Stage, Solution, CountrySolution
+    Stage, Solution, CountrySolution, ProjectVersion
 
 
 class PartnerSerializer(serializers.Serializer):
@@ -758,3 +758,12 @@ class SolutionSerializer(serializers.ModelSerializer):
         fields = ('id', 'created', 'modified', 'name', 'regions', 'phase', 'countries',
                   'people_reached', 'open_source_frontier_tech', 'learning_investment',
                   'portfolios', 'problem_statements')
+
+
+class ProjectVersionHistorySerializer(serializers.ModelSerializer):
+    user = UserProfileSerializer()
+    changes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProjectVersion
+        fields = ('id', 'version', 'modified', 'user', 'changes', 'published')
