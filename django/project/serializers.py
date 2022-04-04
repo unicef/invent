@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -763,10 +766,11 @@ class SolutionSerializer(serializers.ModelSerializer):
 class ProjectVersionHistorySerializer(serializers.ModelSerializer):
     user = UserProfileSerializer()
     changes = serializers.SerializerMethodField()
+    beyond_history = serializers.SerializerMethodField()
 
     class Meta:
         model = ProjectVersion
-        fields = ('id', 'version', 'modified', 'user', 'changes', 'published')
+        fields = ('id', 'version', 'modified', 'user', 'changes', 'published', 'beyond_history')
 
     def get_changes(self, obj):
         if obj.version == 1:
@@ -812,3 +816,10 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
                 else:
                     changes.append(dict(field=k, added=current[k], removed=previous[k], special=False))
         return changes
+
+    def get_beyond_history(self, obj):
+        first_version = list(self.instance)[0]
+        inception_date = getattr(settings, 'PROJECT_VERSIONING_INSTALLED_AT', datetime(2021, 11, 9)).date()
+
+        return obj == first_version and \
+            obj.project.created.date() < inception_date and first_version.created.date() == inception_date
