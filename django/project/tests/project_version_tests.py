@@ -190,3 +190,23 @@ class ProjectVersionTests(SetupTests):
         contact_name_change = [ch for ch in changes if ch['field'] == 'contact_name'][0]
         self.assertEqual(contact_name_change['added'], new_data['project']['contact_name'])
         self.assertEqual(contact_name_change['removed'], self.project_data['project']['contact_name'])
+
+    def test_project_beyond_history_feature(self):
+        url = reverse("project-versions-retrieve", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.json()[0]['beyond_history'])
+
+        project = Project.objects.get(id=self.project_id)
+        versions = project.versions.all()
+
+        for v in versions:
+            v.created = datetime(2021, 11, 9)
+            v.save()
+
+        project.created = datetime(2021, 10, 9)
+        project.save()
+
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()[0]['beyond_history'])
