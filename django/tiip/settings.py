@@ -17,6 +17,7 @@ DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['*']
 
+PROJECT_SHORT_NAME = env.str('PROJECT_SHORT_NAME', default='Short Name')
 PROJECT_NAME = env.str('PROJECT_NAME', default='Example')
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default='john@example.org')
 # Developer email who can be reached for API inquiries
