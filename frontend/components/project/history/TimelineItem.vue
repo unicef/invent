@@ -1,7 +1,9 @@
 <template>
   <div class="TimeLineItem">
     <div class="event">
-      <translate v-if="version.version" tag="div" :parameters="{ version: version.version }" class="version">Version {version}</translate>
+      <translate v-if="version.version" tag="div" :parameters="{ version: version.version }" class="version">
+        Version {version}
+      </translate>
       <div>{{ version.changed }}</div>
       <translate
         v-if="version.changes.length > 0"

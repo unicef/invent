@@ -31,6 +31,7 @@ import ValuePhases from '@/components/project/history/values/ValuePhases.vue'
 import ValueWebsites from '@/components/project/history/values/ValueWebsites.vue'
 import ValueTags from '@/components/project/history/values/ValueTags.vue'
 import ValuePartners from '@/components/project/history/values/ValuePartners.vue'
+import ValueSpecial from '@/components/project/history/values/ValueSpecial.vue'
 import SimpleMessage from '@/components/project/history/values/SimpleMessage.vue'
 import ValueCoverImage from '@/components/project/history/values/ValueCoverImage.vue'
 
@@ -42,6 +43,7 @@ export default {
     ValueWebsites,
     ValueTags,
     ValuePartners,
+    ValueSpecial,
     SimpleMessage,
     ValueCoverImage,
   },

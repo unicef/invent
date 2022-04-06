@@ -1,19 +1,9 @@
 <template>
   <div class="change">
     <div class="field">{{ index + 1 }}) {{ changes.fieldTitle }}</div>
-    <div :class="`value ${changes.values.added.changeType}`">
-      <i :class="` ${changes.values.added.changeTypeIcon}`"></i>
-      <template v-if="changes.values.added.value">
-        {{ changes.values.added.value }}
-      </template>
-      <template v-else>N/A</template>
-    </div>
-    <div :class="`value ${changes.values.removed.changeType}`">
-      <i :class="` ${changes.values.removed.changeTypeIcon}`"></i>
-      <template v-if="changes.values.removed.value">
-        {{ changes.values.removed.value }}
-      </template>
-      <template v-else>N/A</template>
+    <div :class="`value ${changes.values.changeType}`">
+      <i :class="` ${changes.values.changeTypeIcon}`"></i>
+      {{ changes.values.value }}
     </div>
   </div>
 </template>
@@ -47,17 +37,11 @@ export default {
     margin-top: 10px;
     word-break: normal;
     line-height: 20px;
-    &.new {
+    &.edit {
       color: @colorTextPrimary;
       i {
         font-weight: bold;
       }
-    }
-    &.old {
-      color: @colorTextMuted;
-    }
-    &.deleted {
-      color: #f44336;
     }
   }
   i {

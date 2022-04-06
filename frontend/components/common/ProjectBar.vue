@@ -17,7 +17,7 @@
                   type="text"
                   class="history"
                   :title="$gettext('Display project changes') | translate"
-                  @click="openHistoryDialog(id)"
+                  @click="openHistoryDialog"
                 >
                   <translate>History</translate>
                 </el-button>
@@ -169,8 +169,12 @@ export default {
     },
   },
   methods: {
-    openHistoryDialog(id) {
-      this.$refs.history_dialog.open(id)
+    openHistoryDialog() {
+      this.$refs.history_dialog.open({
+        id: this.id,
+        title: this.project.name,
+        teamMember: this.isTeam,
+      })
     },
   },
 }

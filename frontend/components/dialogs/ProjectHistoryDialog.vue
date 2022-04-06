@@ -12,16 +12,10 @@
             class="change"
             >Version {currentVersion} on {changed}
           </translate>
-          <el-switch v-model="projectHistory.teamMember" active-text="Team member" style="margin-left: auto;" />
         </div>
       </div>
     </template>
     <Timeline v-if="showTimeline">
-      <!-- 
-        As each timeline item can be totally different structure, it's very clean
-        if we provide the component dynamically based on the prepared data from 
-        the backend.
-        -->
       <component
         :is="version.component"
         v-for="(version, index) in projectHistory.versions"
@@ -40,6 +34,8 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+import { format } from 'date-fns'
 import Timeline from '@/components/project/history/Timeline'
 import StatusBadge from '@/components/project/history/StatusBadge'
 import TimelineItem from '@/components/project/history/TimelineItem'
@@ -58,11 +54,300 @@ export default {
       visible: false,
       showTimeline: false,
       projectHistory: {},
+      fieldMap: {
+        donors: undefined,
+        organisation: undefined,
+        country_answers: undefined,
+        donor_answers: undefined,
+        name: {
+          component: 'ValueText',
+          title: this.$gettext('Initiative mame'),
+          parse: (name) => name || '',
+        },
+        country: {
+          component: 'ValueText',
+          title: this.$gettext('Country'),
+          parse: (country) => this.parseCountry(country),
+        },
+        country_office: {
+          component: 'ValueText',
+          title: this.$gettext('UNICEF Office'),
+          parse: (country_office) =>
+            country_office ? this.offices.find((obj) => obj.id === country_office).name || '' : '',
+        },
+        regional_office: {
+          component: 'ValueTags',
+          title: this.$gettext('Multicountry or Regional Office'),
+          parse: (regional_office) => this.parseList(this.getRegionalOffices, [regional_office]),
+        },
+        modified: {
+          component: 'ValueText',
+          title: this.$gettext('Last updated'),
+          parse: (datetime) => format(new Date(datetime), 'DD/MM/YYYY') || '',
+        },
+        implementation_overview: {
+          component: 'ValueText',
+          title: this.$gettext('Narrative of the initiative'),
+          parse: (implementation_overview) => implementation_overview || '',
+        },
+        research: {
+          component: 'ValueText',
+          title: this.$gettext('title'),
+          parse: (research) => research || '',
+        },
+        start_date: {
+          component: 'ValueText',
+          title: this.$gettext('Start date'),
+          parse: (startDate) => format(new Date(startDate), 'DD/MM/YYYY') || '',
+        },
+        end_date: {
+          component: 'ValueText',
+          title: this.$gettext('End date'),
+          parse: (endDate) => format(new Date(endDate), 'DD/MM/YYYY') || '',
+        },
+        end_date_note: {
+          component: 'ValueText',
+          title: this.$gettext('Note'),
+          parse: (endNote) => endNote || '',
+        },
+        contact_name: {
+          component: 'ValueText',
+          title: this.$gettext('Contact name'),
+          parse: (contactName) => contactName || '',
+        },
+        contact_email: {
+          component: 'ValueText',
+          title: this.$gettext('Contact email'),
+          parse: (contactEmail) => contactEmail || '',
+        },
+        team: {
+          component: 'ValueText',
+          title: this.$gettext('Team members'),
+          parse: (contactEmail) => contactEmail || '',
+        },
+        viewers: {
+          component: 'ValueText',
+          title: this.$gettext('INVENT country focal points'),
+          parse: (viewers) => viewers || '',
+        },
+        goal_area: {
+          component: 'ValueText',
+          title: this.$gettext('Goal Area'),
+          parse: (goal_area) => this.parseSingleSelection(goal_area, 'goalAreas'),
+        },
+        result_area: {
+          component: 'ValueText',
+          title: this.$gettext('Result Area'),
+          parse: (resultArea) => this.parseSingleSelection(resultArea, 'resultAreas'),
+        },
+        capability_levels: {
+          component: 'ValueTags',
+          title: this.$gettext('Capability Levels'),
+          parse: (capabilityLevels) => this.parseFlatList(capabilityLevels, 'capabilityLevels'),
+        },
+        capability_categories: {
+          component: 'ValueTags',
+          title: this.$gettext('Capability Categories'),
+          parse: (capabilityCategories) => this.parseFlatList(capabilityCategories, 'capabilityCategories'),
+        },
+        capability_subcategories: {
+          component: 'ValueTags',
+          title: this.$gettext('Capability Subcategories'),
+          parse: (capabilitySubCategories) => this.parseFlatList(capabilitySubCategories, 'capabilitySubcategories'),
+        },
+        platforms: {
+          component: 'ValueTags',
+          title: this.$gettext('Software Platforms(s)'),
+          parse: (platforms) => this.parseFlatList(platforms, 'platforms'),
+        },
+        dhis: {
+          component: 'ValueTags',
+          title: this.$gettext('Digital Health Intervention(s)'),
+          parse: (strategies) => this.parseFlatList(strategies, 'strategies'),
+        },
+        health_focus_areas: {
+          component: 'ValueText',
+          title: this.$gettext('Programme Focus Area(s)'),
+          parse: (hfa) => this.parseHealthFocusAreas(hfa),
+        },
+        hsc_challenges: {
+          component: 'ValueText',
+          title: this.$gettext('System challenge(s)'),
+          parse: (hsc) => this.parseHscChallenges(hsc),
+        },
+        unicef_sector: {
+          component: 'ValueTags',
+          title: this.$gettext('Sector'),
+          parse: (unicef_sector) => this.parseList(this.getSectors, unicef_sector),
+        },
+        functions: {
+          component: 'ValueTags',
+          title: this.$gettext('Platform/Product Function'),
+          parse: (functions) => this.parseList(this.getFunctions, functions),
+        },
+        hardware: {
+          component: 'ValueTags',
+          title: this.$gettext('Hardware platform(s)'),
+          parse: (hardware) => this.parseList(this.getHardware, hardware),
+        },
+        nontech: {
+          component: 'ValueTags',
+          title: this.$gettext('Non-technology platform(s)'),
+          parse: (nontech) => this.parseList(this.getNontech, nontech),
+        },
+        regional_priorities: {
+          component: 'ValueTags',
+          title: this.$gettext('Regional priorities'),
+          parse: (regional_priorities) => this.parseList(this.getRegionalPriorities, regional_priorities),
+        },
+        wbs: {
+          component: 'ValueText',
+          title: this.$gettext('Work Breakdown Structure (WBS)'),
+          parse: (wbs) => this.joinSimpleArr(wbs),
+        },
+        innovation_categories: {
+          component: 'ValueTags',
+          title: this.$gettext('Innovation Categories'),
+          parse: (innovation_categories) => this.parseList(this.getInnovationCategories, innovation_categories),
+        },
+        cpd: {
+          component: 'ValueText',
+          title: this.$gettext('Country Programme Document inclusion'),
+          parse: (cpd) => this.joinSimpleArr(cpd),
+        },
+        partners: {
+          component: 'ValueSpecial', // should be 'ValuePartners'
+          title: this.$gettext('Partners'),
+          parse: () => this.$gettext('Partner list has been changed'),
+        },
+        links: {
+          component: 'ValueSpecial', // should be 'ValueTags'
+          title: this.$gettext('Links to website/Current Documentation'),
+          parse: () => this.$gettext('Link list has been changed.'),
+        },
+        overview: {
+          component: 'ValueText',
+          title: this.$gettext('Overview of the initiative'),
+          parse: (overview) => overview || '',
+        },
+        coverImage: {
+          component: 'ValueSpecial',
+          title: this.$gettext('Cover image'),
+          parse: () => this.$gettext('Cover image has been changed'),
+        },
+        program_targets: {
+          component: 'ValueText',
+          title: this.$gettext('Program targets'),
+          parse: (program_targets) => program_targets || '',
+        },
+        program_targets_achieved: {
+          component: 'ValueText',
+          title: this.$gettext('Program Targets Archieved'),
+          parse: (program_targets_achieved) => program_targets_achieved || '',
+        },
+        current_achievements: {
+          component: 'ValueText',
+          title: this.$gettext('Initiative achievements'),
+          parse: (current_achievements) => current_achievements || '',
+        },
+        awp: {
+          component: 'ValueText',
+          title: this.$gettext('Annual Work Plan (AWP) Outcome/Activity'),
+          parse: (awp) => awp || '',
+        },
+        funding_needs: {
+          component: 'ValueText',
+          title: this.$gettext('Funding Needs'),
+          parse: (funding_needs) => funding_needs || '',
+        },
+        partnership_needs: {
+          component: 'ValueText',
+          title: this.$gettext('Partnership needs'),
+          parse: (partnership_needs) => partnership_needs || '',
+        },
+        target_group_reached: {
+          component: 'ValueText',
+          title: this.$gettext('Target Group (Target Population) Reached'),
+          parse: (target_group_reached) => target_group_reached || '',
+        },
+        currency: {
+          component: 'ValueText',
+          title: this.$gettext('Currency'),
+          parse: (currency) => currency || '',
+        },
+        total_budget: {
+          component: 'ValueText',
+          title: this.$gettext('Total Budget'),
+          parse: (total_budget) => total_budget || '',
+        },
+        total_budget_narrative: {
+          component: 'ValueText',
+          title: this.$gettext('Total Budget (Narrative)'),
+          parse: (total_budget_narrative) => total_budget_narrative || '',
+        },
+        innovation_ways: {
+          component: 'ValueTags',
+          title: this.$gettext('Innovation Ways'),
+          parse: (innovation_ways) => this.parseList(this.getInnovationWays, innovation_ways),
+        },
+        isc: {
+          component: 'ValueTags',
+          title: this.$gettext('Information security classification'),
+          parse: (isc) => this.parseList(this.getInfoSec, [isc]),
+        },
+        stages: {
+          component: 'ValueSpecial', // should be 'ValuePhases'
+          title: this.$gettext('Completed phases'),
+          parse: () => this.$gettext('The has been a change in phases.'),
+        },
+        current_phase: {
+          component: 'ValueText',
+          title: this.$gettext('Current phase'),
+          parse: (phaseId) => this.parseSingleSelection(phaseId, 'getStages'),
+        },
+        country_custom_answers: {
+          component: 'ValueText',
+          title: this.$gettext('Country custom answers'),
+          parse: () => '',
+        },
+      },
     }
   },
+  computed: {
+    ...mapState({
+      systemDicts: (state) => state,
+      offices: (state) => state.offices.offices,
+      scalePhases: (state) => state.system.scalePhases,
+      projectDicts: (state) => state.projects.projectStructure,
+    }),
+    ...mapGetters({
+      getCountryDetails: 'countries/getCountryDetails',
+      getHealthFocusAreas: 'projects/getHealthFocusAreas',
+      goalAreas: 'projects/getGoalAreas',
+      resultAreas: 'projects/getResultAreas',
+      capabilityLevels: 'projects/getCapabilityLevels',
+      capabilityCategories: 'projects/getCapabilityCategories',
+      capabilitySubcategories: 'projects/getCapabilitySubcategories',
+      regions: 'system/getUnicefRegions',
+      platforms: 'projects/getTechnologyPlatforms',
+      hscChallenges: 'projects/getHscChallenges',
+      // new fields
+      getSectors: 'projects/getSectors',
+      getRegionalPriorities: 'projects/getRegionalPriorities',
+      getInnovationWays: 'projects/getInnovationWays',
+      getInnovationCategories: 'projects/getInnovationCategories',
+      getStages: 'projects/getStages',
+      getHardware: 'projects/getHardware',
+      getNontech: 'projects/getNontech',
+      getFunctions: 'projects/getFunctions',
+      // single new field
+      getRegionalOffices: 'projects/getRegionalOffices',
+      getInfoSec: 'projects/getInfoSec',
+    }),
+  },
   methods: {
-    open(id) {
-      this.getProjectHistory(id)
+    open(project) {
+      this.getProjectHistory(project)
       this.visible = true
     },
     timelineStack(row) {
@@ -71,9 +356,126 @@ export default {
         rows: this.projectHistory.versions.length,
       }
     },
-    async getProjectHistory(id) {
-      const { data } = await this.$axios.get('mock/project.versions.json')
-      this.projectHistory = data.projects.find((p) => (p.id = id))
+    async getProjectHistory(project) {
+      const { data: vh } = await this.$axios.get(`/api/projects/${project.id}/version-history`)
+      if (vh.length > 0) {
+        const versions = vh.map((v) => {
+          return {
+            component: v.beyond_history ? 'TimelineItemNoData' : 'TimelineItem',
+            status: v.beyond_history ? 'empty' : v.published ? 'published' : 'draft',
+            version: v.version,
+            changed: v.modified ? format(new Date(v.modified), 'DD/MM/YYYY') : '',
+            user: {
+              colorScheme: {
+                text: '#FFFFFF',
+                background: '#CB7918',
+                border: 'none',
+              },
+              ...v.user,
+            },
+            changes: v.changes.map((ch, i) => {
+              return {
+                component: this.fieldMap[ch.field].component,
+                field: ch.field,
+                fieldTitle: this.fieldMap[ch.field].title,
+                key: i,
+                values: this.parseChanges(ch),
+              }
+            }),
+          }
+        })
+        this.projectHistory = {
+          title: project.title,
+          teamMember: project.teamMember,
+          currentVersion: vh[0].version,
+          changed: vh[0].modified ? format(new Date(vh[0].modified), 'DD/MM/YYYY') : '',
+          status: vh[0].published ? 'published' : 'draft',
+          versions: versions.sort((a, b) => b.version - a.version),
+        }
+      } else {
+        this.projectHistory = {}
+      }
+    },
+    parseChanges(change) {
+      if (change.special) {
+        return {
+          changeType: 'edit',
+          changeTypeIcon: 'el-icon-edit',
+          value: this.fieldMap[change.field].parse(),
+        }
+      }
+      const added = {
+        changeType: 'new',
+        changeTypeIcon: 'el-icon-circle-plus-outline',
+        value: this.fieldMap[change.field].parse(change.added),
+      }
+      const removed = {
+        changeType: 'old',
+        changeTypeIcon: 'el-icon-remove-outline',
+        value: this.fieldMap[change.field].parse(change.removed),
+      }
+      return { added, removed }
+    },
+    parseFlatList(flatList, type) {
+      if (typeof flatList === 'object') {
+        const all = typeof this[type] === 'function' ? this[type]() : this[type]
+        return all.filter((cb) => flatList.includes(cb.id)).map((cb) => cb.name)
+      }
+      return ''
+    },
+    parseListWithObjects(list, filter) {
+      if (filter == null) return 'N/A'
+      if (typeof filter === 'object' || Array.isArray(filter)) {
+        const filterIDs = filter.map((item) => item.id)
+        return list.filter((tp) => filterIDs.includes(tp.id)).map((i) => i.name)
+      }
+      return ''
+    },
+    parseList(list, filter) {
+      if (typeof filter === 'object') {
+        return list.filter((tp) => filter.includes(tp.id)).map((i) => i.name)
+      }
+      return ''
+    },
+    joinSimpleArr(arr) {
+      return arr ? arr.join(', ') : ''
+    },
+    parseSingleSelection(id, type) {
+      try {
+        const item = this[type].find((i) => i.id === id)
+        return item && item.name ? item.name : ''
+      } catch (e) {
+        console.warn(e)
+        return ''
+      }
+    },
+    parseCountry(countryId) {
+      const country = this.getCountryDetails(countryId)
+      return country && country.name ? country.name : ''
+    },
+    parseHscChallenges(values) {
+      if (typeof values === 'object') {
+        return this.hscChallenges
+          .reduce((a, c) => {
+            c.challenges.forEach((cc) => {
+              if (values && values.includes(cc.id)) {
+                a.push(cc.challenge)
+              }
+            })
+            return a
+          }, [])
+          .join(',')
+      }
+      return ''
+    },
+    parseHealthFocusAreas(health_focus_areas) {
+      if (typeof health_focus_areas === 'object') {
+        return this.getHealthFocusAreas
+          .filter((hfa) => hfa.health_focus_areas.some((h) => health_focus_areas.includes(h.id)))
+          .map((hf) => hf.name)
+          .join(',')
+      }
+      return ''
     },
   },
 }
@@ -112,6 +514,7 @@ export default {
     gap: 10px;
     .change {
       font-size: 14px;
+      font-weight: normal;
       line-height: 20px;
       color: @colorTextMuted;
     }
