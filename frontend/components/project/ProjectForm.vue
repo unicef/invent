@@ -299,10 +299,10 @@ export default {
             } else {
               console.error(e)
             }
-            this.setLoading(false)
           }
         }
         this.handleErrorMessages()
+        this.setLoading(false)
       })
     },
     async doDiscardDraft() {
