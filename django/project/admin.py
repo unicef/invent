@@ -11,6 +11,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage, \
     Phase, ProjectVersion, Solution, CountrySolution
+from country.models import CountryOffice
 from core.utils import make_admin_list
 
 from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter, CountryFilter, DescriptionFilter, \
@@ -21,7 +22,7 @@ import scheduler.celery # noqa
 
 from import_export.admin import ExportActionMixin
 from import_export_celery.admin_actions import create_export_job_action
-from .resources import ProjectResource, ProblemStatementResource, PortfolioResource
+from .resources import ProjectResource, ProblemStatementResource, PortfolioResource, SolutionsResource
 from .utils import project_status_change, project_status_change_str
 
 
@@ -239,8 +240,8 @@ class PortfolioForm(forms.ModelForm):
     class Meta:
         model = Portfolio
         fields = ['name', 'description', 'status', 'is_active',
-                  'managers', 'icon', 'innovation_hub', 'investment_to_date']
-        labels = {'investment_to_date': 'Cumulative investment.'}
+                  'managers', 'icon', 'innovation_hub', 'landscape_review', 'investment_to_date']
+        labels = {'investment_to_date': 'Cumulative investment.', 'landscape_review': 'Completed landscape review'}
         widgets = {'innovation_hub': forms.CheckboxInput,
                    'icon': forms.Select(choices=[(1, 'education'),
                                                  (2, 'nutrition'),
@@ -278,7 +279,7 @@ class PortfolioForm(forms.ModelForm):
 
 class PortfolioAdmin(ExportActionMixin, AllObjectsAdmin):
     resource_class = PortfolioResource
-    list_display = ['__str__', 'description', 'status',
+    list_display = ['__str__', 'description', 'status', 'landscape_review',
                     'created', 'icon', 'managers_list', 'is_active', 'innovation_hub', 'investment_to_date']
     inlines = [ProblemStatementsInline]
     form = PortfolioForm
@@ -293,7 +294,10 @@ class PortfolioAdmin(ExportActionMixin, AllObjectsAdmin):
 class ProblemStatementAdmin(ExportActionMixin, admin.ModelAdmin):
     model = ProblemStatement
     resource_class = ProblemStatementResource
-    list_display = ['id', 'name', 'description', 'portfolio']
+    list_display = ['id', 'name', 'description', 'portfolio', 'is_active']
+
+    def get_queryset(self, request):  # pragma: no cover
+        return self.model.all_objects.all()
 
 
 class ResultAreaInline(ViewOnlyInlineMixin, admin.TabularInline):
@@ -375,12 +379,26 @@ class CountrySolutionInline(admin.TabularInline):
     extra = 1
 
 
-class SolutionAdmin(admin.ModelAdmin):
+class SolutionAdmin(ExportActionMixin, admin.ModelAdmin):
+    resource_class = SolutionsResource
+
     ordering = search_fields = ['name']
-    list_display = ['__str__', 'phase', 'people_reached']
+    list_display = ['__str__', 'portfolio_list', 'phase', 'open_source_frontier_tech',
+                    'learning_investment', 'people_reached', 'list_of_countries']
+    list_filter = ['portfolios', 'open_source_frontier_tech', 'learning_investment']
     filter_horizontal = ['portfolios', 'problem_statements']
     readonly_fields = ['people_reached', 'regions_display']
     inlines = (CountrySolutionInline,)
+
+    def portfolio_list(self, obj):  # pragma: no cover
+        return list(obj.portfolios.all())
+    portfolio_list.short_description = 'Portfolios'
+
+    def list_of_countries(self, obj):  # pragma: no cover
+        countries_with_data = obj.countrysolution_set.all()
+        countries_with_people_reached = ['{} - {} - {}'.format(cwd.country, CountryOffice.REGIONS[cwd.region][1],
+                                                               cwd.people_reached) for cwd in countries_with_data]
+        return ', '.join(countries_with_people_reached)
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)

@@ -79,6 +79,11 @@
                   <translate>New initiative</translate>
                 </nuxt-link>
               </div>
+              <div>
+                <a key="documentationBtn" :href="docUrl" class="HeaderBtn" target="_blank">
+                  <translate>Documentation</translate>
+                </a>
+              </div>
               <UserDropdown />
             </el-col>
           </template>
@@ -128,6 +133,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      docUrl: this.$gettext('https://uni.cf/invent-help')
+    }
   },
   computed: {
     ...mapGetters({
