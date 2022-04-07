@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):  # pragma: no cover
         self.stdout.write("Setting phases")
-        for project in Project.objects.all():
+        for project in Project.all_objects.all():
             if project.public_id:
                 project.data['current_phase'] = Stage.calc_current_phase(project.data.get('stages', []))
             project.draft['current_phase'] = Stage.calc_current_phase(project.draft.get('stages', []))
