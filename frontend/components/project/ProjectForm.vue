@@ -298,6 +298,7 @@ export default {
               this.apiErrors = e.response.data
             } else {
               console.error(e)
+              this.setLoading(false)
             }
           }
         }
@@ -353,6 +354,7 @@ export default {
           }
         }
         this.handleErrorMessages()
+        this.setLoading(false)
       })
     },
     createdHandler() {
