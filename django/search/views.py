@@ -49,7 +49,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
     serializer_class = ListResultSerializer
 
     def get_queryset(self):
-        return ProjectSearch.objects.exclude(project__public_id='')\
+        return ProjectSearch.objects.exclude(project__public_id='').exclude(project__is_active=False) \
             .select_related('project', 'project__approval', 'organisation', 'country', 'country_office')
 
     def list(self, request, *args, **kwargs):
