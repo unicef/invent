@@ -57,7 +57,6 @@ class SolutionsResource(resources.ModelResource):
 class PortfolioResource(resources.ModelResource):
     managers = Field(column_name=_('Managers of the portfolio'))
     id = Field(column_name=_('ID'))
-    is_active = Field(column_name=_('Is Active'))
     name = Field(column_name=_('Name'))
     description = Field(column_name=_('Description'))
     icon = Field(column_name=_('Icon'))
@@ -68,19 +67,16 @@ class PortfolioResource(resources.ModelResource):
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'is_active', 'name', 'description', 'icon',
+        fields = ('id', 'name', 'description', 'icon',
                   'managers', 'status', 'investment_to_date', 'innovation_hub', 'landscape_review')
         export_order = ('id', 'name', 'description', 'managers', 'icon',
-                        'is_active', 'status', 'investment_to_date', 'innovation_hub', 'landscape_review')
+                        'status', 'investment_to_date', 'innovation_hub', 'landscape_review')
 
     def dehydrate_managers(self, portfolio):  # pragma: no cover
         return ', '.join([manager.user.email for manager in portfolio.managers.all()])
 
     def dehydrate_id(self, portfolio):  # pragma: no cover
         return portfolio.id
-
-    def dehydrate_is_active(self, portfolio):  # pragma: no cover
-        return bool(portfolio.is_active)
 
     def dehydrate_name(self, portfolio):  # pragma: no cover
         return portfolio.name
