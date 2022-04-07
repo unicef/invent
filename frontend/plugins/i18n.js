@@ -6,6 +6,19 @@ Vue.component('Translate', TranslateWrapper)
 Vue.mixin({
   methods: {
     $gettext(word, parameters, debug) {
+      if (!word) {
+        this.$sentry.captureMessage(
+          'Empty or invalid text provided.',
+          {
+            level: 'warning',
+            extra: {
+              translation: word,
+              translation_parameters: parameters
+            },
+          }
+        )
+        return ''
+      }
       const trimmedWord = word.replace(/\s+\n/g, '\n').replace(/\n\s+/g, '\n').replace(/\t/g, ' ').replace(/\n/g, ' ').replace(/ +/g, ' ')
       let translated = this.$t(trimmedWord, parameters)
       if (!this.$te(trimmedWord)) {

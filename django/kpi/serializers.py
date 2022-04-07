@@ -15,7 +15,8 @@ class SolutionKPISerializer(SolutionSerializer):
 class PortfolioKPISerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
-        fields = ('id', 'investment_to_date', 'innovation_hub', 'problem_statements', 'solutions', 'status')
+        fields = ('id', 'investment_to_date', 'innovation_hub', 'landscape_review',
+                  'problem_statements',  'solutions', 'status')
 
 
 class SolutionLogSerializer(serializers.ModelSerializer):
@@ -37,3 +38,19 @@ class CountryInclusionLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryInclusionLog
         fields = ('id', 'date', 'modified', 'data')
+
+
+class RegionSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    countries = serializers.IntegerField()
+    max_countries = serializers.IntegerField()
+
+
+class CountryInclusionDataSerializer(serializers.Serializer):
+    regions = RegionSerializer(many=True)
+    countries = serializers.IntegerField()
+    max_countries = serializers.IntegerField()
+
+
+class CountryInclusionVerboseSerializer(CountryInclusionLogSerializer):
+    data = CountryInclusionDataSerializer()

@@ -18,6 +18,7 @@
         type="selection"
         align="center"
         width="45"
+        class-name="selection-td"
       />
       <el-table-column
         v-if="selectedColumns.includes('1')"
@@ -971,7 +972,7 @@ export default {
     cursor: pointer;
     position: absolute;
     top: 32px;
-    left: -32px;
+    left: -30px;
     svg {
       font-size: 14px;
     }
@@ -1035,6 +1036,9 @@ export default {
 
     td {
       padding: 10px 16px 10px 12px;
+      &.selection-td {
+        padding: 10px 0 10px 0 !important;
+      }
       &.project-td {
         padding: 10px 10px 10px 12px;
       }
@@ -1043,7 +1047,6 @@ export default {
         line-height: 17px;
         word-break: normal;
         padding: 0;
-        overflow: initial !important;
         p {
           position: relative;
           margin: 0;
@@ -1051,7 +1054,9 @@ export default {
           -webkit-line-clamp: 4;
           -webkit-box-orient: vertical;
           // With 17 in the calc the fixed columns and the rest of the table go out of sync
-          max-height: calc(16.5px * 4);
+          // max-height: calc(16.5px * 4);
+          // but it should be 15, based on the line-height
+          max-height: calc(15px * 4);
           font-size: @fontSizeSmall;
           letter-spacing: 0;
           line-height: 15px;
