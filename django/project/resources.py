@@ -331,7 +331,7 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         try:
             return Stage.objects.get(id=stage_id).name
         except Exception:
-            return _('No phase data')
+            return 'No phase data'
 
     def dehydrate_partners(self, project):
         if 'partners' not in self.get_data_member(project):
