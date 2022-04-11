@@ -908,8 +908,14 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
+
+        is_country_manager = False
+        co_id = instance.get_country_office_id()
+        if co_id:
+            is_country_manager = request.user.userprofile.manager_of.filter(id=co_id).exists()
+
         if request.user.is_superuser or instance.team.filter(id=request.user.userprofile.id).exists() or \
-                instance.viewers.filter(id=request.user.userprofile.id).exists():
+                instance.viewers.filter(id=request.user.userprofile.id).exists() or is_country_manager:
             serializer = self.serializer_class(instance.versions.all(), many=True)
         else:
             serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
