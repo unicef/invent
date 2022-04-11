@@ -287,6 +287,7 @@ export default {
   .history {
     font-size: 11px;
     font-weight: bold;
+    padding: 0;
     margin-left: 5px;
   }
 }

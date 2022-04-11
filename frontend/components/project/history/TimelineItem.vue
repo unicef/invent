@@ -1,7 +1,12 @@
 <template>
-  <div class="TimeLineItem">
+  <div v-if="showInternalInfo" class="TimeLineItem">
     <div class="event">
-      <translate v-if="version.version" tag="div" :parameters="{ version: version.version }" class="version">
+      <translate
+        v-if="version.version && teamMember"
+        tag="div"
+        :parameters="{ version: version.version }"
+        class="version"
+      >
         Version {version}
       </translate>
       <div>{{ version.changed }}</div>
@@ -51,6 +56,9 @@ export default {
     },
   },
   computed: {
+    showInternalInfo() {
+      return (this.version?.version && this.teamMember) || this.version.status === 'published'
+    },
     versionCreator() {
       return this.version.status !== 'noversion'
         ? this.version.user
@@ -68,7 +76,7 @@ export default {
     dividerStyle() {
       if (this.stack.rows === 1) return 'onlyone'
       if (this.stack.row === 0) return 'first'
-      if (this.stack.row === this.stack.rows) return 'last'
+      if (this.stack.row === this.stack.rows - 1) return 'last'
       return ''
     },
   },
@@ -116,12 +124,12 @@ export default {
     }
     &.first {
       &::before {
-        border-left: 1px solid transparent;
+        top: 30px;
       }
     }
     &.last {
       &::before {
-        bottom: initial;
+        bottom: 48px;
       }
     }
     .avatar {
