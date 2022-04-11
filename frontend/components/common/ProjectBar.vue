@@ -10,25 +10,27 @@
         <el-col :span="12" class="ProjectInfo">
           <el-row type="flex" justify="end">
             <el-col :span="8" class="InfoSection">
-              <div class="Label">
-                <translate>Last Updated</translate>
-              </div>
+              <translate tag="div" class="Label">Last Updated</translate>
               <div class="Info">
-                {{ modified }}
+                <span>{{ modified }}</span>
+                <el-button
+                  type="text"
+                  class="history"
+                  :title="$gettext('Display project changes') | translate"
+                  @click="openHistoryDialog"
+                >
+                  <translate>History</translate>
+                </el-button>
               </div>
             </el-col>
             <el-col :span="8" class="InfoSection">
-              <div class="Label">
-                <translate>Organisation</translate>
-              </div>
+              <translate tag="div" class="Label">Organisation</translate>
               <div class="Info">
                 <organisation-item :id="project.organisation" />
               </div>
             </el-col>
             <el-col :span="8" class="InfoSection">
-              <div class="Label">
-                <translate>Contact person</translate>
-              </div>
+              <translate tag="div" class="Label">Contact person</translate>
               <div class="Info">
                 <a :href="`mailto:${project.contact_email}`" class="NuxtLink Small IconRight">
                   {{ project.contact_name }}
@@ -85,6 +87,7 @@
         </nuxt-link>
       </div>
     </div>
+    <ProjectHistoryDialog ref="history_dialog" />
   </div>
 </template>
 
@@ -92,6 +95,7 @@
 import { format } from 'date-fns'
 import { mapGetters } from 'vuex'
 import Favorite from '@/components/common/Favorite'
+import ProjectHistoryDialog from '@/components/dialogs/ProjectHistoryDialog'
 import toInteger from 'lodash/toInteger'
 import OrganisationItem from './OrganisationItem'
 
@@ -99,6 +103,7 @@ export default {
   components: {
     OrganisationItem,
     Favorite,
+    ProjectHistoryDialog,
   },
   computed: {
     ...mapGetters({
@@ -163,10 +168,19 @@ export default {
       return null
     },
   },
+  methods: {
+    openHistoryDialog() {
+      this.$refs.history_dialog.open({
+        id: this.id,
+        title: this.project.name,
+        teamMember: this.isTeam,
+      })
+    },
+  },
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '../../assets/style/variables.less';
 @import '../../assets/style/mixins.less';
 
@@ -269,6 +283,11 @@ export default {
         color: @colorTextPrimary;
       }
     }
+  }
+  .history {
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 5px;
   }
 }
 </style>

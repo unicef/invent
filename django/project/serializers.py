@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -17,7 +20,7 @@ from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
     ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction, \
-    Stage, Solution, CountrySolution
+    Stage, Solution, CountrySolution, ProjectVersion
 
 
 class PartnerSerializer(serializers.Serializer):
@@ -759,3 +762,65 @@ class SolutionSerializer(serializers.ModelSerializer):
         fields = ('id', 'created', 'modified', 'name', 'regions', 'phase', 'countries',
                   'people_reached', 'open_source_frontier_tech', 'learning_investment',
                   'portfolios', 'problem_statements')
+
+
+class ProjectVersionHistorySerializer(serializers.ModelSerializer):
+    user = UserProfileSerializer()
+    changes = serializers.SerializerMethodField()
+    beyond_history = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProjectVersion
+        fields = ('id', 'version', 'modified', 'user', 'changes', 'published', 'beyond_history')
+
+    def get_changes(self, obj):
+        if obj.version == 1:
+            return []
+
+        versions = list(self.instance)
+        try:
+            if versions.index(obj) == 0:
+                return []
+        except ValueError:  # pragma: no cover
+            return []
+        else:
+            previous_version = versions[versions.index(obj) - 1]
+
+        current = obj.data
+        previous = previous_version.data
+
+        if current == previous:
+            return []
+
+        keys_added = set(current.keys()) - set(previous.keys())
+        keys_removed = set(previous.keys()) - set(current.keys())
+        keys_intersect = set(previous.keys()) & set(current.keys())
+
+        changes = []
+        for k in keys_added:
+            changes.append(dict(field=k, added=current[k], removed=None, special=False))
+
+        for k in keys_removed:
+            changes.append(dict(field=k, added=None, removed=previous[k], special=False))
+
+        for k in keys_intersect:
+            if current[k] != previous[k]:
+                if isinstance(current[k], list):
+                    if len(current[k]) > 0:
+                        if isinstance(current[k][0], list) or isinstance(current[k][0], dict):
+                            changes.append(dict(field=k, added=None, removed=None, special=True))
+                        elif isinstance(previous[k], list):
+                            changes.append(dict(field=k,
+                                                added=list(set(current[k]) - set(previous[k])),
+                                                removed=list(set(previous[k]) - set(current[k])),
+                                                special=False))
+                else:
+                    changes.append(dict(field=k, added=current[k], removed=previous[k], special=False))
+        return changes
+
+    def get_beyond_history(self, obj):
+        first_version = list(self.instance)[0]
+        inception_date = getattr(settings, 'PROJECT_VERSIONING_INSTALLED_AT', datetime(2021, 11, 9)).date()
+
+        return obj == first_version and \
+            obj.project.created.date() < inception_date and first_version.created.date() == inception_date

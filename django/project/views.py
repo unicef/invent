@@ -36,7 +36,8 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectPortfolioStateManagerSerializer, PortfolioSerializer, \
     PortfolioStateChangeSerializer, ReviewScoreDetailedSerializer, TechnologyPlatformCreateSerializer, \
     HardwarePlatformCreateSerializer, NontechPlatformCreateSerializer, PlatformFunctionCreateSerializer, \
-    ProjectCardSerializer, ProjectImageUploadSerializer, ProblemStatementSerializer, SolutionSerializer
+    ProjectCardSerializer, ProjectImageUploadSerializer, ProblemStatementSerializer, SolutionSerializer, \
+    ProjectVersionHistorySerializer
 from user.serializers import UserProfileSerializer
 from .tasks import notify_superusers_about_new_pending_approval
 
@@ -899,3 +900,18 @@ class ProblemStatementListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet
 class SolutionListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
+
+
+class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectVersionHistorySerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user.is_superuser or instance.team.filter(id=request.user.userprofile.id).exists() or \
+                instance.viewers.filter(id=request.user.userprofile.id).exists():
+            serializer = self.serializer_class(instance.versions.all(), many=True)
+        else:
+            serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
+
+        return Response(serializer.data)

@@ -1,10 +1,13 @@
 <template>
   <el-tooltip :content="contact" placement="top-start" :disabled="!showHint">
     <div
-      :class="['Avatar', `${noBorder}`]"
+      :class="`Avatar ${noBorder}`"
       :style="`color: ${colors.text}; background-color: ${colors.background}; border: ${colors.border};`"
     >
       <img v-if="profileImage" :src="profileImage" />
+      <template v-else-if="profileIcon">
+        <i :class="`icon ${profileIcon}`"></i>
+      </template>
       <template v-else>
         {{ initial }}
       </template>
@@ -64,6 +67,9 @@ export default {
     profileImage() {
       return this.user?.picture
     },
+    profileIcon() {
+      return this.user?.icon
+    },
   },
 }
 </script>
@@ -72,6 +78,9 @@ export default {
 @import '@/assets/style/variables.less';
 @import '@/assets/style/mixins.less';
 .Avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   overflow: hidden;
   width: 30px;
@@ -93,6 +102,11 @@ export default {
     width: 34px;
     height: 34px;
     line-height: 34px;
+  }
+  .icon {
+    &::before {
+      font-size: 20px;
+    }
   }
 }
 </style>

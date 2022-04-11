@@ -13,12 +13,17 @@ router.register('nontech-request', views.NontechPlatformRequestViewSet)
 router.register('function-request', views.PlatformFunctionRequestViewSet)
 
 urlpatterns = [
-    url(r"^projects/", include(router.urls)),
-    url(r"^projects/(?P<pk>\d+)/$",
-        view=views.ProjectRetrieveViewSet.as_view({
-            'get': 'retrieve',
-        }),
-        name="project-retrieve"),
+    path("projects/", include(router.urls)),
+    path(r"projects/<int:pk>/",
+         view=views.ProjectRetrieveViewSet.as_view({
+             'get': 'retrieve',
+         }),
+         name="project-retrieve"),
+    path(r"projects/<int:pk>/version-history",
+         view=views.ProjectVersionHistoryViewSet.as_view({
+             'get': 'retrieve',
+         }),
+         name="project-versions-retrieve"),
     path(r'projects/publish/<int:project_id>/<int:country_office_id>/',
          view=views.ProjectPublishViewSet.as_view({
              'put': 'update'
