@@ -93,7 +93,13 @@
       </div>
 
       <div v-if="isTeam || isNewProject || isSuper" class="NavigationActions">
-        <el-button v-if="isDraft" :disabled="!!loading" type="primary" size="medium" @click="$emit('publishProject')">
+        <el-button
+          v-if="isDraft"
+          :disabled="!!loading"
+          type="primary"
+          size="medium"
+          @click="emitAction('publishProject')"
+        >
           <fa v-show="loading === 'publish'" icon="spinner" spin />
           <translate>Publish</translate>
         </el-button>
@@ -104,7 +110,7 @@
           :size="isNewProject ? 'medium' : ''"
           :class="['SaveDraft', { NewProject: isNewProject, Draft: isDraft }]"
           :disabled="!!loading"
-          @click="$emit('saveDraft')"
+          @click="emitAction('saveDraft')"
         >
           <fa v-show="loading === 'draft'" icon="spinner" spin />
           <translate>Save draft</translate>
@@ -115,7 +121,7 @@
           :disabled="!!loading"
           type="text"
           class="DiscardDraft DeleteButton"
-          @click="$emit('discardDraft')"
+          @click="emitAction('discardDraft')"
         >
           <fa v-show="loading === 'discard'" icon="spinner" spin />
           <translate>Discard draft</translate>
@@ -132,7 +138,7 @@
             {{ $gettext('The action will update the timestamp') | translate }}<br />
             {{ $gettext('of the initiative to the current date.') | translate }}
           </div>
-          <el-button :disabled="!!loading" type="primary" size="medium" @click="$emit('handleClickLatest')">
+          <el-button :disabled="!!loading" type="primary" size="medium" @click="emitAction('handleClickLatest')">
             <fa v-show="loading === 'latest'" icon="spinner" spin />
             <translate>Publish as latest</translate>
             <fa icon="question-circle" />
@@ -145,7 +151,7 @@
           type="danger"
           size="medium"
           class="button--danger"
-          @click="$emit('handleClickUnPublish')"
+          @click="emitAction('handleClickUnPublish')"
         >
           <fa v-show="loading === 'unpublish'" icon="spinner" spin />
           <translate>Unpublish</translate>
@@ -168,7 +174,7 @@
 
 <script>
 import VueScrollClass from 'vue-scroll-class'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   directives: {
@@ -252,6 +258,15 @@ export default {
     window.removeEventListener('scroll', this.setNavigationBoxLeftStyle)
   },
   methods: {
+    ...mapActions({
+      setLoading: 'project/setLoading',
+    }),
+    emitAction(action) {
+      this.setLoading(true)
+      setTimeout(() => {
+        this.$emit(action)
+      }, 100)
+    },
     scrollTo(where) {
       window.location.hash = ''
       this.$nextTick(() => {

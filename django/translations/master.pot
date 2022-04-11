@@ -685,6 +685,10 @@ msgid ""
 "software. If there are no users of this type, put 0."
 msgstr ""
 
+#: pages/_organisation/innovation-performance.vue:14
+msgid "Climate"
+msgstr ""
+
 #: components/portfolio/form/NewPortfolioForm.vue:122
 #: components/portfolio/form/NewPortfolioForm.vue:155
 #: components/project/ProjectForm.vue:194
@@ -1417,6 +1421,10 @@ msgstr ""
 msgid "Funding Needs"
 msgstr ""
 
+#: pages/_organisation/innovation-performance.vue:20
+msgid "Gender"
+msgstr ""
+
 #: components/project/ProjectNavigation.vue:24
 msgid "General"
 msgstr ""
@@ -1435,7 +1443,7 @@ msgstr ""
 msgid "Global performance"
 msgstr ""
 
-#: pages/_organisation/innovation-performance.vue:16
+#: pages/_organisation/innovation-performance.vue:79
 msgid "global_performance_url"
 msgstr ""
 
@@ -1514,6 +1522,10 @@ msgstr ""
 #: components/DhaLogin.vue:23 components/DhaLogin.vue:46
 #: components/SignupComponent.vue:36
 msgid "Has to be a valid email address"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:44
+msgid "Health"
 msgstr ""
 
 #: components/project/CoverageFieldset.vue:28
@@ -1688,6 +1700,10 @@ msgstr ""
 msgid "https://unicef.sharepoint.com/sites/OOI/SitePages/INVENT.aspx"
 msgstr ""
 
+#: pages/_organisation/innovation-performance.vue:26
+msgid "Humanitarian"
+msgstr ""
+
 #: components/dashboard/ListExport.vue:391
 msgid "i"
 msgstr ""
@@ -1737,6 +1753,10 @@ msgid ""
 "If your initiative is focused on research activities, please indicate here. "
 "The unique initiative ID can be shared as a reference during in your "
 "publication."
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:32
+msgid "Immunization"
 msgstr ""
 
 #: components/dashboard/ListExport.vue:26
@@ -1924,6 +1944,7 @@ msgid "Innovation Portfolio"
 msgstr ""
 
 #: components/common/TopBar.vue:31 components/common/TopBar.vue:9
+#: pages/_organisation/innovation-performance.vue:5
 msgid "Innovation Portfolios"
 msgstr ""
 
@@ -1939,11 +1960,55 @@ msgid "Innovation Ways"
 msgstr ""
 
 #: components/common/TopBar.vue:64
-#: pages/_organisation/innovation-performance.vue:12
+#: pages/_organisation/innovation-performance.vue:75
 msgid "innovation_performance_title"
 msgstr ""
 
-#: components/project/ProjectData.vue:83 components/project/ProjectData.vue:266
+#: pages/_organisation/innovation-performance.vue:11
+msgid "innovation_portfolios_1_overview_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:65
+msgid "innovation_portfolios_10_youth_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:17
+msgid "innovation_portfolios_2_climate_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:23
+msgid "innovation_portfolios_3_gender_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:29
+msgid "innovation_portfolios_4_humanitarian_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:35
+msgid "innovation_portfolios_5_immunization_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:41
+msgid "innovation_portfolios_6_learning_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:47
+msgid "innovation_portfolios_7_health_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:53
+msgid "innovation_portfolios_8_mental_health_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:59
+msgid "innovation_portfolios_9_wash_url"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:83
+msgid "innovation_portfolios_intro"
+msgstr ""
+
+#: components/project/ProjectData.vue:83 components/project/ProjectData.vue:268
 msgid "Innovation(s)"
 msgstr ""
 
@@ -2073,6 +2138,10 @@ msgstr ""
 msgid "Learn more"
 msgstr ""
 
+#: pages/_organisation/innovation-performance.vue:38
+msgid "Learning"
+msgstr ""
+
 #: components/common/chart/cStages.vue:5
 msgid "Legend:"
 msgstr ""
@@ -2200,6 +2269,10 @@ msgstr ""
 
 #: components/common/UserProjectsList.vue:5
 msgid "Member"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:50
+msgid "Mental health"
 msgstr ""
 
 #: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:29
@@ -2582,7 +2655,8 @@ msgstr ""
 #: components/dashboard/MainTable.vue:217
 #: components/dashboard/MainTable.vue:717
 #: components/portfolio/dashboard/MainTable.vue:236
-#: components/portfolio/dashboard/MainTable.vue:774
+#: components/portfolio/dashboard/MainTable.vue:779
+#: pages/_organisation/innovation-performance.vue:8
 msgid "Overview"
 msgstr ""
 
@@ -2817,11 +2891,16 @@ msgid ""
 "etc."
 msgstr ""
 
-#: pages/_organisation/innovation-performance.vue:21
+#: pages/_organisation/innovation-performance.vue:28
 #: pages/_organisation/innovation-performance.vue:1
 msgid ""
 "Please provide proper title (innovation_performance_title) in order to turn "
 "on this feature!"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:17
+#: pages/_organisation/innovation-performance.vue:14
+msgid "Please provide proper URLs for each tab."
 msgstr ""
 
 #: components/project/sections/Partners.vue:48
@@ -2908,10 +2987,6 @@ msgstr ""
 msgid "Portfolio"
 msgstr ""
 
-#: pages/_organisation/innovation-performance.vue:6
-msgid "Portfolio details"
-msgstr ""
-
 #: components/BreadCrumb.vue:16 components/common/TopBar.vue:36
 #: components/common/TopBar.vue:14
 msgid "Portfolio Manager"
@@ -2925,18 +3000,6 @@ msgstr ""
 #: components/portfolio/form/GeneralSettings.vue:5
 #: components/portfolio/form/GeneralSettings.vue:1
 msgid "Portfolio name"
-msgstr ""
-
-#: pages/_organisation/innovation-performance.vue:5
-msgid "Portfolio overview"
-msgstr ""
-
-#: pages/_organisation/innovation-performance.vue:24
-msgid "portfolio_details_url"
-msgstr ""
-
-#: pages/_organisation/innovation-performance.vue:20
-msgid "portfolio_overview_url"
 msgstr ""
 
 #: components/landing/FeaturedCards.vue:9
@@ -4417,6 +4480,10 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
+#: pages/_organisation/innovation-performance.vue:56
+msgid "WASH"
+msgstr ""
+
 #: pages/_organisation/terms.vue:196
 msgid ""
 "We know that you care how information about you is used and shared and we "
@@ -4766,4 +4833,8 @@ msgstr ""
 msgid ""
 "Your project has been successfully saved as a draft, you can go to your "
 "project page or keep working on the import interface"
+msgstr ""
+
+#: pages/_organisation/innovation-performance.vue:62
+msgid "Youth"
 msgstr ""

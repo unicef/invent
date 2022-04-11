@@ -163,6 +163,16 @@ class HSCChallengeAdmin(ViewOnlyPermissionMixin, AllObjectsAdmin):
     pass
 
 
+class ProjectVersionInline(admin.TabularInline):
+    model = ProjectVersion
+    readonly_fields = ('version', 'id', 'name', 'data', 'user', 'published')
+    extra = 0
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
     create_export_job_action.short_description = _("Generate export in the background")
     actions = (create_export_job_action,)
@@ -175,6 +185,7 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
     fields = ['is_active', 'featured', 'featured_rank'] + readonly_fields
     search_fields = ['name']
     resource_class = ProjectResource
+    inlines = [ProjectVersionInline]
 
     def get_country(self, obj):
         return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)

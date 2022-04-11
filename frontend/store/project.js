@@ -174,7 +174,12 @@ export const actions = {
       userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`)
     commit('SET_ORIGINAL', Object.freeze(data))
     const clean = cleanState()
-    const donorsToFetch = new Set([rootGetters['system/getUnicefDonor'].id])
+    let unicefDonor = rootGetters['system/getUnicefDonor']
+    if (!unicefDonor) {
+      await dispatch('system/loadDonors', null, { root: true })
+      unicefDonor = rootGetters['system/getUnicefDonor']
+    }
+    const donorsToFetch = new Set([unicefDonor.id])
     // if (data.draft) {
     if (data.draft && !isEmpty(data.draft)) {
       const draft = { ...clean, ...apiReadParser(data.draft) }

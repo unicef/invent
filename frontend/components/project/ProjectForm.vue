@@ -298,11 +298,12 @@ export default {
               this.apiErrors = e.response.data
             } else {
               console.error(e)
+              this.setLoading(false)
             }
-            this.setLoading(false)
           }
         }
         this.handleErrorMessages()
+        this.setLoading(false)
       })
     },
     async doDiscardDraft() {
@@ -353,6 +354,7 @@ export default {
           }
         }
         this.handleErrorMessages()
+        this.setLoading(false)
       })
     },
     createdHandler() {
