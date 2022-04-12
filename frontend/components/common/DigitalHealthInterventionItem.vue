@@ -16,8 +16,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getDigitalHealthInterventionDetails:
-        'projects/getDigitalHealthInterventionDetails',
+      getDigitalHealthInterventionDetails: 'projects/getDigitalHealthInterventionDetails',
     }),
     dhi() {
       return this.getDigitalHealthInterventionDetails(this.id)
@@ -27,9 +26,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
-
 .DhiItem {
   display: inline;
 }

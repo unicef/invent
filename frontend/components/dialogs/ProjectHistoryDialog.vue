@@ -55,10 +55,10 @@ export default {
       showTimeline: false,
       projectHistory: {},
       fieldMap: {
-        donors: undefined,
         organisation: undefined,
-        country_answers: undefined,
+        donors: undefined,
         donor_answers: undefined,
+        country_answers: undefined,
         name: {
           component: 'ValueText',
           title: this.$gettext('Initiative mame'),
@@ -163,7 +163,7 @@ export default {
         dhis: {
           component: 'ValueTags',
           title: this.$gettext('Digital Health Intervention(s)'),
-          parse: (strategies) => this.parseFlatList(strategies, 'strategies'),
+          parse: (dhis) => this.parseDHIList(dhis),
         },
         health_focus_areas: {
           component: 'ValueText',
@@ -298,7 +298,7 @@ export default {
         stages: {
           component: 'ValueSpecial', // should be 'ValuePhases'
           title: this.$gettext('Completed phases'),
-          parse: () => this.$gettext('The has been a change in phases.'),
+          parse: () => this.$gettext('Completed phases have been changed.'),
         },
         current_phase: {
           component: 'ValueText',
@@ -340,6 +340,8 @@ export default {
       getHardware: 'projects/getHardware',
       getNontech: 'projects/getNontech',
       getFunctions: 'projects/getFunctions',
+      dhis: 'projects/getDigitalHealthInterventions',
+      getDHIDetails: 'projects/getDigitalHealthInterventionDetails',
       // single new field
       getRegionalOffices: 'projects/getRegionalOffices',
       getInfoSec: 'projects/getInfoSec',
@@ -360,6 +362,9 @@ export default {
       const { data: vh } = await this.$axios.get(`/api/projects/${project.id}/version-history`)
       if (vh.length > 0) {
         const versions = vh.map((v) => {
+          const cleanedChanges = v.changes.filter((ch) => {
+            return this.fieldMap[ch.field] !== undefined
+          })
           return {
             component: v.beyond_history ? 'TimelineItemNoData' : 'TimelineItem',
             status: v.beyond_history ? 'empty' : v.published ? 'published' : 'draft',
@@ -373,7 +378,7 @@ export default {
               },
               ...v.user,
             },
-            changes: v.changes.map((ch, i) => {
+            changes: cleanedChanges.map((ch, i) => {
               return {
                 component: this.fieldMap[ch.field].component,
                 field: ch.field,
@@ -384,12 +389,18 @@ export default {
             }),
           }
         })
+        const latestVersionIndex = vh.length - 1
+        const latestVersion = {
+          status: vh[latestVersionIndex].published ? 'published' : 'draft',
+          currentVersion: vh[latestVersionIndex].version,
+          changed: vh[latestVersionIndex].modified
+            ? format(new Date(vh[latestVersionIndex].modified), 'DD/MM/YYYY')
+            : '',
+        }
         this.projectHistory = {
           title: project.title,
           teamMember: project.teamMember,
-          currentVersion: vh[0].version,
-          changed: vh[0].modified ? format(new Date(vh[0].modified), 'DD/MM/YYYY') : '',
-          status: vh[0].published ? 'published' : 'draft',
+          ...latestVersion,
           versions: versions.sort((a, b) => b.version - a.version),
         }
       } else {
@@ -436,6 +447,9 @@ export default {
         return list.filter((tp) => filter.includes(tp.id)).map((i) => i.name)
       }
       return ''
+    },
+    parseDHIList(filter) {
+      return filter.map((dhiId) => this.getDHIDetails(dhiId).name)
     },
     joinSimpleArr(arr) {
       return arr ? arr.join(', ') : ''
