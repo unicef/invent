@@ -44,3 +44,9 @@ django/.env
 *.icloud
 init-letsencrypt.qa.sh
 init-letsencrypt.dev.sh
+docker-compose.qa.*
+docker-compose.dev.*
+docker-compose.prod.*
+nginx/conf.d.qa/default.conf
+nginx/conf.d.prod/default.conf
+nginx/conf.d.dev/default.conf
