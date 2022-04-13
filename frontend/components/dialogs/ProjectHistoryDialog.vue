@@ -171,7 +171,7 @@ export default {
           parse: (dhis) => this.parseDHIList(dhis),
         },
         health_focus_areas: {
-          component: 'ValueText',
+          component: 'ValueTags',
           title: this.$gettext('Programme Focus Area(s)'),
           parse: (hfa) => this.parseHealthFocusAreas(hfa),
         },
@@ -311,9 +311,9 @@ export default {
           parse: (phaseId) => this.parseSingleSelection(phaseId, 'getStages'),
         },
         country_custom_answers: {
-          component: 'ValueText',
+          component: 'ValueSpecial',
           title: this.$gettext('Country custom answers'),
-          parse: (customAnswers) => this.parseCustomAnswers(customAnswers),
+          parse: () => this.$gettext('Custom answers have been changed.'),
         },
       },
     }
@@ -382,7 +382,13 @@ export default {
           })
           return {
             component: v.beyond_history ? 'TimelineItemNoData' : 'TimelineItem',
-            status: v.beyond_history ? 'empty' : v.published ? 'published' : 'draft',
+            status: v.beyond_history
+              ? 'empty'
+              : v.published
+              ? 'published'
+              : v.was_unpublished
+              ? 'unpublished'
+              : 'draft',
             version: v.version,
             changed: v.modified ? format(new Date(v.modified), 'DD/MM/YYYY') : '',
             user: {
@@ -517,13 +523,11 @@ export default {
       return ''
     },
     parseHealthFocusAreas(health_focus_areas) {
-      if (typeof health_focus_areas === 'object') {
-        return this.getHealthFocusAreas
-          .filter((hfa) => hfa.health_focus_areas.some((h) => health_focus_areas.includes(h.id)))
-          .map((hf) => hf.name)
-          .join(',')
-      }
-      return ''
+      const ise = this.getHealthFocusAreas.reduce((hfaTags, hfa) => {
+        hfa.health_focus_areas.filter((h) => health_focus_areas.includes(h.id)).forEach((h) => hfaTags.push(h.name))
+        return hfaTags
+      }, [])
+      return ise
     },
     parseCustomAnswers(answers) {
       if (Object.keys(answers).length > 0) {
