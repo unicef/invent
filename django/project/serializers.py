@@ -798,10 +798,18 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
 
         changes = []
         for k in keys_added:
-            changes.append(dict(field=k, added=current[k], removed=None, special=False))
+            if isinstance(current[k], dict) or isinstance(current[k], list) \
+                    and len(current[k]) > 0 and (isinstance(current[k][0], list) or isinstance(current[k][0], dict)):
+                changes.append(dict(field=k, added=None, removed=None, special=True))
+            else:
+                changes.append(dict(field=k, added=current[k], removed=None, special=False))
 
         for k in keys_removed:
-            changes.append(dict(field=k, added=None, removed=previous[k], special=False))
+            if isinstance(previous[k], dict) or isinstance(previous[k], list) \
+                    and len(previous[k]) > 0 and (isinstance(previous[k][0], list) or isinstance(previous[k][0], dict)):
+                changes.append(dict(field=k, added=None, removed=None, special=True))
+            else:
+                changes.append(dict(field=k, added=None, removed=previous[k], special=False))
 
         for k in keys_intersect:
             if current[k] != previous[k]:
@@ -814,6 +822,8 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
                                                 added=list(set(current[k]) - set(previous[k])),
                                                 removed=list(set(previous[k]) - set(current[k])),
                                                 special=False))
+                elif isinstance(current[k], dict):  # eg: country_custom_answers, donor_custom_answers
+                    changes.append(dict(field=k, added=None, removed=None, special=True))
                 else:
                     changes.append(dict(field=k, added=current[k], removed=previous[k], special=False))
         return changes
