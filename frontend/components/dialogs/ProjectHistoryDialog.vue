@@ -73,13 +73,12 @@ export default {
         country: {
           component: 'ValueText',
           title: this.$gettext('Country'),
-          parse: (country) => this.parseCountry(country),
+          parse: (countryId) => this.parseCountry(countryId),
         },
         country_office: {
           component: 'ValueText',
           title: this.$gettext('UNICEF Office'),
-          parse: (country_office) =>
-            country_office ? this.offices.find((obj) => obj.id === country_office).name || '' : '',
+          parse: (officeId) => (officeId ? this.parseCountryOffice(officeId) : ''),
         },
         regional_office: {
           component: 'ValueTags',
@@ -498,9 +497,9 @@ export default {
       const country = this.getCountryDetails(countryId)
       return country && country.name ? country.name : ''
     },
-    parseCountryOffice(countryId) {
-      const country = this.getCountryDetails(countryId)
-      return country && country.name ? country.name : ''
+    parseCountryOffice(officeId) {
+      const office = this.offices.find((obj) => obj.id === officeId)
+      return office && office.name ? office.name : ''
     },
     parseHscChallenges(values) {
       if (typeof values === 'object') {
