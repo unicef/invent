@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
+from country.models import CountryCustomQuestion
 from project.tests.setup import SetupTests
 from project.models import ProjectVersion, Project
 from user.tests import create_profile_for_user
@@ -210,3 +211,37 @@ class ProjectVersionTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()[0]['beyond_history'])
+
+    def test_custom_questions_with_history(self):
+        q1 = CountryCustomQuestion.objects.create(question="test private", country_id=self.country_id, private=True)
+        q2 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+        q3 = CountryCustomQuestion.objects.create(question="test2 private", country_id=self.country_id, private=True)
+
+        data = copy.deepcopy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=["private answer 1"]),
+                                                dict(question_id=q2.id, answer=["public answer"]),
+                                                dict(question_id=q3.id, answer=["private answer 2"])]})
+        del data['project']['end_date']
+        del data['project']['partners']
+
+        publish_url = reverse("project-publish", kwargs={"project_id": self.project_id,
+                                                         "country_office_id": self.country_office.id})
+        response = self.test_user_client.put(publish_url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # publish new version with one extra change
+        data.update({"country_custom_answers": [dict(question_id=q2.id, answer=["public answer changed"])]})
+        data['project']['end_date'] = str(datetime.today().date())
+        response = self.test_user_client.put(publish_url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse("project-versions-retrieve", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        last_version = response.json()[-1]
+        changes = last_version['changes']
+        custom_question_change = [ch for ch in changes if ch['field'] == 'country_custom_answers'][0]
+        self.assertIsNone(custom_question_change['added'])
+        self.assertIsNone(custom_question_change['removed'])
+        self.assertTrue(custom_question_change['special'])
