@@ -245,3 +245,15 @@ class ProjectVersionTests(SetupTests):
         self.assertIsNone(custom_question_change['added'])
         self.assertIsNone(custom_question_change['removed'])
         self.assertTrue(custom_question_change['special'])
+
+    def test_project_unpublished_state_on_history(self):
+        url = reverse('project-unpublish', kwargs={'project_id': self.project_id})
+        response = self.test_user_client.put(url, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse("project-versions-retrieve", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        last_version = response.json()[-1]
+        self.assertTrue(last_version['was_unpublished'])
