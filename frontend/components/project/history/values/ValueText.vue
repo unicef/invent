@@ -1,19 +1,13 @@
 <template>
   <div class="change">
     <div class="field">{{ index + 1 }}) {{ changes.fieldTitle }}</div>
-    <div :class="`value ${changes.values.added.changeType}`">
+    <div v-if="!isNothing(changes.values.added.value)" :class="`value ${changes.values.added.changeType}`">
       <i :class="` ${changes.values.added.changeTypeIcon}`"></i>
-      <template v-if="changes.values.added.value">
-        {{ changes.values.added.value }}
-      </template>
-      <template v-else>N/A</template>
+      {{ changes.values.added.value }}
     </div>
-    <div :class="`value ${changes.values.removed.changeType}`">
+    <div v-if="!isNothing(changes.values.removed.value)" :class="`value ${changes.values.removed.changeType}`">
       <i :class="` ${changes.values.removed.changeTypeIcon}`"></i>
-      <template v-if="changes.values.removed.value">
-        {{ changes.values.removed.value }}
-      </template>
-      <template v-else>N/A</template>
+      {{ changes.values.removed.value }}
     </div>
   </div>
 </template>
@@ -28,6 +22,11 @@ export default {
     changes: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    isNothing(value) {
+      return value === null || value === ''
     },
   },
 }

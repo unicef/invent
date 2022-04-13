@@ -8,9 +8,15 @@
         <div class="status">
           <StatusBadge :status="projectHistory.status" large />
           <translate
+            v-if="projectHistory.teamMember"
+            key="team"
             :parameters="{ currentVersion: projectHistory.currentVersion, changed: projectHistory.changed }"
             class="change"
-            >Version {currentVersion} on {changed}
+          >
+            Version {currentVersion} on {changed}
+          </translate>
+          <translate v-else key="viewer" :parameters="{ changed: projectHistory.changed }" class="change">
+            on {changed}
           </translate>
         </div>
       </div>
@@ -34,7 +40,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { format } from 'date-fns'
 import Timeline from '@/components/project/history/Timeline'
 import StatusBadge from '@/components/project/history/StatusBadge'
@@ -83,7 +89,7 @@ export default {
         modified: {
           component: 'ValueText',
           title: this.$gettext('Last updated'),
-          parse: (datetime) => format(new Date(datetime), 'DD/MM/YYYY') || '',
+          parse: (modified) => this.parseDate(modified),
         },
         implementation_overview: {
           component: 'ValueText',
@@ -98,12 +104,12 @@ export default {
         start_date: {
           component: 'ValueText',
           title: this.$gettext('Start date'),
-          parse: (startDate) => format(new Date(startDate), 'DD/MM/YYYY') || '',
+          parse: (startDate) => this.parseDate(startDate),
         },
         end_date: {
           component: 'ValueText',
           title: this.$gettext('End date'),
-          parse: (endDate) => format(new Date(endDate), 'DD/MM/YYYY') || '',
+          parse: (endDate) => this.parseDate(endDate),
         },
         end_date_note: {
           component: 'ValueText',
@@ -211,9 +217,9 @@ export default {
           parse: (innovation_categories) => this.parseList(this.getInnovationCategories, innovation_categories),
         },
         cpd: {
-          component: 'ValueText',
+          component: 'ValueTags',
           title: this.$gettext('Country Programme Document inclusion'),
-          parse: (cpd) => this.joinSimpleArr(cpd),
+          parse: (cpd) => this.parseList(this.getCpd, cpd),
         },
         partners: {
           component: 'ValueSpecial', // should be 'ValuePartners'
@@ -268,17 +274,17 @@ export default {
         target_group_reached: {
           component: 'ValueText',
           title: this.$gettext('Target Group (Target Population) Reached'),
-          parse: (target_group_reached) => target_group_reached || '',
+          parse: (target_group_reached) => (target_group_reached === null ? '' : target_group_reached),
         },
         currency: {
           component: 'ValueText',
           title: this.$gettext('Currency'),
-          parse: (currency) => currency || '',
+          parse: (currencyId) => this.parseCurrency(currencyId),
         },
         total_budget: {
           component: 'ValueText',
           title: this.$gettext('Total Budget'),
-          parse: (total_budget) => total_budget || '',
+          parse: (total_budget) => (total_budget === null ? '' : total_budget),
         },
         total_budget_narrative: {
           component: 'ValueText',
@@ -308,7 +314,7 @@ export default {
         country_custom_answers: {
           component: 'ValueText',
           title: this.$gettext('Country custom answers'),
-          parse: () => '',
+          parse: (customAnswers) => this.parseCustomAnswers(customAnswers),
         },
       },
     }
@@ -331,6 +337,8 @@ export default {
       regions: 'system/getUnicefRegions',
       platforms: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
+      currencies: 'projects/getCurrencies',
+      getCpd: 'projects/getCpd',
       // new fields
       getSectors: 'projects/getSectors',
       getRegionalPriorities: 'projects/getRegionalPriorities',
@@ -347,7 +355,15 @@ export default {
       getInfoSec: 'projects/getInfoSec',
     }),
   },
+  mounted() {
+    if (this.offices.length === 0) {
+      this.loadOffices()
+    }
+  },
   methods: {
+    ...mapActions({
+      loadOffices: 'offices/loadOffices',
+    }),
     open(project) {
       this.getProjectHistory(project)
       this.visible = true
@@ -408,24 +424,34 @@ export default {
       }
     },
     parseChanges(change) {
-      if (change.special) {
-        return {
-          changeType: 'edit',
-          changeTypeIcon: 'el-icon-edit',
-          value: this.fieldMap[change.field].parse(),
+      try {
+        if (change.special) {
+          return {
+            changeType: 'edit',
+            changeTypeIcon: 'el-icon-edit',
+            value: this.fieldMap[change.field].parse(),
+          }
         }
+        const added = {
+          changeType: 'new',
+          changeTypeIcon: 'el-icon-circle-plus-outline',
+          value: this.fieldMap[change.field].parse(change.added),
+        }
+        const removed = {
+          changeType: 'old',
+          changeTypeIcon: 'el-icon-remove-outline',
+          value: this.fieldMap[change.field].parse(change.removed),
+        }
+        return { added, removed }
+      } catch (error) {
+        this.$sentry.captureMessage('Field parsing error', {
+          level: 'error',
+          extra: change,
+        })
       }
-      const added = {
-        changeType: 'new',
-        changeTypeIcon: 'el-icon-circle-plus-outline',
-        value: this.fieldMap[change.field].parse(change.added),
-      }
-      const removed = {
-        changeType: 'old',
-        changeTypeIcon: 'el-icon-remove-outline',
-        value: this.fieldMap[change.field].parse(change.removed),
-      }
-      return { added, removed }
+    },
+    parseDate(value) {
+      return value ? format(new Date(value), 'DD/MM/YYYY') : ''
     },
     parseFlatList(flatList, type) {
       if (typeof flatList === 'object') {
@@ -435,12 +461,17 @@ export default {
       return ''
     },
     parseListWithObjects(list, filter) {
-      if (filter == null) return 'N/A'
+      if (filter == null) return ''
       if (typeof filter === 'object' || Array.isArray(filter)) {
         const filterIDs = filter.map((item) => item.id)
         return list.filter((tp) => filterIDs.includes(tp.id)).map((i) => i.name)
       }
       return ''
+    },
+    parseCurrency(id) {
+      if (id === null) return ''
+      const currency = this.currencies.find((c) => c.id === id)
+      return currency ? `${currency.name} (${currency.code})` : ''
     },
     parseList(list, filter) {
       if (typeof filter === 'object') {
@@ -467,6 +498,10 @@ export default {
       const country = this.getCountryDetails(countryId)
       return country && country.name ? country.name : ''
     },
+    parseCountryOffice(countryId) {
+      const country = this.getCountryDetails(countryId)
+      return country && country.name ? country.name : ''
+    },
     parseHscChallenges(values) {
       if (typeof values === 'object') {
         return this.hscChallenges
@@ -490,6 +525,15 @@ export default {
           .join(',')
       }
       return ''
+    },
+    parseCustomAnswers(answers) {
+      if (Object.keys(answers).length > 0) {
+        const joinedAnswers = Object.keys(answers).map((a) => {
+          return answers[a]
+        })
+        return joinedAnswers.join(', ')
+      }
+      return 'empty'
     },
   },
 }

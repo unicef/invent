@@ -112,9 +112,7 @@ export default {
       user: 'user/getProfile',
     }),
     favorite() {
-      return this.user
-        ? this.user.favorite.includes(toInteger(this.$route.params.id))
-        : undefined
+      return this.user ? this.user.favorite.includes(toInteger(this.$route.params.id)) : undefined
     },
     project() {
       return this.published && this.published.name ? this.published : this.draft
@@ -147,10 +145,10 @@ export default {
       })
     },
     isTeam() {
-      if (this.user) {
-        return this.user.member.includes(+this.$route.params.id)
-      }
-      return false
+      return this.user
+        ? this.user.member.includes(+this.$route.params.id) ||
+            this.user.manager_of.includes(this.project.country_office)
+        : false
     },
     isViewer() {
       if (this.user) {
