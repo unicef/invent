@@ -768,64 +768,69 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
     user = UserProfileSerializer()
     changes = serializers.SerializerMethodField()
     beyond_history = serializers.SerializerMethodField()
+    was_unpublished = serializers.SerializerMethodField()
 
     class Meta:
         model = ProjectVersion
-        fields = ('id', 'version', 'modified', 'user', 'changes', 'published', 'beyond_history')
+        fields = ('id', 'version', 'modified', 'user', 'changes', 'published', 'beyond_history', 'was_unpublished')
 
-    def get_changes(self, obj):
-        if obj.version == 1:
-            return []
-
+    def get_previous(self, obj):
         versions = list(self.instance)
         try:
-            if versions.index(obj) == 0:
-                return []
+            if obj.version == 1:
+                return None
+            elif versions.index(obj) == 0:
+                return None
         except ValueError:  # pragma: no cover
+            return None
+        else:
+            return versions[versions.index(obj) - 1]
+
+    def get_changes(self, obj):
+        previous = self.get_previous(obj)
+        if not previous:
             return []
         else:
-            previous_version = versions[versions.index(obj) - 1]
+            prev = previous.data
+        cur = obj.data
 
-        current = obj.data
-        previous = previous_version.data
-
-        if current == previous:
+        if cur == prev:
             return []
 
-        keys_added = set(current.keys()) - set(previous.keys())
-        keys_removed = set(previous.keys()) - set(current.keys())
-        keys_intersect = set(previous.keys()) & set(current.keys())
+        keys_added = set(cur.keys()) - set(prev.keys())
+        keys_removed = set(prev.keys()) - set(cur.keys())
+        keys_intersect = set(prev.keys()) & set(cur.keys())
 
         changes = []
         for k in keys_added:
-            if isinstance(current[k], dict) or isinstance(current[k], list) \
-                    and len(current[k]) > 0 and (isinstance(current[k][0], list) or isinstance(current[k][0], dict)):
+            if isinstance(cur[k], dict) or isinstance(cur[k], list) \
+                    and len(cur[k]) > 0 and (isinstance(cur[k][0], list) or isinstance(cur[k][0], dict)):
                 changes.append(dict(field=k, added=None, removed=None, special=True))
             else:
-                changes.append(dict(field=k, added=current[k], removed=None, special=False))
+                changes.append(dict(field=k, added=cur[k], removed=None, special=False))
 
         for k in keys_removed:
-            if isinstance(previous[k], dict) or isinstance(previous[k], list) \
-                    and len(previous[k]) > 0 and (isinstance(previous[k][0], list) or isinstance(previous[k][0], dict)):
+            if isinstance(prev[k], dict) or isinstance(prev[k], list) \
+                    and len(prev[k]) > 0 and (isinstance(prev[k][0], list) or isinstance(prev[k][0], dict)):
                 changes.append(dict(field=k, added=None, removed=None, special=True))
             else:
-                changes.append(dict(field=k, added=None, removed=previous[k], special=False))
+                changes.append(dict(field=k, added=None, removed=prev[k], special=False))
 
         for k in keys_intersect:
-            if current[k] != previous[k]:
-                if isinstance(current[k], list):
-                    if len(current[k]) > 0:
-                        if isinstance(current[k][0], list) or isinstance(current[k][0], dict):
+            if cur[k] != prev[k]:
+                if isinstance(cur[k], list):
+                    if len(cur[k]) > 0:
+                        if isinstance(cur[k][0], list) or isinstance(cur[k][0], dict):
                             changes.append(dict(field=k, added=None, removed=None, special=True))
-                        elif isinstance(previous[k], list):
+                        elif isinstance(prev[k], list):
                             changes.append(dict(field=k,
-                                                added=list(set(current[k]) - set(previous[k])),
-                                                removed=list(set(previous[k]) - set(current[k])),
+                                                added=list(set(cur[k]) - set(prev[k])),
+                                                removed=list(set(prev[k]) - set(cur[k])),
                                                 special=False))
-                elif isinstance(current[k], dict):  # eg: country_custom_answers, donor_custom_answers
+                elif isinstance(cur[k], dict):  # eg: country_custom_answers, donor_custom_answers
                     changes.append(dict(field=k, added=None, removed=None, special=True))
                 else:
-                    changes.append(dict(field=k, added=current[k], removed=previous[k], special=False))
+                    changes.append(dict(field=k, added=cur[k], removed=prev[k], special=False))
         return changes
 
     def get_beyond_history(self, obj):
@@ -834,3 +839,12 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
 
         return obj == first_version and \
             obj.project.created.date() < inception_date and first_version.created.date() == inception_date
+
+    def get_was_unpublished(self, obj):
+        previous = self.get_previous(obj)
+        if not previous:
+            return False
+        else:
+            if previous.published and not obj.published and previous.data == obj.data:
+                return True
+        return False
