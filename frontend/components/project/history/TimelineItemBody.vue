@@ -2,7 +2,7 @@
   <div :class="style">
     <div class="header">
       <div>
-        <span>{{ actions[version.status] }}</span>
+        <span>{{ calcActions }}</span>
         <span v-if="version.user" class="user">{{ version.user.name }}</span>
       </div>
       <StatusBadge v-if="teamMember" :status="version.status" />
@@ -60,11 +60,6 @@ export default {
   data() {
     return {
       actions: {
-        // Additional states.. will implement on integration
-        // created
-        // a draft version was present
-        // a published version was found
-        // no data
         noversion: this.$gettext('A published version was found'),
         draft: this.$gettext('Saved draft by'),
         published: this.$gettext('Published by'),
@@ -74,6 +69,11 @@ export default {
     }
   },
   computed: {
+    calcActions() {
+      return this.version.user === null && this.version.status === 'published'
+        ? this.actions.noversion
+        : this.actions[this.version.status]
+    },
     style() {
       return this.teamMember ? `TimeLineItemBody ${this.version.status}` : 'TimeLineItemBody draft'
     },

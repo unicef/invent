@@ -60,8 +60,15 @@ export default {
       return (this.version?.version && this.teamMember) || this.version.status === 'published'
     },
     versionCreator() {
-      return this.version.status !== 'noversion'
-        ? this.version.user
+      return this.version.status === 'noversion' || this.version.user !== null
+        ? {
+            ...this.version.user,
+            colorScheme: {
+              text: '#FFFFFF',
+              background: '#CB7918',
+              border: 'none',
+            },
+          }
         : {
             name: null,
             email: null,
