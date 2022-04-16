@@ -374,21 +374,17 @@ export default {
       }
     },
     async getProjectHistory(project) {
-      const { data: vh } = await this.$axios.get(`/api/projects/${project.id}/version-history`)
-      if (vh.length > 0) {
-        const versions = vh.map((v) => {
+      const { data: versionHistoryRaw } = await this.$axios.get(`/api/projects/${project.id}/version-history`)
+
+      // Prepare version changes field by field
+      if (versionHistoryRaw.length > 0) {
+        const versions = versionHistoryRaw.map((v) => {
           const cleanedChanges = v.changes.filter((ch) => {
             return this.fieldMap[ch.field] !== undefined
           })
           return {
-            component: v.beyond_history ? 'TimelineItemNoData' : 'TimelineItem',
-            status: v.beyond_history
-              ? 'empty'
-              : v.published
-              ? 'published'
-              : v.was_unpublished
-              ? 'unpublished'
-              : 'draft',
+            component: 'TimelineItem',
+            status: v.published ? 'published' : v.was_unpublished ? 'unpublished' : 'draft',
             version: v.version,
             changed: v.modified ? format(new Date(v.modified), 'DD/MM/YYYY') : '',
             user: v.user,
@@ -403,18 +399,62 @@ export default {
             }),
           }
         })
-        const latestVersionIndex = vh.length - 1
-        const latestVersion = {
-          status: vh[latestVersionIndex].published ? 'published' : 'draft',
-          currentVersion: vh[latestVersionIndex].version,
-          changed: vh[latestVersionIndex].modified
-            ? format(new Date(vh[latestVersionIndex].modified), 'DD/MM/YYYY')
-            : '',
+
+        // Check and prepare beyond history edge case
+        versions[0].beyond_history = false
+        if (versionHistoryRaw[0].beyond_history) {
+          const beyondHistory = [
+            {
+              component: 'TimelineItem',
+              status: 'created',
+              version: -2,
+              changed: format(new Date(project.created), 'DD/MM/YYYY'),
+              user: null,
+              changes: [],
+            },
+            {
+              component: 'TimelineItemNoData',
+              status: 'empty',
+              version: -1,
+              changed: '',
+              user: null,
+              changes: [],
+            },
+            {
+              component: 'TimelineItem',
+              status: versionHistoryRaw[0].published ? 'noversionPublished' : 'noversionDraft',
+              version: 0,
+              changed: versions[0].changed,
+              user: null,
+              changes: [],
+            },
+          ]
+          versions.push(...beyondHistory)
         }
+
+        // Calculate current version
+        let publishedOrUnpublished = false
+        const latestVersionIndex = versionHistoryRaw.length - 1
+        let pIndex = latestVersionIndex
+        while (!publishedOrUnpublished && pIndex >= 0) {
+          publishedOrUnpublished = versionHistoryRaw[pIndex].published || versionHistoryRaw[pIndex].was_unpublished
+          if (!publishedOrUnpublished) pIndex--
+        }
+        const status = publishedOrUnpublished && versionHistoryRaw[pIndex].published ? 'published' : 'draft'
+        const currentVersion = {
+          status,
+          currentVersion:
+            status === 'published' ? versionHistoryRaw[pIndex].version : versionHistoryRaw[latestVersionIndex].version,
+          changed:
+            status === 'published'
+              ? format(new Date(versionHistoryRaw[pIndex].modified), 'DD/MM/YYYY')
+              : format(new Date(versionHistoryRaw[latestVersionIndex].modified), 'DD/MM/YYYY'),
+        }
+
+        // return prepared data
         this.projectHistory = {
-          title: project.title,
-          teamMember: project.teamMember,
-          ...latestVersion,
+          ...project,
+          ...currentVersion,
           versions: versions.sort((a, b) => b.version - a.version),
         }
       } else {

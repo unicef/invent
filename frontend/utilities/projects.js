@@ -60,6 +60,7 @@ export const projectFields = () => ({
   organisation: null,
   country: null,
   country_office: null,
+  created: null,
   modified: null,
   implementation_overview: null,
   research: false,

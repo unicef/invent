@@ -2,7 +2,7 @@
   <div :class="style">
     <div class="header">
       <div>
-        <span>{{ calcActions }}</span>
+        <span>{{ actions[version.status] }}</span>
         <span v-if="version.user" class="user">{{ version.user.name }}</span>
       </div>
       <StatusBadge v-if="teamMember" :status="version.status" />
@@ -60,7 +60,9 @@ export default {
   data() {
     return {
       actions: {
-        noversion: this.$gettext('A published version was found'),
+        noversionPublished: this.$gettext('A published version was found'),
+        noversionDraft: this.$gettext('A draft version was found'),
+        created: this.$gettext('Initiative created'),
         draft: this.$gettext('Saved draft by'),
         published: this.$gettext('Published by'),
         unpublished: this.$gettext('Unpublished by'),
@@ -69,13 +71,14 @@ export default {
     }
   },
   computed: {
-    calcActions() {
-      return this.version.user === null && this.version.status === 'published'
-        ? this.actions.noversion
-        : this.actions[this.version.status]
-    },
     style() {
-      return this.teamMember ? `TimeLineItemBody ${this.version.status}` : 'TimeLineItemBody draft'
+      const status =
+        this.version.status === 'created' ||
+        this.version.status === 'noversionPublished' ||
+        this.version.status === 'noversionDraft'
+          ? 'noversion'
+          : this.version.status
+      return this.teamMember ? `TimeLineItemBody ${status}` : 'TimeLineItemBody draft'
     },
     shownChanges() {
       return this.showAll ? this.version.changes : this.version.changes.slice(0, 2)
