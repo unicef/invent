@@ -143,7 +143,11 @@ msgstr ""
 msgid "6. Technology"
 msgstr ""
 
-#: components/project/history/TimelineItemBody.vue:41
+#: components/project/history/TimelineItemBody.vue:37
+msgid "A draft version was found"
+msgstr ""
+
+#: components/project/history/TimelineItemBody.vue:36
 msgid "A published version was found"
 msgstr ""
 
@@ -555,6 +559,10 @@ msgstr ""
 #: components/project/sections/TechnologyOverview.vue:40
 #: components/project/sections/TechnologyOverview.vue:1
 msgid "Can you provide a link to the software wikipage?"
+msgstr ""
+
+#: components/project/history/values/ValueTags.vue:5
+msgid "Can't find the changes"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:82 components/admin/DhaQuestion.vue:120
@@ -1878,6 +1886,10 @@ msgstr ""
 
 #: components/admin/CountryAdmin.vue:36 components/admin/CountryAdmin.vue:190
 msgid "Initiative approval process"
+msgstr ""
+
+#: components/project/history/TimelineItemBody.vue:38
+msgid "Initiative created"
 msgstr ""
 
 #: components/dashboard/PdfExport.vue:389
@@ -3210,7 +3222,7 @@ msgstr ""
 msgid "Published"
 msgstr ""
 
-#: components/project/history/TimelineItemBody.vue:43
+#: components/project/history/TimelineItemBody.vue:40
 msgid "Published by"
 msgstr ""
 
@@ -3489,7 +3501,7 @@ msgstr ""
 msgid "Save settings"
 msgstr ""
 
-#: components/project/history/TimelineItemBody.vue:42
+#: components/project/history/TimelineItemBody.vue:39
 msgid "Saved draft by"
 msgstr ""
 
@@ -4357,7 +4369,7 @@ msgstr ""
 msgid "Unpublish"
 msgstr ""
 
-#: components/project/history/TimelineItemBody.vue:44
+#: components/project/history/TimelineItemBody.vue:41
 msgid "Unpublished by"
 msgstr ""
 
