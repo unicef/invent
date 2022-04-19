@@ -173,12 +173,12 @@ export default {
         health_focus_areas: {
           component: 'ValueTags',
           title: this.$gettext('Programme Focus Area(s)'),
-          parse: (hfa) => this.parseHealthFocusAreas(hfa),
+          parse: (hfa) => this.parseTwoLevelList(this.getHealthFocusAreas, 'health_focus_areas', hfa),
         },
         hsc_challenges: {
-          component: 'ValueText',
+          component: 'ValueTags',
           title: this.$gettext('System challenge(s)'),
-          parse: (hsc) => this.parseHscChallenges(hsc),
+          parse: (hsc) => this.parseTwoLevelList(this.hscChallenges, 'challenges', hsc),
         },
         unicef_sector: {
           component: 'ValueTags',
@@ -374,31 +374,20 @@ export default {
       }
     },
     async getProjectHistory(project) {
-      const { data: vh } = await this.$axios.get(`/api/projects/${project.id}/version-history`)
-      if (vh.length > 0) {
-        const versions = vh.map((v) => {
+      const { data: versionHistoryRaw } = await this.$axios.get(`/api/projects/${project.id}/version-history`)
+
+      // Prepare version changes field by field
+      if (versionHistoryRaw.length > 0) {
+        const versions = versionHistoryRaw.map((v) => {
           const cleanedChanges = v.changes.filter((ch) => {
             return this.fieldMap[ch.field] !== undefined
           })
           return {
-            component: v.beyond_history ? 'TimelineItemNoData' : 'TimelineItem',
-            status: v.beyond_history
-              ? 'empty'
-              : v.published
-              ? 'published'
-              : v.was_unpublished
-              ? 'unpublished'
-              : 'draft',
+            component: 'TimelineItem',
+            status: v.published ? 'published' : v.was_unpublished ? 'unpublished' : 'draft',
             version: v.version,
             changed: v.modified ? format(new Date(v.modified), 'DD/MM/YYYY') : '',
-            user: {
-              colorScheme: {
-                text: '#FFFFFF',
-                background: '#CB7918',
-                border: 'none',
-              },
-              ...v.user,
-            },
+            user: v.user,
             changes: cleanedChanges.map((ch, i) => {
               return {
                 component: this.fieldMap[ch.field].component,
@@ -410,18 +399,62 @@ export default {
             }),
           }
         })
-        const latestVersionIndex = vh.length - 1
-        const latestVersion = {
-          status: vh[latestVersionIndex].published ? 'published' : 'draft',
-          currentVersion: vh[latestVersionIndex].version,
-          changed: vh[latestVersionIndex].modified
-            ? format(new Date(vh[latestVersionIndex].modified), 'DD/MM/YYYY')
-            : '',
+
+        // Check and prepare beyond history edge case
+        versions[0].beyond_history = false
+        if (versionHistoryRaw[0].beyond_history) {
+          const beyondHistory = [
+            {
+              component: 'TimelineItem',
+              status: 'created',
+              version: -2,
+              changed: format(new Date(project.created), 'DD/MM/YYYY'),
+              user: null,
+              changes: [],
+            },
+            {
+              component: 'TimelineItemNoData',
+              status: 'empty',
+              version: -1,
+              changed: '',
+              user: null,
+              changes: [],
+            },
+            {
+              component: 'TimelineItem',
+              status: versionHistoryRaw[0].published ? 'noversionPublished' : 'noversionDraft',
+              version: 0,
+              changed: versions[0].changed,
+              user: null,
+              changes: [],
+            },
+          ]
+          versions.push(...beyondHistory)
         }
+
+        // Calculate current version
+        let publishedOrUnpublished = false
+        const latestVersionIndex = versionHistoryRaw.length - 1
+        let pIndex = latestVersionIndex
+        while (!publishedOrUnpublished && pIndex >= 0) {
+          publishedOrUnpublished = versionHistoryRaw[pIndex].published || versionHistoryRaw[pIndex].was_unpublished
+          if (!publishedOrUnpublished) pIndex--
+        }
+        const status = publishedOrUnpublished && versionHistoryRaw[pIndex].published ? 'published' : 'draft'
+        const currentVersion = {
+          status,
+          currentVersion:
+            status === 'published' ? versionHistoryRaw[pIndex].version : versionHistoryRaw[latestVersionIndex].version,
+          changed:
+            status === 'published'
+              ? format(new Date(versionHistoryRaw[pIndex].modified), 'DD/MM/YYYY')
+              : format(new Date(versionHistoryRaw[latestVersionIndex].modified), 'DD/MM/YYYY'),
+        }
+
+        // return prepared data
         this.projectHistory = {
-          title: project.title,
-          teamMember: project.teamMember,
-          ...latestVersion,
+          ...project,
+          ...currentVersion,
           versions: versions.sort((a, b) => b.version - a.version),
         }
       } else {
@@ -449,6 +482,7 @@ export default {
         }
         return { added, removed }
       } catch (error) {
+        console.error('🚀 ~ parseChanges ~ error', error)
         this.$sentry.captureMessage('Field parsing error', {
           level: 'error',
           extra: change,
@@ -459,11 +493,11 @@ export default {
       return value ? format(new Date(value), 'DD/MM/YYYY') : ''
     },
     parseFlatList(flatList, type) {
-      if (typeof flatList === 'object') {
+      if (typeof flatList === 'object' && flatList !== null) {
         const all = typeof this[type] === 'function' ? this[type]() : this[type]
         return all.filter((cb) => flatList.includes(cb.id)).map((cb) => cb.name)
       }
-      return ''
+      return []
     },
     parseListWithObjects(list, filter) {
       if (filter == null) return ''
@@ -471,7 +505,7 @@ export default {
         const filterIDs = filter.map((item) => item.id)
         return list.filter((tp) => filterIDs.includes(tp.id)).map((i) => i.name)
       }
-      return ''
+      return []
     },
     parseCurrency(id) {
       if (id === null) return ''
@@ -479,15 +513,17 @@ export default {
       return currency ? `${currency.name} (${currency.code})` : ''
     },
     parseList(list, filter) {
-      if (typeof filter === 'object') {
+      if (typeof filter === 'object' && filter !== null) {
         return list.filter((tp) => filter.includes(tp.id)).map((i) => i.name)
       }
-      return ''
+      return []
     },
     parseDHIList(filter) {
+      if (filter === null) return []
       return filter.map((dhiId) => this.getDHIDetails(dhiId).name)
     },
     joinSimpleArr(arr) {
+      if (arr === null) return ''
       return arr ? arr.join(', ') : ''
     },
     parseSingleSelection(id, type) {
@@ -507,27 +543,13 @@ export default {
       const office = this.offices.find((obj) => obj.id === officeId)
       return office && office.name ? office.name : ''
     },
-    parseHscChallenges(values) {
-      if (typeof values === 'object') {
-        return this.hscChallenges
-          .reduce((a, c) => {
-            c.challenges.forEach((cc) => {
-              if (values && values.includes(cc.id)) {
-                a.push(cc.challenge)
-              }
-            })
-            return a
-          }, [])
-          .join(',')
-      }
-      return ''
-    },
-    parseHealthFocusAreas(health_focus_areas) {
-      const ise = this.getHealthFocusAreas.reduce((hfaTags, hfa) => {
-        hfa.health_focus_areas.filter((h) => health_focus_areas.includes(h.id)).forEach((h) => hfaTags.push(h.name))
-        return hfaTags
+    parseTwoLevelList(list, secondListName, filter) {
+      if (filter === null) return []
+      const changedTags = list.reduce((tags, obj) => {
+        obj[secondListName].filter((h) => filter.includes(h.id)).forEach((h) => tags.push(h.name))
+        return tags
       }, [])
-      return ise
+      return changedTags
     },
     parseCustomAnswers(answers) {
       if (Object.keys(answers).length > 0) {

@@ -170,6 +170,7 @@ export default {
     openHistoryDialog() {
       this.$refs.history_dialog.open({
         id: this.id,
+        created: this.project.created,
         title: this.project.name,
         teamMember: this.isTeam,
       })

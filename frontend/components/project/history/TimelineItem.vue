@@ -1,8 +1,8 @@
 <template>
-  <div v-if="showInternalInfo" class="TimeLineItem">
+  <div class="TimeLineItem">
     <div class="event">
       <translate
-        v-if="version.version && teamMember"
+        v-if="version.version > 0 && teamMember"
         tag="div"
         :parameters="{ version: version.version }"
         class="version"
@@ -56,20 +56,27 @@ export default {
     },
   },
   computed: {
-    showInternalInfo() {
-      return (this.version?.version && this.teamMember) || this.version.status === 'published'
-    },
     versionCreator() {
-      return this.version.status !== 'noversion'
-        ? this.version.user
-        : {
+      return this.version.status === 'noversionPublished' ||
+        this.version.status === 'noversionDraft' ||
+        this.version.status === 'created' ||
+        this.version.user === null
+        ? {
             name: null,
             email: null,
             icon: 'el-icon-s-tools',
             colorScheme: {
-              text: '#FFFFFF',
               background: '#1CABE2',
               border: 'none',
+              text: '#FFFFFF',
+            },
+          }
+        : {
+            ...this.version.user,
+            colorScheme: {
+              background: '#CB7918',
+              border: 'none',
+              text: '#FFFFFF',
             },
           }
     },

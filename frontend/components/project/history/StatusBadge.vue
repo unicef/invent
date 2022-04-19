@@ -13,7 +13,8 @@ export default {
       type: String,
       default: 'draft',
       required: true,
-      validator: (val) => ['noversion', 'draft', 'published', 'unpublished'].includes(val),
+      validator: (val) =>
+        ['created', 'noversionDraft', 'noversionPublished', 'draft', 'published', 'unpublished'].includes(val),
     },
     large: {
       type: Boolean,
