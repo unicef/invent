@@ -9,10 +9,10 @@ if git diff --quiet django/translations/master.pot; then
    exit 0
 else
    echo "Translation have been updated, we need to commit them"
-   git pull origin dev
    git stash
    git checkout dev
    git stash pop
+   git pull origin dev
    git add django/translations/master.pot
    git commit -m "update translations [AUTO] [ci skip]"
    ./autotag b  # increment bug version X.X.THIS
