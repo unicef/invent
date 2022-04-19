@@ -147,7 +147,8 @@ export default {
     isTeam() {
       return this.user
         ? this.user.member.includes(+this.$route.params.id) ||
-            this.user.manager_of.includes(this.project.country_office)
+            this.user.manager_of.includes(this.project.country_office) ||
+            this.user.is_superuser
         : false
     },
     isViewer() {
