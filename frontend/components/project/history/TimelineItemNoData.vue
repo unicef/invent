@@ -29,12 +29,13 @@ export default {
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 50%;
-      border-left: 1px dashed #eae6e1;
+      left: 48%;
+      border-left: 1px solid #eae6e1;
     }
   }
   .body {
     margin: 0 0 20px 18px;
+    padding-left: 20px;
   }
 }
 </style>

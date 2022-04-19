@@ -718,6 +718,7 @@ export const mutations = {
     state.dhis = get(project, 'dhis', [])
     state.health_focus_areas = get(project, 'health_focus_areas', [])
     state.hsc_challenges = get(project, 'hsc_challenges', [])
+    state.created = get(project, 'created', '')
     state.modified = get(project, 'modified', '')
     state.donors = get(project, 'donors', [])
     state.country_answers = get(project, 'country_custom_answers', [])

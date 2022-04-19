@@ -3,11 +3,11 @@
     <div class="field">{{ index + 1 }}) {{ changes.fieldTitle }}</div>
     <div v-if="!isNothing(changes.values.added.value)" :class="`value ${changes.values.added.changeType}`">
       <i :class="` ${changes.values.added.changeTypeIcon}`"></i>
-      {{ changes.values.added.value }}
+      <span>{{ changes.values.added.value }}</span>
     </div>
     <div v-if="!isNothing(changes.values.removed.value)" :class="`value ${changes.values.removed.changeType}`">
       <i :class="` ${changes.values.removed.changeTypeIcon}`"></i>
-      {{ changes.values.removed.value }}
+      <span>{{ changes.values.removed.value }}</span>
     </div>
   </div>
 </template>
@@ -45,6 +45,7 @@ export default {
     margin-left: 19px;
     margin-top: 10px;
     word-break: normal;
+    white-space: pre-line;
     line-height: 20px;
     &.new {
       color: @colorTextPrimary;
