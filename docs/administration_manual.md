@@ -1,14 +1,14 @@
 # Administration Manual
 
 ## Translations
-The interface to run and configure translations is loaded in http://localhost/translate. Backend uses Rosetta Django application that eases the translation process in django projects and can be configured via parameters defined in ```django/tiip/settings.py``` file (see [rosetta-settings](https://django-rosetta.readthedocs.io/settings.html)
+The interface to run and configure translations is loaded in http://localhost/translation. Backend uses Rosetta Django application that eases the translation process in django projects and can be configured via parameters defined in ```django/tiip/settings.py``` file (see [rosetta-settings](https://django-rosetta.readthedocs.io/settings.html)
 When logging for the first time the following page will appear when filtered by **PROJEC**T:
 
 :::{figure-md} translations1
 
 <img src="./_static/images/translations1.png" alt="system-context-diagram" class="bg-primary mb-1" width="600px">
 
-**STranslations - Rosetta Screen (no translations loaded)**
+**Translations - Rosetta Screen (no translations loaded)**
 :::
 
 
@@ -67,7 +67,7 @@ Finally, the Project Translation page will have the following items and the tran
 ## User Management
 This section contains instructions how a superuser can create / modify / delete users and super users.
 
-### ser creation
+### User creation
 A superuser has to login to http://localhost/admin
 Under AUTHENTICATION AND AUTHORIZATION tab click on “Users” and the on the right corner clicks on “Add user”. Alternatively, click on “Add” icon next to “Users”. 
 Fill in the requested fields username/password and in the “USER PROFILES” add UNICEF as Donor and add user’s organization.
@@ -82,9 +82,6 @@ from user.models import Organisation
 Organisation.objects.create(name=’UNICEF’)
 ```
 
-Then restart django backend:
-* Stop the running process by typing ```CTRL+C```
-* Run the command ```docker-compose up``` to apply the above change
 
 ### User modification
 Modify a user by clicking on the user’s related USER PROFILE checkbox. Apply the necessary changes and click on SAVE.
@@ -244,7 +241,6 @@ Rebuild search should be executed when the data related to project application a
 docker-compose exec django python manage.py rebuild_search
 ```
 
-
 ## Enable logging
 Django uses Python’s built-in logging module to perform system logging. In order to be configured, LOGGING is used to define a dictionary of logging setting. These settings describe the loggers, handlers, filters and formatters for logging setup and the log levels and other properties that the components should have and can be found under ```django/tiip/setting.py``` file. Fore more information, see the [official Django documentation)(https://docs.djangoproject.com/en/4.0/topics/logging/#topic-logging-parts-handlers).
 
@@ -252,7 +248,7 @@ Django uses Python’s built-in logging module to perform system logging. In ord
 Debug mode is recommended to be set to True while developing locally and false when deploying a site into production. Debug mode is set and can be modified in ```django/tiip/settings.py``` file. One of the main features of debug mode is the display of detailed error pages. As a security measure, Django will not include settings that might be sensitive, such as SECRET_KEY. For more information, see the [official Django documentation](https://docs.djangoproject.com/en/4.0/ref/settings/).
 
 ## Upgrade DB
-Django uses Migrations as a way of propagating changes made on models into the database schema. For more information, see https://docs.djangoproject.com/en/4.0/topics/migrations/. The following commands should run on the local development environment in order to interact with migrations and Django’s handling of database schema.
+Django uses Migrations as a way of propagating changes made on models into the database schema. For more information, see [Django Migrations](https://docs.djangoproject.com/en/4.0/topics/migrations/). The following commands should run on the local development environment in order to interact with migrations and Django’s handling of database schema.
 ```bash
 docker-compose exec django python manage.py makemigrations
 docker-compose exec django python manage.py migrate
