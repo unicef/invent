@@ -33,13 +33,3 @@ For a better understanding of the present document, the following table provides
 * - PDM
   - Physical Data Model
 ```
-
-<!---
-```{list-table} Definitions
-:header-rows: 1
-:name: definitions-table
-
-* - Definition
-  - Description
-```
--->
