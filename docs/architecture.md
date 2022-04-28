@@ -173,7 +173,3 @@ middleware: ['auth', 'reset', 'tracking'],
 - vue-leaflet: register `leaflet` map components globally
 - vuex-geolocation: register `vuex-geolocation` globally
 - watchHead: fix for a strange issue (find more info in the code)
-
-### Permission
-
-There are several permission 
