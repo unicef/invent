@@ -21,6 +21,8 @@ caption: Main features
 ---
 feature_phases
 feature_translation
+django_admin
+simple_feedback
 Changelog / Versioning / Snapshots
 Innovation performance page
 Organisation specialty
