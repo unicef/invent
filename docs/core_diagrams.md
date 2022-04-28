@@ -1,11 +1,9 @@
  # Core Diagrams
  The architecture overview diagram is defined according to C4 model by the following viewpoints :
 * The Level 1: A System Context diagram provides a starting point, showing how the software system in scope fits into the world around it;
-*The Level 2: A Container diagram zooms into the software system in scope, showing the high-level technical building blocks;
+* The Level 2: A Container diagram zooms into the software system in scope, showing the high-level technical building blocks;
 * The Level 3: A Component diagram zooms into an individual container, showing the components inside it;
 * The Level 4: A code (e.g. UML class) diagram can be used to zoom into an individual component, showing how that component is implemented.
-
-The Architecture Decisions (see {ref}`myst_cheatsheet`) are evident on the design and software solutions chosen.
 
 ## System Context diagram
 The [System Context Diagram](system-context-diagram) shows the system context of the INVENT system. A system context diagram defines the boundary between the system or part of a system, and its environment, showing the actors and system entities that interact with it. The yellow parts show the actors and roles that interact with the system. The grey parts are external systems which the INVENT System shall interact with and are not described in the following sections.
@@ -79,7 +77,7 @@ The following Container diagram zooms into the internals of the INVENT System, s
 * - Frontend
   - Backend/Django
   - JSON/HTTP API calls
-  - Frontend uses django api to fetch and save all the information for INVENT application. The API can be accessed as pOAS](http://localhost/api/docs/) or [Redoc](http://localhost/api/devdocs/). Screenshots are provided as {ref}`annex_6`) and {ref}`annex_7`) respectively.
+  - Frontend uses django api to fetch and save all the information for INVENT application. The API can be accessed as pOAS](http://localhost/api/docs/) or [Redoc](http://localhost/api/devdocs/).
 * - Backend/Django
   - Database/PostgreSQL
   - TCP Unix socket creation
@@ -269,7 +267,7 @@ The following scripts are supported (configured in frontend/package.json):
 
 
 ### Database Component diagram
-For the DB physical data model, see {ref}`supplementary_diagrams`).
+For the DB physical data model, see [](supplementary_diagrams.md).
 
 
 
