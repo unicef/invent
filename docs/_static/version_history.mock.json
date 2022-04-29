@@ -1,0 +1,344 @@
+{
+  "id": 1645,
+  "title": "EduTrac - Online Information Platform",
+  "created": "2022-04-06",
+  "changed": "2022-04-16",
+  "currentVersion": 5,
+  "status": "draft",
+  "teamMember": true,
+  "versions": [
+    {
+      "component": "TimelineItem",
+      "status": "draft",
+      "version": 6,
+      "changed": "2022-01-23",
+      "user": {
+        "id": 2143,
+        "name": "Ian Doe",
+        "email": "id@pulilab.com",
+        "colorScheme": {
+          "text": "#FFFFFF",
+          "background": "#CB7918",
+          "border": "none"
+        }
+      },
+      "changes": [
+        {
+          "component": "ValueCoverImage",
+          "key": 0,
+          "field": "cover",
+          "fieldTitle": " Initiative’s cover image",
+          "values": {
+            "added": {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "imageUrl": "https://www.unicef.org/sites/default/files/styles/media_large_image/public/UN0501467_0.JPG?itok=42_yOWtV"
+            },
+            "removed": {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "imageUrl": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "component": "TimelineItem",
+      "status": "unpublished",
+      "version": 5,
+      "changed": "2022-01-23",
+      "user": {
+        "name": "Ian Doe",
+        "email": "id@pulilab.com",
+        "colorScheme": {
+          "text": "#FFFFFF",
+          "background": "#CB7918",
+          "border": "none"
+        }
+      },
+      "changes": [
+        {
+          "component": "SimpleMessage",
+          "key": 0,
+          "message": "The initiative is only available as a Draft now."
+        }
+      ]
+    },
+    {
+      "component": "TimelineItem",
+      "status": "draft",
+      "version": 4,
+      "changed": "2022-01-23",
+      "user": {
+        "name": "Ian Doe",
+        "email": "id@pulilab.com",
+        "colorScheme": {
+          "text": "#FFFFFF",
+          "background": "#CB7918",
+          "border": "none"
+        }
+      },
+      "changes": [
+        {
+          "component": "ValueText",
+          "key": "7zb9dg50",
+          "field": "implementation_overview",
+          "fieldTitle": "Overview of the digital health implementation",
+          "values": [
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "value": "The platform is being deployed by UNICEF in partnership with MoPSE in order to collect information from School Heads for better and more timely decision making and corrective actions. eduTrac is a mobile phone-based data collection platform that collects data on key education indicators such as pupil and teachers attendance, school supervision visits, and school infrastructure in."
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": "The platform is being deployed by UNICEF in partnership with MoPSE in order to collect information from School Heads for better and more timely decision making and corrective actions. eduTrac is a mobile phone-based data collection platform that collects data on key education indicators such as pupil and teachers attendance, school supervision visits, and school infrastructure in order to strengthen the monitoring of education service delivery and improve the quality of education."
+            }
+          ]
+        },
+        {
+          "component": "ValueTags",
+          "key": "1jytwbwj",
+          "field": "partners",
+          "fieldTitle": "Who else should be able to modify this initiative's entry?",
+          "values": [
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "tags": ["Torben Thomsen (t@pulilab.com)","Christian Buus Nielsen (c@pulilab.com)"]
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "tags": ["Gyorgy Fekete (f@pulilab.com)","Gergo Kovacs (gk@pulilab.com)","Greg Monroe (gmonroe@unicef.org)"]
+            }
+          ]
+        },
+        {
+          "component": "ValuePartners",
+          "key": "79mg1y19",
+          "field": "partners",
+          "fieldTitle": "Partners",
+          "values": [
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "partner": {
+                "type": "Investment",
+                "name": "Pulilab",
+                "contact": "Welldone Johnny",
+                "email": "wj@pulilab.com",
+                "website": "https://pulilab.com"
+              }
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "partner": {
+                "type": "Investment",
+                "name": "Pulilab",
+                "contact": "Welldone Johnny",
+                "email": "wj@pulilab.com",
+                "website": "https://pulilab.com"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "component": "TimelineItem",
+      "status": "draft",
+      "version": 3,
+      "changed": "2022-01-23",
+      "user": {
+        "name": "Joe Doe",
+        "email": "jd@pulilab.com",
+        "colorScheme": {
+          "text": "#FFFFFF",
+          "background": "#CB7918",
+          "border": "none"
+        }
+      },
+      "changes": [
+        {
+          "component": "ValuePhases",
+          "key": "aar4d3oh",
+          "field": "",
+          "fieldTitle": "Completion of initiative phases",
+          "values": [
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "value": {
+                "phase": "‘Piloting and Evidence Generation’ on 20-10-2021",
+                "note": "Ambitioni dedisse scripsisse iudicaretur."
+              }
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": {
+                "phase": "‘Piloting and Evidence Generation’ on 21-10-2021",
+                "note": "Etiam habebis sem dicantur magna mollis euismod."
+              }
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": {
+                "phase": "‘Deploying’ on 15-01-2022",
+                "note": "-"
+              }
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": {
+                "phase": "‘Handover or Complete’ on 14-02-2022",
+                "note": "It’s complete."
+              }
+            }
+          ]
+        },
+        {
+          "component": "ValueText",
+          "key": "bn776yhj",
+          "field": "",
+          "fieldTitle": "UNICEF Office",
+          "values": [
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": "N/A"
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": "UNICEF Uganda, Kampala, Uganda, ESAR"
+            }
+          ]
+        },
+        {
+          "component": "ValueText",
+          "key": "0vt9ifle",
+          "field": "implementation_overview",
+          "fieldTitle": "Overview of the digital health implementation",
+          "values": [
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "value": "The platform is being deployed by UNICEF in partnership with MoPSE in order to collect information from School Heads for better and more timely decision making and corrective actions. eduTrac is a mobile phone-based data collection platform that collects data on key education indicators such as pupil and teachers attendance, school supervision visits, and school infrastructure in order to strengthen the monitoring of education service delivery and improve the quality of education."
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": "The platform is being deployed by UNICEF in partnership with MoPSE in order to collect information from School Heads for better and more timely decision making and corrective actions. eduTrac is a mobile phone-based data collection platform that collects data on key education indicators such as pupil and teachers attendance, school supervision visits, and school infrastructure in order to strengthen the monitoring of education service delivery and improve the quality of education."
+            }
+          ]
+        },
+        {
+          "component": "ValueTags",
+          "key": "hd97risg",
+          "field": "",
+          "fieldTitle": "UNICEF Innovation categories this initiative applies to.",
+          "values": [
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "tags": ["Frugal Innovation"]
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "tags": ["Innovative Financing", "Physical Product Innovation"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "component": "TimelineItem",
+      "status": "draft",
+      "version": 2,
+      "changed": "2022-01-23",
+      "user": {
+        "name": "Joe Doe",
+        "email": "jd@pulilab.com",
+        "colorScheme": {
+          "text": "#FFFFFF",
+          "background": "#CB7918",
+          "border": "none"
+        }
+      },
+      "changes": [
+        {
+          "component": "ValueWebsites",
+          "key": "wa493mtl",
+          "field": "",
+          "fieldTitle": "Links to website/Current Documentation",
+          "values": [
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": {
+                "website": "The female frontline",
+                "url": "https://www.unicef.org/coronavirus/the-female-frontline"
+              }
+            },
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "value": {
+                "website": "Delivering assistance in Afghanistan as winter sets in",
+                "url": "https://www.unicef.org/stories/delivering-assistance-afghanistan-winter-sets"
+              }
+            },
+            {
+              "changeType": "new",
+              "changeTypeIcon": "el-icon-circle-plus-outline",
+              "value": {
+                "website": "Children in eastern Ukraine fear for the future",
+                "url": "https://www.unicef.org/stories/children-eastern-ukraine-fear-future"
+              }
+            },
+            {
+              "changeType": "old",
+              "changeTypeIcon": "el-icon-remove-outline",
+              "value": {
+                "website": "Winter brings more woes for children in eastern Ukraine",
+                "url": "https://www.unicef.org/ukraine/en/stories/winter-brings-more-woes-children-eastern-ukraine"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "component": "TimelineItem",
+      "status": "noversionPublished",
+      "version": 0,
+      "changed": "03/09/2021",
+      "user": null,
+      "changes": []
+    },
+    {
+      "component": "TimelineItemNoData",
+      "status": "empty",
+      "version": -1,
+      "changed": "",
+      "user": null,
+      "changes": []
+    },
+    {
+      "component": "TimelineItem",
+      "status": "created",
+      "version": -2,
+      "changed": "06/04/2022",
+      "user": null,
+      "changes": []
+    }
+  ]
+}

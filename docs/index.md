@@ -19,19 +19,19 @@ administration_manual
 ---
 caption: Main features
 ---
-feature_phases
-feature_translation
 django_admin
 simple_feedback
 versioning
-Changelog / Versioning / Snapshots
-Innovation performance page
-Organisation specialty
-Donor concept
-Donor Viewer
-Country member / admin / viewer
-Country focal point admin
-Country maps
-Permission system
 Project Import
+fe_phases
+feature_translation
+fe_changelog
+fe_innovation_performance_page
+fe_organisation
+fe_donor_concept
+fe_donor_viewer
+fe_countr_member
+fe_contry_focal_point
+fe_country_maps
+fe_permission_system
 ```
