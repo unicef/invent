@@ -23,6 +23,7 @@ feature_phases
 feature_translation
 django_admin
 simple_feedback
+versioning
 Changelog / Versioning / Snapshots
 Innovation performance page
 Organisation specialty
@@ -32,4 +33,5 @@ Country member / admin / viewer
 Country focal point admin
 Country maps
 Permission system
+Project Import
 ```
