@@ -19,11 +19,11 @@ administration_manual
 ---
 caption: Main features
 ---
-django_admin
 api_docs
-simple_feedback
+django_admin
 versioning
 kpi
+simple_feedback
 Project Import
 fe_phases
 feature_translation
