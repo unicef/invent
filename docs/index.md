@@ -20,8 +20,10 @@ administration_manual
 caption: Main features
 ---
 django_admin
+api_docs
 simple_feedback
 versioning
+kpi
 Project Import
 fe_phases
 feature_translation
