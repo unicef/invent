@@ -24,11 +24,10 @@ django_admin
 versioning
 kpi
 simple_feedback
-Project Import
+innovation_performance_page
+import_interface
 fe_phases
 feature_translation
-fe_changelog
-fe_innovation_performance_page
 fe_organisation
 fe_donor_concept
 fe_donor_viewer
