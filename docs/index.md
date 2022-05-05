@@ -21,11 +21,10 @@ caption: Main features
 ---
 api_docs
 django_admin
-versioning
+feature_versioning
 kpi
-simple_feedback
-innovation_performance_page
-import_interface
+feature_import
+feature_export
 fe_phases
 feature_translation
 fe_organisation
@@ -35,4 +34,6 @@ fe_countr_member
 fe_contry_focal_point
 fe_country_maps
 fe_permission_system
+simple_feedback
+innovation_performance_page
 ```

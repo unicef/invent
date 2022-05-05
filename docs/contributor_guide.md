@@ -4,12 +4,12 @@
 The following Code Style Guides and Linters should be used to format code before submitting a pull request:	
 * Backend: 
   * Cover new code with tests cases and execute the test suite (see [](installation_manual.md)).
-  * Code Style Guide: PEP 8 Style Code  for Python code.
+  * Code Style Guide: PEP 8 Style Code for Python code.
   * Linter: Flake8  should be used. Configuration can be found in django/.flake8 . In order to invoke the linter, execute from <GIT_REPOSITORY_NAME> the following: ```docker-compose exec django flake8```
 * Frontend: 
   * Cover new code with tests cases and execute the test suite: ```yarn test```
-  * Code Style Guide: Vue.js style guide  should be used. 
-  * Linter: ESLint should be used. Configuration found in frontend/.eslintrc.js. It contains standard JS rules. In order to invoke the linter, execute from <GIT_REPOSITORY_NAME> the following (configured in frontend/package.json): ```yarn precommit```
+  * Code Style Guide: Vue.js style guide should be used. 
+  * Linter: ESLint should be used. Configuration found in frontend/.eslintrc.js. It contains standard JS rules. In order to invoke the linter, execute `yarn precommit` in the `frontend ` folder.
 
 
 ## Git branching model
@@ -41,3 +41,9 @@ To run those new migrations that were created:
 docker-compose exec django python manage.py migrate
 ```
 
+### Frontend local development environment
+
+After cloning the repository navigate to `frontend` folder.
+- install the packages: `yarn install`
+- copy `.env.template` into `.env`
+- 

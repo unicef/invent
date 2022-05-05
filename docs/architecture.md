@@ -94,48 +94,23 @@ and migrations and want to keep data:
 
 ### Frontend
 
-This is a project based on [NuxtJS](https://nuxtjs.org/) and [Element](https://element.eleme.io/#/en-US) UI library.
+This is a project based on [NuxtJS 2](https://nuxtjs.org/) and [Element](https://element.eleme.io/#/en-US) UI library.
 
 #### Requirements
 
 It is recommended to prepare the following tools and packages.
 
-- [yarn](https://yarnpkg.com/), default package manager for our projects.
+- Node.js [v15.8.0](https://nodejs.org/dist/v15.8.0/) (might with newer versions too).
+- [yarn](https://yarnpkg.com/) as package manager.
 - [Visual studio code](https://code.visualstudio.com/), recommended, not an obligation. Recommended extensions:
-  - [ESLint]()
-  - [GitLens]()
-  - [Prettier]()
-  - [Vue Peek]()
-  - [Markdown Preview Github Styling]() to help in making nice technical documentations (like this)
-- [nvm](https://github.com/nvm-sh/nvm) is node version manager that will allow you to manage your node versions easily for projects with a `.nvmrc` attach to it (our projects). For a deeper integration and automated use of `nvm use` when you enter in the project folder, check [this](https://github.com/nvm-sh/nvm#deeper-shell-integration) out. (this is not working on Windows machines though)
-- [Docker](https://www.docker.com/), we use docker a lot.
-- On Windows machines further tools are needed
+  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+  - [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+  - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+  - [Vue Peek](https://marketplace.visualstudio.com/items?itemName=dariofuzinato.vue-peek)
+  - [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur)
+  - [Markdown Preview Github Styling](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles) to help in making nice technical documentations (like this)
+- [nvm](https://github.com/nvm-sh/nvm) is a node version manager that will allow you to manage your node versions easily for projects with a `.nvmrc` attached to the projects. For a deeper integration and automated use of `nvm use` when you enter in the project folder, check [this](https://github.com/nvm-sh/nvm#deeper-shell-integration) out. (this is not working on Windows machines though)
+- [Docker](https://www.docker.com/), docker is used a lot.
+- On Windows machines further tools might be needed
   - [Power Shell 7](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows) because of proper UTF-8 handling (sql dumps and other scripts)
-
-#### Quick Frontend Setup
-
-``` bash
-# install dependencies
-$ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-```
-
-#### .env template
-
-HOST=localhost  
-PORT=3000  
-NODE_ENV=dev  
-SENTRY_PUBLIC_DSN=""  
-SENTRY_DSN=""  
-AZURE_CLIENT_ID=  
-AZURE_REDIRECT_URI=  
-AZURE_TENANT=  
-MATOMO_URL=  
-MATOMO_SITEID=  
-MATOMO_DEBUG=
+  - [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) with Ubuntu 20

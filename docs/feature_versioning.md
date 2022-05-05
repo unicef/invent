@@ -89,7 +89,6 @@ The Timeline component handles the proper UI flow.
 **Changelog anatomy**
 :::
 
-
 ### Components
 
 ```
@@ -141,7 +140,7 @@ The dialog can be displayed via the `open(projectParams)` method passing the pro
 ```
 #### Data structure
 
-The data structure can be seen in the example [mock data](_static/version_history.mock.json).
+The data structure can be seen in the example [mock data](./_static/version_history.mock.json).
 
 #### Data preparation
 
