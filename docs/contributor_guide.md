@@ -41,9 +41,13 @@ To run those new migrations that were created:
 docker-compose exec django python manage.py migrate
 ```
 
-### Frontend local development environment
+## Frontend local development environment
+
+### Prerequisites
+
+As described in the [frontend part](architecture.md#requirements) of the architecture
 
 After cloning the repository navigate to `frontend` folder.
 - install the packages: `yarn install`
 - copy `.env.template` into `.env`
-- 
+- either import a database dump or create 

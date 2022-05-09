@@ -100,7 +100,7 @@ This is a project based on [NuxtJS 2](https://nuxtjs.org/) and [Element](https:/
 
 It is recommended to prepare the following tools and packages.
 
-- Node.js [v15.8.0](https://nodejs.org/dist/v15.8.0/) (might with newer versions too).
+- Node.js [v15.8.0](https://nodejs.org/dist/v15.8.0/) (might work with newer versions too).
 - [yarn](https://yarnpkg.com/) as package manager.
 - [Visual studio code](https://code.visualstudio.com/), recommended, not an obligation. Recommended extensions:
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
@@ -114,3 +114,66 @@ It is recommended to prepare the following tools and packages.
 - On Windows machines further tools might be needed
   - [Power Shell 7](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows) because of proper UTF-8 handling (sql dumps and other scripts)
   - [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) with Ubuntu 20
+
+
+#### Data flow
+
+[Nuxt Directory Structure](https://nuxtjs.org/docs/get-started/directory-structure) is used throughout the application. So far no custom directory was needed.
+
+##### Store
+
+We are using default Nuxt store management system (`store` folder). Further information can be found in the [official documentation](https://nuxtjs.org/docs/directory-structure/store). Stores:
+- charts: used in displaying phases
+- countries: stores the country list and data that is used for the map 
+- dashboard: contains data for the inventory list and search components
+- filters: used to manage saved filters in search component
+- landing: landing page map, search, news feed 
+- layout: dialog states
+- matrixes: portfolio matrix
+- offices: office lists
+- portfolio: portfolio related data (lists, columns etc.)
+- project: current display or edited project
+- projects: project lists
+- search: search fields
+- system: system store
+- user: logged in user profile and account actions
+
+##### Server calls
+
+No central service or repository system is used in the project, calls to the servers are used where they're needed via the [nuxt/axios](https://axios.nuxtjs.org/) module.  
+In the `axios.js` plugin the `token` and `language` is set in the `onRequest` interceptor before initiating the call.
+
+##### Middleware
+
+There's not many or complex [middleware](https://nuxtjs.org/docs/directory-structure/middleware) in the application. The order of the middlewares are defined in `nuxt.config.js`
+
+```js
+middleware: ['auth', 'reset', 'tracking'],
+```
+
+- auth: check if user is logged on 
+- defaultOrg: set default organisation
+- importRestriction: route guard for the import page
+- isLoggedIn: if not authenticated, redirect to login page
+- languageCheck: try to set the application language to match the user's profile
+- permissions: route guard for the portfolio pages
+- profile: redirect new users to profile page
+- reset: guest users (not logged in) are allowed to `auth`, `login` and `reset password` pages
+- tracking: set userid to matomo tracking service
+
+##### Plugins
+
+- axios: axios interceptor
+- charts: provide the `LineChart` as global component
+- directives: click `outside` and `paste` directives used for `TeamSelector` component
+- element: register Element UI and some custom components globally
+- filters: vue filters (`simpleDateFormat`, `formatNumber`)
+- i18n: register global `translate` component
+- vee-validate: a special fix, see comment
+- vue-leaflet: register `leaflet` map components globally
+- vuex-geolocation: register `vuex-geolocation` globally
+- watchHead: fix for a strange issue (find more info in the code)
+
+#### Permission
+
+There are several permission 
