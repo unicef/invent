@@ -2,6 +2,14 @@
 
 ### Backend
 
+We utilize both [Django translation](https://docs.djangoproject.com/en/4.0/topics/i18n/translation/) and [model translations](https://github.com/deschler/django-modeltranslation) on the backend.
+
+The UI for Django translation is available at `/translation` and it's using the [Rosetta](https://django-rosetta.readthedocs.io/) engine. Please login through `/admin` first to use Rosetta.
+
+The model translations are available on the django admin for the applicable models.
+
+For usage and administration please follow [](administration_manual.md#translations).
+
 ### Frontend
 
 For translation, we use a system based on `.po` extractions with [easygettext](https://www.npmjs.com/package/easygettext). In order to extract all the literals, we need to implement extraction methods in our components.
