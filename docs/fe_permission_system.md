@@ -66,30 +66,30 @@ Read only if:
 
 There are several user roles that a userprofile can choose from (only one at a time):
 - **Implementer** - the default user who has an account
-- **Investor Viewer**
+- **Investor/Donor Viewer**
     - Can read/export responses to private investor questions
-- **Investor Admin**
+- **Investor/Donor Admin**
   - Can read/export responses to private investor-specific questions
   - Can create and delete investor-specific questions
   - Can select which questions are private and public
   - Can approve users to join the investor page
-- **Investor System Admin**
+- **Investor/Donor System Admin**
   - Can read/export responses to private investor-specific questions
   - Can create and delete investor-specific questions
   - Can select which questions are private and public
   - Can approve users to join the investor page
   - Can customize and update investor home page
-- **Government Viewer**
+- **Country Viewer**
   - Can read/export responses to private Government questions
   - Can view when an initiative is approved/declined
-- **Government Admin**
+- **Country Admin**
   - Can update Government map data
   - Can create and delete Government-specific questions
   - Can select which questions are private and public
   - Can read/export responses to private Government questions
   - Can approve users to join the Government page
   - Can approve initiatives if the initiative approval feature is active
-- **Government System Admin**
+- **Country System Admin**
   - Can update Government map data
   - Can create and delete Government-specific questions
   - Can select which questions are private and public
