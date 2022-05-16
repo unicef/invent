@@ -3,6 +3,13 @@ The KPI django application is responsible for calculating and storing relevant k
 It's built to be extensible and reusable. It serves the calculated data through its APIs. 
 In this section we will list the currently available KPI models and APIs.
 
+:::{figure-md} system-context-diagram
+
+<img src="./_static/images/kpi_model.png" alt="system-context-diagram" class="bg-primary mb-1" width="600px">
+
+**Model Diagram**
+:::
+
 ## LogBase abstract model
 This should be the base of any KPI models since it has the attributes to store data and timestamp.
 
