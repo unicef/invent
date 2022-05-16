@@ -25,8 +25,6 @@ fe_permission_system
 feature_contry_focal_point
 feature_phases
 feature_translation
-fe_donor_viewer
-fe_countr_member
 fe_contry_focal_point
 fe_country_maps
 feature_versioning
