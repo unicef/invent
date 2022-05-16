@@ -3,7 +3,7 @@
 There are two ways to export initiative.
 
 ### From Django admin
-
+See [](django_admin.md) for admin exports. 
 
 ### From application
 
