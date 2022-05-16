@@ -52,14 +52,14 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'
 
-html_theme_options = {
-    'page_width': '1100px',  # default: 940 px
-    'caption_font_size': '1.5em',
-    'caption_font_family': 'Menlo',
-    'description': 'INVENT provides a one-stop-shop to explore, discover, connect and contribute to the landscape of '
-                   'Technology for Development (T4D) and Innovations across UNICEF, while improving portfolio '
-                   'management and decision making at all levels.'
-}
+# html_theme_options = {
+#     'page_width': '1100px',  # default: 940 px
+#     'caption_font_size': '1.5em',
+#     'caption_font_family': 'Menlo',
+#     'description': 'INVENT provides a one-stop-shop to explore, discover, connect and contribute to the landscape of '
+#                    'Technology for Development (T4D) and Innovations across UNICEF, while improving portfolio '
+#                    'management and decision making at all levels.'
+# }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
