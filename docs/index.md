@@ -7,6 +7,7 @@ caption: Project
 ---
 intro
 architecture
+ui_design
 core_diagrams
 tools
 supplementary_diagrams
@@ -21,18 +22,19 @@ caption: Main features
 ---
 api_docs
 django_admin
-fe_permission_system
+feature_permission
 feature_contry_focal_point
 feature_phases
 feature_translation
-fe_contry_focal_point
-fe_country_maps
+feature_country_maps
 feature_versioning
-kpi
+feature_kpi
 feature_import
 feature_export
-simple_feedback
-innovation_performance_page
+feature_search
+feature_landing.md
+feature_innovation_performance_page.md
+feature_simple_feedback
 ```
 
 ```{toctree}

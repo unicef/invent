@@ -45,7 +45,7 @@ docker-compose exec django python manage.py migrate
 
 ### Prerequisites
 
-As described in the [frontend part](architecture.md#requirements) of the architecture
+As described in the [frontend part](architecture.md#frontend) of the architecture.
 
 After cloning the repository navigate to `frontend` folder.
 - install the packages: `yarn install`

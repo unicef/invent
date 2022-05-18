@@ -1,4 +1,4 @@
- # Django Admin features
+# Django Admin features
 The following list is features that a superuser or staff member (`is_superuser`, `is_staff`) can use on the `/admin` UI
  
 ## Auth Token > Tokens

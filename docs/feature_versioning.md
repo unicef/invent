@@ -2,7 +2,7 @@
 Project (Initiative) versioning is enabled by default.
 All fields that are in the `project.data` or `project.draft` `JSONFields` are versioned.
 
-#### Versioning excludes the following attributes
+## Versioning excludes the following attributes
 - `team`
 - `viewers`
 - `favorited_by`
@@ -10,7 +10,7 @@ All fields that are in the `project.data` or `project.draft` `JSONFields` are ve
 - `featured_rank`
 - `image`
 
-#### Endpoints triggering a new version
+## Endpoints triggering a new version
 Successful calls to these endpoints will create a new version.
 - Project Create `/api/projects/draft/<int:country_office_id>/`
 - Publish `/api/projects/publish/<int:project_id>/<int:country_office_id>/`
@@ -25,10 +25,10 @@ If you publish or update draft with the exact same payload as before, new versio
 
 ## Django Admin
 
-#### Project > Projects
+### Project > Projects
 Click on a project (initiative). Versions are inlined in order.
 
-#### Project > Project versions
+### Project > Project versions
 Click on a particular project version.
 
 ## Versioning History API a.k.a Changelog

@@ -6,7 +6,7 @@ Before the installation make sure that the DEV-local environment has properly in
 
 ```{list-table} Environment Prerequisites
 :header-rows: 1
-:name: frontend-modules-table
+:name: environment-rerequisites-table
 
 * - Prerequisite
   - Version
@@ -163,7 +163,7 @@ Configure database connection in ```django/tiip/settings.py```:
 here:
 ```{list-table} Backend .env contents description
 :header-rows: 1
-:name: backend-env-table
+:name: backend-contents-description-table
 
 * - Location
   - Description
@@ -191,7 +191,7 @@ This configuration assumes that PostgreSQL trusts connections from localhost els
 Configure emails:
 ```{list-table} Backend .env contents description
 :header-rows: 1
-:name: backend-env-table
+:name: backend-emails-table
 
 * - Location
   - Description

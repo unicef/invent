@@ -1,6 +1,6 @@
-## Translation (i18n)
+# Translation (i18n)
 
-### Backend
+## Backend
 
 We utilize both [Django translation](https://docs.djangoproject.com/en/4.0/topics/i18n/translation/) and [model translations](https://github.com/deschler/django-modeltranslation) on the backend.
 
@@ -10,17 +10,17 @@ The model translations are available on the django admin for the applicable mode
 
 For usage and administration please follow [](administration_manual.md#translations).
 
-### Frontend
+## Frontend
 
 For translation, we use a system based on `.po` extractions with [easygettext](https://www.npmjs.com/package/easygettext). In order to extract all the literals, we need to implement extraction methods in our components.
 
-#### Files to take in consideration
+### Files to take in consideration
 
 - `gettext.sh`: extract all text marked it as a translate tag and set it up in a `.po` file for backend use. Backend generate translation inputs with [Rosetta](https://django-rosetta.readthedocs.io/).
 - `TranslateWrapper.vue`: Create the tags and filters that can be used to map the translation.
 - `langReq.js`: Make API request to backend to download files that will be used by Nuxt.
 
-#### Usage
+### Usage
 
 To work around on enrich html and translation tags, do the following:
 
@@ -41,9 +41,9 @@ this.$gettext('some text', {/*params*/})
 :::
 
 
-#### Extraction
+### Extraction
 
-##### Setup for Windows 10/11
+#### Setup for Windows 10/11
 
 Install WSL2 on Windows 10/11 as described in the [official Microsoft Guide](https://docs.microsoft.com/en-us/windows/wsl/install)
 
@@ -57,7 +57,7 @@ Then go to the working directory of the project, and execute the following comma
 
 `sudo npm install yarn --global`
 
-##### Extract translatable texts
+#### Extract translatable texts
 Make sure you installed all the packages by running `yarn` in the **frontend** folder.
 
 Run `yarn translation:extract`

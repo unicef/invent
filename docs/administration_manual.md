@@ -172,9 +172,9 @@ Emails are sent to notify users or superusers in order to take some actions on p
 ## Scheduled Tasks
 There are some scheduled tasks configured in the application regarding actions where notification mails should be sent. These tasks are defined under ```django/project/tasks.py```: 
 
-```{list-table} Docker Images
+```{list-table} Scheduled Project Tasks
 :header-rows: 1
-:name: docker-images-table
+:name: scheduled-project-tasks-table
 
 * - Task Name
   - Description
@@ -203,9 +203,9 @@ There are some scheduled tasks configured in the application regarding actions w
 ```
 
 and ```django/user/tasks.py```:
-```{list-table} Docker Images
+```{list-table} Scheduled User Tasks
 :header-rows: 1
-:name: docker-images-table
+:name: scheduled-user-tasks-table
 
 * - Task Name
   - Description

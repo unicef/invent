@@ -9,9 +9,9 @@
 
 Feel free to create group permissions if you have external translator clients. The group permission can be used to give access to the model translations.
 
-:::{figure-md} translations1
+:::{figure-md} django_admin_group_perm_translators
 
-<img src="./_static/images/django_admin_group_perm_translators.png" alt="system-context-diagram" class="bg-primary mb-1" width="500px">
+<img src="./_static/images/django_admin_group_perm_translators.png" alt="Group permissions for translators" class="bg-primary mb-1" width="500px">
 
 **Group permission for Translators**
 :::
@@ -98,3 +98,13 @@ There are several user roles that a userprofile can choose from (only one at a t
   - Can approve initiatives if the initiative approval feature is active
   - Can customize and update Government home page
 - **Inventory User** - Deprecated role that was used for the previous import
+
+
+## Frontend
+
+Notable permissions:  
+- **Portfolio Manager** is regulated by `displayManager` computed property in `TopBar`
+- Editing a project is regulated by `isTeam` computed property in `ProjectBar`
+- **Country admin page** is regulated by `isUserCA` computed property in `UserDropdown`
+- **Investor admin page** is regulated by `isUserDA` computed property in `UserDropdown`
+- **Importing** is regulated by `isUserDA` computed property in `UserDropdown`

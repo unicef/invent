@@ -1,4 +1,4 @@
- # Core Diagrams
+# Core Diagrams
  The architecture overview diagram is defined according to C4 model by the following viewpoints :
 * The Level 1: A System Context diagram provides a starting point, showing how the software system in scope fits into the world around it;
 * The Level 2: A Container diagram zooms into the software system in scope, showing the high-level technical building blocks;
@@ -92,7 +92,7 @@ The following Container diagram zooms into the internals of the INVENT System, s
 ### External Interfaces
 ```{list-table} External Interfaces
 :header-rows: 1
-:name: invent-external-interfaces-table
+:name: invent-system-container-external-interfaces-table
 
 * - Source
   - Target
@@ -268,17 +268,3 @@ The following scripts are supported (configured in frontend/package.json):
 
 ### Database Component diagram
 For the DB physical data model, see [](supplementary_diagrams.md).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
