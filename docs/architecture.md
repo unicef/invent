@@ -113,7 +113,7 @@ It is recommended to prepare the following tools and packages.
 - [Docker](https://www.docker.com/), docker is used a lot.
 - On Windows machines further tools might be needed
   - [Power Shell 7](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows) because of proper UTF-8 handling (sql dumps and other scripts)
-  - [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) with Ubuntu 20
+  - [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install) with Ubuntu 20
 
 
 ### Data flow

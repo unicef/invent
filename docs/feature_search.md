@@ -18,9 +18,8 @@ We also map the state of the filter from store state into a local variable. This
     // more code
 ```
 So now we have a list as `this.regions` and the current selection `this.region`. The default to every filter query is set in the `frontend/store/search.js` on the definition of state:
-<details>
-<summary>state.js</summary>
-<pre>
+
+```js
 export const state = () => ({
   ...stateGenerator(),
   blockSearch: true,
@@ -37,19 +36,18 @@ export const state = () => ({
     // `his` eg: his=1&his=2
     region: '',
     // more code
-</pre>
-</details>
+```
 
 Then these loaded data fetched to the actual filter input:
 
-```html
+:::
 <filter-select
     :value="region"
     :items="regions"
     :placeholder="$gettext('Region') | translate"
     @change="handleSearch('region', $event, regions)"
 />
-```
+:::
 
 On the `@change` event we set a `handleSearch` search call which will update the filter in the store and reload the API endpoint for the search.
 
@@ -65,15 +63,15 @@ watch: {
 
 ## Frontend
 
-There's two almost identical component for search, call `AdvSearch`. These are differences between them:
+There's two almost identical component for search, called `AdvSearch`. These are differences between them:
 
 ### @components/dashboard/AdvSearch
 
 Used in **Inventory**
 
-This component has a url query interpreter for the filter. So if you copy the link of the current filter set, you can share a filtered view of the proejcts with someone else. So this file has the following additionally to handle the query in the link:
+This component has a url query interpreter for the filter. So if you copy the link of the current filter set, you can share a filtered view of the projects with someone else. So this file has the following additionally to handle the query in the link:
 - `...mapState` spread for all the shortened link query parameters
-- `handleSearch()` function which calls `setSearch()` which uses the store and sets the respective query parameters. The in the `handleSearch()` we invoke the `getSearchResult()` which calls the `getSearch()` and that is actually reloading the list of projects.
+- `handleSearch()` function which calls `setSearch()` which uses the store and sets the respective query parameters. Then in the `handleSearch()` we invoke the `getSearchResult()` which calls the `getSearch()` and that is actually reloading the list of projects.
 
 ### @components/search/AdvSearch
 

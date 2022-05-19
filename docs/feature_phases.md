@@ -2,8 +2,8 @@
 
 Phases are defined in **project structure** on the backend. Can be retreived via `/api/projects/structure/` endpoint. It is the `stages` field in the result.
 
-:::{admonition} Warning
-:class: warning
+:::{admonition} Info
+:class: info
 Beware, `phases` sometimes called `stages` throughout the application.
 :::
 
