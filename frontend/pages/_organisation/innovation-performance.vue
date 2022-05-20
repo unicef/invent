@@ -188,7 +188,7 @@ export default {
       }
       .SubContent {
         position: relative;
-        height: calc(100vh - 416px);
+        height: calc(100vh - 437px);
         overflow: hidden;
         &.fullscreen {
           height: calc(100vh - 253px);
