@@ -1,6 +1,6 @@
 <template>
   <div :class="`SectionWrapper ${fullScreen ? 'fullscreen' : ''}`">
-    <translate tag="h1">Innovation performance</translate>
+    <translate v-if="!fullScreen" tag="h1">Innovation performance</translate>
     <template v-if="true">
       <el-tabs v-model="mainTabs" class="EmbedWrapper">
         <div class="fullscreen-button" @click="fullScreen = !fullScreen">
@@ -137,6 +137,10 @@ export default {
       return this.nestedTabs.length > 0
     },
   },
+  mounted() {
+    document.getElementsByClassName('footer-bg')[0].remove()
+    document.getElementsByClassName('vue-django-feedback')[0].remove()
+  },
 }
 </script>
 
@@ -150,7 +154,7 @@ export default {
     position: fixed;
     inset: 0;
     z-index: 20;
-    padding: 0;
+    padding-top: 8px;
   }
   h1 {
     color: @colorBrandPrimary;
@@ -178,15 +182,16 @@ export default {
       font-size: @fontSizeLarger;
     }
     .SubWrapper {
+
       .el-tabs__item {
         font-size: @fontSizeBase;
       }
       .SubContent {
         position: relative;
-        height: calc(100vh - 461px);
+        height: calc(100vh - 437px);
         overflow: hidden;
         &.fullscreen {
-          height: calc(100vh - 320px);
+          height: calc(100vh - 253px);
         }
         iframe {
           position: absolute;
@@ -203,10 +208,10 @@ export default {
     }
     .EmbedContent {
       position: relative;
-      height: calc(100vh - 289px);
+      height: calc(100vh - 225px);
       overflow: auto;
       &.fullscreen {
-        height: calc(100vh - 150px);
+        height: calc(100vh - 62px);
       }
       iframe {
         position: absolute;
