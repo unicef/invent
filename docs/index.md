@@ -3,18 +3,44 @@ UNICEF is mandated by the United Nations General Assembly to advocate for the pr
 
 ```{toctree}
 ---
-caption: ToC
-maxdepth: 1
+caption: Project
 ---
-
-purpose
-scope
-target_audience
-abb_and_acronyms
-scenarios
+intro
+architecture
+ui_design
 core_diagrams
+tools
 supplementary_diagrams
 contributor_guide
 installation_manual
 administration_manual
+```
+
+```{toctree}
+---
+caption: Main features
+---
+api_docs
+django_admin
+feature_permission
+feature_contry_focal_point
+feature_phases
+feature_translation
+feature_country_maps
+feature_versioning
+feature_kpi
+feature_import
+feature_export
+feature_search
+feature_landing.md
+feature_innovation_performance_page.md
+feature_simple_feedback
+```
+
+```{toctree}
+---
+caption: Specialties
+---
+special_organisation
+special_donor
 ```

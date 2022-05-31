@@ -6,7 +6,7 @@ Before the installation make sure that the DEV-local environment has properly in
 
 ```{list-table} Environment Prerequisites
 :header-rows: 1
-:name: frontend-modules-table
+:name: environment-rerequisites-table
 
 * - Prerequisite
   - Version
@@ -53,10 +53,20 @@ Copy``` <GIT_REPOSITORY_NAME>/django/.env.template``` to ```<GIT_REPOSITORY_NAME
 ```bash
 SECRET_KEY=<a random generated long alphabetic string eg dskgsjgssosdsfhaplfnfbkjnndbff>
 DEBUG=False
+PROJECT_NAME=
+DEFAULT_FROM_EMAIL=
+REDIS_URL=redis
 AZURE_CLIENT_ID=
 AZURE_SECRET=
 AZURE_TENANT=
 AZURE_CALLBACK_URL=
+SENTRY_DSN=
+EMAIL_SENDING_PRODUCTION=False
+SIMPLE_FEEDBACK_SEND_TO=
+API_MAINTAINER=
+EMAIL_VALIDATOR_REGEX=
+ENABLE_API_REGISTRATION=True
+DEPLOY_VERSION=
 ```
 
 Where:
@@ -73,7 +83,13 @@ Where:
 * - ```DEBUG```
   - Mandatory
   - A boolean that turns on/off debug mode
-* - ```ZURE_CLIENT_ID```
+* - ```PROJECT_NAME```
+  - Mandatory
+  - Project name string, can include spaces
+* - ```REDIS_URL```
+  - Mandatory
+  - Redis URL string
+* - ```AZURE_CLIENT_ID```
   - Optional
   - The client(application) ID of an App Registration in the tenant. 
 * - ```AZURE_SECRET```
@@ -83,8 +99,29 @@ Where:
   - Optional
   - The Azure Active Directory tenant(directory) ID. 
 * - ```AZURE_CALLBACK_URL```
-  - Ooptional
-  - Azure login redirect URI 
+  - Optional
+  - Azure login redirect URI
+* - ```SENTRY_DSN```
+  - Optional
+  - DSN if you want to capture errors on Sentry [Sentry](https://sentry.io)
+* - ```EMAIL_SENDING_PRODUCTION```
+  - Optional
+  - A boolean that turns on/off email sending through SMTP (False by default)
+* - ```SIMPLE_FEEDBACK_SEND_TO```
+  - Mandatory
+  - Email address of administration who should get the Feedback module questions (Help(?) button on UI)
+* - ```API_MAINTAINER```
+  - Mandatory
+  - Email address of the API maintainer visible on /api/docs
+* - ```EMAIL_VALIDATOR_REGEX```
+  - Optional
+  - Regex that is used to limit email addresses that can be added as a team, viewer for an initiative
+* - ```ENABLE_API_REGISTRATION```
+  - Optional
+  - Signups can be disabled through the API eg. in production to only use SSO not the internal API (True by default)
+* - ```DEPLOY_VERSION```
+  - Optional
+  - Version number of the software deployed. Eg 1.0.0. Will be used on Django Admin header bar and on Seentry.
 ```
 
 Copy``` <GIT_REPOSITORY_NAME>/frontend/.env.template``` to ```<GIT_REPOSITORY_NAME>/frontend/.env``` and provide the appropriate values:
@@ -126,7 +163,7 @@ Configure database connection in ```django/tiip/settings.py```:
 here:
 ```{list-table} Backend .env contents description
 :header-rows: 1
-:name: backend-env-table
+:name: backend-contents-description-table
 
 * - Location
   - Description
@@ -154,7 +191,7 @@ This configuration assumes that PostgreSQL trusts connections from localhost els
 Configure emails:
 ```{list-table} Backend .env contents description
 :header-rows: 1
-:name: backend-env-table
+:name: backend-emails-table
 
 * - Location
   - Description
@@ -181,41 +218,6 @@ This command will use the default ```docker-compose.yml``` file
 ::::{important}
 Code changes are applied immediately in backend without the need to restart django.
 ::::
-
-## Tests Execution
-Change directory to the project’s root folder.
-```bash
-cd <GIT_REPOSITORY_NAME>
-```
-In order to execute all the tests, execute the following:
-```bash
-docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config. Coveragerc
-```
-
-Alternatively, in order to execute a test suite for a specific Django application (see section 3.3.1.1) execute the following:
-```bash
-docker-compose exec django ptw – <DJANGO_APPLICATION> -s –testmon
-```
-
-For example for ```django/project/tests```:
-```bash
-docker-compose exec django ptw -- project -s –testmon
-```
-
-For example, for ```django/core/tests.py```:
-```bash
-docker-compose exec django ptw -- core -s –testmon
-```
-
-There is also the option to run a single test from the application’s test suite by executing the following:
-```bash
-docker-compose exec django py.test -s -k <DJANGO_APPLICATION_TEST>
-```
-
-For example, for ```django/user/tests```:
-```bash
-docker-compose exec django py.test -s -k test_non_expiring_api_token_auth
-```
 
 ## Deploy backend
 ### Start containers
@@ -291,7 +293,7 @@ docker-compose exec django python manage.py createsuperuser
 
 Provide the required information, username, email and password.
 
-A superuser can create more superusers as described in {ref}(administration_manual).
+A superuser can create more superusers as described in [](administration_manual.md).
 
 ### Validate successful installation
 

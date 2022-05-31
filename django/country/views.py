@@ -130,6 +130,9 @@ class MapFileViewSet(CountryAdminPermissionMixin, mixins.CreateModelMixin, mixin
 class MapDownloadViewSet(viewsets.ViewSet):
     @staticmethod
     def map_download(request, country_id):
+        """
+        DEPRECATED: wambacjers-osm.website doesn't exist anymore
+        """
         obj = get_object_or_404(Country.objects.all(), id=country_id)
         country = pycountry.countries.get(alpha_2=obj.code)
         url = ("https://wambachers-osm.website/boundaries/exportBoundaries?"

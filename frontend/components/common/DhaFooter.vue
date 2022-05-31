@@ -4,14 +4,8 @@
     <div class="text">
       <span><translate>Disclaimer:</translate>&nbsp;</span>
       <span>
-        <translate>
-          All reasonable precautions have been taken by the UNICEF to verify the
-          information contained in this publication. However, the published
-          material is being distributed without warranty of any kind, either
-          expressed or implied. The responsibility for the interpretation and
-          use of the material lies with the reader. In no event shall the UNICEF
-          be liable for damages arising from its use. Please read our
-        </translate>
+        <span v-html="translateFooter">
+        </span>
       </span>
       <nuxt-link
         :to="localePath({ name: 'organisation-terms', params: $route.params })"
@@ -23,7 +17,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  computed: {
+    translateFooter () {
+      return this.$gettext('All reasonable precautions have been taken by the UNICEF to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the UNICEF be liable for damages arising from its use. Please read our')
+    }
+  }
+}
 </script>
 
 <style lang="less">
