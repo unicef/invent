@@ -274,7 +274,7 @@ msgid ""
 "more info visit: https://uni.cf/CLASSI"
 msgstr ""
 
-#: components/common/DhaFooter.vue:6
+#: components/common/DhaFooter.vue:4
 msgid ""
 "All reasonable precautions have been taken by the UNICEF to verify the "
 "information contained in this publication. However, the published material "
@@ -3888,7 +3888,7 @@ msgstr ""
 msgid "Terminations"
 msgstr ""
 
-#: components/common/DhaFooter.vue:16
+#: components/common/DhaFooter.vue:10
 msgid "Terms of use"
 msgstr ""
 
