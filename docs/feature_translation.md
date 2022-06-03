@@ -62,7 +62,7 @@ Make sure you installed all the packages by running `yarn` in the **frontend** f
 
 Run `yarn translation:extract`
 
-In the project's main folder, run `docker-compose exec django python manage.py update_translations master`, this will merge all translatable text and they show up in the translation admin.
+In the project's main folder, run `docker-compose exec django python manage.py update_translations master.pot`, this will merge all translatable text and they show up in the translation admin.
 
 ### Testing translations
 You can make translations in Rosetta. In local dev it can be access via [localhost/translation](http://localhost/translation).
