@@ -176,7 +176,7 @@ const config = {
   },
   proxy: {},
   axios: {
-    baseURL: 'http://nginx:9010/',
+    baseURL: 'http://localhost:80/',
     browserBaseURL: '/',
     credentials: true,
     retry: false,

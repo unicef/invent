@@ -1,5 +1,10 @@
 trigger:
-  - test_docker
+  branches:
+    include:
+      - test_docker
+  paths:
+    include:
+      - django/*
 
 variables:
   imageRepository: 'invent_django'
