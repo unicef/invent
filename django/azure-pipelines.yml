@@ -19,9 +19,9 @@ variables:
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
   ${{ if endsWith( variables['Build.SourceBranchName'], 'test_docker' ) }}:
-    tag: 'thisisatestag'
+    envtag: 'thisisatestag'
   ${{ else }}:
-    tag: 'anothertesttag'
+    envtag: 'anothertesttag'
 
 
 
@@ -36,7 +36,7 @@ stages:
           vmImage: $(vmImageName)
         steps:
           - script: |
-              echo "TAG IS $(tag)"
+              echo "TAG IS $(envtag)"
             displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
