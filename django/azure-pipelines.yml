@@ -2,6 +2,7 @@ trigger:
   branches:
     include:
       - test_docker
+      - feature/*
   paths:
     include:
       - django/*
@@ -17,6 +18,10 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'test_docker' ) }}:
+    tag: 'thisisatestag'
+  ${{ else }}:
+    tag: 'anothertesttag'
 
 
 
@@ -30,6 +35,9 @@ stages:
         pool:
           vmImage: $(vmImageName)
         steps:
+          - script: |
+              echo "TAG IS $(tag)"
+            displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
             inputs:
