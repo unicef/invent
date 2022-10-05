@@ -36,6 +36,7 @@ stages:
           vmImage: $(vmImageName)
         steps:
           - script: |
+              echo "BRANCH IS $(Build.SourceBranchName)"
               echo "TAG IS $(envtag)"
             displayName: 'Display tag'
           - task: Docker@2
