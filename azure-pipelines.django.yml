@@ -10,7 +10,7 @@ trigger:
 variables:
   imageRepository: 'invent_django'
   containerRegistry: 'uniinventacrdev.azurecr.io'
-  dockerfilePath: '../Dockerfile.django'
+  dockerfilePath: 'Dockerfile.django'
   tag: '$(Build.BuildId)'
   dockerRegistryServiceConnection: 'uniinventacrdev'
   # Agent VM image name
