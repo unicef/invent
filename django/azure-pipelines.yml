@@ -10,7 +10,7 @@ trigger:
 variables:
   imageRepository: 'invent_django'
   containerRegistry: 'uniinventacrdev.azurecr.io'
-  dockerfilePath: 'django/Dockerfile'
+  dockerfilePath: '../Dockerfile.django'
   tag: '$(Build.BuildId)'
   dockerRegistryServiceConnection: 'uniinventacrdev'
   # Agent VM image name
@@ -50,7 +50,7 @@ stages:
                 latest
 
           - task: HelmDeploy@0
-            displayName: Helm deploy
+            displayName: Helm deploy django
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: $(kubernetesServiceConnection)
