@@ -40,8 +40,8 @@ spec:
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
-            - name: C_FORCE_ROOT
-              value: true
+            - name: "C_FORCE_ROOT"
+              value: "true"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
