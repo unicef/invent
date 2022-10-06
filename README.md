@@ -13,7 +13,7 @@
 `fab migrate` - to run new migrations  
 `docker-compose build` - if there were new django requirements
 
-## Project structure
+### Project structure
 
 Static files (png, css, etc.) should go to:
 
