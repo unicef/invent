@@ -29,10 +29,10 @@ variables:
 
 stages:
 
-  - stage: Build Docker 
+  - stage: Build_Docker 
     displayName: Build and push stage
     jobs:
-      - job: Build Nginx
+      - job: Build_Nginx
         displayName: Build job
         pool:
           vmImage: $(vmImageName)
@@ -50,7 +50,7 @@ stages:
               tags: |
                 $(tag)
                 latest
-      - job: Build Frontend
+      - job: Build_Frontend
         displayName: Build job
         pool:
           vmImage: $(vmImageName)
