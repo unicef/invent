@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repositoryNginx: localhost:5001/invent_nginx
-  repositoryFrontend: localhost:5001/invent_frontend
+  repositoryNginx: uniinventacrdev.azurecr.io/invent_nginx
+  repositoryFrontend: uniinventacrdev.azurecr.io/invent_frontend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
