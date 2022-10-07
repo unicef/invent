@@ -20,7 +20,7 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
-  ${{ if endsWith( variables['Build.SourceBranchName'], test*) }}:
+  ${{ if contains( variables['Build.SourceBranchName'], 'test' ) }}:
     envtag: 'thisisatestag'
   ${{ else }}:
     envtag: 'anothertesttag'
