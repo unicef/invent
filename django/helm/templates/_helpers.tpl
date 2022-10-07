@@ -3,6 +3,7 @@ Expand the name of the chart.
 */}}
 {{- define "invent-django.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Values.application.name .Values.instance | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
 {{/*
@@ -38,6 +39,9 @@ helm.sh/chart: {{ include "invent-django.chart" . }}
 {{ include "invent-django.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+{{- if .Values.lifecycle }}
+lifecycle: "{{ .Values.lifecycle }}"
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}

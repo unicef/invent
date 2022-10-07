@@ -4,13 +4,18 @@
 
 replicaCount: 1
 
+application:
+  name: invent-django
+
+environment: tobesetfromHelm
+lifecycle: tobesetfromHelm
+instance: tobesetfromHelm
+
 image:
   repository: uniinventacrdev.azurecr.io/invent_django
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
-
-environment: tobesetfromHelm
 
 imagePullSecrets: []
 nameOverride: ""

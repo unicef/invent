@@ -22,10 +22,8 @@ variables:
   namespace: 'invent-dev'
   branchName: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
   ${{ if contains( variables['Build.SourceBranch'], 'feature/' ) }}:
-    envtag: 'thisisatestag'
     lifecycle: 'managed'
   ${{ else }}:
-    envtag: 'anothertesttag'
     lifecycle: 'temporary'
 
 stages:
@@ -40,13 +38,9 @@ stages:
         steps:
           - script: |
               echo "BRANCH FULL IS $(branchName)"
-              echo "TAG IS $(envtag)"
               echo "BRANCH IS $(Build.SourceBranchName)"
               testenv=$(Build.SourceBranchName)
-              echo $testenv
-              cutenv=${testenv:0:6}
-              echo $cutenv
-              echo "CUT BRANCH IS $cutenv"
+              envPrefix=${testenv:0:10}
             displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
@@ -68,9 +62,10 @@ stages:
               command: upgrade
               chartType: filepath
               chartPath: django/helm
-              releaseName: invent-django-$(cut_5_branch)
+              releaseName: invent-django-$(envPrefix)
               install: true
               waitForExecution: false
               overrideValues: |
                 environment='development'
-                lifecycle=$(envtag)
+                lifecycle=$(lifecycle)
+                instance=$(envPrefix)
