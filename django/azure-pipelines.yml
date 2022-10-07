@@ -39,7 +39,7 @@ stages:
           - script: |
               echo "BRANCH FULL IS $(branchName)"
               echo "BRANCH IS $(Build.SourceBranchName)"
-              envPrefix=${$(Build.SourceBranchName):0:10}
+              envPrefix=${(Build.SourceBranchName):0:10}
               echo $envPrefix
             displayName: 'Display tag'
           - task: Docker@2
