@@ -32,8 +32,8 @@ stages:
   - stage: Build_Docker 
     displayName: Build and push stage
     jobs:
-      - job: Build_Nginx
-        displayName: Build job
+      - job: Build
+        displayName: Build_Nginx job
         pool:
           vmImage: $(vmImageName)
         steps:
@@ -51,7 +51,7 @@ stages:
                 $(tag)
                 latest
       - job: Build_Frontend
-        displayName: Build job
+        displayName: Build_Frontend job
         pool:
           vmImage: $(vmImageName)
         steps:
