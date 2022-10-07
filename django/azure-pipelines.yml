@@ -38,7 +38,7 @@ stages:
           vmImage: $(vmImageName)
         steps:
           - script: |
-              echo "BRANCH IS $(Build.SourceBranchName)"
+              echo "BRANCH FULL IS $(Build.SourceBranch)"
               echo "TAG IS $(envtag)"
               echo "BRANCH IS $(Build.SourceBranchName)"
             displayName: 'Display tag'
