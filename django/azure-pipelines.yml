@@ -39,8 +39,8 @@ stages:
           - script: |
               echo "BRANCH FULL IS $(branchName)"
               echo "BRANCH IS $(Build.SourceBranchName)"
-              testenv=$(Build.SourceBranchName)
-              envPrefix=${testenv:0:10}
+              envPrefix=${$(Build.SourceBranchName):0:10}
+              echo $envPrefix
             displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
@@ -53,11 +53,6 @@ stages:
                 $(tag)
                 latest
 
-      - job: Deploy
-        displayName: Deploy Django Backend
-        pool:
-          vmImage: $(vmImageName)
-        steps:
           - task: HelmDeploy@0
             displayName: Helm deploy django
             inputs:
