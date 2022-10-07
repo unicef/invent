@@ -6,6 +6,7 @@ trigger:
   paths:
     include:
       - django/*
+      - Dockerfile.django
 
 variables:
   imageRepository: 'invent_django'
@@ -18,7 +19,7 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
-  ${{ if endsWith( variables['Build.SourceBranchName'], 'test_docker' ) }}:
+  ${{ if endsWith( variables['Build.SourceBranchName'], or('test_docker', "feature/*") ) }}:
     envtag: 'thisisatestag'
   ${{ else }}:
     envtag: 'anothertesttag'
