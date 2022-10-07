@@ -43,7 +43,7 @@ stages:
               envPrefix=${branchName:0:10}
               envPrefix_fixed=$(echo $envPrefix | tr "_" -)
               echo $envPrefix_fixed
-              export $envPrefix_fixed
+              export envPrefix_fixed=$envPrefix_fixed
             displayName: 'Display tag'
           - script: |
               echo $envPrefix_fixed
