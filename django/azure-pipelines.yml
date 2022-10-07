@@ -20,12 +20,12 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
-  ${{ if contains( variables['Build.SourceBranchName'], 'test' ) }}:
+  ${{ if contains( variables['Build.SourceBranchName'], 'release/' ) }}:
     envtag: 'thisisatestag'
+    lifecycle: 'managed'
   ${{ else }}:
     envtag: 'anothertesttag'
-
-
+    lifecycle: 'temporary'
 
 stages:
 
@@ -39,6 +39,7 @@ stages:
         steps:
           - script: |
               echo "TAG IS $(envtag)"
+              echo "BRANCH IS $(Build.SourceBranchName)"
             displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
