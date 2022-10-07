@@ -20,7 +20,8 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
-  ${{ if contains( variables['Build.SourceBranchName'], 'release/' ) }}:
+  branchName: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
+  ${{ if contains( variables['branchName'], 'feature/' ) }}:
     envtag: 'thisisatestag'
     lifecycle: 'managed'
   ${{ else }}:
@@ -38,7 +39,7 @@ stages:
           vmImage: $(vmImageName)
         steps:
           - script: |
-              echo "BRANCH FULL IS $(Build.SourceBranch)"
+              echo "BRANCH FULL IS $(branchName)"
               echo "TAG IS $(envtag)"
               echo "BRANCH IS $(Build.SourceBranchName)"
             displayName: 'Display tag'
