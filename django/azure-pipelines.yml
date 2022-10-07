@@ -20,7 +20,6 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
-  branchName: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
   branchNameFixed: $[replace(variables['Build.SourceBranchName'], '_', '-')]
   ${{ if contains( variables['Build.SourceBranch'], 'feature/' ) }}:
     lifecycle: 'managed'
@@ -44,31 +43,35 @@ stages:
               echo $(lifecycle)
             displayName: 'Display tag'
           - script: |
-              echo $envPrefix_fixed
-            displayName: 'echo $envPrefix_fixed'
-#          - task: Docker@2
-#            displayName: Build and push an image to container registry
-#            inputs:
-#              command: buildAndPush
-#              repository: $(imageRepository)
-#              dockerfile: $(dockerfilePath)
-#              containerRegistry: $(dockerRegistryServiceConnection)
-#              tags: |
-#                $(tag)
-#                latest
-#          - task: HelmDeploy@0
-#            displayName: Helm deploy django
-#            inputs:
-#              connectionType: 'Kubernetes Service Connection'
-#              kubernetesServiceConnection: $(kubernetesServiceConnection)
-#              namespace: $(namespace)
-#              command: upgrade
-#              chartType: filepath
-#              chartPath: django/helm
-#              releaseName: invent-django
-#              install: true
-#              waitForExecution: false
+              echo $(branchNameFixed)
+            displayName: 'echo $(branchNameFixed)'
+          - task: Docker@2
+            displayName: Build and push an image to container registry
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+                latest
+          - task: HelmDeploy@0
+            displayName: Helm deploy django
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              namespace: $(namespace)
+              command: upgrade
+              chartType: filepath
+              chartPath: django/helm
+              releaseName: invent-django
+              install: true
+              waitForExecution: false
 #              overrideValues: |
 #                environment='development'
 #                lifecycle=$lifecycle
 #                instance=$envPrefix_fixed
+              arguments: >
+                --set environment='development'
+                --set lifecycle=$(lifecycle)
+                --set instance=$(branchNameFixed)
