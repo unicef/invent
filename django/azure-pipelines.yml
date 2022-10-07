@@ -53,6 +53,11 @@ stages:
                 $(tag)
                 latest
 
+      - job: Deploy
+        displayName: Deploy Django Backend
+        pool:
+          vmImage: $(vmImageName)
+        steps:
           - task: HelmDeploy@0
             displayName: Helm deploy django
             inputs:
