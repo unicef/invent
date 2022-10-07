@@ -37,14 +37,6 @@ stages:
         pool:
           vmImage: $(vmImageName)
         steps:
-          - task: Docker@2
-            inputs:
-              containerRegistry: '$(dockerRegistryServiceConnection)'
-              command: 'login'
-
-          - script: "docker pull $(containerRegistry)/$(imageRepository):latest"
-            displayName: Pull latest for layer caching
-            continueOnError: true # for first build, no cache
           - script: |
               echo "TAG IS $(envtag)"
             displayName: 'Display tag'
@@ -55,7 +47,6 @@ stages:
               repository: $(imageRepository)
               dockerfile: $(dockerfilePath)
               containerRegistry: $(dockerRegistryServiceConnection)
-              arguments: '--cache-from=$(containerRegistry)/$(imageRepository):latest'
               tags: |
                 $(tag)
                 latest
