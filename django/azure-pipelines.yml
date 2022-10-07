@@ -39,8 +39,9 @@ stages:
           - script: |
               echo "BRANCH FULL IS $(branchName)"
               echo "BRANCH IS $(Build.SourceBranchName)"
-              envPrefix=${(Build.SourceBranchName):0:10}
-              echo $envPrefix
+              branchName=$(Build.SourceBranchName)
+              envPrefix=${branchName:0:10}
+              envPrefix_fixed=$(echo $envPrefix | tr "_" -)
             displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
@@ -68,4 +69,4 @@ stages:
               overrideValues: |
                 environment='development'
                 lifecycle=$(lifecycle)
-                instance=$(envPrefix)
+                instance=$(envPrefix_fixed)
