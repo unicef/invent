@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "invent-forntend.fullname" . }}
+  name: {{ include "invent-frontend.fullname" . }}
   labels:
-    {{- include "invent-forntend.labels" . | nindent 4 }}
+    {{- include "invent-frontend.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "invent-forntend.selectorLabels" . | nindent 6 }}
+      {{- include "invent-frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "invent-forntend.selectorLabels" . | nindent 8 }}
+        {{- include "invent-frontend.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "invent-forntend.serviceAccountName" . }}
+      serviceAccountName: {{ include "invent-frontend.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
