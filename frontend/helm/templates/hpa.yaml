@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "invent-forntend.fullname" . }}
+  name: {{ include "invent-frontend.fullname" . }}
   labels:
-    {{- include "invent-forntend.labels" . | nindent 4 }}
+    {{- include "invent-frontend.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "invent-forntend.fullname" . }}
+    name: {{ include "invent-frontend.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

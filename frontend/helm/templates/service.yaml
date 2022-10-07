@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "invent-forntend.fullname" . }}
+  name: {{ include "invent-frontend.fullname" . }}
   labels:
-    {{- include "invent-forntend.labels" . | nindent 4 }}
+    {{- include "invent-frontend.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "invent-forntend.selectorLabels" . | nindent 4 }}
+    {{- include "invent-frontend.selectorLabels" . | nindent 4 }}
