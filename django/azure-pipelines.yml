@@ -54,7 +54,9 @@ stages:
               tags: |
                 $(tag)
                 latest
-
+          - script: |
+              echo $envPrefix_fixed
+            displayName: 'echo $envPrefix_fixed'
           - task: HelmDeploy@0
             displayName: Helm deploy django
             inputs:
