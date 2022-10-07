@@ -28,7 +28,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-nginx
+        - name: nginx
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repositoryNginx }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -47,7 +47,7 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-        - name: {{ .Chart.Name }}-frontenc
+        - name: invent-frontend
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repositoryFrontend }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
