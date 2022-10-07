@@ -21,7 +21,7 @@ variables:
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
   branchName: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
-  ${{ if contains( $(branchName), 'feature/' ) }}:
+  ${{ if contains( variables['Build.SourceBranch'], 'feature/' ) }}:
     envtag: 'thisisatestag'
     lifecycle: 'managed'
   ${{ else }}:
