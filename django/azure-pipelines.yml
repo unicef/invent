@@ -21,7 +21,7 @@ variables:
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
   branchName: $[replace(variables['Build.SourceBranch'], 'refs/heads/', '')]
-  ${{ if contains( variables['Build.SourceBranch'], 'feature/' ) }}:
+  ${{ if contains( variables.branchName, 'feature/' ) }}:
     lifecycle: 'managed'
   ${{ else }}:
     lifecycle: 'temporary'
@@ -39,6 +39,7 @@ stages:
           - script: |
               echo "BRANCH FULL IS $(branchName)"
               echo "BRANCH IS $(Build.SourceBranchName)"
+              echo $lifecycle
               branchName=$(Build.SourceBranchName)
               envPrefix=${branchName:0:10}
               envPrefix_fixed=$(echo $envPrefix | tr "_" -)
