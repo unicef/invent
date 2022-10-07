@@ -15,7 +15,7 @@ variables:
   dockerfilePath: 'Dockerfile.django'
   tag: '$(Build.BuildId)'
   dockerRegistryServiceConnection: 'uniinventacrdev'
-  # Agent VM image name.
+  # Agent VM image name
   vmImageName: 'ubuntu-latest'
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
