@@ -50,29 +50,29 @@ stages:
           - script: |
               echo $envPrefix_fixed
             displayName: 'echo $envPrefix_fixed'
-          - task: Docker@2
-            displayName: Build and push an image to container registry
-            inputs:
-              command: buildAndPush
-              repository: $(imageRepository)
-              dockerfile: $(dockerfilePath)
-              containerRegistry: $(dockerRegistryServiceConnection)
-              tags: |
-                $(tag)
-                latest
-          - task: HelmDeploy@0
-            displayName: Helm deploy django
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: $(kubernetesServiceConnection)
-              namespace: $(namespace)
-              command: upgrade
-              chartType: filepath
-              chartPath: django/helm
-              releaseName: invent-django
-              install: true
-              waitForExecution: false
-              overrideValues: |
-                environment='development'
-                lifecycle=$lifecycle
-                instance=$envPrefix_fixed
+#          - task: Docker@2
+#            displayName: Build and push an image to container registry
+#            inputs:
+#              command: buildAndPush
+#              repository: $(imageRepository)
+#              dockerfile: $(dockerfilePath)
+#              containerRegistry: $(dockerRegistryServiceConnection)
+#              tags: |
+#                $(tag)
+#                latest
+#          - task: HelmDeploy@0
+#            displayName: Helm deploy django
+#            inputs:
+#              connectionType: 'Kubernetes Service Connection'
+#              kubernetesServiceConnection: $(kubernetesServiceConnection)
+#              namespace: $(namespace)
+#              command: upgrade
+#              chartType: filepath
+#              chartPath: django/helm
+#              releaseName: invent-django
+#              install: true
+#              waitForExecution: false
+#              overrideValues: |
+#                environment='development'
+#                lifecycle=$lifecycle
+#                instance=$envPrefix_fixed
