@@ -20,7 +20,7 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
-  ${{ if endsWith( variables['Build.SourceBranchName'], 'test*' ) }}:
+  ${{ if contains( variables['Build.SourceBranchName'], 'test' ) }}:
     envtag: 'thisisatestag'
   ${{ else }}:
     envtag: 'anothertesttag'
@@ -37,6 +37,14 @@ stages:
         pool:
           vmImage: $(vmImageName)
         steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: '$(containerRegistry)'
+              command: 'login'
+
+          - script: "docker pull $(containerRegistry)/$(imageRepository):latest"
+            displayName: Pull latest for layer caching
+            continueOnError: true # for first build, no cache
           - script: |
               echo "TAG IS $(envtag)"
             displayName: 'Display tag'
