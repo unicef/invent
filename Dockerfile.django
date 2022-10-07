@@ -11,6 +11,8 @@ RUN npm install -g mapshaper
 
 RUN mkdir /src
 WORKDIR /src
-ADD requirements.txt .
+ADD django/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-ADD . /src/
+ADD django/ /src/
+ADD nginx/site/static /usr/share/django/static
+ADD django/media /usr/share/django/media
