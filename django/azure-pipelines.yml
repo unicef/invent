@@ -43,7 +43,11 @@ stages:
               envPrefix=${branchName:0:10}
               envPrefix_fixed=$(echo $envPrefix | tr "_" -)
               echo $envPrefix_fixed
+              export $envPrefix_fixed
             displayName: 'Display tag'
+          - script: |
+              echo $envPrefix_fixed
+            displayName: 'echo $envPrefix_fixed'
           - task: Docker@2
             displayName: Build and push an image to container registry
             inputs:
@@ -54,9 +58,6 @@ stages:
               tags: |
                 $(tag)
                 latest
-          - script: |
-              echo $envPrefix_fixed
-            displayName: 'echo $envPrefix_fixed'
           - task: HelmDeploy@0
             displayName: Helm deploy django
             inputs:

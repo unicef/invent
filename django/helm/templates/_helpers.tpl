@@ -3,7 +3,7 @@ Expand the name of the chart.
 */}}
 {{- define "invent-django.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- printf "%s-%s" .Values.application.name .Values.instance | replace "_" "-" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Values.application.name .Values.instance | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
 {{/*
