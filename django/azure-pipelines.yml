@@ -69,5 +69,5 @@ stages:
               waitForExecution: false
               overrideValues: |
                 environment='development'
-                lifecycle=$(lifecycle)
-                instance=$(envPrefix_fixed)
+                lifecycle=$lifecycle
+                instance=$envPrefix_fixed
