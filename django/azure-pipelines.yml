@@ -42,8 +42,8 @@ stages:
               echo "BRANCH FULL IS $(branchName)"
               echo "TAG IS $(envtag)"
               echo "BRANCH IS $(Build.SourceBranchName)"
-              testenv=${Build.SourceBranchName:0:4}
-              echo "CUT BRANCH IS $testenv"
+              testenv=$(Build.SourceBranchName:0:4}
+              echo "CUT BRANCH IS $(testenv)"
             displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
@@ -65,8 +65,9 @@ stages:
               command: upgrade
               chartType: filepath
               chartPath: django/helm
-              releaseName: invent-django
+              releaseName: invent-django-$(cut_5_branch)
               install: true
               waitForExecution: false
               overrideValues: |
                 environment='development'
+                lifecycle=$(envtag)
