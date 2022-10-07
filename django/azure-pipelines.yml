@@ -3,14 +3,16 @@ trigger:
     include:
       - test_docker
       - feature/*
+      - release/*
   paths:
     include:
       - django/*
+      - Dockerfile.django
 
 variables:
   imageRepository: 'invent_django'
   containerRegistry: 'uniinventacrdev.azurecr.io'
-  dockerfilePath: 'django/Dockerfile'
+  dockerfilePath: 'Dockerfile.django'
   tag: '$(Build.BuildId)'
   dockerRegistryServiceConnection: 'uniinventacrdev'
   # Agent VM image name
@@ -18,12 +20,12 @@ variables:
   kubernetesCluster: 'uni-apps-aks-invent-dev'
   kubernetesServiceConnection: 'INVENT-DEV-uni-apps-aks-invent-dev-invent-dev-1662392151258'
   namespace: 'invent-dev'
-  ${{ if endsWith( variables['Build.SourceBranchName'], 'test_docker' ) }}:
+  ${{ if contains( variables['Build.SourceBranchName'], 'release/' ) }}:
     envtag: 'thisisatestag'
+    lifecycle: 'managed'
   ${{ else }}:
     envtag: 'anothertesttag'
-
-
+    lifecycle: 'temporary'
 
 stages:
 
@@ -38,6 +40,7 @@ stages:
           - script: |
               echo "BRANCH IS $(Build.SourceBranchName)"
               echo "TAG IS $(envtag)"
+              echo "BRANCH IS $(Build.SourceBranchName)"
             displayName: 'Display tag'
           - task: Docker@2
             displayName: Build and push an image to container registry
@@ -51,7 +54,7 @@ stages:
                 latest
 
           - task: HelmDeploy@0
-            displayName: Helm deploy
+            displayName: Helm deploy django
             inputs:
               connectionType: 'Kubernetes Service Connection'
               kubernetesServiceConnection: $(kubernetesServiceConnection)

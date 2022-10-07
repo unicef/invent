@@ -11,7 +11,7 @@ npm-debug.log
 dist
 
 coverage/
-
-.env
+##Push .env for testing##
+#.env
 .yarn-error.log
 
