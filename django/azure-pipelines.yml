@@ -64,7 +64,7 @@ stages:
               command: upgrade
               chartType: filepath
               chartPath: django/helm
-              releaseName: invent-django-$(envPrefix)
+              releaseName: invent-django-$(envPrefix_fixed)
               install: true
               waitForExecution: false
               overrideValues: |
