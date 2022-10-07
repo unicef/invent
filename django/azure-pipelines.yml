@@ -41,11 +41,7 @@ stages:
               echo "BRANCH FULL IS $(branchName)"
               echo "BRANCH IS $(Build.SourceBranchName)"
               echo $(branchNameFixed)
-              branchName=$(Build.SourceBranchName)
-              envPrefix=${branchName:0:10}
-              envPrefix_fixed=$(echo $envPrefix | tr "_" -)
-              echo $envPrefix_fixed
-              echo "##vso[task.setvariable variable=$envPrefix_fixed]$envPrefix_fixed"
+              echo $(lifecycle)
             displayName: 'Display tag'
           - script: |
               echo $envPrefix_fixed
