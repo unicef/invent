@@ -43,7 +43,9 @@ stages:
               echo "TAG IS $(envtag)"
               echo "BRANCH IS $(Build.SourceBranchName)"
               testenv=$(Build.SourceBranchName)
+              echo $testenv
               cutenv=${testenv:0:6}
+              echo $cutenv
               echo "CUT BRANCH IS $cutenv"
             displayName: 'Display tag'
           - task: Docker@2
