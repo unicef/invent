@@ -33,7 +33,7 @@ stages:
     displayName: Build and push stage
     jobs:
       - job: Build
-        displayName: Build_Nginx job
+        displayName: Build job
         pool:
           vmImage: $(vmImageName)
         steps:
@@ -41,7 +41,7 @@ stages:
               echo "TAG IS $(envtag)"
             displayName: 'Display tag'
           - task: Docker@2
-            displayName: Build and push an image to container registry
+            displayName: Build and push Nginx image to container registry
             inputs:
               command: buildAndPush
               repository: $(imageRepository1)
@@ -50,16 +50,8 @@ stages:
               tags: |
                 $(tag)
                 latest
-      - job: Build_Frontend
-        displayName: Build_Frontend job
-        pool:
-          vmImage: $(vmImageName)
-        steps:
-          - script: |
-              echo "TAG IS $(envtag)"
-            displayName: 'Display tag'
           - task: Docker@2
-            displayName: Build and push an image to container registry
+            displayName: Build and push Frontend image to container registry
             inputs:
               command: buildAndPush
               repository: $(imageRepository2)
@@ -68,3 +60,17 @@ stages:
               tags: |
                 $(tag)
                 latest
+          - task: HelmDeploy@0
+            displayName: Helm deploy Frontend
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              namespace: $(namespace)
+              command: upgrade
+              chartType: filepath
+              chartPath: frontend/helm
+              releaseName: invent-frontend
+              install: true
+              waitForExecution: false
+              overrideValues: |
+                environment='development'
