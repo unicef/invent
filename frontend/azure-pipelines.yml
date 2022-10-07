@@ -8,7 +8,7 @@ trigger:
       - frontend/*
 
 variables:
-  imageRepository: 'invent_frontend'
+  imageRepository: 'invent_nginx'
   containerRegistry: 'uniinventacrdev.azurecr.io'
   dockerfilePath: './Dockerfile.nginx'
   tag: '$(Build.BuildId)'
