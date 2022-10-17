@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repositoryNginx: uniinventacrdev.azurecr.io/invent_nginx
   repositoryFrontend: uniinventacrdev.azurecr.io/invent_frontend
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
