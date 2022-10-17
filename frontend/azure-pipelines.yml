@@ -40,16 +40,25 @@ stages:
           - script: |
               echo "TAG IS $(envtag)"
             displayName: 'Display tag'
-          - task: Docker@2
-            displayName: Build and push Nginx image to container registry
+          - task: DownloadSecureFile@1
+            displayName: Download .env file
             inputs:
-              command: buildAndPush
-              repository: $(imageRepository1)
-              dockerfile: $(dockerfilePath1)
-              containerRegistry: $(dockerRegistryServiceConnection)
-              tags: |
-                $(tag)
-                latest
+              secureFile: '.env' 
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(Agent.TempDirectory)'
+              Contents: .env
+              TargetFolder: ./frontend            
+#          - task: Docker@2
+#            displayName: Build and push Nginx image to container registry
+#            inputs:
+#              command: buildAndPush
+#              repository: $(imageRepository1)
+#              dockerfile: $(dockerfilePath1)
+#              containerRegistry: $(dockerRegistryServiceConnection)
+#              tags: |
+#                $(tag)
+#                latest
           - task: Docker@2
             displayName: Build and push Frontend image to container registry
             inputs:
@@ -60,17 +69,17 @@ stages:
               tags: |
                 $(tag)
                 latest
-          - task: HelmDeploy@0
-            displayName: Helm deploy Frontend
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceConnection: $(kubernetesServiceConnection)
-              namespace: $(namespace)
-              command: upgrade
-              chartType: filepath
-              chartPath: frontend/helm
-              releaseName: invent-frontend
-              install: true
-              waitForExecution: false
-              overrideValues: |
-                environment='development'
+#          - task: HelmDeploy@0
+#            displayName: Helm deploy Frontend
+#            inputs:
+#              connectionType: 'Kubernetes Service Connection'
+#              kubernetesServiceConnection: $(kubernetesServiceConnection)
+#              namespace: $(namespace)
+#              command: upgrade
+#              chartType: filepath
+#              chartPath: frontend/helm
+#              releaseName: invent-frontend
+#              install: true
+#              waitForExecution: false
+#              overrideValues: |
+#                environment='development'
