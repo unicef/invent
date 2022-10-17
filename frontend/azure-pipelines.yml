@@ -40,15 +40,15 @@ stages:
           - script: |
               echo "TAG IS $(envtag)"
             displayName: 'Display tag'
-          - task: DownloadSecureFile@1
-            displayName: Download .env file
-            inputs:
-              secureFile: '.env' 
-          - task: CopyFiles@2
-            inputs:
-              SourceFolder: '$(Agent.TempDirectory)'
-              Contents: .env
-              TargetFolder: ./frontend            
+#          - task: DownloadSecureFile@1
+#            displayName: Download .env file
+#            inputs:
+#              secureFile: '.env' 
+#          - task: CopyFiles@2
+#            inputs:
+#              SourceFolder: '$(Agent.TempDirectory)'
+#              Contents: .env
+#              TargetFolder: ./frontend            
 #          - task: Docker@2
 #            displayName: Build and push Nginx image to container registry
 #            inputs:
@@ -59,16 +59,16 @@ stages:
 #              tags: |
 #                $(tag)
 #                latest
-          - task: Docker@2
-            displayName: Build and push Frontend image to container registry
-            inputs:
-              command: buildAndPush
-              repository: $(imageRepository2)
-              dockerfile: $(dockerfilePath2)
-              containerRegistry: $(dockerRegistryServiceConnection)
-              tags: |
-                $(tag)
-                latest
+#          - task: Docker@2
+#            displayName: Build and push Frontend image to container registry
+#            inputs:
+#              command: buildAndPush
+#              repository: $(imageRepository2)
+#              dockerfile: $(dockerfilePath2)
+#              containerRegistry: $(dockerRegistryServiceConnection)
+#              tags: |
+#                $(tag)
+#                latest
 #          - task: HelmDeploy@0
 #            displayName: Helm deploy Frontend
 #            inputs:
