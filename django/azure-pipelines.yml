@@ -39,9 +39,14 @@ stages:
           - task: DownloadSecureFile@1
             inputs:
               secureFile: 'django.env.dev'
-              retryCount: '2'
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(Agent.TempDirectory)'
+              Contents: '**'
+              TargetFolder: ./invent/django
+            displayName: 'Copy .env files to django folder'
           - script: |
-              ls -al
+              ls -al django/
             displayName: 'See contents of repo'
           - script: |
               echo "BRANCH FULL IS $(branchName)"
