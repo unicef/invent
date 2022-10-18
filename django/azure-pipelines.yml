@@ -38,7 +38,7 @@ stages:
         steps:
           - task: DownloadSecureFile@1
             inputs:
-              secureFile: 'django.env.*'
+              secureFile: 'django.env.dev'
           - task: CopyFiles@2
             inputs:
               SourceFolder: '$(Agent.TempDirectory)'
@@ -46,7 +46,8 @@ stages:
               TargetFolder: django/
             displayName: 'Copy .env files to django folder'
           - script: |
-              ls -al django/
+              mv django/django.env.dev django/.env.dev
+              ls -la django/
             displayName: 'See contents of repo'
           - script: |
               echo "BRANCH FULL IS $(branchName)"
