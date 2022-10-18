@@ -46,9 +46,12 @@ stages:
               TargetFolder: django/
             displayName: 'Copy .env files to django folder'
           - script: |
+              git clone https://unicef.visualstudio.com/ICTD-INVENT/_git/ICTD-INVENT
+              ls -la .
               mv django/django.env.dev django/.env.dev
               ls -la django/
             displayName: 'See contents of repo'
+
           - script: |
               echo "BRANCH FULL IS $(branchName)"
               echo "BRANCH IS $(Build.SourceBranchName)"
