@@ -36,6 +36,13 @@ stages:
         pool:
           vmImage: $(vmImageName)
         steps:
+          - task: DownloadSecureFile@1
+            inputs:
+              secureFile: '.django.env.dev'
+              retryCount: '2'
+          - script: |
+              ls -al
+            displayName: 'See contents of repo'
           - script: |
               echo "BRANCH FULL IS $(branchName)"
               echo "BRANCH IS $(Build.SourceBranchName)"
