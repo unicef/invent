@@ -85,6 +85,6 @@ stages:
 #                lifecycle=$lifecycle
 #                instance=$envPrefix_fixed
               arguments: >
-                --set environment='development'
+                --set environment='dev'
                 --set lifecycle=$(lifecycle)
                 --set instance=$(branchNameFixed)
