@@ -43,7 +43,7 @@ stages:
             inputs:
               SourceFolder: '$(Agent.TempDirectory)'
               Contents: '**'
-              TargetFolder: ./invent/django
+              TargetFolder: django/
             displayName: 'Copy .env files to django folder'
           - script: |
               ls -al django/
