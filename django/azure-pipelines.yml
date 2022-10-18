@@ -38,7 +38,7 @@ stages:
         steps:
           - task: DownloadSecureFile@1
             inputs:
-              secureFile: 'django.env.**'
+              secureFile: 'django.env.*'
           - task: CopyFiles@2
             inputs:
               SourceFolder: '$(Agent.TempDirectory)'
