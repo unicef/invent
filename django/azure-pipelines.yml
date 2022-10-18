@@ -38,7 +38,7 @@ stages:
         steps:
           - task: DownloadSecureFile@1
             inputs:
-              secureFile: '.django.env.dev'
+              secureFile: 'django.env.dev'
               retryCount: '2'
           - script: |
               ls -al
