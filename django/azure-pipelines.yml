@@ -55,9 +55,6 @@ stages:
               echo $(branchNameFixed)
               echo $(lifecycle)
             displayName: 'Display tag'
-          - script: |
-              echo $(branchNameFixed)
-            displayName: 'echo $(branchNameFixed)'
           - task: Docker@2
             displayName: Build and push an image to container registry
             inputs:

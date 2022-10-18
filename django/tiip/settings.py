@@ -10,7 +10,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = Env()
 environment = os.environ.get('ENVIRONMENT')
-env.read_env(path=".env." + environment)
+if environment:
+    env.read_env(path=".env." + environment)
+else:
+    env.read_env(path=".env.local")
 
 SECRET_KEY = env.str('SECRET_KEY')
 
@@ -108,8 +111,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
-        'USER': 'postgres',
+        'USER': env.str('POSTGRES_USER', default='postgres'),
         'HOST': env.str('DATABASE_URL', default='postgres'),
+        'PASSWORD': env.str('POSTGRES_PASSWORD', default='postgres'),
         'PORT': 5432,
     }
 }
