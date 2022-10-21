@@ -39,6 +39,9 @@ helm.sh/chart: {{ include "invent-django.chart" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
+{{- if .Values.lifecycle }}
+lifecycle: "{{ .Values.lifecycle }}"
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
