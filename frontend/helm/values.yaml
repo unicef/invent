@@ -49,7 +49,7 @@ ingress:
     appgw.ingress.kubernetes.io/appgw-ssl-certificate: "kv-cert-unitst"
     appgw.ingress.kubernetes.io/ssl-redirect: "true"
   hosts:
-    - host: "invent-dev.unitst.org"
+    - host: invent-dev.unitst.org
       paths:
         - path: /
           pathType: Exact
