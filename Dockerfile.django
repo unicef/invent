@@ -14,7 +14,7 @@ WORKDIR /src
 ADD django/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 ADD django/ /src/
-RUN sudo pip install pipenv
+RUN pip install pipenv
 RUN pipenv instal
 RUN pipenv run flake8
 RUN pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
