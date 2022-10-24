@@ -6,6 +6,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && apt-get install -y gettext  # django i18n needs this
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get update
 RUN apt-get install -y nodejs pipenv
 RUN npm install -g mapshaper
 
