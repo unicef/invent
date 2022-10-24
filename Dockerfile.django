@@ -15,7 +15,7 @@ ADD django/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 ADD django/ /src/
 RUN pip install pipenv
-RUN pipenv install
+RUN pipenv install --skip-lock
 RUN pipenv run flake8
 RUN pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 ADD nginx/site/static /usr/share/django/static
