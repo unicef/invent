@@ -21,6 +21,7 @@ API_TITLE = f'{settings.PROJECT_NAME} API'
 API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
+    url(r'^account/', include('allauth.urls')),
     url(r"^admin/", admin.site.urls),
     url(r"^api/", include("core.urls")),
     url(r"^api/", include("user.urls")),
