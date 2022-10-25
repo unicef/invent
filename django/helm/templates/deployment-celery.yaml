@@ -4,7 +4,7 @@ metadata:
   name: invent-celery
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}-celery
-      component: celery
+    component: celery
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
