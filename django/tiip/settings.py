@@ -337,7 +337,7 @@ ENVIRONMENT_COLOR = "blue"
 # Validator for emails that can be registered as team members, viewers, eg.: r'(example.org|example.com)$'
 EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
-#Import the setting_azure settings only in the Azure environments
-if environment in ["dev", "tst", "uat", "prod"]:
-    from .settings_azure import *
-
+try:
+    from .settings_deployed import *  # noqa
+except ImportError:
+    pass
