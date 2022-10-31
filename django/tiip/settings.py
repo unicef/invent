@@ -17,7 +17,7 @@ else:
 
 SECRET_KEY = env.str('SECRET_KEY')
 
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.str('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['*']
 
@@ -230,12 +230,12 @@ ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_EMAIL_CONFIRMATION_HMAC = False  # This is for backwards compat, should move to True to not store it in DB
 
-ENABLE_API_REGISTRATION = env.bool('ENABLE_API_REGISTRATION', default=True)
+ENABLE_API_REGISTRATION = env.str('ENABLE_API_REGISTRATION', default=True)
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_SENDING_PRODUCTION = env.bool('EMAIL_SENDING_PRODUCTION', default=False)
+EMAIL_SENDING_PRODUCTION = env.str('EMAIL_SENDING_PRODUCTION', default=False)
 
 REDIS_URL = env.str('REDIS_URL', default='redis')
 
