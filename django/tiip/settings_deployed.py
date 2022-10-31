@@ -58,7 +58,7 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
-DEBUG = False
+DEBUG = env.str('DEBUG', default='False')
 # allowed_hosts = env.str('ALLOWED_HOSTS', default='')
 ALLOWED_HOSTS = ['*']
 
