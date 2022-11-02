@@ -114,3 +114,5 @@ sentry-sdk
 environs
 git+https://github.com/pulilab/django-import-export-celery@1.16.3
 django-jsoneditor
+dj-anonymizer==0.3.1
+dj-anonymizer[bulk]

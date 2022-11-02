@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'scheduler',
     'kpi',
     'simple-feedback',
+    "dj_anonymizer",
     'import_export',
 ]
 
