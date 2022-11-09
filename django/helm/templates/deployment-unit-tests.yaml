@@ -34,7 +34,7 @@ spec:
               value: unit-tests
           securityContext:
             {}
-          image: "uniinventacrdev.azurecr.io/invent_django:latest"
+          image: "uniinventacrdev.azurecr.io/invent_django:<change me with latest tag>"
           imagePullPolicy: Always
           ports:
             - name: http
