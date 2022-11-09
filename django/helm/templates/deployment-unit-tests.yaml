@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invent-django-unit-tests
+  labels:
+    component: django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: django
+  template:
+    metadata:
+      labels:
+        component: django
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: invent-django-unit-tests
+          args:
+            - /usr/local/bin/gunicorn
+            - tiip.wsgi:application
+            - -w
+            - "2"
+            - -b
+            - :8000
+            - --reload
+            - --timeout
+            - "120"
+          env:
+            - name: ENVIRONMENT
+              value: unit-tests
+          securityContext:
+            {}
+          image: "uniinventacrdev.azurecr.io/invent_django:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          resources:
+            {}

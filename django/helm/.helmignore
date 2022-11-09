@@ -21,3 +21,6 @@
 .idea/
 *.tmproj
 .vscode/
+
+# Dont deploy unit-tests
+templates/deployment-unit-tests.yaml
