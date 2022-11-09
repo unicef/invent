@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: invent-django-unit-tests
   labels:
-    component: django
+    component: django-unit-tests
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: django
+      component: django-unit-tests
   template:
     metadata:
       labels:
-        component: django
+        component: django-unit-tests
     spec:
       serviceAccountName: default
       securityContext:
