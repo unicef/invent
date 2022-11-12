@@ -29,7 +29,7 @@ class UserAnonym(AnonymBase):
 
         # Anonymize email.
         email = anonym_field.string(
-            "johndoe{seq}@preply.com", seq_callback=datetime.now
+            "johndoe{seq}@unicef.org", seq_callback=datetime.now
         )
 
         # Anonymize username.
