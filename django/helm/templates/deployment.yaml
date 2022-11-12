@@ -30,6 +30,13 @@ spec:
       serviceAccountName: {{ include "invent-django.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: secrets-store01-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-keyvault-django"
       containers:
         - name: {{ .Chart.Name }}
           args:
@@ -42,9 +49,43 @@ spec:
             - --reload
             - --timeout
             - "120"
+          volumeMounts:
+            - name: secrets-store01-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: azure-keyvault-django
+                  key: secret-key
+            - name: AZURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: azure-keyvault-django
+                  key: azure-client-id
+            - name: AZURE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: azure-keyvault-django
+                  key: azure-secret
+            - name: AZURE_TENANT
+              valueFrom:
+                secretKeyRef:
+                  name: azure-keyvault-django
+                  key: azure-tenant
+            - name: OSM_MAP_CLI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: azure-keyvault-django
+                  key: osm-map-cli-key
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: azure-keyvault-django
+                  key: {{ .Values.envFullName }}-azure-postgres-password
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
