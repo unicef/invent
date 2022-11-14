@@ -32,6 +32,8 @@ spec:
           env:
             - name: ENVIRONMENT
               value: unit-tests
+            - name: POSTGRES_PASSWORD
+              value: Postgres123!
           securityContext:
             {}
           image: "uniinventacrdev.azurecr.io/invent_django:<change me with latest tag>"
