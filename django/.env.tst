@@ -1,4 +1,4 @@
-DEBUG=False
+DEBUG=True
 PROJECT_SHORT_NAME='TIIP'
 PROJECT_NAME='UNICEF T4D & Innovation Inventory Portal'
 DEFAULT_FROM_EMAIL='UNICEF T4D & Innovation Inventory Portal <noreply@invent.unicef.org>'
