@@ -18,6 +18,9 @@ vault:
   clientID: toBeSetFromPipeline
   tenantID: toBeSetFromPipeline
 
+unitTests:
+  enabled: false
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

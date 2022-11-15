@@ -1,10 +1,10 @@
+{{- if not .Values.unitTests.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: invent-celery
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}-celery
-    component: celery
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -12,7 +12,6 @@ spec:
   selector:
     matchLabels:
       {{- include "invent-django.selectorLabels" . | nindent 6 }}-celery
-      component: celery
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -21,7 +20,6 @@ spec:
       {{- end }}
       labels:
         {{- include "invent-django.selectorLabels" . | nindent 8 }}-celery
-        component: celery
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -108,3 +106,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
