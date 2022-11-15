@@ -49,7 +49,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "invent-django.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "invent-django.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
