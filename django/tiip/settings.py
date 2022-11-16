@@ -9,15 +9,15 @@ from django.utils.translation import ugettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = Env()
-environment = os.environ.get('ENVIRONMENT')
+environment = os.environ.get('ENVIRONMENT', default='local')
 if environment:
     env.read_env(path=".env." + environment)
 else:
     env.read_env(path=".env.local")
 
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default='thisisthedefaultkeyforlocalenv')
 
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.str('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['*']
 
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'scheduler',
     'kpi',
     'simple-feedback',
+    "dj_anonymizer",
     'import_export',
 ]
 
@@ -110,10 +111,10 @@ WSGI_APPLICATION = 'tiip.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
+        'NAME': env.str('DATABASE_NAME', default='postgres'),
         'USER': env.str('POSTGRES_USER', default='postgres'),
-        'HOST': env.str('DATABASE_URL', default='postgres'),
-        'PASSWORD': env.str('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': env.str('DATABASE_HOST', default='postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='postgres'),
         'PORT': 5432,
     }
 }
@@ -211,13 +212,13 @@ REST_AUTH_SERIALIZERS = {
 SOCIALACCOUNT_PROVIDERS = {
     'azure': {
         'APP': {
-            'client_id': env.str('AZURE_CLIENT_ID', default=''),
-            'secret': env.str('AZURE_SECRET', default=''),
+            'client_id': os.environ.get('AZURE_CLIENT_ID', default=''),
+            'secret': os.environ.get('AZURE_SECRET', default=''),
         },
     }
 }
 SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter'
-SOCIALACCOUNT_AZURE_TENANT = env.str('AZURE_TENANT', default='')
+SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='')
 SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')
 LOGIN_REDIRECT_URL = '/'
 
@@ -230,12 +231,12 @@ ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_EMAIL_CONFIRMATION_HMAC = False  # This is for backwards compat, should move to True to not store it in DB
 
-ENABLE_API_REGISTRATION = env.bool('ENABLE_API_REGISTRATION', default=True)
+ENABLE_API_REGISTRATION = env.str('ENABLE_API_REGISTRATION', default=True)
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_SENDING_PRODUCTION = env.bool('EMAIL_SENDING_PRODUCTION', default=False)
+EMAIL_SENDING_PRODUCTION = env.str('EMAIL_SENDING_PRODUCTION', default=False)
 
 REDIS_URL = env.str('REDIS_URL', default='redis')
 
@@ -300,7 +301,7 @@ if CI_RUN:
     STATIC_ROOT = "/home/circleci/tiip/nginx/site/static/"
     MEDIA_ROOT = "/home/circleci/tiip/django/media/"
 
-OSM_MAP_CLI_KEY = env.str('OSM_MAP_CLI_KEY', default='')
+OSM_MAP_CLI_KEY = os.environ.get('OSM_MAP_CLI_KEY', default='')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -337,7 +338,7 @@ ENVIRONMENT_COLOR = "blue"
 # Validator for emails that can be registered as team members, viewers, eg.: r'(example.org|example.com)$'
 EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
-try:
-    from .settings_deployed import *  # noqa
-except ImportError:
-    pass
+#Import the setting_azure settings only in the Azure environments
+if environment in ["dev", "tst", "uat", "prod"]:
+    from .settings_deployed import *
+

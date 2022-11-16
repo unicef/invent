@@ -1,3 +1,4 @@
+{{- if not .Values.unitTests.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,3 +13,4 @@ spec:
       name: http
   selector:
     {{- include "invent-django.selectorLabels" . | nindent 4 }}
+{{- end }}
