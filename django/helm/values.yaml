@@ -1,4 +1,5 @@
 replicaCount: 2
+revisionHistoryLimit: 0
 
 application:
   name: invent-django
