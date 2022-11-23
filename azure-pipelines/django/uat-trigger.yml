@@ -1,0 +1,11 @@
+trigger:
+  branches:
+    include:
+      - uat
+
+  paths:
+    include:
+      - django/*
+
+steps:
+  - script: This pipeline will trigger the UAT Django pipeline in Azure DevOps.
