@@ -8,4 +8,4 @@ trigger:
       - django/*
 
 steps:
-  - script: This pipeline will trigger the UAT Django pipeline in Azure DevOps.
+  - script: echo "This pipeline will trigger the UAT Django pipeline in Azure DevOps."
