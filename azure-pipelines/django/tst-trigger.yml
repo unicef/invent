@@ -1,0 +1,11 @@
+trigger:
+  branches:
+    include:
+      - tst
+
+  paths:
+    include:
+      - django/*
+
+steps:
+  - script: echo "This pipeline will trigger the TST Django pipeline in Azure DevOps."
