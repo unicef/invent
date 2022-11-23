@@ -34,7 +34,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "azure-keyvault-django"
+              secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
       containers:
         - name: invent-celery
           args:
