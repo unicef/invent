@@ -6,9 +6,7 @@ metadata:
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}-celery
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCountCelery }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "invent-django.selectorLabels" . | nindent 6 }}-celery
