@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 replicaCountCelery: 1
 revisionHistoryLimit: 0
 
@@ -71,10 +71,10 @@ resources: {}
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 70
 
 nodeSelector: {}
 
