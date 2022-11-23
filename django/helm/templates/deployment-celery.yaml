@@ -53,32 +53,32 @@ spec:
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: azure-keyvault-django
+                  name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: secret-key
             - name: AZURE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: azure-keyvault-django
+                  name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: azure-client-id
             - name: AZURE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: azure-keyvault-django
+                  name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: azure-secret
             - name: AZURE_TENANT
               valueFrom:
                 secretKeyRef:
-                  name: azure-keyvault-django
+                  name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: azure-tenant
             - name: OSM_MAP_CLI_KEY
               valueFrom:
                 secretKeyRef:
-                  name: azure-keyvault-django
+                  name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: osm-map-cli-key
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: azure-keyvault-django
+                  name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: {{ .Values.envFullName }}-azure-postgres-password
             - name: "C_FORCE_ROOT"
               value: "true"
@@ -86,10 +86,6 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
