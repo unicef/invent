@@ -334,7 +334,7 @@ SIMPLE_FEEDBACK_SEND_TO = env.str('SIMPLE_FEEDBACK_SEND_TO', default='john@examp
 
 if environment == "tst":
     env_name = "TEST"
-    env_color = "yellow"
+    env_color = "green"
 elif environment == "uat":
     env_name = "UAT"
     env_color = "orange"
