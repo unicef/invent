@@ -1,0 +1,11 @@
+trigger:
+  branches:
+    include:
+      - test_docker
+
+  paths:
+    include:
+      - frontend/*
+
+steps:
+- script: echo "This pipeline will trigger the DEV Frontend pipeline in Azure DevOps."
