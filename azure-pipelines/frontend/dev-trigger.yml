@@ -7,5 +7,7 @@ trigger:
     include:
       - frontend/*
 
+pr: none
+
 steps:
 - script: echo "This pipeline will trigger the DEV Frontend pipeline in Azure DevOps."
