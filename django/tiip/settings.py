@@ -332,8 +332,21 @@ THUMBNAIL_HEIGHT = 520
 
 SIMPLE_FEEDBACK_SEND_TO = env.str('SIMPLE_FEEDBACK_SEND_TO', default='john@example.org')
 
-ENVIRONMENT_NAME = f"DEVELOPMENT - ({env.str('DEPLOY_VERSION', default='Unknown')})"
-ENVIRONMENT_COLOR = "blue"
+if environment == "tst":
+    env_name = "TEST"
+    env_color = "green"
+elif environment == "uat":
+    env_name = "UAT"
+    env_color = "orange"
+elif environment == "prod":
+    env_name = "PRODUCTION"
+    env_color = "red"
+else:
+    env_name = "DEVELOPMENT"
+    env_color = "blue"
+
+ENVIRONMENT_NAME = f"{env_name} - ({env.str('DEPLOY_VERSION', default='Unknown')})"
+ENVIRONMENT_COLOR = env_color
 
 # Validator for emails that can be registered as team members, viewers, eg.: r'(example.org|example.com)$'
 EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
