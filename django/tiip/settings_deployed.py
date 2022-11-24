@@ -88,6 +88,3 @@ CSRF_COOKIE_SECURE = True
 
 # csrf_trusted_origins = env.str('CSRF_TRUSTED_ORIGINS', default='')
 CSRF_TRUSTED_ORIGINS = ['*']
-
-ENVIRONMENT_NAME = f"PRODUCTION - ({env.str('DEPLOY_VERSION', default='Unknown')})"
-ENVIRONMENT_COLOR = "red"
