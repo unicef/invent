@@ -7,5 +7,7 @@ trigger:
     include:
       - django/*
 
+pr: none
+
 steps:
   - script: echo "This pipeline will trigger the TST Django pipeline in Azure DevOps."
