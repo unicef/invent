@@ -6,6 +6,10 @@ metadata:
     {{- include "invent-django.labels" . | nindent 4 }}
     component: django
 spec:
+  volumes:
+    - name: pvc-test
+      persistentVolumeClaim:
+        claimName: pvc-test
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
@@ -45,6 +49,9 @@ spec:
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
+          volumeMounts:
+            - name: pvc-test
+              mountPath: /src/translations
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
