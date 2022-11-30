@@ -6,10 +6,6 @@ metadata:
     {{- include "invent-django.labels" . | nindent 4 }}
     component: django
 spec:
-  volumes:
-    - name: pvc-test
-      persistentVolumeClaim:
-        claimName: pvc-test
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
@@ -27,6 +23,10 @@ spec:
         {{- include "invent-django.selectorLabels" . | nindent 8 }}
         component: django
     spec:
+      volumes:
+        - name: pvc-test
+          persistentVolumeClaim:
+            claimName: pvc-test
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
