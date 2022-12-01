@@ -1,0 +1,16 @@
+{{- if not .Values.unitTests.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "invent-django.fullname" . }}
+  labels:
+    {{- include "invent-django.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      name: http
+  selector:
+    {{- include "invent-django.selectorLabels" . | nindent 4 }}
+{{- end }}

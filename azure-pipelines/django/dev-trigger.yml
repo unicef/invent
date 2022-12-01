@@ -1,0 +1,13 @@
+trigger:
+  branches:
+    include:
+      - dev
+
+  paths:
+    include:
+      - django/*
+
+pr: none
+
+steps:
+  - script: echo "This pipeline will trigger the DEV Django pipeline in Azure DevOps."

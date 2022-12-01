@@ -202,7 +202,7 @@ export default {
         (res, val, key) => {
           res[nameInventMapping[key]] = this.projectDicts[
             keyMapping[key] || key
-          ][0].name
+          ][0]?.name
           return res
         },
         {}
