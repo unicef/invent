@@ -38,7 +38,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          command: ["/bin/bash","-c","generate_translations.sh && gunicorn tiip.wsgi:application -w 2 -b :8000 --reload --timeout 120"]
+          command: ["/bin/bash", "generate_translations.sh"]
           volumeMounts:
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
