@@ -37,16 +37,8 @@ spec:
               secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
       containers:
         - name: {{ .Chart.Name }}
-          args:
-            - /usr/local/bin/gunicorn
-            - tiip.wsgi:application
-            - -w
-            - "2"
-            - -b
-            - :8000
-            - --reload
-            - --timeout
-            - "120"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command: ["/bin/bash","-c","generate_translations.sh && gunicorn tiip.wsgi:application -w 2 -b :8000 --reload --timeout 120"]
           volumeMounts:
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
@@ -86,7 +78,6 @@ spec:
                   key: {{ .Values.envFullName }}-azure-postgres-password
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
