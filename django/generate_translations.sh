@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 python manage.py update_translations master.pot
 django-admin makemessages -l en
