@@ -5,7 +5,6 @@ import sys
 from environs import Env
 from django.utils.translation import ugettext_lazy as _
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = Env()
@@ -44,6 +43,7 @@ ALLOWED_HOSTS = ['*']
 
 PROJECT_SHORT_NAME = env.str('PROJECT_SHORT_NAME', default='Short Name')
 PROJECT_NAME = env.str('PROJECT_NAME', default='Example')
+SITE_URL = env.str('SITE_URL', default='localhost')
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default='john@example.org')
 # Developer email who can be reached for API inquiries
 API_MAINTAINER = env.str('API_MAINTAINER', default='john@example.org')
@@ -122,6 +122,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
                 'core.context_processors.from_settings',
+                'module.context_processors.site',
             ],
         },
     },
@@ -176,7 +177,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/share/django/static'
@@ -333,7 +333,7 @@ SWAGGER_SETTINGS = {
     }
 }
 REDOC_SETTINGS = {
-   'LAZY_RENDERING': False
+    'LAZY_RENDERING': False
 }
 
 PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS = {
@@ -358,7 +358,6 @@ ENVIRONMENT_COLOR = env_color
 # Validator for emails that can be registered as team members, viewers, eg.: r'(example.org|example.com)$'
 EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
-#Import the setting_azure settings only in the Azure environments
+# Import the setting_azure settings only in the Azure environments
 if environment in ["dev", "tst", "uat", "prod"]:
     from .settings_deployed import *
-
