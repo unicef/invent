@@ -15,6 +15,27 @@ if environment:
 else:
     env.read_env(path=".env.local")
 
+if environment == "dev":
+    SITE_ID = 2
+    env_name = "DEVELOPMENT"
+    env_color = "blue"
+elif environment == "tst":
+    SITE_ID = 3
+    env_name = "TEST"
+    env_color = "green"
+elif environment == "uat":
+    SITE_ID = 4
+    env_name = "UAT"
+    env_color = "orange"
+elif environment == "prod":
+    SITE_ID = 5
+    env_name = "PRODUCTION"
+    env_color = "red"
+else:
+    SITE_ID = 1
+    env_name = "LOCAL"
+    env_color = "purple"
+
 SECRET_KEY = os.environ.get('SECRET_KEY', default='thisisthedefaultkeyforlocalenv')
 
 DEBUG = env.str('DEBUG', default=False)
@@ -166,7 +187,6 @@ MEDIA_URL = '/media/'
 
 FILE_UPLOAD_PERMISSIONS = 0o644
 
-SITE_ID = env.int('SITE_ID', default=1)
 CI_RUN = env.bool('CI_RUN', default=False)
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -331,19 +351,6 @@ THUMBNAIL_HEIGHT = 520
 # THUMBNAIL_WIDTH = round(THUMBNAIL_HEIGHT*THUMBNAIL_RATIO)
 
 SIMPLE_FEEDBACK_SEND_TO = env.str('SIMPLE_FEEDBACK_SEND_TO', default='john@example.org')
-
-if environment == "tst":
-    env_name = "TEST"
-    env_color = "green"
-elif environment == "uat":
-    env_name = "UAT"
-    env_color = "orange"
-elif environment == "prod":
-    env_name = "PRODUCTION"
-    env_color = "red"
-else:
-    env_name = "DEVELOPMENT"
-    env_color = "blue"
 
 ENVIRONMENT_NAME = f"{env_name} - ({env.str('DEPLOY_VERSION', default='Unknown')})"
 ENVIRONMENT_COLOR = env_color
