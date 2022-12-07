@@ -23,6 +23,10 @@ vault:
 unitTests:
   enabled: false
 
+storage:
+  storageCLass: managed-csi
+  translationsSize: 1GI
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

@@ -1,0 +1,15 @@
+{{- if not .Values.unitTests.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    {{- include "invent-django.labels" . | nindent 4 }}
+  name: {{ include "invent-django.fullname" . }}-translations
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.storage.storageCLass }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.translationsSize }}
+{{- end }}
