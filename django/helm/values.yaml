@@ -25,7 +25,7 @@ unitTests:
 
 storage:
   storageCLass: managed-csi
-  translationsSize: 1GI
+  translationsSize: 1Gi
 
 imagePullSecrets: []
 nameOverride: ""
