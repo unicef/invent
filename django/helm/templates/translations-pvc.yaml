@@ -6,7 +6,7 @@ metadata:
   name: {{ include "invent-django.fullname" . }}-translations
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: {{ .Values.storage.storageCLass }}
   resources:
     requests:
