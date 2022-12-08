@@ -26,6 +26,9 @@ unitTests:
 storage:
   storageCLass: azurefile-csi
   translationsSize: 1Gi
+  translationsCountrySize: 500Mi
+  localeSize: 500Mi
+  translationsUserSize: 500Mi
 
 imagePullSecrets: []
 nameOverride: ""

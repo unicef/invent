@@ -38,6 +38,15 @@ spec:
         - name: translations-data
           persistentVolumeClaim:
             claimName: {{ include "invent-django.fullname" . }}-translations
+        - name: translations-country-data
+          persistentVolumeClaim:
+            claimName: {{ include "invent-django.fullname" . }}-translations-country
+        - name: locale-data
+          persistentVolumeClaim:
+            claimName: {{ include "invent-django.fullname" . }}-locale
+        - name: translations-user-data
+          persistentVolumeClaim:
+            claimName: {{ include "invent-django.fullname" . }}-translations-user
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -48,6 +57,12 @@ spec:
               readOnly: true
             - mountPath: "/src/translations"
               name: translations-data
+            - mountPath: "/src/country/locale"
+              name: translations-country-data
+            - mountPath: "/src/locale"
+              name: locale-data
+            - mountPath: "/src/user/locale"
+              name: translations-user-data
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
