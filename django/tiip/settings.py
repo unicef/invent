@@ -5,7 +5,6 @@ import sys
 from environs import Env
 from django.utils.translation import ugettext_lazy as _
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = Env()
@@ -15,6 +14,27 @@ if environment:
 else:
     env.read_env(path=".env.local")
 
+if environment == "dev":
+    SITE_ID = 2
+    env_name = "DEVELOPMENT"
+    env_color = "blue"
+elif environment == "tst":
+    SITE_ID = 3
+    env_name = "TEST"
+    env_color = "green"
+elif environment == "uat":
+    SITE_ID = 4
+    env_name = "UAT"
+    env_color = "orange"
+elif environment == "prod":
+    SITE_ID = 5
+    env_name = "PRODUCTION"
+    env_color = "red"
+else:
+    SITE_ID = 1
+    env_name = "LOCAL"
+    env_color = "purple"
+
 SECRET_KEY = os.environ.get('SECRET_KEY', default='thisisthedefaultkeyforlocalenv')
 
 DEBUG = env.str('DEBUG', default=False)
@@ -23,6 +43,7 @@ ALLOWED_HOSTS = ['*']
 
 PROJECT_SHORT_NAME = env.str('PROJECT_SHORT_NAME', default='Short Name')
 PROJECT_NAME = env.str('PROJECT_NAME', default='Example')
+SITE_URL = env.str('SITE_URL', default='localhost')
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default='john@example.org')
 # Developer email who can be reached for API inquiries
 API_MAINTAINER = env.str('API_MAINTAINER', default='john@example.org')
@@ -156,7 +177,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/share/django/static'
 
@@ -166,7 +186,6 @@ MEDIA_URL = '/media/'
 
 FILE_UPLOAD_PERMISSIONS = 0o644
 
-SITE_ID = env.int('SITE_ID', default=1)
 CI_RUN = env.bool('CI_RUN', default=False)
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -313,7 +332,7 @@ SWAGGER_SETTINGS = {
     }
 }
 REDOC_SETTINGS = {
-   'LAZY_RENDERING': False
+    'LAZY_RENDERING': False
 }
 
 PORTFOLIO_PROBLEMSTATEMENT_TRESHOLDS = {
@@ -332,26 +351,12 @@ THUMBNAIL_HEIGHT = 520
 
 SIMPLE_FEEDBACK_SEND_TO = env.str('SIMPLE_FEEDBACK_SEND_TO', default='john@example.org')
 
-if environment == "tst":
-    env_name = "TEST"
-    env_color = "green"
-elif environment == "uat":
-    env_name = "UAT"
-    env_color = "orange"
-elif environment == "prod":
-    env_name = "PRODUCTION"
-    env_color = "red"
-else:
-    env_name = "DEVELOPMENT"
-    env_color = "blue"
-
 ENVIRONMENT_NAME = f"{env_name} - ({env.str('DEPLOY_VERSION', default='Unknown')})"
 ENVIRONMENT_COLOR = env_color
 
 # Validator for emails that can be registered as team members, viewers, eg.: r'(example.org|example.com)$'
 EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
-#Import the setting_azure settings only in the Azure environments
+# Import the setting_azure settings only in the Azure environments
 if environment in ["dev", "tst", "uat", "prod"]:
     from .settings_deployed import *
-

@@ -35,22 +35,34 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
+        - name: translations-data
+          persistentVolumeClaim:
+            claimName: {{ include "invent-django.fullname" . }}-translations
+        - name: translations-country-data
+          persistentVolumeClaim:
+            claimName: {{ include "invent-django.fullname" . }}-translations-country
+        - name: locale-data
+          persistentVolumeClaim:
+            claimName: {{ include "invent-django.fullname" . }}-locale
+        - name: translations-user-data
+          persistentVolumeClaim:
+            claimName: {{ include "invent-django.fullname" . }}-translations-user
       containers:
         - name: {{ .Chart.Name }}
-          args:
-            - /usr/local/bin/gunicorn
-            - tiip.wsgi:application
-            - -w
-            - "2"
-            - -b
-            - :8000
-            - --reload
-            - --timeout
-            - "120"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command: ["/bin/bash", "startup_actions.sh"]
           volumeMounts:
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
               readOnly: true
+            - mountPath: "/src/translations"
+              name: translations-data
+            - mountPath: "/src/country/locale"
+              name: translations-country-data
+            - mountPath: "/src/locale"
+              name: locale-data
+            - mountPath: "/src/user/locale"
+              name: translations-user-data
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
@@ -86,7 +98,6 @@ spec:
                   key: {{ .Values.envFullName }}-azure-postgres-password
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
