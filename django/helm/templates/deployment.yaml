@@ -46,7 +46,7 @@ spec:
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
               readOnly: true
-            - mountPath: "/translations"
+            - mountPath: "/src/translations"
               name: translations-data
           env:
             - name: ENVIRONMENT
