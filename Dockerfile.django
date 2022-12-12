@@ -16,5 +16,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 ADD django/ /src/
 ADD nginx/site/static /usr/share/django/static
 ADD django/media /usr/share/django/media
-ADD django/translations/en/LC_MESSAGES/pseudo_djangojs.po /tmp/
-ADD django/translations/master.pot /tmp/
+ADD django/translations/ /tmp/translations/
+ADD django/locale/ /tmp/locale/
