@@ -11,7 +11,7 @@
     "model": "sites.site",
     "pk": 2,
     "fields": {
-      "domain": "dev.example.org",
+      "domain": "invent-dev.unitst.org",
       "name": "dev"
     }
   },
@@ -19,16 +19,24 @@
     "model": "sites.site",
     "pk": 3,
     "fields": {
-      "domain": "example.org",
-      "name": "production"
+      "domain": "invent-tst.unitst.org",
+      "name": "tst"
     }
   },
   {
     "model": "sites.site",
     "pk": 4,
     "fields": {
-      "domain": "qa.example.org",
-      "name": "staging"
+      "domain": "invent-uat.unitst.org",
+      "name": "uat"
+    }
+  },
+  {
+    "model": "sites.site",
+    "pk": 5,
+    "fields": {
+      "domain": "invent.unicef.org",
+      "name": "production"
     }
   }
 ]
