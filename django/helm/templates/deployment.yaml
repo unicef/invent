@@ -75,12 +75,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: azure-{{ include "invent-django.fullname" . }}-keyvault
-                  key: azure-client-id
+                  key: uni-invent-{{ .Values.environment }}-id
             - name: AZURE_SECRET
               valueFrom:
                 secretKeyRef:
                   name: azure-{{ include "invent-django.fullname" . }}-keyvault
-                  key: azure-secret
+                  key: uni-invent-{{ .Values.environment }}-secret
             - name: AZURE_TENANT
               valueFrom:
                 secretKeyRef:
