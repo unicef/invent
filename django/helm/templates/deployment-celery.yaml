@@ -54,7 +54,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: azure-{{ include "invent-django.fullname" . }}-keyvault
-                  key: secret-key
+                  key: secret-key-{{ .Values.environment }}
             - name: AZURE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -74,7 +74,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: azure-{{ include "invent-django.fullname" . }}-keyvault
-                  key: osm-map-cli-key
+                  key: osm-map-cli-key-{{ .Values.environment }}
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
