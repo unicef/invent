@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth_microsoft',
+    'allauth.socialaccount.providers.microsoft',
     'azure',
     'rest_auth',
     'rest_auth.registration',
