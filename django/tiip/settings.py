@@ -229,18 +229,20 @@ REST_AUTH_SERIALIZERS = {
     # 'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
 }
 
+SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter'
+SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='')
+SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')
+LOGIN_REDIRECT_URL = '/'
+
 SOCIALACCOUNT_PROVIDERS = {
     'microsoft': {
         'APP': {
             'client_id': os.environ.get('AZURE_CLIENT_ID', default=''),
             'secret': os.environ.get('AZURE_SECRET', default=''),
+            'tenant': SOCIALACCOUNT_AZURE_TENANT,
         },
     }
 }
-SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter'
-SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='')
-SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')
-LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_EMAIL_REQUIRED = True
