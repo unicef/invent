@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth_microsoft',
     'azure',
     'rest_auth',
     'rest_auth.registration',
@@ -229,7 +230,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 SOCIALACCOUNT_PROVIDERS = {
-    'azure': {
+    'microsoft': {
         'APP': {
             'client_id': os.environ.get('AZURE_CLIENT_ID', default=''),
             'secret': os.environ.get('AZURE_SECRET', default=''),
