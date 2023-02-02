@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.microsoft',
+    'allauth.socialaccount.providers.microsoft', # .microsoft works for single tenant apps
     'azure',
     'rest_auth',
     'rest_auth.registration',
@@ -229,19 +229,19 @@ REST_AUTH_SERIALIZERS = {
     # 'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
 }
 
-SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter'
-SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='')
-SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')
-LOGIN_REDIRECT_URL = '/'
+SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter' #TODO: Clear
+SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='') #TODO: Clear
+SOCIALACCOUNT_CLIENT_ID = os.environ.get('AZURE_CLIENT_ID', default='') #TODO: Clear
+SOCIALACCOUNT_SECRET = os.environ.get('AZURE_SECRET', default='') #TODO: Clear
+SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/') #TODO: Clear
+LOGIN_REDIRECT_URL = '/' #TODO: Clear
 
 SOCIALACCOUNT_PROVIDERS = {
     'microsoft': {
-        'APP': {
-            'client_id': os.environ.get('AZURE_CLIENT_ID', default=''),
-            'secret': os.environ.get('AZURE_SECRET', default=''),
-            'tenant': SOCIALACCOUNT_AZURE_TENANT,
-        },
-    }
+        'tenant': SOCIALACCOUNT_AZURE_TENANT,
+        'client_id': SOCIALACCOUNT_CLIENT_ID,
+        'secret': SOCIALACCOUNT_SECRET
+    },
 }
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
