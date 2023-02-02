@@ -221,6 +221,8 @@ AUTHENTICATION_BACKENDS = (
     # 'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods
     'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.azuread.AzureADOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 REST_USE_JWT = True
