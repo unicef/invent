@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'azure',
+    'social_django',
     'rest_auth',
     'rest_auth.registration',
     'rest_framework',
@@ -221,6 +222,7 @@ AUTHENTICATION_BACKENDS = (
     # 'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods
     'allauth.account.auth_backends.AuthenticationBackend',
+    'allauth.socialaccount.backends.azuread.AzureADOAuth2',
 )
 
 REST_USE_JWT = True
@@ -230,13 +232,22 @@ REST_AUTH_SERIALIZERS = {
 }
 
 SOCIALACCOUNT_PROVIDERS = {
-    'azure': {
-        'APP': {
-            'client_id': os.environ.get('AZURE_CLIENT_ID', default=''),
-            'secret': os.environ.get('AZURE_SECRET', default=''),
-        },
+    'microsoft': {
+        'APP_ID': env.str('AZURE_CLIENT_ID', default=''),
+        'APP_SECRET': env.str('AZURE_SECRET', default=''),
+        'SCOPE': ['openid'],
     }
 }
+
+SOCIALACCOUNT_PROVIDERS = {
+    'azuread': {
+        'AUTHORIZATION_URL': 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        'ACCESS_TOKEN_URL': 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        'PROFILE_URL': 'https://graph.microsoft.com/v1.0/me',
+        'SCOPE': ['openid']
+    }
+}
+
 SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter'
 SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='')
 SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')

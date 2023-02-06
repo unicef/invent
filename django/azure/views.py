@@ -12,7 +12,7 @@ from .provider import AzureProvider
 
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
-GRAPH_URL = 'https://graph.microsoft.com/'
+GRAPH_URL = 'https://graph.microsoft.com/v1.0'
 
 
 class AzureOAuth2Adapter(OAuth2Adapter):
