@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'social_django',
     'azure',
     'rest_auth',
     'rest_auth.registration',
@@ -123,6 +122,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
                 'core.context_processors.from_settings',
+                'module.context_processors.site',
             ],
         },
     },
@@ -221,8 +221,6 @@ AUTHENTICATION_BACKENDS = (
     # 'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods
     'allauth.account.auth_backends.AuthenticationBackend',
-    'social_core.backends.azuread.AzureADOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
 )
 
 REST_USE_JWT = True
@@ -231,18 +229,18 @@ REST_AUTH_SERIALIZERS = {
     # 'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
 }
 
+SOCIALACCOUNT_PROVIDERS = {
+    'azure': {
+        'APP': {
+            'client_id': os.environ.get('AZURE_CLIENT_ID', default=''),
+            'secret': os.environ.get('AZURE_SECRET', default=''),
+        },
+    }
+}
 SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter'
 SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='')
 SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')
 LOGIN_REDIRECT_URL = '/'
-
-SOCIALACCOUNT_PROVIDERS = {
-    'microsoft': {
-        'APP_ID': env.str('AZURE_CLIENT_ID', default=''),
-        'APP_SECRET': env.str('AZURE_SECRET', default=''),
-        'SCOPE': ['openid'],
-    }
-}
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_EMAIL_REQUIRED = True
