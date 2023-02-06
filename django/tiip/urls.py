@@ -31,8 +31,7 @@ urlpatterns = [
     url(r"^api/", include("simple-feedback.urls")),
     url(r"^api/kpi/", include("kpi.urls")),
     url(r'^translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
-    url(r'^translation/', include('rosetta.urls')),
-    url(r'^social/', include('social_django.urls')),
+    url(r'^translation/', include('rosetta.urls'))
 ]
 
 if settings.DEBUG:  # pragma: no cover
