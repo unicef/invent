@@ -237,16 +237,10 @@ SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://local
 LOGIN_REDIRECT_URL = '/'
 
 SOCIALACCOUNT_PROVIDERS = {
-    'azuread': {
-        'APP': {
-            'client_id': env.str('AZURE_CLIENT_ID', default=''),
-            'secret': env.str('AZURE_SECRET', default=''),
-            'tenant': SOCIALACCOUNT_AZURE_TENANT,
-        },
-        'AUTHORIZATION_URL': f'https://login.microsoftonline.com/{SOCIALACCOUNT_AZURE_TENANT}/oauth2/v2.0/authorize',
-        'ACCESS_TOKEN_URL': f'https://login.microsoftonline.com/{SOCIALACCOUNT_AZURE_TENANT}/oauth2/v2.0/token',
-        'PROFILE_URL': 'https://graph.microsoft.com/v1.0/me',
-        'SCOPE': ['openid', 'profile', 'email', 'User.Read', 'Directory.Read.All'],
+    'microsoft': {
+        'APP_ID': env.str('AZURE_CLIENT_ID', default=''),
+        'APP_SECRET': env.str('AZURE_SECRET', default=''),
+        'SCOPE': ['openid'],
     }
 }
 
