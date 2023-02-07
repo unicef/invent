@@ -38,7 +38,7 @@ spec:
           image: "{{ .Values.image.repositoryNginx }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-            - mountPath: "/media"
+            - mountPath: "/usr/share/nginx/html/media"
               name: media
           ports:
             - name: http
