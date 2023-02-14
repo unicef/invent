@@ -16,3 +16,6 @@ coverage/
 .yarn-error.log
 
 .yarn
+/test-results/
+/playwright-report/
+/playwright/.cache/
