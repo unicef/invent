@@ -5,13 +5,13 @@ revisionHistoryLimit: 0
 application:
   name: invent-django
 
-environment: toBeSetFromPipeline
-envFullName: toBeSetFromPipeline
+environment: local
+envFullName: local
 lifecycle: toBeSetFromPipeline
 instance: toBeSetFromPipeline
 
 image:
-  repository: uniinventacrdev.azurecr.io/invent_django
+  repository: localhost:5001/invent-django
   pullPolicy: Always
   tag: "latest"
 
@@ -24,8 +24,8 @@ unitTests:
   enabled: false
 
 storage:
-  storageCLass: azurefile-csi
-  accessModes: ReadWriteMany
+  storageCLass: standard
+  accessModes: ReadWriteOnce
   translationsSize: 1Gi
   translationsCountrySize: 500Mi
   localeSize: 500Mi
