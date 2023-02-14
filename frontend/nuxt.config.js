@@ -67,7 +67,7 @@ const config = {
   },
   plugins: [
     { src: '~plugins/eventfix.js', ssr: false },
-    { src: '~plugins/extends.js', ssr: false },
+    // { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
@@ -185,12 +185,12 @@ const config = {
     resourceHints: false,
   },
   build: {
-    babel: {
-      presets({ isServer }) {
-        const targets = isServer ? { node: '10' } : { ie: '11' }
-        return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
-      },
-    },
+    // babel: {
+    //   presets({ isServer }) {
+    //     const targets = isServer ? { node: '10' } : { ie: '11' }
+    //     return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
+    //   },
+    // },
     extractCSS: true,
     optimization: {},
     //transpile: ['redux', 'redux-async-thunk'],
@@ -205,14 +205,14 @@ const config = {
         loader: 'html-loader',
         exclude: /(node_modules)/,
       })
-      if (isDev && process.client) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/,
-        })
-      }
+      // if (isDev && process.client) {
+      //   config.module.rules.push({
+      //     enforce: 'pre',
+      //     test: /\.(js|vue)$/,
+      //     loader: 'eslint-loader',
+      //     exclude: /(node_modules)/,
+      //   })
+      // }
       config.resolve.alias.leaflet = path.join(__dirname, 'node_modules/leaflet')
       // config.plugins.push(new bundlebuddy());
     },
