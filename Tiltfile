@@ -75,3 +75,34 @@ yaml = helm(
   set=['service.port=1234', 'ingress.enabled=false']
   )
 k8s_yaml(yaml)
+
+############# FE Tilt Configuration ##################
+
+docker_build(
+    'localhost:5001/invent_nginx',
+    './',
+    dockerfile='Dockerfile.nginx',
+)
+
+docker_build(
+    'localhost:5001/invent_frontend',
+    './',
+    dockerfile='Dockerfile.frontend',
+)
+
+yaml = helm(
+  './frontend/helm',
+  # The release name, equivalent to helm --name
+  name='invent-frontend',
+  # The namespace to install in, equivalent to helm --namespace
+  namespace='default',
+  # The values file to substitute into the chart.
+  values=['./frontend/helm/values-dev.yaml'],
+  # Values to set from the command-line
+  set=['ingress.enabled=false']
+  )
+k8s_yaml(yaml)
+
+k8s_resource('invent-frontend', port_forwards='8080:80')
+
+k8s_kind('local')
