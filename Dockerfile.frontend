@@ -6,16 +6,16 @@ RUN apk update && apk upgrade && \
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-ADD frontend/package.json frontend/yarn.lock /tmp/
-RUN cd /tmp && yarn --silent --non-interactive
+ADD frontend/package.json /tmp/
+RUN cd /tmp && npm i
 RUN cd /usr/src/app && ln -s /tmp/node_modules
 
 COPY frontend/ /usr/src/app/
 COPY django/translations/master.pot /usr/src/app/
 #RUN echo "NODE_ENV=production" >> .env
-RUN yarn build --quiet
+RUN npm build --quiet
 ####
 ENV HOST 0.0.0.0
 EXPOSE 3000
 # start command
-CMD yarn start
+CMD npm start
