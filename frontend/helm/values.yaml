@@ -41,6 +41,8 @@ service:
   type: ClusterIP
   port: 80
 
+pvc_media: true
+
 ingress:
   enabled: true
   className: ""
