@@ -5,12 +5,20 @@ const result = dotenv.config()
 
 // const bundlebuddy = require('bundle-buddy-webpack-plugin');
 
-const features = ['default', 'fetch', 'Object.entries', 'Object.from', 'IntersectionObserver', 'EventSource'].join(
-  '%2C'
-)
+const features = [
+  'default',
+  'fetch',
+  'Object.entries',
+  'Object.from',
+  'IntersectionObserver',
+  'EventSource',
+].join('%2C')
 
 if (result.error) {
-  console.log('\x1B[31m%s\x1B[0m', 'Missing .env file, follow the README instructions')
+  console.log(
+    '\x1B[31m%s\x1B[0m',
+    'Missing .env file, follow the README instructions'
+  )
   throw result.error
 }
 
@@ -20,7 +28,8 @@ const loginUrl =
   '/oauth2/v2.0/authorize?client_id=' +
   (process.env.AZURE_CLIENT_ID || '') +
   '&response_type=code&redirect_uri=' +
-  (process.env.AZURE_REDIRECT_URI || 'http://localhost/accounts/azure/login/callback/') +
+  (process.env.AZURE_REDIRECT_URI ||
+    'http://localhost/accounts/azure/login/callback/') +
   '&response_mode=fragment&scope=openid offline_access'
 
 const config = {
@@ -30,7 +39,6 @@ const config = {
   //     devtools: true,
   //   },
   // },
-  // serverMiddleware: ['@/server-middleware/check-spa'],
   head: {
     title: "Invent: UNICEF's T4D and Innovation Inventory",
     meta: [
@@ -68,7 +76,7 @@ const config = {
   },
   plugins: [
     { src: '~plugins/eventfix.js', ssr: false },
-    // { src: '~plugins/extends.js', ssr: false },
+    { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
@@ -186,18 +194,21 @@ const config = {
     resourceHints: false,
   },
   build: {
-    // babel: {
-    //   presets({ isServer }) {
-    //     const targets = isServer ? { node: '10' } : { ie: '11' }
-    //     return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
-    //   },
-    // },
+    babel: {
+      presets({ isServer }) {
+        const targets = isServer ? { node: '10' } : { ie: '11' }
+        return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
+      },
+    },
     extractCSS: true,
     optimization: {},
-    //transpile: ['redux', 'redux-async-thunk'],
+    transpile: ['redux', 'redux-async-thunk'],
     extend(config, { isDev }) {
       config.plugins.forEach(function (plugin) {
-        if (plugin.constructor && plugin.constructor.name === 'ExtractCssChunksPlugin') {
+        if (
+          plugin.constructor &&
+          plugin.constructor.name === 'ExtractCssChunksPlugin'
+        ) {
           plugin.options.ignoreOrder = true
         }
       })
@@ -206,15 +217,18 @@ const config = {
         loader: 'html-loader',
         exclude: /(node_modules)/,
       })
-      // if (isDev && process.client) {
-      //   config.module.rules.push({
-      //     enforce: 'pre',
-      //     test: /\.(js|vue)$/,
-      //     loader: 'eslint-loader',
-      //     exclude: /(node_modules)/,
-      //   })
-      // }
-      config.resolve.alias.leaflet = path.join(__dirname, 'node_modules/leaflet')
+      if (isDev && process.client) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/,
+        })
+      }
+      config.resolve.alias.leaflet = path.join(
+        __dirname,
+        'node_modules/leaflet'
+      )
       // config.plugins.push(new bundlebuddy());
     },
   },
