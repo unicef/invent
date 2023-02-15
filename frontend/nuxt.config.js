@@ -30,6 +30,7 @@ const config = {
   //     devtools: true,
   //   },
   // },
+  // serverMiddleware: ['@/server-middleware/check-spa'],
   head: {
     title: "Invent: UNICEF's T4D and Innovation Inventory",
     meta: [
