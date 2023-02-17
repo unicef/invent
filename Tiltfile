@@ -81,6 +81,7 @@ yaml = helm(
 k8s_yaml(yaml)
 k8s_resource(
     'invent-django',
+    objects = ['invent-django:ServiceAccount:default',"invent-django-translations:PersistentVolumeClaim:default","invent-django-translations-country:PersistentVolumeClaim:default","invent-django-locale:PersistentVolumeClaim:default","invent-django-translations-user:PersistentVolumeClaim:default"],
     labels='backend'
 )
 k8s_resource(
@@ -160,6 +161,7 @@ k8s_yaml(yaml)
 k8s_resource(
     'invent-frontend',
     port_forwards='12345:80',
+    objects = ['invent-frontend:ServiceAccount:default'],
     labels='frontend'
 )
 
