@@ -18,13 +18,15 @@ helm_resource(
 )
 
 local_resource(
-  name='import-dump',
-  resource_deps=['postgres'],
-  cmd=['sh', '-c', """
-kubectl cp $HOME/tilt_files/dump_anon.sql postgres-postgresql-0:/tmp/dump_anon.sql
-kubectl exec postgres-postgresql-0 -- psql -U postgres -d postgres -f /tmp/dump_anon.sql
-"""],
-labels=['database'])
+    name='import-dump',
+    resource_deps=['postgres'],
+    cmd=['sh', '-c', """
+    kubectl cp $HOME/tilt_files/dump_anon.sql postgres-postgresql-0:/tmp/dump_anon.sql
+    kubectl exec postgres-postgresql-0 -- psql -U postgres -d postgres -f /tmp/dump_anon.sql
+    """],
+    allow_parallel=True,
+    labels=['database']
+    )
 
 helm_resource(
     resource_deps=['bitnami'],
@@ -146,24 +148,25 @@ yaml = helm(
   )
 k8s_yaml(yaml)
 
-k8s_resource('invent-frontend', port_forwards='12345:80')
-
 local_resource(
     'frontend-portforward',
     'kubectl port-forward svc/invent-frontend 30010:80',
     resource_deps=['invent-frontend'],
+    allow_parallel=True
     )
 
 local_resource(
     'db-portforward',
     'kubectl port-forward svc/postgres-postgresql 30011:5432',
     resource_deps=['postgres'],
+    allow_parallel=True
     )
 
 local_resource(
     'mailhog-portforward',
     'kubectl port-forward svc/mailhog 30012:8025',
     resource_deps=['mailhog'],
+    allow_parallel=True
     )
 
 k8s_kind('local')
