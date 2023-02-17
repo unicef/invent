@@ -18,13 +18,15 @@ helm_resource(
 )
 
 local_resource(
-  name='import-dump',
-  resource_deps=['postgres'],
-  cmd=['sh', '-c', """
-kubectl cp $HOME/tilt_files/dump_anon.sql postgres-postgresql-0:/tmp/dump_anon.sql
-kubectl exec postgres-postgresql-0 -- psql -U postgres -d postgres -f /tmp/dump_anon.sql
-"""],
-labels=['database'])
+    name='import-dump',
+    resource_deps=['postgres'],
+    cmd=['sh', '-c', """
+    kubectl cp $HOME/tilt_files/dump_anon.sql postgres-postgresql-0:/tmp/dump_anon.sql
+    kubectl exec postgres-postgresql-0 -- psql -U postgres -d postgres -f /tmp/dump_anon.sql
+    """],
+    allow_parallel=True,
+    labels=['database']
+    )
 
 helm_resource(
     resource_deps=['bitnami'],
