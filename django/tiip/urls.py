@@ -36,6 +36,8 @@ urlpatterns = [
 
 if settings.DEBUG:  # pragma: no cover
     urlpatterns.append(url(r'^api/devdocs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)))
+    urlpatterns.append(url(r'^swagger(?P<format>\.json|\.yaml)$', api_info.without_ui(cache_timeout=0), name='schema-json'))
+    urlpatterns.append(url(r'^swagger/$', api_info.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'))
 
 api_info = openapi.Info(
     title=API_TITLE,
@@ -80,6 +82,6 @@ api_schema_view = get_schema_view(
 
 urlpatterns += [
     path('api/docs/', api_schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('api/swagger(?P<format>\.json|\.yaml)$', api_schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('api/swagger/$', api_schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('swagger(?P<format>\.json|\.yaml)$', api_schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/$', api_schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
