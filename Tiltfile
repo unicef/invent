@@ -14,6 +14,7 @@ helm_resource(
         '--set=auth.enablePostgresUser=true',
         '--set=auth.postgresPassword=postgres'
     ],
+    port_forwards=['30011:5432'],
     labels=['database']
 )
 
@@ -52,6 +53,7 @@ helm_resource(
     flags=[
         '--set=auth.enabled=false',
     ],
+    port_forwards=['30012:8025'],
     labels=['mailhog']
 )
 
@@ -82,6 +84,7 @@ k8s_yaml(yaml)
 k8s_resource(
     'invent-django',
     objects = ['invent-django:ServiceAccount',"invent-django-translations:PersistentVolumeClaim","invent-django-translations-country:PersistentVolumeClaim","invent-django-locale:PersistentVolumeClaim","invent-django-translations-user:PersistentVolumeClaim"],
+    pod_readiness='wait',
     labels='backend'
 )
 k8s_resource(
@@ -160,33 +163,10 @@ k8s_yaml(yaml)
 
 k8s_resource(
     'invent-frontend',
-    port_forwards='12345:80',
+    port_forwards='30010:80',
     objects = ['invent-frontend:ServiceAccount'],
+    pod_readiness='wait',
     labels='frontend'
-)
-
-local_resource(
-    'frontend-portforward',
-    serve_cmd='kubectl port-forward svc/invent-frontend 30010:80',
-    resource_deps=['invent-frontend'],
-    labels=['frontend'],
-    allow_parallel=True
-)
-
-local_resource(
-    'db-portforward',
-    serve_cmd='kubectl port-forward svc/postgres-postgresql 30011:5432',
-    resource_deps=['postgres'],
-    labels=['database'],
-    allow_parallel=True
-)
-
-local_resource(
-    'mailhog-portforward',
-    serve_cmd='kubectl port-forward svc/mailhog 30012:8025',
-    resource_deps=['mailhog'],
-    labels=['mailhog'],
-    allow_parallel=True
 )
 
 k8s_kind('local')
