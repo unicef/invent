@@ -79,6 +79,15 @@ yaml = helm(
   values=['./django/helm/values-dev.yaml'],
   )
 k8s_yaml(yaml)
+k8s_resource(
+    'invent-django',
+    labels='backend'
+)
+k8s_resource(
+    'invent-celery',
+    labels='backend'
+)
+
 
 # Add a button to quickly run a command in a pod
 pod_exec_script = '''
@@ -148,25 +157,34 @@ yaml = helm(
   )
 k8s_yaml(yaml)
 
+k8s_resource(
+    'invent-frontend',
+    port_forwards='12345:80',
+    labels='frontend'
+)
+
 local_resource(
     'frontend-portforward',
-    'kubectl port-forward svc/invent-frontend 30010:80',
+    serve_cmd='kubectl port-forward svc/invent-frontend 30010:80',
     resource_deps=['invent-frontend'],
+    labels=['frontend'],
     allow_parallel=True
-    )
+)
 
 local_resource(
     'db-portforward',
-    'kubectl port-forward svc/postgres-postgresql 30011:5432',
+    serve_cmd='kubectl port-forward svc/postgres-postgresql 30011:5432',
     resource_deps=['postgres'],
+    labels=['database'],
     allow_parallel=True
-    )
+)
 
 local_resource(
     'mailhog-portforward',
-    'kubectl port-forward svc/mailhog 30012:8025',
+    serve_cmd='kubectl port-forward svc/mailhog 30012:8025',
     resource_deps=['mailhog'],
+    labels=['mailhog'],
     allow_parallel=True
-    )
+)
 
 k8s_kind('local')
