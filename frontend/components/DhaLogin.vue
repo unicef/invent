@@ -1,10 +1,6 @@
 <template>
   <div class="LoginComponent">
-    <el-card
-      v-if="!showForgotten && !successfulReset"
-      key="loginCard"
-      :body-style="{ padding: '0px' }"
-    >
+    <el-card v-if="!showForgotten && !successfulReset" key="loginCard" :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Log in to Digital Health Atlas</translate>
       </div>
@@ -18,63 +14,27 @@
         @submit.native.prevent="loginLocal"
       >
         <fieldset>
-          <el-form-item
-            data-test="signin-username-item"
-            :label="$gettext('E-mail') | translate"
-            prop="username"
-          >
-            <el-input
-              v-model="username"
-              data-test="signin-username"
-              type="text"
-            />
+          <el-form-item data-test="signin-username-item" :label="$gettext('E-mail') | translate" prop="username">
+            <el-input v-model="username" data-test="signin-username" type="text" />
           </el-form-item>
 
-          <el-form-item
-            data-test="signin-password-item"
-            :label="$gettext('Password') | translate"
-            prop="password"
-          >
-            <el-input
-              v-model="password"
-              data-test="signin-password"
-              type="password"
-            />
-            <div
-              v-if="nonFieldErrors"
-              class="el-form-item__error ModifiedFormError"
-              data-test="signin-error"
-            >
+          <el-form-item data-test="signin-password-item" :label="$gettext('Password') | translate" prop="password">
+            <el-input v-model="password" data-test="signin-password" type="password" />
+            <div v-if="nonFieldErrors" class="el-form-item__error ModifiedFormError" data-test="signin-error">
               {{ nonFieldErrors }}
             </div>
           </el-form-item>
         </fieldset>
 
         <div class="CardActionsBottom">
-          <el-row
-            type="flex"
-            justify="space-between"
-            align="middle"
-            class="cardActions"
-          >
+          <el-row type="flex" justify="space-between" align="middle" class="cardActions">
             <el-col :span="6" class="SecondaryAction">
-              <el-button
-                data-test="signin-forgot"
-                type="text"
-                size="small"
-                class="CancelButton"
-                @click="toForgotten"
-              >
+              <el-button data-test="signin-forgot" type="text" size="small" class="CancelButton" @click="toForgotten">
                 <translate>Forgot password?</translate>
               </el-button>
             </el-col>
             <el-col :span="6" class="PrimaryAction">
-              <el-button
-                data-test="signin-submit"
-                type="primary"
-                size="medium"
-                native-type="submit"
-              >
+              <el-button data-test="signin-submit" type="primary" size="medium" native-type="submit">
                 <translate>Log in</translate>
               </el-button>
             </el-col>
@@ -83,20 +43,13 @@
       </el-form>
     </el-card>
 
-    <el-card
-      v-if="showForgotten"
-      key="forgottenCard"
-      :body-style="{ padding: '0px' }"
-    >
+    <el-card v-if="showForgotten" key="forgottenCard" :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Reset forgotten password</translate>
       </div>
 
       <p class="Instruction">
-        <translate
-          >Enter your email address and follow the instructions you will get by
-          email.</translate
-        >
+        <translate>Enter your email address and follow the instructions you will get by email.</translate>
       </p>
 
       <el-form
@@ -114,29 +67,14 @@
         </fieldset>
 
         <div class="CardActionsBottom">
-          <el-row
-            type="flex"
-            justify="space-between"
-            align="middle"
-            class="cardActions"
-          >
+          <el-row type="flex" justify="space-between" align="middle" class="cardActions">
             <el-col :span="6" class="SecondaryAction">
-              <el-button
-                data-test="back"
-                type="text"
-                size="small"
-                @click="showForgotten = false"
-              >
+              <el-button data-test="back" type="text" size="small" @click="showForgotten = false">
                 <translate>Go back to login</translate>
               </el-button>
             </el-col>
             <el-col :span="6" class="PrimaryAction">
-              <el-button
-                data-test="reset"
-                type="primary"
-                size="medium"
-                native-type="submit"
-              >
+              <el-button data-test="reset" type="primary" size="medium" native-type="submit">
                 <translate>Reset</translate>
               </el-button>
             </el-col>
@@ -145,38 +83,20 @@
       </el-form>
     </el-card>
 
-    <el-card
-      v-if="successfulReset"
-      key="resetCard"
-      :body-style="{ padding: '0px' }"
-      class="Success"
-    >
+    <el-card v-if="successfulReset" key="resetCard" :body-style="{ padding: '0px' }" class="Success">
       <div slot="header">
         <translate>Congratulations!</translate>
       </div>
 
       <p class="Instruction">
-        <translate
-          >An email with instructions to reset your password have been
-          sent.</translate
-        >
+        <translate>An email with instructions to reset your password have been sent.</translate>
       </p>
 
       <div class="CardActionsBottom">
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-          class="cardActions"
-        >
+        <el-row type="flex" justify="space-between" align="middle" class="cardActions">
           <el-col :span="6" class="SecondaryAction" />
           <el-col :span="6" class="PrimaryAction">
-            <el-button
-              data-test="back"
-              type="primary"
-              size="medium"
-              @click="successfulReset = false"
-            >
+            <el-button data-test="back" type="primary" size="medium" @click="successfulReset = false">
               <translate>Go back to login</translate>
             </el-button>
           </el-col>
@@ -253,24 +173,19 @@ export default {
     }),
     handleRoutingErrors(e) {
       this.$alert(
-        this.$gettext(
-          'An error occured during login, please reload the page and try again'
-        ),
+        this.$gettext('An error occured during login, please reload the page and try again'),
         this.$gettext('Warning'),
         {
           confirmButtonText: this.$gettext('OK'),
         }
       )
       if (this.$sentry) {
-        this.$sentry.captureMessage(
-          'Un-caught validation error in initiative page',
-          {
-            level: 'warning',
-            extra: {
-              e,
-            },
-          }
-        )
+        this.$sentry.captureMessage('Un-caught validation error in initiative page', {
+          level: 'warning',
+          extra: {
+            e,
+          },
+        })
       }
     },
     async loginLocal() {
@@ -281,7 +196,7 @@ export default {
         await this.login({
           username: this.username,
           password: this.password,
-        })
+        }).then(() => this.goToHomePage())
       } catch (e) {
         if (e) {
           this.setFormAPIErrors(e)
@@ -290,28 +205,31 @@ export default {
         this.$nuxt.$loading.finish('loginLoader')
         return
       }
+
+      this.$nuxt.$loading.finish('loginLoader')
+    },
+    async goToHomePage() {
       try {
         if (this.profile.country) {
           this.setSelectedCountry(this.profile.country)
         }
-        if (this.$route.query?.next && this.$route.query?.next.search(/auth\/$/) < 0) {
+        if (this.$route.query && this.$route.query.next) {
           const path = this.$route.query.next
           const query = { ...this.$route.query, next: undefined }
           this.$router.push({ path, query })
-        }else{
+        } else {
           this.$router.push(
             this.localePath({
               name: 'index',
               params: this.$route.params,
+              // query: { country: [this.profile.country] },
             })
           )
         }
       } catch (e) {
         this.handleRoutingErrors(e)
       }
-      this.$nuxt.$loading.finish('loginLoader')
     },
-
     toForgotten() {
       this.email = this.username
       this.showForgotten = true
@@ -344,9 +262,7 @@ export default {
 
 .LoginComponent {
   width: @cardSizeSmall;
-  min-height: calc(
-    100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 160px
-  );
+  min-height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 160px);
   margin: 80px auto;
 
   .Instruction {

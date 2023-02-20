@@ -8,11 +8,11 @@ WORKDIR /usr/src/app
 
 ADD frontend/package.json frontend/yarn.lock /tmp/
 RUN cd /tmp && yarn --silent --non-interactive
+RUN cd /usr/src/app && ln -s /tmp/node_modules
 
 COPY frontend/ /usr/src/app/
 COPY django/translations/master.pot /usr/src/app/
 #RUN echo "NODE_ENV=production" >> .env
-RUN ln -s /tmp/node_modules /usr/src/app/node_modules
 RUN yarn build --quiet
 ####
 ENV HOST 0.0.0.0
