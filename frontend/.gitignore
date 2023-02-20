@@ -12,6 +12,6 @@ dist
 
 coverage/
 ##Push .env for testing##
-.env
+#.env
 .yarn-error.log
 .yarn

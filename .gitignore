@@ -50,3 +50,6 @@ nginx/conf.d.qa/default.conf
 nginx/conf.d.prod/default.conf
 nginx/conf.d.dev/default.conf
 /docs/_build/
+
+# Anonymized database
+dump_anon.sql

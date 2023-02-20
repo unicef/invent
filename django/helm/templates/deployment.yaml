@@ -29,12 +29,17 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
+        {{- if not (eq .Values.environment "local") }}
         - name: secrets-store01-inline
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
               secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
+        - name: media-data
+          persistentVolumeClaim:
+            claimName: media-blob-fuse
+        {{- end }}
         - name: translations-data
           persistentVolumeClaim:
             claimName: {{ include "invent-django.fullname" . }}-translations
@@ -47,17 +52,18 @@ spec:
         - name: translations-user-data
           persistentVolumeClaim:
             claimName: {{ include "invent-django.fullname" . }}-translations-user
-        - name: media-data
-          persistentVolumeClaim:
-            claimName: media-blob-fuse
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           command: ["/bin/bash", "startup_actions.sh"]
           volumeMounts:
+            {{- if not (eq .Values.environment "local") }}
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
               readOnly: true
+            - mountPath: "/src/media"
+              name: media-data
+            {{- end }}
             - mountPath: "/src/translations"
               name: translations-data
             - mountPath: "/src/country/locale"
@@ -66,11 +72,10 @@ spec:
               name: locale-data
             - mountPath: "/src/user/locale"
               name: translations-user-data
-            - mountPath: "/src/media"
-              name: media-data
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
+            {{- if not (eq .Values.environment "local") }}
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -101,6 +106,7 @@ spec:
                 secretKeyRef:
                   name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: {{ .Values.envFullName }}-azure-postgres-password
+            {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}

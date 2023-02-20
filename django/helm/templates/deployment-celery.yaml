@@ -27,12 +27,14 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
+      {{- if not (eq .Values.environment "local") }}
         - name: secrets-store01-inline
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
               secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
+      {{- end }}
       containers:
         - name: invent-celery
           args:
@@ -44,12 +46,15 @@ spec:
             - -l
             - info
           volumeMounts:
+          {{- if not (eq .Values.environment "local") }}
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
               readOnly: true
+          {{- end }}
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
+          {{- if not (eq .Values.environment "local") }}
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -80,6 +85,7 @@ spec:
                 secretKeyRef:
                   name: azure-{{ include "invent-django.fullname" . }}-keyvault
                   key: {{ .Values.envFullName }}-azure-postgres-password
+          {{- end }}
             - name: "C_FORCE_ROOT"
               value: "true"
           securityContext:
