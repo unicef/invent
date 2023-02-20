@@ -24,7 +24,7 @@ unitTests:
   enabled: false
 
 storage:
-  storageCLass: standard
+  storageCLass: 
   accessModes: ReadWriteOnce
   translationsSize: 1Gi
   translationsCountrySize: 500Mi
