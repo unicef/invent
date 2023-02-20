@@ -89,6 +89,7 @@ k8s_resource(
 )
 k8s_resource(
     'invent-celery',
+    resource_deps = ['redis'],
     labels='backend'
 )
 
