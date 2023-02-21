@@ -38,7 +38,7 @@ spec:
               secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
         - name: media-data
           persistentVolumeClaim:
-            claimName: media-blob-fuse
+            claimName: media-blob-nfs
         {{- end }}
         - name: translations-data
           persistentVolumeClaim:
