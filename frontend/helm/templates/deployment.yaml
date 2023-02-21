@@ -31,7 +31,7 @@ spec:
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: media-blob-fuse
+            claimName: media-blob-nfs
       {{- end }}
       containers:
         - name: nginx
