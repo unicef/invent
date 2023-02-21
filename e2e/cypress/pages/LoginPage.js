@@ -1,3 +1,4 @@
+/// <reference types="Cypress" />
 import HomePage from "./HomePage";
 
 class LoginPage {

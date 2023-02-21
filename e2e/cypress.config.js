@@ -9,6 +9,9 @@ module.exports = defineConfig({
     chromeWebSecurity: false,
     defaultCommandTimeout: 60000,
     experimentalModifyObstructiveThirdPartyCode: true,
-    experimentalSessionAndOrigin:true
+    experimentalSessionAndOrigin:true,
+    viewportHeight:1000,
+    viewportWidth:1400
+
   },
 });
