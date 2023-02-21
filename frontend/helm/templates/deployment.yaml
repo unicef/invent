@@ -27,7 +27,7 @@ spec:
       serviceAccountName: {{ include "invent-frontend.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if .Values.pvc_media -}}
+      {{- if .Values.pvc_media }}
       volumes:
         - name: media
           persistentVolumeClaim:
@@ -39,7 +39,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repositoryNginx }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.pvc_media -}}
+          {{- if .Values.pvc_media }}
           volumeMounts:
             - mountPath: "/usr/share/nginx/html/media"
               name: media
