@@ -9,5 +9,13 @@ export default async function ({ store, req, redirect, app, route }) {
       query: { ...route.query, next: route.path },
     })
     redirect(path)
-  }
+  } else {
+    const path = app.localePath({
+      name: 'index',
+      params: route.params,
+      query: { ...route.query, next: route.path },
+    })
+    redirect(path)
+    }
+  
 }
