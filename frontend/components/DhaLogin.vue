@@ -162,8 +162,22 @@ export default {
   },
   computed: {
     ...mapGetters({
+      user: 'user/getProfile',
       profile: 'user/getProfile',
     }),
+  },
+  watch: {
+    user: function () {
+      if (this.user) {
+        this.$router.push(
+            this.localePath({
+              name: 'index',
+              params: this.$route.params,
+              // query: { country: [this.profile.country] },
+            })
+          )
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -196,7 +210,7 @@ export default {
         await this.login({
           username: this.username,
           password: this.password,
-        }).then(() => this.goToHomePage())
+        })
       } catch (e) {
         if (e) {
           this.setFormAPIErrors(e)
@@ -205,10 +219,6 @@ export default {
         this.$nuxt.$loading.finish('loginLoader')
         return
       }
-
-      this.$nuxt.$loading.finish('loginLoader')
-    },
-    async goToHomePage() {
       try {
         if (this.profile.country) {
           this.setSelectedCountry(this.profile.country)
@@ -220,7 +230,7 @@ export default {
         } else {
           this.$router.push(
             this.localePath({
-              name: 'index',
+              name: 'organisation-inventory-list',
               params: this.$route.params,
               // query: { country: [this.profile.country] },
             })
@@ -229,6 +239,7 @@ export default {
       } catch (e) {
         this.handleRoutingErrors(e)
       }
+      this.$nuxt.$loading.finish('loginLoader')
     },
     toForgotten() {
       this.email = this.username

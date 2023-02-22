@@ -18,8 +18,22 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
+      user: 'user/getProfile',
       profile: 'user/getProfile',
     }),
+  },
+  watch: {
+    user: function () {
+      if (this.user) {
+        this.$router.push(
+            this.localePath({
+              name: 'index',
+              params: this.$route.params,
+              // query: { country: [this.profile.country] },
+            })
+          )
+      }
+    }
   },
   async mounted() {
     // eslint-disable-next-line
