@@ -162,8 +162,22 @@ export default {
   },
   computed: {
     ...mapGetters({
+      user: 'user/getProfile',
       profile: 'user/getProfile',
     }),
+  },
+  watch: {
+    user: function () {
+      if (this.user) {
+        this.$router.push(
+            this.localePath({
+              name: 'index',
+              params: this.$route.params,
+              // query: { country: [this.profile.country] },
+            })
+          )
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -220,7 +234,7 @@ export default {
         } else {
           this.$router.push(
             this.localePath({
-              name: 'index',
+              name: 'organisation-inventory-list',
               params: this.$route.params,
               // query: { country: [this.profile.country] },
             })
