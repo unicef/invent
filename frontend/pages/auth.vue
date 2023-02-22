@@ -6,7 +6,7 @@
           <translate> Login </translate>
         </el-button>
         <p>
-          <translate> You must have a UNICEF account to log in. </translate>
+          <translate> You must have a UNICEF account to log in. @ @@@@</translate>
         </p>
       </div>
     </div>
@@ -18,10 +18,30 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
+      user: 'user/getProfile',
       profile: 'user/getProfile',
     }),
   },
   async mounted() {
+    if (this.user) {
+      console.log('Auth redirect')
+      this.$router.push(
+        this.localePath({
+          name: 'index',
+          params: this.$route.params,
+          // query: { country: [this.profile.country] },
+        })
+      )
+    }
+    if (this.user) {
+        this.$router.push(
+            this.localePath({
+              name: 'index',
+              params: this.$route.params,
+              // query: { country: [this.profile.country] },
+            })
+          )
+      }
     // eslint-disable-next-line
     if (!process.server) {
       const storedNext = localStorage.getItem('next')
