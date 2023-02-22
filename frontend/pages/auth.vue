@@ -18,30 +18,12 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-      user: 'user/getProfile',
+     
       profile: 'user/getProfile',
     }),
   },
-  watch: {
-user: function(){
-  if (this.user) {
-    console.log('To homepage watch')
-      this.goToHomepage()
-      }
-}
-  },
-  async beforeMount() {
-    if (this.user) {
-      console.log('To homepage beforeMount')
-      this.goToHomepage()
-      }
-  },
   async mounted() {
-    if (this.user) {
-      console.log('To homepage onmounted')
-       this.goToHomepage()
-      } else {
-         // eslint-disable-next-line
+             // eslint-disable-next-line
     if (!process.server) {
       const storedNext = localStorage.getItem('next')
       const next = this.$route.query.next
@@ -82,7 +64,7 @@ user: function(){
         }
       }
     }
-      }
+      
    
   },
   methods: {
