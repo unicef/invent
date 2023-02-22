@@ -6,7 +6,7 @@
           <translate> Login </translate>
         </el-button>
         <p>
-          <translate> You must have a UNICEF account to log in. @ @@@@</translate>
+          <translate> You must have a UNICEF account to log in. </translate>
         </p>
       </div>
     </div>
@@ -22,27 +22,26 @@ export default {
       profile: 'user/getProfile',
     }),
   },
+  watch: {
+user: function(){
+  if (this.user) {
+    console.log('To homepage watch')
+      this.goToHomepage()
+      }
+}
+  },
+  async beforeMount() {
+    if (this.user) {
+      console.log('To homepage beforeMount')
+      this.goToHomepage()
+      }
+  },
   async mounted() {
     if (this.user) {
-      console.log('Auth redirect')
-      this.$router.push(
-        this.localePath({
-          name: 'index',
-          params: this.$route.params,
-          // query: { country: [this.profile.country] },
-        })
-      )
-    }
-    if (this.user) {
-        this.$router.push(
-            this.localePath({
-              name: 'index',
-              params: this.$route.params,
-              // query: { country: [this.profile.country] },
-            })
-          )
-      }
-    // eslint-disable-next-line
+      console.log('To homepage onmounted')
+       this.goToHomepage()
+      } else {
+         // eslint-disable-next-line
     if (!process.server) {
       const storedNext = localStorage.getItem('next')
       const next = this.$route.query.next
@@ -83,6 +82,8 @@ export default {
         }
       }
     }
+      }
+   
   },
   methods: {
     ...mapActions({
@@ -92,6 +93,14 @@ export default {
     loginStart() {
       window.location.href = process.env.loginUrl
     },
+    goToHomepage() {
+      this.$router.push(
+            this.localePath({
+              name: 'index',
+              params: this.$route.params,
+            })
+          )
+    }
   },
 }
 </script>
