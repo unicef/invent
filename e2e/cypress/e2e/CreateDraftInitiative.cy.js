@@ -4,7 +4,7 @@ import LoginPage from "../pages/LoginPage"
 import NavigationBar from "../pages/NavigationBar"
 
 describe('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147948/', () => {
-    it('Create Draft Iniative',async () => {
+    it('Create Draft Iniative',() => {
         const loginPage = new LoginPage()
         const navigationBar = new NavigationBar()
         loginPage.login(Cypress.env('username'), Cypress.env('password'))
@@ -12,7 +12,10 @@ describe('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147948/', 
         const initiativePage = new InitiativePage()            
         initiativePage.typeInitiativeName('Automation Test Initiative')
         initiativePage.selectUnicefOffice('Angola: Dundo')
-        initiativePage.typeInitiativeOverview('Initiative created from automation test')
-
+        initiativePage.typeFocalPointName('Test test')
+        initiativePage.typeFocalPointMail('gerasimos.kourkoumelis@sword-group.com')
+        initiativePage.selectPartnerType('Investment')
+        initiativePage.typePartnerName('Test test')
+        
     })
 })  

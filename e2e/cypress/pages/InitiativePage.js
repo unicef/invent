@@ -10,34 +10,63 @@ class InitiativePage {
         return cy.get('input[data-as-name="Name"]')
     }
 
-    getUnicefOffice(){
+    getUnicefOffice() {
         return cy.get('input[placeholder="UNICEF office"]')
     }
 
-    getIniativeOverview(){
+    getIniativeOverview() {
         return cy.get('textarea[data-vv-name="overview"]')
     }
 
-    getFocalPointName(){
+    getFocalPointName() {
         return cy.get('input[data-vv-name="contact_name"]')
     }
 
-    getFocalPointMail(){
+    getFocalPointMail() {
         return cy.get('input[data-vv-name="contact_email"]')
     }
 
-    typeInitiativeName(name){
+    typeInitiativeName(name) {
         this.getInitiativeName().type(name)
     }
 
-    typeInitiativeOverview(overview){
+    typeInitiativeOverview(overview) {
         this.getIniativeOverview().type(overview)
     }
 
-    selectUnicefOffice(office){
+    getPartnerType() {
+        return cy.get('div[data-vv-as="Partner Type"]')
+    }
+
+    getPartnerName() {
+        return cy.get('data-vv-name="partner_name0"')
+    }
+
+
+
+    selectUnicefOffice(office) {
         this.getUnicefOffice().click()
-        this.getUnicefOffice().type(office) 
+        this.getUnicefOffice().type(office)
         cy.contains(office).click()
     }
+
+    typeFocalPointName(name) {
+        this.getFocalPointName().type(name)
+    }
+
+    typeFocalPointMail(email) {
+        this.getFocalPointMail().type(email)
+    }
+
+    selectPartnerType(partner) {
+        this.getPartnerType().click()
+        this.getPartnerType().type(partner)
+        cy.contains(partner).click()
+    }
+
+    typePartnerName(name) {
+        this.getPartnerName().type(name)
+    }
+
 }
 export default InitiativePage
