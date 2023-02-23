@@ -17,6 +17,10 @@ describe('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147948/', 
         initiativePage.selectPartnerType('Investment')
         initiativePage.typePartnerName('Test test')
         initiativePage.saveDraft()
+        initiativePage.getPopWindow().contains('Your draft has been saved successfully')
+        initiativePage.closePopUpWindow()
+
+        
         
     })
 })  

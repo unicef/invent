@@ -50,6 +50,10 @@ class InitiativePage {
         return cy.get('[role="dialog"]')
     }
 
+    getCloseButton(){
+        return cy.contains('Close')
+    }
+
     selectUnicefOffice(office) {      
         this.getUnicefOffice().click()
         this.getUnicefOffice().type(office)
@@ -68,6 +72,7 @@ class InitiativePage {
     selectPartnerType(partner) {
         this.getPartnerType().click()
         this.getPartnerType().type(partner)
+        this.getPartnerType().scrollIntoView()
         cy.contains(partner).click()
     }
 
@@ -77,6 +82,10 @@ class InitiativePage {
 
     saveDraft() {
         this.getSaveDraftButton().click()
+    }
+
+    closePopUpWindow(){
+        this.getCloseButton().click()
     }
 
 
