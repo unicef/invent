@@ -2,7 +2,7 @@
   <div>
     <div class="AuthComponent">
       <div>
-        <el-button type="primary" size="large" @click="loginStart" disabled="disabled" >
+        <el-button type="primary" size="large" @click="loginStart" :disabled="disabled" >
           <translate> Login </translate>
         </el-button>
         <p>
