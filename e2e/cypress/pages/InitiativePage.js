@@ -39,14 +39,21 @@ class InitiativePage {
     }
 
     getPartnerName() {
-        return cy.get('data-vv-name="partner_name0"')
+        return cy.get('input[data-vv-as="Partner Name"]')
     }
 
+    getSaveDraftButton() {
+        return cy.get('[class="el-button el-button--primary el-button--medium SaveDraft NewProject"]')
+    }
 
+    getPopWindow(){
+        return cy.get('[role="dialog"]')
+    }
 
-    selectUnicefOffice(office) {
+    selectUnicefOffice(office) {      
         this.getUnicefOffice().click()
         this.getUnicefOffice().type(office)
+        this.getUnicefOffice().scrollIntoView()
         cy.contains(office).click()
     }
 
@@ -67,6 +74,12 @@ class InitiativePage {
     typePartnerName(name) {
         this.getPartnerName().type(name)
     }
+
+    saveDraft() {
+        this.getSaveDraftButton().click()
+    }
+
+
 
 }
 export default InitiativePage

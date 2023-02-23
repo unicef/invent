@@ -16,6 +16,7 @@ describe('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147948/', 
         initiativePage.typeFocalPointMail('gerasimos.kourkoumelis@sword-group.com')
         initiativePage.selectPartnerType('Investment')
         initiativePage.typePartnerName('Test test')
+        initiativePage.saveDraft()
         
     })
 })  
