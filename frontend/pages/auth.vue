@@ -44,7 +44,7 @@ export default {
             await this.login({ code })
             console.log('Login sucesfull!')
             if (this.profile.country) {
-              await this.setSelectedCountry(this.profile.country)
+              this.setSelectedCountry(this.profile.country)
             }
             if (storedNext) {
               this.$router.push(storedNext)
