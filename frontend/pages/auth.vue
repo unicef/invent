@@ -18,22 +18,24 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
-     
+      user: 'user/getProfile',
       profile: 'user/getProfile',
     }),
   },
   async mounted() {
-             // eslint-disable-next-line
+    // eslint-disable-next-line
+    console.log(this.$route.name)
     if (!process.server) {
       const storedNext = localStorage.getItem('next')
       const next = this.$route.query.next
+      console.log('route next ' + next + 'stored next ' + storedNext)
       localStorage.removeItem('next')
       if (next && next !== '/') {
         localStorage.setItem('next', next)
       }
       if (window.location.hash) {
         const codeMatch = window.location.hash.match(/#code=(.*)&session/)
-        window.history.replaceState(null, null, ' ')
+        //window.history.replaceState(null, null, ' ')
         if (codeMatch.length > 1) {
           const code = codeMatch[1]
           this.$nextTick(() => {
@@ -41,31 +43,28 @@ export default {
           })
           try {
             await this.login({ code })
-          } catch (e) {
-            this.$nuxt.$loading.finish('loginLoader')
-            return
-          }
-          try {
+            console.log('Login sucesfull!')
             if (this.profile.country) {
-              this.setSelectedCountry(this.profile.country)
+              await this.setSelectedCountry(this.profile.country)
             }
             if (storedNext) {
               this.$router.push(storedNext)
             } else {
+              console.log('hash and no next route, redirect to homepage')
               // this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: { organisation: '-' } }));
-              this.$router.push(
-                this.localePath({ name: '', params: { organisation: '-' } })
-              )
+              this.$router.push(this.localePath({ name: 'organisation-login', params: { organisation: '-' } }))
             }
           } catch (e) {
             console.error(e)
+          } finally {
+            this.$nuxt.$loading.finish('loginLoader')
           }
-          this.$nuxt.$loading.finish('loginLoader')
         }
+      } else if ( this.user && this.$route.name.split('___')[0] === 'auth' ) {
+        console.log('User set and auth route, redirect to homepage')
+        this.$router.push(this.localePath({ name: 'organisation-login', params: { organisation: '-' } }))
       }
     }
-      
-   
   },
   methods: {
     ...mapActions({
