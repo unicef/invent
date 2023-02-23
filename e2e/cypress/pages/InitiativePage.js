@@ -26,12 +26,16 @@ class InitiativePage {
         return cy.get('input[data-vv-name="contact_email"]')
     }
 
-    typeInitiativeName(name) {
-        this.getInitiativeName().type(name)
+    getSectorInitiative() {
+        return cy.get('[data-vv-name="unicef_sector"]').click()
     }
 
-    typeInitiativeOverview(overview) {
-        this.getIniativeOverview().type(overview)
+    getGoalArea() {
+        return cy.get('[data-vv-name="goal_area"]').click()
+    }
+
+    getStartDate() {
+        return cy.get('[data-vv-name="start_date"]').click()
     }
 
     getPartnerType() {
@@ -40,6 +44,30 @@ class InitiativePage {
 
     getPartnerName() {
         return cy.get('input[data-vv-as="Partner Name"]')
+    }
+
+    getSoftwarePLatform(){
+        return cy.get('[data-vv-name="platforms"]')
+    }
+
+    typeInitiativeName(name) {
+        this.getInitiativeName().type(name)
+    }
+
+    typeInitiativeOverview(overview) {
+        this.getIniativeOverview().type(overview)
+    }
+
+    typeFocalPointName(name) {
+        this.getFocalPointName().type(name)
+    }
+
+    typeFocalPointMail(email) {
+        this.getFocalPointMail().type(email)
+    }
+
+    typePartnerName(name) {
+        this.getPartnerName().type(name)
     }
 
     getSaveDraftButton() {
@@ -61,13 +89,23 @@ class InitiativePage {
         cy.contains(office).click()
     }
 
-    typeFocalPointName(name) {
-        this.getFocalPointName().type(name)
-    }
+    selectSectorInitiative(sector) {
+        this.getSectorInitiative().click()
+        this.getSectorInitiative().type(sector).type('{enter}')
+        cy.contains(sector).click()
+        this.getSectorInitiative().click()
+   }
 
-    typeFocalPointMail(email) {
-        this.getFocalPointMail().type(email)
-    }
+   selectGoalArea(goalarea) {
+       this.getGoalArea().click()
+       this.getGoalArea().type(goalarea)
+       cy.contains(goalarea).click()
+   }
+
+   selectStartDate(startdate) {
+       this.getStartDate().click()
+       this.getStartDate().type(startdate).type('{enter}')
+   }
 
     selectPartnerType(partner) {
         this.getPartnerType().click()
@@ -76,8 +114,13 @@ class InitiativePage {
         cy.contains(partner).click()
     }
 
-    typePartnerName(name) {
-        this.getPartnerName().type(name)
+    selectSoftwarePLatform(software) {
+        this.getSoftwarePLatform().click()
+        this.getSoftwarePLatform().type(software)
+        this.getSoftwarePLatform().scrollIntoView()
+        cy.find(software).click()
+        //cy.get('[style="min-width: 862px; transform-origin: center top; z-index: 2071; position: absolute; top: 8325px; left: 81px;"] > .el-scrollbar > .el-select-dropdown__wrap > .el-scrollbar__view > .hover')
+        this.getSoftwarePLatform().click()
     }
 
     saveDraft() {
@@ -87,8 +130,6 @@ class InitiativePage {
     closePopUpWindow(){
         this.getCloseButton().click()
     }
-
-
 
 }
 export default InitiativePage
