@@ -216,7 +216,7 @@ export default {
         } else {
           this.$router.push(
             this.localePath({
-              name: 'organisation-inventory-list',
+              name: 'organisation',
               params: this.$route.params,
               // query: { country: [this.profile.country] },
             })
