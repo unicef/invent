@@ -2,7 +2,7 @@
   <div>
     <div class="AuthComponent">
       <div>
-        <el-button type="primary" size="large" @click="loginStart">
+        <el-button type="primary" size="large" @click="loginStart" disabled="disabled" >
           <translate> Login </translate>
         </el-button>
         <p>
@@ -22,12 +22,17 @@ export default {
       profile: 'user/getProfile',
     }),
   },
+  data: function() {
+return {
+  disabled: false
+}
+  },
   async mounted() {
     // eslint-disable-next-line
     if (!process.server) {
       const storedNext = localStorage.getItem('next')
       const next = this.$route.query.next
-      console.log('route next ' + next + 'stored next ' + storedNext)
+   
       localStorage.removeItem('next')
       if (next && next !== '/') {
         localStorage.setItem('next', next)
@@ -39,17 +44,18 @@ export default {
           const code = codeMatch[1]
           this.$nextTick(() => {
             this.$nuxt.$loading.start('loginLoader')
+            this.disabled = true
           })
           try {
             await this.login({ code })
-            console.log('Login sucesfull!')
+      
             if (this.profile.country) {
-              this.setSelectedCountry(this.profile.country)
+            await  this.setSelectedCountry(this.profile.country)
             }
             if (storedNext) {
               this.$router.push(storedNext)
             } else {
-              console.log('hash and no next route, redirect to homepage')
+              
               // this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: { organisation: '-' } }));
               this.$router.push(this.localePath({ name: 'organisation', params: { organisation: '-' } }))
             }
@@ -57,10 +63,11 @@ export default {
             console.error(e)
           } finally {
             this.$nuxt.$loading.finish('loginLoader')
+            this.disabled = false
           }
         }
       } else if ( this.user && this.$route.name.split('___')[0] === 'auth' ) {
-        console.log('User set and auth route, redirect to homepage')
+        
         this.$router.push(this.localePath({ name: 'organisation', params: { organisation: '-' } }))
       }
     }
