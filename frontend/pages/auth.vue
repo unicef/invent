@@ -24,7 +24,6 @@ export default {
   },
   async mounted() {
     // eslint-disable-next-line
-    console.log(this.$route.name)
     if (!process.server) {
       const storedNext = localStorage.getItem('next')
       const next = this.$route.query.next
@@ -35,7 +34,7 @@ export default {
       }
       if (window.location.hash) {
         const codeMatch = window.location.hash.match(/#code=(.*)&session/)
-        //window.history.replaceState(null, null, ' ')
+        window.history.replaceState(null, null, ' ')
         if (codeMatch.length > 1) {
           const code = codeMatch[1]
           this.$nextTick(() => {
@@ -52,7 +51,7 @@ export default {
             } else {
               console.log('hash and no next route, redirect to homepage')
               // this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: { organisation: '-' } }));
-              this.$router.push(this.localePath({ name: 'organisation-login', params: { organisation: '-' } }))
+              this.$router.push(this.localePath({ name: 'organisation', params: { organisation: '-' } }))
             }
           } catch (e) {
             console.error(e)
@@ -62,7 +61,7 @@ export default {
         }
       } else if ( this.user && this.$route.name.split('___')[0] === 'auth' ) {
         console.log('User set and auth route, redirect to homepage')
-        this.$router.push(this.localePath({ name: 'organisation-login', params: { organisation: '-' } }))
+        this.$router.push(this.localePath({ name: 'organisation', params: { organisation: '-' } }))
       }
     }
   },
