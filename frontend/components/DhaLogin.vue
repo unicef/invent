@@ -196,7 +196,7 @@ export default {
         await this.login({
           username: this.username,
           password: this.password,
-        })
+        }).then(() => this.goToHomePage())
       } catch (e) {
         if (e) {
           this.setFormAPIErrors(e)
@@ -205,6 +205,10 @@ export default {
         this.$nuxt.$loading.finish('loginLoader')
         return
       }
+
+      this.$nuxt.$loading.finish('loginLoader')
+    },
+    async goToHomePage() {
       try {
         if (this.profile.country) {
           this.setSelectedCountry(this.profile.country)
@@ -225,7 +229,6 @@ export default {
       } catch (e) {
         this.handleRoutingErrors(e)
       }
-      this.$nuxt.$loading.finish('loginLoader')
     },
     toForgotten() {
       this.email = this.username
