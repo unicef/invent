@@ -35,6 +35,9 @@ spec:
             volumeAttributes:
               secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
       {{- end }}
+        - name: media-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.mediaClaimName }}
       containers:
         - name: invent-celery
           args:
@@ -51,6 +54,8 @@ spec:
               mountPath: "/mnt/secrets-store"
               readOnly: true
           {{- end }}
+            - mountPath: "/usr/share/django/media"
+              name: media-data
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
