@@ -61,7 +61,7 @@ spec:
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
               readOnly: true
-            - mountPath: "/src/media"
+            - mountPath: "/usr/share/django/media"
               name: media-data
             {{- end }}
             - mountPath: "/src/translations"
