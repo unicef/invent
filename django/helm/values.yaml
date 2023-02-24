@@ -30,6 +30,7 @@ storage:
   translationsCountrySize: 500Mi
   localeSize: 500Mi
   translationsUserSize: 500Mi
+  mediaClaimName: media-blob-nfs
 
 imagePullSecrets: []
 nameOverride: ""
