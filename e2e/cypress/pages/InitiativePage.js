@@ -86,19 +86,17 @@ class InitiativePage {
         this.getUnicefOffice().click()
         this.getUnicefOffice().type(office)
         this.getUnicefOffice().scrollIntoView()
-        cy.contains(office).click()
+        cy.contains(office).click({force:true})
     }
 
     selectSectorInitiative(sector) {
-        this.getSectorInitiative().click()
-        this.getSectorInitiative().type(sector).type('{enter}')
+        this.getSectorInitiative().click({force:true}).type(sector)
         cy.contains(sector).click()
         this.getSectorInitiative().click()
    }
 
    selectGoalArea(goalarea) {
-       this.getGoalArea().click()
-       this.getGoalArea().type(goalarea)
+       this.getGoalArea().click().type(goalarea)
        cy.contains(goalarea).click()
    }
 
@@ -108,18 +106,17 @@ class InitiativePage {
    }
 
     selectPartnerType(partner) {
-        this.getPartnerType().click()
+        this.getPartnerType().click({force:true})
         this.getPartnerType().type(partner)
         this.getPartnerType().scrollIntoView()
         cy.contains(partner).click()
     }
 
     selectSoftwarePLatform(software) {
-        this.getSoftwarePLatform().click()
+        this.getSoftwarePLatform().click({force:true})
         this.getSoftwarePLatform().type(software)
         this.getSoftwarePLatform().scrollIntoView()
-        cy.find(software).click()
-        //cy.get('[style="min-width: 862px; transform-origin: center top; z-index: 2071; position: absolute; top: 8325px; left: 81px;"] > .el-scrollbar > .el-select-dropdown__wrap > .el-scrollbar__view > .hover')
+        cy.get('li').last().click({force: true})
         this.getSoftwarePLatform().click()
     }
 
