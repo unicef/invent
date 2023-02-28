@@ -41,7 +41,8 @@ service:
   type: ClusterIP
   port: 80
 
-pvc_media: false
+storage:
+  mediaClaimName: media-pvc
 
 ingress:
   enabled: false

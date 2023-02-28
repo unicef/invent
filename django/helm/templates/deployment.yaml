@@ -36,10 +36,10 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: azure-{{ include "invent-django.fullname" . }}-keyvault
+        {{- end }}
         - name: media-data
           persistentVolumeClaim:
-            claimName: media-blob-nfs
-        {{- end }}
+            claimName: {{ .Values.storage.mediaClaimName }}
         - name: translations-data
           persistentVolumeClaim:
             claimName: {{ include "invent-django.fullname" . }}-translations
@@ -61,9 +61,9 @@ spec:
             - name: secrets-store01-inline
               mountPath: "/mnt/secrets-store"
               readOnly: true
+            {{- end }}
             - mountPath: "/usr/share/django/media"
               name: media-data
-            {{- end }}
             - mountPath: "/src/translations"
               name: translations-data
             - mountPath: "/src/country/locale"
