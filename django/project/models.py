@@ -826,7 +826,7 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         (1, _('Acceleration')),
         (2, _('Scale')),
     ]
-
+    
     portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
     countries = models.ManyToManyField(Country, through='CountrySolution')
     problem_statements = models.ManyToManyField(ProblemStatement)
@@ -850,6 +850,23 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     @property
     def regions_display(self):
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
+    
+    def to_representation(self):
+        data = dict(
+            id=self.pk,
+            created=self.created,
+            modified=self.modified, 
+            name=self.name, 
+            regions=self.regions,
+            phase=self.phase, # I need the names not the ids
+            countries=self.countries.all(),
+            people_reached=self.people_reached, 
+            open_source_frontier_tech=self.open_source_frontier_tech,
+            learning_investment=self.learning_investment, 
+            portfolios=self.portfolios.all(),
+            problem_statements=self.problem_statements.all(),
+        )
+        return data
 
 
 class CountrySolution(models.Model):

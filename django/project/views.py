@@ -268,28 +268,9 @@ class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
 
     def _get_permission_based_data(self, solution):
         draft = None
+        published = solution.to_representation()
 
-        if not self.request.user.is_authenticated:  # ANON
-            data = solution.get_anon_data()
-        else:  # LOGGED IN
-            is_member = solution.is_member(self.request.user)
-            is_country_user_or_admin = solution.is_country_user_or_admin(self.request.user)
-            is_country_manager = False
-            co_id = solution.get_country_office_id()
-            if co_id:
-                is_country_manager = self.request.user.userprofile.manager_of.filter(id=co_id).exists()
-
-            if is_member or is_country_user_or_admin or is_country_manager or self.request.user.is_superuser:
-                data = solution.get_member_data()
-                draft = solution.get_member_draft()
-            else:
-                data = solution.get_non_member_data()
-
-        if draft:
-            draft = solution.to_representation(data=draft, draft_mode=True)
-        published = solution.to_representation(data=data)
-
-        return solution.to_response_dict(published=published, draft=draft)
+        return published
 
     def retrieve(self, request, *args, **kwargs):
         """
