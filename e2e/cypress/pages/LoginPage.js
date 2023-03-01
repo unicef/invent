@@ -8,12 +8,14 @@ class LoginPage {
 
     login(username, password) {
         cy.visit('/');
+        cy.clearLocalStorage();
+        cy.clearCookies();
         this.getLoginButton().click()
         const sentArgs = { email: username, pass: password }
         cy.origin(`https://login.microsoftonline.com`,  { args: sentArgs },({ email, pass })=> {
             cy.get('[type="email"]').type(email);
             cy.get('[type="submit"]').click();
-            cy.get('[type="password"]').type(pass);
+            cy.get('[type="password"]').type(pass, {log:false});
             cy.get('[type="submit"]').click();
         });
         const homePage = new HomePage()
