@@ -18,13 +18,31 @@ helm_resource(
     labels=['database']
 )
 
+if os.path.exists('/tmp'):
+    which_os = 'linux'
+    os_command = ['sh', '-c']
+    pod_exec_script = 'kubectl exec deployment/$deployment -- $command'
+else:
+    which_os = 'windows'
+    os_command = ['cmd', '/c']
+    pod_exec_script = 'kubectl exec deployment/%deployment% -- %command%'
+
+local_resource('test_command', cmd="echo " + which_os, allow_parallel=True)
+
+local_resource(
+    name='copy-dump',
+    resource_deps=['postgres'],
+    cmd="""kubectl cp dump_anon.sql postgres-postgresql-0:/tmp/dump_anon.sql
+    """,
+    allow_parallel=True,
+    labels=['database']
+    )
+
 local_resource(
     name='import-dump',
-    resource_deps=['postgres'],
-    cmd=['sh', '-c', """
-    kubectl cp dump_anon.sql postgres-postgresql-0:/tmp/dump_anon.sql
-    kubectl exec postgres-postgresql-0 -- psql -U postgres -d postgres -f /tmp/dump_anon.sql
-    """],
+    resource_deps=['copy-dump'],
+    cmd="""kubectl exec postgres-postgresql-0 -- psql -U postgres -d postgres -f /tmp/dump_anon.sql
+    """,
     allow_parallel=True,
     labels=['database']
     )
@@ -89,18 +107,15 @@ k8s_resource(
 )
 k8s_resource(
     'invent-celery',
+    resource_deps = ['redis'],
     labels='backend'
 )
 
 
 # Add a button to quickly run a command in a pod
-pod_exec_script = '''
-    set -eu
-    kubectl exec deployment/$deployment -- $command
-'''
 # Execute Unit Tests
 cmd_button('exec_unit_tests',
-    argv=['sh', '-c', pod_exec_script],
+    argv=os_command + [pod_exec_script],
     resource='invent-django',
     env=[
         'deployment=invent-django',
@@ -112,7 +127,7 @@ cmd_button('exec_unit_tests',
 
 # Create the Super User in Django
 cmd_button('exec_create_super_user',
-    argv=['sh', '-c', pod_exec_script],
+    argv=os_command + [pod_exec_script],
     resource='invent-django',
     env=[
         'deployment=invent-django',
@@ -124,7 +139,7 @@ cmd_button('exec_create_super_user',
 
 # Run the django migrations
 cmd_button('exec_migrate',
-    argv=['sh', '-c', pod_exec_script],
+    argv=os_command + [pod_exec_script],
     resource='invent-django',
     env=[
         'deployment=invent-django',
@@ -163,7 +178,7 @@ k8s_yaml(yaml)
 
 k8s_resource(
     'invent-frontend',
-    port_forwards='30010:80',
+    port_forwards='80:80',
     objects = ['invent-frontend:ServiceAccount'],
     pod_readiness='wait',
     labels='frontend'
