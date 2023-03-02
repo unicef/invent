@@ -13,8 +13,8 @@ module.exports = defineConfig({
     experimentalModifyObstructiveThirdPartyCode: true,
     experimentalSessionAndOrigin:true,
     viewportHeight:1000,
-    viewportWidth:1400
-
-
+    viewportWidth:1400,
+    watchForFileChanges: false
+    
   },
 });

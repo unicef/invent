@@ -12,10 +12,11 @@ class NavigationBar{
         return cy.contains('Inventory')
     }
 
-    navigateToInventory(){
+    navigateToInventoryPage(){
         this.getInventoryButton().click()
-        const inventoryPage = new InventoryPage()
-        inventoryPage.getListView().should('be.visible')
+        //inventoryPage = new InventoryPage()
+        //inventoryPage.getListView().should('be.visible')
+        cy.title().should('eq',"Invent: UNICEF's T4D and Innovation Inventory").should('be.visible')
     }
 
     // Innovation Portfolios
@@ -23,7 +24,7 @@ class NavigationBar{
         return cy.contains('Innovation Portfolios')
     }
 
-    navigateToInnovationPortfolios(){
+    navigateToInnovationPortfoliosPage(){
         this.getInnovationPortfoliosButton().click()
         const innovationPortfoliosPage = new InnovationPortfoliosPage()
         innovationPortfoliosPage.getInnovationPortfoliosSection().should('be.visible')

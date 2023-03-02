@@ -4,7 +4,7 @@ import LoginPage from "../pages/LoginPage"
 import NavigationBar from "../pages/NavigationBar"
 
 describe('Create Publish Iniative', () => {
-    it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147949/',() => {
+    it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/148113/',() => {
         const loginPage = new LoginPage()
         const navigationBar = new NavigationBar()
         loginPage.login(Cypress.env('username'), Cypress.env('password'))
