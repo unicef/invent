@@ -19,15 +19,11 @@ helm_resource(
 )
 
 if os.path.exists('/tmp'):
-    which_os = 'linux'
     os_command = ['sh', '-c']
     pod_exec_script = 'kubectl exec deployment/$deployment -- $command'
 else:
-    which_os = 'windows'
     os_command = ['cmd', '/c']
     pod_exec_script = 'kubectl exec deployment/%deployment% -- %command%'
-
-local_resource('test_command', cmd="echo " + which_os, allow_parallel=True)
 
 local_resource(
     name='copy-dump',
@@ -101,7 +97,7 @@ yaml = helm(
 k8s_yaml(yaml)
 k8s_resource(
     'invent-django',
-    objects = ['invent-django:ServiceAccount',"invent-django-translations:PersistentVolumeClaim","invent-django-translations-country:PersistentVolumeClaim","invent-django-locale:PersistentVolumeClaim","invent-django-translations-user:PersistentVolumeClaim"],
+    objects = ['invent-django:ServiceAccount', "media-pvc:persistentvolumeclaim", "invent-django-translations:PersistentVolumeClaim","invent-django-translations-country:PersistentVolumeClaim","invent-django-locale:PersistentVolumeClaim","invent-django-translations-user:PersistentVolumeClaim"],
     pod_readiness='wait',
     labels='backend'
 )
