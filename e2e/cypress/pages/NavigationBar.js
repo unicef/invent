@@ -14,9 +14,8 @@ class NavigationBar{
 
     navigateToInventoryPage(){
         this.getInventoryButton().click()
-        //inventoryPage = new InventoryPage()
-        //inventoryPage.getListView().should('be.visible')
-        cy.title().should('eq',"Invent: UNICEF's T4D and Innovation Inventory").should('be.visible')
+        const inventoryPage = new InventoryPage()
+        inventoryPage.getListView().should('be.visible')
     }
 
     // Innovation Portfolios
