@@ -72,10 +72,9 @@ helm_resource(
 )
 
 docker_build(
-    'localhost:5001/invent-django',
+    'invent-django',
     './',
     dockerfile='Dockerfile.django',
-    # only=['./django'],
     live_update=[
         sync('django/', '/src'),
         run('cd /src && pip install -r requirements.txt',
@@ -85,26 +84,18 @@ docker_build(
     ],
 )
 
-yaml = helm(
-  './django/helm',
-  # The release name, equivalent to helm --name
-  name='invent-django',
-  # The namespace to install in, equivalent to helm --namespace
-  namespace='default',
-  # The values file to substitute into the chart.
-  values=['./django/helm/values-dev.yaml'],
-  )
-k8s_yaml(yaml)
-k8s_resource(
-    'invent-django',
-    objects = ['invent-django:ServiceAccount', "media-pvc:persistentvolumeclaim", "invent-django-translations:PersistentVolumeClaim","invent-django-translations-country:PersistentVolumeClaim","invent-django-locale:PersistentVolumeClaim","invent-django-translations-user:PersistentVolumeClaim"],
-    pod_readiness='wait',
-    labels='backend'
-)
-k8s_resource(
-    'invent-celery',
-    resource_deps = ['redis'],
-    labels='backend'
+helm_resource(
+    resource_deps=['postgres'],
+    name='invent-django',
+    chart='./django/helm',
+    deps=['./django/helm'],
+    image_deps=['invent-django'],
+    namespace='default',
+    image_keys=[('image.repository', 'image.tag')],
+    flags=[
+        '-f=./django/helm/values-dev.yaml',
+    ],
+    labels=['backend']
 )
 
 
