@@ -1,0 +1,15 @@
+{{- if (eq .Values.environment "local") }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    {{- include "invent-django.labels" . | nindent 4 }}
+  name: media-pvc
+spec:
+  accessModes:
+    - {{ .Values.storage.accessModes }}
+  storageClassName: {{ .Values.storage.storageCLass }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.mediaSize }}
+{{- end }}

@@ -2,7 +2,7 @@
   <div>
     <div class="AuthComponent">
       <div>
-        <el-button type="primary" size="large" @click="loginStart">
+        <el-button type="primary" size="large" @click="loginStart" :disabled="disabled" >
           <translate> Login </translate>
         </el-button>
         <p>
@@ -18,14 +18,21 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
+      user: 'user/getProfile',
       profile: 'user/getProfile',
     }),
+  },
+  data: function() {
+return {
+  disabled: false
+}
   },
   async mounted() {
     // eslint-disable-next-line
     if (!process.server) {
       const storedNext = localStorage.getItem('next')
       const next = this.$route.query.next
+   
       localStorage.removeItem('next')
       if (next && next !== '/') {
         localStorage.setItem('next', next)
@@ -37,30 +44,31 @@ export default {
           const code = codeMatch[1]
           this.$nextTick(() => {
             this.$nuxt.$loading.start('loginLoader')
+            this.disabled = true
           })
           try {
             await this.login({ code })
-          } catch (e) {
-            this.$nuxt.$loading.finish('loginLoader')
-            return
-          }
-          try {
+      
             if (this.profile.country) {
-              this.setSelectedCountry(this.profile.country)
+            await  this.setSelectedCountry(this.profile.country)
             }
             if (storedNext) {
               this.$router.push(storedNext)
             } else {
+              
               // this.$router.push(this.localePath({ name: 'organisation-dashboard-list', params: { organisation: '-' } }));
-              this.$router.push(
-                this.localePath({ name: '', params: { organisation: '-' } })
-              )
+              this.$router.push(this.localePath({ name: 'organisation', params: { organisation: '-' } }))
             }
           } catch (e) {
             console.error(e)
+          } finally {
+            this.$nuxt.$loading.finish('loginLoader')
+            this.disabled = false
           }
-          this.$nuxt.$loading.finish('loginLoader')
         }
+      } else if ( this.user && this.$route.name.split('___')[0] === 'auth' ) {
+        
+        this.$router.push(this.localePath({ name: 'organisation', params: { organisation: '-' } }))
       }
     }
   },
@@ -72,6 +80,14 @@ export default {
     loginStart() {
       window.location.href = process.env.loginUrl
     },
+    goToHomepage() {
+      this.$router.push(
+            this.localePath({
+              name: 'index',
+              params: this.$route.params,
+            })
+          )
+    }
   },
 }
 </script>
