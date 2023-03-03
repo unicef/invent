@@ -136,7 +136,7 @@ export default {
   },
   data() {
     return {
-      docUrl: this.$gettext('https://uni.cf/invent-help')
+      docUrl: this.$gettext('https://uni.cf/invent-help'),
     }
   },
   computed: {
