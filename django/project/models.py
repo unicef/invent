@@ -851,6 +851,13 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     def regions_display(self):
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
     
+    @classmethod
+    def get_phase_text(self, phase_value):
+        for phase in self.PHASES:
+            if phase[0] == phase_value:
+                return phase[1]
+        return None
+    
     def to_representation(self):
         data = dict(
             id=self.pk,
@@ -858,7 +865,7 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
             modified=self.modified, 
             name=self.name, 
             regions=self.regions,
-            phase=self.phase, # I need the names not the ids
+            phase=self.get_phase_display(),
             countries=self.countries.all(),
             people_reached=self.people_reached, 
             open_source_frontier_tech=self.open_source_frontier_tech,
