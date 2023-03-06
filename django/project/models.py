@@ -866,14 +866,15 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
             name=self.name, 
             regions=self.regions,
             phase=self.get_phase_display(),
-            countries=self.countries.all(),
+            countries=[country.name for country in self.countries.all()],
             people_reached=self.people_reached, 
             open_source_frontier_tech=self.open_source_frontier_tech,
             learning_investment=self.learning_investment, 
-            portfolios=self.portfolios.all(),
-            problem_statements=self.problem_statements.all(),
+            portfolios=[portfolio.name for portfolio in self.portfolios.all()],
+            problem_statements=[problem_statement.name for problem_statement in self.problem_statements.all()],
         )
         return data
+
 
 
 class CountrySolution(models.Model):
