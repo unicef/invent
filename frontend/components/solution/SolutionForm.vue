@@ -8,8 +8,8 @@
       <el-row v-show="showForm" type="flex">
         <el-col :span="18">
           <GeneralOverview
-            key="generalOverview"
-            ref="generalOverview"
+            key="solutionGeneral"
+            ref="solutionGeneral"
             :use-publish-rules="usePublishRules"
             :rules="rules"
             :draft-rules="draftRules"
@@ -19,8 +19,8 @@
             @hook:created="createdHandler"
           />
           <ActivityAndReach
-            key="categorization"
-            ref="categorization"
+            key="solutionActivityAndReach"
+            ref="solutionActivityAndReach"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
@@ -30,7 +30,7 @@
           />
         </el-col>
         <el-col :span="6">
-          <SolutionNavigation
+          <FormActionsAside
             @saveDraft="doSaveDraft"
             @discardDraft="doDiscardDraft"
             @publishProject="doPublishProject"
@@ -46,13 +46,13 @@ import { publishRules, draftRules } from '@/utilities/solutions'
 import { mapGetters, mapActions } from 'vuex'
 import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
-import SolutionNavigation from './SolutionNavigation'
+import FormActionsAside from './FormActionsAside.vue'
 
 export default {
   components: {
     GeneralOverview,
     ActivityAndReach,
-    SolutionNavigation,
+    FormActionsAside,
   },
   $_veeValidate: {
     validator: 'new',
@@ -63,12 +63,12 @@ export default {
       createdElements: 0,
       usePublishRules: false,
       apiErrors: {},
-      coverImage: null,
+      countriesTable: [],
     }
   },
   computed: {
     ...mapGetters({
-      project: 'project/getProjectData',
+      solution: 'solution/getSolutionData',
       countryAnswers: 'project/getCountryAnswers',
       donorAnswers: 'project/getDonorsAnswers',
     }),
@@ -96,10 +96,10 @@ export default {
       this.$nextTick(() => {
         this.$nuxt.$loading.start()
         try {
-          const stored = JSON.parse(window.localStorage.getItem('rescuedProject'))
+          const stored = JSON.parse(window.localStorage.getItem('rescuedSoluton'))
           this.initProjectState(stored)
         } catch (e) {
-          this.$alert(this.$gettext('Failed to restore auto-saved project'), this.$gettext('Warning'), {
+          this.$alert(this.$gettext('Failed to restore auto-saved solution'), this.$gettext('Warning'), {
             confirmButtonText: this.$gettext('OK'),
           })
         }
@@ -118,29 +118,7 @@ export default {
       setLoading: 'project/setLoading',
       initProjectState: 'project/initProjectState',
     }),
-    digitalHealthInterventionsValidator(rule, value, callback) {
-      const ownDhi = this.project.digitalHealthInterventions.filter((dhi) => dhi.platform === value && dhi.id)
-      if (ownDhi.length === 0) {
-        const error = {
-          message: this.$gettext('Please select one or more Digital Health Intervetions for this Software'),
-          field: rule.fullField,
-        }
-        callback(error)
-      } else {
-        callback()
-      }
-    },
     async unCaughtErrorHandler(errors) {
-      if (this.$sentry) {
-        this.$sentry.captureMessage('Un-caught validation error in project page', {
-          level: 'error',
-          extra: {
-            apiErrors: this.apiErrors,
-            errors,
-          },
-        })
-      }
-
       try {
         await this.$confirm(
           this.$gettext('There was an un-caught validation error an automatic report has been submitted'),
@@ -150,13 +128,13 @@ export default {
             cancelButtonText: this.$gettext('Discard changes'),
           }
         )
-        const project = {
-          ...this.project,
+        const solution = {
+          ...this.solution,
           country_custom_answers: this.countryAnswers,
           donor_custom_answers: this.donorAnswers,
         }
-        const toStore = JSON.stringify(project)
-        window.localStorage.setItem('rescuedProject', toStore)
+        const toStore = JSON.stringify(solution)
+        window.localStorage.setItem('rescuedSolution', toStore)
         const newUrl = window.location.origin + this.$route.path + `?reloadDataFromStorage=true`
         window.location.href = newUrl
       } catch (e) {
@@ -177,25 +155,25 @@ export default {
     },
     async validate() {
       const validations = await Promise.all([
-        this.$refs.generalOverview.validate(),
-        this.$refs.categorization.validate(),
+        this.$refs.solutionGeneral.validate(),
+        this.$refs.solutionActivityAndReach.validate(),
       ])
       console.log('root validations', validations)
       return validations.reduce((a, c) => a && c, true)
     },
     clearValidation() {
       this.apiErrors = {}
-      this.$refs.generalOverview.clear()
-      this.$refs.categorization.clear()
+      this.$refs.solutionGeneral.clear()
+      this.$refs.solutionActivityAndReach.clear()
     },
     async doSaveDraft() {
       this.clearValidation()
       this.usePublishRules = false
       await this.$nextTick(async () => {
-        const valid = await this.$refs.generalOverview.validateDraft()
-        const categorization = await this.$refs.categorization.validateDraft()
+        const general = await this.$refs.solutionGeneral.validateDraft()
+        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validateDraft()
 
-        if (valid && categorization && technology && stages && partners) {
+        if (general && solutionActivityAndReach) {
           try {
             if (this.isNewProject) {
               const id = await this.createProject()

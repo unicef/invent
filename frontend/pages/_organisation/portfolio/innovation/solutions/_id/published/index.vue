@@ -24,9 +24,6 @@ export default {
   components: {
     SolutionData,
   },
-  props: {
-    canEdit: Boolean,
-  },
   scrollToTop: true,
   computed: {
     ...mapGetters({

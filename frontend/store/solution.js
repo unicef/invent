@@ -7,6 +7,7 @@ const cleanState = () => ({
   portfolios: [],
   people_reached: '',
   countries: [],
+  problem_statements: [],
 })
 
 export const state = () => ({
@@ -24,6 +25,9 @@ export const actions = {
     return this.$axios.get(`/api/solutions/${id}`).then((response) => {
       commit('PUT_SOLUTION', response.data)
     })
+  },
+  async setSolution({ commit }, data) {
+    return this.$axios.put(`api/solutions/${id}`)
   },
 }
 

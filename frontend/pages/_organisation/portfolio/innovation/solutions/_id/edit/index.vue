@@ -1,7 +1,7 @@
 <template>
   <div class="EditProject">
     <div class="PageTitle">
-      <h2><translate>Edit Solution Info</translate></h2>
+      <h2><translate>Edit Solution</translate></h2>
     </div>
     <solution-form />
   </div>

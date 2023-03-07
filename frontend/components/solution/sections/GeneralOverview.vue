@@ -1,13 +1,13 @@
 <template>
   <div id="general" class="GeneralOverview">
-    <collapsible-card ref="collapsible" key="general" :title="$gettext('General overview') | translate" show-legend>
+    <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('General') | translate" show-legend>
       <custom-required-form-item
         :error="errors.first('name')"
         :draft-rule="draftRules.name"
         :publish-rule="publishRules.name"
       >
         <template slot="label">
-          <translate key="project-name"> What is the name of the initiative? </translate>
+          <translate key="project-name"> What is the name of the solution? </translate>
         </template>
         <template slot="tooltip">
           <el-tooltip
@@ -22,7 +22,7 @@
         </template>
 
         <character-count-input
-          v-model="name"
+          v-model="solution.name"
           v-validate="rules.name"
           :rules="rules.name"
           data-as-name="Name"
@@ -32,407 +32,153 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              An easy to understand name for your initiative. We recommend using descriptive names that describe what
-              your initiative does. Please avoid acronyms, clever names/puns as well as the name of a specific
-              technology or platform (e.g. RapidPro) as those can make it hard to search for an initiative. For large,
-              potentially public initiatives, please do a quick search on the web for your initiative's name to make
-              sure that name isn't already being used, as it can cause confusion.
+              A short and memorable name for this solution. This name will be used across all implementing countries,
+              and will allow colleagues to find and remember the solution. This should match any public-facing name for
+              this solution.
             </translate>
           </p>
         </span>
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('country_office') ? errors.first('country_office').replace('_', ' ') : undefined"
-        :draft-rule="draftRules.country_office"
-        :publish-rule="publishRules.country_office"
+        :error="errors.first('phase') ? errors.first('phase').replace('_', ' ') : undefined"
+        :draft-rule="draftRules.phase"
+        :publish-rule="publishRules.phase"
       >
         <template slot="label">
-          <translate key="country_office"> Which UNICEF Office supports the initiative? </translate>
+          <translate key="phase"> Phase </translate>
         </template>
-        <!--        <template slot="tooltip">-->
-        <!--          <el-tooltip-->
-        <!--            class="item"-->
-        <!--            content="If you encounter an error and/or can not locate the UNICEF Office-->
-        <!--            you would like to see in this list, please send a request with details to invent@unicef.org"-->
-        <!--            placement="right"-->
-        <!--          >-->
-        <!--            <i class="el-icon-warning warning" />-->
-        <!--          </el-tooltip>-->
-        <!--        </template>-->
+
         <country-office-select
-          v-model="country_office"
-          v-validate="rules.country_office"
-          data-vv-name="country_office"
-          data-vv-as="country_office"
+          v-model="solution.phase"
+          v-validate="rules.phase"
+          data-vv-name="phase"
+          data-vv-as="phase"
         />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              The name of the country or field office location. Start typing the name of the UNICEF country office to
-              show all the field locations.
-            </translate>
-          </p>
-        </span>
-        <span class="Hint">
-          <br />
-          <fa icon="info-circle" />
-          <translate>
-            If you encounter an error and/or cannot find the correct Unicef office, please let us know
-          </translate>
-          &nbsp;
-          <el-button class="no-padding" type="text" size="mini" @click="openFeedback">
-            <translate>HERE</translate>
-          </el-button>
-        </span>
-      </custom-required-form-item>
-
-      <el-row :gutter="20" type="flex">
-        <el-col :span="12">
-          <custom-required-form-item>
-            <template slot="label">
-              <translate key="field-offices"> City </translate>
-            </template>
-            {{ city }}
-          </custom-required-form-item>
-        </el-col>
-        <el-col :span="12">
-          <custom-required-form-item>
-            <template slot="label">
-              <translate key="country"> Country </translate>
-            </template>
-            {{ countryOfOffice }}
-          </custom-required-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20" type="flex">
-        <el-col :span="12">
-          <custom-required-form-item>
-            <template slot="label">
-              <translate key="region">Region</translate>
-            </template>
-            {{ selectedRegion }}
-          </custom-required-form-item>
-        </el-col>
-        <el-col :span="12">
-          <custom-required-form-item>
-            <template slot="label">
-              <translate key="multi-or-regional-office">Multicountry or Regional Office</translate>
-            </template>
-            {{ regionalOffice }}
-          </custom-required-form-item>
-        </el-col>
-      </el-row>
-
-      <custom-required-form-item v-if="countryManagers.length > 0">
-        <template #label>
-          <translate>INVENT country focal point(s)</translate>
-        </template>
-        <ul class="ma-0">
-          <li v-for="manager in countryManagers" :key="manager.id">{{ manager.name }} ({{ manager.email }})</li>
-        </ul>
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('overview')"
-        :draft-rule="draftRules.overview"
-        :publish-rule="publishRules.overview"
+        :error="errors.first('tech') ? errors.first('tech').replace('_', ' ') : undefined"
+        :draft-rule="draftRules.tech"
+        :publish-rule="publishRules.tech"
       >
-        <template slot="label">
-          <translate key="overview">Please provide a brief overview of the initiative.</translate>
-        </template>
-        <template slot="tooltip">
-          <el-tooltip
-            class="item"
-            content="Suggested format for the brief overview is to include the
-            What, How, Who and Where. Example: Text-based behaviour change
-            communication messages on maternal health for midwives in rural Philippines."
-            placement="right"
-          >
-            <i class="el-icon-warning warning" />
-          </el-tooltip>
-        </template>
-        <character-count-input
-          v-model="overview"
-          v-validate="rules.overview"
-          :rules="rules.overview"
-          data-vv-name="overview"
-          data-vv-as="Overview"
-          type="textarea"
-        />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate
-              >This short description provides a clear understanding of the purpose and target group to a reader who
-              does not know anything about the initiative. It should be 10-15 words or less and include the technology
-              the technology or innovation, programme function and target beneficiary.
-            </translate>
-          </p>
-        </span>
+        <el-checkbox :v-model="solution.open_source_frontier_tech" class="tech__checkbox" :label="'tech'"
+          ><translate>Open source frontier tech</translate>
+        </el-checkbox>
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('implementation_overview')"
-        :draft-rule="draftRules.implementation_overview"
-        :publish-rule="publishRules.implementation_overview"
+        :error="errors.first('learning') ? errors.first('learning').replace('_', ' ') : undefined"
+        :draft-rule="draftRules.learning"
+        :publish-rule="publishRules.learning"
       >
-        <template slot="label">
-          <translate key="implementation-overview"> Please provide a detailed narrative of the initiative. </translate>
-        </template>
-
-        <character-count-input
-          v-model="implementation_overview"
-          v-validate="rules.implementation_overview"
-          :rules="rules.implementation_overview"
-          data-vv-name="implementation_overview"
-          data-vv-as="Implementation Overview"
-          type="textarea"
-        />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              What the initiative aims to achieve, detailing the purpose, summarizing the approach, solution and
-              intended impact, and specifying current and planned activities during deployment.
-            </translate>
-          </p>
-        </span>
+        <el-checkbox :v-model="solution.learning_investment" class="tech__checkbox" :label="'tech'"
+          ><translate>Learning investment</translate>
+        </el-checkbox>
       </custom-required-form-item>
 
-      <el-form-item>
-        <template slot="label">
-          <translate key="cover">Upload initiative’s cover image</translate>
-        </template>
-        <file-upload
-          :files.sync="coverImage"
-          accept=".jpg,.jpeg,.png"
-          preview-title="Cover image"
-          @clear="coverImage = []"
-        />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          <p>
-            <translate>
-              Upload the best quality image you have for the initiative. Uploaded image will be formatted to match the
-              pages in the future, and the better quality the original image, the better result it will have displayed
-              on invent. Image should be .png or .jpg and minimum height: 520px.
-            </translate>
-          </p>
-        </span>
-      </el-form-item>
-
-      <el-row :gutter="20" type="flex">
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('contact_name')"
-            :draft-rule="draftRules.contact_name"
-            :publish-rule="publishRules.contact_name"
-          >
-            <template slot="label">
-              <translate key="contact-name">Who is the focal point of contact for this initiative?</translate>
-            </template>
-
-            <character-count-input
-              v-model="contact_name"
-              v-validate="rules.contact_name"
-              :rules="rules.contact_name"
-              data-vv-name="contact_name"
-              data-vv-as="Contact name"
-            />
-          </custom-required-form-item>
-        </el-col>
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('contact_email')"
-            :draft-rule="draftRules.contact_email"
-            :publish-rule="publishRules.contact_email"
-          >
-            <template slot="label">
-              <translate key="contact-email"> Focal Point Email </translate>
-            </template>
-
-            <character-count-input
-              v-model="contact_email"
-              v-validate="rules.contact_email"
-              :rules="rules.contact_email"
-              data-vv-name="contact_email"
-              data-vv-as="Contact email"
-              @blur="addContactToTeam"
-              @keyup.enter.native="addContactToTeam"
-            />
-          </custom-required-form-item>
-        </el-col>
-      </el-row>
-
-      <div class="TeamArea">
+      <!-- <div class="TeamArea">
         <custom-required-form-team-item
           v-model="team"
-          :error="errors.first('team')"
+          :error="errors.first('portfolios')"
           :draft-rule="draftRules.team"
           :publish-rule="publishRules.team"
         >
           <template slot="label">
-            <translate key="team">Who else should be able to modify this initiative's entry?</translate>
+            <translate>Portfolios</translate>
           </template>
 
           <team-selector v-model="team" v-validate="rules.team" data-vv-name="team" data-vv-as="Team" />
-
-          <span class="Hint">
-            <fa icon="info-circle" />
-            <p>
-              <translate>These team members can modify entries on "+ New Initiative" page.</translate>
-            </p>
-          </span>
         </custom-required-form-team-item>
 
         <custom-required-form-team-item
           v-model="viewers"
-          :error="errors.first('viewers')"
+          :error="errors.first('problem-statements')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
         >
           <template slot="label">
-            <translate key="viewers">
-              Who should receive updates that this initiative has been added or modified?
-            </translate>
+            <translate> Problem Statements </translate>
           </template>
 
-          <team-selector v-model="viewers" v-validate="rules.viewers" data-vv-name="viewers" data-vv-as="Viewers" />
-
-          <span class="Hint">
-            <fa icon="info-circle" />
-            <p>
-              <translate>These team members will receive a notification when an initiative has been added.</translate>
-            </p>
-          </span>
+          <team-selector
+            v-model="solution.problem_statements"
+            v-validate="rules.viewers"
+            data-vv-name="viewers"
+            data-vv-as="Viewers"
+          />
         </custom-required-form-team-item>
-      </div>
-
-      <custom-required-form-item v-if="modified">
-        <template slot="label">
-          <translate key="updated"> Last updated </translate>
-        </template>
-        {{ lastUpdated }}
-      </custom-required-form-item>
-    </collapsible-card>
+      </div> -->
+    </collapsible-solution-card>
   </div>
 </template>
 
 <script>
-import { format } from 'date-fns'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import FileUpload from '@/components/common/FileUpload'
 import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
-import CollapsibleCard from '@/components/project/CollapsibleCard'
+import CollapsibleSolutionCard from '../CollapsibleSolutionCard.vue'
 import TeamSelector from '@/components/project/TeamSelector'
 import CountryOfficeSelect from '@/components/common/CountryOfficeSelect'
-import { mapGettersActions } from '@/utilities/form'
 
 export default {
   components: {
-    CollapsibleCard,
+    CollapsibleSolutionCard,
     CountryOfficeSelect,
     TeamSelector,
     CustomRequiredFormTeamItem,
     FileUpload,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  data: function () {
+    return {
+      solution: {
+        name: '',
+        phase: [],
+        open_source_frontier_tech: false,
+        learning_investment: false,
+        portfolios: [],
+        problem_statements: [],
+      },
+    }
+  },
   computed: {
-    ...mapState({
-      offices: (state) => state.offices.offices,
-      office: (state) => state.offices.office,
-    }),
     ...mapGetters({
       unicef_regions: 'system/getUnicefRegions',
       getCountryDetails: 'countries/getCountryDetails',
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
       userProfiles: 'system/getUserProfilesNoFilter',
+      getStatements: 'portfolio/getStatements',
+      getPortfolios: 'portfolio/getPortfolios',
+      getSolution: 'solution/getSolutionData',
     }),
-    ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 0],
-      country: ['project', 'getCountry', 'setCountry', 0],
-      country_office: ['project', 'getCountryOffice', 'setCountryOffice', 0],
-      overview: ['project', 'getOverview', 'setOverview', 0],
-      coverImage: ['project', 'getCoverImage', 'setCoverImage', 0],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
-      team: ['project', 'getTeam', 'setTeam', 0],
-      viewers: ['project', 'getViewers', 'setViewers', 0],
-    }),
-    officeData() {
-      return this.offices.find((obj) => obj.id === this.country_office)
-    },
-    selectedRegion() {
-      if (this.officeData) {
-        const result = this.unicef_regions.find((uf) => uf.id === this.officeData.region)
-        return (result && result.name) || '-' // N/A
-      }
-      return ' ' // N/A
-    },
-    countryOfOffice() {
-      return this.officeData ? this.getCountryDetails(this.officeData.country).name : '-' // N/A
-    },
-    countryManagers() {
-      return this.officeData?.managers.length > 0 ? this.officeData?.managers : []
-    },
-    city() {
-      return this.officeData ? this.officeData.city : '-' // N/A
-    },
-    regionalOffice() {
-      const office = this.regionalOffices.find((obj) => obj.id === this.office.regional_office)
-      return office ? office.name : ''
-    },
-    lastUpdated() {
-      return this.modified ? format(new Date(this.modified), 'DD/MM/YYYY HH:mm') : ''
-    },
+  },
+  mounted: function () {
+    const s = this.getSolution
+    this.solution = {
+      ...this.solution,
+      name: s.name,
+      phase: s.phase,
+      open_source_frontier_tech: s.open_source_frontier_tech,
+      learning_investment: s.learning_investment,
+    }
   },
   watch: {
-    async country_office() {
-      if (this.officeData) {
-        await this.$store.dispatch('countries/loadCountryDetails', this.officeData.country)
-        this.country = this.officeData.country
+    getSolution: function () {
+      const s = this.getSolution
+      this.solution = {
+        ...this.solution,
+        name: s.name,
+        phase: s.phase,
+        open_source_frontier_tech: s.open_source_frontier_tech,
+        learning_investment: s.learning_investment,
       }
     },
   },
   methods: {
-    async addContactToTeam() {
-      const validEmail = await this.$validator.validate('contact_email')
-      if (!validEmail || this.contact_email === '') return
-      const teamMember = this.userProfiles.find((user) => {
-        return user.email === this.contact_email
-      })
-      if (teamMember !== undefined) {
-        if (!this.team.includes(teamMember.id)) {
-          const team = this.team.concat(teamMember.id)
-          this.team = team
-        }
-      } else {
-        const addToTeam =
-          validEmail &&
-          (this.contact_email.endsWith('unicef.org') || this.contact_email.endsWith('pulilab.com')) &&
-          !this.team.includes(this.contact_email)
-        if (addToTeam) {
-          const team = this.team.concat(this.contact_email)
-          this.team = team
-        }
-      }
-    },
-    openFeedback() {
-      this.$store.commit('user/SET_FEEDBACK', {
-        feedbackOn: true,
-        feedbackForm: {
-          subject: this.$gettext('UNICEF Office Issue'),
-          message: this.$gettext('Please provide an email address: '),
-        },
-      })
-    },
     async validate() {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
@@ -443,7 +189,7 @@ export default {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate('name'),
-        this.$validator.validate('country_office'),
+        this.$validator.validate('phase'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team'),
       ])
@@ -476,7 +222,12 @@ export default {
     margin: 0;
   }
 }
-
+.tech__checkbox {
+  color: @colorTextPrimary;
+  .el-checkbox__inner {
+    border-color: @colorTextPrimary;
+  }
+}
 .TeamArea {
   position: relative;
 }
