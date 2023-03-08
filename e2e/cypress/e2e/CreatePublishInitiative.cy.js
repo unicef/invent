@@ -1,16 +1,16 @@
 /// <reference types="Cypress" />
 import InitiativePage from "../pages/InitiativePage"
-import LoginPage from "../pages/LoginPage"
+import LoginForm from "../pages/LoginForm"
 import NavigationBar from "../pages/NavigationBar"
 
 describe('Create Publish Iniative', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/148113/',() => {
-        const loginPage = new LoginPage()
+        const loginForm = new LoginForm()
         const navigationBar = new NavigationBar()
-        loginPage.login(Cypress.env('username'), Cypress.env('password'))
+        loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
         navigationBar.navigateToNewInitiativePage()
         const initiativePage = new InitiativePage()
-        initiativePage.typeInitiativeName('Automation Publish Initiative 35')
+        initiativePage.typeInitiativeName('Automation Publish Initiative'+(Math.floor(Math.random() * 1000000000000000)).toString())
         initiativePage.selectUnicefOffice('Angola: Dundo')
         initiativePage.typeInitiativeOverview('Automate Publish Initiative')
         initiativePage.typeFocalPointName('Publish Initiative')
