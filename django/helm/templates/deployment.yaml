@@ -114,21 +114,6 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /health_check
-              port: {{ .Values.service.port }}
-              scheme: HTTP
-            initialDelaySeconds: 20
-            periodSeconds: 5
-            failureThreshold: 20
-          readinessProbe:
-            httpGet:
-              path: /health_check
-              port: {{ .Values.service.port }}
-              scheme: HTTP
-            initialDelaySeconds: 20
-            periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
