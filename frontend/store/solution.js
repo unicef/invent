@@ -38,5 +38,6 @@ export const mutations = {
     state.phase = data.phase
     state.open_source_frontier_tech = data.open_source_frontier_tech ? 'Yes' : 'No'
     state.learning_investment = data.learning_investment ? 'Yes' : 'No'
+    state.people_reached = data.people_reached
   },
 }

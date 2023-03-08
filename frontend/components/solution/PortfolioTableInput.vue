@@ -14,7 +14,7 @@
         </tr>
       </tbody>
     </table>
-    <el-button type="text" class="IconLeft"> <fa icon="plus" /> <translate>Add Country</translate> </el-button>
+    <el-button type="text" class="IconLeft"> <fa icon="plus" /> <translate>Add Portfolio</translate> </el-button>
   </div>
 </template>
 
@@ -44,6 +44,9 @@ export default {}
   }
   td:nth-child(1) {
     width: 30%;
+  }
+  tr:nth-child(even) {
+    background-color: lightgrey;
   }
 }
 </style>

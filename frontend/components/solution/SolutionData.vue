@@ -16,15 +16,24 @@
           <simple-field :content="solution.learning_investment" :header="$gettext('Learning investment') | translate" />
 
           <simple-field :header="$gettext('Innovation portfolios and problem statements') | translate">
-            <PortfolioTable />
+            <PortfolioTable :tableData="[{ id: 1, portfolio: 'abc', publicStatements: ['st1', 'st2'] }]" />
           </simple-field>
         </collapsible-card>
 
         <collapsible-card id="activity-and-reach" :title="$gettext('2. Activity and Reach') | translate">
-          <simple-field :header="$gettext('Global reach of this solution') | translate" :content="12345" />
+          <simple-field
+            :header="$gettext('Global reach of this solution') | translate"
+            :content="solution.people_reached"
+          />
 
           <simple-field :header="$gettext('Countries where this solution is active') | translate">
-            <CountriesTable />
+            <CountriesTable
+              :tableData="[
+                { id: 1, country: 34, region: [1, 0], peopleReached: 120 },
+                { id: 2, country: 34, region: [0], peopleReached: 20 },
+                { id: 2, country: 41, region: [], peopleReached: 20 },
+              ]"
+            />
           </simple-field>
         </collapsible-card>
       </el-col>
@@ -48,7 +57,7 @@
 
 <script>
 // vuex
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 // components
 import SolutionNavigation from './SolutionNavigation'

@@ -49,12 +49,7 @@
           <translate key="phase"> Phase </translate>
         </template>
 
-        <country-office-select
-          v-model="solution.phase"
-          v-validate="rules.phase"
-          data-vv-name="phase"
-          data-vv-as="phase"
-        />
+        <SolutionPhaseSelect v-model="solution.phase" />
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -76,7 +71,7 @@
           ><translate>Learning investment</translate>
         </el-checkbox>
       </custom-required-form-item>
-
+      <portfolio-table-input />
       <!-- <div class="TeamArea">
         <custom-required-form-team-item
           v-model="team"
@@ -116,27 +111,27 @@
 <script>
 import { mapGetters } from 'vuex'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
-import FileUpload from '@/components/common/FileUpload'
 import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 import CollapsibleSolutionCard from '../CollapsibleSolutionCard.vue'
 import TeamSelector from '@/components/project/TeamSelector'
-import CountryOfficeSelect from '@/components/common/CountryOfficeSelect'
+import SolutionPhaseSelect from '../SolutionPhaseSelect.vue'
+import PortfolioTableInput from '../PortfolioTableInput.vue'
 
 export default {
   components: {
     CollapsibleSolutionCard,
-    CountryOfficeSelect,
+    SolutionPhaseSelect,
     TeamSelector,
     CustomRequiredFormTeamItem,
-    FileUpload,
+    PortfolioTableInput,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   data: function () {
     return {
       solution: {
         name: '',
-        phase: [],
+        phase: 0,
         open_source_frontier_tech: false,
         learning_investment: false,
         portfolios: [],

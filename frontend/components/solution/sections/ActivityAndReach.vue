@@ -14,17 +14,17 @@
         <el-col :span="6">
           <custom-required-form-item
             :error="errors.first('override_reach')"
-            :draft-rule="draftRules.contact_name"
-            :publish-rule="publishRules.contact_name"
+            :draft-rule="draftRules.override_reach"
+            :publish-rule="publishRules.override_reach"
           >
             <template slot="label">
               <translate key="override_reach">Override reach value</translate>
             </template>
 
             <character-count-input
-              v-model="contact_name"
-              v-validate="rules.contact_name"
-              :rules="rules.contact_name"
+              v-model="override_reach"
+              v-validate="rules.override_reach"
+              :rules="rules.override_reach"
               data-vv-name="override_reach"
               data-vv-as="Override reach value"
             />
@@ -56,6 +56,11 @@ export default {
     CountriesTableInput,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  data: function () {
+    return {
+      override_reach: 0,
+    }
+  },
   computed: {
     ...mapState({
       offices: (state) => state.offices.offices,

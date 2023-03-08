@@ -8,22 +8,43 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Croatia</td>
-        <td>ECAR</td>
-        <td>120</td>
-      </tr>
-      <tr>
-        <td>Croatia</td>
-        <td>ECAR</td>
-        <td>120</td>
+      <tr v-for="row in tableData" :key="row.id">
+        <td>{{ getCountryName(row.country) }}</td>
+        <td>{{ printRegionNameList(row.region) }}</td>
+        <td>{{ row.peopleReached }}</td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+export default {
+  props: {
+    tableData: [],
+  },
+  computed: {
+    ...mapGetters({
+      getRegionDetails: 'system/getRegionDetails',
+      countries: 'countries/getCountries',
+    }),
+  },
+  methods: {
+    getRegionName: function (regionId) {
+      return this.getRegionDetails(regionId).name
+    },
+    printRegionNameList: function (regionArray) {
+      if (!regionArray || !regionArray.length > 0) {
+        return 'N/A'
+      } else {
+        return regionArray.map((regionRec) => this.getRegionName(regionRec)).toString()
+      }
+    },
+    getCountryName: function (id) {
+      return this.countries.filter((country) => country.id === id)[0].name
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -40,11 +61,11 @@ export default {}
     text-align: left;
 
     th {
-      padding-left: 10px;
+      padding: 4px 0px 4px 10px;
     }
   }
   td {
-    padding-left: 10px;
+    padding: 4px 0px 4px 10px;
   }
   td:nth-child(1) {
     width: 40%;

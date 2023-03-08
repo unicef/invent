@@ -7,16 +7,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Climate change</td>
-        <td>2. Accessing ...</td>
+      <tr v-for="row in tableData" :key="row.id">
+        <td>{{ row.portfolio }}</td>
+        <td>{{ publicStatements(row.publicStatements) }}</td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    tableData: [],
+  },
+  methods: {
+    publicStatements: function (statementsArray) {
+      return statementsArray.toString()
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -33,11 +42,11 @@ export default {}
     text-align: left;
 
     th {
-      padding-left: 10px;
+      padding: 4px 0px 4px 10px;
     }
   }
   td {
-    padding-left: 10px;
+    padding: 4px 0px 4px 10px;
   }
   td:nth-child(1) {
     width: 30%;
