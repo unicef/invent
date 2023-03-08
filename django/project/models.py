@@ -826,7 +826,7 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         (1, _('Acceleration')),
         (2, _('Scale')),
     ]
-    
+
     portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
     countries = models.ManyToManyField(Country, through='CountrySolution')
     problem_statements = models.ManyToManyField(ProblemStatement)
@@ -850,31 +850,43 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     @property
     def regions_display(self):
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
-    
+
     @classmethod
     def get_phase_text(self, phase_value):
         for phase in self.PHASES:
             if phase[0] == phase_value:
                 return phase[1]
         return None
-    
+
+    def get_country_solutions(self):
+        country_solutions = CountrySolution.objects.filter(solution=self)
+        country_solutions_list = []
+        for cs in country_solutions:
+            cs_dict = dict(
+                id=cs.pk,
+                country=cs.country.id,
+                people_reached=cs.people_reached,
+                region=cs.region,
+            )
+            country_solutions_list.append(cs_dict)
+
+        return country_solutions_list
+
     def to_representation(self):
         data = dict(
             id=self.pk,
             created=self.created,
-            modified=self.modified, 
-            name=self.name, 
-            regions=self.regions,
-            phase=self.get_phase_display(),
-            countries=[country.name for country in self.countries.all()],
-            people_reached=self.people_reached, 
+            modified=self.modified,
+            name=self.name,
+            phase=self.phase,
             open_source_frontier_tech=self.open_source_frontier_tech,
-            learning_investment=self.learning_investment, 
-            portfolios=[portfolio.name for portfolio in self.portfolios.all()],
-            problem_statements=[problem_statement.name for problem_statement in self.problem_statements.all()],
+            learning_investment=self.learning_investment,
+            portfolios=[portfolio.id for portfolio in self.portfolios.all()],
+            problem_statements=[problem_statement.id for problem_statement in self.problem_statements.all()],
+            people_reached=self.people_reached,
+            country_solutions=self.get_country_solutions(),
         )
         return data
-
 
 
 class CountrySolution(models.Model):
