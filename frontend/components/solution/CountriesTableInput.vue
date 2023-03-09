@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="SimpleTable">
+    <table data-test="countries-table-input" class="SimpleTable">
       <thead>
         <tr>
           <th>Country</th>

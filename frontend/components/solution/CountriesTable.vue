@@ -1,5 +1,5 @@
 <template>
-  <table class="SimpleTable">
+  <table data-test="countries-table" class="SimpleTable">
     <thead>
       <tr>
         <th>Country</th>
@@ -7,11 +7,18 @@
         <th>People Reached</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody v-if="!!tableData.length">
       <tr v-for="row in tableData" :key="row.id">
         <td>{{ getCountryName(row.country) }}</td>
         <td>{{ printRegionNameList(row.region) }}</td>
         <td>{{ row.people_reached }}</td>
+      </tr>
+    </tbody>
+    <tbody v-else="!!tableData.length">
+      <tr>
+        <td><translate>No data</translate></td>
+        <td><translate>No data</translate></td>
+        <td><translate>No data</translate></td>
       </tr>
     </tbody>
   </table>
