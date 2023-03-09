@@ -66,31 +66,64 @@ class InitiativePage {
         return cy.get('[data-vv-name="platforms"]')
     }
 	
-    //Save Draft Button
-	getSaveDraftButton() {
-        return cy.get('[class="el-button el-button--primary el-button--medium SaveDraft NewProject"]')
-    }
-	
-    //Publish Button
-    getPublishButton() {
-		return cy.get('.NavigationActions > .el-button--primary')
-	}
-	
-	//Close Button
-	getCloseButton(){
-        return cy.contains('Close')
-    }
-	
 	//Pop up Window
 	getPopWindow(){
         return cy.get('[role="dialog"]')
     }
+    
+    //Save Draft Button on Page
+	getSaveDraftButton() {
+        return cy.get('[class="el-button el-button--primary el-button--medium SaveDraft NewProject"]')
+    }
 	
-    //Cancel Button
+    //Draft Button on Switch View
+    getViewDraftButton() {
+        return cy.get('.DraftButton')
+    }
+
+    //Publish Button on Page
+    getPublishButton() {
+		return cy.get('.NavigationActions > .el-button--primary')
+	}
+	
+    //Publish Button on Switch View
+    getViewPublishButton() {
+        return cy.get('.PublishedButton')
+    }
+
+	//Close Button
+	getCloseButton(){
+        return cy.contains('Close')
+    }
+
+    //Cancel Button on Page
     getCancelButton() {
         return cy.get('.NavigationActions > .CancelButton')
     }
 	
+    //Verify Draft Label
+    getDraftLabel() {
+        return cy.get('[class="DraftLabel"]')
+    }
+    
+    //Verify Published Label
+    getPublishLabel() {
+        return cy.get('.PublishedLabel')
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	typeInitiativeName(name) {
         this.getInitiativeName().type(name)
     }

@@ -24,9 +24,18 @@ describe('Create Publish Iniative', () => {
         initiativePage.saveDraft()
         initiativePage.getPopWindow().contains('Your draft has been saved successfully')
         initiativePage.closePopUpWindow()
+        initiativePage.getDraftLabel().should('be.visible')
         initiativePage.publishInitiative()
         initiativePage.getPopWindow().contains('Your draft has been published successfully')
         initiativePage.closePopUpWindow()
+        initiativePage.getPublishLabel().should('be.visible')
+        
+
+
+        
+        //initiativePage.getViewDraftButton().should('be.visible').and('not.be.enabled')
+        //initiativePage.getViewPublishButton().should('be.visible').and('not.be.enabled')
+        //initiativePage.getPublishButton().should('be.visible').and('be.enabled')
 
     })
 })  
