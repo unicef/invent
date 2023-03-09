@@ -91,6 +91,15 @@ class InitiativePage {
         return cy.get('.PublishedButton')
     }
 
+    //Publish as latest
+    getPublishAsLatestButton() {
+        return cy.get('.NavigationActions > .el-tooltip')
+    }
+
+    //Unpublish Button
+    getUnpublishButton() {
+        return cy.get('.button--danger')
+    }
 	//Close Button
 	getCloseButton(){
         return cy.contains('Close')
@@ -105,7 +114,7 @@ class InitiativePage {
     getDraftLabel() {
         return cy.get('[class="DraftLabel"]')
     }
-    
+
     //Verify Published Label
     getPublishLabel() {
         return cy.get('.PublishedLabel')
