@@ -100,6 +100,12 @@ class InitiativePage {
     getUnpublishButton() {
         return cy.get('.button--danger')
     }
+
+    //Go to Dashboard
+    getGoToDashboard() {
+        return cy.get('.GoToDashboard').contains('Go to Dashboard')
+    }
+
 	//Close Button
 	getCloseButton(){
         return cy.contains('Close')

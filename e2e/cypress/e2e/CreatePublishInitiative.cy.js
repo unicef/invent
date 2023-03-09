@@ -33,8 +33,9 @@ describe('Create Publish Iniative', () => {
         initiativePage.getDraftLabel().should('not.exist')
         initiativePage.getViewDraftButton().should('be.visible').and('be.enabled')
         initiativePage.getViewPublishButton().should('be.visible').and('not.be.enabled')
-        initiativePage.getPublishButton().should('be.visible').and('be.enabled')
+        initiativePage.getPublishButton().should('be.visible').and('be.enabled').and('be.enabled')
         initiativePage.getPublishAsLatestButton().contains('Publish as latest').should('be.visible')
+        initiativePage.getGoToDashboard().should('be.visible')
 
         
 

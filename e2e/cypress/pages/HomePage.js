@@ -2,12 +2,20 @@
 
 class HomePage{
 
-    getWelcomeSection(){
+    getWelcomeSection() {
         return cy.get('[class="WelcomeSection"]')
     }
     
-    getInitiativesSection(){
+    getInitiativesSection() {
         return cy.get('[class="InitiativesSection"]')
+    }
+
+    getSeeAll() {
+        return cy.get('.action > .link > a')
+    }
+
+    getTable() {
+        return cy.get('.initiative-wrapper > .top').find('tr')
     }
 
 }
