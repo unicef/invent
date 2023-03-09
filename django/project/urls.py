@@ -163,4 +163,9 @@ urlpatterns = [
          view=views.SolutionListViewSet.as_view({
              'get': 'list'
          }), name='solution-list'),
+    path(r"solutions/<int:pk>/",
+         view=views.SolutionRetrieveViewSet.as_view({
+             'get': 'retrieve',
+         }),
+         name="solution-retrieve"),
 ]
