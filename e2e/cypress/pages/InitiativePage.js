@@ -126,14 +126,14 @@ class InitiativePage {
 	
 	selectSectorInitiative(sector) {
         this.getSectorInitiative().click()
-        this.getSectorInitiative().type(sector)
+        //this.getSectorInitiative().type(sector)
         cy.contains(sector).click({force:true})
         this.getSectorInitiative().click()
    }
 	
 	selectGoalArea(goalarea) {
-       this.getGoalArea().click().type(goalarea)
-       cy.contains(goalarea).click()
+       this.getGoalArea().click()
+       cy.contains(goalarea).click({force:true})
    }
 	
 	selectStartDate(startdate) {
