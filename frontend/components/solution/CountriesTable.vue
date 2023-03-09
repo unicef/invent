@@ -11,7 +11,7 @@
       <tr v-for="row in tableData" :key="row.id">
         <td>{{ getCountryName(row.country) }}</td>
         <td>{{ printRegionNameList(row.region) }}</td>
-        <td>{{ row.peopleReached }}</td>
+        <td>{{ row.people_reached }}</td>
       </tr>
     </tbody>
   </table>
@@ -21,7 +21,9 @@
 import { mapGetters } from 'vuex'
 export default {
   props: {
-    tableData: [],
+    tableData: {
+      type: Array,
+    },
   },
   computed: {
     ...mapGetters({
@@ -34,10 +36,11 @@ export default {
       return this.getRegionDetails(regionId).name
     },
     printRegionNameList: function (regionArray) {
-      if (!regionArray || !regionArray.length > 0) {
+      if (regionArray === null || regionArray === undefined) {
         return 'N/A'
       } else {
-        return regionArray.map((regionRec) => this.getRegionName(regionRec)).toString()
+        // return regionArray.map((regionRec) => this.getRegionName(regionRec)).toString()
+        return this.getRegionName(regionArray)
       }
     },
     getCountryName: function (id) {

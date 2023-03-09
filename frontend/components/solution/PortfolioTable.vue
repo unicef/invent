@@ -7,22 +7,37 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in tableData" :key="row.id">
-        <td>{{ row.portfolio }}</td>
-        <td>{{ publicStatements(row.publicStatements) }}</td>
+      <tr>
+        <td>{{ portfolios(innovationPortfolios) }}</td>
+        <td>{{ statements(problemStatements) }}</td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
-    tableData: [],
+    innovationPortfolios: Array,
+    problemStatements: Array,
+  },
+  computed: {
+    ...mapGetters({
+      getPortfolios: 'solution/getPorfoliosList',
+      getStatements: 'solution/getProblemStatementList',
+    }),
   },
   methods: {
-    publicStatements: function (statementsArray) {
-      return statementsArray.toString()
+    statements: function (statementsArray) {
+      return statementsArray
+        .map((statementId) => this.getStatements.find((statement) => statement.id === statementId).name)
+        .toString()
+    },
+    portfolios: function (portfolioArray) {
+      return portfolioArray
+        .map((portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId).name)
+        .toString()
     },
   },
 }

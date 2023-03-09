@@ -23,6 +23,7 @@ export default {
   scrollToTop: true,
   async fetch({ store, params, error }) {
     try {
+      await store.dispatch('solution/loadProblemPortfoliolists')
       await store.dispatch('solution/loadSolution', params.id)
     } catch (e) {
       error({ statusCode: e.status ?? 400, message: e.message ?? 'Unknown error' })

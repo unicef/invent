@@ -84,7 +84,6 @@ export default {
       return this.getRegionDetails(regionId).name
     },
     printRegionNameList: function (regionArray) {
-      console.log(regionArray)
       if (!regionArray || !regionArray.length > 0) {
         return 'N/A'
       } else {

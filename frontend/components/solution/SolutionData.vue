@@ -16,7 +16,10 @@
           <simple-field :content="solution.learning_investment" :header="$gettext('Learning investment') | translate" />
 
           <simple-field :header="$gettext('Innovation portfolios and problem statements') | translate">
-            <PortfolioTable :tableData="[{ id: 1, portfolio: 'abc', publicStatements: ['st1', 'st2'] }]" />
+            <PortfolioTable
+              :innovationPortfolios="solution.portfolios"
+              :problemStatements="solution.problem_statements"
+            />
           </simple-field>
         </collapsible-card>
 
@@ -27,13 +30,7 @@
           />
 
           <simple-field :header="$gettext('Countries where this solution is active') | translate">
-            <CountriesTable
-              :tableData="[
-                { id: 1, country: 34, region: [1, 0], peopleReached: 120 },
-                { id: 2, country: 34, region: [0], peopleReached: 20 },
-                { id: 2, country: 41, region: [], peopleReached: 20 },
-              ]"
-            />
+            <CountriesTable :tableData="solution.country_solutions" />
           </simple-field>
         </collapsible-card>
       </el-col>
