@@ -11,6 +11,7 @@ RUN cd /tmp && yarn --silent --non-interactive
 RUN cd /usr/src/app && ln -s /tmp/node_modules
 
 COPY frontend/ /usr/src/app/
+RUN cat /usr/src/app/.env
 COPY django/translations/master.pot /usr/src/app/
 #RUN echo "NODE_ENV=production" >> .env
 RUN yarn build --quiet
