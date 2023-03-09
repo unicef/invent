@@ -168,4 +168,10 @@ urlpatterns = [
              'get': 'retrieve',
          }),
          name="solution-retrieve"),
+    path(r'solution/update/<int:pk>/',
+         view=views.SolutionUpdateViewSet.as_view({
+             'put': 'update',
+             'patch': 'partial_update'
+         }),
+         name="portfolio-update"),
 ]

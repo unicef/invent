@@ -17,7 +17,7 @@ from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from country.models import Donor, CountryOffice, RegionalOffice, Currency
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
-    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin
+    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
@@ -280,7 +280,28 @@ class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
 
         return Response(self._get_permission_based_data(solution))
 
+class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSet):
+    serializer_class = SolutionSerializer
+    queryset = Solution.objects.all()
 
+    # def _check_ps_status(self, request, *args, **kwargs) -> bool:
+    #     instance = self.get_object()
+
+    #     if 'problem_statements' in request.data:
+    #         r_ps_ids = {ps['id'] for ps in request.data.get('problem_statements', []) if 'id' in ps}
+
+    #         non_modifiable_ps = instance.problem_statements.filter(projectportfoliostate__approved=True)
+    #         ps_removed = instance.problem_statements.exclude(id__in=r_ps_ids)
+
+    #         if non_modifiable_ps.intersection(ps_removed):
+    #             raise PermissionDenied("Problem Statements linked to approved projects may not be deleted: [{}]".format(
+    #                 ", ".join([str(x) for x in non_modifiable_ps.intersection(ps_removed).values_list('id', flat=True)])
+    #             ))
+
+    def update(self, request, *args, **kwargs):
+        # self._check_ps_status(request, *args, **kwargs)
+        return super(SolutionUpdateViewSet, self).update(request, *args, **kwargs)
+    
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
         required_ids = set(queryset.filter(required=True).values_list('id', flat=True))

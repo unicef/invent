@@ -48,6 +48,9 @@ class PortfolioAccessMixin:
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerPortfolio)
 
+class SolutionAccessMixin:
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, IsGPOOrManagerPortfolio)
 
 class ProjectPortfolioStateAccessMixin:
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
