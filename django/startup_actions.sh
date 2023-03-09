@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mv /tmp/pseudo_djangojs.po translations/en/LC_MESSAGES/
-mv /tmp/master.pot translations/
+cp -r /tmp/locale/ /src/
+cp -r /tmp/translations/ /src/
 python manage.py update_translations master.pot
 django-admin makemessages -l en
 django-admin makemessages -l es

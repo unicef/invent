@@ -6,7 +6,7 @@ metadata:
   name: {{ include "invent-django.fullname" . }}-translations
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.storage.accessModes }}
   storageClassName: {{ .Values.storage.storageCLass }}
   resources:
     requests:
@@ -20,7 +20,7 @@ metadata:
   name: {{ include "invent-django.fullname" . }}-translations-country
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.storage.accessModes }}
   storageClassName: {{ .Values.storage.storageCLass }}
   resources:
     requests:
@@ -34,7 +34,7 @@ metadata:
   name: {{ include "invent-django.fullname" . }}-locale
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.storage.accessModes }}
   storageClassName: {{ .Values.storage.storageCLass }}
   resources:
     requests:
@@ -48,7 +48,7 @@ metadata:
   name: {{ include "invent-django.fullname" . }}-translations-user
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.storage.accessModes }}
   storageClassName: {{ .Values.storage.storageCLass }}
   resources:
     requests:

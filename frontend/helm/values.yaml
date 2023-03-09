@@ -41,6 +41,9 @@ service:
   type: ClusterIP
   port: 80
 
+storage:
+  mediaClaimName: media-blob-nfs
+
 ingress:
   enabled: true
   className: ""

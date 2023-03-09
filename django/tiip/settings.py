@@ -23,11 +23,11 @@ elif environment == "tst":
     env_name = "TEST"
     env_color = "green"
 elif environment == "uat":
-    SITE_ID = 4
+    SITE_ID = 5
     env_name = "UAT"
     env_color = "orange"
 elif environment == "prod":
-    SITE_ID = 5
+    SITE_ID = 4
     env_name = "PRODUCTION"
     env_color = "red"
 else:
@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'simple-feedback',
     "dj_anonymizer",
     'import_export',
+    'health_check',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -140,9 +141,14 @@ DATABASES = {
     }
 }
 
+REDIS_URL = env.str('REDIS_URL', default='redis')
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://{}:6379/1".format(REDIS_URL),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
