@@ -20,6 +20,7 @@ export const state = () => ({
   review_questions: {},
   review_statuses: {},
   scalePhases: [],
+  solutionPhases: [],
 })
 
 export const getters = {
@@ -29,8 +30,7 @@ export const getters = {
   getUserProfilesNoFilter: (state) => {
     return state.profiles
   },
-  getUserProfileDetails: (state, getters) => (id) =>
-    getters.getUserProfiles.find((u) => u.id === id),
+  getUserProfileDetails: (state, getters) => (id) => getters.getUserProfiles.find((u) => u.id === id),
   getSearchResult: (state) => {
     const search = state.projectSearch ? state.projectSearch : []
     return search.map((s) => {
@@ -40,9 +40,7 @@ export const getters = {
     })
   },
   getLanguages: (state) => {
-    return state.languages
-      .map((l) => ({ ...l, flag: `/static/flags/${l.flag}` }))
-      .filter((l) => l.code !== 'ar')
+    return state.languages.map((l) => ({ ...l, flag: `/static/flags/${l.flag}` })).filter((l) => l.code !== 'ar')
   },
   getLanguageDetails: (state, getters) => (code) => {
     return getters.getLanguages.find((l) => l.code === code)
@@ -60,10 +58,7 @@ export const getters = {
     return [...state.domains]
   },
   getReviewStatuses: (state) => {
-    return Object.assign(
-      {},
-      ...state.review_statuses.map(({ id, text }) => ({ [id]: text }))
-    )
+    return Object.assign({}, ...state.review_statuses.map(({ id, text }) => ({ [id]: text })))
   },
   getThematicOverview: (state) => {
     const th = state.thematic_overview
@@ -82,9 +77,7 @@ export const getters = {
       ...thematic_specific.map((t) => ({ name: t.name, domains: t.domains })),
       ...axis.map((a) => ({
         name: a.name,
-        domains: domains
-          .filter((d) => d.axis === a.id)
-          .map((df) => ({ name: df.name })),
+        domains: domains.filter((d) => d.axis === a.id).map((df) => ({ name: df.name })),
       })),
     ]
   },
@@ -110,10 +103,9 @@ export const getters = {
   getUnicefRegions: (state) => state.unicef_regions,
   getLinkTypes: (state) => state.link_types,
   getPartnerTypes: (state) => state.partner_types,
-  getUnicefDonor: (state) =>
-    find(state.donors, ({ name }) => name === 'UNICEF'),
-  getUnicefOrganisation: (state) =>
-    find(state.organisations, ({ name }) => name === 'UNICEF'),
+  getUnicefDonor: (state) => find(state.donors, ({ name }) => name === 'UNICEF'),
+  getUnicefOrganisation: (state) => find(state.organisations, ({ name }) => name === 'UNICEF'),
+  getSolutionPhases: (state) => state.solutionPhases,
 }
 
 export const actions = {
@@ -150,6 +142,7 @@ export const actions = {
       commit('SET_REGIONS', data.unicef_regions)
       commit('SET_DATA', { key: 'unicef_regions', value: data.unicef_regions })
       commit('SET_DATA', { key: 'scalePhases', value: data.scale_phases })
+      commit('SET_DATA', { key: 'solutionPhases', value: data.solution_phases })
       // columns are coming from
       // console.log(data.dashboard_columns)
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
@@ -201,9 +194,7 @@ export const actions = {
     if (org) {
       return Promise.resolve(org)
     } else {
-      const error = new Error(
-        'Organisation saving / fetching failed, could not find the organisation'
-      )
+      const error = new Error('Organisation saving / fetching failed, could not find the organisation')
       return Promise.reject(error)
     }
   },
