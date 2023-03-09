@@ -30,12 +30,5 @@ describe('Create Publish Iniative', () => {
         initiativePage.closePopUpWindow()
         initiativePage.getPublishLabel().should('be.visible')
         
-
-
-        
-        //initiativePage.getViewDraftButton().should('be.visible').and('not.be.enabled')
-        //initiativePage.getViewPublishButton().should('be.visible').and('not.be.enabled')
-        //initiativePage.getPublishButton().should('be.visible').and('be.enabled')
-
     })
 })  
