@@ -30,18 +30,16 @@ export default {
   },
   methods: {
     statements: function (statementsArray) {
-      return (
-        statementsArray
-          .map((statementId) => this.getStatements.find((statement) => statement.id === statementId).name)
-          .toString() ?? 'None'
-      )
+      const st = statementsArray
+        .map((statementId) => this.getStatements.find((statement) => statement.id === statementId).name)
+        .toString()
+      return st === '' ? 'None' : st
     },
     portfolios: function (portfolioArray) {
-      return (
-        portfolioArray
-          .map((portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId).name)
-          .toString() ?? 'None'
-      )
+      const st = portfolioArray
+        .map((portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId).name)
+        .toString()
+      return st === '' ? 'None' : st
     },
   },
 }

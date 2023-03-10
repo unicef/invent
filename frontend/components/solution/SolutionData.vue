@@ -83,7 +83,6 @@ export default {
       return this.isDraft ? this.draft : this.published
     },
     peopleReached() {
-      console.log(this.solution.people_reached)
       return this.solution.people_reached === 0 ? '0' : this.solution.people_reached
     },
   },
