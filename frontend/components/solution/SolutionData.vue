@@ -24,10 +24,7 @@
         </collapsible-card>
 
         <collapsible-card id="activity-and-reach" :title="$gettext('2. Activity and Reach') | translate">
-          <simple-field
-            :header="$gettext('Global reach of this solution') | translate"
-            :content="solution.people_reached"
-          />
+          <simple-field :header="$gettext('Global reach of this solution') | translate" :content="peopleReached" />
 
           <simple-field :header="$gettext('Countries where this solution is active') | translate">
             <CountriesTable :tableData="solution.country_solutions" />
@@ -84,6 +81,9 @@ export default {
     },
     project() {
       return this.isDraft ? this.draft : this.published
+    },
+    peopleReached() {
+      return this.solution.people_reached === 0 ? '0' : this.solution.people_reached
     },
   },
 }

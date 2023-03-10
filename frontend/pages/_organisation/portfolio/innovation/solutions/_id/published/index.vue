@@ -109,7 +109,7 @@ export default {
   }
   .PageTitle {
     .Title {
-      padding-left: 25%;
+      padding-left: 35%;
     }
   }
 }
