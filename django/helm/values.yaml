@@ -24,7 +24,7 @@ unitTests:
   enabled: false
 
 storage:
-  storageCLass: azureblob-nfs-std
+  storageCLass: azurefile-csi
   accessModes: ReadWriteMany
   translationsSize: 1Gi
   translationsCountrySize: 500Mi
