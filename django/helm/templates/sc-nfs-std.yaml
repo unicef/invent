@@ -1,6 +1,4 @@
 {{- if not (eq .Values.environment "local") }}
-{{- $storageclass := (lookup "v1" "StorageClass" .Release.Namespace "azureblob-nfs-std") }}
-{{- if not $storageclass }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -12,5 +10,4 @@ parameters:
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
 allowVolumeExpansion: true
-{{- end }}
 {{- end }}
