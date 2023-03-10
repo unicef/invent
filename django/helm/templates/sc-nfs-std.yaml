@@ -2,7 +2,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: azureblob-nfs-std
+  name: azureblob-nfs-std-test
 provisioner: blob.csi.azure.com
 parameters:
   protocol: nfs
