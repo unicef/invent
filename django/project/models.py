@@ -851,6 +851,92 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     def regions_display(self):
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
 
+    @classmethod
+    def get_phase_text(self, phase_value):
+        """
+        Returns the descriptive text associated with a given phase value.
+        """
+        for phase in self.PHASES:
+            if phase[0] == phase_value:
+                return phase[1]
+        return None
+
+    def to_representation(self):
+        """
+        Returns a dictionary representing this Solution instance, suitable for use
+        as a response payload in an API.
+
+        Parameters:
+        ----------
+            None.
+
+        Returns:
+        -------
+            dict: A dictionary containing the following keys:
+                - id (int): The ID of the solution.
+                - created (datetime): The date and time when the solution was created.
+                - modified (datetime): The date and time when the solution was last modified.
+                - name (str): The name of the solution.
+                - phase (int): The phase of the solution, represented as a numeric value.
+                - open_source_frontier_tech (bool): Whether the solution uses open-source
+                    frontier technology.
+                - learning_investment (bool): Whether the solution involves investment
+                    in learning.
+                - portfolios (list of int): The IDs of the portfolios associated with the solution.
+                - problem_statements (list of int): The IDs of the problem statements associated
+                    with the solution.
+                - people_reached (int): The number of people reached by the solution.
+                - country_solutions (list of dict): A list of dictionaries representing the
+                    countries where the solution has been implemented, where each dictionary
+                    contains the following keys:
+                    - id (int): The ID of the country solution.
+                    - country (int): The ID of the country where the solution was implemented.
+                    - people_reached (int): The number of people reached by the solution in that
+                        country.
+                    - region (str): The region where the solution was implemented in that country.
+
+        Raises:
+        ------
+            None.
+
+        Example:
+        -------
+            >>> solution = Solution.objects.get(pk=1)
+            >>> rep = solution.to_representation()
+            >>> print(rep)
+            {'id': 1,
+             'created': datetime.datetime(2022, 1, 1, 0, 0),
+             'modified': datetime.datetime(2022, 2, 1, 0, 0),
+             'name': 'Solution 1',
+             'phase': 2,
+             'open_source_frontier_tech': True,
+             'learning_investment': False,
+             'portfolios': [1, 2],
+             'problem_statements': [3, 4],
+             'people_reached': 100000,
+             'country_solutions': [{'id': 1, 'country': 2, 'people_reached': 10000, 'region': 'Africa'},
+                                   {'id': 2, 'country': 3, 'people_reached': 20000, 'region': 'Asia'}]}
+        """
+        portfolios = self.portfolios.values_list('id', flat=True)
+        problem_statements = self.problem_statements.values_list('id', flat=True)
+        country_solutions = self.countrysolution_set.values('id', 'country', 'people_reached', 'region')
+
+        data = {
+            'id': self.pk,
+            'created': self.created,
+            'modified': self.modified,
+            'name': self.name,
+            'phase': self.phase,
+            'open_source_frontier_tech': self.open_source_frontier_tech,
+            'learning_investment': self.learning_investment,
+            'portfolios': list(portfolios),
+            'problem_statements': list(problem_statements),
+            'people_reached': self.people_reached,
+            'country_solutions': list(country_solutions),
+        }
+
+        return data
+
 
 class CountrySolution(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)

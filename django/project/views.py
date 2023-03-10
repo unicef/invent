@@ -258,6 +258,27 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
+    
+class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return []  # Retrieve needs a bit more complex filtering based on user permission
+        else:
+            return super(SolutionRetrieveViewSet, self).get_permissions()
+
+    def _get_permission_based_data(self, solution):
+        draft = None
+        published = solution.to_representation()
+
+        return published
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves a solution.
+        """
+        solution = get_object_or_400(Solution, "No such solution", id=kwargs.get("pk"))
+
+        return Response(self._get_permission_based_data(solution))
 
 
 class CheckRequiredMixin:

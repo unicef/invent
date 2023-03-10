@@ -1,10 +1,7 @@
 <template>
   <div class="breadcrumb">
     <p v-for="breadcrumb in breadcrumbs" :key="breadcrumb.id">
-      <nuxt-link
-        :to="localePath(breadcrumb.localePath)"
-        :disabled="!breadcrumb.name"
-      >
+      <nuxt-link :to="localePath(breadcrumb.localePath)" :disabled="!breadcrumb.name">
         <fa v-if="breadcrumb.id === 'organisation'" icon="home" />
         <template v-else>
           <fa icon="angle-right" size="sm" />
@@ -29,19 +26,14 @@ export default {
       'organisation-login': this.$gettext('Login'),
       'organisation-signup': this.$gettext('Signup'),
       'organisation-reset-key': this.$gettext('Reset'),
-      'organisation-portfolio-innovation': this.$gettext(
-        'Innovation Portfolio'
-      ),
+      'organisation-portfolio-innovation': this.$gettext('Innovation Portfolio'),
+      'organisation-portfolio-innovation-solutions-id-published': this.$gettext('Published Solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
       'organisation-initiatives': this.$gettext('My initiatives'),
       'organisation-portfolio-management-new': this.$gettext('New portfolio'),
-      'organisation-portfolio-management-id-edit': this.$gettext(
-        'Edit portfolio'
-      ),
+      'organisation-portfolio-management-id-edit': this.$gettext('Edit portfolio'),
       'organisation-initiatives-create': this.$gettext('New Initiative'),
-      'organisation-initiatives-id-published': this.$gettext(
-        'Published Initiative'
-      ),
+      'organisation-initiatives-id-published': this.$gettext('Published Initiative'),
       'organisation-initiatives-id-edit': this.$gettext('Edit Initiative'),
       'organisation-initiatives-id-stages': this.$gettext('Phases'),
 
@@ -62,6 +54,7 @@ export default {
   computed: {
     ...mapState({
       portfolioManagementName: (state) => state.portfolio.name,
+      solutionName: (state) => state.solution.name,
     }),
     ...mapGetters({
       initiative: 'project/getProjectData',
@@ -76,9 +69,8 @@ export default {
     breadcrumbs() {
       let name = ''
       let breadcrumbs = []
-      const route = this.exclude.includes(this.pureRoute)
-        ? 'organisation'
-        : this.pureRoute
+      const route = this.exclude.includes(this.pureRoute) ? 'organisation' : this.pureRoute
+
       split(route, '-').forEach((item) => {
         name = name !== '' ? join([name, item], '-') : item
         if (name !== 'organisation-portfolio') {
@@ -100,6 +92,8 @@ export default {
       switch (route) {
         case 'organisation-initiatives-id':
           return this.initiative.name
+        case 'organisation-portfolio-innovation-solutions-id':
+          return this.solutionName
         case 'organisation-portfolio-innovation-id':
           return this.portfolioInnovationName
         case 'organisation-portfolio-management-id':
