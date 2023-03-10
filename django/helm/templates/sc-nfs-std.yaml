@@ -1,0 +1,16 @@
+{{- if not (eq .Values.environment "local") }}
+{{- $storageclass := (lookup "v1" "StorageClass" .Release.Namespace "azureblob-nfs-std") }}
+{{- if not $storageclass }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: azureblob-nfs-std
+provisioner: blob.csi.azure.com
+parameters:
+  protocol: nfs
+  skuName: Standard_LRS  # available values: Standard_LRS, Premium_LRS, Standard_GRS, Standard_RAGRS
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+{{- end }}
+{{- end }}

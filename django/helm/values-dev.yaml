@@ -30,7 +30,7 @@ storage:
   translationsCountrySize: 500Mi
   localeSize: 500Mi
   translationsUserSize: 500Mi
-  mediaSize: 1Gi
+  mediaSize: 2Gi
   mediaClaimName: media-pvc
 
 imagePullSecrets: []
