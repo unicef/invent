@@ -6,7 +6,7 @@
         <collapsible-card id="general" :title="$gettext('1. General') | translate">
           <simple-field :content="solution.name" :header="$gettext('Name') | translate" />
 
-          <simple-field :header="$gettext('Phase') | translate" :content="solution.phase" />
+          <simple-field :header="$gettext('Phase') | translate" :content="phaseName" />
 
           <simple-field
             :content="solution.open_source_frontier_tech"
@@ -71,6 +71,7 @@ export default {
   computed: {
     ...mapGetters({
       solution: 'solution/getSolutionData',
+      phases: 'system/getSolutionPhases',
     }),
 
     route() {
@@ -84,6 +85,9 @@ export default {
     },
     peopleReached() {
       return this.solution.people_reached === 0 ? '0' : this.solution.people_reached
+    },
+    phaseName() {
+      return this.phases.find((phase) => phase.id === this.solution.phase).name
     },
   },
 }

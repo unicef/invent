@@ -8,9 +8,9 @@
       </tr>
     </thead>
     <tbody v-if="!!tableData.length">
-      <tr v-for="row in tableData" :key="row.id">
-        <td>{{ getCountryName(row.country) }}</td>
-        <td>{{ printRegionNameList(row.region) }}</td>
+      <tr v-for="row in sortedCountriesTable" :key="row.id">
+        <td>{{ row.country }}</td>
+        <td>{{ row.region }}</td>
         <td>{{ row.people_reached }}</td>
       </tr>
     </tbody>
@@ -37,6 +37,24 @@ export default {
       getRegionDetails: 'system/getRegionDetails',
       countries: 'countries/getCountries',
     }),
+    sortedCountriesTable() {
+      const namedTable = this.tableData.map((row) => ({
+        id: row.id,
+        country: this.getCountryName(row.country),
+        region: this.printRegionNameList(row.region),
+        people_reached: row.people_reached,
+      }))
+
+      return namedTable.sort((a, b) => {
+        if (a.country > b.country) {
+          return 1
+        } else if (a.country < b.country) {
+          return -1
+        } else {
+          return 0
+        }
+      })
+    },
   },
   methods: {
     getRegionName: function (regionId) {
