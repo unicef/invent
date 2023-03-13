@@ -1,0 +1,18 @@
+{{- $mypvc := (lookup "v1" "PersistentVolumeClaim" .Release.Namespace .Values.storage.mediaClaimName) }}
+{{- if not $mypvc }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    {{- include "invent-django.labels" . | nindent 4 }}
+  name: {{ .Values.storage.mediaClaimName }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: {{ .Values.storage.storageCLass }}
+spec:
+  accessModes:
+    - {{ .Values.storage.accessModes }}
+  storageClassName: {{ .Values.storage.storageCLass }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.mediaSize }}
+{{- end }}

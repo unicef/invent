@@ -364,5 +364,5 @@ ENVIRONMENT_COLOR = env_color
 EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
 # Import the setting_azure settings only in the Azure environments
-if environment in ["dev", "tst", "uat", "prod"]:
+if environment in ["dev", "tst", "uat", "prd"]:
     from .settings_deployed import *
