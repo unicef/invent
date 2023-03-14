@@ -20,13 +20,13 @@ export default {
         const allowed =
           this.profile.is_superuser ||
           this.profile.member.includes(parseInt(this.$route.params.id, 10)) ||
-          this.$route.name.split('__')[0] === 'organisation-portfolio-innovation-solutions-id-published'
+          this.$route.name.split('__')[0] === 'organisation-portfolio-innovation-solutions-id'
         if (!allowed) {
           this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
             confirmButtonText: 'OK',
             callback: () => {
               const path = this.localePath({
-                name: 'organisation-portfolio-innovation-solutions-id-published',
+                name: 'organisation-portfolio-innovation-solutions-id',
                 params: this.$route.params,
               })
               this.$router.replace(path)
