@@ -27,7 +27,6 @@ export default {
       'organisation-signup': this.$gettext('Signup'),
       'organisation-reset-key': this.$gettext('Reset'),
       'organisation-portfolio-innovation': this.$gettext('Innovation Portfolio'),
-      'organisation-portfolio-innovation-solutions-id-published': this.$gettext('Published Solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
       'organisation-initiatives': this.$gettext('My initiatives'),
       'organisation-portfolio-management-new': this.$gettext('New portfolio'),

@@ -1,26 +1,42 @@
 <template>
-  <div class="ProjectDraftView">
+  <div class="SolutionPublishedView">
     <div class="PageTitle">
-      <h2><translate>View Solution Info</translate></h2>
-      <p>
-        <translate>You are viewing the</translate>
-        <span class="DraftLabel">
-          <translate>Draft</translate>
-        </span>
-        <translate>version of the solution.</translate>
-      </p>
+      <el-row>
+        <el-col :span="18">
+          <h2 class="Title"><translate>View Solution Information</translate></h2>
+        </el-col>
+        <el-col :span="6">
+          <el-button v-if="canEdit" type="primary" size="medium" @click="goToEdit">
+            <translate>Edit Solution</translate>
+          </el-button>
+        </el-col>
+      </el-row>
     </div>
-    <solution-data show-draft />
+    <solution-data />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import SolutionData from '@/components/solution/SolutionData'
+
 export default {
   components: {
     SolutionData,
   },
   scrollToTop: true,
+  computed: {
+    ...mapGetters({
+      user: 'user/getProfile',
+    }),
+    canEdit() {
+      return (
+        (this.user && this.user.is_superuser) ||
+        (this.user && this.user.global_portfolio_owner) ||
+        (this.user && this.user.manager.length > 0)
+      )
+    },
+  },
   async fetch({ store, params, error }) {
     try {
       await store.dispatch('solution/loadProblemPortfoliolists')
@@ -29,24 +45,56 @@ export default {
       error({ statusCode: e.status ?? 400, message: e.message ?? 'Unknown error' })
     }
   },
-  computed: {
-    ...mapGetters({
-      user: 'user/getProfile',
-    }),
+  methods: {
+    goToEdit() {
+      const localised = this.localePath({
+        name: `organisation-portfolio-innovation-solutions-id-edit`,
+        params: { ...this.$route.params },
+      })
+      this.$router.push(localised)
+    },
   },
-  // fetch({ store, params, error }) {
+  // async fetch({ store, params, error }) {
   //   store.dispatch('landing/resetSearch')
-  //   return fetchProjectData(store, params, error)
+  //   await fetchProjectData(store, params, error)
+  //   if (!store.state.project.published || store.state.project.published.name === null) {
+  //     error({
+  //       statusCode: 404,
+  //       message: 'Initiative is not published',
+  //     })
+  //   }
   // },
 }
 </script>
 
 <style lang="less">
-@import '@/assets/style/variables.less';
-@import '@/assets/style/mixins.less';
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-.ProjectDraftView {
-  .DraftLabel {
+.SolutionPublishedView {
+  .CollapsibleCard {
+    .el-card__header {
+      background-color: lighten(@colorPublished, 10%) !important;
+      color: @colorWhite !important;
+    }
+  }
+
+  .Stepper {
+    li {
+      &.active,
+      &:hover,
+      &:active {
+        .el-button {
+          .Step {
+            color: @colorWhite;
+            background-color: lighten(@colorPublished, 10%) !important;
+          }
+        }
+      }
+    }
+  }
+
+  .PublishedLabel {
     display: inline-block;
     height: 23px;
     margin: 0 6px;
@@ -56,8 +104,13 @@ export default {
     line-height: 24px;
     text-transform: uppercase;
     border-radius: 12px;
-    background-color: @colorDraft;
-    color: @colorTextPrimary;
+    background-color: @colorPublished;
+    color: @colorWhite;
+  }
+  .PageTitle {
+    .Title {
+      padding-left: 35%;
+    }
   }
 }
 </style>

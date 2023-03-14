@@ -6,7 +6,7 @@
         <collapsible-card id="general" :title="$gettext('1. General') | translate">
           <simple-field :content="solution.name" :header="$gettext('Name') | translate" />
 
-          <simple-field :header="$gettext('Phase') | translate" :content="solution.phase" />
+          <simple-field :header="$gettext('Phase') | translate" :content="phaseName" />
 
           <simple-field
             :content="solution.open_source_frontier_tech"
@@ -24,10 +24,7 @@
         </collapsible-card>
 
         <collapsible-card id="activity-and-reach" :title="$gettext('2. Activity and Reach') | translate">
-          <simple-field
-            :header="$gettext('Global reach of this solution') | translate"
-            :content="solution.people_reached"
-          />
+          <simple-field :header="$gettext('Global reach of this solution') | translate" :content="peopleReached" />
 
           <simple-field :header="$gettext('Countries where this solution is active') | translate">
             <CountriesTable :tableData="solution.country_solutions" />
@@ -74,6 +71,7 @@ export default {
   computed: {
     ...mapGetters({
       solution: 'solution/getSolutionData',
+      phases: 'system/getSolutionPhases',
     }),
 
     route() {
@@ -84,6 +82,12 @@ export default {
     },
     project() {
       return this.isDraft ? this.draft : this.published
+    },
+    peopleReached() {
+      return this.solution.people_reached === 0 ? '0' : this.solution.people_reached
+    },
+    phaseName() {
+      return this.phases.find((phase) => phase.id === this.solution.phase).name
     },
   },
 }

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <table class="SimpleTable">
+    <table data-test="portfolio-table-input" class="SimpleTable">
       <thead>
         <tr>
-          <th>Innovation Portfolio</th>
-          <th>Public Statement(s)</th>
+          <th><translate>Innovation Portfolio</translate></th>
+          <th><translate>Problem Statements</translate></th>
         </tr>
       </thead>
       <tbody>

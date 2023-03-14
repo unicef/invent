@@ -24,12 +24,13 @@ unitTests:
   enabled: false
 
 storage:
-  storageCLass: azurefile-csi
+  storageCLass: azureblob-nfs-std
   accessModes: ReadWriteMany
   translationsSize: 1Gi
   translationsCountrySize: 500Mi
   localeSize: 500Mi
   translationsUserSize: 500Mi
+  mediaSize: 2Gi
   mediaClaimName: media-blob-nfs
 
 imagePullSecrets: []

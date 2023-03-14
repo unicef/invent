@@ -1,9 +1,9 @@
 <template>
-  <table class="SimpleTable">
+  <table data-test="portfolio-table" class="SimpleTable">
     <thead>
       <tr>
-        <th>Innovation Portfolio</th>
-        <th>Public Statement(s)</th>
+        <th><translate>Innovation Portfolio</translate></th>
+        <th><translate>Problem Statements</translate></th>
       </tr>
     </thead>
     <tbody>
@@ -30,14 +30,16 @@ export default {
   },
   methods: {
     statements: function (statementsArray) {
-      return statementsArray
+      const st = statementsArray
         .map((statementId) => this.getStatements.find((statement) => statement.id === statementId).name)
         .toString()
+      return st === '' ? 'None' : st
     },
     portfolios: function (portfolioArray) {
-      return portfolioArray
+      const st = portfolioArray
         .map((portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId).name)
         .toString()
+      return st === '' ? 'None' : st
     },
   },
 }
