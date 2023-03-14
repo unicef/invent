@@ -211,7 +211,7 @@ export default {
     },
     goToPublished() {
       const localised = this.localePath({
-        name: 'organisation-portfolio-innovation-solutions-id-published',
+        name: 'organisation-portfolio-innovation-solutions-id',
         params: { ...this.$route.params },
       })
       this.$router.push(localised)
