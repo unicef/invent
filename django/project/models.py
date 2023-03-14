@@ -835,6 +835,8 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     learning_investment = models.BooleanField()
     people_reached_override = models.PositiveIntegerField(help_text="Override country based calculation", null=True,
                                                           blank=True)
+    is_active = models.BooleanField()
+
 
     @property
     def people_reached(self):
@@ -926,6 +928,7 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
             'created': self.created,
             'modified': self.modified,
             'name': self.name,
+            'is_active': self.is_active,
             'phase': self.phase,
             'open_source_frontier_tech': self.open_source_frontier_tech,
             'learning_investment': self.learning_investment,
