@@ -864,6 +864,24 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
                      queryset=CountrySolution.objects.select_related('country'))
 
     def get_portfolio_problem_statements(self):
+        """
+        Get a list of dictionaries that represent the portfolios and their associated problem statements for the current
+        solution.
+
+        Returns:
+            A list of dictionaries, where each dictionary contains the following keys:
+                - portfolio_id (int): The ID of the portfolio.
+                - problem_statements (list of int): The IDs of the problem statements associated with the portfolio.
+
+        Example:
+            >>> solution = Solution.objects.get(pk=1)
+            >>> portfolios = solution.get_portfolio_problem_statements()
+            >>> print(portfolios)
+            [
+                {'portfolio_id': 1, 'problem_statements': [3, 51]},
+                {'portfolio_id': 5, 'problem_statements': [1, 51]}
+            ]
+        """
         # Create an empty dictionary to group problem statements by portfolio ID
         portfolio_dict = {}
         problem_statements = self.problem_statements.values()
