@@ -5,21 +5,66 @@
         <tr>
           <th><translate>Innovation Portfolio</translate></th>
           <th><translate>Problem Statements</translate></th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Climate change</td>
-          <td>2. Accessing ...</td>
+        <tr v-for="row in table" :key="row.id">
+          <td>
+            <PortfolioSelectSingle @change="() => updateRegion(row.id, row.country)" v-model.number="row.country" />
+          </td>
+          <td><ProblemStatementsSelector /></td>
+          <td>
+            <el-button type="text" class="IconLeft" @click="() => deleteRow(row.id)">
+              <translate>Delete</translate>
+            </el-button>
+          </td>
         </tr>
       </tbody>
     </table>
-    <el-button type="text" class="IconLeft"> <fa icon="plus" /> <translate>Add Portfolio</translate> </el-button>
+    <el-button type="text" class="IconLeft" @click="addRow">
+      <fa icon="plus" /> <translate>Add Portfolio</translate>
+    </el-button>
   </div>
 </template>
 
 <script>
-export default {}
+import { uuidv4 } from '~/utilities/dom'
+import PortfolioSelectSingle from './PortfolioSelectSingle.vue'
+import { mapGetters } from 'vuex'
+import ProblemStatementsSelector from './ProblemStatementsSelector.vue'
+
+export default {
+  components: {
+    PortfolioSelectSingle,
+    ProblemStatementsSelector,
+  },
+  props: {
+    tableData: [],
+  },
+  data: function () {
+    return {
+      table: [],
+    }
+  },
+  computed: {
+    ...mapGetters({
+      portfoliosList: 'solution/getPorfoliosList',
+    }),
+  },
+  methods: {
+    addRow: function () {
+      this.table = [...this.table, { id: uuidv4(), portfolio: '', problem_statements: [] }]
+      // this.emit('update-countries', this.table)
+      //table actions-> table changed + new table
+      // initial table = tableData comparison
+      // when props update -> table actions cleanup
+    },
+    deleteRow: function (id) {
+      this.table = this.table.filter((row) => row.id !== id)
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -42,8 +87,14 @@ export default {}
   td {
     padding-left: 10px;
   }
-  td:nth-child(1) {
+  th:nth-child(1) {
     width: 30%;
+  }
+  th:nth-child(2) {
+    width: 60%;
+  }
+  th:nth-child(3) {
+    width: 10%;
   }
   tr:nth-child(even) {
     background-color: lightgrey;

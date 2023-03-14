@@ -1,11 +1,14 @@
 const cleanState = () => ({
   id: '',
+  isActive: true,
+  created: '',
+  modified: '',
   name: '',
-  phase: '',
-  open_source_frontier_tech: '',
-  learning_investment: '',
+  phase: 0,
+  open_source_frontier_tech: false,
+  learning_investment: false,
   portfolios: [],
-  people_reached: '',
+  people_reached: 0,
   problem_statements: [],
   country_solutions: [],
   problem_statement_list: [],
@@ -43,6 +46,13 @@ export const actions = {
   },
   async setSolution({ commit }, data) {
     return this.$axios.put(`api/solutions/${id}`)
+  },
+  async deleteSolution({ state }) {
+    return this.$axios({
+      method: 'put',
+      url: `api/solutions/${state.id}`,
+      data: { ...state, isActive: false },
+    })
   },
 }
 

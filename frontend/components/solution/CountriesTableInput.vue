@@ -54,12 +54,7 @@ export default {
   },
   data: function () {
     return {
-      table: [
-        { id: '21', country: 58, region: [0], reached: 1234 },
-        { id: '2', country: 79, region: [1, 3], reached: 456 },
-        { id: '3', country: 79, region: [], reached: 456 },
-      ],
-      tableActions: [],
+      table: [],
     }
   },
   computed: {

@@ -14,8 +14,8 @@
         <el-col :span="6">
           <custom-required-form-item
             :error="errors.first('override_reach')"
-            :draft-rule="draftRules.override_reach"
-            :publish-rule="publishRules.override_reach"
+            :draft-rule="rules.override_reach"
+            :publish-rule="rules.override_reach"
           >
             <template slot="label">
               <translate key="override_reach">Override reach value</translate>

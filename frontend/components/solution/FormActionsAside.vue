@@ -1,32 +1,10 @@
 <template>
   <div v-scroll-class:FixedNavigation="266" class="ProjectNavigation">
     <el-card :body-style="{ padding: '0px' }">
-      <div v-if="!isNewProject" class="SwitchProjectStatus">
-        <el-row type="flex" justify="space-between" align="middle">
-          <div class="SwitchLabel">Switch view:</div>
-          <el-button-group class="SwitchButtons">
-            <el-button
-              :class="['DraftButton', { Active: isDraft || isReadOnlyDraft }]"
-              :disabled="isDraft || !canEdit"
-              @click="goToDraft"
-            >
-              <translate>Edit</translate>
-            </el-button>
-            <el-button
-              :class="['PublishedButton', { Active: isPublished && published.name }]"
-              :disabled="isPublished || !published.name"
-              @click="goToPublished"
-            >
-              <translate>Published</translate>
-            </el-button>
-          </el-button-group>
-        </el-row>
-      </div>
-
       <div v-if="isTeam || isNewProject || isSuper" class="NavigationActions">
-        <el-button v-if="true" :disabled="!!loading" type="primary" size="medium" @click="emitAction('publishProject')">
+        <el-button v-if="true" :disabled="!!loading" type="primary" size="medium" @click="emitAction('save')">
           <fa v-show="loading === 'publish'" icon="spinner" spin />
-          <translate>Publish</translate>
+          <translate>Save</translate>
         </el-button>
 
         <el-button
@@ -35,19 +13,13 @@
           :size="isNewProject ? 'medium' : ''"
           :class="['SaveDraft', { NewProject: isNewProject, Draft: isDraft }]"
           :disabled="!!loading"
-          @click="emitAction('saveDraft')"
+          @click="emitAction('cancel')"
         >
           <fa v-show="loading === 'draft'" icon="spinner" spin />
           <translate>Cancel</translate>
         </el-button>
 
-        <el-button
-          v-if="true"
-          :disabled="!!loading"
-          type="text"
-          class="DiscardDraft DeleteButton"
-          @click="emitAction('discardDraft')"
-        >
+        <el-button v-if="true" :disabled="!!loading" type="text" class="DeleteButton" @click="emitAction('delete')">
           <fa v-show="loading === 'discard'" icon="spinner" spin />
           <translate>Delete</translate>
         </el-button>
@@ -282,41 +254,6 @@ export default {
       font-size: @fontSizeBase;
       color: @colorTextPrimary;
     }
-
-    .SwitchButtons {
-      .el-button {
-        margin: 0 !important;
-        padding: 0 10px;
-        height: 29px;
-        line-height: 29px;
-        border: 0 !important;
-        background-color: @colorGrayLighter;
-        color: @colorTextSecondary;
-        font-size: @fontSizeSmall + 1;
-        text-transform: uppercase;
-
-        &:not(.Active) {
-          &:hover {
-            background-color: darken(@colorGrayLighter, 5%);
-            color: @colorTextPrimary;
-          }
-        }
-      }
-
-      .DraftButton {
-        &.Active {
-          color: @colorTextPrimary;
-          background-color: @colorDraft;
-        }
-      }
-
-      .PublishedButton {
-        &.Active {
-          color: @colorWhite;
-          background-color: @colorPublished;
-        }
-      }
-    }
   }
 
   .Stepper {
@@ -447,6 +384,12 @@ export default {
     .fa-spin {
       margin-right: 2px;
     }
+  }
+  .DeleteButton {
+    padding: 16px;
+    color: @colorWhite;
+    background-color: #1cabe2;
+    text-align: center;
   }
 }
 </style>

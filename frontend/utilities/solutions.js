@@ -1,16 +1,4 @@
-export const draftRules = () => {
-  return {
-    name: {
-      min: 3,
-      max: 128,
-    },
-    phase: {},
-    tech: {},
-    learning: {},
-    override_reach: {},
-  }
-}
-export const publishRules = () => {
+export const rules = () => {
   return {
     name: {
       required: true,

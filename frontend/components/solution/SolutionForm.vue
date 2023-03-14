@@ -1,7 +1,7 @@
 <template>
   <div class="NewProjectForm">
     <div v-show="!showForm" class="Loader">
-      <div />
+      <div></div>
       <span>Loading</span>
     </div>
     <el-form ref="projectForm" label-position="top" @submit.native.prevent>
@@ -12,8 +12,6 @@
             ref="solutionGeneral"
             :use-publish-rules="usePublishRules"
             :rules="rules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
@@ -21,20 +19,15 @@
           <ActivityAndReach
             key="solutionActivityAndReach"
             ref="solutionActivityAndReach"
+            :use-publish-rules="usePublishRules"
             :rules="rules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
         </el-col>
         <el-col :span="6">
-          <FormActionsAside
-            @saveDraft="doSaveDraft"
-            @discardDraft="doDiscardDraft"
-            @publishProject="doPublishProject"
-          />
+          <FormActionsAside @save="doSaveDraft" @cancel="doDiscardDraft" @delete="doPublishProject" />
         </el-col>
       </el-row>
     </el-form>
@@ -42,7 +35,7 @@
 </template>
 
 <script>
-import { publishRules, draftRules } from '@/utilities/solutions'
+import { rules } from '@/utilities/solutions'
 import { mapGetters, mapActions } from 'vuex'
 import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
@@ -73,19 +66,15 @@ export default {
       donorAnswers: 'project/getDonorsAnswers',
     }),
     isDraft() {
-      return this.$route.name.includes('organisation-initiatives-id-edit')
+      return this.$route.name.includes('organisation-portfolio-innovation-solutions-edit')
     },
-    isNewProject() {
-      return this.$route.name.includes('organisation-initiatives-create')
+    isNewSolution() {
+      return this.$route.name.includes('organisation-portfolio-innovation-solutions-create')
     },
     showForm() {
       return this.readyElements >= this.createdElements
     },
-    draftRules,
-    publishRules,
-    rules() {
-      return this.usePublishRules ? this.publishRules : this.draftRules
-    },
+    rules,
   },
   mounted() {
     if (this.$route.query.reloadAfterImport) {
@@ -111,8 +100,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      createProject: 'project/createProject',
-      saveDraft: 'project/saveDraft',
+      createSolution: 'solution/createSolution',
+      setSolution: 'solution/setSolution',
       discardDraft: 'project/discardDraft',
       publishProject: 'project/publishProject',
       setLoading: 'project/setLoading',
@@ -175,15 +164,15 @@ export default {
 
         if (general && solutionActivityAndReach) {
           try {
-            if (this.isNewProject) {
-              const id = await this.createProject()
+            if (this.isNewSolution) {
+              const id = await this.createSolution()
               const localised = this.localePath({
-                name: 'organisation-initiatives-id-edit',
+                name: 'organisation-portfolio-innovation-solutions-id-edit',
                 params: { ...this.$route.params, id },
               })
               this.$router.push(localised)
             } else if (this.isDraft) {
-              await this.saveDraft(this.$route.params.id)
+              await this.setSolution(this.$route.params.id)
               location.reload()
             }
             this.$alert(this.$gettext('Your draft has been saved successfully'), this.$gettext('Congratulation'), {
@@ -226,6 +215,10 @@ export default {
           message: this.$gettext('Action cancelled'),
         })
       }
+    },
+    async deleteSolution() {
+      this.clearValidation()
+      this.dispatch()
     },
     async doPublishProject() {
       this.clearValidation()
