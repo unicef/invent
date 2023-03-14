@@ -203,6 +203,7 @@ class ProjectLandingBlocks(TokenAuthMixin, ViewSet):
     2. Recent updates block
     3. Featured initiatives block
     """
+
     def list(self, request, *args, **kwargs):
         my_initiatives_qs = Project.objects.member_of(request.user)
         my_initiatives_count = my_initiatives_qs.count()
@@ -258,7 +259,8 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
-    
+
+
 class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
     def get_permissions(self):
         if self.action == "retrieve":
@@ -280,28 +282,32 @@ class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
 
         return Response(self._get_permission_based_data(solution))
 
+
 class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = SolutionSerializer
     queryset = Solution.objects.all()
 
-    # def _check_ps_status(self, request, *args, **kwargs) -> bool:
-    #     instance = self.get_object()
-
-    #     if 'problem_statements' in request.data:
-    #         r_ps_ids = {ps['id'] for ps in request.data.get('problem_statements', []) if 'id' in ps}
-
-    #         non_modifiable_ps = instance.problem_statements.filter(projectportfoliostate__approved=True)
-    #         ps_removed = instance.problem_statements.exclude(id__in=r_ps_ids)
-
-    #         if non_modifiable_ps.intersection(ps_removed):
-    #             raise PermissionDenied("Problem Statements linked to approved projects may not be deleted: [{}]".format(
-    #                 ", ".join([str(x) for x in non_modifiable_ps.intersection(ps_removed).values_list('id', flat=True)])
-    #             ))
-
     def update(self, request, *args, **kwargs):
-        # self._check_ps_status(request, *args, **kwargs)
-        return super(SolutionUpdateViewSet, self).update(request, *args, **kwargs)
-    
+        instance = self.get_object()
+
+        # Get the portfolio_problem_statements data to set the portfolios and problem_statements
+        portfolio_problem_statements = request.data.get('portfolio_problem_statements', [])
+        portfolios = list(set(d['portfolio_id'] for d in portfolio_problem_statements))
+        problem_statements = list(set(ps for d in portfolio_problem_statements for ps in d['problem_statements']))
+
+        # Update the instance with the extracted data
+        instance.portfolios.set(portfolios)
+        instance.problem_statements.set(problem_statements)
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
         required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
@@ -807,7 +813,7 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
     serializer_class = ReviewScoreBriefSerializer
 
     def get_project_and_portfolio(self):
-        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
+        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio"))
 
         pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
         return portfolio, pps
