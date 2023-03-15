@@ -751,13 +751,24 @@ class CountrySolutionSerializer(serializers.ModelSerializer):
         model = CountrySolution
         fields = ('id', 'people_reached', 'region')
 
+class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
+    problem_statements = ProblemStatementSerializer(many=True)
+    portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
+
+    class Meta:
+        model = CountrySolution
+        fields = ('id', 'people_reached', 'region')
+
 
 class SolutionSerializer(serializers.ModelSerializer):
     regions = serializers.ListField(child=serializers.IntegerField(), max_length=8, min_length=0)
     people_reached = serializers.IntegerField(read_only=True)
     countries = CountrySolutionSerializer(source='countrysolution_set', many=True)
+    problem_statements = ProblemStatementSerializer(many=True, required=False)
+    portfolios = PortfolioSerializer(read_only=True, source='get_portfolio')
 
     class Meta:
+        
         model = Solution
         fields = ('id', 'created', 'modified', 'name', 'regions', 'phase', 'countries',
                   'people_reached', 'open_source_frontier_tech', 'learning_investment',
