@@ -3,7 +3,7 @@
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
-    :placeholder="$gettext('Innovation Portfolios') | translate"
+    :placeholder="$gettext('Innovation Portfolio') | translate"
     filterable
     popper-class="PortfolioSelectorPopper"
     class="CountrySelector"
@@ -45,6 +45,12 @@ export default {
       return Array.isArray(this.value)
     },
   },
+  // methods: {
+  //   portfolio: function (portfolio) {
+  //     const st = (portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId)[0].name
+  //     return st === '' ? this.$gettext('N/A') : st
+  //   },
+  // }
 }
 </script>
 

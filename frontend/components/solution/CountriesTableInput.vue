@@ -3,10 +3,10 @@
     <table data-test="countries-table-input" class="SimpleTable">
       <thead>
         <tr>
-          <th>Country</th>
-          <th>Region</th>
-          <th>People Reached</th>
-          <th></th>
+          <th><translate>Country</translate></th>
+          <th><translate>Region</translate></th>
+          <th><translate>People Reached</translate></th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>

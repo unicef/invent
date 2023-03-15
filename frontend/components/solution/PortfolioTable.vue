@@ -8,12 +8,16 @@
     </thead>
     <tbody>
       <tr v-if="!portfoliosProblemStatements.length > 0">
-        <td>None</td>
-        <td>None</td>
+        <td><translate>None</translate></td>
+        <td><translate>None</translate></td>
       </tr>
       <tr v-else v-for="row in portfoliosProblemStatements">
         <td>{{ portfolio(row.portfolio_id) }}</td>
-        <td>{{ statements(row.problem_statements) }}</td>
+        <td>
+          <ul>
+            <li v-for="listItem in statements(row.problem_statements)">{{ listItem }}</li>
+          </ul>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -33,10 +37,11 @@ export default {
   },
   methods: {
     statements: function (statementsArray) {
-      const st = statementsArray
-        .map((statementId) => this.getStatements.find((statement) => statement.id === statementId).name)
-        .toString()
-      return st === '' ? 'None' : st
+      const st = statementsArray.map(
+        (statementId) => this.getStatements.find((statement) => statement.id === statementId).name
+      )
+
+      return st === [] ? [`${this.$gettext('None')}`] : st
     },
     portfolio: function (portfolioId) {
       return this.getPortfolios.find((portfolio) => portfolio.id === portfolioId).name

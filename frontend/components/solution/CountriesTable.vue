@@ -2,9 +2,9 @@
   <table data-test="countries-table" class="SimpleTable">
     <thead>
       <tr>
-        <th>Country</th>
-        <th>Region</th>
-        <th>People Reached</th>
+        <th><translate>Country</translate></th>
+        <th><translate>Region</translate></th>
+        <th><translate>People Reached</translate></th>
       </tr>
     </thead>
     <tbody v-if="!!tableData.length">
@@ -46,9 +46,10 @@ export default {
       }))
 
       return namedTable.sort((a, b) => {
-        if (a.country > b.country) {
+        const res = a.localeCompare(b, this.$i18n.locale)
+        if (res > 0) {
           return 1
-        } else if (a.country < b.country) {
+        } else if (res < 0) {
           return -1
         } else {
           return 0

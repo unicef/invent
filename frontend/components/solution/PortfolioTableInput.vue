@@ -72,13 +72,6 @@ export default {
     deleteRow: function (id) {
       this.table = this.table.filter((row) => row.id !== id)
     },
-
-    portfolios: function (portfolioArray) {
-      const st = portfolioArray
-        .map((portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId).name)
-        .toString()
-      return st === '' ? 'None' : st
-    },
   },
 }
 </script>

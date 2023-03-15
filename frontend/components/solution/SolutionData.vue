@@ -9,11 +9,14 @@
           <simple-field :header="$gettext('Phase') | translate" :content="phaseName" />
 
           <simple-field
-            :content="solution.open_source_frontier_tech"
+            :content="yesNo(solution.open_source_frontier_tech)"
             :header="$gettext('Open source frontier tech') | translate"
           />
 
-          <simple-field :content="solution.learning_investment" :header="$gettext('Learning investment') | translate" />
+          <simple-field
+            :content="yesNo(solution.learning_investment)"
+            :header="$gettext('Learning investment') | translate"
+          />
 
           <simple-field :header="$gettext('Innovation portfolios and problem statements') | translate">
             <PortfolioTable :portfoliosProblemStatements="solution.portfolio_problem_statements" />
@@ -85,6 +88,11 @@ export default {
     },
     phaseName() {
       return this.phases.find((phase) => phase.id === this.solution.phase).name
+    },
+  },
+  methods: {
+    yesNo(booleanParam) {
+      return booleanParam ? this.$gettext('Yes') : this.$gettext('No')
     },
   },
 }

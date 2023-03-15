@@ -27,7 +27,7 @@
           />
         </el-col>
         <el-col :span="6">
-          <FormActionsAside @save="handleSave" @cancel="doDiscardDraft" @delete="handleDeleteSolution" />
+          <FormActionsAside @save="handleSave" @cancel="handleCancel" @delete="handleDeleteSolution" />
         </el-col>
       </el-row>
     </el-form>
@@ -103,7 +103,7 @@ export default {
       createSolution: 'solution/createSolution',
       updateSolution: 'solution/updateSolution',
       deleteSolution: 'solution/deleteSolution',
-      discardDraft: 'project/discardDraft',
+      cancelSolution: 'solution/cancelSolution',
       publishProject: 'project/publishProject',
       setLoading: 'project/setLoading',
       initProjectState: 'project/initProjectState',
@@ -160,23 +160,22 @@ export default {
       this.clearValidation()
       this.usePublishRules = false
       await this.$nextTick(async () => {
-        const general = await this.$refs.solutionGeneral.validateDraft()
-        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validateDraft()
+        const general = await this.$refs.solutionGeneral.validatePublish()
+        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validatePublish()
 
         if (general && solutionActivityAndReach) {
           try {
-            if (this.isNewSolution) {
-              const id = await this.createSolution()
-              const localised = this.localePath({
-                name: 'organisation-portfolio-innovation-solutions-id-edit',
-                params: { ...this.$route.params, id },
-              })
-              this.$router.push(localised)
-            } else if (this.isDraft) {
-              await this.updateSolution(this.$route.params.id)
-              location.reload()
-            }
-            this.$alert(this.$gettext('Your draft has been saved successfully'), this.$gettext('Congratulation'), {
+            // const id = await this.createSolution()
+            // const localised = this.localePath({
+            //   name: 'organisation-portfolio-innovation-solutions-id-edit',
+            //   params: { ...this.$route.params, id },
+            // })
+            // this.$router.push(localised)
+
+            await this.updateSolution(this.$route.params.id) //needs data
+            location.reload()
+
+            this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close'),
             })
             return
@@ -193,10 +192,10 @@ export default {
         this.setLoading(false)
       })
     },
-    async doDiscardDraft() {
+    async handleCancel() {
       try {
         await this.$confirm(
-          this.$gettext('The current draft will be overwritten by the published version'),
+          this.$gettext('Any changes will be lost and you will be navigated to Dashboard'),
           this.$gettext('Attention'),
           {
             confirmButtonText: this.$gettext('Ok'),
@@ -204,10 +203,11 @@ export default {
             type: 'warning',
           }
         )
-        await this.discardDraft(this.$route.params.id)
+        await this.cancelSolution()
+        this.$router.push(this.localePath('organisation'))
         this.$message({
           type: 'success',
-          message: this.$gettext('Draft overriden with published version'),
+          message: this.$gettext('Edit canceled'),
         })
       } catch (e) {
         this.setLoading(false)
@@ -226,6 +226,7 @@ export default {
           type: 'warning',
         })
         await this.deleteSolution()
+        this.$router.push(this.localePath('organisation'))
         this.$message({
           type: 'success',
           message: this.$gettext('Solution deleted succesfully'),

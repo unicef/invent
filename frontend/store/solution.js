@@ -76,6 +76,9 @@ export const actions = {
       },
     })
   },
+  cancelSolution({ commit }) {
+    commit('INIT_STATE')
+  },
 }
 
 export const mutations = {
@@ -95,5 +98,8 @@ export const mutations = {
   },
   PUT_PORTFOLIO_LIST: (state, data) => {
     state.portfolio_list = data
+  },
+  INIT_STATE: (state) => {
+    state = cleanState()
   },
 }
