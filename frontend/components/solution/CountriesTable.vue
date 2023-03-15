@@ -14,7 +14,7 @@
         <td>{{ row.people_reached }}</td>
       </tr>
     </tbody>
-    <tbody v-else="!!tableData.length">
+    <tbody v-else>
       <tr>
         <td><translate>No data</translate></td>
         <td><translate>No data</translate></td>

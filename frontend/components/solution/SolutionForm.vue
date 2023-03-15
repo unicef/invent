@@ -27,7 +27,7 @@
           />
         </el-col>
         <el-col :span="6">
-          <FormActionsAside @save="doSaveDraft" @cancel="doDiscardDraft" @delete="doPublishProject" />
+          <FormActionsAside @save="handleSave" @cancel="doDiscardDraft" @delete="handleDeleteSolution" />
         </el-col>
       </el-row>
     </el-form>
@@ -101,7 +101,8 @@ export default {
   methods: {
     ...mapActions({
       createSolution: 'solution/createSolution',
-      setSolution: 'solution/setSolution',
+      updateSolution: 'solution/updateSolution',
+      deleteSolution: 'solution/deleteSolution',
       discardDraft: 'project/discardDraft',
       publishProject: 'project/publishProject',
       setLoading: 'project/setLoading',
@@ -155,7 +156,7 @@ export default {
       this.$refs.solutionGeneral.clear()
       this.$refs.solutionActivityAndReach.clear()
     },
-    async doSaveDraft() {
+    async handleSave() {
       this.clearValidation()
       this.usePublishRules = false
       await this.$nextTick(async () => {
@@ -172,7 +173,7 @@ export default {
               })
               this.$router.push(localised)
             } else if (this.isDraft) {
-              await this.setSolution(this.$route.params.id)
+              await this.updateSolution(this.$route.params.id)
               location.reload()
             }
             this.$alert(this.$gettext('Your draft has been saved successfully'), this.$gettext('Congratulation'), {
@@ -216,9 +217,26 @@ export default {
         })
       }
     },
-    async deleteSolution() {
+    async handleDeleteSolution() {
       this.clearValidation()
-      this.dispatch()
+      try {
+        await this.$confirm(this.$gettext('The current solution will be deleted'), this.$gettext('Attention'), {
+          confirmButtonText: this.$gettext('Ok'),
+          cancelButtonText: this.$gettext('Cancel'),
+          type: 'warning',
+        })
+        await this.deleteSolution()
+        this.$message({
+          type: 'success',
+          message: this.$gettext('Solution deleted succesfully'),
+        })
+      } catch (e) {
+        this.setLoading(false)
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action cancelled'),
+        })
+      }
     },
     async doPublishProject() {
       this.clearValidation()

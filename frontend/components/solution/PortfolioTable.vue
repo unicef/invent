@@ -39,7 +39,6 @@ export default {
       return st === '' ? 'None' : st
     },
     portfolio: function (portfolioId) {
-      // return 22222
       return this.getPortfolios.find((portfolio) => portfolio.id === portfolioId).name
     },
   },

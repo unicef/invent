@@ -44,14 +44,36 @@ export const actions = {
       this.$axios.get('/api/portfolio/active-list/').then((response) => commit('PUT_PORTFOLIO_LIST', response.data))
     }
   },
-  async setSolution({ commit }, data) {
-    return this.$axios.put(`api/solutions/${id}`)
+  async updateSolution({ commit }, data) {
+    return this.$axios({
+      method: 'put',
+      url: `/api/solution/update/${id}/`,
+      data: {
+        name: data.name,
+        is_active: true,
+        phase: data.phase,
+        open_source_frontier_tech: data.open_source_frontier_tech,
+        learning_investment: data.learning_investment,
+        people_reached: data.people_reached,
+        country_solutions: data.country_solutions,
+        portfolio_problem_statements: data.portfolio_problem_statements,
+      },
+    })
   },
   async deleteSolution({ state }) {
     return this.$axios({
       method: 'put',
-      url: `api/solutions/${state.id}`,
-      data: { ...state, isActive: false },
+      url: `/api/solution/update/${state.id}/`,
+      data: {
+        name: state.name,
+        is_active: false,
+        phase: state.phase,
+        open_source_frontier_tech: state.open_source_frontier_tech,
+        learning_investment: state.learning_investment,
+        people_reached: state.people_reached,
+        country_solutions: state.country_solutions,
+        portfolio_problem_statements: state.portfolio_problem_statements,
+      },
     })
   },
 }
@@ -61,10 +83,11 @@ export const mutations = {
     state.id = data.id
     state.name = data.name
     state.phase = data.phase
-    state.open_source_frontier_tech = data.open_source_frontier_tech ? 'Yes' : 'No'
-    state.learning_investment = data.learning_investment ? 'Yes' : 'No'
+    state.open_source_frontier_tech = data.open_source_frontier_tech
+    state.learning_investment = data.learning_investment
     state.people_reached = data.people_reached
     state.portfolios = data.portfolios
+    state.country_solutions = data.country_solutions
     state.portfolio_problem_statements = data.portfolio_problem_statements
   },
   PUT_PROBLEM_STATEMENTS_LIST: (state, data) => {
