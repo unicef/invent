@@ -3,6 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: "keep"
   name: {{ include "invent-django.fullname" . }}-translations
 spec:
   accessModes:
@@ -17,6 +19,8 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: "keep"
   name: {{ include "invent-django.fullname" . }}-translations-country
 spec:
   accessModes:
@@ -31,6 +35,8 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: "keep"
   name: {{ include "invent-django.fullname" . }}-locale
 spec:
   accessModes:
@@ -45,6 +51,8 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: "keep"
   name: {{ include "invent-django.fullname" . }}-translations-user
 spec:
   accessModes:
