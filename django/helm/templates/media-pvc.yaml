@@ -8,6 +8,7 @@ metadata:
   name: {{ .Values.storage.mediaClaimName }}
   annotations:
     volume.beta.kubernetes.io/storage-class: {{ .Values.storage.storageCLass }}
+    helm.sh/resource-policy: "keep"
 spec:
   accessModes:
     - {{ .Values.storage.accessModes }}
