@@ -64,6 +64,14 @@ export default {
       getRegionDetails: 'system/getRegionDetails',
     }),
   },
+  // mounted: function () {
+  //   this.table = this.tableData
+  // },
+  watch: {
+    tableData: function () {
+      this.table = this.tableData
+    },
+  },
   methods: {
     addRow: function () {
       this.table = [...this.table, { id: uuidv4(), country: '', region: [], reached: 0 }]
@@ -123,13 +131,13 @@ export default {
   td {
     padding-left: 10px;
   }
-  td:nth-child(1) {
+  th:nth-child(1) {
     width: 30%;
   }
-  td:nth-child(2) {
+  th:nth-child(2) {
     width: 30%;
   }
-  td:nth-child(3) {
+  th:nth-child(3) {
     width: 30%;
   }
   tr:nth-child(even) {

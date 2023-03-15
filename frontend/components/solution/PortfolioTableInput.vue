@@ -11,9 +11,12 @@
       <tbody>
         <tr v-for="row in table" :key="row.id">
           <td>
-            <PortfolioSelectSingle @change="() => updateRegion(row.id, row.country)" v-model.number="row.country" />
+            <PortfolioSelectSingle
+              @change="() => updatePortfolio(row.id, row.portfolio)"
+              v-model.number="row.portfolio"
+            />
           </td>
-          <td><ProblemStatementsSelector /></td>
+          <td><ProblemStatementsSelector :tableData="row.problem_statements" /></td>
           <td>
             <el-button type="text" class="IconLeft" @click="() => deleteRow(row.id)">
               <translate>Delete</translate>
@@ -49,8 +52,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      portfoliosList: 'solution/getPorfoliosList',
+      getPortfolios: 'solution/getPorfoliosList',
+      getStatements: 'solution/getProblemStatementList',
     }),
+  },
+  watch: {
+    tableData: function () {
+      this.table = this.tableData
+    },
   },
   methods: {
     addRow: function () {
@@ -62,6 +71,13 @@ export default {
     },
     deleteRow: function (id) {
       this.table = this.table.filter((row) => row.id !== id)
+    },
+
+    portfolios: function (portfolioArray) {
+      const st = portfolioArray
+        .map((portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId).name)
+        .toString()
+      return st === '' ? 'None' : st
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="general" class="GeneralOverview">
     <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('General') | translate" show-legend>
-      <custom-required-form-item :error="errors.first('name')" :draft-rule="rules.name" :publish-rule="rules.name">
+      <custom-required-form-item :error="errors.first('name')" :publish-rule="rules.name">
         <template slot="label">
           <translate key="project-name"> What is the name of the solution? </translate>
         </template>
@@ -38,7 +38,6 @@
 
       <custom-required-form-item
         :error="errors.first('phase') ? errors.first('phase').replace('_', ' ') : undefined"
-        :draft-rule="rules.phase"
         :publish-rule="rules.phase"
       >
         <template slot="label">
@@ -67,7 +66,7 @@
           ><translate>Learning investment</translate>
         </el-checkbox>
       </custom-required-form-item>
-      <portfolio-table-input :tableData="[{ id: 1, portfolio: 1, problem_statements: [11, 2] }]" @change="" />
+      <portfolio-table-input :tableData="[{ portfolio: 1, problem_statements: [1, 2] }]" @change="" />
       <!-- <div class="TeamArea">
         <custom-required-form-team-item
           v-model="team"
