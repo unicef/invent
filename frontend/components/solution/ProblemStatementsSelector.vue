@@ -30,8 +30,8 @@ export default {
   },
   mounted: function () {
     this.statements = this.tableData
-    console.log(this.getStatements)
   },
+
   methods: {
     changeHandler(value) {
       this.$emit('change', value)
