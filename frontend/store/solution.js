@@ -10,6 +10,7 @@ const cleanState = () => ({
   country_solutions: [],
   problem_statement_list: [],
   portfolio_list: [],
+  portfolio_problem_statements: [],
 })
 
 export const state = () => ({
@@ -20,7 +21,7 @@ export const getters = {
   getSolutionData: (state) => ({
     ...state,
   }),
-  getPorfoliosList: (state) => state.portfolio_list,
+  getPortfoliosList: (state) => state.portfolio_list,
   getProblemStatementList: (state) => state.problem_statement_list,
 }
 
@@ -53,9 +54,8 @@ export const mutations = {
     state.open_source_frontier_tech = data.open_source_frontier_tech ? 'Yes' : 'No'
     state.learning_investment = data.learning_investment ? 'Yes' : 'No'
     state.people_reached = data.people_reached
-    state.country_solutions = data.country_solutions
     state.portfolios = data.portfolios
-    state.problem_statements = data.problem_statements
+    state.portfolio_problem_statements = data.portfolio_problem_statements
   },
   PUT_PROBLEM_STATEMENTS_LIST: (state, data) => {
     state.problem_statement_list = data

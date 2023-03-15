@@ -16,10 +16,7 @@
           <simple-field :content="solution.learning_investment" :header="$gettext('Learning investment') | translate" />
 
           <simple-field :header="$gettext('Innovation portfolios and problem statements') | translate">
-            <PortfolioTable
-              :innovationPortfolios="solution.portfolios"
-              :problemStatements="solution.problem_statements"
-            />
+            <PortfolioTable :portfoliosProblemStatements="solution.portfolio_problem_statements" />
           </simple-field>
         </collapsible-card>
 

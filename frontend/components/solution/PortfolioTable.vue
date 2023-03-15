@@ -7,9 +7,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>{{ portfolios(innovationPortfolios) }}</td>
-        <td>{{ statements(problemStatements) }}</td>
+      <tr v-if="!portfoliosProblemStatements.length > 0">
+        <td>None</td>
+        <td>None</td>
+      </tr>
+      <tr v-else v-for="row in portfoliosProblemStatements">
+        <td>{{ portfolio(row.portfolio_id) }}</td>
+        <td>{{ statements(row.problem_statements) }}</td>
       </tr>
     </tbody>
   </table>
@@ -19,12 +23,11 @@
 import { mapGetters } from 'vuex'
 export default {
   props: {
-    innovationPortfolios: Array,
-    problemStatements: Array,
+    portfoliosProblemStatements: Array,
   },
   computed: {
     ...mapGetters({
-      getPortfolios: 'solution/getPorfoliosList',
+      getPortfolios: 'solution/getPortfoliosList',
       getStatements: 'solution/getProblemStatementList',
     }),
   },
@@ -35,11 +38,9 @@ export default {
         .toString()
       return st === '' ? 'None' : st
     },
-    portfolios: function (portfolioArray) {
-      const st = portfolioArray
-        .map((portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId).name)
-        .toString()
-      return st === '' ? 'None' : st
+    portfolio: function (portfolioId) {
+      // return 22222
+      return this.getPortfolios.find((portfolio) => portfolio.id === portfolioId).name
     },
   },
 }
