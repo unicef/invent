@@ -3,10 +3,10 @@
     <table data-test="countries-table-input" class="SimpleTable">
       <thead>
         <tr>
-          <th>Country</th>
-          <th>Region</th>
-          <th>People Reached</th>
-          <th></th>
+          <th><translate>Country</translate></th>
+          <th><translate>Region</translate></th>
+          <th><translate>People Reached</translate></th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -54,12 +54,7 @@ export default {
   },
   data: function () {
     return {
-      table: [
-        { id: '21', country: 58, region: [0], reached: 1234 },
-        { id: '2', country: 79, region: [1, 3], reached: 456 },
-        { id: '3', country: 79, region: [], reached: 456 },
-      ],
-      tableActions: [],
+      table: [],
     }
   },
   computed: {
@@ -68,6 +63,14 @@ export default {
       // regions: 'system/getRegions',
       getRegionDetails: 'system/getRegionDetails',
     }),
+  },
+  // mounted: function () {
+  //   this.table = this.tableData
+  // },
+  watch: {
+    tableData: function () {
+      this.table = this.tableData
+    },
   },
   methods: {
     addRow: function () {
@@ -128,13 +131,13 @@ export default {
   td {
     padding-left: 10px;
   }
-  td:nth-child(1) {
+  th:nth-child(1) {
     width: 30%;
   }
-  td:nth-child(2) {
+  th:nth-child(2) {
     width: 30%;
   }
-  td:nth-child(3) {
+  th:nth-child(3) {
     width: 30%;
   }
   tr:nth-child(even) {
