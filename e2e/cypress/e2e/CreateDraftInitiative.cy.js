@@ -3,8 +3,8 @@ import InitiativePage from "../pages/InitiativePage"
 import LoginForm from "../pages/LoginForm"
 import NavigationBar from "../pages/NavigationBar"
 
-describe('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147948/', () => {
-    it('Create Draft Iniative',() => {
+describe('Create Draft Iniative', () => {
+    it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147948/',() => {
         const loginForm = new LoginForm()
         const navigationBar = new NavigationBar()
         loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
