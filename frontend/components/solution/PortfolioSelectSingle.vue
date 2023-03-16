@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      portfolios: 'portfolio/getPortfolios',
+      portfolios: 'solution/getPortfoliosList',
     }),
     innerValue: {
       get() {
