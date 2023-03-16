@@ -1,5 +1,5 @@
 <template>
-  <div id="activity-and-reach" class="GeneralOverview">
+  <div id="activity-and-reach" class="GeneralSolution">
     <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('Activity and Reach') | translate">
       <el-row>
         <simple-field :header="$gettext('Global reach of this solution') | translate" :content="12345" />
@@ -29,7 +29,7 @@
       </el-row>
       <el-row>
         <countries-table-input
-          :tableData="[{ id: 1, country: 1, region: 0, reached: 100 }]"
+          :tableData="getSolutionData.country_solutions"
           @update-countries="updateCountriesTable"
         />
       </el-row>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
@@ -68,16 +68,8 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      offices: (state) => state.offices.offices,
-      office: (state) => state.offices.office,
-    }),
     ...mapGetters({
-      unicef_regions: 'system/getUnicefRegions',
-      getCountries: 'countries/getCountries',
-      modified: 'project/getModified',
-      regionalOffices: 'projects/getRegionalOffices',
-      userProfiles: 'system/getUserProfilesNoFilter',
+      getSolutionData: 'solution/getSolutionData',
     }),
   },
   watch: {
@@ -112,8 +104,6 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country_office'),
-        this.$validator.validate('contact_email'),
-        this.$validator.validate('team'),
       ])
       console.log('General overview draft validation', validations)
       return validations.reduce((a, c) => a && c, true)
@@ -126,10 +116,10 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
-.GeneralOverview {
+.GeneralSolution {
   .CountrySelector,
   .select-office {
-    width: 50%;
+    width: 100%;
   }
 
   .Date {

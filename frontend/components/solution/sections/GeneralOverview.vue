@@ -1,9 +1,9 @@
 <template>
-  <div id="general" class="GeneralOverview">
+  <div id="general" class="GeneralSolution">
     <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('General') | translate" show-legend>
       <custom-required-form-item :error="errors.first('name')" :publish-rule="rules.name">
         <template slot="label">
-          <translate key="project-name"> What is the name of the solution? </translate>
+          <translate key="solution-name"> What is the name of the solution? </translate>
         </template>
         <template slot="tooltip">
           <el-tooltip
@@ -62,43 +62,11 @@
         :draft-rule="rules.learning"
         :publish-rule="rules.learning"
       >
-        <el-checkbox :v-model="solution.learning_investment" class="tech__checkbox" :label="'tech'"
+        <el-checkbox :v-model="solution.learning_investment" class="tech__checkbox" :label="'investment'"
           ><translate>Learning investment</translate>
         </el-checkbox>
       </custom-required-form-item>
-      <portfolio-table-input :tableData="[{ portfolio: 1, problem_statements: [1, 2] }]" @change="" />
-      <!-- <div class="TeamArea">
-        <custom-required-form-team-item
-          v-model="team"
-          :error="errors.first('portfolios')"
-          :draft-rule="rules.team"
-          :publish-rule="rules.team"
-        >
-          <template slot="label">
-            <translate>Portfolios</translate>
-          </template>
-
-          <team-selector v-model="team" v-validate="rules.team" data-vv-name="team" data-vv-as="Team" />
-        </custom-required-form-team-item>
-
-        <custom-required-form-team-item
-          v-model="viewers"
-          :error="errors.first('problem-statements')"
-          :draft-rule="rules.viewers"
-          :publish-rule="rules.viewers"
-        >
-          <template slot="label">
-            <translate> Problem Statements </translate>
-          </template>
-
-          <team-selector
-            v-model="solution.problem_statements"
-            v-validate="rules.viewers"
-            data-vv-name="viewers"
-            data-vv-as="Viewers"
-          />
-        </custom-required-form-team-item>
-      </div> -->
+      <portfolio-table-input :tableData="solution.portfolio_problem_statements" @change="" />
     </collapsible-solution-card>
   </div>
 </template>
@@ -129,8 +97,9 @@ export default {
         phase: 0,
         open_source_frontier_tech: false,
         learning_investment: false,
-        portfolios: [],
-        problem_statements: [],
+        portfolio_problem_statements: [],
+        country_solutions: [],
+        people_reached: 0,
       },
     }
   },
@@ -154,6 +123,9 @@ export default {
       phase: s.phase,
       open_source_frontier_tech: s.open_source_frontier_tech,
       learning_investment: s.learning_investment,
+      country_solutions: s.country_solutions,
+      portfolio_problem_statements: s.portfolio_problem_statements,
+      people_reached: s.people_reached,
     }
   },
   watch: {
@@ -165,6 +137,9 @@ export default {
         phase: s.phase,
         open_source_frontier_tech: s.open_source_frontier_tech,
         learning_investment: s.learning_investment,
+        country_solutions: s.country_solutions,
+        portfolio_problem_statements: s.portfolio_problem_statements,
+        people_reached: s.people_reached,
       }
     },
   },
@@ -189,10 +164,10 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
-.GeneralOverview {
+.GeneralSolution {
   .CountrySelector,
   .select-office {
-    width: 50%;
+    width: 100%;
   }
 
   .Date {

@@ -53,5 +53,9 @@ export default {
 
 .TeamSelector {
   width: 100%;
+  word-wrap: normal;
+  el-select__tags {
+    max-width: 200px;
+  }
 }
 </style>

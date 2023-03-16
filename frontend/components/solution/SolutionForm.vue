@@ -2,7 +2,7 @@
   <div class="NewProjectForm">
     <div v-show="!showForm" class="Loader">
       <div></div>
-      <span>Loading</span>
+      <span><translate>Loading</translate></span>
     </div>
     <el-form ref="projectForm" label-position="top" @submit.native.prevent>
       <el-row v-show="showForm" type="flex">
@@ -62,8 +62,6 @@ export default {
   computed: {
     ...mapGetters({
       solution: 'solution/getSolutionData',
-      countryAnswers: 'project/getCountryAnswers',
-      donorAnswers: 'project/getDonorsAnswers',
     }),
     isDraft() {
       return this.$route.name.includes('organisation-portfolio-innovation-solutions-edit')
@@ -120,8 +118,6 @@ export default {
         )
         const solution = {
           ...this.solution,
-          country_custom_answers: this.countryAnswers,
-          donor_custom_answers: this.donorAnswers,
         }
         const toStore = JSON.stringify(solution)
         window.localStorage.setItem('rescuedSolution', toStore)
@@ -158,7 +154,7 @@ export default {
     },
     async handleSave() {
       this.clearValidation()
-      this.usePublishRules = false
+      this.usePublishRules = true
       await this.$nextTick(async () => {
         const general = await this.$refs.solutionGeneral.validatePublish()
         const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validatePublish()
@@ -178,6 +174,7 @@ export default {
             this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close'),
             })
+            this.usePublishRules = false
             return
           } catch (e) {
             if (e.response) {

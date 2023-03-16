@@ -17,7 +17,7 @@
           <td>{{ printRegionNameList(row.region) }}</td>
           <td>
             <el-input-number
-              v-model="row.reached"
+              v-model="row.people_reached"
               v-validate="{}"
               data-vv-name="people_reached_per_country"
               data-vv-as="People reached per country"
@@ -64,9 +64,9 @@ export default {
       getRegionDetails: 'system/getRegionDetails',
     }),
   },
-  // mounted: function () {
-  //   this.table = this.tableData
-  // },
+  mounted: function () {
+    this.table = this.tableData
+  },
   watch: {
     tableData: function () {
       this.table = this.tableData
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     addRow: function () {
-      this.table = [...this.table, { id: uuidv4(), country: '', region: [], reached: 0 }]
+      this.table = [...this.table, { id: uuidv4(), country: '', region: [], people_reached: 0 }]
       // this.emit('update-countries', this.table)
       //table actions-> table changed + new table
       // initial table = tableData comparison
@@ -102,7 +102,7 @@ export default {
             id: record.id,
             country: countryId,
             region: this.getRegionsByCountry(countryId),
-            reached: record.reached,
+            people_reached: record.people_reached,
           }
         }
       })
@@ -132,10 +132,10 @@ export default {
     padding-left: 10px;
   }
   th:nth-child(1) {
-    width: 30%;
+    width: 40%;
   }
   th:nth-child(2) {
-    width: 30%;
+    width: 20%;
   }
   th:nth-child(3) {
     width: 30%;
