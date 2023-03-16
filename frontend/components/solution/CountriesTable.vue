@@ -46,7 +46,7 @@ export default {
       }))
 
       return namedTable.sort((a, b) => {
-        const res = a.localeCompare(b, this.$i18n.locale)
+        const res = a.country.localeCompare(b.country, this.$i18n.locale)
         if (res > 0) {
           return 1
         } else if (res < 0) {
