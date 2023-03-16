@@ -14,7 +14,8 @@ module.exports = defineConfig({
     experimentalSessionAndOrigin:true,
     viewportHeight:1000,
     viewportWidth:1400,
-    watchForFileChanges: false
+    watchForFileChanges: false,
+    video: false
     
   },
 });
