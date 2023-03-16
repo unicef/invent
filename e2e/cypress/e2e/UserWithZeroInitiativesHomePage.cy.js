@@ -11,5 +11,7 @@ describe('User with 0 Initiatives', () => {
         homePage.getInitiativesSection().contains('Recently Updated Initiatives').should('be.visible')
         // Check if the <<My Initiatives>> section is not visible
         homePage.getInitiativesSection().contains('My Initiatives').should('not.exist')
+        // Count Recently update initiatives
+        homePage.getInitiativeCards().should('have.length', 3)
     })
 })

@@ -10,6 +10,14 @@ class HomePage{
         return cy.get('[class="InitiativesSection"]')
     }
 
+    getInitiativeCards(){
+        return cy.get('[class="InitiativeCard"]')
+    }
+
+    getInitiativeCardsSmall(){
+        return cy.get('[class="InitiativeCard Small"]')
+    }
+
     getSeeAll() {
         return cy.get('.action > .link > a')
     }
