@@ -7,7 +7,7 @@ module.exports = defineConfig({
       // implement node event listeners here
       require('cypress-mochawesome-reporter/plugin')(on);
     },
-    baseUrl: "https://invent-tst.unitst.org/en/-/",
+    baseUrl: "https://invent-tst.unitst.org",
     chromeWebSecurity: false,
     defaultCommandTimeout: 60000,
     experimentalModifyObstructiveThirdPartyCode: true,

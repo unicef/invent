@@ -1,12 +1,18 @@
 /// <reference types="Cypress" />
 import LoginForm from "../pages/LoginForm"
 import HomePage from "../pages/HomePage"
+import Requests from "../support/Requests"
 
-describe('User with 0 Initiatives', () => {
+describe('User with 1 Initiatives', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147434',() => {
         const loginForm = new LoginForm()
+        const requests = new Requests()
         loginForm.login(Cypress.env('username1'), Cypress.env('username1'))
         const homePage = new HomePage()
+        requests.getInitiativesList().then((response)=>{
+                cy.log(response.body.results.projects[1].name)
+        })
+        
         // Check if the <<Recently Updated Initiatives>> section is visible
         homePage.getInitiativesSection().contains('Recently Updated').should('be.visible')
         // Check if the <<My Initiatives>> section is visible
@@ -16,6 +22,8 @@ describe('User with 0 Initiatives', () => {
         homePage.getInitiativeCards().should('have.length', 1)
         // Count Recently update initiatives
         homePage.getInitiativeCardsSmall().should('have.length', 3)
+   
+
 
     })
 })
