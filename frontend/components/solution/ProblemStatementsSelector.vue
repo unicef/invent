@@ -1,6 +1,11 @@
 <template>
-  <el-select v-model="statements" multiple placeholder="Select" class="TeamSelector">
-    <el-option v-for="item in getStatements" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+  <el-select
+    v-model="statements"
+    multiple
+    :placeholder="$gettext('Select Problem Statements') | translate"
+    class="TeamSelector"
+  >
+    <el-option v-for="item in filteredStatements" :key="item.id" :label="item.name" :value="item.id"> </el-option>
   </el-select>
 </template>
 
@@ -17,6 +22,10 @@ export default {
       type: Array,
       default: [],
     },
+    portfolio: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
@@ -25,8 +34,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getStatements: 'solution/getProblemStatementList',
+      //getStatements: 'solution/getProblemStatementList',
+      getPortfolioList: 'solution/getPortfoliosList',
     }),
+    filteredStatements: function () {
+      if (this.portfolio === null) {
+        return []
+      } else {
+        return this.getPortfolioList.find((statement) => statement.id === this.portfolio).problem_statements
+      }
+    },
   },
   mounted: function () {
     this.statements = this.tableData
@@ -35,13 +52,6 @@ export default {
   methods: {
     changeHandler(value) {
       this.$emit('change', value)
-    },
-    statements: function (statementsArray) {
-      console.log(this.getStatements)
-      const st = statementsArray
-        .map((statementId) => this.getStatements.find((statement) => statement.id === statementId).name)
-        .toString()
-      return st === '' ? 'N/A' : st
     },
   },
 }
@@ -56,6 +66,11 @@ export default {
   word-wrap: normal;
   el-select__tags {
     max-width: 200px;
+  }
+  .el-tag {
+    height: fit-content;
+    word-wrap: normal;
+    white-space: normal;
   }
 }
 </style>

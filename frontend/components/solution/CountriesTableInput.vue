@@ -12,7 +12,11 @@
       <tbody>
         <tr v-for="row in table" :key="row.id">
           <td>
-            <CountrySelectSingle @change="() => updateRegion(row.id, row.country)" v-model.number="row.country" />
+            <CountrySelectDisabledSingle
+              @change="() => updateRegion(row.id, row.country)"
+              v-model.number="row.country"
+              :selectedCountries="table"
+            />
           </td>
           <td>{{ printRegionNameList(row.region) }}</td>
           <td>
@@ -42,12 +46,12 @@
 
 <script>
 import { uuidv4 } from '~/utilities/dom'
-import CountrySelectSingle from '../common/CountrySelectSingle.vue'
+import CountrySelectDisabledSingle from './CountrySelectDisabledSingle.vue'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    CountrySelectSingle,
+    CountrySelectDisabledSingle,
   },
   props: {
     tableData: [],

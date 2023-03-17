@@ -9,16 +9,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in table" :key="row.id">
+        <tr v-for="row in table" :key="row.portfolio_id">
           <td>
-            <PortfolioSelectSingle
-              @change="() => updatePortfolio(row.id, row.portfolio)"
-              v-model.number="row.portfolio"
-            />
+            <PortfolioSelectSingle @change="() => {}" v-model.number="row.portfolio_id" :portfoliosList="table" />
           </td>
-          <td><ProblemStatementsSelector :tableData="row.problem_statements" /></td>
           <td>
-            <el-button type="text" class="IconLeft" @click="() => deleteRow(row.id)">
+            <ProblemStatementsSelector :tableData="row.problem_statements" :portfolio="row.portfolio_id" />
+          </td>
+          <td>
+            <el-button type="text" class="IconLeft" @click="() => deleteRow(row.portfolio_id)">
               <translate>Delete</translate>
             </el-button>
           </td>
@@ -32,7 +31,6 @@
 </template>
 
 <script>
-import { uuidv4 } from '~/utilities/dom'
 import PortfolioSelectSingle from './PortfolioSelectSingle.vue'
 import { mapGetters } from 'vuex'
 import ProblemStatementsSelector from './ProblemStatementsSelector.vue'
@@ -63,14 +61,14 @@ export default {
   },
   methods: {
     addRow: function () {
-      this.table = [...this.table, { id: uuidv4(), portfolio: '', problem_statements: [] }]
+      this.table = [...this.table, { portfolio_id: null, problem_statements: [] }]
       // this.emit('update-countries', this.table)
       //table actions-> table changed + new table
       // initial table = tableData comparison
       // when props update -> table actions cleanup
     },
     deleteRow: function (id) {
-      this.table = this.table.filter((row) => row.id !== id)
+      this.table = this.table.filter((row) => row.portfolio_id !== id)
     },
   },
 }

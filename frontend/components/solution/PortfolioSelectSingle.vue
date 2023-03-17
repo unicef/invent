@@ -8,7 +8,13 @@
     popper-class="PortfolioSelectorPopper"
     class="CountrySelector"
   >
-    <el-option v-for="portfolio in portfolios" :key="portfolio.id" :label="portfolio.name" :value="portfolio.id" />
+    <el-option
+      v-for="portfolio in filteredPortfolios"
+      :key="portfolio.id"
+      :label="portfolio.name"
+      :value="portfolio.id"
+      :disabled="portfolio.disabled"
+    />
   </lazy-el-select>
 </template>
 
@@ -23,6 +29,10 @@ export default {
     value: {
       type: Number,
       default: null,
+    },
+    portfoliosList: {
+      type: Array,
+      default: [],
     },
     disabled: {
       type: Boolean,
@@ -44,13 +54,18 @@ export default {
     multiple() {
       return Array.isArray(this.value)
     },
+    filteredPortfolios() {
+      if (!this.portfoliosList.length > 0) {
+        return this.portfolios
+      } else {
+        return this.portfolios.map((portfolio) =>
+          this.portfoliosList.some((port) => port.portfolio_id === portfolio.id)
+            ? { ...portfolio, disabled: true }
+            : { ...portfolio, disabled: false }
+        )
+      }
+    },
   },
-  // methods: {
-  //   portfolio: function (portfolio) {
-  //     const st = (portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId)[0].name
-  //     return st === '' ? this.$gettext('N/A') : st
-  //   },
-  // }
 }
 </script>
 

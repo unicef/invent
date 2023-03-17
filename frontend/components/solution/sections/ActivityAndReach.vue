@@ -2,16 +2,15 @@
   <div id="activity-and-reach" class="GeneralSolution">
     <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('Activity and Reach') | translate">
       <el-row>
-        <simple-field :header="$gettext('Global reach of this solution') | translate" :content="12345" />
+        <simple-field
+          :header="$gettext('Global reach of this solution') | translate"
+          :content="getSolutionData.people_reached"
+        />
       </el-row>
 
       <el-row :gutter="20" type="flex">
         <el-col :span="6">
-          <custom-required-form-item
-            :error="errors.first('override_reach')"
-            :draft-rule="rules.override_reach"
-            :publish-rule="rules.override_reach"
-          >
+          <custom-required-form-item :error="errors.first('override_reach')" :publish-rule="rules.override_reach">
             <template slot="label">
               <translate key="override_reach">Override reach value</translate>
             </template>
@@ -83,15 +82,6 @@ export default {
   methods: {
     updateCountriesTable(countriesArray) {
       // assign new countries value
-    },
-    openFeedback() {
-      this.$store.commit('user/SET_FEEDBACK', {
-        feedbackOn: true,
-        feedbackForm: {
-          subject: this.$gettext('UNICEF Office Issue'),
-          message: this.$gettext('Please provide an email address: '),
-        },
-      })
     },
     async validate() {
       this.$refs.collapsible.expandCard()
