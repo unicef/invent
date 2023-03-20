@@ -1,3 +1,4 @@
+import { uuidv4 } from '~/utilities/dom'
 const cleanState = () => ({
   id: '',
   isActive: true,
@@ -33,7 +34,7 @@ export const getters = {
 export const actions = {
   async loadSolution({ commit }, id) {
     return this.$axios.get(`/api/solutions/${id}`).then((response) => {
-      commit('PUT_SOLUTION', response.data)
+      commit('LOAD_SOLUTION', response.data)
     })
   },
   setLoading({ commit }, loadingState) {
@@ -87,7 +88,7 @@ export const actions = {
 }
 
 export const mutations = {
-  PUT_SOLUTION: (state, data) => {
+  LOAD_SOLUTION: (state, data) => {
     state.id = data.id
     state.name = data.name
     state.phase = data.phase
@@ -95,7 +96,7 @@ export const mutations = {
     state.learning_investment = data.learning_investment
     state.people_reached = data.people_reached
     state.portfolios = data.portfolios
-    state.country_solutions = data.country_solutions
+    state.country_solutions = data.country_solutions.map((sol) => ({ ...sol, row_id: uuidv4() }))
     state.portfolio_problem_statements = data.portfolio_problem_statements
   },
   PUT_PROBLEM_STATEMENTS_LIST: (state, data) => {

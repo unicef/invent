@@ -10,10 +10,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in tableData" :key="row.id">
+        <tr v-for="row in tableData" :key="row.row_id">
           <td>
             <CountrySelectDisabledSingle
-              @change="() => updateRegion(row.id, row.country)"
+              @change="() => updateRegion(row.row_id, row.country)"
               v-model.number="row.country"
               :selectedCountries="tableData"
             />
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     addRow: function () {
-      const newTable = [...this.tableData, { id: uuidv4(), country: '', region: [], people_reached: 0 }]
+      const newTable = [...this.tableData, { row_id: uuidv4(), id: null, country: '', region: 0, people_reached: 0 }]
       this.$emit('change', newTable)
     },
     deleteRow: function (id) {
