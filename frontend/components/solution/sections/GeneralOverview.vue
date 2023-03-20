@@ -18,7 +18,7 @@
         </template>
 
         <character-count-input
-          v-model="solution.name"
+          v-model="innerValue.name"
           v-validate="rules.name"
           :rules="rules.name"
           data-as-name="Name"
@@ -44,7 +44,7 @@
           <translate key="phase"> Phase </translate>
         </template>
 
-        <SolutionPhaseSelect v-model="solution.phase" />
+        <SolutionPhaseSelect v-model="innerValue.phase" />
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -52,7 +52,7 @@
         :draft-rule="rules.tech"
         :publish-rule="rules.tech"
       >
-        <el-checkbox :v-model="solution.open_source_frontier_tech" class="tech__checkbox" :label="'tech'"
+        <el-checkbox v-model="innerValue.open_source_frontier_tech" class="tech__checkbox" :label="'tech'"
           ><translate>Open source frontier tech</translate>
         </el-checkbox>
       </custom-required-form-item>
@@ -62,22 +62,19 @@
         :draft-rule="rules.learning"
         :publish-rule="rules.learning"
       >
-        <el-checkbox :v-model="solution.learning_investment" class="tech__checkbox" :label="'investment'"
+        <el-checkbox v-model="innerValue.learning_investment" class="tech__checkbox" :label="'investment'"
           ><translate>Learning investment</translate>
         </el-checkbox>
       </custom-required-form-item>
-      <portfolio-table-input :tableData="solution.portfolio_problem_statements" @change="" />
+      <portfolio-table-input v-model="innerValue.portfolio_problem_statements" />
     </collapsible-solution-card>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 import CollapsibleSolutionCard from '../CollapsibleSolutionCard.vue'
-import TeamSelector from '@/components/project/TeamSelector'
 import SolutionPhaseSelect from '../SolutionPhaseSelect.vue'
 import PortfolioTableInput from '../PortfolioTableInput.vue'
 
@@ -85,75 +82,39 @@ export default {
   components: {
     CollapsibleSolutionCard,
     SolutionPhaseSelect,
-    TeamSelector,
-    CustomRequiredFormTeamItem,
     PortfolioTableInput,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
-  data: function () {
-    return {
-      solution: {
-        name: '',
-        phase: 0,
-        open_source_frontier_tech: false,
-        learning_investment: false,
-        portfolio_problem_statements: [],
-        country_solutions: [],
-        people_reached: 0,
-      },
-    }
+  model: {
+    prop: 'value',
+    event: 'change',
   },
+  props: {
+    publishRules: {
+      required: false,
+    },
+    draftRules: {
+      required: false,
+    },
+    value: Object,
+  },
+
   computed: {
-    ...mapGetters({
-      unicef_regions: 'system/getUnicefRegions',
-      getCountryDetails: 'countries/getCountryDetails',
-      modified: 'project/getModified',
-      regionalOffices: 'projects/getRegionalOffices',
-      userProfiles: 'system/getUserProfilesNoFilter',
-      getStatements: 'portfolio/getStatements',
-      getPortfolios: 'portfolio/getPortfolios',
-      getSolution: 'solution/getSolutionData',
-    }),
-  },
-  mounted: function () {
-    const s = this.getSolution
-    this.solution = {
-      ...this.solution,
-      name: s.name,
-      phase: s.phase,
-      open_source_frontier_tech: s.open_source_frontier_tech,
-      learning_investment: s.learning_investment,
-      country_solutions: s.country_solutions,
-      portfolio_problem_statements: s.portfolio_problem_statements,
-      people_reached: s.people_reached,
-    }
-  },
-  watch: {
-    getSolution: function () {
-      const s = this.getSolution
-      this.solution = {
-        ...this.solution,
-        name: s.name,
-        phase: s.phase,
-        open_source_frontier_tech: s.open_source_frontier_tech,
-        learning_investment: s.learning_investment,
-        country_solutions: s.country_solutions,
-        portfolio_problem_statements: s.portfolio_problem_statements,
-        people_reached: s.people_reached,
-      }
+    innerValue: {
+      get() {
+        return this.value
+      },
+      set(value) {
+        this.$emit('change', value)
+      },
     },
   },
+
   methods: {
     async validate() {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
       console.log('General overview published validation', validations)
-      return validations.reduce((a, c) => a && c, true)
-    },
-    async validateDraft() {
-      this.$refs.collapsible.expandCard()
-      const validations = await Promise.all([this.$validator.validate('name'), this.$validator.validate('phase')])
-      console.log('General overview draft validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },
   },

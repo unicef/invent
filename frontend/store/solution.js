@@ -14,6 +14,7 @@ const cleanState = () => ({
   problem_statement_list: [],
   portfolio_list: [],
   portfolio_problem_statements: [],
+  loading: false,
 })
 
 export const state = () => ({
@@ -24,6 +25,7 @@ export const getters = {
   getSolutionData: (state) => ({
     ...state,
   }),
+  getloading: (state) => state.loading,
   getPortfoliosList: (state) => state.portfolio_list,
   getProblemStatementList: (state) => state.problem_statement_list,
 }
@@ -33,6 +35,9 @@ export const actions = {
     return this.$axios.get(`/api/solutions/${id}`).then((response) => {
       commit('PUT_SOLUTION', response.data)
     })
+  },
+  setLoading({ commit }, loadingState) {
+    commit('SET_LOADING', loadingState)
   },
   async loadProblemPortfoliolists({ state, commit }) {
     if (!state.problem_statement_list.length > 0) {
@@ -44,10 +49,10 @@ export const actions = {
       this.$axios.get('/api/portfolio/active-list/').then((response) => commit('PUT_PORTFOLIO_LIST', response.data))
     }
   },
-  async updateSolution({ commit }, data) {
+  async updateSolution({ state }, data) {
     return this.$axios({
       method: 'put',
-      url: `/api/solution/update/${id}/`,
+      url: `/api/solution/update/${state.id}/`,
       data: {
         name: data.name,
         is_active: true,
@@ -101,5 +106,8 @@ export const mutations = {
   },
   INIT_STATE: (state) => {
     state = cleanState()
+  },
+  SET_LOADING: (state, loadingState) => {
+    state.loading = loadingState
   },
 }

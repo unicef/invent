@@ -9,12 +9,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in table" :key="row.portfolio_id">
+        <tr v-for="row in innerValue" :key="row.portfolio_id">
           <td>
-            <PortfolioSelectSingle @change="() => {}" v-model.number="row.portfolio_id" :portfoliosList="table" />
+            <PortfolioSelectSingle v-model.number="row.portfolio_id" :portfoliosList="innerValue" />
           </td>
           <td>
-            <ProblemStatementsSelector :tableData="row.problem_statements" :portfolio="row.portfolio_id" />
+            <ProblemStatementsSelector v-model="row.problem_statements" :portfolio="row.portfolio_id" />
           </td>
           <td>
             <el-button type="text" class="IconLeft" @click="() => deleteRow(row.portfolio_id)">
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+//import { uuidv4 } from '~/utilities/dom'
 import PortfolioSelectSingle from './PortfolioSelectSingle.vue'
 import { mapGetters } from 'vuex'
 import ProblemStatementsSelector from './ProblemStatementsSelector.vue'
@@ -40,35 +41,33 @@ export default {
     PortfolioSelectSingle,
     ProblemStatementsSelector,
   },
-  props: {
-    tableData: [],
+  model: {
+    prop: 'value',
+    event: 'change',
   },
-  data: function () {
-    return {
-      table: [],
-    }
-  },
+  props: ['value'],
   computed: {
     ...mapGetters({
-      getPortfolios: 'solution/getPorfoliosList',
       getStatements: 'solution/getProblemStatementList',
     }),
-  },
-  watch: {
-    tableData: function () {
-      this.table = this.tableData
+    innerValue: {
+      get() {
+        return this.value
+      },
+      set(value) {
+        this.$emit('change', value)
+      },
     },
   },
+
   methods: {
     addRow: function () {
-      this.table = [...this.table, { portfolio_id: null, problem_statements: [] }]
-      // this.emit('update-countries', this.table)
-      //table actions-> table changed + new table
-      // initial table = tableData comparison
-      // when props update -> table actions cleanup
+      const newValue = [...this.value, { portfolio_id: null, problem_statements: [] }]
+      this.$emit('change', newValue)
     },
     deleteRow: function (id) {
-      this.table = this.table.filter((row) => row.portfolio_id !== id)
+      const newValue = this.value.filter((row) => row.portfolio_id !== id)
+      this.$emit('change', newValue)
     },
   },
 }

@@ -1,6 +1,6 @@
 <template>
   <el-select
-    v-model="statements"
+    v-model="inputVal"
     multiple
     :placeholder="$gettext('Select Problem Statements') | translate"
     class="TeamSelector"
@@ -14,7 +14,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   model: {
-    prop: 'value',
+    prop: 'tableData',
     event: 'change',
   },
   props: {
@@ -27,14 +27,8 @@ export default {
       default: null,
     },
   },
-  data() {
-    return {
-      statements: [],
-    }
-  },
   computed: {
     ...mapGetters({
-      //getStatements: 'solution/getProblemStatementList',
       getPortfolioList: 'solution/getPortfoliosList',
     }),
     filteredStatements: function () {
@@ -44,14 +38,13 @@ export default {
         return this.getPortfolioList.find((statement) => statement.id === this.portfolio).problem_statements
       }
     },
-  },
-  mounted: function () {
-    this.statements = this.tableData
-  },
-
-  methods: {
-    changeHandler(value) {
-      this.$emit('change', value)
+    inputVal: {
+      get() {
+        return this.tableData
+      },
+      set(val) {
+        this.$emit('change', val)
+      },
     },
   },
 }

@@ -4,7 +4,7 @@
       <el-row>
         <simple-field
           :header="$gettext('Global reach of this solution') | translate"
-          :content="getSolutionData.people_reached"
+          :content="innerValue.people_reached"
         />
       </el-row>
 
@@ -16,7 +16,7 @@
             </template>
 
             <character-count-input
-              v-model="override_reach"
+              v-model.number="innerValue.override_reach"
               v-validate="rules.override_reach"
               :rules="rules.override_reach"
               data-vv-name="override_reach"
@@ -27,18 +27,13 @@
         <el-col :span="12"> </el-col>
       </el-row>
       <el-row>
-        <countries-table-input
-          :tableData="getSolutionData.country_solutions"
-          @update-countries="updateCountriesTable"
-        />
+        <countries-table-input v-model="innerValue.country_solutions" />
       </el-row>
     </collapsible-solution-card>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 import CollapsibleSolutionCard from '../CollapsibleSolutionCard.vue'
@@ -48,11 +43,14 @@ import CountriesTableInput from '../CountriesTableInput.vue'
 export default {
   components: {
     CollapsibleSolutionCard,
-    CustomRequiredFormTeamItem,
     SimpleField,
     CountriesTableInput,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  model: {
+    prop: 'value',
+    event: 'change',
+  },
   props: {
     publishRules: {
       required: false,
@@ -60,42 +58,24 @@ export default {
     draftRules: {
       required: false,
     },
-  },
-  data: function () {
-    return {
-      override_reach: 0,
-    }
+    value: Object,
   },
   computed: {
-    ...mapGetters({
-      getSolutionData: 'solution/getSolutionData',
-    }),
-  },
-  watch: {
-    async country_office() {
-      if (this.officeData) {
-        await this.$store.dispatch('countries/loadCountryDetails', this.officeData.country)
-        this.country = this.officeData.country
-      }
+    innerValue: {
+      get() {
+        return this.value
+      },
+      set(value) {
+        this.$emit('change', value)
+      },
     },
   },
+
   methods: {
-    updateCountriesTable(countriesArray) {
-      // assign new countries value
-    },
     async validate() {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
       console.log('General overview published validation', validations)
-      return validations.reduce((a, c) => a && c, true)
-    },
-    async validateDraft() {
-      this.$refs.collapsible.expandCard()
-      const validations = await Promise.all([
-        this.$validator.validate('name'),
-        this.$validator.validate('country_office'),
-      ])
-      console.log('General overview draft validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },
   },

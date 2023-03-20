@@ -10,12 +10,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in table" :key="row.id">
+        <tr v-for="row in tableData" :key="row.id">
           <td>
             <CountrySelectDisabledSingle
               @change="() => updateRegion(row.id, row.country)"
               v-model.number="row.country"
-              :selectedCountries="table"
+              :selectedCountries="tableData"
             />
           </td>
           <td>{{ printRegionNameList(row.region) }}</td>
@@ -53,39 +53,27 @@ export default {
   components: {
     CountrySelectDisabledSingle,
   },
-  props: {
-    tableData: [],
+  model: {
+    prop: 'tableData',
+    event: 'change',
   },
-  data: function () {
-    return {
-      table: [],
-    }
+  props: {
+    tableData: Array,
   },
   computed: {
     ...mapGetters({
       getRegionsByCountry: 'countries/getRegionsByCountry',
-      // regions: 'system/getRegions',
       getRegionDetails: 'system/getRegionDetails',
     }),
   },
-  mounted: function () {
-    this.table = this.tableData
-  },
-  watch: {
-    tableData: function () {
-      this.table = this.tableData
-    },
-  },
   methods: {
     addRow: function () {
-      this.table = [...this.table, { id: uuidv4(), country: '', region: [], people_reached: 0 }]
-      // this.emit('update-countries', this.table)
-      //table actions-> table changed + new table
-      // initial table = tableData comparison
-      // when props update -> table actions cleanup
+      const newTable = [...this.tableData, { id: uuidv4(), country: '', region: [], people_reached: 0 }]
+      this.$emit('change', newTable)
     },
     deleteRow: function (id) {
-      this.table = this.table.filter((row) => row.id !== id)
+      const newTable = this.tableData.filter((row) => row.id !== id)
+      this.$emit('change', newTable)
     },
     getRegionName: function (regionId) {
       return this.getRegionDetails(regionId).name
@@ -98,7 +86,7 @@ export default {
       }
     },
     updateRegion: function (recordId, countryId) {
-      this.table = this.table.map((record) => {
+      const newTable = this.tableData.map((record) => {
         if (record.id !== recordId) {
           return record
         } else {
@@ -110,6 +98,8 @@ export default {
           }
         }
       })
+
+      this.$emit('change', newTable)
     },
   },
 }
