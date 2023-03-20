@@ -26,7 +26,7 @@ export const getters = {
   getSolutionData: (state) => ({
     ...state,
   }),
-  getloading: (state) => state.loading,
+  getLoading: (state) => state.loading,
   getPortfoliosList: (state) => state.portfolio_list,
   getProblemStatementList: (state) => state.problem_statement_list,
 }

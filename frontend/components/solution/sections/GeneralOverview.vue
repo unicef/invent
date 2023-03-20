@@ -96,7 +96,9 @@ export default {
     draftRules: {
       required: false,
     },
-    value: Object,
+    value: {
+      required: false,
+    },
   },
 
   computed: {
