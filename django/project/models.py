@@ -844,6 +844,10 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         else:
             return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
 
+    @people_reached.setter
+    def people_reached(self, value):
+        self.people_reached_override = value
+
     @property
     def regions(self) -> List:
         return list(set(self.countrysolution_set.values_list('region', flat=True)))

@@ -762,7 +762,7 @@ class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
 
 class SolutionSerializer(serializers.ModelSerializer):
     regions = serializers.ListField(child=serializers.IntegerField(), max_length=8, min_length=0)
-    people_reached = serializers.IntegerField(read_only=True)
+    people_reached = serializers.IntegerField(allow_null=True)
     countries = CountrySolutionSerializer(source='countrysolution_set', many=True)
     problem_statements = ProblemStatementSerializer(many=True, required=False)
     portfolios = PortfolioSerializer(read_only=True, source='get_portfolio')

@@ -315,15 +315,21 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         portfolio_problem_statements = request.data.get('portfolio_problem_statements', [])
         portfolios = list(set(d['portfolio_id'] for d in portfolio_problem_statements))
         problem_statements = list(set(ps for d in portfolio_problem_statements for ps in d['problem_statements']))
+        is_active = request.data.get("is_active", True)
+        people_reached = request.data.get("people_reached", None)
 
         # Update the instance with the extracted data
         instance.portfolios.set(portfolios)
         instance.problem_statements.set(problem_statements)
+        instance.is_active = is_active
+        instance.people_reached = people_reached
+        instance.save()
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
 
     def perform_update(self, serializer):
         serializer.save()
