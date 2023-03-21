@@ -65,7 +65,6 @@ export default {
           open_source_frontier_tech: false,
           learning_investment: false,
           portfolio_problem_statements: [],
-          country_solutions: [],
         },
         activity_reach: {
           override_reach: 0,
@@ -135,6 +134,16 @@ export default {
       cancelSolution: 'solution/cancelSolution',
       setLoading: 'solution/setLoading',
     }),
+    trimEmptyRows() {
+      const portfolioTable = this.solution.general_overview.portfolio_problem_statements
+      const trimedTable = portfolioTable.find((row) => row.portfolio_id !== null)
+      console.log(trimedTable)
+      this.solution.general_overview.portfolio_problem_statements = trimedTable
+
+      // const countriesTable = this.solution.activity_reach.country_solutions
+      // console.log(countriesTable)
+      // this.solution.activity_reach.country_solutions = countriesTable.find((row) => row.country !== null)
+    },
     handleErrorMessages() {},
     async validate() {
       const validations = await Promise.all([
@@ -151,51 +160,61 @@ export default {
     },
     async handleSave() {
       console.log('handle Save clicked')
-      this.setLoading(true)
-      this.clearValidation()
+      // this.trimEmptyRows()
+
+      // this.setLoading(true)
+      // this.clearValidation()
       this.usePublishRules = true
-      // await this.$nextTick(async () => {
-      //   const general = await this.$refs.solutionGeneral.validatePublish()
-      //   const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validatePublish()
+      await this.$nextTick(async () => {
+        const general = await this.$refs.solutionGeneral.validate()
+        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validate()
 
-      //  if (general && solutionActivityAndReach) {
-      const s = this.solution
-      try {
-        const response = await this.updateSolution({
-          name: s.general_overview.name,
-          phase: s.general_overview.phase,
-          open_source_frontier_tech: s.general_overview.open_source_frontier_tech,
-          learning_investment: s.general_overview.learning_investment,
-          portfolio_problem_statements: s.general_overview.portfolio_problem_statements,
-          country_solutions: s.activity_reach.country_solutions,
-          people_reached: s.activity_reach.override_reach
-            ? s.activity_reach.override_reach
-            : s.activity_reach.people_reached,
-        })
-        const id = response.data.id
-        const localised = this.localePath({
-          name: 'organisation-portfolio-innovation-solutions-id',
-          params: { ...this.$route.params, id },
-        })
-        this.$router.push(localised)
+        if (general && solutionActivityAndReach) {
+          const s = this.solution
+          try {
+            const response = await this.updateSolution({
+              name: s.general_overview.name,
+              phase: s.general_overview.phase,
+              open_source_frontier_tech: s.general_overview.open_source_frontier_tech,
+              learning_investment: s.general_overview.learning_investment,
+              portfolio_problem_statements: s.general_overview.portfolio_problem_statements,
+              country_solutions: s.activity_reach.country_solutions,
+              people_reached: s.activity_reach.override_reach
+                ? s.activity_reach.override_reach
+                : s.activity_reach.people_reached,
+            })
+            const id = response.data.id
+            const localised = this.localePath({
+              name: 'organisation-portfolio-innovation-solutions-id',
+              params: { ...this.$route.params, id },
+            })
+            this.$router.push(localised)
 
-        this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
-          confirmButtonText: this.$gettext('Close'),
-        })
-        this.usePublishRules = false
-        return
-      } catch (e) {
-        if (e.response) {
-          this.apiErrors = e.response.data
+            this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
+              confirmButtonText: this.$gettext('Close'),
+            })
+            this.usePublishRules = false
+            return
+          } catch (e) {
+            if (e.response) {
+              this.apiErrors = e.response.data
+            } else {
+              console.error(e)
+              this.setLoading(false)
+            }
+          }
         } else {
-          console.error(e)
-          this.setLoading(false)
+          this.$alert(
+            this.$gettext('Please correct all errors in required fields before save.'),
+            this.$gettext('Error'),
+            {
+              confirmButtonText: this.$gettext('Close'),
+            }
+          )
         }
-      }
-      //  }
-      //  this.handleErrorMessages()
-      this.setLoading(false)
-      //  })
+        this.handleErrorMessages()
+        this.setLoading(false)
+      })
     },
     async handleCancel() {
       try {

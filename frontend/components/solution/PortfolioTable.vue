@@ -70,8 +70,11 @@ export default {
   td {
     padding: 4px 0px 4px 10px;
   }
-  td:nth-child(1) {
+  th:nth-child(1) {
     width: 30%;
+  }
+  th:nth-child(2) {
+    width: 70%;
   }
 }
 </style>

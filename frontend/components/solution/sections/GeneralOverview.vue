@@ -66,7 +66,13 @@
           ><translate>Learning investment</translate>
         </el-checkbox>
       </custom-required-form-item>
-      <portfolio-table-input v-model="innerValue.portfolio_problem_statements" />
+      <portfolio-table-input
+        v-model="innerValue.portfolio_problem_statements"
+        v-validate="rules.portfolio_statements_table"
+        :rules="rules"
+        :error="errors.first('portfolio-table')"
+        name="portfolio-table"
+      />
     </collapsible-solution-card>
   </div>
 </template>
@@ -116,7 +122,6 @@ export default {
     async validate() {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
-      console.log('General overview published validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },
   },
