@@ -1,6 +1,11 @@
 <template>
-  <el-select v-model="statements" multiple placeholder="Select" class="TeamSelector">
-    <el-option v-for="item in getStatements" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+  <el-select
+    v-model="inputVal"
+    multiple
+    :placeholder="$gettext('Select Problem Statements') | translate"
+    class="TeamSelector"
+  >
+    <el-option v-for="item in filteredStatements" :key="item.id" :label="item.name" :value="item.id"> </el-option>
   </el-select>
 </template>
 
@@ -9,7 +14,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   model: {
-    prop: 'value',
+    prop: 'tableData',
     event: 'change',
   },
   props: {
@@ -17,31 +22,29 @@ export default {
       type: Array,
       default: [],
     },
-  },
-  data() {
-    return {
-      statements: [],
-    }
+    portfolio: {
+      type: Number,
+      default: null,
+    },
   },
   computed: {
     ...mapGetters({
-      getStatements: 'solution/getProblemStatementList',
+      getPortfolioList: 'solution/getPortfoliosList',
     }),
-  },
-  mounted: function () {
-    this.statements = this.tableData
-  },
-
-  methods: {
-    changeHandler(value) {
-      this.$emit('change', value)
+    filteredStatements: function () {
+      if (this.portfolio === null) {
+        return []
+      } else {
+        return this.getPortfolioList.find((statement) => statement.id === this.portfolio).problem_statements
+      }
     },
-    statements: function (statementsArray) {
-      console.log(this.getStatements)
-      const st = statementsArray
-        .map((statementId) => this.getStatements.find((statement) => statement.id === statementId).name)
-        .toString()
-      return st === '' ? 'N/A' : st
+    inputVal: {
+      get() {
+        return this.tableData
+      },
+      set(val) {
+        this.$emit('change', val)
+      },
     },
   },
 }
@@ -53,5 +56,14 @@ export default {
 
 .TeamSelector {
   width: 100%;
+  word-wrap: normal;
+  el-select__tags {
+    max-width: 200px;
+  }
+  .el-tag {
+    height: fit-content;
+    word-wrap: normal;
+    white-space: normal;
+  }
 }
 </style>

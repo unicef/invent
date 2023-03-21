@@ -10,14 +10,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in table" :key="row.id">
+        <tr v-for="row in tableData" :key="row.row_id">
           <td>
-            <CountrySelectSingle @change="() => updateRegion(row.id, row.country)" v-model.number="row.country" />
+            <CountrySelectDisabledSingle
+              @change="() => updateRegion(row.row_id, row.country)"
+              v-model.number="row.country"
+              :selectedCountries="tableData"
+            />
           </td>
           <td>{{ printRegionNameList(row.region) }}</td>
           <td>
             <el-input-number
-              v-model="row.reached"
+              v-model="row.people_reached"
               v-validate="{}"
               data-vv-name="people_reached_per_country"
               data-vv-as="People reached per country"
@@ -42,46 +46,34 @@
 
 <script>
 import { uuidv4 } from '~/utilities/dom'
-import CountrySelectSingle from '../common/CountrySelectSingle.vue'
+import CountrySelectDisabledSingle from './CountrySelectDisabledSingle.vue'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    CountrySelectSingle,
+    CountrySelectDisabledSingle,
+  },
+  model: {
+    prop: 'tableData',
+    event: 'change',
   },
   props: {
-    tableData: [],
-  },
-  data: function () {
-    return {
-      table: [],
-    }
+    tableData: Array,
   },
   computed: {
     ...mapGetters({
       getRegionsByCountry: 'countries/getRegionsByCountry',
-      // regions: 'system/getRegions',
       getRegionDetails: 'system/getRegionDetails',
     }),
   },
-  // mounted: function () {
-  //   this.table = this.tableData
-  // },
-  watch: {
-    tableData: function () {
-      this.table = this.tableData
-    },
-  },
   methods: {
     addRow: function () {
-      this.table = [...this.table, { id: uuidv4(), country: '', region: [], reached: 0 }]
-      // this.emit('update-countries', this.table)
-      //table actions-> table changed + new table
-      // initial table = tableData comparison
-      // when props update -> table actions cleanup
+      const newTable = [...this.tableData, { row_id: uuidv4(), id: null, country: '', region: 0, people_reached: 0 }]
+      this.$emit('change', newTable)
     },
     deleteRow: function (id) {
-      this.table = this.table.filter((row) => row.id !== id)
+      const newTable = this.tableData.filter((row) => row.id !== id)
+      this.$emit('change', newTable)
     },
     getRegionName: function (regionId) {
       return this.getRegionDetails(regionId).name
@@ -94,7 +86,7 @@ export default {
       }
     },
     updateRegion: function (recordId, countryId) {
-      this.table = this.table.map((record) => {
+      const newTable = this.tableData.map((record) => {
         if (record.id !== recordId) {
           return record
         } else {
@@ -102,10 +94,12 @@ export default {
             id: record.id,
             country: countryId,
             region: this.getRegionsByCountry(countryId),
-            reached: record.reached,
+            people_reached: record.people_reached,
           }
         }
       })
+
+      this.$emit('change', newTable)
     },
   },
 }
@@ -132,10 +126,10 @@ export default {
     padding-left: 10px;
   }
   th:nth-child(1) {
-    width: 30%;
+    width: 40%;
   }
   th:nth-child(2) {
-    width: 30%;
+    width: 20%;
   }
   th:nth-child(3) {
     width: 30%;
