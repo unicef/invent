@@ -333,22 +333,29 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
 
         # Update the country solutions
         for country_solution_data in country_solutions_data:
+            # Create a new CountrySolution object with data from the request
             country_solution = CountrySolution(
                 country_id=country_solution_data["country"],
                 people_reached=country_solution_data["people_reached"],
                 region=country_solution_data["region"],
                 solution=instance,
             )
+            # Save the new CountrySolution object to the database
             country_solution.save()
 
+        # Save the updated Solution object to the database
         instance.save()
 
+        # Update the serializer with the updated instance data
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+
+        # Return the updated data in the response
         return Response(serializer.data)
 
     def perform_update(self, serializer):
+        # Call the serializer's save method to update the instance
         serializer.save()
 
 
