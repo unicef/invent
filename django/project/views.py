@@ -25,7 +25,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
     ApprovalState, Stage, Phase, ProjectVersion, ProblemStatement, Solution
 from project.permissions import InCountryAdminForApproval
 from search.views import ResultsSetPagination
-from .models import Project, TechnologyPlatform, DigitalStrategy, \
+from .models import Project, TechnologyPlatform, DigitalStrategy, CountrySolution, \
     HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
 from user.models import UserProfile
 from .resources import ProjectResource
@@ -259,7 +259,8 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
-    
+
+
 class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
     def get_permissions(self):
         if self.action == "retrieve":
@@ -323,13 +324,29 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         instance.problem_statements.set(problem_statements)
         instance.is_active = is_active
         instance.people_reached = people_reached
+
+        # Remove existing country solutions for the instance
+        instance.countrysolution_set.all().delete()
+
+        # Get the country_solutions data from the request
+        country_solutions_data = request.data.get('country_solutions', [])
+
+        # Update the country solutions
+        for country_solution_data in country_solutions_data:
+            country_solution = CountrySolution(
+                country_id=country_solution_data["country"],
+                people_reached=country_solution_data["people_reached"],
+                region=country_solution_data["region"],
+                solution=instance,
+            )
+            country_solution.save()
+
         instance.save()
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
-
 
     def perform_update(self, serializer):
         serializer.save()
