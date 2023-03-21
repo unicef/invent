@@ -916,69 +916,68 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         portfolio_list = list(portfolio_dict.values())
         return portfolio_list
 
+    def to_representation(self):
+        """
+        Returns a dictionary representing this Solution instance, to be used as a response payload in an API.
+        The method first uses the `prefetch_related` method to efficiently fetch related objects using the 
+        related managers defined on the model. Then it constructs a dictionary containing the Solution model payload:
 
-def to_representation(self):
-    """
-    Returns a dictionary representing this Solution instance, to be used as a response payload in an API.
-    The method first uses the `prefetch_related` method to efficiently fetch related objects using the 
-    related managers defined on the model. Then it constructs a dictionary containing the Solution model payload:
+        Parameters:
+        ----------
+            None.
 
-    Parameters:
-    ----------
-        None.
+        Returns:
+        -------
+            data: dict:
 
-    Returns:
-    -------
-        data: dict:
+        Example:
+        -------
+        {
+            'id': 1,
+            'created': datetime.datetime(2022, 1, 1, 0, 0),
+            'modified': datetime.datetime(2022, 2, 1, 0, 0),
+            'name': 'Solution 1',
+            'is_active': True,
+            'phase': 2,
+            'open_source_frontier_tech': True,
+            'learning_investment': False,
+            'portfolios': [1, 2],
+            'problem_statements': [3, 4],
+            'people_reached': 100000,
+            'country_solutions': [
+                {'id': 1, 'country': 2, 'people_reached': 10000, 'region': '1'},
+                {'id': 2, 'country': 3, 'people_reached': 20000, 'region': '2'}
+            ],
+            'portfolio_problem_statements': [
+                {'portfolio_id': 1, 'problem_statements': [3, 4]},
+                {'portfolio_id': 2, 'problem_statements': [4, 5]}
+            ]
+        } 
+        """
+        # Use the Prefetch object to fetch related objects efficiently
+        self = Solution.objects.prefetch_related(*self.prefetch_related_objects()).get(pk=self.pk)
 
-    Example:
-    -------
-    {
-        'id': 1,
-        'created': datetime.datetime(2022, 1, 1, 0, 0),
-        'modified': datetime.datetime(2022, 2, 1, 0, 0),
-        'name': 'Solution 1',
-        'is_active': True,
-        'phase': 2,
-        'open_source_frontier_tech': True,
-        'learning_investment': False,
-        'portfolios': [1, 2],
-        'problem_statements': [3, 4],
-        'people_reached': 100000,
-        'country_solutions': [
-            {'id': 1, 'country': 2, 'people_reached': 10000, 'region': '1'},
-            {'id': 2, 'country': 3, 'people_reached': 20000, 'region': '2'}
-        ],
-        'portfolio_problem_statements': [
-            {'portfolio_id': 1, 'problem_statements': [3, 4]},
-            {'portfolio_id': 2, 'problem_statements': [4, 5]}
-        ]
-    } 
-    """
-    # Use the Prefetch object to fetch related objects efficiently
-    self = Solution.objects.prefetch_related(*self.prefetch_related_objects()).get(pk=self.pk)
+        portfolios = self.portfolios.values_list('id', flat=True)
+        problem_statements = self.problem_statements.values_list('id', flat=True)
+        country_solutions = self.countrysolution_set.values('id', 'country', 'people_reached', 'region')
 
-    portfolios = self.portfolios.values_list('id', flat=True)
-    problem_statements = self.problem_statements.values_list('id', flat=True)
-    country_solutions = self.countrysolution_set.values('id', 'country', 'people_reached', 'region')
+        data = {
+            'id': self.pk,
+            'created': self.created,
+            'modified': self.modified,
+            'name': self.name,
+            'is_active': self.is_active,
+            'phase': self.phase,
+            'open_source_frontier_tech': self.open_source_frontier_tech,
+            'learning_investment': self.learning_investment,
+            'portfolios': list(portfolios),
+            'problem_statements': list(problem_statements),
+            'people_reached': self.people_reached,
+            'country_solutions': list(country_solutions),
+            'portfolio_problem_statements': self.get_portfolio_problem_statements(),
+        }
 
-    data = {
-        'id': self.pk,
-        'created': self.created,
-        'modified': self.modified,
-        'name': self.name,
-        'is_active': self.is_active,
-        'phase': self.phase,
-        'open_source_frontier_tech': self.open_source_frontier_tech,
-        'learning_investment': self.learning_investment,
-        'portfolios': list(portfolios),
-        'problem_statements': list(problem_statements),
-        'people_reached': self.people_reached,
-        'country_solutions': list(country_solutions),
-        'portfolio_problem_statements': self.get_portfolio_problem_statements(),
-    }
-
-    return data
+        return data
 
 
 class CountrySolution(models.Model):
