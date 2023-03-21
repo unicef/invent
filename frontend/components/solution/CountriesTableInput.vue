@@ -16,13 +16,15 @@
               @change="() => updateRegion(row.row_id, row.country)"
               v-model.number="row.country"
               :selectedCountries="tableData"
+              v-validate="rules.countrySingleSelect"
+              name="country-single-select"
             />
           </td>
           <td>{{ printRegionNameList(row.region) }}</td>
           <td>
             <el-input-number
               v-model="row.people_reached"
-              v-validate="{}"
+              v-validate="rules.countrySingleNumber"
               data-vv-name="people_reached_per_country"
               data-vv-as="People reached per country"
               controls-position="right"
@@ -38,6 +40,9 @@
         </tr>
       </tbody>
     </table>
+    <p v-show="errors.first('country-single-select')" class="error">
+      <translate>Country, cannot be empty.</translate>
+    </p>
     <el-button type="text" class="IconLeft" @click="addRow">
       <fa icon="plus" /> <translate>Add Country</translate>
     </el-button>
@@ -46,6 +51,8 @@
 
 <script>
 import { uuidv4 } from '~/utilities/dom'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 import CountrySelectDisabledSingle from './CountrySelectDisabledSingle.vue'
 import { mapGetters } from 'vuex'
 
@@ -53,12 +60,23 @@ export default {
   components: {
     CountrySelectDisabledSingle,
   },
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   model: {
     prop: 'tableData',
     event: 'change',
   },
   props: {
     tableData: Array,
+    rules: { type: Object, default: {} },
+    publishRules: {},
+    draftRules: {},
+    apiErrors: {},
+  },
+  $_veeValidate: {
+    value() {
+      return this.tableData
+    },
+    //  rejectsFalse: true,
   },
   computed: {
     ...mapGetters({
@@ -68,7 +86,7 @@ export default {
   },
   methods: {
     addRow: function () {
-      const newTable = [...this.tableData, { row_id: uuidv4(), id: null, country: '', region: 0, people_reached: 0 }]
+      const newTable = [...this.tableData, { row_id: uuidv4(), id: null, country: null, region: 0, people_reached: 0 }]
       this.$emit('change', newTable)
     },
     deleteRow: function (id) {
@@ -143,5 +161,9 @@ export default {
       text-align: left;
     }
   }
+}
+.error {
+  color: red;
+  font-size: @fontSizeBase;
 }
 </style>

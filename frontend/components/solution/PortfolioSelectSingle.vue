@@ -7,6 +7,7 @@
     filterable
     popper-class="PortfolioSelectorPopper"
     class="CountrySelector"
+    ref="portfolioSelectSingle"
   >
     <el-option
       v-for="portfolio in filteredPortfolios"
@@ -20,11 +21,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 export default {
   model: {
     prop: 'value',
     event: 'change',
   },
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   props: {
     value: {
       type: Number,
@@ -38,6 +42,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    publishRules: {},
+    draftRules: {},
+    apiErrors: {},
+  },
+  $_veeValidate: {
+    value() {
+      return this.value
+    },
+    events: 'change|blur',
+    //  rejectsFalse: true,
   },
   computed: {
     ...mapGetters({

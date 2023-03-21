@@ -11,10 +11,20 @@
       <tbody>
         <tr v-for="row in innerValue" :key="row.portfolio_id">
           <td>
-            <PortfolioSelectSingle v-model.number="row.portfolio_id" :portfoliosList="innerValue" />
+            <PortfolioSelectSingle
+              v-model.number="row.portfolio_id"
+              :portfoliosList="innerValue"
+              v-validate="rules.portfolioSingleSelect"
+              name="portfolio-single-select"
+            />
           </td>
           <td>
-            <ProblemStatementsSelector v-model="row.problem_statements" :portfolio="row.portfolio_id" />
+            <ProblemStatementsSelector
+              v-model="row.problem_statements"
+              :portfolio="row.portfolio_id"
+              v-validate="rules.problemStatementSelect"
+              name="problem-statement-select"
+            />
           </td>
           <td>
             <el-button type="text" class="IconLeft" @click="() => deleteRow(row.portfolio_id)">
@@ -24,6 +34,15 @@
         </tr>
       </tbody>
     </table>
+    <p v-show="error" class="error">
+      <translate>At least one Innovation Portfolio and Problem Statement are required.</translate>
+    </p>
+    <p v-show="errors.first('portfolio-single-select')" class="error">
+      <translate>Innovation Portfolio, cannot be empty.</translate>
+    </p>
+    <p v-show="errors.first('problem-statement-select')" class="error">
+      <translate>Problem Statements, cannot be empty.</translate>
+    </p>
     <el-button type="text" class="IconLeft" @click="addRow">
       <fa icon="plus" /> <translate>Add Portfolio</translate>
     </el-button>
@@ -32,20 +51,30 @@
 
 <script>
 //import { uuidv4 } from '~/utilities/dom'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 import PortfolioSelectSingle from './PortfolioSelectSingle.vue'
 import { mapGetters } from 'vuex'
 import ProblemStatementsSelector from './ProblemStatementsSelector.vue'
+import { draftRules, publishRules } from '~/utilities/projects'
 
 export default {
   components: {
     PortfolioSelectSingle,
     ProblemStatementsSelector,
   },
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   model: {
     prop: 'value',
     event: 'change',
   },
-  props: ['value'],
+  props: ['value', 'error', 'rules', 'publishRules', 'draftRules', 'apiErrors'],
+  $_veeValidate: {
+    value() {
+      return this.innerValue
+    },
+    //  rejectsFalse: true,
+  },
   computed: {
     ...mapGetters({
       getStatements: 'solution/getProblemStatementList',
@@ -105,5 +134,9 @@ export default {
   tr:nth-child(even) {
     background-color: lightgrey;
   }
+}
+.error {
+  color: red;
+  font-size: @fontSizeBase;
 }
 </style>
