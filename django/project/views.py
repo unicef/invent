@@ -16,7 +16,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from country.models import Donor, CountryOffice, RegionalOffice, Currency
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, get_object_or_404, GPOAccessMixin, PortfolioAccessMixin, \
     ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
@@ -278,29 +278,7 @@ class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Retrieves a solution.
         """
-        solution = get_object_or_400(Solution, "No such solution", id=kwargs.get("pk"))
-
-        return Response(self._get_permission_based_data(solution))
-
-
-class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
-    def get_permissions(self):
-        if self.action == "retrieve":
-            return []  # Retrieve needs a bit more complex filtering based on user permission
-        else:
-            return super(SolutionRetrieveViewSet, self).get_permissions()
-
-    def _get_permission_based_data(self, solution):
-        draft = None
-        published = solution.to_representation()
-
-        return published
-
-    def retrieve(self, request, *args, **kwargs):
-        """
-        Retrieves a solution.
-        """
-        solution = get_object_or_400(Solution, "No such solution", id=kwargs.get("pk"))
+        solution = get_object_or_404(Solution, "No such solution", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(solution))
 
