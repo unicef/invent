@@ -1,11 +1,7 @@
 <template>
   <div id="general" class="GeneralOverview">
     <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('General') | translate" show-legend>
-      <custom-required-form-item
-        :error="errors.first('name')"
-        :draft-rule="draftRules.name"
-        :publish-rule="publishRules.name"
-      >
+      <custom-required-form-item :error="errors.first('name')" :publish-rule="rules.name">
         <template slot="label">
           <translate key="project-name"> What is the name of the solution? </translate>
         </template>
@@ -42,8 +38,7 @@
 
       <custom-required-form-item
         :error="errors.first('phase') ? errors.first('phase').replace('_', ' ') : undefined"
-        :draft-rule="draftRules.phase"
-        :publish-rule="publishRules.phase"
+        :publish-rule="rules.phase"
       >
         <template slot="label">
           <translate key="phase"> Phase </translate>
@@ -54,8 +49,8 @@
 
       <custom-required-form-item
         :error="errors.first('tech') ? errors.first('tech').replace('_', ' ') : undefined"
-        :draft-rule="draftRules.tech"
-        :publish-rule="publishRules.tech"
+        :draft-rule="rules.tech"
+        :publish-rule="rules.tech"
       >
         <el-checkbox :v-model="solution.open_source_frontier_tech" class="tech__checkbox" :label="'tech'"
           ><translate>Open source frontier tech</translate>
@@ -64,20 +59,20 @@
 
       <custom-required-form-item
         :error="errors.first('learning') ? errors.first('learning').replace('_', ' ') : undefined"
-        :draft-rule="draftRules.learning"
-        :publish-rule="publishRules.learning"
+        :draft-rule="rules.learning"
+        :publish-rule="rules.learning"
       >
         <el-checkbox :v-model="solution.learning_investment" class="tech__checkbox" :label="'tech'"
           ><translate>Learning investment</translate>
         </el-checkbox>
       </custom-required-form-item>
-      <portfolio-table-input />
+      <portfolio-table-input :tableData="[{ portfolio: 1, problem_statements: [1, 2] }]" @change="" />
       <!-- <div class="TeamArea">
         <custom-required-form-team-item
           v-model="team"
           :error="errors.first('portfolios')"
-          :draft-rule="draftRules.team"
-          :publish-rule="publishRules.team"
+          :draft-rule="rules.team"
+          :publish-rule="rules.team"
         >
           <template slot="label">
             <translate>Portfolios</translate>
@@ -89,8 +84,8 @@
         <custom-required-form-team-item
           v-model="viewers"
           :error="errors.first('problem-statements')"
-          :draft-rule="draftRules.viewers"
-          :publish-rule="publishRules.viewers"
+          :draft-rule="rules.viewers"
+          :publish-rule="rules.viewers"
         >
           <template slot="label">
             <translate> Problem Statements </translate>
@@ -182,12 +177,7 @@ export default {
     },
     async validateDraft() {
       this.$refs.collapsible.expandCard()
-      const validations = await Promise.all([
-        this.$validator.validate('name'),
-        this.$validator.validate('phase'),
-        this.$validator.validate('contact_email'),
-        this.$validator.validate('team'),
-      ])
+      const validations = await Promise.all([this.$validator.validate('name'), this.$validator.validate('phase')])
       console.log('General overview draft validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },

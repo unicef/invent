@@ -182,7 +182,7 @@
                   </li>
                   <li>
                     <translate>Partner website</translate>:
-                    <a :href="`mailto:${partner.partner_website}`">{{ partner.partner_website }}</a>
+                    <a :href="partner.partner_website" target="_blank">{{ partner.partner_website }}</a>
                   </li>
                 </ul>
               </simple-field>

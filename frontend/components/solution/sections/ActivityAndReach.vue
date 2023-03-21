@@ -1,11 +1,6 @@
 <template>
   <div id="activity-and-reach" class="GeneralOverview">
-    <collapsible-solution-card
-      ref="collapsible"
-      key="general"
-      :title="$gettext('Activity and Reach') | translate"
-      show-legend
-    >
+    <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('Activity and Reach') | translate">
       <el-row>
         <simple-field :header="$gettext('Global reach of this solution') | translate" :content="12345" />
       </el-row>
@@ -14,8 +9,8 @@
         <el-col :span="6">
           <custom-required-form-item
             :error="errors.first('override_reach')"
-            :draft-rule="draftRules.override_reach"
-            :publish-rule="publishRules.override_reach"
+            :draft-rule="rules.override_reach"
+            :publish-rule="rules.override_reach"
           >
             <template slot="label">
               <translate key="override_reach">Override reach value</translate>
@@ -33,7 +28,10 @@
         <el-col :span="12"> </el-col>
       </el-row>
       <el-row>
-        <countries-table-input @update-countries="updateCountriesTable" />
+        <countries-table-input
+          :tableData="[{ id: 1, country: 1, region: 0, reached: 100 }]"
+          @update-countries="updateCountriesTable"
+        />
       </el-row>
     </collapsible-solution-card>
   </div>
@@ -56,6 +54,14 @@ export default {
     CountriesTableInput,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  props: {
+    publishRules: {
+      required: false,
+    },
+    draftRules: {
+      required: false,
+    },
+  },
   data: function () {
     return {
       override_reach: 0,

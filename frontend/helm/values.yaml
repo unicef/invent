@@ -42,9 +42,6 @@ service:
   port: 80
 
 storage:
-  storageCLass: azureblob-nfs-std
-  accessModes: ReadWriteMany
-  mediaSize: 2Gi
   mediaClaimName: media-blob-nfs
 
 ingress:

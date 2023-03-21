@@ -1,7 +1,7 @@
 <template>
   <div class="NewProjectForm">
     <div v-show="!showForm" class="Loader">
-      <div />
+      <div></div>
       <span>Loading</span>
     </div>
     <el-form ref="projectForm" label-position="top" @submit.native.prevent>
@@ -12,8 +12,6 @@
             ref="solutionGeneral"
             :use-publish-rules="usePublishRules"
             :rules="rules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
@@ -21,20 +19,15 @@
           <ActivityAndReach
             key="solutionActivityAndReach"
             ref="solutionActivityAndReach"
+            :use-publish-rules="usePublishRules"
             :rules="rules"
-            :draft-rules="draftRules"
-            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
         </el-col>
         <el-col :span="6">
-          <FormActionsAside
-            @saveDraft="doSaveDraft"
-            @discardDraft="doDiscardDraft"
-            @publishProject="doPublishProject"
-          />
+          <FormActionsAside @save="handleSave" @cancel="handleCancel" @delete="handleDeleteSolution" />
         </el-col>
       </el-row>
     </el-form>
@@ -42,7 +35,7 @@
 </template>
 
 <script>
-import { publishRules, draftRules } from '@/utilities/solutions'
+import { rules } from '@/utilities/solutions'
 import { mapGetters, mapActions } from 'vuex'
 import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
@@ -73,19 +66,15 @@ export default {
       donorAnswers: 'project/getDonorsAnswers',
     }),
     isDraft() {
-      return this.$route.name.includes('organisation-initiatives-id-edit')
+      return this.$route.name.includes('organisation-portfolio-innovation-solutions-edit')
     },
-    isNewProject() {
-      return this.$route.name.includes('organisation-initiatives-create')
+    isNewSolution() {
+      return this.$route.name.includes('organisation-portfolio-innovation-solutions-create')
     },
     showForm() {
       return this.readyElements >= this.createdElements
     },
-    draftRules,
-    publishRules,
-    rules() {
-      return this.usePublishRules ? this.publishRules : this.draftRules
-    },
+    rules,
   },
   mounted() {
     if (this.$route.query.reloadAfterImport) {
@@ -111,9 +100,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      createProject: 'project/createProject',
-      saveDraft: 'project/saveDraft',
-      discardDraft: 'project/discardDraft',
+      createSolution: 'solution/createSolution',
+      updateSolution: 'solution/updateSolution',
+      deleteSolution: 'solution/deleteSolution',
+      cancelSolution: 'solution/cancelSolution',
       publishProject: 'project/publishProject',
       setLoading: 'project/setLoading',
       initProjectState: 'project/initProjectState',
@@ -166,27 +156,26 @@ export default {
       this.$refs.solutionGeneral.clear()
       this.$refs.solutionActivityAndReach.clear()
     },
-    async doSaveDraft() {
+    async handleSave() {
       this.clearValidation()
       this.usePublishRules = false
       await this.$nextTick(async () => {
-        const general = await this.$refs.solutionGeneral.validateDraft()
-        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validateDraft()
+        const general = await this.$refs.solutionGeneral.validatePublish()
+        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validatePublish()
 
         if (general && solutionActivityAndReach) {
           try {
-            if (this.isNewProject) {
-              const id = await this.createProject()
-              const localised = this.localePath({
-                name: 'organisation-initiatives-id-edit',
-                params: { ...this.$route.params, id },
-              })
-              this.$router.push(localised)
-            } else if (this.isDraft) {
-              await this.saveDraft(this.$route.params.id)
-              location.reload()
-            }
-            this.$alert(this.$gettext('Your draft has been saved successfully'), this.$gettext('Congratulation'), {
+            // const id = await this.createSolution()
+            // const localised = this.localePath({
+            //   name: 'organisation-portfolio-innovation-solutions-id-edit',
+            //   params: { ...this.$route.params, id },
+            // })
+            // this.$router.push(localised)
+
+            await this.updateSolution(this.$route.params.id) //needs data
+            location.reload()
+
+            this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close'),
             })
             return
@@ -203,10 +192,10 @@ export default {
         this.setLoading(false)
       })
     },
-    async doDiscardDraft() {
+    async handleCancel() {
       try {
         await this.$confirm(
-          this.$gettext('The current draft will be overwritten by the published version'),
+          this.$gettext('Any changes will be lost and you will be navigated to Dashboard'),
           this.$gettext('Attention'),
           {
             confirmButtonText: this.$gettext('Ok'),
@@ -214,10 +203,33 @@ export default {
             type: 'warning',
           }
         )
-        await this.discardDraft(this.$route.params.id)
+        await this.cancelSolution()
+        this.$router.push(this.localePath('organisation'))
         this.$message({
           type: 'success',
-          message: this.$gettext('Draft overriden with published version'),
+          message: this.$gettext('Edit canceled'),
+        })
+      } catch (e) {
+        this.setLoading(false)
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action cancelled'),
+        })
+      }
+    },
+    async handleDeleteSolution() {
+      this.clearValidation()
+      try {
+        await this.$confirm(this.$gettext('The current solution will be deleted'), this.$gettext('Attention'), {
+          confirmButtonText: this.$gettext('Ok'),
+          cancelButtonText: this.$gettext('Cancel'),
+          type: 'warning',
+        })
+        await this.deleteSolution()
+        this.$router.push(this.localePath('organisation'))
+        this.$message({
+          type: 'success',
+          message: this.$gettext('Solution deleted succesfully'),
         })
       } catch (e) {
         this.setLoading(false)
