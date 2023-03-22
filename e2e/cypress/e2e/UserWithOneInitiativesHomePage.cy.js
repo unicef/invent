@@ -10,10 +10,10 @@ describe('User with 1 Initiatives', () => {
         loginForm.login(Cypress.env('username1'), Cypress.env('username1'))
         const homePage = new HomePage()
         requests.getInitiativesList().then((response)=>{
-                //cy.log(response.body.results.projects[1].name)
-                cy.log(response.body.results)
+            homePage.getInitiativeCardsSmall().contains(response.body.results.projects[0].name)
+            homePage.getInitiativeCardsSmall().contains(response.body.results.projects[1].name)
+            homePage.getInitiativeCardsSmall().contains(response.body.results.projects[2].name)
         })
-        
         // Check if the <<Recently Updated Initiatives>> section is visible
         homePage.getInitiativesSection().contains('Recently Updated').should('be.visible')
         // Check if the <<My Initiatives>> section is visible
