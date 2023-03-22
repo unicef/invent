@@ -41,7 +41,7 @@ export default {
       const namedTable = this.tableData.map((row) => ({
         id: row.id,
         country: this.getCountryName(row.country),
-        region: this.printRegionNameList(row.region),
+        region: this.printRegionName(row.region),
         people_reached: row.people_reached,
       }))
 
@@ -58,15 +58,11 @@ export default {
     },
   },
   methods: {
-    getRegionName: function (regionId) {
-      return this.getRegionDetails(regionId).name
-    },
-    printRegionNameList: function (regionArray) {
-      if (regionArray === null || regionArray === undefined) {
+    printRegionName: function (regionId) {
+      if (regionId === null || regionId === undefined) {
         return 'N/A'
       } else {
-        // return regionArray.map((regionRec) => this.getRegionName(regionRec)).toString()
-        return this.getRegionName(regionArray)
+        return this.getRegionDetails(regionId).name
       }
     },
     getCountryName: function (id) {
