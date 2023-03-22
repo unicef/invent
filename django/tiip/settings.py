@@ -23,11 +23,11 @@ elif environment == "tst":
     env_name = "TEST"
     env_color = "green"
 elif environment == "uat":
-    SITE_ID = 4
+    SITE_ID = 5
     env_name = "UAT"
     env_color = "orange"
 elif environment == "prod":
-    SITE_ID = 5
+    SITE_ID = 4
     env_name = "PRODUCTION"
     env_color = "red"
 else:
@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'simple-feedback',
     "dj_anonymizer",
     'import_export',
+    'health_check',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -363,5 +364,5 @@ ENVIRONMENT_COLOR = env_color
 EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
 # Import the setting_azure settings only in the Azure environments
-if environment in ["dev", "tst", "uat", "prod"]:
+if environment in ["dev", "tst", "uat", "prd"]:
     from .settings_deployed import *

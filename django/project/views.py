@@ -16,8 +16,8 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from country.models import Donor, CountryOffice, RegionalOffice, Currency
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
-    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, get_object_or_404, GPOAccessMixin, PortfolioAccessMixin, \
+    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
@@ -25,7 +25,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
     ApprovalState, Stage, Phase, ProjectVersion, ProblemStatement, Solution
 from project.permissions import InCountryAdminForApproval
 from search.views import ResultsSetPagination
-from .models import Project, TechnologyPlatform, DigitalStrategy, \
+from .models import Project, TechnologyPlatform, DigitalStrategy, CountrySolution, \
     HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
 from user.models import UserProfile
 from .resources import ProjectResource
@@ -203,6 +203,7 @@ class ProjectLandingBlocks(TokenAuthMixin, ViewSet):
     2. Recent updates block
     3. Featured initiatives block
     """
+
     def list(self, request, *args, **kwargs):
         my_initiatives_qs = Project.objects.member_of(request.user)
         my_initiatives_count = my_initiatives_qs.count()
@@ -258,6 +259,82 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
+
+
+class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return []  # Retrieve needs a bit more complex filtering based on user permission
+        else:
+            return super(SolutionRetrieveViewSet, self).get_permissions()
+
+    def _get_permission_based_data(self, solution):
+        draft = None
+        published = solution.to_representation()
+
+        return published
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves a solution.
+        """
+        solution = get_object_or_404(Solution, "No such solution", id=kwargs.get("pk"))
+
+        return Response(self._get_permission_based_data(solution))
+
+
+class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSet):
+    serializer_class = SolutionSerializer
+    queryset = Solution.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # Get the portfolio_problem_statements data to set the portfolios and problem_statements
+        portfolio_problem_statements = request.data.get('portfolio_problem_statements', [])
+        portfolios = list(set(d['portfolio_id'] for d in portfolio_problem_statements))
+        problem_statements = list(set(ps for d in portfolio_problem_statements for ps in d['problem_statements']))
+        is_active = request.data.get("is_active", True)
+        people_reached = request.data.get("people_reached", None)
+
+        # Update the instance with the extracted data
+        instance.portfolios.set(portfolios)
+        instance.problem_statements.set(problem_statements)
+        instance.is_active = is_active
+        instance.people_reached = people_reached
+
+        # Remove existing country solutions for the instance
+        instance.countrysolution_set.all().delete()
+
+        # Get the country_solutions data from the request
+        country_solutions_data = request.data.get('country_solutions', [])
+
+        # Update the country solutions
+        for country_solution_data in country_solutions_data:
+            # Create a new CountrySolution object with data from the request
+            country_solution = CountrySolution(
+                country_id=country_solution_data["country"],
+                people_reached=country_solution_data["people_reached"],
+                region=country_solution_data["region"],
+                solution=instance,
+            )
+            # Save the new CountrySolution object to the database
+            country_solution.save()
+
+        # Save the updated Solution object to the database
+        instance.save()
+
+        # Update the serializer with the updated instance data
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        # Return the updated data in the response
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        # Call the serializer's save method to update the instance
+        serializer.save()
 
 
 class CheckRequiredMixin:
@@ -765,7 +842,7 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
     serializer_class = ReviewScoreBriefSerializer
 
     def get_project_and_portfolio(self):
-        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
+        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio"))
 
         pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
         return portfolio, pps

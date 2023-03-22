@@ -15,7 +15,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.db.models import Count, Case, When, IntegerField, F, Q, Sum
+from django.db.models import Count, Case, When, IntegerField, F, Q, Sum, Prefetch
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -821,12 +821,14 @@ class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class Solution(ExtendedNameOrderedSoftDeletedModel):
+    # Constants to define the phases of a Solution
     PHASES = [
         (0, _('Pilot')),
         (1, _('Acceleration')),
         (2, _('Scale')),
     ]
 
+    # Fields
     portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
     countries = models.ManyToManyField(Country, through='CountrySolution')
     problem_statements = models.ManyToManyField(ProblemStatement)
@@ -835,21 +837,147 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     learning_investment = models.BooleanField()
     people_reached_override = models.PositiveIntegerField(help_text="Override country based calculation", null=True,
                                                           blank=True)
+    is_active = models.BooleanField()
 
+    # Properties
     @property
     def people_reached(self):
-        if self.people_reached_override:  # pragma: no cover
+        """
+        The number of people reached by the solution.
+        """
+        if self.people_reached_override:
             return self.people_reached_override
         else:
             return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
 
+    @people_reached.setter
+    def people_reached(self, value):
+        """
+        Sets the number of people reached by the solution.
+        """
+        self.people_reached_override = value
+
     @property
     def regions(self) -> List:
+        """
+        The regions of the countries where the solution has been implemented.
+        """
         return list(set(self.countrysolution_set.values_list('region', flat=True)))
 
     @property
     def regions_display(self):
+        """
+        The display names of the regions of the countries where the solution has been implemented.
+        """
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
+
+    # Class methods
+    @classmethod
+    def prefetch_related_objects(cls):
+        """
+        Returns a Prefetch object that fetches all related objects needed for Solution.to_representation.
+        """
+        return Prefetch('problem_statements'), \
+            Prefetch('portfolios'), \
+            Prefetch('countrysolution_set',
+                     queryset=CountrySolution.objects.select_related('country'))
+
+    # Methods
+    def get_portfolio_problem_statements(self):
+        """
+        Get a list of dictionaries that represent the portfolios and their associated problem statements for the current
+        solution.
+
+        Returns:
+            A list of dictionaries, where each dictionary contains the following keys:
+                - portfolio_id (int): The ID of the portfolio.
+                - problem_statements (list of int): The IDs of the problem statements associated with the portfolio.
+
+        Example:
+            >>> solution = Solution.objects.get(pk=1)
+            >>> portfolios = solution.get_portfolio_problem_statements()
+            >>> print(portfolios)
+            [
+                {'portfolio_id': 1, 'problem_statements': [3, 51]},
+                {'portfolio_id': 5, 'problem_statements': [1, 51]}
+            ]
+        """
+        # Create an empty dictionary to group problem statements by portfolio ID
+        portfolio_dict = {}
+        problem_statements = self.problem_statements.values()
+        # Loop through all problem statements and group them by portfolio ID
+        for ps in problem_statements:
+            portfolio_id = ps['portfolio_id']
+            if portfolio_id not in portfolio_dict:
+                portfolio_dict[portfolio_id] = {'portfolio_id': portfolio_id, 'problem_statements': []}
+            portfolio_dict[portfolio_id]['problem_statements'].append(ps['id'])
+
+        # Convert the dictionary to a list of objects
+        portfolio_list = list(portfolio_dict.values())
+        return portfolio_list
+
+    def to_representation(self):
+        """
+        Returns a dictionary representing this Solution instance, to be used as a response payload in an API.
+        The method first uses the `prefetch_related` method to efficiently fetch related objects using the 
+        related managers defined on the model. Then it constructs a dictionary containing the Solution model payload:
+
+        Parameters:
+        ----------
+            None.
+
+        Returns:
+        -------
+            data: dict:
+
+        Example:
+        -------
+        {
+            'id': 1,
+            'created': datetime.datetime(2022, 1, 1, 0, 0),
+            'modified': datetime.datetime(2022, 2, 1, 0, 0),
+            'name': 'Solution 1',
+            'is_active': True,
+            'phase': 2,
+            'open_source_frontier_tech': True,
+            'learning_investment': False,
+            'portfolios': [1, 2],
+            'problem_statements': [3, 4],
+            'people_reached': 100000,
+            'country_solutions': [
+                {'id': 1, 'country': 2, 'people_reached': 10000, 'region': '1'},
+                {'id': 2, 'country': 3, 'people_reached': 20000, 'region': '2'}
+            ],
+            'portfolio_problem_statements': [
+                {'portfolio_id': 1, 'problem_statements': [3, 4]},
+                {'portfolio_id': 2, 'problem_statements': [4, 5]}
+            ]
+        } 
+        """
+        # Use the Prefetch object to fetch related objects efficiently
+        self = Solution.objects.prefetch_related(*self.prefetch_related_objects()).get(pk=self.pk)
+
+        portfolios = self.portfolios.values_list('id', flat=True)
+        problem_statements = self.problem_statements.values_list('id', flat=True)
+        country_solutions = self.countrysolution_set.values('id', 'country', 'people_reached', 'region')
+
+        data = {
+            'id': self.pk,
+            'created': self.created,
+            'modified': self.modified,
+            'name': self.name,
+            'is_active': self.is_active,
+            'phase': self.phase,
+            'open_source_frontier_tech': self.open_source_frontier_tech,
+            'learning_investment': self.learning_investment,
+            'portfolios': list(portfolios),
+            'problem_statements': list(problem_statements),
+            'people_reached': self.people_reached,
+            'country_solutions': list(country_solutions),
+            'portfolio_problem_statements': self.get_portfolio_problem_statements(),
+        }
+
+        return data
 
 
 class CountrySolution(models.Model):

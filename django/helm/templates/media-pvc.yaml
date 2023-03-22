@@ -1,10 +1,14 @@
-{{- if (eq .Values.environment "local") }}
+{{- $mypvc := (lookup "v1" "PersistentVolumeClaim" .Release.Namespace .Values.storage.mediaClaimName) }}
+{{- if not $mypvc }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
     {{- include "invent-django.labels" . | nindent 4 }}
-  name: media-pvc
+  name: {{ .Values.storage.mediaClaimName }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: {{ .Values.storage.storageCLass }}
+    helm.sh/resource-policy: "keep"
 spec:
   accessModes:
     - {{ .Values.storage.accessModes }}

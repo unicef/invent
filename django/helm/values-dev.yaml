@@ -11,8 +11,8 @@ lifecycle: toBeSetFromPipeline
 instance: toBeSetFromPipeline
 
 image:
-  repository: localhost:5001/invent-django
-  pullPolicy: Always
+  repository: invent-django
+  pullPolicy: IfNotPresent
   tag: "latest"
 
 vault:
@@ -24,13 +24,13 @@ unitTests:
   enabled: false
 
 storage:
-  storageCLass: 
+  storageCLass: hostpath
   accessModes: ReadWriteOnce
   translationsSize: 1Gi
   translationsCountrySize: 500Mi
   localeSize: 500Mi
   translationsUserSize: 500Mi
-  mediaSize: 1Gi
+  mediaSize: 2Gi
   mediaClaimName: media-pvc
 
 imagePullSecrets: []
