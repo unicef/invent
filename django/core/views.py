@@ -78,6 +78,17 @@ class Http400(APIException):
         if detail:
             self.detail = {"details": detail}
 
+class Http404(APIException):
+    """
+    Represents 404 error to be raised inside APIs for immediate error response.
+    """
+    status_code = 404
+    detail = {"details": "No such object."}
+
+    def __init__(self, detail=None):
+        if detail:
+            self.detail = {"details": detail}
+
 
 def get_object_or_400(cls, error_message="No such object.", select_for_update=False, **kwargs):
     """
@@ -94,6 +105,22 @@ def get_object_or_400(cls, error_message="No such object.", select_for_update=Fa
         return obj
     else:
         raise Http400(error_message)
+    
+def get_object_or_404(cls, error_message="No such object.", select_for_update=False, **kwargs):
+    """
+    Gets an object, raises Http404 with custom message if no such object.
+
+    Args:
+        cls: type of entity
+        select_for_update: locks object for update
+        error_message: to be used in the error response if no such object
+        kwargs: filter parameters for object query
+    """
+    obj = cls.objects.get_object_or_none(select_for_update, **kwargs)
+    if obj:
+        return obj
+    else:
+        raise Http404(error_message)
 
 
 class StaticDataView(GenericAPIView):

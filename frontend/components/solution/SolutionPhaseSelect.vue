@@ -7,7 +7,7 @@
     filterable
     class="select-solution-phase"
   >
-    <el-option v-for="solution in solutionList" :key="solution.id" :label="solution.name" :value="solution.id" />
+    <el-option v-for="solution in solutions" :key="solution.id + 1" :label="solution.name" :value="solution.id + 1" />
   </lazy-el-select>
 </template>
 
@@ -21,8 +21,8 @@ export default {
   },
   props: {
     value: {
-      type: [Number, Array],
-      default: null,
+      type: Number,
+      default: 0,
     },
     disabled: {
       type: Boolean,
@@ -41,14 +41,11 @@ export default {
     }),
     innerValue: {
       get() {
-        return this.value
+        return this.value + 1
       },
       set(value) {
-        this.$emit('change', value)
+        this.$emit('change', value - 1)
       },
-    },
-    solutionList() {
-      return this.solutions ? this.solutions : []
     },
   },
 }

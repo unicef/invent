@@ -7,27 +7,51 @@
     filterable
     popper-class="PortfolioSelectorPopper"
     class="CountrySelector"
+    ref="portfolioSelectSingle"
   >
-    <el-option v-for="portfolio in portfolios" :key="portfolio.id" :label="portfolio.name" :value="portfolio.id" />
+    <el-option
+      v-for="portfolio in filteredPortfolios"
+      :key="portfolio.id"
+      :label="portfolio.name"
+      :value="portfolio.id"
+      :disabled="portfolio.disabled"
+    />
   </lazy-el-select>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 export default {
   model: {
     prop: 'value',
     event: 'change',
   },
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   props: {
     value: {
       type: Number,
       default: null,
     },
+    portfoliosList: {
+      type: Array,
+      default: [],
+    },
     disabled: {
       type: Boolean,
       default: false,
     },
+    publishRules: {},
+    draftRules: {},
+    apiErrors: {},
+  },
+  $_veeValidate: {
+    value() {
+      return this.value
+    },
+    events: 'change|blur',
+    //  rejectsFalse: true,
   },
   computed: {
     ...mapGetters({
@@ -44,13 +68,18 @@ export default {
     multiple() {
       return Array.isArray(this.value)
     },
+    filteredPortfolios() {
+      if (!this.portfoliosList.length > 0) {
+        return this.portfolios
+      } else {
+        return this.portfolios.map((portfolio) =>
+          this.portfoliosList.some((port) => port.portfolio_id === portfolio.id)
+            ? { ...portfolio, disabled: true }
+            : { ...portfolio, disabled: false }
+        )
+      }
+    },
   },
-  // methods: {
-  //   portfolio: function (portfolio) {
-  //     const st = (portId) => this.getPortfolios.find((portfolio) => portfolio.id === portId)[0].name
-  //     return st === '' ? this.$gettext('N/A') : st
-  //   },
-  // }
 }
 </script>
 

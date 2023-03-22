@@ -2,8 +2,14 @@
   <div v-scroll-class:FixedNavigation="266" class="ProjectNavigation">
     <el-card :body-style="{ padding: '0px' }">
       <div v-if="isTeam || isNewProject || isSuper" class="NavigationActions">
-        <el-button v-if="true" :disabled="!!loading" type="primary" size="medium" @click="emitAction('save')">
-          <fa v-show="loading === 'publish'" icon="spinner" spin />
+        <el-button
+          v-if="true"
+          :disabled="!!loading || disabled"
+          type="primary"
+          size="medium"
+          @click="emitAction('save')"
+        >
+          <fa v-show="loading === true" icon="spinner" spin />
           <translate>Save</translate>
         </el-button>
 
@@ -67,11 +73,16 @@ export default {
   directives: {
     'scroll-class': VueScrollClass,
   },
+  props: {
+    disabled: {
+      required: false,
+      default: false,
+    },
+  },
   computed: {
     ...mapGetters({
-      loading: 'project/getLoading',
+      loading: 'solution/getLoading',
       user: 'user/getProfile',
-      getCountryDetails: 'countries/getCountryDetails',
     }),
     active() {
       const hash = this.$route.hash
@@ -84,7 +95,7 @@ export default {
       return this.route === 'organisation-initiatives-create'
     },
     isPublished() {
-      return this.route === 'organisation-initiatives-id-published'
+      return this.route === 'organisation-initiatives-id'
     },
     isDraft() {
       return this.route === 'organisation-initiatives-id-edit'

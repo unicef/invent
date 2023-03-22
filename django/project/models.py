@@ -821,12 +821,14 @@ class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class Solution(ExtendedNameOrderedSoftDeletedModel):
+    # Constants to define the phases of a Solution
     PHASES = [
         (0, _('Pilot')),
         (1, _('Acceleration')),
         (2, _('Scale')),
     ]
 
+    # Fields
     portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
     countries = models.ManyToManyField(Country, through='CountrySolution')
     problem_statements = models.ManyToManyField(ProblemStatement)
@@ -837,32 +839,50 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
                                                           blank=True)
     is_active = models.BooleanField()
 
+    # Properties
     @property
     def people_reached(self):
-        if self.people_reached_override:  # pragma: no cover
+        """
+        The number of people reached by the solution.
+        """
+        if self.people_reached_override:
             return self.people_reached_override
         else:
             return self.countrysolution_set.aggregate(Sum('people_reached'))['people_reached__sum'] or 0
 
+    @people_reached.setter
+    def people_reached(self, value):
+        """
+        Sets the number of people reached by the solution.
+        """
+        self.people_reached_override = value
+
     @property
     def regions(self) -> List:
+        """
+        The regions of the countries where the solution has been implemented.
+        """
         return list(set(self.countrysolution_set.values_list('region', flat=True)))
 
     @property
     def regions_display(self):
+        """
+        The display names of the regions of the countries where the solution has been implemented.
+        """
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
 
+    # Class methods
     @classmethod
     def prefetch_related_objects(cls):
         """
-        Returns a Prefetch object that fetches all related objects needed for
-        Solution.to_representation.
+        Returns a Prefetch object that fetches all related objects needed for Solution.to_representation.
         """
         return Prefetch('problem_statements'), \
             Prefetch('portfolios'), \
             Prefetch('countrysolution_set',
                      queryset=CountrySolution.objects.select_related('country'))
 
+    # Methods
     def get_portfolio_problem_statements(self):
         """
         Get a list of dictionaries that represent the portfolios and their associated problem statements for the current
@@ -899,7 +919,8 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     def to_representation(self):
         """
         Returns a dictionary representing this Solution instance, to be used as a response payload in an API.
-        The method first uses the `prefetch_related` method to efficiently fetch related objects using the related managers defined on the model. Then it constructs a dictionary containing the Solution model payload:
+        The method first uses the `prefetch_related` method to efficiently fetch related objects using the 
+        related managers defined on the model. Then it constructs a dictionary containing the Solution model payload:
 
         Parameters:
         ----------

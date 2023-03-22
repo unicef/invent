@@ -2,7 +2,7 @@
   <div class="NewProjectForm">
     <div v-show="!showForm" class="Loader">
       <div></div>
-      <span>Loading</span>
+      <span><translate>Loading</translate></span>
     </div>
     <el-form ref="projectForm" label-position="top" @submit.native.prevent>
       <el-row v-show="showForm" type="flex">
@@ -15,6 +15,7 @@
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
+            v-model="solution.general_overview"
           />
           <ActivityAndReach
             key="solutionActivityAndReach"
@@ -24,6 +25,7 @@
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
+            v-model="solution.activity_reach"
           />
         </el-col>
         <el-col :span="6">
@@ -56,14 +58,25 @@ export default {
       createdElements: 0,
       usePublishRules: false,
       apiErrors: {},
-      countriesTable: [],
+      solution: {
+        general_overview: {
+          name: '',
+          phase: 0,
+          open_source_frontier_tech: false,
+          learning_investment: false,
+          portfolio_problem_statements: [],
+        },
+        activity_reach: {
+          override_reach: 0,
+          people_reached: 0,
+          country_solutions: [],
+        },
+      },
     }
   },
   computed: {
     ...mapGetters({
-      solution: 'solution/getSolutionData',
-      countryAnswers: 'project/getCountryAnswers',
-      donorAnswers: 'project/getDonorsAnswers',
+      getSolution: 'solution/getSolutionData',
     }),
     isDraft() {
       return this.$route.name.includes('organisation-portfolio-innovation-solutions-edit')
@@ -77,72 +90,61 @@ export default {
     rules,
   },
   mounted() {
-    if (this.$route.query.reloadAfterImport) {
-      window.location.href = window.location.origin + this.$route.path
-      return
-    }
-    if (this.$route.query.reloadDataFromStorage) {
-      this.$nextTick(() => {
-        this.$nuxt.$loading.start()
-        try {
-          const stored = JSON.parse(window.localStorage.getItem('rescuedSoluton'))
-          this.initProjectState(stored)
-        } catch (e) {
-          this.$alert(this.$gettext('Failed to restore auto-saved solution'), this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('OK'),
-          })
-        }
-        window.localStorage.removeItem('rescuedProject')
-        this.$router.replace({ ...this.$route, query: undefined })
-        this.$nuxt.$loading.finish()
-      })
+    const s = this.getSolution
+    this.solution = {
+      activity_reach: {
+        override_reach: 0,
+        people_reached: s.people_reached,
+        country_solutions: s.country_solutions,
+      },
+      general_overview: {
+        name: s.name,
+        phase: s.phase,
+        open_source_frontier_tech: s.open_source_frontier_tech,
+        learning_investment: s.learning_investment,
+        portfolio_problem_statements: s.portfolio_problem_statements,
+      },
     }
   },
+  watch: {
+    getSolution() {
+      const s = this.getSolution
+      this.solution = {
+        activity_reach: {
+          override_reach: 0,
+          people_reached: s.people_reached,
+          country_solutions: s.country_solutions,
+        },
+        general_overview: {
+          name: s.name,
+          phase: s.phase,
+          open_source_frontier_tech: s.open_source_frontier_tech,
+          learning_investment: s.learning_investment,
+          portfolio_problem_statements: s.portfolio_problem_statements,
+        },
+      }
+    },
+  },
+
   methods: {
     ...mapActions({
-      createSolution: 'solution/createSolution',
+      // createSolution: 'solution/createSolution',
       updateSolution: 'solution/updateSolution',
       deleteSolution: 'solution/deleteSolution',
       cancelSolution: 'solution/cancelSolution',
-      publishProject: 'project/publishProject',
-      setLoading: 'project/setLoading',
-      initProjectState: 'project/initProjectState',
+      setLoading: 'solution/setLoading',
     }),
-    async unCaughtErrorHandler(errors) {
-      try {
-        await this.$confirm(
-          this.$gettext('There was an un-caught validation error an automatic report has been submitted'),
-          this.$gettext('Warning'),
-          {
-            confirmButtonText: this.$gettext('Recover & Reload'),
-            cancelButtonText: this.$gettext('Discard changes'),
-          }
-        )
-        const solution = {
-          ...this.solution,
-          country_custom_answers: this.countryAnswers,
-          donor_custom_answers: this.donorAnswers,
-        }
-        const toStore = JSON.stringify(solution)
-        window.localStorage.setItem('rescuedSolution', toStore)
-        const newUrl = window.location.origin + this.$route.path + `?reloadDataFromStorage=true`
-        window.location.href = newUrl
-      } catch (e) {
-        console.log('User declined the option to save, just reloading')
-        window.location.reload(true)
-      }
+    trimEmptyRows() {
+      const portfolioTable = this.solution.general_overview.portfolio_problem_statements
+      const trimedTable = portfolioTable.find((row) => row.portfolio_id !== null)
+      console.log(trimedTable)
+      this.solution.general_overview.portfolio_problem_statements = trimedTable
+
+      // const countriesTable = this.solution.activity_reach.country_solutions
+      // console.log(countriesTable)
+      // this.solution.activity_reach.country_solutions = countriesTable.find((row) => row.country !== null)
     },
-    handleErrorMessages() {
-      this.$nextTick(() => {
-        const errors = [...this.$el.querySelectorAll('.is-error')]
-        const visibleErrors = errors.filter((e) => e.offsetParent !== null)
-        if (visibleErrors && visibleErrors.length > 0) {
-          visibleErrors[0].scrollIntoView()
-        } else {
-          this.unCaughtErrorHandler(errors)
-        }
-      })
-    },
+    handleErrorMessages() {},
     async validate() {
       const validations = await Promise.all([
         this.$refs.solutionGeneral.validate(),
@@ -157,27 +159,41 @@ export default {
       this.$refs.solutionActivityAndReach.clear()
     },
     async handleSave() {
-      this.clearValidation()
-      this.usePublishRules = false
+      console.log('handle Save clicked')
+      // this.trimEmptyRows()
+
+      // this.setLoading(true)
+      // this.clearValidation()
+      this.usePublishRules = true
       await this.$nextTick(async () => {
-        const general = await this.$refs.solutionGeneral.validatePublish()
-        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validatePublish()
+        const general = await this.$refs.solutionGeneral.validate()
+        const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validate()
 
         if (general && solutionActivityAndReach) {
+          const s = this.solution
           try {
-            // const id = await this.createSolution()
-            // const localised = this.localePath({
-            //   name: 'organisation-portfolio-innovation-solutions-id-edit',
-            //   params: { ...this.$route.params, id },
-            // })
-            // this.$router.push(localised)
-
-            await this.updateSolution(this.$route.params.id) //needs data
-            location.reload()
+            const response = await this.updateSolution({
+              name: s.general_overview.name,
+              phase: s.general_overview.phase,
+              open_source_frontier_tech: s.general_overview.open_source_frontier_tech,
+              learning_investment: s.general_overview.learning_investment,
+              portfolio_problem_statements: s.general_overview.portfolio_problem_statements,
+              country_solutions: s.activity_reach.country_solutions,
+              people_reached: s.activity_reach.override_reach
+                ? s.activity_reach.override_reach
+                : s.activity_reach.people_reached,
+            })
+            const id = response.data.id
+            const localised = this.localePath({
+              name: 'organisation-portfolio-innovation-solutions-id',
+              params: { ...this.$route.params, id },
+            })
+            this.$router.push(localised)
 
             this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close'),
             })
+            this.usePublishRules = false
             return
           } catch (e) {
             if (e.response) {
@@ -187,6 +203,14 @@ export default {
               this.setLoading(false)
             }
           }
+        } else {
+          this.$alert(
+            this.$gettext('Please correct all errors in required fields before save.'),
+            this.$gettext('Error'),
+            {
+              confirmButtonText: this.$gettext('Close'),
+            }
+          )
         }
         this.handleErrorMessages()
         this.setLoading(false)
@@ -210,7 +234,7 @@ export default {
           message: this.$gettext('Edit canceled'),
         })
       } catch (e) {
-        this.setLoading(false)
+        // this.setLoading(false)
         this.$message({
           type: 'info',
           message: this.$gettext('Action cancelled'),
@@ -232,7 +256,7 @@ export default {
           message: this.$gettext('Solution deleted succesfully'),
         })
       } catch (e) {
-        this.setLoading(false)
+        // this.setLoading(false)
         this.$message({
           type: 'info',
           message: this.$gettext('Action cancelled'),
@@ -246,7 +270,7 @@ export default {
         const valid = await this.validate()
         if (valid) {
           try {
-            await this.publishProject(this.$route.params.id)
+            // await this.publishProject(this.$route.params.id)
             const localised = this.localePath({
               name: 'organisation-initiatives-id-published',
               params: { ...this.$route.params },
@@ -258,12 +282,12 @@ export default {
             return
           } catch (e) {
             console.log(e)
-            this.setLoading(false)
+            //this.setLoading(false)
             this.apiErrors = e.response.data ? e.response.data : 'error'
           }
         }
         this.handleErrorMessages()
-        this.setLoading(false)
+        // this.setLoading(false)
       })
     },
     createdHandler() {

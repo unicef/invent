@@ -454,7 +454,7 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
 
 
 class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=512, 
+    name = serializers.CharField(max_length=512,
                                  validators=[UniqueValidator(
                                      queryset=TechnologyPlatform.objects.all(), lookup='iexact')])
 
@@ -465,7 +465,7 @@ class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
 
 
 class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=512, 
+    name = serializers.CharField(max_length=512,
                                  validators=[UniqueValidator(
                                      queryset=HardwarePlatform.objects.all(), lookup='iexact')])
 
@@ -487,7 +487,7 @@ class NontechPlatformCreateSerializer(serializers.ModelSerializer):
 
 
 class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=512, 
+    name = serializers.CharField(max_length=512,
                                  validators=[UniqueValidator(
                                      queryset=PlatformFunction.objects.all(), lookup='iexact')])
 
@@ -745,11 +745,13 @@ class ProjectImageUploadSerializer(serializers.ModelSerializer):
 
 
 class CountrySolutionSerializer(serializers.ModelSerializer):
+    # Use the country's ID as the primary key in the serialized data
     id = serializers.IntegerField(source='country.id')
 
     class Meta:
         model = CountrySolution
         fields = ('id', 'people_reached', 'region')
+
 
 class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
     problem_statements = ProblemStatementSerializer(many=True)
@@ -761,15 +763,16 @@ class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
 
 
 class SolutionSerializer(serializers.ModelSerializer):
+    # Define custom serializers for each field
     regions = serializers.ListField(child=serializers.IntegerField(), max_length=8, min_length=0)
-    people_reached = serializers.IntegerField(read_only=True)
+    people_reached = serializers.IntegerField(allow_null=True)
     countries = CountrySolutionSerializer(source='countrysolution_set', many=True)
     problem_statements = ProblemStatementSerializer(many=True, required=False)
     portfolios = PortfolioSerializer(read_only=True, source='get_portfolio')
 
     class Meta:
-        
         model = Solution
+        # Define the fields to be included in the serialized data
         fields = ('id', 'created', 'modified', 'name', 'regions', 'phase', 'countries',
                   'people_reached', 'open_source_frontier_tech', 'learning_investment',
                   'portfolios', 'problem_statements')
