@@ -20,7 +20,7 @@
               name="country-single-select"
             />
           </td>
-          <td>{{ printRegionNameList(row.region) }}</td>
+          <td>{{ getRegionName(row.region) }}</td>
           <td>
             <el-input-number
               v-model="row.people_reached"
@@ -86,7 +86,10 @@ export default {
   },
   methods: {
     addRow: function () {
-      const newTable = [...this.tableData, { row_id: uuidv4(), id: null, country: null, region: 0, people_reached: 0 }]
+      const newTable = [
+        ...this.tableData,
+        { row_id: uuidv4(), id: null, country: null, region: null, people_reached: 0 },
+      ]
       this.$emit('change', newTable)
     },
     deleteRow: function (id) {
@@ -94,24 +97,31 @@ export default {
       this.$emit('change', newTable)
     },
     getRegionName: function (regionId) {
-      return this.getRegionDetails(regionId).name
-    },
-    printRegionNameList: function (regionArray) {
-      if (!regionArray || !regionArray.length > 0) {
-        return 'N/A'
+      if (regionId === null) {
+        return this.$gettext('N/A')
       } else {
-        return regionArray.map((regionRec) => this.getRegionName(regionRec)).toString()
+        const regName = this.getRegionDetails(regionId).name
+        console.log(regName)
+        return regName
       }
     },
+    // printRegionNameList: function (regionArray) {
+    //   if (!regionArray || !regionArray.length > 0) {
+    //     return 'N/A'
+    //   } else {
+    //     return regionArray.map((regionRec) => this.getRegionName(regionRec)).toString()
+    //   }
+    // },
     updateRegion: function (recordId, countryId) {
       const newTable = this.tableData.map((record) => {
-        if (record.id !== recordId) {
+        if (record.row_id !== recordId) {
           return record
         } else {
           return {
+            row_id: record.row_id,
             id: record.id,
             country: countryId,
-            region: this.getRegionsByCountry(countryId),
+            region: this.getRegionsByCountry(countryId)[0],
             people_reached: record.people_reached,
           }
         }
