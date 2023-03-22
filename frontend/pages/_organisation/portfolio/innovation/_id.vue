@@ -30,9 +30,9 @@
         </section>
         <!-- tabs -->
         <div class="DashboardListView">
-          <el-row>
+          <!-- <el-row>
             <table-top-actions />
-          </el-row>
+          </el-row> -->
           <el-row>
             <main-solutions-table />
           </el-row>
@@ -44,17 +44,13 @@
 
 <script>
 import MainSolutionsTable from '@/components/solution/dashboard/MainSolutionsTable'
-import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
-import Radio from '@/components/portfolio/form/inputs/Radio'
 import Tabs from '@/components/common/Tabs'
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    Radio,
     MainSolutionsTable,
-    TableTopActions,
     Tabs,
   },
   data() {

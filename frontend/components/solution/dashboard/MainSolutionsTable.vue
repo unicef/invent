@@ -28,38 +28,13 @@
               localePath({
                 name: 'organisation-portfolio-innovation-solutions-id',
                 params: { id: scope.row.solutionId },
+                query: { project: $route.params.id },
               })
             "
             >{{ scope.row.solutionName }}</nuxt-link
           >
         </template>
       </el-table-column>
-
-      <!-- <el-table-column
-        v-if="selectedColumns.includes('61') && tab > 1"
-        :resizable="false"
-        :label="$gettext('Questionnaires Assigned') | translate"
-        sortable="custom"
-        prop="review_states"
-        width="511"
-      >
-        <template slot-scope="scope">
-          <Reviewers v-if="scope.row.review_states" :id="scope.row.id" :items="scope.row.review_states.review_scores" />
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column
-        v-if="selectedColumns.includes('5')"
-        :resizable="false"
-        :label="$gettext('Region') | translate"
-        sortable="custom"
-        prop="country__region"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <region-item :id="scope.row.region" />
-        </template>
-      </el-table-column> -->
 
       <el-table-column
         v-if="selectedColumns.includes('1')"
@@ -74,19 +49,6 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column
-        v-if="selectedColumns.includes('2')"
-        :resizable="false"
-        :label="$gettext('Country') | translate"
-        sortable="custom"
-        prop="country__name"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <CountryItem :id="scope.row.country" :show-flag="false" />
-        </template>
-      </el-table-column> -->
-
       <el-table-column
         v-if="selectedColumns.includes('4')"
         :resizable="false"
@@ -98,185 +60,20 @@
         <template slot-scope="scope"> {{ scope.row.phase }} </template>
       </el-table-column>
 
-      <!-- <el-table-column
-        v-if="selectedColumns.includes('3')"
-        :resizable="false"
-        :label="$gettext('Last updated') | translate"
-        sortable="custom"
-        prop="project__modified"
-        width="180"
-      >
-        <template slot-scope="scope">
-          {{ convertDate(scope.row.modified) }}
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('11')"
-        :resizable="false"
-        :label="$gettext('Goal Area') | translate"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <GoalAreaItem :value="scope.row.goal_area" />
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('21')"
-        :resizable="false"
-        :label="$gettext('Completed phases') | translate"
-        sortable="custom"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <PlatformsList class="SimpleList" :platforms="stageIDs(scope.row.stages)" source="getStages" />
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('12')"
-        :resizable="false"
-        :label="$gettext('Result Area') | translate"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <ResultAreaItem :value="scope.row.result_area" />
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('15')"
-        :resizable="false"
-        :label="$gettext('Capability Subcategories') | translate"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <CapabilitiesList
-            show-icon
-            :value="scope.row.capability_subcategories"
-            :goal-area="scope.row.goal_area"
-            :values-function="getCapabilitySubcategories"
-          />
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('7')"
-        :resizable="false"
-        :label="$gettext('Programme Focal Point Name') | translate"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <span>{{ scope.row.contact_name }}</span>
-          <a :href="`mailto:${scope.row.contact_email}`" :rel="`email`" class="TextLink">
-            {{ scope.row.contact_email }}
-          </a>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('10')"
-        :resizable="false"
-        :label="$gettext('Health Focus Areas') | translate"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <HfaCategoriesList :value="scope.row.health_focus_areas" :limit="3" value-is-child show-check />
-        </template>
-      </el-table-column>
-
-     
-      <el-table-column
-        v-if="selectedColumns.includes('60')"
-        :resizable="false"
-        :label="$gettext('Software Platforms(s)') | translate"
-        sortable="custom"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <PlatformsList class="SimpleList" :platforms="scope.row.platforms" source="getTechnologyPlatforms" />
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('25')"
-        :resizable="false"
-        :label="$gettext('Information Security Classification') | translate"
-        sortable="custom"
-        width="220"
-      >
-        <template slot-scope="scope">
-          <ListElement class="SimpleList" :value="scope.row.isc" source="getInfoSec" />
-        </template>
-      </el-table-column> -->
-
-      <!-- new table fields -->
-
-      <!-- <el-table-column
-        v-if="selectedColumns.includes('36')"
-        :resizable="false"
-        :label="$gettext('Partnership needs') | translate"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <p>{{ scope.row.partnership_needs }}</p>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        v-if="selectedColumns.includes('40')"
-        :resizable="false"
-        :label="$gettext('End Date') | translate"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <p>{{ scope.row.end_date | simpleDateFormat }}</p>
-        </template>
-      </el-table-column>-->
-
       <el-table-column
         v-if="selectedColumns.includes('42')"
         :resizable="false"
         :label="$gettext('Reach') | translate"
         sortable
-        width="240"
+        width="180"
         prop="reach"
       >
         <template slot-scope="scope">
           <p>{{ scope.row.reach | formatNumber }}</p>
         </template>
       </el-table-column>
-      <!-- <el-table-column
-        v-if="selectedColumns.includes('44')"
-        :resizable="false"
-        :label="$gettext('Work Breakdown Structure (WBS)') | translate"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <SimpleList :items="scope.row.wbs" />
-        </template>
-      </el-table-column> -->
       <!-- new table fields -->
     </el-table>
-
-    <div class="Pagination">
-      <el-pagination
-        :current-page="page"
-        :page-size="pageSize"
-        :page-sizes="pageSizeOption"
-        :total="total"
-        :layout="paginationOrderStr"
-        @size-change="sizeChange"
-        @prev-click="pagClick"
-        @next-click="pagClick"
-      >
-        <current-page :total="total" :page-size="pageSize" :page="page" />
-      </el-pagination>
-    </div>
-    <!-- dialogs -->
-    <review />
-    <score />
   </div>
 </template>
 
@@ -286,44 +83,11 @@ import { format } from 'date-fns'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { mapGettersActions } from '@/utilities/form.js'
 
-import ProjectCard from '@/components/common/ProjectCard'
-import CountryItem from '@/components/common/CountryItem'
-import HfaCategoriesList from '@/components/common/list/HfaCategoriesList'
-// import DonorsList from '@/components/common/list/DonorsList'
-import RegionItem from '@/components/common/RegionItem'
-import CustomAnswersCell from '@/components/dashboard/CustomAnswersCell'
-import GoalAreaItem from '@/components/dashboard/GoalAreaItem'
-import ResultAreaItem from '@/components/dashboard/ResultAreaItem'
 import CurrentPage from '@/components/dashboard/CurrentPage'
-import CapabilitiesList from '@/components/project/CapabilitiesList'
-import Reviewers from '@/components/portfolio/dashboard/table/Reviewers'
-import Scores from '@/components/portfolio/dashboard/table/Scores'
-import ListElement from '@/components/project/ListElement'
-import SimpleList from '@/components/common/list/SimpleList'
-
-// dialogs
-import Review from '@/components/portfolio/dashboard/dialog/Review'
-import Score from '@/components/portfolio/dashboard/dialog/Score'
-import PlatformsList from '@/components/project/PlatformsList'
 
 export default {
   components: {
-    ProjectCard,
-    CountryItem,
-    HfaCategoriesList,
-    RegionItem,
-    CustomAnswersCell,
     CurrentPage,
-    CapabilitiesList,
-    GoalAreaItem,
-    ResultAreaItem,
-    Reviewers,
-    Scores,
-    Review,
-    PlatformsList,
-    ListElement,
-    Score,
-    SimpleList,
   },
   data() {
     return {
@@ -362,12 +126,7 @@ export default {
   },
   computed: {
     ...mapState({
-      projects: (state) => state.portfolio.projects,
       tab: (state) => state.portfolio.tab,
-      // pagination
-      total: (state) => state.portfolio.total,
-      pageSize: (state) => state.search.filter.page_size,
-      page: (state) => state.search.filter.page,
     }),
     ...mapGetters({
       selectedColumns: 'dashboard/getSelectedColumns',
@@ -516,14 +275,6 @@ export default {
 .MainTable {
   margin: 0 40px 120px;
   max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
-
-  .SimpleList {
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-    }
-  }
 
   .favorite {
     cursor: pointer;
@@ -685,61 +436,33 @@ export default {
       }
     }
 
-    .CountryItem {
-      .CountryFlag {
-        display: none;
-      }
-
-      .CountryName {
-        margin: 0;
-        font-size: @fontSizeSmall;
-        letter-spacing: 0;
-        line-height: 15px;
-        font-weight: 100;
-      }
-    }
-
-    // .DonorList {
-    //   ul {
-    //     padding: 0;
-    //     margin: 0;
-    //   }
-
-    //   .DonorItem {
-    //     display: inline-flex;
-    //     align-items: flex-start;
-    //     width: 100%;
-
-    //     .svg-inline--fa {
-    //       position: relative;
-    //       top: -1px;
-    //       margin-right: 5px;
-    //     }
-    //   }
-    // }
-
-    .HealthFocusAreasList,
-    .CustomAnswersCell,
-    .CapabilitiesList {
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-
-        li {
-          position: relative;
-          display: flex;
-          align-items: center;
-          > span {
-            &:last-child {
-              margin-left: 6px;
-              .textTruncate();
-            }
-          }
-        }
-      }
+    .CountryName {
+      margin: 0;
+      font-size: @fontSizeSmall;
+      letter-spacing: 0;
+      line-height: 15px;
+      font-weight: 100;
     }
   }
+
+  // .DonorList {
+  //   ul {
+  //     padding: 0;
+  //     margin: 0;
+  //   }
+
+  //   .DonorItem {
+  //     display: inline-flex;
+  //     align-items: flex-start;
+  //     width: 100%;
+
+  //     .svg-inline--fa {
+  //       position: relative;
+  //       top: -1px;
+  //       margin-right: 5px;
+  //     }
+  //   }
+  // }
 
   .Pagination {
     z-index: 5;
