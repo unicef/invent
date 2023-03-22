@@ -132,18 +132,18 @@ export default {
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'portfolio/getSelectedRows',
       selectAll: 'portfolio/getSelectAll',
-      getAllSolutionsList: 'solutions/getAllSolutionsList',
+      getSolutionsList: 'solutions/getSolutionsList',
       getPortfoliosList: 'solution/getPortfoliosList',
     }),
     ...mapGettersActions({
       sorting: ['dashboard', 'getSorting', 'setSorting', 0],
     }),
     portfolioSolutionsList() {
-      const currentSolutionId = this.$route.params.id
-
-      const currentPortfolio = this.getPortfoliosList.find((portfolio) => portfolio.id === currentSolutionId)
-
-      // return this.getAllSolutionsList.find(solution => )
+      if (this.getSolutionsList) {
+        return this.getSolutionsList.solutions
+      } else {
+        return this.solutions
+      }
     },
     paginationOrderStr() {
       const loc = this.$i18n.locale
@@ -184,8 +184,7 @@ export default {
     },
   },
   mounted() {
-    this.loadSolutionsList()
-    this.loadProblemPortfoliolists()
+    this.loadSolutionsList(this.$route.query.id)
     setTimeout(() => {
       this.fixTableHeight()
       this.fixSorting(this.$route.query.ordering)

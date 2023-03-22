@@ -7,12 +7,12 @@ export const state = () => ({
 })
 
 export const getters = {
-  getAllSolutionsList: (state) => state.allSolutionsList,
+  getSolutionsList: (state) => state.allSolutionsList,
 }
 
 export const actions = {
   async loadSolutionsList({ state, commit, dispatch, rootGetters }, id) {
-    const response = await this.$axios.get(`/api/solution/`)
+    const response = await this.$axios.get(`/api/portfolio/${id}`)
     commit('PUT_SOLUTION_LIST', response.data)
   },
 }

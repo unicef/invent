@@ -27,6 +27,7 @@ export default {
       'organisation-signup': this.$gettext('Signup'),
       'organisation-reset-key': this.$gettext('Reset'),
       'organisation-portfolio-innovation': this.$gettext('Innovation Portfolio'),
+      'organisation-portfolio-innovation-solutions-id-edit': this.$gettext('Edit solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
       'organisation-initiatives': this.$gettext('My initiatives'),
       'organisation-portfolio-management-new': this.$gettext('New portfolio'),
@@ -58,6 +59,7 @@ export default {
     ...mapGetters({
       initiative: 'project/getProjectData',
       portfolioInnovationName: 'portfolio/getName',
+      getPortfolios: 'solution/getPortfoliosList',
     }),
     pureRoute() {
       if (this.$route && this.$route.name) {
@@ -72,15 +74,28 @@ export default {
 
       split(route, '-').forEach((item) => {
         name = name !== '' ? join([name, item], '-') : item
-        if (name !== 'organisation-portfolio') {
+        if (item === 'solutions') {
+          const path = this.$route.query.project
+
           breadcrumbs = [
             ...breadcrumbs,
             {
               id: item,
-              localePath: { name },
-              text: this[name] || '',
+              localePath: { name: `organisation-portfolio-innovation-id`, params: { id: path } },
+              text: this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name || '',
             },
           ]
+        } else {
+          if (name !== 'organisation-portfolio') {
+            breadcrumbs = [
+              ...breadcrumbs,
+              {
+                id: item,
+                localePath: { name },
+                text: this[name] || '',
+              },
+            ]
+          }
         }
       })
       return breadcrumbs
