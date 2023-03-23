@@ -74,25 +74,26 @@ export default {
 
       split(route, '-').forEach((item) => {
         name = name !== '' ? join([name, item], '-') : item
-        if (item === 'solutions') {
-          const path = this.$route.query.project || process.env.FALLBACK_PROJECT || 1
+        if (name !== 'organisation-portfolio') {
+          if (item === 'solutions') {
+            const path = this.$route.query.project
+            if (path) {
+              const portfolioName = this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name
 
-          const portfolioName = this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name
-
-          breadcrumbs = [
-            ...breadcrumbs,
-            {
-              id: item,
-              localePath: {
-                name: `organisation-portfolio-innovation-id`,
-                params: { id: path },
-                query: { ...this.$route.query },
-              },
-              text: portfolioName || '',
-            },
-          ]
-        } else {
-          if (name !== 'organisation-portfolio') {
+              breadcrumbs = [
+                ...breadcrumbs,
+                {
+                  id: item,
+                  localePath: {
+                    name: `organisation-portfolio-innovation-id`,
+                    params: { id: path },
+                    query: { ...this.$route.query },
+                  },
+                  text: portfolioName || '',
+                },
+              ]
+            }
+          } else {
             breadcrumbs = [
               ...breadcrumbs,
               {
