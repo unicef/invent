@@ -144,6 +144,7 @@ export default {
       // console.log(countriesTable)
       // this.solution.activity_reach.country_solutions = countriesTable.find((row) => row.country !== null)
     },
+
     handleErrorMessages() {},
     async validate() {
       const validations = await Promise.all([
@@ -159,7 +160,6 @@ export default {
       this.$refs.solutionActivityAndReach.clear()
     },
     async handleSave() {
-      console.log('handle Save clicked')
       // this.trimEmptyRows()
 
       // this.setLoading(true)
@@ -196,6 +196,13 @@ export default {
             this.usePublishRules = false
             return
           } catch (e) {
+            this.$alert(
+              `${this.$gettext('Request failed, please retry, or contact support with code: ')} ${e.message}`,
+              this.$gettext('Error'),
+              {
+                confirmButtonText: this.$gettext('Close'),
+              }
+            )
             if (e.response) {
               this.apiErrors = e.response.data
             } else {
@@ -261,6 +268,7 @@ export default {
           type: 'info',
           message: this.$gettext('Action cancelled'),
         })
+        this.apiErrors = e.response.data ? e.response.data : 'error'
       }
     },
     async doPublishProject() {
@@ -287,7 +295,15 @@ export default {
           }
         }
         this.handleErrorMessages()
-        // this.setLoading(false)
+        this.$nextTick(() => {
+          const errors = [...this.$el.querySelectorAll('.is-error')]
+          const visibleErrors = errors.filter((e) => e.offsetParent !== null)
+          if (visibleErrors && visibleErrors.length > 0) {
+            visibleErrors[0].scrollIntoView()
+          } else {
+            this.unCaughtErrorHandler(errors)
+          }
+        })
       })
     },
     createdHandler() {

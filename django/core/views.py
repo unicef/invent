@@ -10,7 +10,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
-    IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState
+    IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState, IsGPOOrManagerOfAtLeastOnePortfolio
 from project.models import ProjectPortfolioState, ReviewScore, Solution, Portfolio
 from project.serializers import PartnerSerializer, LinkSerializer
 from country.models import CountryOffice
@@ -48,9 +48,11 @@ class PortfolioAccessMixin:
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerPortfolio)
 
+
 class SolutionAccessMixin:
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
-    permission_classes = (IsAuthenticated, IsGPOOrManagerPortfolio)
+    permission_classes = (IsAuthenticated, IsGPOOrManagerOfAtLeastOnePortfolio)
+
 
 class ProjectPortfolioStateAccessMixin:
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
@@ -77,6 +79,7 @@ class Http400(APIException):
     def __init__(self, detail=None):
         if detail:
             self.detail = {"details": detail}
+
 
 class Http404(APIException):
     """
@@ -105,7 +108,8 @@ def get_object_or_400(cls, error_message="No such object.", select_for_update=Fa
         return obj
     else:
         raise Http400(error_message)
-    
+
+
 def get_object_or_404(cls, error_message="No such object.", select_for_update=False, **kwargs):
     """
     Gets an object, raises Http404 with custom message if no such object.
