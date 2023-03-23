@@ -9,7 +9,7 @@ const cleanState = () => ({
   open_source_frontier_tech: false,
   learning_investment: false,
   portfolios: [],
-  people_reached: 0,
+  people_reached: null,
   problem_statements: [],
   country_solutions: [],
   problem_statement_list: [],

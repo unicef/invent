@@ -67,7 +67,7 @@ export default {
           portfolio_problem_statements: [],
         },
         activity_reach: {
-          override_reach: 0,
+          override_reach: null,
           people_reached: 0,
           country_solutions: [],
         },
@@ -93,7 +93,6 @@ export default {
     const s = this.getSolution
     this.solution = {
       activity_reach: {
-        override_reach: 0,
         people_reached: s.people_reached,
         country_solutions: s.country_solutions,
       },
@@ -111,7 +110,6 @@ export default {
       const s = this.getSolution
       this.solution = {
         activity_reach: {
-          override_reach: 0,
           people_reached: s.people_reached,
           country_solutions: s.country_solutions,
         },
@@ -159,6 +157,13 @@ export default {
       this.$refs.solutionGeneral.clear()
       this.$refs.solutionActivityAndReach.clear()
     },
+    peopleReached(people_reached) {
+      if (people_reached === undefined || people_reached === null) {
+        return null
+      } else {
+        return people_reached
+      }
+    },
     async handleSave() {
       // this.trimEmptyRows()
 
@@ -179,9 +184,7 @@ export default {
               learning_investment: s.general_overview.learning_investment,
               portfolio_problem_statements: s.general_overview.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
-              people_reached: s.activity_reach.override_reach
-                ? s.activity_reach.override_reach
-                : s.activity_reach.people_reached,
+              people_reached: this.peopleReached(s.activity_reach.override_reach),
             })
             const id = response.data.id
             const localised = this.localePath({
