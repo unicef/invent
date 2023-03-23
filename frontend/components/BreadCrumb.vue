@@ -115,8 +115,8 @@ export default {
           return this.initiative.name
         case 'organisation-portfolio-innovation-solutions-id':
           return this.solutionName
-        case 'organisation-portfolio-innovation-id':
-          return this.portfolioInnovationName
+        // case 'organisation-portfolio-innovation-id':
+        //   return this.portfolioInnovationName
         case 'organisation-portfolio-management-id':
           return this.portfolioManagementName
         default:
