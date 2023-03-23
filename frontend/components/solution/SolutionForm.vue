@@ -196,9 +196,13 @@ export default {
             this.usePublishRules = false
             return
           } catch (e) {
-            this.$alert(this.$gettext(`${e.response.message}`), this.$gettext('Error'), {
-              confirmButtonText: this.$gettext('Close'),
-            })
+            this.$alert(
+              `${this.$gettext('Request failed, please retry, or contact support with code: ')} ${e.message}`,
+              this.$gettext('Error'),
+              {
+                confirmButtonText: this.$gettext('Close'),
+              }
+            )
             if (e.response) {
               this.apiErrors = e.response.data
             } else {
