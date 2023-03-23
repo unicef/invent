@@ -297,7 +297,7 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         is_active = request.data.get("is_active", True)
         people_reached = request.data.get("people_reached", None)
 
-        # Update the instance with the extracted data
+        # Update the instance with the extract`ed data
         instance.portfolios.set(portfolios)
         instance.problem_statements.set(problem_statements)
         instance.is_active = is_active
@@ -336,6 +336,9 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         # Call the serializer's save method to update the instance
         serializer.save()
 
+    # def update(self, request, *args, **kwargs):
+    #     self._check_ps_status(request, *args, **kwargs)
+    #     return super(PortfolioUpdateViewSet, self).update(request, *args, **kwargs)
 
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
