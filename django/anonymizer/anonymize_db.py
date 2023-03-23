@@ -119,7 +119,7 @@ try:
             tables_to_anonymize = {
                 'account_emailaddress': ['email'],
                 'auth_user': ['username', 'first_name', 'last_name', 'email'],
-                'core_newsitem': ['title', 'description', 'alt_text']
+                'core_newsitem': ['title', 'description', 'description_en', 'description_es', 'description_fr', 'description_pt']
             }
 
             column_faker_map = {
