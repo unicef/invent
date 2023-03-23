@@ -65,16 +65,16 @@ export default {
           name: this.$gettext('Summary'),
           icon: 'braille',
         },
-        {
-          id: 2,
-          name: this.$gettext('problem statement matrix'),
-          icon: 'th',
-        },
-        {
-          id: 3,
-          name: this.$gettext('map view'),
-          icon: 'columns',
-        },
+        // {
+        //   id: 2,
+        //   name: this.$gettext('problem statement matrix'),
+        //   icon: 'th',
+        // },
+        // {
+        //   id: 3,
+        //   name: this.$gettext('map view'),
+        //   icon: 'columns',
+        // },
       ],
       tab: 1,
     }

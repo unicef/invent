@@ -75,14 +75,20 @@ export default {
       split(route, '-').forEach((item) => {
         name = name !== '' ? join([name, item], '-') : item
         if (item === 'solutions') {
-          const path = this.$route.query.project
+          const path = this.$route.query.project || process.env.FALLBACK_PROJECT || 1
+
+          const portfolioName = this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name
 
           breadcrumbs = [
             ...breadcrumbs,
             {
               id: item,
-              localePath: { name: `organisation-portfolio-innovation-id`, params: { id: path } },
-              text: this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name || '',
+              localePath: {
+                name: `organisation-portfolio-innovation-id`,
+                params: { id: path },
+                query: { ...this.$route.query },
+              },
+              text: portfolioName || '',
             },
           ]
         } else {
@@ -91,7 +97,7 @@ export default {
               ...breadcrumbs,
               {
                 id: item,
-                localePath: { name },
+                localePath: { name, params: { ...this.$route.params }, query: { ...this.$route.query } },
                 text: this[name] || '',
               },
             ]
