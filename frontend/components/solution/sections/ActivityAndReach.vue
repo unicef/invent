@@ -15,12 +15,15 @@
               <translate key="override_reach">Override reach value</translate>
             </template>
 
-            <character-count-input
+            <el-input-number
               v-model.number="innerValue.override_reach"
               v-validate="rules.override_reach"
-              :rules="rules.override_reach"
               data-vv-name="override_reach"
               data-vv-as="Override reach value"
+              :controls="false"
+              controls-position="left"
+              :min="0"
+              class="number-input"
             />
           </custom-required-form-item>
         </el-col>
@@ -152,5 +155,11 @@ export default {
 
 .TeamArea {
   position: relative;
+}
+.number-input {
+  width: 90%;
+  &.el-input-number .el-input__inner {
+    text-align: left;
+  }
 }
 </style>
