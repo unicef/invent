@@ -17,7 +17,6 @@
         :resizable="false"
         :label="$gettext('Solution Name') | translate"
         fixed
-        sortable
         prop="solutionName"
         width="240"
         class-name="project-td"
@@ -53,7 +52,6 @@
         v-if="selectedColumns.includes('4')"
         :resizable="false"
         :label="$gettext('Phase') | translate"
-        sortable
         prop="phase"
         width="180"
       >
@@ -64,7 +62,6 @@
         v-if="selectedColumns.includes('42')"
         :resizable="false"
         :label="$gettext('Reach') | translate"
-        sortable
         width="180"
         prop="reach"
       >
