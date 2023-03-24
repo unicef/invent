@@ -19,7 +19,7 @@
                 <span> * </span>
               </span>
               <span class="Text">
-                <translate ref="publish_required"> Required to publish </translate>
+                <translate ref="publish_required"> Required to save </translate>
               </span>
             </div>
           </div>

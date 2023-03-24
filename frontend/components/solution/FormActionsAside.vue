@@ -23,7 +23,7 @@
         >
           <fa v-show="loading === 'draft'" icon="spinner" spin />
           <translate>Cancel</translate><br />
-          <translate class="Rt-dashboard">Return to the Dashboard</translate>
+          <translate class="Rt-dashboard">Return to Solution view</translate>
         </el-button>
 
         <el-button v-if="true" :disabled="!!loading" type="text" class="DeleteButton" @click="emitAction('delete')">

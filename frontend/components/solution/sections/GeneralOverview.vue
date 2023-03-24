@@ -152,6 +152,10 @@ export default {
 }
 .tech__checkbox {
   color: @colorTextPrimary;
+  .el-checkbox__label {
+    font-weight: bold;
+  }
+
   .el-checkbox__inner {
     border-color: @colorTextPrimary;
   }
