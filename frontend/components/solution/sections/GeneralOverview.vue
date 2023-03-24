@@ -72,6 +72,7 @@
         :rules="rules"
         :error="errors.first('portfolio-table')"
         name="portfolio-table"
+        class="portfolio-table"
       />
     </collapsible-solution-card>
   </div>
@@ -162,5 +163,8 @@ export default {
 }
 .TeamArea {
   position: relative;
+}
+.portfolio-table {
+  padding-top: 16px;
 }
 </style>
