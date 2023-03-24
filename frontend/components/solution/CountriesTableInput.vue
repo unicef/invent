@@ -33,7 +33,7 @@
             />
           </td>
           <td>
-            <el-button type="text" class="IconLeft" @click="() => deleteRow(row.id)">
+            <el-button type="text" class="IconLeft" @click="() => deleteRow(row.row_id)">
               <translate>Delete</translate>
             </el-button>
           </td>
@@ -93,7 +93,7 @@ export default {
       this.$emit('change', newTable)
     },
     deleteRow: function (id) {
-      const newTable = this.tableData.filter((row) => row.id !== id)
+      const newTable = this.tableData.filter((row) => row.row_id !== id)
       this.$emit('change', newTable)
     },
     getRegionName: function (regionId) {
