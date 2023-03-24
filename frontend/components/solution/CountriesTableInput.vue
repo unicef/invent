@@ -101,7 +101,7 @@ export default {
         return this.$gettext('N/A')
       } else {
         const regName = this.getRegionDetails(regionId).name
-        console.log(regName)
+
         return regName
       }
     },

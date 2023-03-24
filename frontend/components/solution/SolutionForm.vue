@@ -67,7 +67,7 @@ export default {
           portfolio_problem_statements: [],
         },
         activity_reach: {
-          override_reach: 0,
+          override_reach: null,
           people_reached: 0,
           country_solutions: [],
         },
@@ -93,7 +93,6 @@ export default {
     const s = this.getSolution
     this.solution = {
       activity_reach: {
-        override_reach: 0,
         people_reached: s.people_reached,
         country_solutions: s.country_solutions,
       },
@@ -111,7 +110,6 @@ export default {
       const s = this.getSolution
       this.solution = {
         activity_reach: {
-          override_reach: 0,
           people_reached: s.people_reached,
           country_solutions: s.country_solutions,
         },
@@ -159,6 +157,22 @@ export default {
       this.$refs.solutionGeneral.clear()
       this.$refs.solutionActivityAndReach.clear()
     },
+    peopleReached(people_reached) {
+      if (people_reached === undefined || people_reached === null) {
+        return null
+      } else {
+        return people_reached
+      }
+    },
+    goToViewSolution() {
+      const id = this.$route.params.id
+      const localised = this.localePath({
+        name: 'organisation-portfolio-innovation-solutions-id',
+        params: { ...this.$route.params, id },
+        query: { ...this.$route.query },
+      })
+      this.$router.push(localised)
+    },
     async handleSave() {
       // this.trimEmptyRows()
 
@@ -172,23 +186,16 @@ export default {
         if (general && solutionActivityAndReach) {
           const s = this.solution
           try {
-            const response = await this.updateSolution({
+            await this.updateSolution({
               name: s.general_overview.name,
               phase: s.general_overview.phase,
               open_source_frontier_tech: s.general_overview.open_source_frontier_tech,
               learning_investment: s.general_overview.learning_investment,
               portfolio_problem_statements: s.general_overview.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
-              people_reached: s.activity_reach.override_reach
-                ? s.activity_reach.override_reach
-                : s.activity_reach.people_reached,
+              people_reached: this.peopleReached(s.activity_reach.override_reach),
             })
-            const id = response.data.id
-            const localised = this.localePath({
-              name: 'organisation-portfolio-innovation-solutions-id',
-              params: { ...this.$route.params, id },
-            })
-            this.$router.push(localised)
+            this.goToViewSolution()
 
             this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close'),
@@ -235,7 +242,7 @@ export default {
           }
         )
         await this.cancelSolution()
-        this.$router.push(this.localePath('organisation'))
+        this.goToViewSolution()
         this.$message({
           type: 'success',
           message: this.$gettext('Edit canceled'),
@@ -257,7 +264,23 @@ export default {
           type: 'warning',
         })
         await this.deleteSolution()
-        this.$router.push(this.localePath('organisation'))
+        const id = this.$route.query.project
+        if (id) {
+          const localised = this.localePath({
+            name: 'organisation-portfolio-innovation-id',
+            params: { ...this.$route.params, id },
+            query: { ...this.$route.query },
+          })
+          this.$router.replace(localised)
+        } else {
+          const localised = this.localePath({
+            name: 'organisation-portfolio-innovation',
+            params: { ...this.$route.params },
+            query: { ...this.$route.query },
+          })
+          this.$router.replace(localised)
+        }
+
         this.$message({
           type: 'success',
           message: this.$gettext('Solution deleted succesfully'),

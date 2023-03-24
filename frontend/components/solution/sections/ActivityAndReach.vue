@@ -22,8 +22,9 @@
               data-vv-as="Override reach value"
               :controls="false"
               controls-position="left"
-              :min="0"
               class="number-input"
+              placeholder=" "
+              :min="0"
             />
           </custom-required-form-item>
         </el-col>
