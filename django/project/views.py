@@ -1001,3 +1001,32 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
             serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
 
         return Response(serializer.data)
+    
+
+class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
+    
+    queryset = Portfolio.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        portfolio = get_object_or_404(Portfolio, "No such portfolio", id=kwargs.get("pk"))
+        response_data = {
+            'id': portfolio.id,
+            'solutions': []
+        }
+
+        for solution in portfolio.solutions.all():
+            solution_data = {
+                'id': solution.pk,
+                'name': solution.name,
+                'problemStatements': [{'id': problem_statement.pk, 'name': problem_statement.name} for problem_statement in solution.problem_statements.all()],
+                'phase': solution.phase,
+                'reach': solution.people_reached,
+            }
+            response_data['solutions'].append(solution_data)
+
+
+        return Response(response_data)
+
+
+
+    
