@@ -1,5 +1,5 @@
 const cleanState = () => ({
-  allSolutionsList: [],
+  allSolutionsList: {},
 })
 
 export const state = () => ({
@@ -7,7 +7,7 @@ export const state = () => ({
 })
 
 export const getters = {
-  getSolutionsList: (state) => state.allSolutionsList,
+  getSolutionsList: (state) => state.allSolutionsList.solutions,
 }
 
 export const actions = {

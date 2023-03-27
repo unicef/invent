@@ -81,21 +81,10 @@ export default {
   },
   async fetch({ store, query, error, params }) {
     // setup search
-    store.dispatch('search/resetSearch')
-    store.dispatch('landing/resetSearch')
-    store.dispatch('dashboard/setSearchOptions', query)
-    // search setup
-    store.commit('search/SET_SEARCH', {
-      key: 'portfolio',
-      val: params.id,
-    })
-    store.commit('search/SET_SEARCH', {
-      key: 'portfolio_page',
-      val: 'portfolio',
-    })
-    store.commit('search/SET_SEARCH', { key: 'scores', val: true })
+    await store.dispatch('solutions/loadSolutionsList', params.id)
+
     await Promise.all([
-      store.dispatch('portfolio/getPortfolios', 'active-list'),
+      //tore.dispatch('portfolio/getPortfolios', 'active-list'),
       store.dispatch('portfolio/getPortfolioDetails', {
         id: params.id,
         type: 'active-list',
@@ -113,15 +102,9 @@ export default {
       selectedColumns: 'dashboard/getSelectedColumns',
     }),
   },
-  mounted() {
-    this.getSearch()
-    this.setSelectedColumns(this.selectedColumns.filter((s) => s !== '61' && s !== '62'))
-  },
   methods: {
     ...mapActions({
       loadProjectsMap: 'search/loadProjectsMap',
-      getSearch: 'search/getSearch',
-      setSelectedColumns: 'dashboard/setSelectedColumns',
     }),
     navigate(id) {
       this.$store.dispatch('search/resetSearch')

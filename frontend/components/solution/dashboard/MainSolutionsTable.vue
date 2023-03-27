@@ -2,14 +2,14 @@
   <div class="MainTable">
     <el-table
       ref="mainTable"
-      :data="solutions"
+      :data="getSolutionsList"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       :stripe="false"
       :border="true"
       size="mini"
-      style="width: 100%"
-      :defalt-sort="{ prop: 'solutionName', order: 'ascending' }"
+      style="width: inherit"
+      :defalt-sort="{ prop: 'name', order: 'ascending' }"
     >
       <!-- <el-table-column :resizable="false" type="selection" align="center" width="45" class-name="selection-td" /> -->
       <el-table-column
@@ -17,8 +17,8 @@
         :resizable="false"
         :label="$gettext('Solution Name') | translate"
         fixed
-        prop="solutionName"
-        width="240"
+        prop="name"
+        width="280"
         class-name="project-td"
       >
         <template slot-scope="scope">
@@ -26,11 +26,11 @@
             :to="
               localePath({
                 name: 'organisation-portfolio-innovation-solutions-id',
-                params: { id: scope.row.solutionId },
+                params: { id: scope.row.id },
                 query: { project: $route.params.id },
               })
             "
-            >{{ scope.row.solutionName }}</nuxt-link
+            >{{ scope.row.name }}</nuxt-link
           >
         </template>
       </el-table-column>
@@ -39,7 +39,7 @@
         v-if="selectedColumns.includes('1')"
         :resizable="false"
         :label="$gettext('Problem Statement') | translate"
-        width="540"
+        style="{minWidth: 600px, maxWidth: 800px}"
       >
         <template slot-scope="scope">
           <ul v-for="ps in scope.row.problemStatements">
@@ -78,7 +78,6 @@
 import { setTimeout } from 'timers'
 import { format } from 'date-fns'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
-import { mapGettersActions } from '@/utilities/form.js'
 
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
@@ -93,32 +92,6 @@ export default {
       localSort: null,
       addFavoriteText: this.$gettext('Add to Favorites'),
       removeFavoriteText: this.$gettext('Remove from Favorites'),
-      solutions: [
-        {
-          solutionId: 1,
-          solutionName: 'solution 1',
-          phase: 0,
-          reach: 1001,
-          problemStatements: [
-            { id: 1, name: 'problem statement 1' },
-            { id: 2, name: 'problem statement 2' },
-            { id: 3, name: 'problem statement 3' },
-            { id: 4, name: 'problem statement 4' },
-          ],
-        },
-        {
-          solutionId: 2,
-          solutionName: 'solution 2',
-          phase: 1,
-          reach: 1002,
-          problemStatements: [
-            { id: 1, name: 'problem statement 1' },
-            { id: 2, name: 'problem statement 2' },
-            { id: 3, name: 'problem statement 3' },
-            { id: 4, name: 'problem statement 4' },
-          ],
-        },
-      ],
     }
   },
   computed: {
@@ -132,16 +105,6 @@ export default {
       getSolutionsList: 'solutions/getSolutionsList',
       getPortfoliosList: 'solution/getPortfoliosList',
     }),
-    ...mapGettersActions({
-      sorting: ['dashboard', 'getSorting', 'setSorting', 0],
-    }),
-    portfolioSolutionsList() {
-      if (this.getSolutionsList) {
-        return this.getSolutionsList.solutions
-      } else {
-        return this.solutions
-      }
-    },
     paginationOrderStr() {
       const loc = this.$i18n.locale
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
@@ -181,7 +144,6 @@ export default {
     },
   },
   mounted() {
-    this.loadSolutionsList(this.$route.query.id)
     setTimeout(() => {
       this.fixTableHeight()
       this.fixSorting(this.$route.query.ordering)
@@ -203,7 +165,7 @@ export default {
       setSelectedRows: 'portfolio/setSelectedRows',
       addFavorite: 'projects/addFavorite',
       removeFavorite: 'projects/removeFavorite',
-      loadSolutionsList: 'solutions/loadSolutionsList',
+
       loadProblemPortfoliolists: 'solution/loadProblemPortfoliolists',
     }),
 
