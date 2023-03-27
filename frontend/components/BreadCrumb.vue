@@ -27,6 +27,7 @@ export default {
       'organisation-signup': this.$gettext('Signup'),
       'organisation-reset-key': this.$gettext('Reset'),
       'organisation-portfolio-innovation': this.$gettext('Innovation Portfolio'),
+      'organisation-portfolio-innovation-solutions': this.$gettext('Solutions'),
       'organisation-portfolio-innovation-solutions-id-edit': this.$gettext('Edit solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
       'organisation-initiatives': this.$gettext('My initiatives'),
@@ -75,24 +76,22 @@ export default {
       split(route, '-').forEach((item) => {
         name = name !== '' ? join([name, item], '-') : item
         if (name !== 'organisation-portfolio') {
-          if (item === 'solutions') {
-            const path = this.$route.query.project
-            if (path) {
-              const portfolioName = this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name
+          const path = this.$route.query.project
+          if (item === 'solutions' && path) {
+            const portfolioName = this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name
 
-              breadcrumbs = [
-                ...breadcrumbs,
-                {
-                  id: item,
-                  localePath: {
-                    name: `organisation-portfolio-innovation-id`,
-                    params: { id: path },
-                    query: { ...this.$route.query },
-                  },
-                  text: portfolioName || '',
+            breadcrumbs = [
+              ...breadcrumbs,
+              {
+                id: item,
+                localePath: {
+                  name: `organisation-portfolio-innovation-id`,
+                  params: { id: path },
+                  query: { ...this.$route.query },
                 },
-              ]
-            }
+                text: portfolioName || '',
+              },
+            ]
           } else {
             breadcrumbs = [
               ...breadcrumbs,

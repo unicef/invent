@@ -82,9 +82,23 @@ export default {
   async fetch({ store, query, error, params }) {
     // setup search
     await store.dispatch('solutions/loadSolutionsList', params.id)
+    store.dispatch('search/resetSearch')
+    store.dispatch('landing/resetSearch')
+    store.dispatch('dashboard/setSearchOptions', query)
+
+    // search setup
+    store.commit('search/SET_SEARCH', {
+      key: 'portfolio',
+      val: params.id,
+    })
+    store.commit('search/SET_SEARCH', {
+      key: 'portfolio_page',
+      val: 'portfolio',
+    })
+    store.commit('search/SET_SEARCH', { key: 'scores', val: true })
 
     await Promise.all([
-      //tore.dispatch('portfolio/getPortfolios', 'active-list'),
+      store.dispatch('portfolio/getPortfolios', 'active-list'),
       store.dispatch('portfolio/getPortfolioDetails', {
         id: params.id,
         type: 'active-list',
@@ -107,9 +121,6 @@ export default {
       loadProjectsMap: 'search/loadProjectsMap',
     }),
     navigate(id) {
-      this.$store.dispatch('search/resetSearch')
-      this.$refs.ambitionMatrix.clear()
-      this.$refs.riskMatrix.clear()
       this.$router.push(
         this.localePath({
           name: 'organisation-portfolio-innovation-id',
