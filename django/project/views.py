@@ -297,7 +297,7 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         is_active = request.data.get("is_active", True)
         people_reached = request.data.get("people_reached", None)
 
-        # Update the instance with the extracted data
+        # Update the instance with the extract`ed data
         instance.portfolios.set(portfolios)
         instance.problem_statements.set(problem_statements)
         instance.is_active = is_active
@@ -336,6 +336,9 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         # Call the serializer's save method to update the instance
         serializer.save()
 
+    # def update(self, request, *args, **kwargs):
+    #     self._check_ps_status(request, *args, **kwargs)
+    #     return super(PortfolioUpdateViewSet, self).update(request, *args, **kwargs)
 
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
@@ -998,3 +1001,32 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
             serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
 
         return Response(serializer.data)
+    
+
+class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
+    
+    queryset = Portfolio.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        portfolio = get_object_or_404(Portfolio, "No such portfolio", id=kwargs.get("pk"))
+        response_data = {
+            'id': portfolio.id,
+            'solutions': []
+        }
+
+        for solution in portfolio.solutions.all():
+            solution_data = {
+                'id': solution.pk,
+                'name': solution.name,
+                'problemStatements': [{'id': problem_statement.pk, 'name': problem_statement.name} for problem_statement in solution.problem_statements.all()],
+                'phase': solution.phase,
+                'reach': solution.people_reached,
+            }
+            response_data['solutions'].append(solution_data)
+
+
+        return Response(response_data)
+
+
+
+    
