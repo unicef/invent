@@ -78,12 +78,7 @@ export default {
     ...mapGetters({
       getSolution: 'solution/getSolutionData',
     }),
-    isDraft() {
-      return this.$route.name.includes('organisation-portfolio-innovation-solutions-edit')
-    },
-    isNewSolution() {
-      return this.$route.name.includes('organisation-portfolio-innovation-solutions-create')
-    },
+
     showForm() {
       return this.readyElements >= this.createdElements
     },
@@ -251,7 +246,7 @@ export default {
         // this.setLoading(false)
         this.$message({
           type: 'info',
-          message: this.$gettext('Action cancelled'),
+          message: this.$gettext('Action failed'),
         })
       }
     },
@@ -277,9 +272,16 @@ export default {
         })
       } catch (e) {
         // this.setLoading(false)
+        this.$alert(
+          `${this.$gettext('Request failed, please retry, or contact support with code: ')} ${e.message}`,
+          this.$gettext('Error'),
+          {
+            confirmButtonText: this.$gettext('Close'),
+          }
+        )
         this.$message({
           type: 'info',
-          message: this.$gettext('Action cancelled'),
+          message: this.$gettext('Action failed'),
         })
         this.apiErrors = e.response.data ? e.response.data : 'error'
       }
