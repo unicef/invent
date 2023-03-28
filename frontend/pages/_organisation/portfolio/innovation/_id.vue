@@ -1,6 +1,6 @@
 <template>
   <section class="portfolio-area">
-    <div class="content-area">
+    <div class="content-area-full">
       <div class="portfolio">
         <!-- tabs -->
         <tabs :tabs="tabs" :tab="tab" :center="false" @handleTab="setTab">
@@ -8,20 +8,12 @@
             <div class="PHeader">
               <h2>
                 <translate>Portfolio</translate>:
-                <el-dropdown
-                  trigger="click"
-                  placement="bottom-start"
-                  @command="navigate"
-                >
+                <el-dropdown trigger="click" placement="bottom-start" @command="navigate">
                   <span class="Title el-dropdown-link">
                     {{ name }} <i class="el-icon-caret-bottom el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown" class="PDropdown">
-                    <el-dropdown-item
-                      v-for="portfolio in portfolios"
-                      :key="portfolio.id"
-                      :command="portfolio.id"
-                    >
+                    <el-dropdown-item v-for="portfolio in portfolios" :key="portfolio.id" :command="portfolio.id">
                       {{ portfolio.name }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -31,195 +23,69 @@
           </template>
         </tabs>
         <section class="tab-content">
-          <Matrix
-            v-show="tab === 1"
-            ref="ambitionMatrix"
-            bg-image="/bg-ambition_matrix.svg"
-            :description="description"
-            :elements="ambitionMatrix"
-            :left="matrixLabels.ambition.left"
-            :bottom="matrixLabels.ambition.bottom"
-          />
           <div v-if="tab === 1" class="Problems problem-matrix">
-            <el-row>
-              <div class="Info">
-                <fa icon="info-circle" />
-                <translate>
-                  The innovation ambition matrix is a strategic framework that
-                  helps balance risk and impact. “Newer” challenges and
-                  solutions are not necessarily advantageous; rather, the goal
-                  is to appropriately balance resource allocation across the
-                  incremental, substantial, and breakthrough categories.
-                </translate>
-              </div>
-            </el-row>
-          </div>
-          <Matrix
-            v-show="tab === 2"
-            ref="riskMatrix"
-            bg-color="#FCEFE8"
-            color="#F26A21"
-            noarrow
-            :description="description"
-            :elements="riskImpactMatrix"
-            :left="matrixLabels.riskImpact.left"
-            :bottom="matrixLabels.riskImpact.bottom"
-            :extra-bottom="impactInfo"
-            :extra-left="riskInfo"
-          />
-          <div v-if="tab === 3" class="Problems">
-            <el-row type="flex">
-              <el-col
-                v-for="(col, index) in matrixLabels.problemStatement"
-                :key="col"
-                :span="8"
-              >
-                <div :class="`Problem Problem${index + 1}`">
-                  <div class="Title">
-                    {{ col }}
-                  </div>
-                  <div>
-                    <radio
-                      v-for="statement in problemStatementMatrix[index]"
-                      :key="statement.id"
-                      :value="ps === statement.id"
-                      :disabled="disabledProblems.indexOf(statement.id) !== -1"
-                      @update="select(statement.id, $event)"
-                    >
-                      {{ statement.title }}
-                    </radio>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <div class="Info">
-                <fa icon="info-circle" />
-                <translate>
-                  By clicking on a problem statement you can add or remove it
-                  from your current filter settings.
-                </translate>
-              </div>
-            </el-row>
-          </div>
-          <div v-if="tab === 4" class="map">
-            <search-map />
-            <portfolio-project-box />
+            <h1 class="portfolio-summary"><Translate>Summary</Translate></h1>
+            <p>{{ description }}</p>
           </div>
         </section>
         <!-- tabs -->
         <div class="DashboardListView">
-          <el-row>
+          <!-- <el-row>
             <table-top-actions />
-          </el-row>
+          </el-row> -->
           <el-row>
-            <main-table />
+            <main-solutions-table />
           </el-row>
         </div>
       </div>
     </div>
-    <aside class="filter-area">
-      <advanced-search />
-    </aside>
   </section>
 </template>
 
 <script>
-import MainTable from '@/components/portfolio/dashboard/MainTable'
-import TableTopActions from '@/components/portfolio/dashboard/TableTopActions'
-import AdvancedSearch from '@/components/search/AdvancedSearch'
-import Matrix from '@/components/portfolio/Matrix'
-import Radio from '@/components/portfolio/form/inputs/Radio'
-import SearchMap from '@/components/searchMap/SearchMap'
+import MainSolutionsTable from '@/components/solution/dashboard/MainSolutionsTable'
 import Tabs from '@/components/common/Tabs'
-import PortfolioProjectBox from '@/components/searchMap/PortfolioProjectBox'
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    Matrix,
-    Radio,
-    MainTable,
-    AdvancedSearch,
-    TableTopActions,
-    SearchMap,
+    MainSolutionsTable,
     Tabs,
-    PortfolioProjectBox,
   },
   data() {
     return {
       activeName: 'ambition',
       disabledProblems: [],
-      riskInfo: this.$gettext(
-        'What are the risk levels associated with this initiative? Note that low scores indicate high risk assessment.'
-      ),
-      impactInfo: this.$gettext(
-        'Impact score takes into account an initiative’s reach, effectiveness, and ability to address key challenges, particularly for vulnerable and hard-to-reach children.'
-      ),
 
-      matrixLabels: {
-        problemStatement: [
-          this.$gettext('Neglected'),
-          this.$gettext('Moderate'),
-          this.$gettext('High activity'),
-        ],
-        riskImpact: {
-          left: [
-            this.$gettext('high'),
-            this.$gettext('risk'),
-            this.$gettext('low'),
-          ],
-          bottom: [
-            this.$gettext('low'),
-            this.$gettext('impact (total global need)'),
-            this.$gettext('high'),
-          ],
-        },
-        ambition: {
-          left: [
-            this.$gettext('existing'),
-            this.$gettext('challenge'),
-            this.$gettext('new'),
-          ],
-          bottom: [
-            this.$gettext('existing'),
-            this.$gettext('solution (tools)'),
-            this.$gettext('new'),
-          ],
-        },
-      },
       // tabs information handle
       tabs: [
         {
           id: 1,
-          name: this.$gettext('ambition matrix'),
+          name: this.$gettext('Summary'),
           icon: 'braille',
         },
-        {
-          id: 2,
-          name: this.$gettext('risk-impact matrix'),
-          icon: 'th',
-        },
-        {
-          id: 3,
-          name: this.$gettext('problem statement matrix'),
-          icon: 'columns',
-        },
-        {
-          id: 4,
-          name: this.$gettext('map view'),
-          icon: 'globe-africa',
-        },
+        // {
+        //   id: 2,
+        //   name: this.$gettext('problem statement matrix'),
+        //   icon: 'th',
+        // },
+        // {
+        //   id: 3,
+        //   name: this.$gettext('map view'),
+        //   icon: 'columns',
+        // },
       ],
       tab: 1,
     }
   },
   async fetch({ store, query, error, params }) {
     // setup search
+    await store.dispatch('solutions/loadSolutionsList', params.id)
     store.dispatch('search/resetSearch')
     store.dispatch('landing/resetSearch')
     store.dispatch('dashboard/setSearchOptions', query)
+
     // search setup
     store.commit('search/SET_SEARCH', {
       key: 'portfolio',
@@ -230,9 +96,9 @@ export default {
       val: 'portfolio',
     })
     store.commit('search/SET_SEARCH', { key: 'scores', val: true })
+
     await Promise.all([
       store.dispatch('portfolio/getPortfolios', 'active-list'),
-      store.dispatch('countries/loadMapData'),
       store.dispatch('portfolio/getPortfolioDetails', {
         id: params.id,
         type: 'active-list',
@@ -245,30 +111,16 @@ export default {
       portfolios: (state) => state.portfolio.portfolios,
     }),
     ...mapGetters({
-      ambitionMatrix: 'matrixes/getAmbitionMatrix',
-      riskImpactMatrix: 'matrixes/getRiskImpactMatrix',
-      problemStatementMatrix: 'matrixes/getProblemStatementMatrix',
       name: 'portfolio/getName',
       description: 'portfolio/getDescription',
       selectedColumns: 'dashboard/getSelectedColumns',
     }),
   },
-  mounted() {
-    this.getSearch()
-    this.setSelectedColumns(
-      this.selectedColumns.filter((s) => s !== '61' && s !== '62')
-    )
-  },
   methods: {
     ...mapActions({
       loadProjectsMap: 'search/loadProjectsMap',
-      getSearch: 'search/getSearch',
-      setSelectedColumns: 'dashboard/setSelectedColumns',
     }),
     navigate(id) {
-      this.$store.dispatch('search/resetSearch')
-      this.$refs.ambitionMatrix.clear()
-      this.$refs.riskMatrix.clear()
       this.$router.push(
         this.localePath({
           name: 'organisation-portfolio-innovation-id',
@@ -299,7 +151,9 @@ export default {
   padding: 40px;
   background-color: #fbfaf8;
 }
-
+.portfolio-summary {
+  font-size: @fontSizeHeading;
+}
 .portfolio-area::v-deep {
   .move {
     display: none;

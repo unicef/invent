@@ -43,8 +43,7 @@
 
 @font-face {
   font-family: 'Univers';
-  src: url('~assets/fonts/univers_55_bold_oblique-webfont.woff2')
-      format('woff2'),
+  src: url('~assets/fonts/univers_55_bold_oblique-webfont.woff2') format('woff2'),
     url('~assets/fonts/univers_55_bold_oblique-webfont.woff') format('woff');
   font-weight: bold;
   font-style: italic;
@@ -1387,14 +1386,10 @@ fieldset {
 @font-face {
   font-family: '@{portfolio-font-family}';
   src: url('@{portfolio-font-path}/@{portfolio-font-family}.eot?3j3iak');
-  src: url('@{portfolio-font-path}/@{portfolio-font-family}.eot?3j3iak#iefix')
-      format('embedded-opentype'),
-    url('@{portfolio-font-path}/@{portfolio-font-family}.ttf?3j3iak')
-      format('truetype'),
-    url('@{portfolio-font-path}/@{portfolio-font-family}.woff?3j3iak')
-      format('woff'),
-    url('@{portfolio-font-path}/@{portfolio-font-family}.svg?3j3iak#@{portfolio-font-family}')
-      format('svg');
+  src: url('@{portfolio-font-path}/@{portfolio-font-family}.eot?3j3iak#iefix') format('embedded-opentype'),
+    url('@{portfolio-font-path}/@{portfolio-font-family}.ttf?3j3iak') format('truetype'),
+    url('@{portfolio-font-path}/@{portfolio-font-family}.woff?3j3iak') format('woff'),
+    url('@{portfolio-font-path}/@{portfolio-font-family}.svg?3j3iak#@{portfolio-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -1642,6 +1637,22 @@ fieldset {
     width: calc(100vw - @advancedSearchWidth);
     min-width: @appWidthMinLimit - @advancedSearchWidth;
     max-width: @appWidthMaxLimit - @advancedSearchWidth;
+    height: 100%;
+
+    > div {
+      background-color: #fbfaf8;
+    }
+  }
+
+  .content-area-full {
+    // z-index: 1;
+    //position: relative;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: calc(90vw);
+    min-width: calc(@appWidthMinLimit - 10vw);
+    max-width: calc(@appWidthMaxLimit - 10vw);
     height: 100%;
 
     > div {

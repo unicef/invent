@@ -336,6 +336,9 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         # Call the serializer's save method to update the instance
         serializer.save()
 
+    # def update(self, request, *args, **kwargs):
+    #     self._check_ps_status(request, *args, **kwargs)
+    #     return super(PortfolioUpdateViewSet, self).update(request, *args, **kwargs)
 
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
@@ -1000,7 +1003,7 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
         return Response(serializer.data)
 
 class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
-    
+
     queryset = Portfolio.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
