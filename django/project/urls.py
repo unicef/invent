@@ -174,4 +174,9 @@ urlpatterns = [
              'patch': 'partial_update'
          }),
          name="portfolio-update"),
+    path(r'portfolio/<int:pk>/', 
+         view=views.PortfolioViewSet.as_view({
+            'get':'retrieve'
+        }),
+        name="portfolio-retrieve"),
 ]
