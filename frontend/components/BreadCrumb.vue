@@ -92,6 +92,18 @@ export default {
                 text: portfolioName || '',
               },
             ]
+          } else if (name === 'organisation-portfolio-innovation-id') {
+            breadcrumbs = [
+              ...breadcrumbs,
+              {
+                id: item,
+                localePath: {
+                  name: `organisation-portfolio-innovation-id`,
+                  params: { id: this.$route.params.id },
+                },
+                text: this.portfolioInnovationName || '',
+              },
+            ]
           } else {
             breadcrumbs = [
               ...breadcrumbs,

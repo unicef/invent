@@ -2,7 +2,7 @@
   <div class="MainTable">
     <el-table
       ref="mainTable"
-      :data="getSolutionsList"
+      :data="currentList"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       :stripe="false"
@@ -15,7 +15,6 @@
       <el-table-column
         :resizable="false"
         :label="$gettext('Solution Name') | translate"
-        fixed
         prop="name"
         width="280"
         class-name="project-td"
@@ -58,6 +57,17 @@
       </el-table-column>
       <!-- new table fields -->
     </el-table>
+    <div class="Pagination">
+      <el-pagination
+        :current-page.sync="currentPage"
+        :page-size.sync="pageSize"
+        :page-sizes="pageSizeOption"
+        :total="total"
+        :layout="paginationOrderStr"
+      >
+        <current-page :total="total" :page-size="pageSize" :page="currentPage" />
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -65,7 +75,6 @@
 import { setTimeout } from 'timers'
 import { format } from 'date-fns'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
-
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
@@ -79,6 +88,8 @@ export default {
       localSort: null,
       addFavoriteText: this.$gettext('Add to Favorites'),
       removeFavoriteText: this.$gettext('Remove from Favorites'),
+      pageSize: 10,
+      currentPage: 1,
     }
   },
   computed: {
@@ -92,6 +103,14 @@ export default {
       getSolutionsList: 'solutions/getSolutionsList',
       getPortfoliosList: 'solution/getPortfoliosList',
     }),
+    total() {
+      return this.getSolutionsList.length + 1
+    },
+    currentList() {
+      const start = this.pageSize * (this.currentPage - 1)
+      const end = this.pageSize * this.currentPage
+      return this.getSolutionsList.slice(start, end)
+    },
     paginationOrderStr() {
       const loc = this.$i18n.locale
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
@@ -244,6 +263,12 @@ export default {
   .el-table--border {
     border: 0px solid transparent;
   }
+  .el-table__body {
+    td:nth-child(1) {
+      border-left: 1px solid @colorBrandGrayLight;
+    }
+  }
+
   .el-table__body tr.hover-row > td,
   .el-table__body tr.hover-row.current-row > td {
     background-color: #e8f6fd;
