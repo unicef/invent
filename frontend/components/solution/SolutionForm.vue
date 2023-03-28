@@ -258,28 +258,18 @@ export default {
     async handleDeleteSolution() {
       this.clearValidation()
       try {
-        await this.$confirm(this.$gettext('The current solution will be deleted'), this.$gettext('Attention'), {
+        await this.$confirm(this.$gettext('This solution will be deleted!'), this.$gettext('Attention'), {
           confirmButtonText: this.$gettext('Ok'),
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning',
         })
         await this.deleteSolution()
-        const id = this.$route.query.project
-        if (id) {
-          const localised = this.localePath({
-            name: 'organisation-portfolio-innovation-id',
-            params: { ...this.$route.params, id },
-            query: { ...this.$route.query },
-          })
-          this.$router.replace(localised)
-        } else {
-          const localised = this.localePath({
-            name: 'organisation-portfolio-innovation',
-            params: { ...this.$route.params },
-            query: { ...this.$route.query },
-          })
-          this.$router.replace(localised)
-        }
+
+        const localised = this.localePath({
+          name: 'organisation-portfolio-innovation-solutions',
+          params: { ...this.$route.params },
+        })
+        this.$router.replace(localised)
 
         this.$message({
           type: 'success',
