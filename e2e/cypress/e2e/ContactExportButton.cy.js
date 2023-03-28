@@ -24,7 +24,6 @@ describe('Contact & Export Button', () => {
         const navigationBar = new NavigationBar()
         navigationBar.navigateToInventoryPage()
         const inventoryPage = new InventoryPage()
-        // inventoryPage.getSelectButton().click()
         inventoryPage.getExportButton().should('be.visible').should('not.be.enabled')
         inventoryPage.getSelectButton().click()
         inventoryPage.getExportButton().should('be.visible').should('be.enabled')

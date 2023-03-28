@@ -6,8 +6,8 @@ import Requests from "../support/Requests"
 describe('User with 1 Initiatives', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147434',() => {
         const loginForm = new LoginForm()
-        const requests = new Requests()
         loginForm.login(Cypress.env('username1'), Cypress.env('username1'))
+        const requests = new Requests()
         const homePage = new HomePage()
         requests.getInitiativesList().then((response)=>{
             homePage.getInitiativeCardsSmall().contains(response.body.results.projects[0].name)

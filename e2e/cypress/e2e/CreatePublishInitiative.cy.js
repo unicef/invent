@@ -6,8 +6,8 @@ import NavigationBar from "../pages/NavigationBar"
 describe('Create Publish Iniative', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/148113/',() => {
         const loginForm = new LoginForm()
-        const navigationBar = new NavigationBar()
         loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
+        const navigationBar = new NavigationBar()
         navigationBar.navigateToNewInitiativePage()
         const initiativePage = new InitiativePage()
         initiativePage.typeInitiativeName('Automation Publish Initiative'+(Math.floor(Math.random() * 1000000000000000)).toString())
