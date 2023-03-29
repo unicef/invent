@@ -341,6 +341,8 @@ export default {
       width: 100% !important;
       text-align: center;
 
+      border-left: 1px solid @colorBrandGrayLight !important;
+
       .el-table__empty-text {
         width: auto;
         font-weight: 700;
