@@ -21,6 +21,20 @@
               </h2>
             </div>
           </template>
+          <template slot="actionButton">
+            <div class="SolutionsButton" v-show="canEdit">
+              <nuxt-link
+                :to="
+                  localePath({
+                    name: 'organisation-portfolio-management-id-edit',
+                    params: { id: this.$route.params.id },
+                  })
+                "
+              >
+                <translate>Edit Portfolio</translate>
+              </nuxt-link>
+            </div>
+          </template>
         </tabs>
         <section class="tab-content">
           <div v-if="tab === 1" class="Problems problem-matrix">
@@ -114,7 +128,15 @@ export default {
       name: 'portfolio/getName',
       description: 'portfolio/getDescription',
       selectedColumns: 'dashboard/getSelectedColumns',
+      profile: 'user/getProfile',
     }),
+    canEdit() {
+      return (
+        this.profile.is_superuser ||
+        this.profile.global_portfolio_owner ||
+        this.profile.manager.includes(this.$route.params.id * 1)
+      )
+    },
   },
   methods: {
     ...mapActions({
@@ -241,6 +263,27 @@ section.portfolio-area {
         padding: 29px 0;
         margin: 0;
       }
+    }
+  }
+  .SolutionsButton {
+    width: 240px;
+    display: flex;
+    align-items: flex-end;
+    color: @colorBrandPrimary;
+    padding-bottom: 18px;
+    a {
+      margin-left: auto;
+      margin-right: 12px;
+      background-color: @colorBrandPrimary;
+      color: @colorWhite;
+      height: 22px;
+      padding: 11px 24px 13px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 0;
+      line-height: 20px;
+      text-align: center;
+      text-decoration: none;
     }
   }
 }

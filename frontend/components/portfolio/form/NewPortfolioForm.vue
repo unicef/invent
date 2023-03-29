@@ -157,7 +157,8 @@ export default {
           try {
             await this.createPortfolio()
             const localised = this.localePath({
-              name: 'organisation-portfolio-management',
+              name: 'organisation-portfolio-innovation-id',
+              params: { id: this.$route.params.id },
             })
             this.$router.push(localised)
 
@@ -199,7 +200,8 @@ export default {
             // const id = await this.editPortfolio(this.$route.params.id)
             await this.editPortfolio(this.$route.params.id)
             const localised = this.localePath({
-              name: 'organisation-portfolio-management',
+              name: 'organisation-portfolio-innovation-id',
+              params: { id: this.$route.params.id },
             })
             this.$router.push(localised)
 
@@ -231,7 +233,9 @@ export default {
       })
     },
     handleCancel() {
-      this.$router.push(this.localePath({ name: 'organisation-portfolio-management' }))
+      this.$router.push(
+        this.localePath({ name: 'organisation-portfolio-innovation-id', params: { id: this.$route.params.id } })
+      )
     },
   },
 }
