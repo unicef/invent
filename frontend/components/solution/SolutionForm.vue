@@ -228,7 +228,7 @@ export default {
     async handleCancel() {
       try {
         await this.$confirm(
-          this.$gettext('Any changes will be lost and you will be navigated to Dashboard'),
+          this.$gettext('Any changes will be lost and you will be navigated to View Solution page'),
           this.$gettext('Attention'),
           {
             confirmButtonText: this.$gettext('Ok'),

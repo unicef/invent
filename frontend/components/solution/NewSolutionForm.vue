@@ -78,12 +78,7 @@ export default {
     ...mapGetters({
       getSolution: 'solution/getSolutionData',
     }),
-    isDraft() {
-      return this.$route.name.includes('organisation-portfolio-innovation-solutions-edit')
-    },
-    isNewSolution() {
-      return this.$route.name.includes('organisation-portfolio-innovation-solutions-create')
-    },
+
     showForm() {
       return this.readyElements >= this.createdElements
     },
@@ -98,16 +93,6 @@ export default {
       cancelSolution: 'solution/cancelSolution',
       setLoading: 'solution/setLoading',
     }),
-    trimEmptyRows() {
-      const portfolioTable = this.solution.general_overview.portfolio_problem_statements
-      const trimedTable = portfolioTable.find((row) => row.portfolio_id !== null)
-      console.log(trimedTable)
-      this.solution.general_overview.portfolio_problem_statements = trimedTable
-
-      // const countriesTable = this.solution.activity_reach.country_solutions
-      // console.log(countriesTable)
-      // this.solution.activity_reach.country_solutions = countriesTable.find((row) => row.country !== null)
-    },
 
     handleErrorMessages() {},
     async validate() {
@@ -130,14 +115,19 @@ export default {
         return people_reached
       }
     },
-    goToViewSolution() {
-      const id = this.$route.params.id
-      const localised = this.localePath({
-        name: 'organisation-portfolio-innovation-solutions-id',
-        params: { ...this.$route.params, id },
-        query: { ...this.$route.query },
-      })
-      this.$router.push(localised)
+    goToViewSolution(id) {
+      if (id) {
+        const localised = this.localePath({
+          name: 'organisation-portfolio-innovation-solutions-id',
+          params: { ...this.$route.params, id },
+        })
+        this.$router.push(localised)
+      } else {
+        const localised = this.localePath({
+          name: 'organisation-portfolio-innovation-solutions',
+        })
+        this.$router.push(localised)
+      }
     },
     async handleSave() {
       // this.trimEmptyRows()
@@ -152,7 +142,7 @@ export default {
         if (general && solutionActivityAndReach) {
           const s = this.solution
           try {
-            await this.createNewSolution({
+            const response = await this.createNewSolution({
               name: s.general_overview.name,
               phase: s.general_overview.phase,
               open_source_frontier_tech: s.general_overview.open_source_frontier_tech,
@@ -161,7 +151,7 @@ export default {
               country_solutions: s.activity_reach.country_solutions,
               people_reached: this.peopleReached(s.activity_reach.override_reach),
             })
-            this.goToViewSolution()
+            this.goToViewSolution(response.data.id)
 
             this.$alert(this.$gettext('Your Solution has been created successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close'),
@@ -199,7 +189,7 @@ export default {
     async handleCancel() {
       try {
         await this.$confirm(
-          this.$gettext('Any changes will be lost and you will be navigated to Dashboard'),
+          this.$gettext('Any changes will be lost and you will be navigated to All Solutions page'),
           this.$gettext('Attention'),
           {
             confirmButtonText: this.$gettext('Ok'),
@@ -208,10 +198,14 @@ export default {
           }
         )
         await this.cancelSolution()
-        this.goToViewSolution()
+        const localised = this.localePath({
+          name: 'organisation-portfolio-innovation-solutions',
+          params: { ...this.$route.params },
+        })
+        this.$router.push(localised)
         this.$message({
           type: 'success',
-          message: this.$gettext('Edit canceled'),
+          message: this.$gettext('Action canceled'),
         })
       } catch (e) {
         // this.setLoading(false)
