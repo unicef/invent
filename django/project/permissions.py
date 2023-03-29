@@ -66,7 +66,7 @@ class IsGPOOrManagerOfAtLeastOnePortfolio(permissions.BasePermission):
             return False
 
         # Check if the user is a member of at least one portfolio
-        return user.userprofile.portfolios.exists()
+        return user.userprofile.global_portfolio_owner or user.userprofile.portfolios.exists()
 
 class IsGPOOrManagerProjectPortfolioState(permissions.BasePermission):
     """
