@@ -29,6 +29,7 @@ export default {
       'organisation-portfolio-innovation': this.$gettext('Innovation Portfolio'),
       'organisation-portfolio-innovation-solutions': this.$gettext('Solutions'),
       'organisation-portfolio-innovation-solutions-id-edit': this.$gettext('Edit solution'),
+      'organisation-portfolio-innovation-solutions-create': this.$gettext('Create new solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
       'organisation-initiatives': this.$gettext('My initiatives'),
       'organisation-portfolio-management-new': this.$gettext('New portfolio'),

@@ -82,6 +82,22 @@ export const actions = {
       },
     })
   },
+  async createNewSolution({ state }, data) {
+    return this.$axios({
+      method: 'put',
+      url: `/api/solution/create/`,
+      data: {
+        name: data.name,
+        is_active: true,
+        phase: data.phase,
+        open_source_frontier_tech: data.open_source_frontier_tech,
+        learning_investment: data.learning_investment,
+        people_reached: data.people_reached,
+        country_solutions: data.country_solutions,
+        portfolio_problem_statements: data.portfolio_problem_statements,
+      },
+    })
+  },
   cancelSolution({ commit }) {
     commit('INIT_STATE')
   },

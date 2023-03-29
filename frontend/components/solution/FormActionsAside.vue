@@ -22,10 +22,16 @@
           @click="emitAction('cancel')"
         >
           <fa v-show="loading === 'draft'" icon="spinner" spin />
-          <translate>Cancel</translate><br />
+          <translate>Cancel</translate>
         </el-button>
 
-        <el-button v-if="true" :disabled="!!loading" type="text" class="DeleteButton" @click="emitAction('delete')">
+        <el-button
+          v-if="canDelete"
+          :disabled="!!loading"
+          type="text"
+          class="DeleteButton"
+          @click="emitAction('delete')"
+        >
           <fa v-show="loading === 'discard'" icon="spinner" spin />
           <translate>Delete</translate>
         </el-button>
@@ -46,6 +52,10 @@ export default {
     disabled: {
       required: false,
       default: false,
+    },
+    canDelete: {
+      required: false,
+      default: true,
     },
   },
   computed: {
@@ -309,6 +319,9 @@ export default {
   }
   .Cancel {
     color: gray;
+    padding: 30px;
+    margin-top: -14px !important;
+    margin-bottom: 6px !important;
     :hover {
       color: lightgray;
     }
