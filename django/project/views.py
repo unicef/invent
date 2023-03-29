@@ -283,7 +283,7 @@ class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(self._get_permission_based_data(solution))
 
 
-class SolutionUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericViewSet):
+class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = SolutionSerializer
     queryset = Solution.objects.all()
 
