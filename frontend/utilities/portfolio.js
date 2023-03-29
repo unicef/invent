@@ -39,6 +39,16 @@ export const draftRules = () => {
       required: false,
       max: 1000,
     },
+    funding: {
+      required: true,
+      min: 0,
+    },
+    landscapeReview: {
+      required: true,
+    },
+    innovationHub: {
+      required: true,
+    },
   }
 }
 
@@ -73,6 +83,16 @@ export const publishRules = () => {
     statementDescription: {
       required: false,
       max: 1000,
+    },
+    funding: {
+      required: true,
+      min: 0,
+    },
+    landscapeReview: {
+      required: true,
+    },
+    innovationHub: {
+      required: true,
     },
   }
 }

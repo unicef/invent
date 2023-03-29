@@ -63,7 +63,7 @@
       </el-table-column>
       <!-- new table fields -->
     </el-table>
-    <div class="Pagination">
+    <div class="Pagination" v-show="showPagination">
       <el-pagination
         :current-page.sync="currentPage"
         :page-size.sync="pageSize"
@@ -105,6 +105,9 @@ export default {
     }),
     total() {
       return this.getAllActiveSolutionsList.length + 1
+    },
+    showPagination() {
+      return this.total > 10
     },
     currentList() {
       const start = this.pageSize * (this.currentPage - 1)
