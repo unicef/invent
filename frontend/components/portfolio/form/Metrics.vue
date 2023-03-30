@@ -18,6 +18,8 @@
           data-vv-name="funding"
           class="number-input"
           :min="0"
+          :max="999999999"
+          :precision="0"
           :controls="false"
           controls-position="left"
         />

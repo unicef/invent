@@ -408,7 +408,7 @@ export default {
       return ''
     },
     lastUpdated() {
-      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm')
+      return this.modified ? format(this.modified, 'DD/MM/YYYY HH:mm') : this.$gettext('N/A')
     },
     countryQuestions() {
       if (this.country) {
