@@ -518,7 +518,7 @@ class PortfolioListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
         fields = ('id', 'name', 'description', 'icon', 'project_count',
-                  'managers', 'status', 'landscape_review', 'problem_statements')
+                  'managers', 'status', 'landscape_review', 'problem_statements', 'investment_to_date', 'innovation_hub')
 
     @staticmethod
     def get_project_count(obj):
@@ -593,7 +593,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'landscape_review', 'problem_statements')
+        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'landscape_review', 'problem_statements', 'investment_to_date', 'innovation_hub')
 
     @staticmethod
     def _create_problem_statements(instance, problem_statements):
