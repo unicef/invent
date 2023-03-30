@@ -5,9 +5,9 @@ export const state = () => ({
   name: '',
   projectName: '',
   description: '',
-  funding: 0,
-  landscapeReview: false,
-  innovationHub: false,
+  investment_to_date: 0,
+  landscape_review: false,
+  innovation_hub: false,
   status: 'DR',
   icon: null,
   managers: [],
@@ -115,9 +115,9 @@ export const getters = {
   getDescription: (state) => state.description,
   getStatus: (state) => state.status,
   getIcon: (state) => state.icon,
-  getFunding: (state) => state.funding,
-  getLandscapeReview: (state) => state.landscapeReview,
-  getInnovationHub: (state) => state.innovationHub,
+  getFunding: (state) => state.investment_to_date,
+  getLandscapeReview: (state) => state.landscape_review,
+  getInnovationHub: (state) => state.innovation_hub,
   getManagers: (state) => state.managers.map((i) => i.id || i),
   getStatements: (state) => state.problemStatements,
   getLoading: (state) => state.loading,
@@ -183,9 +183,9 @@ export const actions = {
       description: state.description,
       status: state.status,
       icon: state.icon.id,
-      investment_to_date: state.funding,
-      innovation_hub: state.innovationHub,
-      landscape_review: state.landscapeReview,
+      investment_to_date: state.investment_to_date,
+      innovation_hub: state.innovation_hub,
+      landscape_review: state.landscape_review,
       managers: state.managers,
       problem_statements: state.problemStatements.filter((i) => i.name !== ''),
     })
@@ -199,9 +199,9 @@ export const actions = {
       description: state.description,
       status: state.status,
       icon: state.icon.id,
-      investment_to_date: state.funding,
-      innovation_hub: state.innovationHub,
-      landscape_review: state.landscapeReview,
+      investment_to_date: state.investment_to_date,
+      innovation_hub: state.innovation_hub,
+      landscape_review: state.landscape_review,
       managers: state.managers,
       problem_statements: state.problemStatements.filter((i) => i.name !== ''),
     })
@@ -218,9 +218,9 @@ export const actions = {
         total: i.project_count,
         status: status(i.status),
         description: i.description,
-        funding: i.investment_to_date,
-        innovationHub: i.innovation_hub,
-        landscapeReview: i.landscape_review,
+        investment_to_date: i.investment_to_date,
+        innovation_hub: i.innovation_hub,
+        landscape_review: i.landscape_review,
         ps: i.problem_statements,
         managers: i.managers,
         icon,
@@ -231,9 +231,17 @@ export const actions = {
 
   async getPortfolioDetails({ state, commit, dispatch }, { id, type = 'manager-of' }) {
     const { data } = await this.$axios.get(`api/portfolio/${type}/`)
-    const { name, description, status, icon, managers, problem_statements } = data.find(
-      (i) => i.id === toInteger(id, 10)
-    )
+    const {
+      name,
+      description,
+      status,
+      icon,
+      managers,
+      problem_statements,
+      investment_to_date,
+      innovation_hub,
+      landscape_review,
+    } = data.find((i) => i.id === toInteger(id, 10))
 
     commit('SET_VALUE', { key: 'name', val: name })
     commit('SET_VALUE', { key: 'description', val: description })
@@ -250,6 +258,9 @@ export const actions = {
       key: 'problemStatements',
       val: problem_statements,
     })
+    commit('SET_FUNDING', investment_to_date)
+    commit('SET_LANDSCAPE_REVIEW', landscape_review)
+    commit('SET_INNOVATION_HUB', innovation_hub)
   },
   async getPortfolioProjects({ state, commit, dispatch }) {
     try {
@@ -431,6 +442,9 @@ export const actions = {
     commit('SET_VALUE', { key: 'icon', val: null })
     commit('SET_VALUE', { key: 'managers', val: [] })
     commit('SET_VALUE', { key: 'problemStatements', val: [] })
+    commit('SET_FUNDING', 0)
+    commit('SET_LANDSCAPE_REVIEW', false)
+    commit('SET_INNOVATION_HUB', false)
   },
   setSelectedRows({ commit, state }, rows) {
     if (state.selectAll && state.selectedRows.length > rows.length) {
@@ -459,14 +473,14 @@ export const mutations = {
   SET_ICON: (state, icon) => {
     state.icon = icon
   },
-  SET_FUNDING: (state, funding) => {
-    state.funding = funding
+  SET_FUNDING: (state, investment_to_date) => {
+    state.investment_to_date = investment_to_date
   },
-  SET_LANDSCAPE_REVIEW: (state, landscapeReview) => {
-    state.landscapeReview = landscapeReview
+  SET_LANDSCAPE_REVIEW: (state, landscape_review) => {
+    state.landscape_review = landscape_review
   },
-  SET_INNOVATION_HUB: (state, innovationHub) => {
-    state.innovationHub = innovationHub
+  SET_INNOVATION_HUB: (state, innovation_hub) => {
+    state.innovation_hub = innovation_hub
   },
   SET_MANAGERS: (state, managers) => {
     state.managers = managers
