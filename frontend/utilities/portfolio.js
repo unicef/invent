@@ -41,8 +41,10 @@ export const draftRules = () => {
     },
     funding: {
       required: true,
-      min: 0,
-      max: 999999999,
+      min_value: 0,
+      max_value: 999999999,
+      integer: true,
+      numeric: true,
     },
     landscapeReview: {
       required: true,
@@ -87,8 +89,10 @@ export const publishRules = () => {
     },
     funding: {
       required: true,
-      min: 0,
-      max: 999999999,
+      min_value: 0,
+      max_value: 999999999,
+      integer: true,
+      numeric: true,
     },
     landscapeReview: {
       required: true,
