@@ -41,7 +41,7 @@
                   <translate>Innovation Portfolios</translate>
                 </nuxt-link>
               </div>
-              <div v-if="displayManager">
+              <div v-if="false">
                 <nuxt-link
                   key="managerBtn"
                   :to="localePath({ name: 'organisation-portfolio-management' })"
