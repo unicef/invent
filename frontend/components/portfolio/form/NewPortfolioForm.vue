@@ -8,6 +8,14 @@
       :publish-rules="publishRules"
       :api-errors="apiErrors"
     />
+    <metrics
+      ref="metrics"
+      :use-publish-rules="usePublishRules"
+      :rules="rules"
+      :draft-rules="draftRules"
+      :publish-rules="publishRules"
+      :api-errors="apiErrors"
+    />
     <managers
       ref="managers"
       :use-publish-rules="usePublishRules"
@@ -29,22 +37,10 @@
       <el-button type="text" size="large" @click="handleCancel">
         <translate>Dismiss changes</translate>
       </el-button>
-      <el-button
-        v-if="edit"
-        type="text"
-        size="large"
-        class="create-btn"
-        @click="handleEdit"
-      >
+      <el-button v-if="edit" type="text" size="large" class="create-btn" @click="handleEdit">
         <translate>Save Portfolio</translate>
       </el-button>
-      <el-button
-        v-else
-        type="text"
-        size="large"
-        class="create-btn"
-        @click="handleCreate"
-      >
+      <el-button v-else type="text" size="large" class="create-btn" @click="handleCreate">
         <translate>Add Portfolio</translate>
       </el-button>
     </div>
@@ -60,12 +56,14 @@ import { publishRules, draftRules } from '@/utilities/portfolio'
 import GeneralSettings from '@/components/portfolio/form/GeneralSettings'
 import Managers from '@/components/portfolio/form/Managers'
 import ProblemStatement from '@/components/portfolio/form/ProblemStatement'
+import Metrics from '@/components/portfolio/form/Metrics.vue'
 
 export default {
   components: {
     GeneralSettings,
     Managers,
     ProblemStatement,
+    Metrics,
   },
   $_veeValidate: {
     validator: 'new',
@@ -99,16 +97,13 @@ export default {
     }),
     async unCaughtErrorHandler(errors) {
       if (this.$sentry) {
-        this.$sentry.captureMessage(
-          'Un-caught validation error in portfolio page',
-          {
-            level: 'error',
-            extra: {
-              apiErrors: this.apiErrors,
-              errors,
-            },
-          }
-        )
+        this.$sentry.captureMessage('Un-caught validation error in portfolio page', {
+          level: 'error',
+          extra: {
+            apiErrors: this.apiErrors,
+            errors,
+          },
+        })
       }
       const errorList = Object.entries(this.apiErrors).map((e) => {
         if (e[0] === 'problem_statements') {
@@ -123,9 +118,7 @@ export default {
       console.log(errorList)
       await this.$confirm(
         isEmpty(this.apiErrors)
-          ? this.$gettext(
-              'There was an un-caught validation error an automatic report has been submitted'
-            )
+          ? this.$gettext('There was an un-caught validation error an automatic report has been submitted')
           : join(errorList, '\n'),
         this.$gettext('Warning'),
         {
@@ -146,9 +139,7 @@ export default {
       })
     },
     async validate() {
-      const validations = await Promise.all([
-        this.$refs.generalSettings.validate(),
-      ])
+      const validations = await Promise.all([this.$refs.generalSettings.validate(), this.$refs.metrics.validate()])
       console.log('root validations', validations)
       return validations.reduce((a, c) => a && c, true)
     },
@@ -160,12 +151,14 @@ export default {
       this.clearValidation()
       this.usePublishRules = false
       await this.$nextTick(async () => {
-        const general = await this.$refs.generalSettings.validateDraft()
+        const general = await this.validate()
+
         if (general) {
           try {
             await this.createPortfolio()
             const localised = this.localePath({
-              name: 'organisation-portfolio-management',
+              name: 'organisation-portfolio-innovation-id',
+              params: { id: this.$route.params.id },
             })
             this.$router.push(localised)
 
@@ -184,21 +177,31 @@ export default {
               console.error(e)
             }
           }
+        } else {
+          this.$alert(
+            this.$gettext('Please correct all errors in required fields before save.'),
+            this.$gettext('Error'),
+            {
+              confirmButtonText: this.$gettext('Close'),
+            }
+          )
         }
-        this.handleErrorMessages()
+        // this.handleErrorMessages()
       })
     },
     async handleEdit() {
       this.clearValidation()
       this.usePublishRules = false
       await this.$nextTick(async () => {
-        const general = await this.$refs.generalSettings.validateDraft()
+        const general = await this.validate()
+
         if (general) {
           try {
             // const id = await this.editPortfolio(this.$route.params.id)
             await this.editPortfolio(this.$route.params.id)
             const localised = this.localePath({
-              name: 'organisation-portfolio-management',
+              name: 'organisation-portfolio-innovation-id',
+              params: { id: this.$route.params.id },
             })
             this.$router.push(localised)
 
@@ -217,13 +220,21 @@ export default {
               console.error(e)
             }
           }
+        } else {
+          this.$alert(
+            this.$gettext('Please correct all errors in required fields before save.'),
+            this.$gettext('Error'),
+            {
+              confirmButtonText: this.$gettext('Close'),
+            }
+          )
         }
-        this.handleErrorMessages()
+        // this.handleErrorMessages()
       })
     },
     handleCancel() {
       this.$router.push(
-        this.localePath({ name: 'organisation-portfolio-management' })
+        this.localePath({ name: 'organisation-portfolio-innovation-id', params: { id: this.$route.params.id } })
       )
     },
   },

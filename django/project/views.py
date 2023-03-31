@@ -297,7 +297,7 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
         is_active = request.data.get("is_active", True)
         people_reached = request.data.get("people_reached", None)
 
-        # Update the instance with the extract`ed data
+        # Update the instance with the extracted data
         instance.portfolios.set(portfolios)
         instance.problem_statements.set(problem_statements)
         instance.is_active = is_active
@@ -1001,10 +1001,9 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
             serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
 
         return Response(serializer.data)
-    
 
 class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
-    
+
     queryset = Portfolio.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
@@ -1015,18 +1014,15 @@ class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
         }
 
         for solution in portfolio.solutions.all():
-            solution_data = {
-                'id': solution.pk,
-                'name': solution.name,
-                'problemStatements': [{'id': problem_statement.pk, 'name': problem_statement.name} for problem_statement in solution.problem_statements.all()],
-                'phase': solution.phase,
-                'reach': solution.people_reached,
-            }
-            response_data['solutions'].append(solution_data)
+            if solution.is_active == True:
+                solution_data = {
+                    'id': solution.pk,
+                    'name': solution.name,
+                    'problemStatements': [{'id': problem_statement.pk, 'name': problem_statement.name} for problem_statement in solution.problem_statements.all()],
+                    'phase': solution.phase,
+                    'reach': solution.people_reached,
+                }
+                response_data['solutions'].append(solution_data)
 
 
         return Response(response_data)
-
-
-
-    

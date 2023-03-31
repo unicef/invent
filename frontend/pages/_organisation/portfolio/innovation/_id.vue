@@ -21,6 +21,20 @@
               </h2>
             </div>
           </template>
+          <template slot="actionButton">
+            <div class="SolutionsButton" v-show="canEdit">
+              <nuxt-link
+                :to="
+                  localePath({
+                    name: 'organisation-portfolio-management-id-edit',
+                    params: { id: this.$route.params.id },
+                  })
+                "
+              >
+                <translate>Edit Portfolio</translate>
+              </nuxt-link>
+            </div>
+          </template>
         </tabs>
         <section class="tab-content">
           <div v-if="tab === 1" class="Problems problem-matrix">
@@ -82,9 +96,23 @@ export default {
   async fetch({ store, query, error, params }) {
     // setup search
     await store.dispatch('solutions/loadSolutionsList', params.id)
+    store.dispatch('search/resetSearch')
+    store.dispatch('landing/resetSearch')
+    store.dispatch('dashboard/setSearchOptions', query)
+
+    // search setup
+    store.commit('search/SET_SEARCH', {
+      key: 'portfolio',
+      val: params.id,
+    })
+    store.commit('search/SET_SEARCH', {
+      key: 'portfolio_page',
+      val: 'portfolio',
+    })
+    store.commit('search/SET_SEARCH', { key: 'scores', val: true })
 
     await Promise.all([
-      //tore.dispatch('portfolio/getPortfolios', 'active-list'),
+      store.dispatch('portfolio/getPortfolios', 'active-list'),
       store.dispatch('portfolio/getPortfolioDetails', {
         id: params.id,
         type: 'active-list',
@@ -100,16 +128,21 @@ export default {
       name: 'portfolio/getName',
       description: 'portfolio/getDescription',
       selectedColumns: 'dashboard/getSelectedColumns',
+      profile: 'user/getProfile',
     }),
+    canEdit() {
+      return (
+        this.profile.is_superuser ||
+        this.profile.global_portfolio_owner ||
+        this.profile.manager.includes(this.$route.params.id * 1)
+      )
+    },
   },
   methods: {
     ...mapActions({
       loadProjectsMap: 'search/loadProjectsMap',
     }),
     navigate(id) {
-      this.$store.dispatch('search/resetSearch')
-      this.$refs.ambitionMatrix.clear()
-      this.$refs.riskMatrix.clear()
       this.$router.push(
         this.localePath({
           name: 'organisation-portfolio-innovation-id',
@@ -230,6 +263,27 @@ section.portfolio-area {
         padding: 29px 0;
         margin: 0;
       }
+    }
+  }
+  .SolutionsButton {
+    width: 240px;
+    display: flex;
+    align-items: flex-end;
+    color: @colorBrandPrimary;
+    padding-bottom: 18px;
+    a {
+      margin-left: auto;
+      margin-right: 12px;
+      background-color: @colorBrandPrimary;
+      color: @colorWhite;
+      height: 22px;
+      padding: 11px 24px 13px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 0;
+      line-height: 20px;
+      text-align: center;
+      text-decoration: none;
     }
   }
 }

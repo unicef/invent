@@ -18,6 +18,5 @@ coverage/
 
 ## Protect accidental change of yarn.lock
 yarn.lock
-
 .yarnrc.yml
 

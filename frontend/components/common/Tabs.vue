@@ -16,6 +16,10 @@
           {{ ` (${item.total})` }}
         </template>
       </p>
+      <span></span>
+      <div class="actionButton">
+        <slot name="actionButton" />
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +72,9 @@ export default {
       text-decoration: none;
       z-index: 1;
     }
+  }
+  .actionButton {
+    margin: 0 0 0 auto;
   }
   .tabs {
     display: flex;

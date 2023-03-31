@@ -4,7 +4,7 @@
       ref="mainTable"
       :data="currentList"
       :max-height="tableMaxHeight"
-      :row-class-name="rowClassCalculator"
+      :row-class-name="'NotSelected'"
       :stripe="false"
       :border="true"
       size="mini"
@@ -33,14 +33,20 @@
           >
         </template>
       </el-table-column>
-
+      <el-table-column :resizable="false" :label="$gettext('Portfolios') | translate" width="300">
+        <template slot-scope="scope">
+          <ul v-for="ps in scope.row.portfolios">
+            <li>{{ ps.name }}</li>
+          </ul>
+        </template>
+      </el-table-column>
       <el-table-column
         :resizable="false"
         :label="$gettext('Problem Statement') | translate"
         style="{minWidth: 600px, maxWidth: 800px}"
       >
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.problemStatements">
+          <ul v-for="ps in scope.row.problem_statements">
             <li>{{ ps.name }}</li>
           </ul>
         </template>
@@ -50,9 +56,9 @@
         <template slot-scope="scope"> {{ scope.row.phase }} </template>
       </el-table-column>
 
-      <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="reach">
+      <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="people_reached">
         <template slot-scope="scope">
-          <p>{{ scope.row.reach | formatNumber }}</p>
+          <p>{{ scope.row.people_reached | formatNumber }}</p>
         </template>
       </el-table-column>
       <!-- new table fields -->
@@ -74,7 +80,8 @@
 <script>
 import { setTimeout } from 'timers'
 import { format } from 'date-fns'
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
@@ -93,18 +100,11 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      tab: (state) => state.portfolio.tab,
-    }),
     ...mapGetters({
-      selectedColumns: 'dashboard/getSelectedColumns',
-      selectedRows: 'portfolio/getSelectedRows',
-      selectAll: 'portfolio/getSelectAll',
-      getSolutionsList: 'solutions/getSolutionsList',
-      getPortfoliosList: 'solution/getPortfoliosList',
+      getAllActiveSolutionsList: 'solutions/getAllActiveSolutionsList',
     }),
     total() {
-      return this.getSolutionsList.length + 1
+      return this.getAllActiveSolutionsList.length + 1
     },
     showPagination() {
       return this.total > 10
@@ -112,44 +112,11 @@ export default {
     currentList() {
       const start = this.pageSize * (this.currentPage - 1)
       const end = this.pageSize * this.currentPage
-      return this.getSolutionsList.slice(start, end)
+      return this.getAllActiveSolutionsList.slice(start, end)
     },
     paginationOrderStr() {
       const loc = this.$i18n.locale
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
-    },
-  },
-  watch: {
-    selectAll: {
-      immediate: true,
-      handler(value) {
-        if (this.$refs.mainTable) {
-          if (value) {
-            this.$refs.mainTable.toggleAllSelection()
-          } else if (this.selectedRows.length === 0) {
-            this.$refs.mainTable.clearSelection()
-          }
-        }
-      },
-    },
-    selectedColumns: {
-      immediate: false,
-      handler(columns) {
-        this.$nextTick(() => {
-          this.$refs.mainTable.doLayout()
-          setTimeout(() => {
-            this.alignFixedTableWidthForRTL()
-          }, 50)
-        })
-      },
-    },
-    sorting: {
-      immediate: false,
-      handler(current) {
-        if (current !== this.localSort) {
-          this.fixSorting(current)
-        }
-      },
     },
   },
   mounted() {
@@ -177,10 +144,6 @@ export default {
 
       loadProblemPortfoliolists: 'solution/loadProblemPortfoliolists',
     }),
-
-    rowClassCalculator({ row }) {
-      return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected'
-    },
 
     convertDate(date) {
       return date ? format(date, 'DD/MM/YYYY HH:mm') : ' ' // N/A

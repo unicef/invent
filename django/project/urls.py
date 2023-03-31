@@ -177,6 +177,6 @@ urlpatterns = [
     path(r'portfolio/<int:pk>/', 
          view=views.PortfolioViewSet.as_view({
             'get':'retrieve'
-         }),
-         name="portfolio-retrieve"),
+        }),
+        name="portfolio-retrieve"),
 ]

@@ -5,6 +5,9 @@ export const state = () => ({
   name: '',
   projectName: '',
   description: '',
+  investment_to_date: 0,
+  landscape_review: false,
+  innovation_hub: false,
   status: 'DR',
   icon: null,
   managers: [],
@@ -99,19 +102,7 @@ export const state = () => ({
   // dialogError: false,
   errorMessage: '',
   // question type
-  questionType: [
-    'psa',
-    'rnci',
-    'ratp',
-    'ra',
-    'ee',
-    'nst',
-    'nc',
-    'ps',
-    'overal_summary',
-    'impact',
-    'scale_phase',
-  ],
+  questionType: ['psa', 'rnci', 'ratp', 'ra', 'ee', 'nst', 'nc', 'ps', 'overal_summary', 'impact', 'scale_phase'],
   // pagination
   total: 0,
   // selection
@@ -124,6 +115,9 @@ export const getters = {
   getDescription: (state) => state.description,
   getStatus: (state) => state.status,
   getIcon: (state) => state.icon,
+  getFunding: (state) => state.investment_to_date,
+  getLandscapeReview: (state) => state.landscape_review,
+  getInnovationHub: (state) => state.innovation_hub,
   getManagers: (state) => state.managers.map((i) => i.id || i),
   getStatements: (state) => state.problemStatements,
   getLoading: (state) => state.loading,
@@ -144,6 +138,15 @@ export const actions = {
   },
   setIcon({ commit }, value) {
     commit('SET_ICON', value)
+  },
+  setFunding({ commit }, value) {
+    commit('SET_FUNDING', value)
+  },
+  setLandscapeReview({ commit }, value) {
+    commit('SET_LANDSCAPE_REVIEW', value)
+  },
+  setInnovationHub({ commit }, value) {
+    commit('SET_INNOVATION_HUB', value)
   },
   setManagers({ commit }, value) {
     commit('SET_MANAGERS', value)
@@ -180,6 +183,9 @@ export const actions = {
       description: state.description,
       status: state.status,
       icon: state.icon.id,
+      investment_to_date: state.investment_to_date,
+      innovation_hub: state.innovation_hub,
+      landscape_review: state.landscape_review,
       managers: state.managers,
       problem_statements: state.problemStatements.filter((i) => i.name !== ''),
     })
@@ -193,6 +199,9 @@ export const actions = {
       description: state.description,
       status: state.status,
       icon: state.icon.id,
+      investment_to_date: state.investment_to_date,
+      innovation_hub: state.innovation_hub,
+      landscape_review: state.landscape_review,
       managers: state.managers,
       problem_statements: state.problemStatements.filter((i) => i.name !== ''),
     })
@@ -209,6 +218,9 @@ export const actions = {
         total: i.project_count,
         status: status(i.status),
         description: i.description,
+        investment_to_date: i.investment_to_date,
+        innovation_hub: i.innovation_hub,
+        landscape_review: i.landscape_review,
         ps: i.problem_statements,
         managers: i.managers,
         icon,
@@ -217,10 +229,7 @@ export const actions = {
     commit('SET_VALUE', { key: 'portfolios', val: portfolios })
   },
 
-  async getPortfolioDetails(
-    { state, commit, dispatch },
-    { id, type = 'manager-of' }
-  ) {
+  async getPortfolioDetails({ state, commit, dispatch }, { id, type = 'manager-of' }) {
     const { data } = await this.$axios.get(`api/portfolio/${type}/`)
     const {
       name,
@@ -229,6 +238,9 @@ export const actions = {
       icon,
       managers,
       problem_statements,
+      investment_to_date,
+      innovation_hub,
+      landscape_review,
     } = data.find((i) => i.id === toInteger(id, 10))
 
     commit('SET_VALUE', { key: 'name', val: name })
@@ -246,6 +258,9 @@ export const actions = {
       key: 'problemStatements',
       val: problem_statements,
     })
+    commit('SET_FUNDING', investment_to_date)
+    commit('SET_LANDSCAPE_REVIEW', landscape_review)
+    commit('SET_INNOVATION_HUB', innovation_hub)
   },
   async getPortfolioProjects({ state, commit, dispatch }) {
     try {
@@ -296,10 +311,7 @@ export const actions = {
       console.error('portfolio/getPortfolioProjects failed')
     }
   },
-  async setProjects(
-    { state, commit, dispatch, rootGetters },
-    { projects, count }
-  ) {
+  async setProjects({ state, commit, dispatch, rootGetters }, { projects, count }) {
     // set favorite
     await dispatch('user/refreshProfile', {}, { root: true })
     const user = rootGetters['user/getProfile']
@@ -323,10 +335,7 @@ export const actions = {
   async moveToState({ state, commit, dispatch }, { type, project, tab }) {
     // add-project, remove-project, approve-project, disapprove-project
     try {
-      await this.$axios.post(
-        `/api/portfolio/${state.currentPortfolioId}/${type}/`,
-        { project }
-      )
+      await this.$axios.post(`/api/portfolio/${state.currentPortfolioId}/${type}/`, { project })
       dispatch('setTab', tab)
     } catch (e) {
       commit('SET_VALUE', {
@@ -340,13 +349,10 @@ export const actions = {
   async addReview({ state, commit, dispatch }, { id, message, reviewers }) {
     try {
       commit('SET_VALUE', { key: 'loadingAddReviewers', val: true })
-      await this.$axios.post(
-        `/api/portfolio/${state.currentPortfolioId}/${id}/`,
-        {
-          userprofile: reviewers,
-          message,
-        }
-      )
+      await this.$axios.post(`/api/portfolio/${state.currentPortfolioId}/${id}/`, {
+        userprofile: reviewers,
+        message,
+      })
       // update portfolio
       dispatch('getPortfolioProjects')
       // interface setters
@@ -377,16 +383,10 @@ export const actions = {
       console.log(e.response.data)
     }
   },
-  async updateScoreSummary(
-    { state, commit, dispatch },
-    { id, overall_reviewer_feedback }
-  ) {
+  async updateScoreSummary({ state, commit, dispatch }, { id, overall_reviewer_feedback }) {
     try {
       commit('SET_VALUE', { key: 'loadingScore', val: true })
-      const res = await this.$axios.patch(
-        `/api/project-review/manager/${id}/`,
-        { overall_reviewer_feedback }
-      )
+      const res = await this.$axios.patch(`/api/project-review/manager/${id}/`, { overall_reviewer_feedback })
       // dispatch('getPortfolioProjects')
       commit('SET_VALUE', { key: 'loadingScore', val: false })
       if (res.status === 200) {
@@ -402,20 +402,16 @@ export const actions = {
     }
   },
   async removeScore({ commit, dispatch }, { id }) {
-    return await this.$axios
-      .delete(`/api/project-review/${id}/`)
-      .then((res) => {
-        if (res.status === 204) {
-          commit('REMOVE_SCORE', id)
-          dispatch('getPortfolioProjects')
-        }
-      })
+    return await this.$axios.delete(`/api/project-review/${id}/`).then((res) => {
+      if (res.status === 204) {
+        commit('REMOVE_SCORE', id)
+        dispatch('getPortfolioProjects')
+      }
+    })
   },
   async getManagerScore({ state, commit, dispatch }, { id, name }) {
     try {
-      const { data } = await this.$axios.get(
-        `api/project-review/manager/${id}/`
-      )
+      const { data } = await this.$axios.get(`api/project-review/manager/${id}/`)
       commit('SET_VALUE', { key: 'projectName', val: name })
       commit('SET_VALUE', {
         key: 'review',
@@ -446,6 +442,9 @@ export const actions = {
     commit('SET_VALUE', { key: 'icon', val: null })
     commit('SET_VALUE', { key: 'managers', val: [] })
     commit('SET_VALUE', { key: 'problemStatements', val: [] })
+    commit('SET_FUNDING', 0)
+    commit('SET_LANDSCAPE_REVIEW', false)
+    commit('SET_INNOVATION_HUB', false)
   },
   setSelectedRows({ commit, state }, rows) {
     if (state.selectAll && state.selectedRows.length > rows.length) {
@@ -473,6 +472,15 @@ export const mutations = {
   },
   SET_ICON: (state, icon) => {
     state.icon = icon
+  },
+  SET_FUNDING: (state, investment_to_date) => {
+    state.investment_to_date = investment_to_date
+  },
+  SET_LANDSCAPE_REVIEW: (state, landscape_review) => {
+    state.landscape_review = landscape_review
+  },
+  SET_INNOVATION_HUB: (state, innovation_hub) => {
+    state.innovation_hub = innovation_hub
   },
   SET_MANAGERS: (state, managers) => {
     state.managers = managers
