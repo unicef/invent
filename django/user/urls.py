@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
     url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
     url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
-    url(r'^azure-user-info/', views.get_azure_user_info, name='azure_user_info'),
+    url(r'^azure-user-info/$', views.azure_user_info, name='azure_user_info'),
 ]
 
 if settings.ENABLE_API_REGISTRATION:
