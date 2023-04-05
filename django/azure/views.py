@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import requests
 from django.conf import settings
-from django.http import JsonResponse
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
@@ -10,6 +9,7 @@ from allauth.socialaccount.providers.oauth2.views import (
 )
 
 from .provider import AzureProvider
+
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
 GRAPH_URL = 'https://graph.microsoft.com/v1.0'
@@ -54,29 +54,9 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         profile_data = resp.json()
         extra_data.update(profile_data)
 
-        return self.get_provider().sociallogin_from_response(request, extra_data)
+        return self.get_provider().sociallogin_from_response(request,
+                                                             extra_data)
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(AzureOAuth2Adapter)
-
-
-def fetch_all_users(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"error": "Authentication required."}, status=401)
-
-    social_account = request.user.socialaccount_set.filter(provider='azure').first()
-    if not social_account:
-        return JsonResponse({"error": "Social account not found."}, status=404)
-
-    access_token = social_account.socialtoken_set.first().token
-
-    users_endpoint = "https://graph.microsoft.com/v1.0/users"
-    headers = {"Authorization": f"Bearer {access_token}"}
-    response = requests.get(users_endpoint, headers=headers)
-
-    if response.status_code != 200:
-        return JsonResponse({"error": "Failed to fetch users."}, status=response.status_code)
-
-    users_data = response.json()
-    return JsonResponse(users_data)

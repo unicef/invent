@@ -1,9 +1,33 @@
+from django.http import JsonResponse
+from allauth.socialaccount.models import SocialAccount
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
+
+# Add this function to views.py
+
+
+def get_azure_user_info(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Authentication required."}, status=401)
+
+    social_account = request.user.socialaccount_set.filter(provider='azure').first()
+    if not social_account:
+        return JsonResponse({"error": "Social account not found."}, status=404)
+
+    extra_data = social_account.extra_data
+
+    user_info = {
+        "email": extra_data.get("mail"),
+        "first_name": extra_data.get("givenName"),
+        "last_name": extra_data.get("surname"),
+        "display_name": extra_data.get("displayName"),
+    }
+
+    return JsonResponse(user_info)
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
