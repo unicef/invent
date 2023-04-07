@@ -33,7 +33,7 @@
               <translate tag="div" class="Label">Contact person</translate>
               <div class="Info">
                 <a :href="`mailto:${project.contact_email}`" class="NuxtLink Small IconRight">
-                  {{ project.contact_name }}
+                  {{ getUserName }}
                   <fa icon="envelope" />
                 </a>
               </div>
@@ -110,7 +110,12 @@ export default {
       draft: 'project/getProjectData',
       published: 'project/getPublished',
       user: 'user/getProfile',
+      userProfiles: 'system/getUserProfilesNoFilter',
     }),
+    getUserName() {
+      const userName = this.userProfiles.find((profile) => profile.email === this.project.contact_email)
+      return userName && userName.name ? userName.name : this.project.contact_name
+    },
     favorite() {
       return this.user ? this.user.favorite.includes(toInteger(this.$route.params.id)) : undefined
     },

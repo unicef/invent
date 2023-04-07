@@ -349,7 +349,6 @@ export default {
       userProfiles: 'system/getUserProfilesNoFilter',
       getTeam: 'project/getTeam',
       getContactEmail: 'project/getContactEmail',
-      getContactName: 'project/getContactName',
     }),
     ...mapActions({
       setTeam: 'project/setTeam',
