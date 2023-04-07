@@ -12,15 +12,11 @@
     :value="value"
     :placeholder="$gettext('Type and select a name') | translate"
     :remote-method="filterList"
-    multiple
+    :multiple="multiple"
     filterable
     remote
     class="TeamSelector"
-    :popper-class="
-      optionsAndValues.length > value.length
-        ? 'TeamSelectorDropdown'
-        : 'NoDisplay'
-    "
+    :popper-class="optionsAndValues.length > value.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
     @change="changeHandler"
     @keyup.enter.native="onEnter"
   >
@@ -29,9 +25,7 @@
       :key="person.id"
       :label="
         `${person.name ? person.name + ', ' : ''}${
-          person.organisation
-            ? getOrganisationDetails(person.organisation).name
-            : ''
+          person.organisation ? getOrganisationDetails(person.organisation).name : ''
         } ${person.name ? '(' + person.email + ')' : person.email}` | truncate
       "
       :value="person.id"
@@ -42,7 +36,7 @@
         <organisation-item :id="person.organisation" />
       </template>
       <template v-else>
-        <br/>
+        <br />
       </template>
       <span class="email"
         ><small>{{ person.email }}</small></span
@@ -82,6 +76,10 @@ export default {
     value: {
       type: Array,
       default: null,
+    },
+    multiple: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -125,17 +123,13 @@ export default {
       mails.map((email) => this.$emit('change', email))
     },
     validEmails(mails) {
-      return mails.filter(
-        (email) => this.validateEmail(email) && !this.arrIncludes(email)
-      )
+      return mails.filter((email) => this.validateEmail(email) && !this.arrIncludes(email))
     },
     arrIncludes(val) {
       return this.value.includes(val)
     },
     validateEmail(email) {
-      const valid =
-        validator.isEmail(email) &&
-        (email.endsWith('unicef.org') || email.endsWith('pulilab.com'))
+      const valid = validator.isEmail(email) && (email.endsWith('unicef.org') || email.endsWith('pulilab.com'))
       if (!valid) {
         this.invalidEmails = [...this.invalidEmails, email]
       }
