@@ -47,7 +47,7 @@
 
       <div class="ProjectMenu">
         <nuxt-link
-          v-if="isTeam"
+          v-if="isTeam && !isInitiativeView"
           :class="{ Active: isProjectActive }"
           :to="
             localePath({
@@ -82,7 +82,7 @@
         >
           <translate>Initiative</translate>
         </nuxt-link>
-        <nuxt-link :to="stagesUrl">
+        <nuxt-link v-if="!isInitiativeView" :to="stagesUrl">
           <translate>Phases</translate>
         </nuxt-link>
       </div>
@@ -138,6 +138,9 @@ export default {
         this.route === 'organisation-initiatives-id'
       )
     },
+    isInitiativeView() {
+      return this.route === 'organisation-initiatives-id-published'
+    },
     stagesUrl() {
       const versionRoute =
         this.route === 'organisation-initiatives-id-published' ||
@@ -192,6 +195,7 @@ export default {
 .ProjectBar {
   background-color: @colorWhite;
   border-bottom: 1px solid @colorGrayLight;
+  height: 88px;
 
   .ProjectBarWrapper {
     overflow: hidden;
