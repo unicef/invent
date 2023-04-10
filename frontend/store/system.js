@@ -30,6 +30,15 @@ export const getters = {
   getUserProfilesNoFilter: (state) => {
     return state.profiles
   },
+  getUserProfilesWithLabel: (state) => {
+    const fields = ['name', 'email', 'job_title', 'section', 'country']
+    const labeledProfiles = state.profiles.map((user) => {
+      let concLabel = []
+      fields.forEach((field) => (concLabel = user[field] ? [...concLabel, `${user[field]} `] : concLabel))
+      return { ...user, label: concLabel.toString() }
+    })
+    return labeledProfiles
+  },
   getUserProfileDetails: (state, getters) => (id) => getters.getUserProfiles.find((u) => u.id === id),
   getSearchResult: (state) => {
     const search = state.projectSearch ? state.projectSearch : []

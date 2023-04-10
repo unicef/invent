@@ -49,8 +49,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userProfiles: 'system/getUserProfilesNoFilter',
-      getOrganisationDetails: 'system/getOrganisationDetails',
+      userProfiles: 'system/getUserProfilesWithLabel',
     }),
 
     innerValue: {
@@ -65,17 +64,11 @@ export default {
         this.$emit('change', value)
       },
     },
-    concatUserData() {
-      return this.userProfiles.map((user) => ({
-        ...user,
-        label: `${user.name} , ${user.email}`,
-      }))
-    },
   },
   methods: {
     filterMethod(query) {
       if (query) {
-        this.filteredOptions = this.concatUserData.filter(
+        this.filteredOptions = this.userProfiles.filter(
           (p) => this.filter(p.name ? p.name : p.email, query) || (p.email ? this.filter(p.email, query) : false)
         )
       } else {

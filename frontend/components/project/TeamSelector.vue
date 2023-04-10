@@ -31,16 +31,7 @@
       :value="person.id"
     >
       <!-- N/A -->
-      <span style="float: left">{{ person.name ? person.name : ' ' }}</span>
-      <template v-if="person.organisation">
-        <organisation-item :id="person.organisation" />
-      </template>
-      <template v-else>
-        <br />
-      </template>
-      <span class="email"
-        ><small>{{ person.email }}</small></span
-      >
+      <span style="float: left">{{ getUserLabel(person.id) }}</span>
     </el-option>
   </lazy-el-select>
 </template>
@@ -91,9 +82,13 @@ export default {
     ...mapGetters({
       items: 'system/getUserProfilesNoFilter',
       getOrganisationDetails: 'system/getOrganisationDetails',
+      userProfiles: 'system/getUserProfilesWithLabel',
     }),
   },
   methods: {
+    getUserLabel(id) {
+      return this.userProfiles.find((user) => user.id === id).label
+    },
     changeHandler(value) {
       this.$emit('change', value)
     },

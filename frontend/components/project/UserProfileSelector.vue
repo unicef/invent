@@ -59,8 +59,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      userProfiles: 'system/getUserProfilesNoFilter',
-      getOrganisationDetails: 'system/getOrganisationDetails',
+      userProfiles: 'system/getUserProfilesWithLabel',
     }),
     innerValue: {
       get() {
@@ -92,14 +91,10 @@ export default {
       },
     },
     concatUserData() {
-      const data = this.userProfiles.map((user) => ({
-        ...user,
-        label: `${user.name} , ${user.email}`,
-      }))
       if (this.ommit) {
-        return data.filter((user) => user.email !== this.ommit)
+        return this.userProfiles.filter((user) => user.email !== this.ommit)
       } else {
-        return data
+        return this.userProfiles
       }
     },
   },

@@ -307,7 +307,7 @@
 
 <script>
 import { format } from 'date-fns'
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import FileUpload from '@/components/common/FileUpload'
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
@@ -333,7 +333,6 @@ export default {
   data() {
     return {
       ommitTeam: null,
-      prevOmmit: null,
     }
   },
   computed: {
@@ -346,13 +345,9 @@ export default {
       getCountryDetails: 'countries/getCountryDetails',
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
-      userProfiles: 'system/getUserProfilesNoFilter',
-      getTeam: 'project/getTeam',
       getContactEmail: 'project/getContactEmail',
     }),
-    ...mapActions({
-      setTeam: 'project/setTeam',
-    }),
+
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
