@@ -3,7 +3,7 @@
     <el-table
       ref="mainTable"
       :data="initiativesList"
-      height="calc(100vh - 350px)"
+      height="calc(100vh - 270px)"
       :row-class-name="rowClassCalculator"
       :stripe="false"
       :border="true"
@@ -156,11 +156,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <platforms-list
-            class="SimpleList"
-            :platforms="scope.row.innovation_ways"
-            source="getInnovationWays"
-          />
+          <platforms-list class="SimpleList" :platforms="scope.row.innovation_ways" source="getInnovationWays" />
         </template>
       </el-table-column>
 
@@ -810,8 +806,8 @@ export default {
 }
 
 .MainTable {
-  margin: 0 40px 120px;
-  max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+  margin: 0 40px 80px;
+  max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - 43px);
 
   .SimpleList {
     ul {

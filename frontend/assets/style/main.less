@@ -82,6 +82,7 @@ html {
 
 body {
   min-height: 100%;
+
   margin: 0;
   padding: 0;
   // Brand typo
@@ -97,6 +98,9 @@ body {
 
   > #__nuxt {
     .limitPageWidth();
+    display: flex;
+    flex-flow: column;
+    height: 100%;
     margin: 0 auto !important;
     padding: 0;
     background-color: #fbfaf8;
