@@ -1,39 +1,9 @@
-from django.http import JsonResponse
-from allauth.socialaccount.models import SocialAccount
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-import requests
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def azure_user_info(request):
-    social_account = request.user.socialaccount_set.filter(provider='azure').first()
-
-    if not social_account:
-        return JsonResponse({"error": "Azure social account not found."}, status=404)
-
-    access_token = social_account.socialtoken_set.first().token
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json'
-    }
-
-    graph_url = 'https://graph.microsoft.com/v1.0/me'
-    response = requests.get(graph_url, headers=headers)
-
-    if response.status_code == 200:
-        return Response(response.json(), status=status.HTTP_200_OK)
-    else:
-        return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
