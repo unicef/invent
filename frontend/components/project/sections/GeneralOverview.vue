@@ -50,16 +50,7 @@
         <template slot="label">
           <translate key="country_office"> Which UNICEF Office supports the initiative? </translate>
         </template>
-        <!--        <template slot="tooltip">-->
-        <!--          <el-tooltip-->
-        <!--            class="item"-->
-        <!--            content="If you encounter an error and/or can not locate the UNICEF Office-->
-        <!--            you would like to see in this list, please send a request with details to invent@unicef.org"-->
-        <!--            placement="right"-->
-        <!--          >-->
-        <!--            <i class="el-icon-warning warning" />-->
-        <!--          </el-tooltip>-->
-        <!--        </template>-->
+
         <country-office-select
           v-model="country_office"
           v-validate="rules.country_office"
@@ -225,27 +216,8 @@
       </el-form-item>
 
       <el-row :gutter="20" type="flex">
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('contact_name')"
-            :draft-rule="draftRules.contact_name"
-            :publish-rule="publishRules.contact_name"
-          >
-            <template slot="label">
-              <translate key="contact-name">Who is the focal point of contact for this initiative?</translate>
-            </template>
-
-            <character-count-input
-              v-model="contact_name"
-              v-validate="rules.contact_name"
-              :rules="rules.contact_name"
-              data-vv-name="contact_name"
-              data-vv-as="Contact name"
-            />
-          </custom-required-form-item>
-        </el-col>
-        <el-col :span="12">
-          <custom-required-form-item
+        <el-col :span="20">
+          <custom-required-form-team-item
             :error="errors.first('contact_email')"
             :draft-rule="draftRules.contact_email"
             :publish-rule="publishRules.contact_email"
@@ -254,16 +226,23 @@
               <translate key="contact-email"> Focal Point Email </translate>
             </template>
 
-            <character-count-input
+            <FocalProfileSelector
               v-model="contact_email"
               v-validate="rules.contact_email"
-              :rules="rules.contact_email"
               data-vv-name="contact_email"
               data-vv-as="Contact email"
-              @blur="addContactToTeam"
-              @keyup.enter.native="addContactToTeam"
+              :multiple="false"
+              @change="updateContactEmail"
+              :api-errors="{}"
             />
-          </custom-required-form-item>
+
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>The focal point member has also team member rights.</translate>
+              </p>
+            </span>
+          </custom-required-form-team-item>
         </el-col>
       </el-row>
 
@@ -277,9 +256,14 @@
           <template slot="label">
             <translate key="team">Who else should be able to modify this initiative's entry?</translate>
           </template>
-
-          <team-selector v-model="team" v-validate="rules.team" data-vv-name="team" data-vv-as="Team" />
-
+          <UserProfileSelector
+            v-model="team"
+            :ommit="ommitTeam"
+            v-validate="rules.team"
+            data-vv-name="team"
+            data-vv-as="Team"
+            :api-errors="{}"
+          />
           <span class="Hint">
             <fa icon="info-circle" />
             <p>
@@ -323,7 +307,7 @@
 
 <script>
 import { format } from 'date-fns'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import FileUpload from '@/components/common/FileUpload'
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
@@ -332,6 +316,8 @@ import CollapsibleCard from '../CollapsibleCard'
 import TeamSelector from '../TeamSelector'
 import CountryOfficeSelect from '../../common/CountryOfficeSelect'
 import { mapGettersActions } from '../../../utilities/form'
+import UserProfileSelector from '../UserProfileSelector.vue'
+import FocalProfileSelector from '../FocalProfileSelector.vue'
 
 export default {
   components: {
@@ -340,8 +326,16 @@ export default {
     TeamSelector,
     CustomRequiredFormTeamItem,
     FileUpload,
+    UserProfileSelector,
+    FocalProfileSelector,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  data() {
+    return {
+      ommitTeam: null,
+      prevOmmit: null,
+    }
+  },
   computed: {
     ...mapState({
       offices: (state) => state.offices.offices,
@@ -353,6 +347,11 @@ export default {
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
       userProfiles: 'system/getUserProfilesNoFilter',
+      getTeam: 'project/getTeam',
+      getContactEmail: 'project/getContactEmail',
+    }),
+    ...mapActions({
+      setTeam: 'project/setTeam',
     }),
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
@@ -361,7 +360,6 @@ export default {
       overview: ['project', 'getOverview', 'setOverview', 0],
       coverImage: ['project', 'getCoverImage', 'setCoverImage', 0],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
       contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0],
@@ -401,29 +399,19 @@ export default {
       }
     },
   },
+  mounted() {
+    this.ommitTeam = this.getContactEmail
+  },
   methods: {
-    async addContactToTeam() {
-      const validEmail = await this.$validator.validate('contact_email')
-      if (!validEmail || this.contact_email === '') return
-      const teamMember = this.userProfiles.find((user) => {
-        return user.email === this.contact_email
-      })
-      if (teamMember !== undefined) {
-        if (!this.team.includes(teamMember.id)) {
-          const team = this.team.concat(teamMember.id)
-          this.team = team
-        }
+    updateContactEmail() {
+      if (this.getContactEmail === '' || this.getContactEmail === null) {
+        this.ommitTeam = null
       } else {
-        const addToTeam =
-          validEmail &&
-          (this.contact_email.endsWith('unicef.org') || this.contact_email.endsWith('pulilab.com')) &&
-          !this.team.includes(this.contact_email)
-        if (addToTeam) {
-          const team = this.team.concat(this.contact_email)
-          this.team = team
-        }
+        // contact email may or may not exist
+        this.ommitTeam = this.getContactEmail
       }
     },
+
     openFeedback() {
       this.$store.commit('user/SET_FEEDBACK', {
         feedbackOn: true,
