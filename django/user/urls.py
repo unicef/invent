@@ -5,6 +5,7 @@ from allauth.account.views import confirm_email
 from rest_framework_jwt.views import obtain_jwt_token
 
 from . import views as views
+from azure.views import get_all_users
 from .adapters import AzureLogin
 
 router = DefaultRouter()
@@ -18,6 +19,7 @@ urlpatterns = [
     url(r'^rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
     url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
     url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
+    url(r'^azure-all-users/$', get_all_users, name='azure_all_users'),
 ]
 
 if settings.ENABLE_API_REGISTRATION:
