@@ -7,11 +7,10 @@ from allauth.socialaccount.providers.oauth2.views import (
     OAuth2CallbackView,
     OAuth2LoginView,
 )
-from allauth.socialaccount.models import SocialToken
 
-from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .provider import AzureProvider
 
@@ -20,42 +19,38 @@ LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUN
 GRAPH_URL = 'https://graph.microsoft.com/v1.0'
 
 
-def obtain_access_token(request):
-    user = request.user
-    if user.is_authenticated:
-        social_account = user.socialaccount_set.filter(provider='azure').first()
-        if social_account:
-            token = SocialToken.objects.filter(account=social_account).first()
-            print(f'Access token obtained: {token.token}')
-            return token.token
-    raise Exception("Access token could not be obtained")
+def get_users_from_azure():
+    token_url = f'https://login.microsoftonline.com/{settings.SOCIALACCOUNT_AZURE_TENANT}/oauth2/v2.0/token'
+    client_id = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['client_id']
+    client_secret = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['secret']
 
+    payload = {
+        'grant_type': 'client_credentials',
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'scope': 'https://graph.microsoft.com/.default',
+    }
+
+    response = requests.post(token_url, data=payload)
+    access_token = response.json().get('access_token')
+
+    if access_token:
+        headers = {'Authorization': f'Bearer {access_token}'}
+        users_url = 'https://graph.microsoft.com/v1.0/users'
+        users_response = requests.get(users_url, headers=headers)
+        users = users_response.json().get('value', [])
+        return users
+
+    return None
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_all_users(request):
-    access_token = obtain_access_token(request)
-    print(f'Access token: {access_token}')
-    user_info = get_users_info(access_token)
-
-    return Response(user_info)
-
-
-def get_users_info(access_token):
-    graph_endpoint = 'https://graph.microsoft.com/v1.0/users'
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json',
-    }
-
-    response = requests.get(graph_endpoint, headers=headers)
-
-    if response.status_code == 200:
-        print('Microsoft Graph API response:', response.json())
-        return response.json()
+def get_users(request):
+    users = get_users_from_azure()
+    if users is not None:
+        return Response(users)
     else:
-        raise Exception(f'Error calling Microsoft Graph API: {response.text}')
-
+        return Response({"error": "Failed to fetch users from Azure"}, status=400)
 
 class AzureOAuth2Adapter(OAuth2Adapter):
     """
