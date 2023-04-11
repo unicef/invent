@@ -79,8 +79,7 @@
 
 <script>
 import { setTimeout } from 'timers'
-import { format } from 'date-fns'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
@@ -92,7 +91,6 @@ export default {
     return {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
-      localSort: null,
       addFavoriteText: this.$gettext('Add to Favorites'),
       removeFavoriteText: this.$gettext('Remove from Favorites'),
       pageSize: 10,
@@ -133,21 +131,6 @@ export default {
     }, 500)
   },
   methods: {
-    ...mapMutations({
-      setSearch: 'search/SET_SEARCH',
-      setPageSize: 'search/setPageSize',
-    }),
-    ...mapActions({
-      setSelectedRows: 'portfolio/setSelectedRows',
-      addFavorite: 'projects/addFavorite',
-      removeFavorite: 'projects/removeFavorite',
-
-      loadProblemPortfoliolists: 'solution/loadProblemPortfoliolists',
-    }),
-
-    convertDate(date) {
-      return date ? format(date, 'DD/MM/YYYY HH:mm') : ' ' // N/A
-    },
     fixTableHeight() {
       const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height')
       this.tableMaxHeight = +maxHeight.replace('px', '')
@@ -180,19 +163,6 @@ export default {
           fixedTableBody.style.left = -toAlignWidth + 'px'
         }
       }
-    },
-
-    handleFavorite(id) {
-      console.log(`this will mark or unmark ${id}`)
-    },
-    sizeChange(val) {
-      this.setPageSize(val)
-    },
-    pagClick(val) {
-      this.setSearch({ key: 'page', val })
-    },
-    stageIDs(stageList) {
-      return stageList ? stageList.map((stage) => stage.id) : []
     },
   },
 }
@@ -347,39 +317,6 @@ export default {
         width: auto;
         font-weight: 700;
       }
-    }
-
-    .ProjectCard {
-      overflow: visible;
-
-      .ProjectLegend {
-        top: 1px;
-        right: -1px;
-        opacity: 1 !important;
-
-        .svg-inline--fa {
-          position: relative;
-          height: 14px;
-          font-size: 12px;
-
-          &.fa-star {
-            right: 1px;
-            font-size: 11px;
-          }
-
-          &.fa-globe-africa {
-            right: 1px;
-          }
-        }
-      }
-    }
-
-    .CountryName {
-      margin: 0;
-      font-size: @fontSizeSmall;
-      letter-spacing: 0;
-      line-height: 15px;
-      font-weight: 100;
     }
   }
 
