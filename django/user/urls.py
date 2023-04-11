@@ -6,7 +6,6 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from . import views as views
 from .adapters import AzureLogin
-# from django.azure.views import get_users
 
 router = DefaultRouter()
 router.register(r'userprofiles', views.UserProfileViewSet)
@@ -19,7 +18,6 @@ urlpatterns = [
     url(r'^rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
     url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
     url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
-    # url(r'^get-users/$', get_users, name='get_users'),
 ]
 
 if settings.ENABLE_API_REGISTRATION:
