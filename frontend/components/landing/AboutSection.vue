@@ -89,6 +89,7 @@ export default {
   background-color: @colorWhite;
   max-width: 1240px;
   margin: 72px auto;
+  margin-bottom: 0px;
 
   .about {
     text-align: center;
