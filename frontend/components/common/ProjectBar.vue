@@ -23,12 +23,7 @@
                 </el-button>
               </div>
             </el-col>
-            <el-col :span="8" class="InfoSection">
-              <translate tag="div" class="Label">Organisation</translate>
-              <div class="Info">
-                <organisation-item :id="project.organisation" />
-              </div>
-            </el-col>
+
             <el-col :span="8" class="InfoSection">
               <translate tag="div" class="Label">Contact person</translate>
               <div class="Info">
@@ -97,11 +92,9 @@ import { mapGetters } from 'vuex'
 import Favorite from '@/components/common/Favorite'
 import ProjectHistoryDialog from '@/components/dialogs/ProjectHistoryDialog'
 import toInteger from 'lodash/toInteger'
-import OrganisationItem from './OrganisationItem'
 
 export default {
   components: {
-    OrganisationItem,
     Favorite,
     ProjectHistoryDialog,
   },

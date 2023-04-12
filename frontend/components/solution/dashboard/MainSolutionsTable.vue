@@ -9,12 +9,13 @@
       :border="true"
       size="mini"
       style="width: inherit"
-      :defalt-sort="{ prop: 'name', order: 'ascending' }"
+      @sort-change="sortTable"
     >
       <!-- <el-table-column :resizable="false" type="selection" align="center" width="45" class-name="selection-td" /> -->
       <el-table-column
         :resizable="false"
         :label="$gettext('Solution Name') | translate"
+        sortable
         prop="name"
         width="280"
         class-name="project-td"
@@ -46,11 +47,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column :resizable="false" :label="$gettext('Phase') | translate" prop="phase" width="180">
+      <el-table-column :resizable="false" sortable :label="$gettext('Phase') | translate" prop="phase" width="180">
         <template slot-scope="scope"> {{ scope.row.phase }} </template>
       </el-table-column>
 
-      <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="reach">
+      <el-table-column :resizable="false" sortable :label="$gettext('Reach') | translate" width="180" prop="reach">
         <template slot-scope="scope">
           <p>{{ scope.row.reach | formatNumber }}</p>
         </template>
@@ -73,8 +74,7 @@
 
 <script>
 import { setTimeout } from 'timers'
-import { format } from 'date-fns'
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
@@ -85,11 +85,11 @@ export default {
     return {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
-      localSort: null,
       addFavoriteText: this.$gettext('Add to Favorites'),
       removeFavoriteText: this.$gettext('Remove from Favorites'),
       pageSize: 10,
       currentPage: 1,
+      table: [],
     }
   },
   computed: {
@@ -97,14 +97,11 @@ export default {
       tab: (state) => state.portfolio.tab,
     }),
     ...mapGetters({
-      selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'portfolio/getSelectedRows',
-      selectAll: 'portfolio/getSelectAll',
       getSolutionsList: 'solutions/getSolutionsList',
-      getPortfoliosList: 'solution/getPortfoliosList',
     }),
     total() {
-      return this.getSolutionsList.length + 1
+      return this.table.length + 1
     },
     showPagination() {
       return this.total > 10
@@ -112,7 +109,7 @@ export default {
     currentList() {
       const start = this.pageSize * (this.currentPage - 1)
       const end = this.pageSize * this.currentPage
-      return this.getSolutionsList.slice(start, end)
+      return this.table.slice(start, end)
     },
     paginationOrderStr() {
       const loc = this.$i18n.locale
@@ -120,39 +117,13 @@ export default {
     },
   },
   watch: {
-    selectAll: {
-      immediate: true,
-      handler(value) {
-        if (this.$refs.mainTable) {
-          if (value) {
-            this.$refs.mainTable.toggleAllSelection()
-          } else if (this.selectedRows.length === 0) {
-            this.$refs.mainTable.clearSelection()
-          }
-        }
-      },
-    },
-    selectedColumns: {
-      immediate: false,
-      handler(columns) {
-        this.$nextTick(() => {
-          this.$refs.mainTable.doLayout()
-          setTimeout(() => {
-            this.alignFixedTableWidthForRTL()
-          }, 50)
-        })
-      },
-    },
-    sorting: {
-      immediate: false,
-      handler(current) {
-        if (current !== this.localSort) {
-          this.fixSorting(current)
-        }
-      },
+    getSolutionsList() {
+      this.table = [...this.getSolutionsList]
     },
   },
   mounted() {
+    this.table = [...this.getSolutionsList]
+
     setTimeout(() => {
       this.fixTableHeight()
       this.fixSorting(this.$route.query.ordering)
@@ -166,24 +137,26 @@ export default {
     }, 500)
   },
   methods: {
-    ...mapMutations({
-      setSearch: 'search/SET_SEARCH',
-      setPageSize: 'search/setPageSize',
-    }),
     ...mapActions({
       setSelectedRows: 'portfolio/setSelectedRows',
       addFavorite: 'projects/addFavorite',
       removeFavorite: 'projects/removeFavorite',
-
       loadProblemPortfoliolists: 'solution/loadProblemPortfoliolists',
     }),
-
+    sortTable({ column, prop, order }) {
+      const solutionsList = this.table
+      if (order === 'ascending') {
+        this.table = solutionsList.sort((a, b) =>
+          a[prop].toString().localeCompare(b[prop].toString(), this.$i18n.locale, { numeric: true })
+        )
+      } else {
+        this.table = solutionsList.sort((a, b) =>
+          b[prop].toString().localeCompare(a[prop].toString(), this.$i18n.locale, { numeric: true })
+        )
+      }
+    },
     rowClassCalculator({ row }) {
       return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected'
-    },
-
-    convertDate(date) {
-      return date ? format(date, 'DD/MM/YYYY HH:mm') : ' ' // N/A
     },
     fixTableHeight() {
       const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height')
@@ -217,19 +190,6 @@ export default {
           fixedTableBody.style.left = -toAlignWidth + 'px'
         }
       }
-    },
-
-    handleFavorite(id) {
-      console.log(`this will mark or unmark ${id}`)
-    },
-    sizeChange(val) {
-      this.setPageSize(val)
-    },
-    pagClick(val) {
-      this.setSearch({ key: 'page', val })
-    },
-    stageIDs(stageList) {
-      return stageList ? stageList.map((stage) => stage.id) : []
     },
   },
 }
@@ -384,39 +344,6 @@ export default {
         width: auto;
         font-weight: 700;
       }
-    }
-
-    .ProjectCard {
-      overflow: visible;
-
-      .ProjectLegend {
-        top: 1px;
-        right: -1px;
-        opacity: 1 !important;
-
-        .svg-inline--fa {
-          position: relative;
-          height: 14px;
-          font-size: 12px;
-
-          &.fa-star {
-            right: 1px;
-            font-size: 11px;
-          }
-
-          &.fa-globe-africa {
-            right: 1px;
-          }
-        }
-      }
-    }
-
-    .CountryName {
-      margin: 0;
-      font-size: @fontSizeSmall;
-      letter-spacing: 0;
-      line-height: 15px;
-      font-weight: 100;
     }
   }
 
