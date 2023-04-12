@@ -10,9 +10,34 @@ from allauth.socialaccount.providers.oauth2.views import (
 
 from .provider import AzureProvider
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from user.adapters import MyAzureAccountAdapter
+
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
 GRAPH_URL = 'https://graph.microsoft.com/v1.0'
+
+
+class UpdateAADUsersView(APIView):
+    def get(self, request, format=None):
+        adapter = MyAzureAccountAdapter()
+        azure_adapter = AzureOAuth2Adapter()
+
+        azure_users = azure_adapter.get_all_users()
+        adapter.save_users_from_azure(azure_users)
+
+        return Response({'message': 'Azure users saved successfully.'}, status=status.HTTP_200_OK)
+
+
+class GetAADUsers(APIView):
+    def get(self, request, format=None):
+        azure_adapter = AzureOAuth2Adapter()
+        azure_users = azure_adapter.get_all_users()
+
+        return Response({'users': azure_users}, status=status.HTTP_200_OK)
 
 
 class AzureOAuth2Adapter(OAuth2Adapter):
@@ -56,6 +81,50 @@ class AzureOAuth2Adapter(OAuth2Adapter):
 
         return self.get_provider().sociallogin_from_response(request,
                                                              extra_data)
+
+    def get_all_users(self):
+        url = 'https://graph.microsoft.com/v1.0/users'
+        token = self.get_access_token()
+
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
+
+        users = []
+
+        while url:
+            response = requests.get(url, headers=headers)
+            response_data = response.json()
+            users.extend(response_data.get('value', []))
+
+            url = response_data.get('@odata.nextLink', None)
+
+        return users
+
+    def get_access_token(self):
+        tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT
+        client_id = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['client_id']
+        client_secret = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['secret']
+        resource = 'https://graph.microsoft.com'
+        url = f'https://login.microsoftonline.com/{tenant_id}/oauth2/token'
+
+        payload = {
+            'grant_type': 'client_credentials',
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'resource': resource
+        }
+
+        response = requests.post(url, data=payload)
+        if response.status_code == 200:
+            json_response = response.json()
+            access_token = json_response['access_token']
+            return access_token
+        else:
+            print(f"Error: {response.status_code}")
+            print(response.text)
+            return None
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
