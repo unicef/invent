@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import json
 import requests
 from django.conf import settings
 from allauth.socialaccount.providers.oauth2.views import (
@@ -10,34 +11,9 @@ from allauth.socialaccount.providers.oauth2.views import (
 
 from .provider import AzureProvider
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-from user.adapters import MyAzureAccountAdapter
-
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
 GRAPH_URL = 'https://graph.microsoft.com/v1.0'
-
-
-class UpdateAADUsersView(APIView):
-    def get(self, request, format=None):
-        adapter = MyAzureAccountAdapter()
-        azure_adapter = AzureOAuth2Adapter()
-
-        azure_users = azure_adapter.get_all_users()
-        adapter.save_users_from_azure(azure_users)
-
-        return Response({'message': 'Azure users saved successfully.'}, status=status.HTTP_200_OK)
-
-
-class GetAADUsers(APIView):
-    def get(self, request, format=None):
-        azure_adapter = AzureOAuth2Adapter()
-        azure_users = azure_adapter.get_all_users()
-
-        return Response({'users': azure_users}, status=status.HTTP_200_OK)
 
 
 class AzureOAuth2Adapter(OAuth2Adapter):
@@ -82,25 +58,71 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         return self.get_provider().sociallogin_from_response(request,
                                                              extra_data)
 
-    def get_all_users(self):
-        url = 'https://graph.microsoft.com/v1.0/users'
-        token = self.get_access_token()
-
-        headers = {
-            'Authorization': f'Bearer {token}',
-            'Content-Type': 'application/json'
-        }
-
+    def get_aad_users(self):
         users = []
 
-        while url:
-            response = requests.get(url, headers=headers)
-            response_data = response.json()
-            users.extend(response_data.get('value', []))
+        mock_users_json = '''
+            [
+                {
+                    "id": "1",
+                    "displayName": "John Doe",
+                    "givenName": "John",
+                    "surname": "Doe",
+                    "mail": "john.doe@example.com",
+                    "jobTitle": "Software Engineer",
+                    "userPrincipalName": "john.doe@example.com",
+                    "mobilePhone": "+1 555 555 5555",
+                    "officeLocation": "New York",
+                    "preferredLanguage": "en-US",
+                    "businessPhones": ["+1 555 555 5555"],
+                    "memberOf": ["Group 1", "Group 2"],
+                    "country": "United States",
+                    "department": "Engineering"
+                },
+                {
+                    "id": "2",
+                    "displayName": "Jane Doe",
+                    "givenName": "Jane",
+                    "surname": "Doe",
+                    "mail": "jane.doe@example.com",
+                    "jobTitle": "Project Manager",
+                    "userPrincipalName": "jane.doe@example.com",
+                    "mobilePhone": "+1 555 555 5555",
+                    "officeLocation": "San Francisco",
+                    "preferredLanguage": "en-US",
+                    "businessPhones": ["+1 555 555 5555"],
+                    "memberOf": ["Group 1", "Group 3"],
+                    "country": "United States",
+                    "department": "Project Management"
+                }
+            ]
+        '''
 
-            url = response_data.get('@odata.nextLink', None)
+        users = json.loads(mock_users_json)
 
         return users
+    
+
+    # def get_aad_users(self):
+    #     url = 'https://graph.microsoft.com/v1.0/users'
+    #     token = self.get_access_token()
+
+    #     headers = {
+    #         'Authorization': f'Bearer {token}',
+    #         'Content-Type': 'application/json'
+    #     }
+
+    #     users = []
+
+    #     while url:
+    #         response = requests.get(url, headers=headers)
+    #         response_data = response.json()
+    #         users.extend(response_data.get('value', []))
+
+    #         url = response_data.get('@odata.nextLink', None)
+
+    #     return users
+
 
     def get_access_token(self):
         tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT

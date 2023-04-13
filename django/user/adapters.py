@@ -54,23 +54,3 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
     
-    def save_users_from_azure(self, azure_users):
-        user_model = get_user_model()
-
-        for user_data in azure_users:
-            email = user_data.get('mail')
-            name = user_data.get('displayName')
-
-            if email:
-                user, created = user_model.objects.get_or_create(email=email)
-
-                if created:
-                    user.set_unusable_password()
-                    DefaultAccountAdapterCustom().populate_username(None, user)
-                    user.save()
-                    UserProfile.objects.create(user=user, name=name, account_type=UserProfile.DONOR)
-                else:
-                    if not user.userprofile.name:
-                        user.userprofile.name = name
-                        user.userprofile.save()
-

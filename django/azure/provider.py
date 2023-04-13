@@ -30,12 +30,14 @@ class AzureProvider(OAuth2Provider):
         Doc on scopes available at
         https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-scopes  # noqa
         """
-        return ['User.Read', 'User.Read.All', 'openid']
+        return ['User.Read', 'openid']
+        # return ['User.Read.All', 'openid']
 
     def extract_uid(self, data):
         return str(data['id'])
 
     def extract_common_fields(self, data):
+        print("User data from Azure AD: ", data)
         email = data.get('mail')
         return dict(email=email,
                     username=email,

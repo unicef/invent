@@ -1,9 +1,14 @@
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
+
+from .adapters import MyAzureAccountAdapter, AzureOAuth2Adapter
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -31,3 +36,22 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.filter(name__contains=search_term)
         else:
             return Organisation.objects.all()
+
+
+class UpdateAADUsersView(APIView):
+    def get(self, request, format=None):
+        adapter = MyAzureAccountAdapter()
+        azure_adapter = AzureOAuth2Adapter()
+
+        azure_users = azure_adapter.get_aad_users()
+        adapter.save_users_from_azure(azure_users)
+
+        return Response({'message': 'Azure users saved successfully.'}, status=status.HTTP_200_OK)
+
+
+class GetAADUsers(APIView):
+    def get(self, request, format=None):
+        azure_adapter = AzureOAuth2Adapter()
+        azure_users = azure_adapter.get_aad_users()
+
+        return Response({'users': azure_users}, status=status.HTTP_200_OK)
