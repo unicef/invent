@@ -38,18 +38,18 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.all()
 
 
-class UpdateAADUsersView(APIView):
+class UpdateAADUsersView(TokenAuthMixin, APIView):
     def get(self, request, format=None):
         adapter = MyAzureAccountAdapter()
         azure_adapter = AzureOAuth2Adapter()
 
         azure_users = azure_adapter.get_aad_users()
-        adapter.save_users_from_azure(azure_users)
+        # adapter.save_users_from_azure(azure_users) # needs to be refined
 
         return Response({'message': 'Azure users saved successfully.'}, status=status.HTTP_200_OK)
 
 
-class GetAADUsers(APIView):
+class GetAADUsers(TokenAuthMixin, APIView):
     def get(self, request, format=None):
         azure_adapter = AzureOAuth2Adapter()
         azure_users = azure_adapter.get_aad_users()
