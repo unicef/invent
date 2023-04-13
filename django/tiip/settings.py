@@ -26,7 +26,7 @@ elif environment == "uat":
     SITE_ID = 5
     env_name = "UAT"
     env_color = "orange"
-elif environment == "prod":
+elif environment == "prd":
     SITE_ID = 4
     env_name = "PRODUCTION"
     env_color = "red"
