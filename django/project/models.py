@@ -208,8 +208,10 @@ class Project(SoftDeleteModel, ExtendedModel):
     @classmethod
     def export_resource_classes(cls):  # pragma: no cover
         from project.resources import ProjectResource
-        from django.core.management import call_command
-        call_command('export_resources', 'projects', use_bulk=True, **resource.get_export_kwargs())
+        print('in export_resource_classes')
+        return {
+            'projects': ('Projects', ProjectResource)
+        }
 
     def unpublish(self):
         self.public_id = ''
