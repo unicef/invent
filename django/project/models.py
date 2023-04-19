@@ -208,7 +208,6 @@ class Project(SoftDeleteModel, ExtendedModel):
     @classmethod
     def export_resource_classes(cls):  # pragma: no cover
         from project.resources import ProjectResource
-        print('in export_resource_classes')
         return {
             'projects': ('Projects', ProjectResource)
         }

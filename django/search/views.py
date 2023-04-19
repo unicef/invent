@@ -25,7 +25,7 @@ class FastCountPaginator(Paginator):
 class ResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 1000
+    max_page_size = 2000
     django_paginator_class = FastCountPaginator
 
     def get_paginated_response(self, data):
@@ -47,6 +47,15 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
     ordering = ('-project__modified',)
     pagination_class = ResultsSetPagination
     serializer_class = ListResultSerializer
+
+    print('in SearchViewSet')
+    def export_queryset(self, queryset, using_transactions=True, use_bulk=True, **kwargs):
+        print('in export_queryset')
+        from import_export import resources
+        if use_bulk:
+            return self.export_bulk(queryset, **kwargs)
+        else:
+            return super().export_queryset(queryset, using_transactions=using_transactions, **kwargs)
 
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='').exclude(project__is_active=False) \
