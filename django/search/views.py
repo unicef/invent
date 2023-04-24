@@ -23,17 +23,25 @@ class FastCountPaginator(Paginator):
 
 
 class ResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 2000
-    django_paginator_class = FastCountPaginator
+    page_size = 2 
+    page_size_query_param = 'page_size' 
+    django_paginator_class = FastCountPaginator 
+    
+    def paginate_queryset(self, queryset, request, view=None): 
+        max_page_size = request.query_params.get(self.page_size_query_param, None) 
+        if max_page_size is not None: 
+            try: 
+                self.max_page_size = int(max_page_size) 
+            except ValueError: 
+                max_page_size = 999999 
+        return super().paginate_queryset(queryset, request, view) 
 
-    def get_paginated_response(self, data):
-        return Response(OrderedDict([
-            ('count', self.page.paginator.count),
-            ('next', self.page.next_page_number() if self.page.has_next() else None),
-            ('previous', self.page.previous_page_number() if self.page.has_previous() else None),
-            ('results', data)
+    def get_paginated_response(self, data): 
+        return Response(OrderedDict([ 
+            ('count', self.page.paginator.count), 
+            ('next', self.page.next_page_number() if self.page.has_next() else None), 
+            ('previous', self.page.previous_page_number() if self.page.has_previous() else None), 
+            ('results', data) 
         ]))
 
 
@@ -47,15 +55,6 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
     ordering = ('-project__modified',)
     pagination_class = ResultsSetPagination
     serializer_class = ListResultSerializer
-
-    print('in SearchViewSet')
-    def export_queryset(self, queryset, using_transactions=True, use_bulk=True, **kwargs):
-        print('in export_queryset')
-        from import_export import resources
-        if use_bulk:
-            return self.export_bulk(queryset, **kwargs)
-        else:
-            return super().export_queryset(queryset, using_transactions=using_transactions, **kwargs)
 
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='').exclude(project__is_active=False) \
