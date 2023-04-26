@@ -35,9 +35,9 @@
       </el-table-column>
       <el-table-column :resizable="false" :label="$gettext('Portfolios') | translate" width="300">
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.portfolios">
-            <li>{{ ps.name }}</li>
-          </ul>
+          <div v-for="ps in scope.row.portfolios">
+            <p>{{ ps.name }}</p>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -46,14 +46,14 @@
         style="{minWidth: 600px, maxWidth: 800px}"
       >
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.problem_statements">
-            <li>{{ ps.name }}</li>
-          </ul>
+          <div v-for="ps in scope.row.problem_statements">
+            <p>{{ ps.name }}</p>
+          </div>
         </template>
       </el-table-column>
 
       <el-table-column :resizable="false" :label="$gettext('Phase') | translate" prop="phase" width="180">
-        <template slot-scope="scope"> {{ scope.row.phase }} </template>
+        <template slot-scope="scope"> <show-phase :phaseId="scope.row.phase" /> </template>
       </el-table-column>
 
       <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="people_reached">
@@ -80,12 +80,14 @@
 <script>
 import { setTimeout } from 'timers'
 import { mapGetters } from 'vuex'
+import ShowPhase from '../ShowPhase.vue'
 
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
   components: {
     CurrentPage,
+    ShowPhase,
   },
   data() {
     return {
