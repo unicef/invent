@@ -42,6 +42,7 @@ import { mapGetters, mapActions } from 'vuex'
 import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
 import FormActionsAside from './FormActionsAside.vue'
+import { async } from 'q'
 
 export default {
   components: {
@@ -246,7 +247,7 @@ export default {
         // this.setLoading(false)
         this.$message({
           type: 'info',
-          message: this.$gettext('Action failed'),
+          message: this.$gettext('Action Canceled.'),
         })
       }
     },
@@ -258,8 +259,18 @@ export default {
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning',
         })
+        await this.doDeleteSolution()
+      } catch (e) {
+        // this.setLoading(false)
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action Canceled.'),
+        })
+      }
+    },
+    async doDeleteSolution() {
+      try {
         await this.deleteSolution()
-
         const localised = this.localePath({
           name: 'organisation-portfolio-innovation-solutions',
           params: { ...this.$route.params },
@@ -271,7 +282,6 @@ export default {
           message: this.$gettext('Solution deleted succesfully'),
         })
       } catch (e) {
-        // this.setLoading(false)
         this.$alert(
           `${this.$gettext('Request failed, please retry, or contact support with code: ')} ${e.message}`,
           this.$gettext('Error'),

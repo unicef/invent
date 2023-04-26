@@ -27,7 +27,7 @@
               localePath({
                 name: 'organisation-portfolio-innovation-solutions-id',
                 params: { id: scope.row.id },
-                query: { project: $route.params.id },
+                query: { portfolio: $route.params.id },
               })
             "
             >{{ scope.row.name }}</nuxt-link

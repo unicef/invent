@@ -77,7 +77,7 @@ export default {
       split(route, '-').forEach((item) => {
         name = name !== '' ? join([name, item], '-') : item
         if (name !== 'organisation-portfolio') {
-          const path = this.$route.query.project
+          const path = this.$route.query.portfolio
           if (item === 'solutions' && path) {
             const portfolioName = this.getPortfolios.find((portfolio) => portfolio.id === path * 1).name
 
