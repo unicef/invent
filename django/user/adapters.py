@@ -9,7 +9,7 @@ from azure.views import AzureOAuth2Adapter
 from .models import UserProfile
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
-import scheduler.celery # noqa
+import scheduler.celery  # noqa
 
 
 class DefaultAccountAdapterCustom(DefaultAccountAdapter):

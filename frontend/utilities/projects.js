@@ -50,10 +50,7 @@ export const newStages = (draft) => {
     })
 }
 
-export const formatDate = (date) =>
-  format(date, 'YYYY-MM-DD') === 'Invalid Date'
-    ? null
-    : format(date, 'YYYY-MM-DD')
+export const formatDate = (date) => (format(date, 'YYYY-MM-DD') === 'Invalid Date' ? null : format(date, 'YYYY-MM-DD'))
 
 export const projectFields = () => ({
   name: null,
@@ -182,7 +179,7 @@ export const draftRules = () => {
       max: 256,
     },
     contact_email: {
-      email: true,
+      required: false,
     },
     team: {
       required: true,
@@ -298,7 +295,6 @@ export const publishRules = () => {
       max: 256,
     },
     contact_email: {
-      email: true,
       required: true,
     },
     team: {

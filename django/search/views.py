@@ -23,17 +23,25 @@ class FastCountPaginator(Paginator):
 
 
 class ResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 1000
-    django_paginator_class = FastCountPaginator
+    page_size = 10 
+    page_size_query_param = 'page_size' 
+    django_paginator_class = FastCountPaginator 
+    
+    def paginate_queryset(self, queryset, request, view=None): 
+        max_page_size = request.query_params.get(self.page_size_query_param, None) 
+        if max_page_size is not None: 
+            try: 
+                self.max_page_size = int(max_page_size) 
+            except ValueError: 
+                max_page_size = 999999 
+        return super().paginate_queryset(queryset, request, view) 
 
-    def get_paginated_response(self, data):
-        return Response(OrderedDict([
-            ('count', self.page.paginator.count),
-            ('next', self.page.next_page_number() if self.page.has_next() else None),
-            ('previous', self.page.previous_page_number() if self.page.has_previous() else None),
-            ('results', data)
+    def get_paginated_response(self, data): 
+        return Response(OrderedDict([ 
+            ('count', self.page.paginator.count), 
+            ('next', self.page.next_page_number() if self.page.has_next() else None), 
+            ('previous', self.page.previous_page_number() if self.page.has_previous() else None), 
+            ('results', data) 
         ]))
 
 

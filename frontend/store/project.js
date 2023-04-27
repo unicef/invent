@@ -288,10 +288,52 @@ export const actions = {
   setStagesDraft({ commit }, value) {
     commit('SET_STAGES_DRAFT', value)
   },
-  setContactName({ commit }, value) {
-    commit('SET_CONTACT_NAME', value)
-  },
-  setContactEmail({ commit }, value) {
+  // setContactName({ commit }, value) {
+  //   commit('SET_CONTACT_NAME', value)
+  // },
+  setContactEmail({ commit, rootGetters, state }, value) {
+    if ((value === '') | (value === null)) {
+      commit('SET_CONTACT_NAME', '')
+    } else {
+      const name = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value).name
+      commit('SET_CONTACT_NAME', name ? name : '')
+    }
+
+    //if old value was null and new email add user to team
+    if (state.contact_email === '' || state.contact_email === null) {
+      if (value !== '' && value !== null) {
+        const newId = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
+          .id
+        commit('SET_TEAM', [...state.team, newId])
+      }
+    }
+
+    //if new value is null then remove the old one if exist
+    if (value === '' || value === null) {
+      if (state.contact_email !== '' && state.contact_email !== null) {
+        const oldId = rootGetters['system/getUserProfilesNoFilter'].find(
+          (userProfile) => userProfile.email === state.contact_email
+        ).id
+        const removedOld = state.team.filter((userId) => userId !== oldId)
+
+        commit('SET_TEAM', removedOld)
+      }
+    }
+    //if new value is different from the old one replace the id's
+    if (value !== '' && value !== null) {
+      if (state.contact_email !== '' && state.contact_email !== null) {
+        if (value !== state.contact_email) {
+          const oldId = rootGetters['system/getUserProfilesNoFilter'].find(
+            (userProfile) => userProfile.email === state.contact_email
+          ).id
+          const removedOld = state.team.filter((userId) => userId !== oldId)
+          const newId = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
+            .id
+          commit('SET_TEAM', [...removedOld, newId])
+        }
+      }
+    }
+
     commit('SET_CONTACT_EMAIL', value)
   },
   setTeam({ commit }, value) {

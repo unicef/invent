@@ -171,7 +171,7 @@ p {
   flex-direction: column;
   justify-content: center;
   width: 1242px;
-  margin: 50px auto 170px;
+  margin: 50px auto 40px;
 
   &::v-deep {
     .SubAccordion {
