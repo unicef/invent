@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import json
 import requests
 from django.conf import settings
 from allauth.socialaccount.providers.oauth2.views import (
@@ -57,96 +56,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
 
         return self.get_provider().sociallogin_from_response(request,
                                                              extra_data)
-
-    def get_aad_users(self):
-        users = []
-
-        mock_users_json = '''
-            [
-                {
-                    "id": "1",
-                    "displayName": "John Doe",
-                    "givenName": "John",
-                    "surname": "Doe",
-                    "mail": "john.doe@example.com",
-                    "jobTitle": "Software Engineer",
-                    "userPrincipalName": "john.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "New York",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 2"],
-                    "country": "United States",
-                    "department": "Engineering"
-                },
-                {
-                    "id": "2",
-                    "displayName": "Jane Doe",
-                    "givenName": "Jane",
-                    "surname": "Doe",
-                    "mail": "jane.doe@example.com",
-                    "jobTitle": "Project Manager",
-                    "userPrincipalName": "jane.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "San Francisco",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 3"],
-                    "country": "United States",
-                    "department": "Project Management"
-                }
-            ]
-        '''
-
-        users = json.loads(mock_users_json)
-
-        return users
-    
-
-    # def get_aad_users(self):
-    #     url = 'https://graph.microsoft.com/v1.0/users'
-    #     token = self.get_access_token()
-
-    #     headers = {
-    #         'Authorization': f'Bearer {token}',
-    #         'Content-Type': 'application/json'
-    #     }
-
-    #     users = []
-
-    #     while url:
-    #         response = requests.get(url, headers=headers)
-    #         response_data = response.json()
-    #         users.extend(response_data.get('value', []))
-
-    #         url = response_data.get('@odata.nextLink', None)
-
-    #     return users
-
-
-    def get_access_token(self):
-        tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT
-        client_id = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['client_id']
-        client_secret = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['secret']
-        resource = 'https://graph.microsoft.com'
-        url = f'https://login.microsoftonline.com/{tenant_id}/oauth2/token'
-
-        payload = {
-            'grant_type': 'client_credentials',
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'resource': resource
-        }
-
-        response = requests.post(url, data=payload)
-        if response.status_code == 200:
-            json_response = response.json()
-            access_token = json_response['access_token']
-            return access_token
-        else:
-            print(f"Error: {response.status_code}")
-            print(response.text)
-            return None
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
