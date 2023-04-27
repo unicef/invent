@@ -88,7 +88,6 @@ export default {
                 localePath: {
                   name: `organisation-portfolio-innovation-id`,
                   params: { id: path },
-                  // query: { ...this.$route.query },
                 },
                 text: portfolioName || '',
               },

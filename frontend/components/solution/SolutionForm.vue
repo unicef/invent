@@ -42,7 +42,6 @@ import { mapGetters, mapActions } from 'vuex'
 import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
 import FormActionsAside from './FormActionsAside.vue'
-import { async } from 'q'
 
 export default {
   components: {
