@@ -18,30 +18,53 @@ from country.serializers import UserProfileSerializer
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Portfolio, ProblemStatement, \
-    ProjectPortfolioState, ReviewScore, TechnologyPlatform, HardwarePlatform, NontechPlatform, PlatformFunction, \
-    Stage, Solution, CountrySolution, ProjectVersion
+from .models import (
+    Project,
+    ProjectApproval,
+    ImportRow,
+    ProjectImportV2,
+    Portfolio,
+    ProblemStatement,
+    ProjectPortfolioState,
+    ReviewScore,
+    TechnologyPlatform,
+    HardwarePlatform,
+    NontechPlatform,
+    PlatformFunction,
+    Stage,
+    Solution,
+    CountrySolution,
+    ProjectVersion,
+)
 
 
 class PartnerSerializer(serializers.Serializer):
-    PARTNER_TYPE = [(0, _('Investment')),
-                    (1, _('Government')),
-                    (2, _('Programme')),
-                    (3, _('Technology'))]
+    PARTNER_TYPE = [
+        (0, _("Investment")),
+        (1, _("Government")),
+        (2, _("Programme")),
+        (3, _("Technology")),
+    ]
 
     partner_type = serializers.ChoiceField(choices=PARTNER_TYPE)
     partner_name = serializers.CharField(max_length=100)
-    partner_contact = serializers.CharField(max_length=100, required=False, allow_blank=True)
+    partner_contact = serializers.CharField(
+        max_length=100, required=False, allow_blank=True
+    )
     partner_email = serializers.EmailField(required=False, allow_blank=True)
-    partner_website = serializers.URLField(max_length=2048, required=False, allow_blank=True)
+    partner_website = serializers.URLField(
+        max_length=2048, required=False, allow_blank=True
+    )
 
 
 class LinkSerializer(serializers.Serializer):
-    LINK_TYPE = [(0, _('Website')),
-                 (1, _('SharePoint Repository ')),
-                 (2, _('External Advocacy/Communications')),
-                 (3, _('Monitoring, Evaluation or Learning')),
-                 (4, _('Other Documents/Resources'))]
+    LINK_TYPE = [
+        (0, _("Website")),
+        (1, _("SharePoint Repository ")),
+        (2, _("External Advocacy/Communications")),
+        (3, _("Monitoring, Evaluation or Learning")),
+        (4, _("Other Documents/Resources")),
+    ]
 
     link_type = serializers.ChoiceField(choices=LINK_TYPE)
     link_url = serializers.URLField(max_length=2048, required=False, allow_blank=True)
@@ -55,18 +78,24 @@ class StageSerializer(serializers.Serializer):
 
 class ProjectPublishedSerializer(serializers.Serializer):
     # UNICEF Office and co
-    country_office = serializers.IntegerField(min_value=1, max_value=100000, required=True)
+    country_office = serializers.IntegerField(
+        min_value=1, max_value=100000, required=True
+    )
     country = serializers.ReadOnlyField()
     regional_office = serializers.ReadOnlyField()
 
     # SECTION 1 General
-    name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
+    name = serializers.CharField(
+        max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())]
+    )
     organisation = serializers.CharField(max_length=128)
     overview = serializers.CharField(max_length=300, required=True)
     implementation_overview = serializers.CharField(max_length=1024, required=False)
     start_date = serializers.CharField(max_length=256, required=True)
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    end_date_note = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date_note = serializers.CharField(
+        max_length=256, required=False, allow_blank=True
+    )
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
 
@@ -74,58 +103,88 @@ class ProjectPublishedSerializer(serializers.Serializer):
     goal_area = serializers.IntegerField()
     result_area = serializers.IntegerField(required=False)
     capability_levels = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     capability_categories = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     capability_subcategories = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
 
     # NEW FIELDS
     innovation_categories = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     unicef_sector = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1, required=True)
+        child=serializers.IntegerField(), max_length=64, min_length=1, required=True
+    )
     regional_priorities = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     program_targets = serializers.CharField(max_length=1024, required=False)
     program_targets_achieved = serializers.CharField(max_length=1024, required=False)
     target_group_reached = serializers.IntegerField(required=False)
     current_achievements = serializers.CharField(max_length=2048, required=False)
     cpd = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     awp = serializers.CharField(max_length=500, required=False)
     wbs = serializers.ListField(
-        child=serializers.CharField(max_length=30), max_length=50, min_length=0, required=False, allow_empty=True)
+        child=serializers.CharField(max_length=30),
+        max_length=50,
+        min_length=0,
+        required=False,
+        allow_empty=True,
+    )
     total_budget = serializers.IntegerField(required=False)
     total_budget_narrative = serializers.CharField(max_length=500, required=False)
     funding_needs = serializers.CharField(max_length=500, required=False)
     partnership_needs = serializers.CharField(max_length=500, required=False)
     currency = serializers.IntegerField(required=False)
     hardware = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     nontech = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     functions = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
 
     links = LinkSerializer(many=True, required=False, allow_empty=True)
     partners = PartnerSerializer(many=True, required=False, allow_empty=True)
 
     # ITERATION 2 Fields
     innovation_ways = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+        child=serializers.IntegerField(),
+        max_length=64,
+        min_length=0,
+        allow_empty=True,
+        required=False,
+    )
     isc = serializers.IntegerField(required=False)
 
     # SECTION 2 Implementation Overview
     platforms = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     dhis = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     health_focus_areas = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
-    donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
+        child=serializers.IntegerField(),
+        max_length=64,
+        min_length=0,
+        allow_empty=True,
+        required=False,
+    )
+    donors = serializers.ListField(
+        child=serializers.IntegerField(), max_length=32, required=False
+    )
 
     stages = StageSerializer(many=True, required=False, allow_empty=True)
     phase = serializers.IntegerField(required=False)
@@ -138,13 +197,19 @@ class ProjectPublishedSerializer(serializers.Serializer):
         try:
             self.co = CountryOffice.objects.get(id=value)
         except CountryOffice.DoesNotExist:
-            raise serializers.ValidationError('Country office does not exist.')
+            raise serializers.ValidationError("Country office does not exist.")
 
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
-            if project.public_id and 'country_office' in project.data and \
-                    project.data['country_office'] != self.initial_data['country_office']:
-                raise serializers.ValidationError('Country office cannot be altered on published projects.')
+            if (
+                project.public_id
+                and "country_office" in project.data
+                and project.data["country_office"]
+                != self.initial_data["country_office"]
+            ):
+                raise serializers.ValidationError(
+                    "Country office cannot be altered on published projects."
+                )
         return value
 
     @staticmethod
@@ -152,7 +217,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         try:
             parse(value)
         except ParserError:
-            raise serializers.ValidationError('Wrong date format')
+            raise serializers.ValidationError("Wrong date format")
         return value
 
     def validate_start_date(self, value):
@@ -162,19 +227,25 @@ class ProjectPublishedSerializer(serializers.Serializer):
         return self.validate_date(value)
 
     def validate(self, attrs):
-        if attrs.get('end_date'):
-            if parse(attrs.get('end_date')) < parse(attrs.get('start_date')):
-                raise serializers.ValidationError({'end_date': 'End date cannot be earlier than start date'})
+        if attrs.get("end_date"):
+            if parse(attrs.get("end_date")) < parse(attrs.get("start_date")):
+                raise serializers.ValidationError(
+                    {"end_date": "End date cannot be earlier than start date"}
+                )
         return attrs
 
     def update(self, instance, validated_data):
-        validated_data['country'] = self.co.country.id
-        validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
-        validated_data['current_phase'] = Stage.calc_current_phase(validated_data.get('stages', []))
+        validated_data["country"] = self.co.country.id
+        validated_data["regional_office"] = (
+            self.co.regional_office.id if self.co.regional_office else ""
+        )
+        validated_data["current_phase"] = Stage.calc_current_phase(
+            validated_data.get("stages", [])
+        )
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
-        instance.make_public_id(validated_data['country'])
+        instance.make_public_id(validated_data["country"])
         instance.save()
 
         return instance
@@ -184,6 +255,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
     Override fields that are not required for draft project.
     """
+
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128)
     organisation = serializers.CharField(max_length=128, required=False)
@@ -198,12 +270,17 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # NEW FIELDS
     overview = serializers.CharField(max_length=300, required=False)
     unicef_sector = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
 
     def create(self, validated_data):
-        validated_data['country'] = self.co.country.id
-        validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
-        validated_data['current_phase'] = Stage.calc_current_phase(validated_data.get('stages', []))
+        validated_data["country"] = self.co.country.id
+        validated_data["regional_office"] = (
+            self.co.regional_office.id if self.co.regional_office else ""
+        )
+        validated_data["current_phase"] = Stage.calc_current_phase(
+            validated_data.get("stages", [])
+        )
         return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
@@ -213,9 +290,13 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         if not instance.public_id:
             instance.name = validated_data["name"]
 
-        validated_data['country'] = self.co.country.id
-        validated_data['regional_office'] = self.co.regional_office.id if self.co.regional_office else ""
-        validated_data['current_phase'] = Stage.calc_current_phase(validated_data.get('stages', []))
+        validated_data["country"] = self.co.country.id
+        validated_data["regional_office"] = (
+            self.co.regional_office.id if self.co.regional_office else ""
+        )
+        validated_data["current_phase"] = Stage.calc_current_phase(
+            validated_data.get("stages", [])
+        )
         instance.draft = validated_data
         return instance
 
@@ -223,10 +304,18 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 class ProjectGroupSerializer(serializers.ModelSerializer):
     new_team_emails = serializers.ListField(
         child=serializers.EmailField(validators=[EmailEndingValidator()]),
-        max_length=64, min_length=0, allow_empty=True, required=False)
+        max_length=64,
+        min_length=0,
+        allow_empty=True,
+        required=False,
+    )
     new_viewer_emails = serializers.ListField(
         child=serializers.EmailField(validators=[EmailEndingValidator()]),
-        max_length=64, min_length=0, allow_empty=True, required=False)
+        max_length=64,
+        min_length=0,
+        allow_empty=True,
+        required=False,
+    )
 
     class Meta:
         model = Project
@@ -239,26 +328,26 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         return user
 
     def save(self, **kwargs):
-        for email in self.validated_data.get('new_team_emails', []):
+        for email in self.validated_data.get("new_team_emails", []):
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
                 user = self.perform_create(email)
-            self.validated_data['team'].append(user.userprofile)
+            self.validated_data["team"].append(user.userprofile)
 
-        for email in self.validated_data.get('new_viewer_emails', []):
+        for email in self.validated_data.get("new_viewer_emails", []):
             try:
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
                 user = self.perform_create(email)
-            self.validated_data['viewers'].append(user.userprofile)
+            self.validated_data["viewers"].append(user.userprofile)
 
-        self.validated_data.pop('new_team_emails', None)
-        self.validated_data.pop('new_viewer_emails', None)
+        self.validated_data.pop("new_team_emails", None)
+        self.validated_data.pop("new_viewer_emails", None)
 
         # remove duplicates
-        self.validated_data['team'] = list(set(self.validated_data['team']))
-        self.validated_data['viewers'] = list(set(self.validated_data['viewers']))
+        self.validated_data["team"] = list(set(self.validated_data["team"]))
+        self.validated_data["viewers"] = list(set(self.validated_data["viewers"]))
 
         return super().save(**kwargs)
 
@@ -266,20 +355,26 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         self._send_notification(instance, validated_data)
 
         # don't allow empty team, so no orphan projects
-        if 'team' in validated_data and isinstance(validated_data['team'], list):
-            instance.team.set(validated_data.get('team') or instance.team.all())
+        if "team" in validated_data and isinstance(validated_data["team"], list):
+            instance.team.set(validated_data.get("team") or instance.team.all())
 
         # a project however can exist without viewers
-        if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
-            instance.viewers.set(validated_data['viewers'])
+        if "viewers" in validated_data and isinstance(validated_data["viewers"], list):
+            instance.viewers.set(validated_data["viewers"])
 
         instance.save()
 
         return instance
 
     def _send_notification(self, instance, validated_data):
-        new_team_members = [x for x in validated_data.get('team', []) if x not in instance.team.all()]
-        new_viewers = [x for x in validated_data.get('viewers', []) if x not in instance.viewers.all()]
+        new_team_members = [
+            x for x in validated_data.get("team", []) if x not in instance.team.all()
+        ]
+        new_viewers = [
+            x
+            for x in validated_data.get("viewers", [])
+            if x not in instance.viewers.all()
+        ]
 
         for profile in new_team_members:
             context = {
@@ -288,11 +383,13 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 "project_name": instance.name,
                 "role": "team member",
             }
-            send_mail_wrapper(subject="You have been added to a project in the T4D & Innovation Inventory Portal",
-                              email_type="new_member",
-                              to=profile.user.email,
-                              language=profile.language,
-                              context=context)
+            send_mail_wrapper(
+                subject="You have been added to a project in the T4D & Innovation Inventory Portal",
+                email_type="new_member",
+                to=profile.user.email,
+                language=profile.language,
+                context=context,
+            )
 
         for profile in new_viewers:
             context = {
@@ -301,15 +398,17 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 "project_name": instance.name,
                 "role": "viewer",
             }
-            send_mail_wrapper(subject="You have been added to a project in the T4D & Innovation Inventory Portal",
-                              email_type="new_member",
-                              to=profile.user.email,
-                              language=profile.language,
-                              context=context)
+            send_mail_wrapper(
+                subject="You have been added to a project in the T4D & Innovation Inventory Portal",
+                email_type="new_member",
+                to=profile.user.email,
+                language=profile.language,
+                context=context,
+            )
 
 
 class MapProjectCountrySerializer(serializers.ModelSerializer):
-    country = ReadOnlyField(source='get_country_id')
+    country = ReadOnlyField(source="get_country_id")
 
     class Meta:
         model = Project
@@ -319,76 +418,99 @@ class MapProjectCountrySerializer(serializers.ModelSerializer):
 class CustomAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField(required=True)
     answer = serializers.ListField(
-        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
+        child=serializers.CharField(max_length=512),
+        max_length=50,
+        min_length=0,
+        required=True,
+    )
 
     def validate_question_id(self, value):
-        self.context['question'] = self.context['question_queryset'].filter(id=int(value)).first()
-        if not self.context['question']:
-            raise ValidationError('This question_id does not exist.')
+        self.context["question"] = (
+            self.context["question_queryset"].filter(id=int(value)).first()
+        )
+        if not self.context["question"]:
+            raise ValidationError("This question_id does not exist.")
         return value
 
     def validate_required_answer(self, value):
         if not value:
-            raise ValidationError({'answer': 'This field is required.'})
+            raise ValidationError({"answer": "This field is required."})
 
     def validate_numeric_answer(self, value):
         if value and isinstance(value[0], str) and not value[0].isnumeric():
-            raise ValidationError({'answer': 'This field must be numeric.'})
+            raise ValidationError({"answer": "This field must be numeric."})
 
     def validate_answer_length(self, value):
         if value and len(value) > 1:
-            raise ValidationError({'answer': 'There must be 1 answer only.'})
+            raise ValidationError({"answer": "There must be 1 answer only."})
 
     def validate(self, attrs):
-        if not self.context['is_draft']:
-            if self.context['question'].required:
-                self.validate_required_answer(attrs['answer'])
-            if self.context['question'].type != CustomQuestion.MULTI:
-                self.validate_answer_length(attrs['answer'])
-            if self.context['question'].type == CustomQuestion.NUMBER:
-                self.validate_numeric_answer(attrs['answer'])
+        if not self.context["is_draft"]:
+            if self.context["question"].required:
+                self.validate_required_answer(attrs["answer"])
+            if self.context["question"].type != CustomQuestion.MULTI:
+                self.validate_answer_length(attrs["answer"])
+            if self.context["question"].type == CustomQuestion.NUMBER:
+                self.validate_numeric_answer(attrs["answer"])
         return attrs
 
 
 class CountryCustomAnswerListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
-        instance = self.context['project']
-        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
-        instance.draft['country_custom_answers'] = custom_answers
-        if not self.context['is_draft']:
-            private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
+        instance = self.context["project"]
+        custom_answers = {k["question_id"]: k["answer"] for k in validated_data}
+        instance.draft["country_custom_answers"] = custom_answers
+        if not self.context["is_draft"]:
+            private_ids = (
+                self.context["question_queryset"]
+                .filter(private=True)
+                .values_list("id", flat=True)
+            )
             if private_ids:
-                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
-                instance.data['country_custom_answers_private'] = private_answers
-                instance.data['country_custom_answers'] = remove_keys(data_dict=custom_answers, keys=private_ids)
+                private_answers = {
+                    k: custom_answers[k] for k in custom_answers if k in private_ids
+                }
+                instance.data["country_custom_answers_private"] = private_answers
+                instance.data["country_custom_answers"] = remove_keys(
+                    data_dict=custom_answers, keys=private_ids
+                )
             else:
-                instance.data['country_custom_answers'] = custom_answers
+                instance.data["country_custom_answers"] = custom_answers
         return instance
 
 
 class DonorCustomAnswerListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
-        instance = self.context['project']
-        donor_id = self.context['donor_id']
+        instance = self.context["project"]
+        donor_id = self.context["donor_id"]
 
-        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
-        instance.draft.setdefault('donor_custom_answers', {})
-        instance.draft['donor_custom_answers'].setdefault(donor_id, {})
-        instance.draft['donor_custom_answers'][donor_id] = custom_answers
+        custom_answers = {k["question_id"]: k["answer"] for k in validated_data}
+        instance.draft.setdefault("donor_custom_answers", {})
+        instance.draft["donor_custom_answers"].setdefault(donor_id, {})
+        instance.draft["donor_custom_answers"][donor_id] = custom_answers
 
-        if not self.context['is_draft']:
-            private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
+        if not self.context["is_draft"]:
+            private_ids = (
+                self.context["question_queryset"]
+                .filter(private=True)
+                .values_list("id", flat=True)
+            )
             if private_ids:
-                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
-                instance.data.setdefault('donor_custom_answers_private', {})
-                instance.data['donor_custom_answers_private'].setdefault(donor_id, {})
-                instance.data['donor_custom_answers_private'][donor_id] = private_answers
-                instance.data['donor_custom_answers'][donor_id] = remove_keys(data_dict=custom_answers,
-                                                                              keys=private_ids)
+                private_answers = {
+                    k: custom_answers[k] for k in custom_answers if k in private_ids
+                }
+                instance.data.setdefault("donor_custom_answers_private", {})
+                instance.data["donor_custom_answers_private"].setdefault(donor_id, {})
+                instance.data["donor_custom_answers_private"][
+                    donor_id
+                ] = private_answers
+                instance.data["donor_custom_answers"][donor_id] = remove_keys(
+                    data_dict=custom_answers, keys=private_ids
+                )
             else:
-                instance.data.setdefault('donor_custom_answers', {})
-                instance.data['donor_custom_answers'].setdefault(donor_id, {})
-                instance.data['donor_custom_answers'][donor_id] = custom_answers
+                instance.data.setdefault("donor_custom_answers", {})
+                instance.data["donor_custom_answers"].setdefault(donor_id, {})
+                instance.data["donor_custom_answers"][donor_id] = custom_answers
         return instance
 
 
@@ -403,21 +525,32 @@ class DonorCustomAnswerSerializer(CustomAnswerSerializer):
 
 
 class ProjectApprovalSerializer(serializers.ModelSerializer):
-    project = serializers.ReadOnlyField(source='project_id')
+    project = serializers.ReadOnlyField(source="project_id")
     project_name = serializers.SerializerMethodField()
     history = serializers.SerializerMethodField()
-    legacy_approved_by = serializers.ReadOnlyField(source='user_id')
+    legacy_approved_by = serializers.ReadOnlyField(source="user_id")
 
     class Meta:
         model = ProjectApproval
-        fields = ('id', 'project_name', 'created', 'modified', 'approved',
-                  'reason', 'project', 'history', 'legacy_approved_by')
+        fields = (
+            "id",
+            "project_name",
+            "created",
+            "modified",
+            "approved",
+            "reason",
+            "project",
+            "history",
+            "legacy_approved_by",
+        )
 
     def get_project_name(self, obj):
         return obj.project.name
 
     def get_history(self, obj):
-        return obj.history.values('history_user__userprofile', 'approved', 'reason', 'modified')
+        return obj.history.values(
+            "history_user__userprofile", "approved", "reason", "modified"
+        )
 
 
 class ImportRowSerializer(serializers.ModelSerializer):
@@ -433,74 +566,99 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectImportV2
-        fields = ('id', 'user', 'status', 'header_mapping',
-                  'rows', 'country', 'country_office', 'donor', 'filename', 'sheet_name', 'draft')
+        fields = (
+            "id",
+            "user",
+            "status",
+            "header_mapping",
+            "rows",
+            "country",
+            "country_office",
+            "donor",
+            "filename",
+            "sheet_name",
+            "draft",
+        )
 
     # TODO: Need Coverage
     def create(self, validated_data):  # pragma: no cover
-        rows = validated_data.pop('rows')
+        rows = validated_data.pop("rows")
         instance = super().create(validated_data)
-        for row_data in rows[0].get('data', []):
-            ImportRow.objects.create(parent=instance, data=row_data, original_data=row_data)
+        for row_data in rows[0].get("data", []):
+            ImportRow.objects.create(
+                parent=instance, data=row_data, original_data=row_data
+            )
         return instance
 
     # TODO: Need Coverage
     def update(self, instance, validated_data):  # pragma: no cover
-        rows = validated_data.pop('rows', [])
+        rows = validated_data.pop("rows", [])
         instance = super().update(instance, validated_data)
         for row in rows:
-            ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
+            ImportRow.objects.get(id=row["id"]).update(data=row.get("data"))
         return instance
 
 
 class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=512,
-                                 validators=[UniqueValidator(
-                                     queryset=TechnologyPlatform.objects.all(), lookup='iexact')])
+    name = serializers.CharField(
+        max_length=512,
+        validators=[
+            UniqueValidator(queryset=TechnologyPlatform.objects.all(), lookup="iexact")
+        ],
+    )
 
     class Meta:
         model = TechnologyPlatform
-        fields = '__all__'
-        read_only_fields = ('is_active', 'state', 'added_by')
+        fields = "__all__"
+        read_only_fields = ("is_active", "state", "added_by")
 
 
 class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=512,
-                                 validators=[UniqueValidator(
-                                     queryset=HardwarePlatform.objects.all(), lookup='iexact')])
+    name = serializers.CharField(
+        max_length=512,
+        validators=[
+            UniqueValidator(queryset=HardwarePlatform.objects.all(), lookup="iexact")
+        ],
+    )
 
     class Meta:
         model = HardwarePlatform
-        fields = '__all__'
-        read_only_fields = ('is_active', 'state', 'added_by')
+        fields = "__all__"
+        read_only_fields = ("is_active", "state", "added_by")
 
 
 class NontechPlatformCreateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=512,
-                                 validators=[UniqueValidator(
-                                     queryset=NontechPlatform.objects.all(), lookup='iexact')])
+    name = serializers.CharField(
+        max_length=512,
+        validators=[
+            UniqueValidator(queryset=NontechPlatform.objects.all(), lookup="iexact")
+        ],
+    )
 
     class Meta:
         model = NontechPlatform
-        fields = '__all__'
-        read_only_fields = ('is_active', 'state', 'added_by')
+        fields = "__all__"
+        read_only_fields = ("is_active", "state", "added_by")
 
 
 class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=512,
-                                 validators=[UniqueValidator(
-                                     queryset=PlatformFunction.objects.all(), lookup='iexact')])
+    name = serializers.CharField(
+        max_length=512,
+        validators=[
+            UniqueValidator(queryset=PlatformFunction.objects.all(), lookup="iexact")
+        ],
+    )
 
     class Meta:
         model = PlatformFunction
-        fields = '__all__'
-        read_only_fields = ('is_active', 'state', 'added_by')
+        fields = "__all__"
+        read_only_fields = ("is_active", "state", "added_by")
 
 
 class ProblemStatementSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProblemStatement
-        fields = ('id', 'name', 'description')
+        fields = ("id", "name", "description")
         extra_kwargs = {
             "id": {
                 "read_only": False,
@@ -517,12 +675,27 @@ class PortfolioListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'project_count',
-                  'managers', 'status', 'landscape_review', 'problem_statements', 'investment_to_date', 'innovation_hub')
+        fields = (
+            "id",
+            "name",
+            "description",
+            "icon",
+            "project_count",
+            "managers",
+            "status",
+            "landscape_review",
+            "problem_statements",
+            "investment_to_date",
+            "innovation_hub",
+        )
 
     @staticmethod
     def get_project_count(obj):
-        return len(Project.objects.published_only().filter(is_active=True, review_states__in=obj.review_states.all()))
+        return len(
+            Project.objects.published_only().filter(
+                is_active=True, review_states__in=obj.review_states.all()
+            )
+        )
 
 
 class ReviewScoreBriefSerializer(serializers.ModelSerializer):
@@ -530,7 +703,15 @@ class ReviewScoreBriefSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewScore
-        fields = ('id', 'created', 'modified', 'reviewer', 'portfolio_review', 'status', 'overall_reviewer_feedback')
+        fields = (
+            "id",
+            "created",
+            "modified",
+            "reviewer",
+            "portfolio_review",
+            "status",
+            "overall_reviewer_feedback",
+        )
 
 
 class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
@@ -538,7 +719,7 @@ class ProjectPortfolioStateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectPortfolioState
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ReviewScoreSerializer(serializers.ModelSerializer):
@@ -547,20 +728,24 @@ class ReviewScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewScore
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
-    impact = serializers.ChoiceField(required=True, choices=ProjectPortfolioState.BASE_CHOICES, allow_blank=False)
-    scale_phase = serializers.ChoiceField(required=True, choices=ProjectPortfolioState.SCALE_CHOICES, allow_blank=False)
-    project = serializers.IntegerField(read_only=True, source='project.id')
-    portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
+    impact = serializers.ChoiceField(
+        required=True, choices=ProjectPortfolioState.BASE_CHOICES, allow_blank=False
+    )
+    scale_phase = serializers.ChoiceField(
+        required=True, choices=ProjectPortfolioState.SCALE_CHOICES, allow_blank=False
+    )
+    project = serializers.IntegerField(read_only=True, source="project.id")
+    portfolio = serializers.IntegerField(read_only=True, source="portfolio.id")
     review_scores = ReviewScoreSerializer(many=True, read_only=True, required=False)
     averages = serializers.SerializerMethodField(read_only=True, required=False)
 
     class Meta:
         model = ProjectPortfolioState
-        fields = ('__all__')
+        fields = "__all__"
 
     def update(self, instance, validated_data):
         """
@@ -578,13 +763,13 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
             return (sum(in_list) / len(in_list)) if in_list else None
 
         return {
-            'rnci': calc_avg([score.rnci for score in complete_scores if score.rnci]),
-            'ratp': calc_avg([score.ratp for score in complete_scores if score.ratp]),
-            'ra': calc_avg([score.ra for score in complete_scores if score.ra]),
-            'ee': calc_avg([score.ee for score in complete_scores if score.ee]),
-            'nst': calc_avg([score.nst for score in complete_scores if score.nst]),
-            'ps': calc_avg([score.ps for score in complete_scores if score.ps]),
-            'nc': calc_avg([score.nc for score in complete_scores if score.nc])
+            "rnci": calc_avg([score.rnci for score in complete_scores if score.rnci]),
+            "ratp": calc_avg([score.ratp for score in complete_scores if score.ratp]),
+            "ra": calc_avg([score.ra for score in complete_scores if score.ra]),
+            "ee": calc_avg([score.ee for score in complete_scores if score.ee]),
+            "nst": calc_avg([score.nst for score in complete_scores if score.nst]),
+            "ps": calc_avg([score.ps for score in complete_scores if score.ps]),
+            "nc": calc_avg([score.nc for score in complete_scores if score.nc]),
         }
 
 
@@ -593,18 +778,31 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'landscape_review', 'problem_statements', 'investment_to_date', 'innovation_hub')
+        fields = (
+            "id",
+            "name",
+            "description",
+            "icon",
+            "status",
+            "managers",
+            "landscape_review",
+            "problem_statements",
+            "investment_to_date",
+            "innovation_hub",
+        )
 
     @staticmethod
     def _create_problem_statements(instance, problem_statements):
         for ps in problem_statements:
-            ProblemStatement.objects.create(name=ps['name'], description=ps['description'], portfolio=instance)
+            ProblemStatement.objects.create(
+                name=ps["name"], description=ps["description"], portfolio=instance
+            )
 
     def create(self, validated_data):
         """
         Creates new portfolio - needs explicit serializer due to nested fields
         """
-        problem_statements = validated_data.pop('problem_statements')
+        problem_statements = validated_data.pop("problem_statements")
         instance = super().create(validated_data)
 
         self._create_problem_statements(instance, problem_statements)
@@ -616,44 +814,73 @@ class PortfolioSerializer(serializers.ModelSerializer):
         Override serializer due to nested Problem Statements
         """
 
-        if 'problem_statements' in validated_data:  # this is to support PATCH update
-            ps_data = validated_data.pop('problem_statements')
+        if "problem_statements" in validated_data:  # this is to support PATCH update
+            ps_data = validated_data.pop("problem_statements")
             instance = super().update(instance, validated_data)
             # Handle delete
-            update_ids = {ps['id'] for ps in ps_data if 'id' in ps}
+            update_ids = {ps["id"] for ps in ps_data if "id" in ps}
             existing_pss = instance.problem_statements.all()
 
             for ps_exist in existing_pss:
-                if ps_exist.id not in update_ids:  # Delete problem statements not in update data
+                if (
+                    ps_exist.id not in update_ids
+                ):  # Delete problem statements not in update data
                     ps_exist.delete()
             for ps in ps_data:
-                ps['portfolio_id'] = instance.id
+                ps["portfolio_id"] = instance.id
                 ProblemStatement.objects.update_or_create(
-                    id=ps['id'] if 'id' in ps else None,
-                    defaults=ps
+                    id=ps["id"] if "id" in ps else None, defaults=ps
                 )
         else:
             instance = super().update(instance, validated_data)
         return instance
-    
 
 
 class PortfolioStateChangeSerializer(PortfolioSerializer):
-    review_states = ProjectPortfolioStateSerializer(many=True, required=False, read_only=True)
+    review_states = ProjectPortfolioStateSerializer(
+        many=True, required=False, read_only=True
+    )
 
     class Meta:
         model = Portfolio
-        fields = ('id', 'name', 'description', 'icon', 'status', 'managers', 'review_states')
+        fields = (
+            "id",
+            "name",
+            "description",
+            "icon",
+            "status",
+            "managers",
+            "review_states",
+        )
 
 
 class ReviewScoreFillSerializer(serializers.ModelSerializer):
-    status = serializers.ChoiceField(required=False, choices=ReviewScore.STATUS_CHOICES, allow_blank=False)
+    status = serializers.ChoiceField(
+        required=False, choices=ReviewScore.STATUS_CHOICES, allow_blank=False
+    )
 
     class Meta:
         model = ReviewScore
-        fields = ('psa', 'psa_comment', 'rnci', 'rnci_comment', 'ratp', 'ratp_comment', 'ra', 'ra_comment', 'ee',
-                  'ee_comment', 'nst', 'nst_comment', 'nc', 'nc_comment', 'ps', 'ps_comment',
-                  'overall_reviewer_feedback', 'status')
+        fields = (
+            "psa",
+            "psa_comment",
+            "rnci",
+            "rnci_comment",
+            "ratp",
+            "ratp_comment",
+            "ra",
+            "ra_comment",
+            "ee",
+            "ee_comment",
+            "nst",
+            "nst_comment",
+            "nc",
+            "nc_comment",
+            "ps",
+            "ps_comment",
+            "overall_reviewer_feedback",
+            "status",
+        )
 
     def update(self, instance, validated_data):
         """
@@ -666,14 +893,14 @@ class ReviewScoreFillSerializer(serializers.ModelSerializer):
 
 
 class ReviewScoreDetailedSerializer(serializers.ModelSerializer):
-    project = serializers.ReadOnlyField(source='get_project_data')
-    portfolio = PortfolioSerializer(read_only=True, source='get_portfolio')
+    project = serializers.ReadOnlyField(source="get_project_data")
+    portfolio = PortfolioSerializer(read_only=True, source="get_portfolio")
     portfolio_review = ProjectPortfolioStateSerializer(read_only=True)
     status = serializers.ChoiceField(choices=ReviewScore.STATUS_CHOICES)
 
     class Meta:
         model = ReviewScore
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ProjectCardSerializer(serializers.ModelSerializer):
@@ -687,40 +914,55 @@ class ProjectCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        read_only_fields = ('id', 'name', 'modified', 'is_draft', 'description',
-                            'unicef_office', 'country', 'team', 'thumbnail')
+        read_only_fields = (
+            "id",
+            "name",
+            "modified",
+            "is_draft",
+            "description",
+            "unicef_office",
+            "country",
+            "team",
+            "thumbnail",
+        )
         fields = read_only_fields
 
     @staticmethod
     def get_name(obj):
-        return obj.name if obj.public_id else obj.draft.get('name', '')
+        return obj.name if obj.public_id else obj.draft.get("name", "")
 
     @staticmethod
     def get_is_draft(obj):
-        return obj.public_id == ''
+        return obj.public_id == ""
 
     @staticmethod
     def get_description(obj):
         data = obj.data if obj.public_id else obj.draft
-        return data.get('implementation_overview', '')
+        return data.get("implementation_overview", "")
 
     @staticmethod
     def get_unicef_office(obj):
         data = obj.data if obj.public_id else obj.draft
-        return data.get('country_office', '')
+        return data.get("country_office", "")
 
     @staticmethod
     def get_country(obj):
-        return obj.get_country_id(draft_mode=obj.public_id == '')
+        return obj.get_country_id(draft_mode=obj.public_id == "")
 
     def get_team(self, obj):
         qs = obj.team.all()
-        request = self.context.get('request')
-        user_in_team = request and request.user and request.user.userprofile and obj.team.filter(
-            id=request.user.userprofile.id).exists()
+        request = self.context.get("request")
+        user_in_team = (
+            request
+            and request.user
+            and request.user.userprofile
+            and obj.team.filter(id=request.user.userprofile.id).exists()
+        )
 
         if user_in_team:
-            my_index = list(qs.values_list('id', flat=True)).index(request.user.userprofile.id)
+            my_index = list(qs.values_list("id", flat=True)).index(
+                request.user.userprofile.id
+            )
             team_list = list(qs)
             if my_index != 0:
                 team_list.insert(0, team_list.pop(my_index))
@@ -738,7 +980,7 @@ class ProjectImageUploadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'image', 'image_url', 'thumbnail')
+        fields = ("id", "image", "image_url", "thumbnail")
 
     @staticmethod
     def get_thumbnail(obj):
@@ -747,36 +989,49 @@ class ProjectImageUploadSerializer(serializers.ModelSerializer):
 
 class CountrySolutionSerializer(serializers.ModelSerializer):
     # Use the country's ID as the primary key in the serialized data
-    id = serializers.IntegerField(source='country.id')
+    id = serializers.IntegerField(source="country.id")
 
     class Meta:
         model = CountrySolution
-        fields = ('id', 'people_reached', 'region')
+        fields = ("id", "people_reached", "region")
 
 
 class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
     problem_statements = ProblemStatementSerializer(many=True)
-    portfolio = serializers.IntegerField(read_only=True, source='portfolio.id')
+    portfolio = serializers.IntegerField(read_only=True, source="portfolio.id")
 
     class Meta:
         model = CountrySolution
-        fields = ('id', 'people_reached', 'region')
+        fields = ("id", "people_reached", "region")
 
 
 class SolutionSerializer(serializers.ModelSerializer):
     # Define custom serializers for each field
-    regions = serializers.ListField(child=serializers.IntegerField(), max_length=8, min_length=0)
+    regions = serializers.ListField(
+        child=serializers.IntegerField(), max_length=8, min_length=0
+    )
     people_reached = serializers.IntegerField(allow_null=True)
-    countries = CountrySolutionSerializer(source='countrysolution_set', many=True)
+    countries = CountrySolutionSerializer(source="countrysolution_set", many=True)
     problem_statements = ProblemStatementSerializer(many=True, required=False)
     portfolios = PortfolioSerializer(many=True)
 
     class Meta:
         model = Solution
         # Define the fields to be included in the serialized data
-        fields = ('id', 'created', 'modified', 'name', 'regions', 'phase', 'countries',
-                  'people_reached', 'open_source_frontier_tech', 'learning_investment',
-                  'portfolios', 'problem_statements')
+        fields = (
+            "id",
+            "created",
+            "modified",
+            "name",
+            "regions",
+            "phase",
+            "countries",
+            "people_reached",
+            "open_source_frontier_tech",
+            "learning_investment",
+            "portfolios",
+            "problem_statements",
+        )
 
 
 class ProjectVersionHistorySerializer(serializers.ModelSerializer):
@@ -787,7 +1042,16 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectVersion
-        fields = ('id', 'version', 'modified', 'user', 'changes', 'published', 'beyond_history', 'was_unpublished')
+        fields = (
+            "id",
+            "version",
+            "modified",
+            "user",
+            "changes",
+            "published",
+            "beyond_history",
+            "was_unpublished",
+        )
 
     def get_previous(self, obj):
         versions = list(self.instance)
@@ -818,42 +1082,69 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
 
         changes = []
         for k in keys_added:
-            if isinstance(cur[k], dict) or isinstance(cur[k], list) \
-                    and len(cur[k]) > 0 and (isinstance(cur[k][0], list) or isinstance(cur[k][0], dict)):
+            if (
+                isinstance(cur[k], dict)
+                or isinstance(cur[k], list)
+                and len(cur[k]) > 0
+                and (isinstance(cur[k][0], list) or isinstance(cur[k][0], dict))
+            ):
                 changes.append(dict(field=k, added=None, removed=None, special=True))
             else:
                 changes.append(dict(field=k, added=cur[k], removed=None, special=False))
 
         for k in keys_removed:
-            if isinstance(prev[k], dict) or isinstance(prev[k], list) \
-                    and len(prev[k]) > 0 and (isinstance(prev[k][0], list) or isinstance(prev[k][0], dict)):
+            if (
+                isinstance(prev[k], dict)
+                or isinstance(prev[k], list)
+                and len(prev[k]) > 0
+                and (isinstance(prev[k][0], list) or isinstance(prev[k][0], dict))
+            ):
                 changes.append(dict(field=k, added=None, removed=None, special=True))
             else:
-                changes.append(dict(field=k, added=None, removed=prev[k], special=False))
+                changes.append(
+                    dict(field=k, added=None, removed=prev[k], special=False)
+                )
 
         for k in keys_intersect:
             if cur[k] != prev[k]:
                 if isinstance(cur[k], list):
                     if len(cur[k]) > 0:
                         if isinstance(cur[k][0], list) or isinstance(cur[k][0], dict):
-                            changes.append(dict(field=k, added=None, removed=None, special=True))
+                            changes.append(
+                                dict(field=k, added=None, removed=None, special=True)
+                            )
                         elif isinstance(prev[k], list):
-                            changes.append(dict(field=k,
-                                                added=list(set(cur[k]) - set(prev[k])),
-                                                removed=list(set(prev[k]) - set(cur[k])),
-                                                special=False))
-                elif isinstance(cur[k], dict):  # eg: country_custom_answers, donor_custom_answers
-                    changes.append(dict(field=k, added=None, removed=None, special=True))
+                            changes.append(
+                                dict(
+                                    field=k,
+                                    added=list(set(cur[k]) - set(prev[k])),
+                                    removed=list(set(prev[k]) - set(cur[k])),
+                                    special=False,
+                                )
+                            )
+                elif isinstance(
+                    cur[k], dict
+                ):  # eg: country_custom_answers, donor_custom_answers
+                    changes.append(
+                        dict(field=k, added=None, removed=None, special=True)
+                    )
                 else:
-                    changes.append(dict(field=k, added=cur[k], removed=prev[k], special=False))
+                    changes.append(
+                        dict(field=k, added=cur[k], removed=prev[k], special=False)
+                    )
         return changes
 
     def get_beyond_history(self, obj):
         first_version = list(self.instance)[0]
-        inception_date = getattr(settings, 'PROJECT_VERSIONING_INSTALLED_AT', datetime(2021, 11, 9)).date()
+        inception_date = getattr(
+            settings, "PROJECT_VERSIONING_INSTALLED_AT", datetime(2021, 11, 9)
+        ).date()
 
-        return obj == first_version and \
-            obj.project.created.date() < inception_date and first_version.created.date() == inception_date
+        return (
+            obj == first_version
+            and obj.project.created.date() < inception_date
+            and first_version.created.date() == inception_date
+        )
 
     def get_was_unpublished(self, obj):
         previous = self.get_previous(obj)
