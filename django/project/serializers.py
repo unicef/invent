@@ -590,7 +590,6 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
 
 class PortfolioSerializer(serializers.ModelSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False)
-    portfolios = serializers.SerializerMethodField()
 
     class Meta:
         model = Portfolio
@@ -636,12 +635,6 @@ class PortfolioSerializer(serializers.ModelSerializer):
         else:
             instance = super().update(instance, validated_data)
         return instance
-    
-    def get_portfolios(self, obj):
-        portfolios_list = []
-        for portfolio in obj.solutions.all():
-            portfolios_list.append({'id': portfolio.id, 'name': portfolio.name})
-        return portfolios_list
     
 
 
