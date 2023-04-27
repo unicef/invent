@@ -973,7 +973,7 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
             'phase': self.phase,
             'open_source_frontier_tech': self.open_source_frontier_tech,
             'learning_investment': self.learning_investment,
-            'portfolios': portfolios,
+            'portfolios': list(portfolios),
             'problem_statements': list(problem_statements),
             'people_reached': self.people_reached,
             'country_solutions': list(country_solutions),
