@@ -88,7 +88,7 @@ export default {
                 localePath: {
                   name: `organisation-portfolio-innovation-id`,
                   params: { id: path },
-                  query: { ...this.$route.query },
+                  // query: { ...this.$route.query },
                 },
                 text: portfolioName || '',
               },
@@ -105,12 +105,28 @@ export default {
                 text: this.portfolioInnovationName || '',
               },
             ]
+          } else if (name === 'organisation-portfolio-innovation') {
+            breadcrumbs = [
+              ...breadcrumbs,
+              {
+                id: item,
+                localePath: {
+                  name,
+                  params: { ...this.$route.params },
+                },
+                text: this[name] || '',
+              },
+            ]
           } else {
             breadcrumbs = [
               ...breadcrumbs,
               {
                 id: item,
-                localePath: { name, params: { ...this.$route.params }, query: { ...this.$route.query } },
+                localePath: {
+                  name,
+                  params: { ...this.$route.params },
+                  query: { ...this.$route.query },
+                },
                 text: this[name] || '',
               },
             ]

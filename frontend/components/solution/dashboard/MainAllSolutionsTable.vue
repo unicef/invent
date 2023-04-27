@@ -40,11 +40,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        :resizable="false"
-        :label="$gettext('Problem Statement') | translate"
-        style="{minWidth: 600px, maxWidth: 800px}"
-      >
+      <el-table-column :resizable="false" :label="$gettext('Problem Statement') | translate" min-width="280">
         <template slot-scope="scope">
           <div v-for="ps in scope.row.problem_statements">
             <p>{{ ps.name }}</p>
