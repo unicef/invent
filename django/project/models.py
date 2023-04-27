@@ -24,6 +24,7 @@ from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys, migrate_project_phases
 from user.models import UserProfile
 
+from .serializers import PortfolioSerializer
 
 class ProjectManager(models.Manager):
     use_in_migrations = True
@@ -827,9 +828,11 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         (1, _('Acceleration')),
         (2, _('Scale')),
     ]
-
+    
     # Fields
+    # portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
     portfolios = models.ManyToManyField(Portfolio, related_name='solutions')
+    portfolio_serializer = PortfolioSerializer(portfolios, many=True)
     countries = models.ManyToManyField(Country, through='CountrySolution')
     problem_statements = models.ManyToManyField(ProblemStatement)
     phase = models.IntegerField(choices=PHASES)
@@ -857,6 +860,7 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         """
         self.people_reached_override = value
 
+    
     @property
     def regions(self) -> List:
         """
@@ -870,6 +874,8 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         The display names of the regions of the countries where the solution has been implemented.
         """
         return [CountryOffice.REGIONS[r][1] for r in self.regions]
+
+   
 
     # Class methods
     @classmethod
@@ -970,7 +976,7 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
             'phase': self.phase,
             'open_source_frontier_tech': self.open_source_frontier_tech,
             'learning_investment': self.learning_investment,
-            'portfolios': list(portfolios),
+            'portfolios': portfolio_serializer.data,
             'problem_statements': list(problem_statements),
             'people_reached': self.people_reached,
             'country_solutions': list(country_solutions),
