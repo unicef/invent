@@ -42,7 +42,11 @@ class AzureProvider(OAuth2Provider):
         return dict(email=email,
                     username=email,
                     last_name=data.get('displayName'),
-                    first_name=data.get('givenName'))
+                    first_name=data.get('givenName'),
+                    job_title=data.get('jobTitle'),
+                    department=data.get('department'),
+                    country=data.get('country')
+                    )
 
 
 provider_classes = [AzureProvider]
