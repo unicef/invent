@@ -35,15 +35,26 @@
       </el-table-column>
       <el-table-column :resizable="false" :label="$gettext('Portfolios') | translate" width="300">
         <template slot-scope="scope">
-          <div v-for="ps in scope.row.portfolios">
-            <p>{{ ps.name }}</p>
-          </div>
+          <p>
+            {{
+              scope.row.portfolios
+                .map((portfolio, index) => (index === 0 ? portfolio.name : ` ${portfolio.name}`))
+                .toString()
+            }}
+          </p>
         </template>
       </el-table-column>
       <el-table-column :resizable="false" :label="$gettext('Problem Statement') | translate" min-width="280">
         <template slot-scope="scope">
-          <div v-for="ps in scope.row.problem_statements">
-            <p>{{ ps.name }}</p>
+          <div v-if="scope.row.portfolios.length > 1">
+            <div v-for="ps in scope.row.problem_statements">
+              <p>{{ ps.portfolio_name ? `${ps.portfolio_name}: ${ps.name}` : ps.name }}</p>
+            </div>
+          </div>
+          <div v-else>
+            <div v-for="ps in scope.row.problem_statements">
+              <p>{{ ps.name }}</p>
+            </div>
           </div>
         </template>
       </el-table-column>
