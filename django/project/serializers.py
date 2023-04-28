@@ -656,9 +656,11 @@ class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
 
 
 class ProblemStatementSerializer(serializers.ModelSerializer):
+    portfolio_name = serializers.StringRelatedField(source='portfolio.name')
+
     class Meta:
         model = ProblemStatement
-        fields = ("id", "name", "description")
+        fields = ("id", "name", "description", "portfolio_name")
         extra_kwargs = {
             "id": {
                 "read_only": False,
