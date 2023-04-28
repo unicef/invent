@@ -246,7 +246,7 @@ export default {
         // this.setLoading(false)
         this.$message({
           type: 'info',
-          message: this.$gettext('Action failed'),
+          message: this.$gettext('Action Canceled.'),
         })
       }
     },
@@ -258,8 +258,18 @@ export default {
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning',
         })
+        await this.doDeleteSolution()
+      } catch (e) {
+        // this.setLoading(false)
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action Canceled.'),
+        })
+      }
+    },
+    async doDeleteSolution() {
+      try {
         await this.deleteSolution()
-
         const localised = this.localePath({
           name: 'organisation-portfolio-innovation-solutions',
           params: { ...this.$route.params },
@@ -271,7 +281,6 @@ export default {
           message: this.$gettext('Solution deleted succesfully'),
         })
       } catch (e) {
-        // this.setLoading(false)
         this.$alert(
           `${this.$gettext('Request failed, please retry, or contact support with code: ')} ${e.message}`,
           this.$gettext('Error'),

@@ -38,7 +38,6 @@
         </tabs>
         <section class="tab-content">
           <div v-if="tab === 1" class="Problems problem-matrix">
-            <h1 class="portfolio-summary"><Translate>Summary</Translate></h1>
             <p>{{ description }}</p>
           </div>
         </section>
@@ -173,9 +172,7 @@ export default {
   padding: 40px;
   background-color: #fbfaf8;
 }
-.portfolio-summary {
-  font-size: @fontSizeHeading;
-}
+
 .portfolio-area::v-deep {
   .move {
     display: none;
@@ -270,7 +267,7 @@ section.portfolio-area {
     display: flex;
     align-items: flex-end;
     color: @colorBrandPrimary;
-    padding-bottom: 18px;
+
     a {
       margin-left: auto;
       margin-right: 12px;
