@@ -51,7 +51,7 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
 
 class GetAADUsers(TokenAuthMixin, APIView):
     def get(self, request, format=None):
-        azure_adapter = AzureOAuth2Adapter()
+        azure_adapter = AzureOAuth2Adapter(request)
         azure_users = azure_adapter.get_aad_users()
 
         return Response({'users': azure_users}, status=status.HTTP_200_OK)

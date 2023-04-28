@@ -37,20 +37,20 @@ class AzureOAuth2Adapter(OAuth2Adapter):
 
         resp = requests.get(self.profile_url, headers=headers)
 
-# See:
-#
-# https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_get  # noqa
-#
-# example of what's returned (in python format)
-#
-# {u'displayName': u'John Smith', u'mobilePhone': None,
-#  u'preferredLanguage': u'en-US', u'jobTitle': u'Director',
-#  u'userPrincipalName': u'john@smith.com',
-#  u'@odata.context':
-#  u'https://graph.microsoft.com/v1.0/$metadata#users/$entity',
-#  u'officeLocation': u'Paris', u'businessPhones': [],
-#  u'mail': u'john@smith.com', u'surname': u'Smith',
-#  u'givenName': u'John', u'id': u'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'}
+        # See:
+        #
+        # https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_get  # noqa
+        #
+        # example of what's returned (in python format)
+        #
+        # {u'displayName': u'John Smith', u'mobilePhone': None,
+        #  u'preferredLanguage': u'en-US', u'jobTitle': u'Director',
+        #  u'userPrincipalName': u'john@smith.com',
+        #  u'@odata.context':
+        #  u'https://graph.microsoft.com/v1.0/$metadata#users/$entity',
+        #  u'officeLocation': u'Paris', u'businessPhones': [],
+        #  u'mail': u'john@smith.com', u'surname': u'Smith',
+        #  u'givenName': u'John', u'id': u'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'}
 
         profile_data = resp.json()
         extra_data.update(profile_data)
@@ -101,7 +101,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         users = json.loads(mock_users_json)
 
         return users
-    
 
     # def get_aad_users(self):
     #     url = 'https://graph.microsoft.com/v1.0/users'
@@ -122,7 +121,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
     #         url = response_data.get('@odata.nextLink', None)
 
     #     return users
-
 
     def get_access_token(self):
         tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT

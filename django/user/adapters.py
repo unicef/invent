@@ -44,7 +44,6 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
             user.save()
             sociallogin.account.user = user
             sociallogin.account.save()
-            # Update the following line to include job_title and department when creating a UserProfile
             UserProfile.objects.create(
                 user=user,
                 name=name,
@@ -60,8 +59,8 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
             sociallogin.user = old_user
             if not old_user.userprofile.name:
                 old_user.userprofile.name = name
-                old_user.userprofile.job_title = job_title  # Add this line to update the job_title
-                old_user.userprofile.department = department  # Add this line to update the department
+                old_user.userprofile.job_title = job_title
+                old_user.userprofile.department = department
                 old_user.userprofile.save()
 
         return user
