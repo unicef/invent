@@ -9,6 +9,7 @@ from rest_auth.registration.views import SocialLoginView
 from django.conf import settings
 from azure.views import AzureOAuth2Adapter
 from .models import UserProfile
+from country.models import Country
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -71,38 +72,52 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         for azure_user in azure_users:
             email = azure_user['mail']
             display_name = azure_user['displayName']
+            job_title = azure_user['jobTitle']
+            department = azure_user['department']
+            country_name = azure_user['country']
             social_account_uid = azure_user['id']
 
             # Get or create user
-            user, created = user_model.objects.get_or_create(email=email, defaults={'username': email})
-            if created:
+            try:
+                user = user_model.objects.get(email=email)
+            except user_model.DoesNotExist:
+                user = user_model.objects.create(email=email, username=email)
                 user.set_unusable_password()
                 user.save()
 
-            # Update UserProfile
-            profile, _ = UserProfile.objects.get_or_create(user=user)
-            if not profile.name:
-                profile.name = display_name
-                profile.job_title = azure_user['jobTitle']
-                profile.department = azure_user['department']
-                profile.country = azure_user['country']
-                profile.account_type = UserProfile.DONOR
-                profile.save()
+            # Check if the user exists
+            try:
+                old_user = user_model.objects.filter(email=user.email).get()
+            except user_model.DoesNotExist:
+                # Get or create Country instance
+                country, _ = Country.objects.get_or_create(name=country_name)
 
-            # UserProfile.objects.create(
-            #     user=user,
-            #     name=display_name,
-            #     account_type=UserProfile.DONOR,
-            #     job_title=azure_user['jobTitle'],
-            #     department=azure_user['department'],
-            #     country=azure_user['country']
-            # )
-            # Get or create SocialAccount
-            app = SocialApp.objects.get_current('azure')
-            social_account, _ = SocialAccount.objects.get_or_create(user=user, provider='azure', uid=social_account_uid)
-            social_account.extra_data = {'displayName': display_name}
-            social_account.app = app
-            social_account.save()
+                # Update UserProfile
+                UserProfile.objects.create(
+                    user=user,
+                    name=display_name,
+                    account_type=UserProfile.DONOR,
+                    job_title=job_title,
+                    department=department,
+                    country=country
+                )
+                # Here you can call the same setup_user_email function as in save_user method.
+                # However, since it's not available in this scope, you can replace it with your email setup logic.
+                # setup_user_email(request, user, sociallogin.email_addresses)
+            else:
+                # Get or create UserProfile
+                user_profile, created = UserProfile.objects.get_or_create(user=old_user)
+
+                if not user_profile.name:
+                    user_profile.name = display_name
+                    user_profile.job_title = job_title
+                    user_profile.department = department
+
+                    # Get or create Country instance
+                    country, _ = Country.objects.get_or_create(name=country_name)
+                    user_profile.country = country
+
+                    user_profile.save()
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
