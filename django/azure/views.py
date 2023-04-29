@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import requests
+
 from django.conf import settings
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,

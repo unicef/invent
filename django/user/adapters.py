@@ -5,15 +5,14 @@ import requests
 from allauth.account.utils import setup_user_email
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from allauth.socialaccount.models import SocialAccount, SocialApp
 from allauth.account.adapter import DefaultAccountAdapter
 from rest_auth.registration.views import SocialLoginView
 
+from .models import UserProfile
+from azure.views import AzureOAuth2Adapter
+from country.models import Country
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from azure.views import AzureOAuth2Adapter
-from .models import UserProfile
-from country.models import Country
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -74,6 +73,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         user_model = get_user_model()
         updated_users = []
 
+        # Loop through the AAD users
         for azure_user in azure_users:
             email = azure_user['mail']
             display_name = azure_user['displayName']
@@ -82,7 +82,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
             country_name = azure_user['country']
             social_account_uid = azure_user['id']
 
-            # Get or create user
+            # Try to get the User instance by email, if not found, create a new User instance
             try:
                 user = user_model.objects.get(email=email)
             except user_model.DoesNotExist:
@@ -90,14 +90,16 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                 user.set_unusable_password()
                 user.save()
 
-            # Check if the user exists
+            # Check if the user already exists in the local database
             try:
                 old_user = user_model.objects.filter(email=user.email).get()
             except user_model.DoesNotExist:
-                # Get or create Country instance
+                # If the user doesn't exist, create a new UserProfile instance
+
+                # Get or create the Country instance for the user
                 country, _ = Country.objects.get_or_create(name=country_name)
 
-                # Update UserProfile
+                # Create a new UserProfile instance for the user
                 user_profile = UserProfile.objects.create(
                     user=user,
                     name=display_name,
@@ -106,25 +108,30 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                     department=department,
                     country=country
                 )
+                # Add the created UserProfile instance to the updated_users list
                 updated_users.append(user_profile)
 
             else:
-                # Get or create UserProfile
+                # If the user exists, update the existing UserProfile instance
+
+                # Get or create the UserProfile instance for the user
                 user_profile, created = UserProfile.objects.get_or_create(user=old_user)
 
-                if not user_profile.name:
-                    user_profile.name = display_name
-
+                # Update the UserProfile instance with the new data
+                user_profile.name = display_name
                 user_profile.job_title = job_title
                 user_profile.department = department
 
-                # Get or create Country instance
+                # Get or create the Country instance for the user
                 country, _ = Country.objects.get_or_create(name=country_name)
                 user_profile.country = country
 
+                # Save the updated UserProfile instance
                 user_profile.save()
+                # Add the updated UserProfile instance to the updated_users list
                 updated_users.append(user_profile)
 
+        # Return the list of updated UserProfile instances
         return updated_users
 
     def get_mocked_aad_users(self):
