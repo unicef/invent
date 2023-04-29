@@ -239,8 +239,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': os.environ.get('AZURE_CLIENT_ID', default=''),
             'secret': os.environ.get('AZURE_SECRET', default=''),
-            'tenant': os.environ.get('AZURE_TENANT', default=''),
-            'resource': 'https://graph.microsoft.com'
         },
     }
 }

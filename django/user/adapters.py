@@ -1,4 +1,6 @@
 import json
+from pathlib import Path  # Remove after we receive actual AAD data
+import requests
 
 from allauth.account.utils import setup_user_email
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
@@ -96,7 +98,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                 country, _ = Country.objects.get_or_create(name=country_name)
 
                 # Update UserProfile
-                UserProfile.objects.create(
+                user_profile = UserProfile.objects.create(
                     user=user,
                     name=display_name,
                     account_type=UserProfile.DONOR,
@@ -104,88 +106,85 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                     department=department,
                     country=country
                 )
-                updated_users.append(user)
+                updated_users.append(user_profile)
+
             else:
                 # Get or create UserProfile
                 user_profile, created = UserProfile.objects.get_or_create(user=old_user)
 
                 if not user_profile.name:
                     user_profile.name = display_name
-                    user_profile.job_title = job_title
-                    user_profile.department = department
 
-                    # Get or create Country instance
-                    country, _ = Country.objects.get_or_create(name=country_name)
-                    user_profile.country = country
+                user_profile.job_title = job_title
+                user_profile.department = department
 
-                    user_profile.save()
-                    updated_users.append(old_user)
+                # Get or create Country instance
+                country, _ = Country.objects.get_or_create(name=country_name)
+                user_profile.country = country
+
+                user_profile.save()
+                updated_users.append(user_profile)
 
         return updated_users
 
-    def get_aad_users(self):
-        users = []
+    def get_mocked_aad_users(self):
+        # Get the path to the JSON file in the same directory as the adapters file
+        json_file_path = Path(__file__).resolve().parent / 'mock_aad_users.json'
 
-        mock_users_json = '''
-            [
-                {
-                    "id": "1",
-                    "displayName": "John Doe1",
-                    "givenName": "John",
-                    "surname": "Doe",
-                    "mail": "john.doe@example.com",
-                    "jobTitle": "Software Engineer",
-                    "userPrincipalName": "john.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "New York",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 2"],
-                    "country": "United States",
-                    "department": "Engineering"
-                },
-                {
-                    "id": "2",
-                    "displayName": "Jane Doe",
-                    "givenName": "Jane",
-                    "surname": "Doe",
-                    "mail": "jane.doe@example.com",
-                    "jobTitle": "Project Manager",
-                    "userPrincipalName": "jane.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "San Francisco",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 3"],
-                    "country": "United States",
-                    "department": "Project Management"
-                }
-            ]
-        '''
-
-        users = json.loads(mock_users_json)
+        # Read the JSON file
+        with open(json_file_path, 'r') as file:
+            users = json.load(file)
 
         return users
 
-    # def get_aad_users(self):
-    #     url = 'https://graph.microsoft.com/v1.0/users'
-    #     token = self.get_access_token()
+    def get_aad_users(self):
+        url = 'https://graph.microsoft.com/v1.0/users'
+        token = self.get_access_token()
 
-    #     headers = {
-    #         'Authorization': f'Bearer {token}',
-    #         'Content-Type': 'application/json'
-    #     }
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
 
-    #     users = []
+        users = []
 
-    #     while url:
-    #         response = requests.get(url, headers=headers)
-    #         response_data = response.json()
-    #         users.extend(response_data.get('value', []))
+        while url:
+            response = requests.get(url, headers=headers)
+            response_data = response.json()
+            users.extend(response_data.get('value', []))
 
-    #         url = response_data.get('@odata.nextLink', None)
+            # Print response details
+            print(f"Response status code: {response.status_code}")
+            print(f"Response headers: {response.headers}")
+            print(f"Response text: {response.text}")
 
-    #     return users
+            url = response_data.get('@odata.nextLink', None)
+
+        return users
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
+
+    def get_access_token(self):
+        tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT
+        client_id = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['client_id']
+        client_secret = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['secret']
+        resource = 'https://graph.microsoft.com'
+        url = f'https://login.microsoftonline.com/{tenant_id}/oauth2/token'
+
+        payload = {
+            'grant_type': 'client_credentials',
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'resource': resource
+        }
+
+        response = requests.post(url, data=payload)
+        if response.status_code == 200:
+            json_response = response.json()
+            access_token = json_response['access_token']
+            return access_token
+        else:
+            print(f"Error: {response.status_code}")
+            print(response.text)
+            return None
