@@ -7,8 +7,7 @@ from rest_framework import status
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
-
-from .adapters import MyAzureAccountAdapter, AzureOAuth2Adapter
+from .adapters import MyAzureAccountAdapter
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -40,18 +39,16 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
 
 class UpdateAADUsersView(TokenAuthMixin, APIView):
     def put(self, request, format=None):
-        azure_adapter = AzureOAuth2Adapter(request)
-        azure_users = azure_adapter.get_aad_users()
-
         adapter = MyAzureAccountAdapter()
-        adapter.save_aad_users(azure_users)
+        azure_users = adapter.get_aad_users()
+        updated_users = adapter.save_aad_users(azure_users)
 
-        return Response({'message': 'Azure users saved successfully.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Azure users saved successfully.', 'updated_users': updated_users}, status=status.HTTP_200_OK)
 
 
 class GetAADUsers(TokenAuthMixin, APIView):
     def get(self, request, format=None):
-        azure_adapter = AzureOAuth2Adapter(request)
-        azure_users = azure_adapter.get_aad_users()
+        adapter = MyAzureAccountAdapter()
+        azure_users = adapter.get_aad_users()
 
         return Response({'users': azure_users}, status=status.HTTP_200_OK)

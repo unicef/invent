@@ -1,11 +1,13 @@
+import json
+
 from allauth.account.utils import setup_user_email
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.socialaccount.models import SocialAccount, SocialApp
-
 from allauth.account.adapter import DefaultAccountAdapter
-from django.contrib.auth import get_user_model
 from rest_auth.registration.views import SocialLoginView
+
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from azure.views import AzureOAuth2Adapter
 from .models import UserProfile
@@ -68,6 +70,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
 
     def save_aad_users(self, azure_users):
         user_model = get_user_model()
+        updated_users = []
 
         for azure_user in azure_users:
             email = azure_user['mail']
@@ -101,9 +104,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                     department=department,
                     country=country
                 )
-                # Here you can call the same setup_user_email function as in save_user method.
-                # However, since it's not available in this scope, you can replace it with your email setup logic.
-                # setup_user_email(request, user, sociallogin.email_addresses)
+                updated_users.append(user)
             else:
                 # Get or create UserProfile
                 user_profile, created = UserProfile.objects.get_or_create(user=old_user)
@@ -118,6 +119,73 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                     user_profile.country = country
 
                     user_profile.save()
+                    updated_users.append(old_user)
+
+        return updated_users
+
+    def get_aad_users(self):
+        users = []
+
+        mock_users_json = '''
+            [
+                {
+                    "id": "1",
+                    "displayName": "John Doe1",
+                    "givenName": "John",
+                    "surname": "Doe",
+                    "mail": "john.doe@example.com",
+                    "jobTitle": "Software Engineer",
+                    "userPrincipalName": "john.doe@example.com",
+                    "mobilePhone": "+1 555 555 5555",
+                    "officeLocation": "New York",
+                    "preferredLanguage": "en-US",
+                    "businessPhones": ["+1 555 555 5555"],
+                    "memberOf": ["Group 1", "Group 2"],
+                    "country": "United States",
+                    "department": "Engineering"
+                },
+                {
+                    "id": "2",
+                    "displayName": "Jane Doe",
+                    "givenName": "Jane",
+                    "surname": "Doe",
+                    "mail": "jane.doe@example.com",
+                    "jobTitle": "Project Manager",
+                    "userPrincipalName": "jane.doe@example.com",
+                    "mobilePhone": "+1 555 555 5555",
+                    "officeLocation": "San Francisco",
+                    "preferredLanguage": "en-US",
+                    "businessPhones": ["+1 555 555 5555"],
+                    "memberOf": ["Group 1", "Group 3"],
+                    "country": "United States",
+                    "department": "Project Management"
+                }
+            ]
+        '''
+
+        users = json.loads(mock_users_json)
+
+        return users
+
+    # def get_aad_users(self):
+    #     url = 'https://graph.microsoft.com/v1.0/users'
+    #     token = self.get_access_token()
+
+    #     headers = {
+    #         'Authorization': f'Bearer {token}',
+    #         'Content-Type': 'application/json'
+    #     }
+
+    #     users = []
+
+    #     while url:
+    #         response = requests.get(url, headers=headers)
+    #         response_data = response.json()
+    #         users.extend(response_data.get('value', []))
+
+    #         url = response_data.get('@odata.nextLink', None)
+
+    #     return users
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
