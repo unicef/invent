@@ -54,6 +54,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
                                                  allow_null=False)
     organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
                                                       allow_null=False)
+    job_title = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    department = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()
