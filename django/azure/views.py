@@ -57,30 +57,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         return self.get_provider().sociallogin_from_response(request,
                                                              extra_data)
 
-    def get_access_token(self):
-        tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT
-        client_id = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['client_id']
-        client_secret = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['secret']
-        resource = 'https://graph.microsoft.com'
-        url = f'https://login.microsoftonline.com/{tenant_id}/oauth2/token'
-
-        payload = {
-            'grant_type': 'client_credentials',
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'resource': resource
-        }
-
-        response = requests.post(url, data=payload)
-        if response.status_code == 200:
-            json_response = response.json()
-            access_token = json_response['access_token']
-            return access_token
-        else:
-            print(f"Error: {response.status_code}")
-            print(response.text)
-            return None
-
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(AzureOAuth2Adapter)
