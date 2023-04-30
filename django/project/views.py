@@ -340,6 +340,7 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
     #     self._check_ps_status(request, *args, **kwargs)
     #     return super(PortfolioUpdateViewSet, self).update(request, *args, **kwargs)
 
+
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
         required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
@@ -1002,6 +1003,7 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
 
         return Response(serializer.data)
 
+
 class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
 
     queryset = Portfolio.objects.all()
@@ -1018,11 +1020,10 @@ class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
                 solution_data = {
                     'id': solution.pk,
                     'name': solution.name,
-                    'problemStatements': [{'id': problem_statement.pk, 'name': problem_statement.name} for problem_statement in solution.problem_statements.all()],
+                    'problemStatements': [{'id': problem_statement.pk, 'name': problem_statement.name} for problem_statement in solution.problem_statements.filter(portfolio=portfolio)],
                     'phase': solution.phase,
                     'reach': solution.people_reached,
                 }
                 response_data['solutions'].append(solution_data)
-
 
         return Response(response_data)

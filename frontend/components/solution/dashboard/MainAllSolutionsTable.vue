@@ -26,7 +26,7 @@
               localePath({
                 name: 'organisation-portfolio-innovation-solutions-id',
                 params: { id: scope.row.id },
-                query: { project: $route.params.id },
+                query: { portfolio: $route.params.id },
               })
             "
             >{{ scope.row.name }}</nuxt-link
@@ -35,25 +35,32 @@
       </el-table-column>
       <el-table-column :resizable="false" :label="$gettext('Portfolios') | translate" width="300">
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.portfolios">
-            <li>{{ ps.name }}</li>
-          </ul>
+          <p>
+            {{
+              scope.row.portfolios
+                .map((portfolio, index) => (index === 0 ? portfolio.name : ` ${portfolio.name}`))
+                .toString()
+            }}
+          </p>
         </template>
       </el-table-column>
-      <el-table-column
-        :resizable="false"
-        :label="$gettext('Problem Statement') | translate"
-        style="{minWidth: 600px, maxWidth: 800px}"
-      >
+      <el-table-column :resizable="false" :label="$gettext('Problem Statement') | translate" min-width="280">
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.problem_statements">
-            <li>{{ ps.name }}</li>
-          </ul>
+          <div v-if="scope.row.portfolios.length > 1">
+            <div v-for="ps in scope.row.problem_statements">
+              <p>{{ ps.portfolio_name ? `${ps.portfolio_name}: ${ps.name}` : ps.name }}</p>
+            </div>
+          </div>
+          <div v-else>
+            <div v-for="ps in scope.row.problem_statements">
+              <p>{{ ps.name }}</p>
+            </div>
+          </div>
         </template>
       </el-table-column>
 
       <el-table-column :resizable="false" :label="$gettext('Phase') | translate" prop="phase" width="180">
-        <template slot-scope="scope"> {{ scope.row.phase }} </template>
+        <template slot-scope="scope"> <show-phase :phaseId="scope.row.phase" /> </template>
       </el-table-column>
 
       <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="people_reached">
@@ -80,12 +87,14 @@
 <script>
 import { setTimeout } from 'timers'
 import { mapGetters } from 'vuex'
+import ShowPhase from '../ShowPhase.vue'
 
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
   components: {
     CurrentPage,
+    ShowPhase,
   },
   data() {
     return {
