@@ -47,8 +47,8 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
     def put(self, request, format=None):
         # Create an instance of MyAzureAccountAdapter and fetch the AAD users
         adapter = MyAzureAccountAdapter()
-        azure_users = adapter.get_mocked_aad_users()
-        # azure_users = adapter.get_aad_users()
+        # azure_users = adapter.get_mocked_aad_users()
+        azure_users = adapter.get_aad_users()
 
         # Save the AAD users to the local database and get the updated user profiles
         updated_user_profiles = adapter.save_aad_users(azure_users)
@@ -69,8 +69,8 @@ class GetAADUsers(TokenAuthMixin, APIView):
     def get(self, request, format=None):
         # Create an instance of MyAzureAccountAdapter and fetch the AAD users
         adapter = MyAzureAccountAdapter()
-        azure_users = adapter.get_mocked_aad_users()
-        # azure_users = adapter.get_aad_users()
+        # azure_users = adapter.get_mocked_aad_users()
+        azure_users = adapter.get_aad_users()
 
         # Return the AAD users in the response
         return Response({'users': azure_users}, status=status.HTTP_200_OK)

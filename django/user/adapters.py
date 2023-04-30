@@ -106,7 +106,8 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                     account_type=UserProfile.DONOR,
                     job_title=job_title,
                     department=department,
-                    country=country
+                    country=country,
+                    # social_account_uid = social_account_uid
                 )
                 # Add the created UserProfile instance to the updated_users list
                 updated_users.append(user_profile)
