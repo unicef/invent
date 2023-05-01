@@ -113,8 +113,6 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                 updated_users.append(user_profile)
 
             else:
-                # If the user exists, update the existing UserProfile instance
-
                 # Get or create the UserProfile instance for the user
                 user_profile, created = UserProfile.objects.get_or_create(user=old_user)
 
@@ -136,12 +134,62 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         return updated_users
 
     def get_mocked_aad_users(self):
-        # Get the path to the JSON file in the same directory as the adapters file
-        json_file_path = Path(__file__).resolve().parent / 'mock_aad_users.json'
+        users = []
 
-        # Read the JSON file
-        with open(json_file_path, 'r') as file:
-            users = json.load(file)
+        mock_users_json = '''
+            [
+                {
+                    "id": "1",
+                    "displayName": "John Doe1",
+                    "givenName": "John",
+                    "surname": "Doe",
+                    "mail": "john.doe@example.com",
+                    "jobTitle": "Software Engineer",
+                    "userPrincipalName": "john.doe@example.com",
+                    "mobilePhone": "+1 555 555 5555",
+                    "officeLocation": "New York",
+                    "preferredLanguage": "en-US",
+                    "businessPhones": ["+1 555 555 5555"],
+                    "memberOf": ["Group 1", "Group 2"],
+                    "country": "United States",
+                    "department": "Engineering"
+                },
+                {
+                    "id": "2",
+                    "displayName": "Jane Doe",
+                    "givenName": "Jane",
+                    "surname": "Doe",
+                    "mail": "jane.doe@example.com",
+                    "jobTitle": "Project Manager",
+                    "userPrincipalName": "jane.doe@example.com",
+                    "mobilePhone": "+1 555 555 5555",
+                    "officeLocation": "San Francisco",
+                    "preferredLanguage": "en-US",
+                    "businessPhones": ["+1 555 555 5555"],
+                    "memberOf": ["Group 1", "Group 3"],
+                    "country": "United States",
+                    "department": "Project Management"
+                },
+                {
+                    "id": "5535",
+                    "displayName": "KALOMALOS Georgios",
+                    "givenName": "",
+                    "surname": "KALOMALOS Georgios",
+                    "mail": "Georgios.KALOMALOS@sword-group.com",
+                    "jobTitle": "Software Engineer",
+                    "userPrincipalName": "Georgios.KALOMALOS@sword-group.com",
+                    "mobilePhone": "+1 555 555 5555",
+                    "officeLocation": "Athens",
+                    "preferredLanguage": "en-US",
+                    "businessPhones": ["+1 555 555 5555"],
+                    "memberOf": ["Group 1", "Group 2"],
+                    "country": "Greece",
+                    "department": "FPB"
+                }
+            ]
+        '''
+
+        users = json.loads(mock_users_json)
 
         return users
 

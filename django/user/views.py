@@ -37,6 +37,21 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.all()
 
 
+class GetAADUsers(TokenAuthMixin, APIView):
+    """
+    API View to fetch Azure Active Directory (AAD) users.
+    Requires token authentication.
+    """
+
+    def get(self, request, format=None):
+        # Create an instance of MyAzureAccountAdapter and fetch the AAD users
+        adapter = MyAzureAccountAdapter()
+        azure_users = adapter.get_aad_users()
+
+        # Return the AAD users in the response
+        return Response({'users': azure_users}, status=status.HTTP_200_OK)
+
+
 class UpdateAADUsersView(TokenAuthMixin, APIView):
     """
     API View to update and save Azure Active Directory (AAD) users in the local database.
@@ -47,7 +62,6 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
     def put(self, request, format=None):
         # Create an instance of MyAzureAccountAdapter and fetch the AAD users
         adapter = MyAzureAccountAdapter()
-        # azure_users = adapter.get_mocked_aad_users()
         azure_users = adapter.get_aad_users()
 
         # Save the AAD users to the local database and get the updated user profiles
@@ -60,7 +74,7 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
         return Response({'message': 'Azure users saved successfully.', 'updated_users': serialized_users.data}, status=status.HTTP_200_OK)
 
 
-class GetAADUsers(TokenAuthMixin, APIView):
+class GetMockAADUsers(TokenAuthMixin, APIView):
     """
     API View to fetch Azure Active Directory (AAD) users.
     Requires token authentication.
@@ -69,8 +83,29 @@ class GetAADUsers(TokenAuthMixin, APIView):
     def get(self, request, format=None):
         # Create an instance of MyAzureAccountAdapter and fetch the AAD users
         adapter = MyAzureAccountAdapter()
-        # azure_users = adapter.get_mocked_aad_users()
-        azure_users = adapter.get_aad_users()
+        azure_users = adapter.get_mocked_aad_users()
 
         # Return the AAD users in the response
         return Response({'users': azure_users}, status=status.HTTP_200_OK)
+
+
+class UpdateMockAADUsersView(TokenAuthMixin, APIView):
+    """
+    API View to update and save Azure Active Directory (AAD) users in the local database.
+    It fetches the AAD users, saves them, and returns the updated users' profiles.
+    Requires token authentication.
+    """
+
+    def put(self, request, format=None):
+        # Create an instance of MyAzureAccountAdapter and fetch the AAD users
+        adapter = MyAzureAccountAdapter()
+        azure_users = adapter.get_mocked_aad_users()
+
+        # Save the AAD users to the local database and get the updated user profiles
+        updated_user_profiles = adapter.save_aad_users(azure_users)
+
+        # Serialize the updated user profiles
+        serialized_users = UserProfileSerializer(updated_user_profiles, many=True)
+
+        # Return the serialized data in the response
+        return Response({'message': 'Azure users saved successfully.', 'updated_users': serialized_users.data}, status=status.HTTP_200_OK)
