@@ -1,21 +1,27 @@
 <template>
   <div class="tabs-wrapper">
-    <div class="title">
-      <slot name="title" />
+    <div class="tabs-col">
+      <div class="title">
+        <slot name="title" />
+      </div>
+      <div :class="`tabs ${center && 'center'}`">
+        <p
+          v-for="item in tabs"
+          :key="item.id"
+          :class="`${item.id === tab && 'active'}`"
+          @click="$emit('handleTab', item.id)"
+        >
+          <fa :icon="item.icon" size="lg" />
+          {{ $gettext(item.name) | translate }}
+          <template v-if="item.total">
+            {{ ` (${item.total})` }}
+          </template>
+        </p>
+        <span></span>
+      </div>
     </div>
-    <div :class="`tabs ${center && 'center'}`">
-      <p
-        v-for="item in tabs"
-        :key="item.id"
-        :class="`${item.id === tab && 'active'}`"
-        @click="$emit('handleTab', item.id)"
-      >
-        <fa :icon="item.icon" size="lg" />
-        {{ $gettext(item.name) | translate }}
-        <template v-if="item.total">
-          {{ ` (${item.total})` }}
-        </template>
-      </p>
+    <div class="actionButton">
+      <slot name="actionButton" />
     </div>
   </div>
 </template>
@@ -46,6 +52,13 @@ export default {
   // height: 158px;
   background-color: @colorWhite!important;
   padding: 0 43px;
+  display: flex;
+  flex-direction: row;
+
+  .tabs-col {
+    display: flex;
+    flex-direction: column;
+  }
   .title {
     display: flex;
     align-items: center;
@@ -68,6 +81,12 @@ export default {
       text-decoration: none;
       z-index: 1;
     }
+  }
+  .actionButton {
+    margin: 0 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
   .tabs {
     display: flex;
