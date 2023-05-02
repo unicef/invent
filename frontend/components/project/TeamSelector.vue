@@ -20,16 +20,7 @@
     @change="changeHandler"
     @keyup.enter.native="onEnter"
   >
-    <el-option
-      v-for="person in optionsAndValues"
-      :key="person.id"
-      :label="
-        `${person.name ? person.name + ', ' : ''}${
-          person.organisation ? getOrganisationDetails(person.organisation).name : ''
-        } ${person.name ? '(' + person.email + ')' : person.email}` | truncate
-      "
-      :value="person.id"
-    >
+    <el-option v-for="person in optionsAndValues" :key="person.id" :label="person.label" :value="person.id">
       <!-- N/A -->
       <span style="float: left">{{ getUserLabel(person.id) }}</span>
     </el-option>
@@ -80,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'system/getUserProfilesNoFilter',
+      items: 'system/getUserProfilesWithLabel',
       getOrganisationDetails: 'system/getOrganisationDetails',
       userProfiles: 'system/getUserProfilesWithLabel',
     }),
