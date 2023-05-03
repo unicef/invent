@@ -29,7 +29,7 @@
           v-if="canDelete"
           :disabled="!!loading"
           type="text"
-          class="DeleteButton"
+          class="el-button button--danger el-button--danger el-button--medium"
           @click="emitAction('delete')"
         >
           <fa v-show="loading === 'discard'" icon="spinner" spin />
