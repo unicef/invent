@@ -983,6 +983,11 @@ class SolutionListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     serializer_class = SolutionSerializer
 
 
+class SolutionCreateViewSet(TokenAuthMixin, CreateModelMixin, GenericViewSet):
+    queryset = Solution.objects.all()
+    serializer_class = SolutionSerializer
+
+
 class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectVersionHistorySerializer

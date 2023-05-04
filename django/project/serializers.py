@@ -1017,6 +1017,34 @@ class SolutionSerializer(serializers.ModelSerializer):
     problem_statements = ProblemStatementSerializer(many=True, required=False)
     portfolios = PortfolioSerializer(many=True)
 
+    def create(self, validated_data):
+        # Extract the related data
+        countries_data = validated_data.pop("countrysolution_set", [])
+        problem_statements_data = validated_data.pop("problem_statements", [])
+        portfolios_data = validated_data.pop("portfolios", [])
+
+        # Create the solution instance
+        solution = Solution.objects.create(**validated_data)
+
+        # Create the related CountrySolution instances
+        for country_data in countries_data:
+            country_solution = CountrySolution.objects.create(solution=solution, **country_data)
+            solution.countries.add(country_solution)
+
+        # Add the related ProblemStatement instances
+        for problem_statement_data in problem_statements_data:
+            problem_statement = ProblemStatement.objects.get(pk=problem_statement_data["id"])
+            solution.problem_statements.add(problem_statement)
+
+        # Add the related Portfolio instances
+        for portfolio_data in portfolios_data:
+            portfolio = Portfolio.objects.get(pk=portfolio_data["id"])
+            solution.portfolios.add(portfolio)
+
+        # Save the solution instance to update the many-to-many relationships
+        solution.save()
+        return solution
+
     class Meta:
         model = Solution
         # Define the fields to be included in the serialized data
@@ -1025,7 +1053,6 @@ class SolutionSerializer(serializers.ModelSerializer):
             "created",
             "modified",
             "name",
-            "regions",
             "phase",
             "countries",
             "people_reached",

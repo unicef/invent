@@ -168,15 +168,19 @@ urlpatterns = [
              'get': 'retrieve',
          }),
          name="solution-retrieve"),
+    url('solution/create/',
+        view=views.SolutionCreateViewSet.as_view({
+            'post': 'create'
+        }), name="solution-create"),
     path(r'solution/update/<int:pk>/',
          view=views.SolutionUpdateViewSet.as_view({
              'put': 'update',
              'patch': 'partial_update'
          }),
          name="portfolio-update"),
-    path(r'portfolio/<int:pk>/', 
+    path(r'portfolio/<int:pk>/',
          view=views.PortfolioViewSet.as_view({
-            'get':'retrieve'
-        }),
-        name="portfolio-retrieve"),
+             'get': 'retrieve'
+         }),
+         name="portfolio-retrieve"),
 ]
