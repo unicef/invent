@@ -39,11 +39,21 @@ class ProfileJWTSerializer(JWTSerializer):
 
 
 class UserProfileListSerializer(serializers.ModelSerializer):
+    # Use source argument to map email field to user.email
     email = serializers.EmailField(source='user.email', read_only=True)
+    # Use SerializerMethodField to fetch the country name instead of the country id
+    country = serializers.SerializerMethodField(method_name='get_country_name')
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'modified', 'account_type', 'name', 'email', 'organisation')
+        fields = ('id', 'modified', 'account_type', 'name', 'email',
+                  'organisation', 'job_title', 'department', 'country')
+
+    # Custom method to get the country name from the UserProfile instance
+    def get_country_name(self, obj):
+        if obj.country is not None:
+            return obj.country.name
+        return None
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
