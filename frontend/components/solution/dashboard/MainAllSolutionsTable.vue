@@ -7,14 +7,12 @@
       :row-class-name="'NotSelected'"
       :stripe="false"
       :border="true"
-      size="mini"
-      style="width: inherit"
       :defalt-sort="{ prop: 'name', order: 'ascending' }"
     >
       <!-- <el-table-column :resizable="false" type="selection" align="center" width="45" class-name="selection-td" /> -->
       <el-table-column
         :resizable="false"
-        :label="$gettext('Solution Name') | translate"
+        :label="$gettext('Solution name') | translate"
         prop="name"
         width="280"
         class-name="project-td"
@@ -44,7 +42,7 @@
           </p>
         </template>
       </el-table-column>
-      <el-table-column :resizable="false" :label="$gettext('Problem Statement') | translate" min-width="280">
+      <el-table-column :resizable="false" :label="$gettext('Problem statement') | translate" min-width="280">
         <template slot-scope="scope">
           <div v-if="scope.row.portfolios.length > 1">
             <div v-for="ps in scope.row.problem_statements">
@@ -65,7 +63,7 @@
 
       <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="people_reached">
         <template slot-scope="scope">
-          <p>{{ scope.row.people_reached | formatNumber }}</p>
+          <p>{{ scope.row.people_reached }}</p>
         </template>
       </el-table-column>
       <!-- new table fields -->
@@ -99,7 +97,7 @@ export default {
   data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
-      tableMaxHeight: 200,
+      tableMaxHeight: 240,
       addFavoriteText: this.$gettext('Add to Favorites'),
       removeFavoriteText: this.$gettext('Remove from Favorites'),
       pageSize: 10,
@@ -119,7 +117,15 @@ export default {
     currentList() {
       const start = this.pageSize * (this.currentPage - 1)
       const end = this.pageSize * this.currentPage
-      return this.getAllActiveSolutionsList.slice(start, end)
+      return this.currentOrderedList.slice(start, end)
+    },
+    currentOrderedList() {
+      return this.getAllActiveSolutionsList.map((solution) => {
+        const problem_statements = solution.problem_statements.sort((a, b) =>
+          a.portfolio_name.localeCompare(b.portfolio_name, this.$i18n.locale, { numeric: true })
+        )
+        return { ...solution, problem_statements }
+      })
     },
     paginationOrderStr() {
       const loc = this.$i18n.locale
@@ -183,7 +189,7 @@ export default {
 
 .MainTable {
   margin: 0 40px 120px;
-  max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+  max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - 93px);
 
   .favorite {
     cursor: pointer;
