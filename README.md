@@ -40,7 +40,7 @@ Start the environment:
 kubectl config use-context docker-desktop
 tilt up
 ```
-By navigating to http://localhost:10350/ you can see the status of the resources. 
+By navigating to http://localhost:10350/r/(all)/overview you can see the status of the resources. 
 The "copy-dump" and "import-dump" Tilt resources are ok to crash if you don't have a sql dump named "dump_anon.sql" present in the root of the repository.
 ### Setting up the Environment
 Once all the services in Tilt (Postgres, Redis, Mailhog, Backend, Frontend) are up and running, 
