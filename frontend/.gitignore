@@ -12,6 +12,11 @@ dist
 
 coverage/
 ##Push .env for testing##
-.env
+#.env
 .yarn-error.log
+.yarn
+
+## Protect accidental change of yarn.lock
+yarn.lock
+.yarnrc.yml
 
