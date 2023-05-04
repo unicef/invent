@@ -59,12 +59,12 @@ Click on ["ADD USER +"](http://localhost/admin/auth/user/add/) and fill out the 
 
 | Field                  | Value                                                |
 |------------------------|------------------------------------------------------|
-| Username               | Unimportant (you’ll use the email address to log in) |
-| Password               | and confirmation As per hint                         |
+| Username               | As you wish (you’ll use the email address to log in) |
+| Password               | As per hint                                          |
 | Account type           | Investor viewer (most accounts are of this type)     |
-| Name                   | A name that will be displayed in the INVENT front end|
-| Organisation           | UNICEF (choose the one in all CAPS!)                 |
-| Country                | As wished (does this even do anything?)              |
+| Name                   | A name that will be displayed in the INVENT page     |
+| Organisation           | UNICEF (choose the one in all CAPS)                  |
+| Country                | As wished                                            |
 | Donor                  | UNICEF                                               |
 | Language               | English                                              |
 | Global portfolio owner | Leave unchecked for a “normal” user                  |
