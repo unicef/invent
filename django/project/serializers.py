@@ -13,7 +13,7 @@ import scheduler.celery  # noqa
 from django.utils.translation import ugettext_lazy as _
 
 from core.utils import send_mail_wrapper
-from country.models import CustomQuestion, CountryOffice
+from country.models import CustomQuestion, CountryOffice, Country
 from country.serializers import UserProfileSerializer
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
@@ -990,12 +990,11 @@ class ProjectImageUploadSerializer(serializers.ModelSerializer):
 
 
 class CountrySolutionSerializer(serializers.ModelSerializer):
-    # Use the country's ID as the primary key in the serialized data
-    id = serializers.IntegerField(source="country.id")
+    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
 
     class Meta:
         model = CountrySolution
-        fields = ("id", "people_reached", "region")
+        fields = ("country", "people_reached", "region")
 
 
 class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
@@ -1004,63 +1003,82 @@ class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CountrySolution
-        fields = ("id", "people_reached", "region")
+        fields = ("id", "people_reached", "region", "portfolio", "problem_statements")
 
 
 class SolutionSerializer(serializers.ModelSerializer):
-    # Define custom serializers for each field
-    regions = serializers.ListField(
-        child=serializers.IntegerField(), max_length=8, min_length=0
+    countries = CountrySolutionSerializer(source='countrysolution_set', many=True, read_only=True)
+    country_solutions = CountrySolutionSerializer(many=True, write_only=True, required=False)
+    portfolio_problem_statements = serializers.ListField(
+        child=serializers.DictField(),
+        write_only=True,
+        required=False,
     )
-    people_reached = serializers.IntegerField(allow_null=True)
-    countries = CountrySolutionSerializer(source="countrysolution_set", many=True)
+    people_reached = serializers.IntegerField(read_only=True)
     problem_statements = ProblemStatementSerializer(many=True, required=False)
-    portfolios = PortfolioSerializer(many=True)
-
-    def create(self, validated_data):
-        # Extract the related data
-        countries_data = validated_data.pop("countrysolution_set", [])
-        problem_statements_data = validated_data.pop("problem_statements", [])
-        portfolios_data = validated_data.pop("portfolios", [])
-
-        # Create the solution instance
-        solution = Solution.objects.create(**validated_data)
-
-        # Create the related CountrySolution instances
-        for country_data in countries_data:
-            country_solution = CountrySolution.objects.create(solution=solution, **country_data)
-            solution.countries.add(country_solution)
-
-        # Add the related ProblemStatement instances
-        for problem_statement_data in problem_statements_data:
-            problem_statement = ProblemStatement.objects.get(pk=problem_statement_data["id"])
-            solution.problem_statements.add(problem_statement)
-
-        # Add the related Portfolio instances
-        for portfolio_data in portfolios_data:
-            portfolio = Portfolio.objects.get(pk=portfolio_data["id"])
-            solution.portfolios.add(portfolio)
-
-        # Save the solution instance to update the many-to-many relationships
-        solution.save()
-        return solution
+    portfolios = PortfolioSerializer(many=True, required=False)
 
     class Meta:
         model = Solution
-        # Define the fields to be included in the serialized data
         fields = (
-            "id",
-            "created",
-            "modified",
-            "name",
-            "phase",
-            "countries",
-            "people_reached",
-            "open_source_frontier_tech",
-            "learning_investment",
-            "portfolios",
-            "problem_statements",
+            'id', 'name', 'portfolios', 'countries', 'problem_statements',
+            'phase', 'open_source_frontier_tech', 'learning_investment',
+            'people_reached', 'is_active', 'portfolio_problem_statements', 'country_solutions'
         )
+
+    def create(self, validated_data):
+        country_solutions_data = validated_data.pop('country_solutions', [])
+        portfolio_problem_statements_data = validated_data.pop('portfolio_problem_statements', [])
+        solution = Solution.objects.create(**validated_data)
+
+        for pps_data in portfolio_problem_statements_data:
+            portfolio_id = pps_data.pop("portfolio_id")
+            problem_statements_ids = pps_data.pop("problem_statements")
+            portfolio = Portfolio.objects.get(id=portfolio_id)
+            solution.portfolios.add(portfolio)
+
+            for ps_id in problem_statements_ids:
+                problem_statement = ProblemStatement.objects.get(id=ps_id)
+                solution.problem_statements.add(problem_statement)
+
+        for country_data in country_solutions_data:
+            country_solution = CountrySolution(solution=solution)
+            for attr, value in country_data.items():
+                setattr(country_solution, attr, value)
+            country_solution.save()
+
+        return solution
+
+    def update(self, instance, validated_data):
+        country_solutions_data = validated_data.pop('country_solutions', [])
+        portfolio_problem_statements_data = validated_data.pop('portfolio_problem_statements', [])
+        instance = super().update(instance, validated_data)
+
+        # Remove existing CountrySolution instances related to the current Solution instance
+        instance.countrysolution_set.all().delete()
+
+        for country_data in country_solutions_data:
+            if 'id' in country_data:
+                country_data.pop('id')  # We don't need this anymore, as we are creating a new instance
+            country_solution = CountrySolution(solution=instance, **country_data)
+            country_solution.save()
+
+        # Clear existing problem_statements and portfolios
+        instance.problem_statements.clear()
+        instance.portfolios.clear()
+
+        for pps_data in portfolio_problem_statements_data:
+            portfolio_id = pps_data.pop("portfolio_id")
+            problem_statements_ids = pps_data.pop("problem_statements")
+            portfolio = Portfolio.objects.get(id=portfolio_id)
+            instance.portfolios.add(portfolio)
+
+            for ps_id in problem_statements_ids:
+                problem_statement = ProblemStatement.objects.get(id=ps_id)
+                instance.problem_statements.add(problem_statement)
+
+        return instance
+
 
 
 class ProjectVersionHistorySerializer(serializers.ModelSerializer):
