@@ -63,11 +63,13 @@ export default {
       return this.isPublished ? 'published' : 'draft'
     },
     showProject() {
+      console.log(this.project)
       return this.isPublished ? this.project.published : this.project
     },
   },
   async mounted() {
     this.prepareStages(this.showProjectVersion)
+
     this.getStageData({ stages: this.stagesPrepared, project: this.showProject })
     await setTimeout(() => {
       this.loaded = true
