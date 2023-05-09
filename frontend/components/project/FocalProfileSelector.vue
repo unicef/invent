@@ -105,29 +105,4 @@ export default {
 .NoDisplay {
   display: none;
 }
-
-.TeamSelectorDropdown {
-  .OrganisationItem {
-    display: inline-block;
-    margin-left: 6px;
-    font-weight: 400;
-    color: @colorGray;
-
-    &::before {
-      content: '(';
-    }
-
-    &::after {
-      content: ')';
-    }
-  }
-  li {
-    height: 50px;
-    .email {
-      float: left;
-      width: 100%;
-      margin-top: -18px;
-    }
-  }
-}
 </style>

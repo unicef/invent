@@ -121,8 +121,18 @@ export default {
 
 .UserProfileSelector {
   width: 100%;
+  word-wrap: normal;
   .el-select-dropdown__item.selected {
     // display: none;
+  }
+
+  el-select__tags {
+    max-width: 200px;
+  }
+  .el-tag {
+    height: fit-content;
+    word-wrap: normal;
+    white-space: normal;
   }
 
   &.el-select {
@@ -139,28 +149,11 @@ export default {
   display: none;
 }
 
-.TeamSelectorDropdown {
-  .OrganisationItem {
-    display: inline-block;
-    margin-left: 6px;
-    font-weight: 400;
-    color: @colorGray;
-
-    &::before {
-      content: '(';
-    }
-
-    &::after {
-      content: ')';
-    }
-  }
-  li {
-    height: 50px;
-    .email {
-      float: left;
-      width: 100%;
-      margin-top: -18px;
-    }
-  }
+.el-select-dropdown__item {
+  max-width: 64vw;
+  min-width: 740px;
+  height: fit-content;
+  word-wrap: normal;
+  white-space: normal;
 }
 </style>
