@@ -6,9 +6,10 @@
     autocomplete
     remote
     clearable
+    multiple
     :remote-method="filterMethod"
     :placeholder="$gettext('Type and select a user') | translate"
-    class="UserProfileSelector"
+    class="FocalPointSelector"
   >
     <el-option v-for="item in filteredOptions" :key="item.email" :label="item.label" :value="item.email"> </el-option>
   </el-select>
@@ -55,13 +56,17 @@ export default {
     innerValue: {
       get() {
         if (this.value !== null) {
-          return this.value
+          return [this.value.toString()]
         } else {
-          return ''
+          return []
         }
       },
       set(value) {
-        this.$emit('change', value)
+        if (value[0]) {
+          this.$emit('change', value[value.length - 1].toString())
+        } else {
+          this.$emit('change', null)
+        }
       },
     },
   },
@@ -86,10 +91,18 @@ export default {
 @import '../../assets/style/variables.less';
 @import '../../assets/style/mixins.less';
 
-.UserProfileSelector {
+.FocalPointSelector {
   width: 100%;
+  word-wrap: normal;
+
   .el-select-dropdown__item.selected {
     // display: none;
+  }
+
+  .el-tag {
+    height: fit-content;
+    word-wrap: normal;
+    white-space: normal;
   }
 
   &.el-select {
