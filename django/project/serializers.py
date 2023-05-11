@@ -1038,7 +1038,7 @@ class SolutionSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False,
     )
-    people_reached = serializers.IntegerField(read_only=True)
+    people_reached = serializers.IntegerField()
     problem_statements = ProblemStatementSerializer(many=True, required=False)
     portfolios = PortfolioSerializer(many=True, required=False)
 
