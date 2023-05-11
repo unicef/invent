@@ -7,14 +7,12 @@
       :row-class-name="'NotSelected'"
       :stripe="false"
       :border="true"
-      size="mini"
-      style="width: inherit"
       :defalt-sort="{ prop: 'name', order: 'ascending' }"
     >
       <!-- <el-table-column :resizable="false" type="selection" align="center" width="45" class-name="selection-td" /> -->
       <el-table-column
         :resizable="false"
-        :label="$gettext('Solution Name') | translate"
+        :label="$gettext('Solution name') | translate"
         prop="name"
         width="280"
         class-name="project-td"
@@ -26,7 +24,7 @@
               localePath({
                 name: 'organisation-portfolio-innovation-solutions-id',
                 params: { id: scope.row.id },
-                query: { project: $route.params.id },
+                query: { portfolio: $route.params.id },
               })
             "
             >{{ scope.row.name }}</nuxt-link
@@ -35,30 +33,37 @@
       </el-table-column>
       <el-table-column :resizable="false" :label="$gettext('Portfolios') | translate" width="300">
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.portfolios">
-            <li>{{ ps.name }}</li>
-          </ul>
+          <p>
+            {{
+              scope.row.portfolios
+                .map((portfolio, index) => (index === 0 ? portfolio.name : ` ${portfolio.name}`))
+                .toString()
+            }}
+          </p>
         </template>
       </el-table-column>
-      <el-table-column
-        :resizable="false"
-        :label="$gettext('Problem Statement') | translate"
-        style="{minWidth: 600px, maxWidth: 800px}"
-      >
+      <el-table-column :resizable="false" :label="$gettext('Problem statement') | translate" min-width="280">
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.problem_statements">
-            <li>{{ ps.name }}</li>
-          </ul>
+          <div v-if="scope.row.portfolios.length > 1">
+            <div v-for="ps in scope.row.problem_statements">
+              <p>{{ ps.portfolio_name ? `${ps.portfolio_name}: ${ps.name}` : ps.name }}</p>
+            </div>
+          </div>
+          <div v-else>
+            <div v-for="ps in scope.row.problem_statements">
+              <p>{{ ps.name }}</p>
+            </div>
+          </div>
         </template>
       </el-table-column>
 
       <el-table-column :resizable="false" :label="$gettext('Phase') | translate" prop="phase" width="180">
-        <template slot-scope="scope"> {{ scope.row.phase }} </template>
+        <template slot-scope="scope"> <show-phase :phaseId="scope.row.phase" /> </template>
       </el-table-column>
 
       <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="people_reached">
         <template slot-scope="scope">
-          <p>{{ scope.row.people_reached | formatNumber }}</p>
+          <p>{{ scope.row.people_reached }}</p>
         </template>
       </el-table-column>
       <!-- new table fields -->
@@ -80,17 +85,19 @@
 <script>
 import { setTimeout } from 'timers'
 import { mapGetters } from 'vuex'
+import ShowPhase from '../ShowPhase.vue'
 
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
   components: {
     CurrentPage,
+    ShowPhase,
   },
   data() {
     return {
       pageSizeOption: [10, 20, 50, 100],
-      tableMaxHeight: 200,
+      tableMaxHeight: 240,
       addFavoriteText: this.$gettext('Add to Favorites'),
       removeFavoriteText: this.$gettext('Remove from Favorites'),
       pageSize: 10,
@@ -110,7 +117,15 @@ export default {
     currentList() {
       const start = this.pageSize * (this.currentPage - 1)
       const end = this.pageSize * this.currentPage
-      return this.getAllActiveSolutionsList.slice(start, end)
+      return this.currentOrderedList.slice(start, end)
+    },
+    currentOrderedList() {
+      return this.getAllActiveSolutionsList.map((solution) => {
+        const problem_statements = solution.problem_statements.sort((a, b) =>
+          a.portfolio_name.localeCompare(b.portfolio_name, this.$i18n.locale, { numeric: true })
+        )
+        return { ...solution, problem_statements }
+      })
     },
     paginationOrderStr() {
       const loc = this.$i18n.locale
@@ -174,7 +189,7 @@ export default {
 
 .MainTable {
   margin: 0 40px 120px;
-  max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+  max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - 93px);
 
   .favorite {
     cursor: pointer;

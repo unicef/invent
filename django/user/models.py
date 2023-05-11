@@ -56,6 +56,9 @@ class UserProfile(ExtendedModel):
     filters = HStoreField(default=dict, blank=True)
     manager_of = models.ManyToManyField('country.CountryOffice', related_name="country_managers",
                                         verbose_name='Country Manager Of', blank=True)
+    job_title = models.CharField(max_length=100, blank=True, null=True)
+    department = models.CharField(max_length=100, blank=True, null=True)
+    # social_account_uid = models.CharField(max_length=255, unique=True, null=True, blank=True)
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""

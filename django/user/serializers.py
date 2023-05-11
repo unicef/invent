@@ -39,11 +39,21 @@ class ProfileJWTSerializer(JWTSerializer):
 
 
 class UserProfileListSerializer(serializers.ModelSerializer):
+    # Use source argument to map email field to user.email
     email = serializers.EmailField(source='user.email', read_only=True)
+    # Use SerializerMethodField to fetch the country name instead of the country id
+    country = serializers.SerializerMethodField(method_name='get_country_name')
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'modified', 'account_type', 'name', 'email', 'organisation')
+        fields = ('id', 'modified', 'account_type', 'name', 'email',
+                  'organisation', 'job_title', 'department', 'country')
+
+    # Custom method to get the country name from the UserProfile instance
+    def get_country_name(self, obj):
+        if obj.country is not None:
+            return obj.country.name
+        return None
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -54,6 +64,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
                                                  allow_null=False)
     organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
                                                       allow_null=False)
+    job_title = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    department = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()

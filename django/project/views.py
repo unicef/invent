@@ -240,11 +240,11 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
             if co_id:
                 is_country_manager = self.request.user.userprofile.manager_of.filter(id=co_id).exists()
 
-            if is_member or is_country_user_or_admin or is_country_manager or self.request.user.is_superuser:
-                data = project.get_member_data()
-                draft = project.get_member_draft()
-            else:
-                data = project.get_non_member_data()
+            # if is_member or is_country_user_or_admin or is_country_manager or self.request.user.is_superuser:
+            data = project.get_member_data()
+            draft = project.get_member_draft()
+            # else:
+            #     data = project.get_non_member_data()
 
         if draft:
             draft = project.to_representation(data=draft, draft_mode=True)
@@ -287,58 +287,6 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
     serializer_class = SolutionSerializer
     queryset = Solution.objects.all()
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-
-        # Get the portfolio_problem_statements data to set the portfolios and problem_statements
-        portfolio_problem_statements = request.data.get('portfolio_problem_statements', [])
-        portfolios = list(set(d['portfolio_id'] for d in portfolio_problem_statements))
-        problem_statements = list(set(ps for d in portfolio_problem_statements for ps in d['problem_statements']))
-        is_active = request.data.get("is_active", True)
-        people_reached = request.data.get("people_reached", None)
-
-        # Update the instance with the extracted data
-        instance.portfolios.set(portfolios)
-        instance.problem_statements.set(problem_statements)
-        instance.is_active = is_active
-        instance.people_reached = people_reached
-
-        # Remove existing country solutions for the instance
-        instance.countrysolution_set.all().delete()
-
-        # Get the country_solutions data from the request
-        country_solutions_data = request.data.get('country_solutions', [])
-
-        # Update the country solutions
-        for country_solution_data in country_solutions_data:
-            # Create a new CountrySolution object with data from the request
-            country_solution = CountrySolution(
-                country_id=country_solution_data["country"],
-                people_reached=country_solution_data["people_reached"],
-                region=country_solution_data["region"],
-                solution=instance,
-            )
-            # Save the new CountrySolution object to the database
-            country_solution.save()
-
-        # Save the updated Solution object to the database
-        instance.save()
-
-        # Update the serializer with the updated instance data
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        # Return the updated data in the response
-        return Response(serializer.data)
-
-    def perform_update(self, serializer):
-        # Call the serializer's save method to update the instance
-        serializer.save()
-
-    # def update(self, request, *args, **kwargs):
-    #     self._check_ps_status(request, *args, **kwargs)
-    #     return super(PortfolioUpdateViewSet, self).update(request, *args, **kwargs)
 
 
 class CheckRequiredMixin:
@@ -979,6 +927,11 @@ class ProblemStatementListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet
 
 
 class SolutionListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    queryset = Solution.objects.all()
+    serializer_class = SolutionSerializer
+
+
+class SolutionCreateViewSet(TokenAuthMixin, CreateModelMixin, GenericViewSet):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
 

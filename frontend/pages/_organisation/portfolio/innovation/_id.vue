@@ -3,7 +3,7 @@
     <div class="content-area-full">
       <div class="portfolio">
         <!-- tabs -->
-        <tabs :tabs="tabs" :tab="tab" :center="false" @handleTab="setTab">
+        <tabs-portfolios :tabs="tabs" :tab="tab" :center="false" @handleTab="setTab">
           <template slot="title">
             <div class="PHeader">
               <h2>
@@ -35,10 +35,9 @@
               </nuxt-link>
             </div>
           </template>
-        </tabs>
+        </tabs-portfolios>
         <section class="tab-content">
           <div v-if="tab === 1" class="Problems problem-matrix">
-            <h1 class="portfolio-summary"><Translate>Summary</Translate></h1>
             <p>{{ description }}</p>
           </div>
         </section>
@@ -58,14 +57,14 @@
 
 <script>
 import MainSolutionsTable from '@/components/solution/dashboard/MainSolutionsTable'
-import Tabs from '@/components/common/Tabs'
+import TabsPortfolios from '@/components/common/TabsPortfolios'
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
     MainSolutionsTable,
-    Tabs,
+    TabsPortfolios,
   },
   data() {
     return {
@@ -173,9 +172,7 @@ export default {
   padding: 40px;
   background-color: #fbfaf8;
 }
-.portfolio-summary {
-  font-size: @fontSizeHeading;
-}
+
 .portfolio-area::v-deep {
   .move {
     display: none;
@@ -270,7 +267,7 @@ section.portfolio-area {
     display: flex;
     align-items: flex-end;
     color: @colorBrandPrimary;
-    padding-bottom: 18px;
+
     a {
       margin-left: auto;
       margin-right: 12px;

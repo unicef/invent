@@ -27,7 +27,7 @@
               localePath({
                 name: 'organisation-portfolio-innovation-solutions-id',
                 params: { id: scope.row.id },
-                query: { project: $route.params.id },
+                query: { portfolio: $route.params.id },
               })
             "
             >{{ scope.row.name }}</nuxt-link
@@ -35,20 +35,16 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        :resizable="false"
-        :label="$gettext('Problem Statement') | translate"
-        style="{minWidth: 600px, maxWidth: 800px}"
-      >
+      <el-table-column :resizable="false" :label="$gettext('Problem Statement') | translate" min-width="200">
         <template slot-scope="scope">
-          <ul v-for="ps in scope.row.problemStatements">
-            <li>{{ ps.name }}</li>
-          </ul>
+          <div v-for="ps in scope.row.problemStatements">
+            <p>{{ ps.name }}</p>
+          </div>
         </template>
       </el-table-column>
 
       <el-table-column :resizable="false" sortable :label="$gettext('Phase') | translate" prop="phase" width="180">
-        <template slot-scope="scope"> {{ scope.row.phase }} </template>
+        <template slot-scope="scope"> <show-phase :phaseId="scope.row.phase" /></template>
       </el-table-column>
 
       <el-table-column :resizable="false" sortable :label="$gettext('Reach') | translate" width="180" prop="reach">
@@ -76,10 +72,12 @@
 import { setTimeout } from 'timers'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import CurrentPage from '@/components/dashboard/CurrentPage'
+import ShowPhase from '../ShowPhase.vue'
 
 export default {
   components: {
     CurrentPage,
+    ShowPhase,
   },
   data() {
     return {

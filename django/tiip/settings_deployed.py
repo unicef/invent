@@ -55,7 +55,11 @@ CELERYBEAT_SCHEDULE = {
     "country_inclusion_log_task": {
         "task": "country_inclusion_log_task",
         "schedule": crontab(hour=1, minute=0),
-    }
+    },
+    # "fetch_users_from_aad_task": {
+    #     "task": "fetch_users_from_aad_and_update_db",
+    #     "schedule": crontab(minute=0, hour=0),
+    # },
 }
 
 DEBUG = env.str('DEBUG', default='False')

@@ -54,7 +54,7 @@
           <translate>Initiative</translate>
         </nuxt-link>
         <nuxt-link
-          v-if="isViewer && !isTeam"
+          v-if="isViewer && !isTeam && !isInitiativeView"
           :class="{ Active: isProjectActive }"
           :to="
             localePath({
@@ -66,7 +66,7 @@
           <translate>Initiative</translate>
         </nuxt-link>
         <nuxt-link
-          v-if="anon"
+          v-if="anon && !isInitiativeView"
           :class="{ Active: isProjectActive }"
           :to="
             localePath({

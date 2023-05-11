@@ -20,16 +20,7 @@
     @change="changeHandler"
     @keyup.enter.native="onEnter"
   >
-    <el-option
-      v-for="person in optionsAndValues"
-      :key="person.id"
-      :label="
-        `${person.name ? person.name + ', ' : ''}${
-          person.organisation ? getOrganisationDetails(person.organisation).name : ''
-        } ${person.name ? '(' + person.email + ')' : person.email}` | truncate
-      "
-      :value="person.id"
-    >
+    <el-option v-for="person in optionsAndValues" :key="person.id" :label="person.label" :value="person.id">
       <!-- N/A -->
       <span style="float: left">{{ getUserLabel(person.id) }}</span>
     </el-option>
@@ -80,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'system/getUserProfilesNoFilter',
+      items: 'system/getUserProfilesWithLabel',
       getOrganisationDetails: 'system/getOrganisationDetails',
       userProfiles: 'system/getUserProfilesWithLabel',
     }),
@@ -152,8 +143,15 @@ export default {
 
 .TeamSelector {
   width: 100%;
+  word-wrap: normal;
   .el-select-dropdown__item.selected {
     display: none;
+  }
+
+  .el-tag {
+    height: fit-content;
+    word-wrap: normal;
+    white-space: normal;
   }
 
   &.el-select {
@@ -170,28 +168,11 @@ export default {
   display: none;
 }
 
-.TeamSelectorDropdown {
-  .OrganisationItem {
-    display: inline-block;
-    margin-left: 6px;
-    font-weight: 400;
-    color: @colorGray;
-
-    &::before {
-      content: '(';
-    }
-
-    &::after {
-      content: ')';
-    }
-  }
-  li {
-    height: 50px;
-    .email {
-      float: left;
-      width: 100%;
-      margin-top: -18px;
-    }
-  }
+.el-select-dropdown__item {
+  max-width: 64vw;
+  min-width: 740px;
+  // height: fit-content;
+  word-wrap: normal;
+  white-space: normal;
 }
 </style>

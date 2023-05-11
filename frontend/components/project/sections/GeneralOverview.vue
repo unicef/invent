@@ -223,7 +223,7 @@
             :publish-rule="publishRules.contact_email"
           >
             <template slot="label">
-              <translate key="contact-email"> Focal Point Email </translate>
+              <translate key="contact-email">Who is the focal point of contact for this initiative?</translate>
             </template>
 
             <FocalProfileSelector
@@ -239,7 +239,10 @@
             <span class="Hint">
               <fa icon="info-circle" />
               <p>
-                <translate>The focal point member has also team member rights.</translate>
+                <translate
+                  >The focal point is the team member who is leading this work, and will act as the point of contact for
+                  anyone wishing to connect with the team.</translate
+                >
               </p>
             </span>
           </custom-required-form-team-item>
