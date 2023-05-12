@@ -1,9 +1,9 @@
-import json
-from pathlib import Path  # Remove after we receive actual AAD data
 import requests
+from time import sleep
 
 from allauth.account.utils import setup_user_email
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from rest_auth.registration.views import SocialLoginView
@@ -13,6 +13,9 @@ from azure.views import AzureOAuth2Adapter
 from country.models import Country
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.db import transaction
+from django.db import IntegrityError
+from django.db.models import Q
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -71,151 +74,104 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
 
     def save_aad_users(self, azure_users):
         user_model = get_user_model()
+        batch_size = 1000  # number of users to process at once
         updated_users = []
 
-        # Loop through the AAD users
-        for azure_user in azure_users:
-            email = azure_user['mail']
-            display_name = azure_user['displayName']
-            job_title = azure_user['jobTitle']
-            department = azure_user['department']
-            country_name = azure_user['country']
-            social_account_uid = azure_user['id']
+        for i in range(0, len(azure_users), batch_size):
+            batch = azure_users[i:i + batch_size]
 
-            # Try to get the User instance by email, if not found, create a new User instance
-            try:
-                user = user_model.objects.get(email=email)
-            except user_model.DoesNotExist:
-                user = user_model.objects.create(email=email, username=email)
+            # Prepare data for new users and existing users
+            new_users_data = []
+            existing_users_data = []
+            for azure_user in batch:
+                user_data = {
+                    'email': azure_user['mail'],
+                    'username': azure_user['mail'],
+                    'name': azure_user['displayName'],
+                    'job_title': azure_user['jobTitle'],
+                    'department': azure_user['department'],
+                    'country_name': azure_user['country'],
+                    'social_account_uid': azure_user['id'],
+                }
+                if user_model.objects.filter(email=user_data['email']).exists():
+                    existing_users_data.append(user_data)
+                else:
+                    new_users_data.append(user_data)
+
+            # Create new users and social accounts
+            new_users = []
+            user_profiles = []
+            social_accounts = []
+            for user_data in new_users_data:
+                country, _ = Country.objects.get_or_create(
+                    name=user_data['country_name'])
+                user = user_model(
+                    email=user_data['email'], username=user_data['username'])
                 user.set_unusable_password()
-                user.save()
-
-            # Check if the user already exists in the local database
-            try:
-                old_user = user_model.objects.filter(email=user.email).get()
-            except user_model.DoesNotExist:
-                # If the user doesn't exist, create a new UserProfile instance
-
-                # Get or create the Country instance for the user
-                country, _ = Country.objects.get_or_create(name=country_name)
-
-                # Create a new UserProfile instance for the user
-                user_profile = UserProfile.objects.create(
+                user_profiles.append(UserProfile(
                     user=user,
-                    name=display_name,
-                    account_type=UserProfile.DONOR,
-                    job_title=job_title,
-                    department=department,
+                    name=user_data['name'],
+                    job_title=user_data['job_title'],
+                    department=user_data['department'],
                     country=country,
-                    # social_account_uid = social_account_uid
-                )
-                # Add the created UserProfile instance to the updated_users list
-                updated_users.append(user_profile)
+                    account_type=UserProfile.DONOR,
+                    social_account_uid=user_data['social_account_uid']
+                ))
+                social_accounts.append(SocialAccount(
+                    user=user, provider='azure', uid=user_data['social_account_uid']))
+                new_users.append(user)
 
-            else:
-                # Get or create the UserProfile instance for the user
-                user_profile, created = UserProfile.objects.get_or_create(user=old_user)
+            try:
+                with transaction.atomic():
+                    # Using bulk_create to create new users, user profiles, and social accounts
+                    user_model.objects.bulk_create(new_users)
+                    UserProfile.objects.bulk_create(user_profiles)
+                    SocialAccount.objects.bulk_create(social_accounts)
+            except Exception as e:
+                # Log the error
+                print(f'Error while creating users: {e}')
 
-                # Update the UserProfile instance with the new data
-                user_profile.name = display_name
-                user_profile.job_title = job_title
-                user_profile.department = department
+            try:
+                # Update existing users
+                for user_data in existing_users_data:
+                    user = user_model.objects.get(email=user_data['email'])
+                    country, _ = Country.objects.get_or_create(
+                        name=user_data['country_name'])
+                    user_profile = UserProfile.objects.get(user=user)
+                    user_profile.name = user_data['name']
+                    user_profile.job_title = user_data['job_title']
+                    user_profile.department = user_data['department']
+                    user_profile.country = country
+                    user_profile.social_account_uid = user_data['social_account_uid']
+                    user_profile.save()
+                    updated_users.append(user_profile)
+            except Exception as e:
+                # Log the error
+                print(f'Error while updating user {user.email}: {e}')
 
-                # Get or create the Country instance for the user
-                country, _ = Country.objects.get_or_create(name=country_name)
-                user_profile.country = country
-
-                # Save the updated UserProfile instance
-                user_profile.save()
-                # Add the updated UserProfile instance to the updated_users list
-                updated_users.append(user_profile)
-
-        # Return the list of updated UserProfile instances
         return updated_users
 
-    def get_mocked_aad_users(self):
-        users = []
-
-        mock_users_json = '''
-            [
-                {
-                    "id": "1",
-                    "displayName": "John Doe1",
-                    "givenName": "John",
-                    "surname": "Doe",
-                    "mail": "john.doe@example.com",
-                    "jobTitle": "Software Engineer",
-                    "userPrincipalName": "john.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "New York",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 2"],
-                    "country": "United States",
-                    "department": "Engineering"
-                },
-                {
-                    "id": "2",
-                    "displayName": "Jane Doe",
-                    "givenName": "Jane",
-                    "surname": "Doe",
-                    "mail": "jane.doe@example.com",
-                    "jobTitle": "Project Manager",
-                    "userPrincipalName": "jane.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "San Francisco",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 3"],
-                    "country": "United States",
-                    "department": "Project Management"
-                },
-                {
-                    "id": "5535",
-                    "displayName": "KALOMALOS Georgios",
-                    "givenName": "",
-                    "surname": "KALOMALOS Georgios",
-                    "mail": "Georgios.KALOMALOS@sword-group.com",
-                    "jobTitle": "Software Engineer",
-                    "userPrincipalName": "Georgios.KALOMALOS@sword-group.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "Athens",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 2"],
-                    "country": "Greece",
-                    "department": "FPB"
-                }
-            ]
-        '''
-
-        users = json.loads(mock_users_json)
-
-        return users
-
     def get_aad_users(self):
-        url = 'https://graph.microsoft.com/v1.0/users'
+        url = 'https://graph.microsoft.com/v1.0/users?$top=1000'
         token = self.get_access_token()
-
         headers = {
             'Authorization': f'Bearer {token}',
             'Content-Type': 'application/json'
         }
-
         users = []
 
         while url:
-            response = requests.get(url, headers=headers)
-            response_data = response.json()
-            users.extend(response_data.get('value', []))
+            try:
+                response = requests.get(url, headers=headers)
+                response_data = response.json()
+                users.extend(response_data.get('value', []))
+                url = response_data.get('@odata.nextLink', None)
 
-            # Print response details
-            print(f"Response status code: {response.status_code}")
-            print(f"Response headers: {response.headers}")
-            print(f"Response text: {response.text}")
-
-            url = response_data.get('@odata.nextLink', None)
-
+                # Throttle the API calls
+                sleep(10)
+            except Exception as e:
+                print(f"Error while making request to {url}: {e}")
+                break  # stop fetching users if there's an error
         return users
 
     def is_auto_signup_allowed(self, request, sociallogin):

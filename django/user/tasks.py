@@ -56,7 +56,7 @@ def send_user_request_to_admins(profile_id):
 def fetch_users_from_aad_and_update_db():
     adapter = MyAzureAccountAdapter()
     # Fetch the AAD users
-    azure_users = adapter.get_mocked_aad_users()
+    azure_users = adapter.get_aad_users()
     # Save the AAD users to the local database and get the updated user profiles
     updated_user_profiles = adapter.save_aad_users(azure_users)
 
