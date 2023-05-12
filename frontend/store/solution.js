@@ -84,7 +84,7 @@ export const actions = {
   },
   async createNewSolution({ state }, data) {
     return this.$axios({
-      method: 'put',
+      method: 'post',
       url: `/api/solution/create/`,
       data: {
         name: data.name,

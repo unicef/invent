@@ -413,7 +413,9 @@ export default {
       return ''
     },
     lastUpdated() {
-      return this.modified ? format(this.modified, 'DD/MM/YYYY HH:mm') : this.$gettext('N/A')
+      return this.published.modified
+        ? format(this.published.modified, 'DD/MM/YYYY HH:mm')
+        : format(this.draft.modified, 'DD/MM/YYYY HH:mm')
     },
     countryQuestions() {
       if (this.country) {

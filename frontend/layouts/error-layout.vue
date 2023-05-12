@@ -3,21 +3,18 @@
     <dialogs-container />
     <top-bar error-page />
     <nuxt />
-    <dha-footer />
     <django-feedback />
   </div>
 </template>
 
 <script>
 import HeadMixin from '@/layouts/HeadMixin'
-import DhaFooter from '../components/common/DhaFooter.vue'
 import TopBar from '../components/common/TopBar.vue'
 import DialogsContainer from '../components/dialogs/DialogsContainer.vue'
 import DjangoFeedback from '../components/DjangoFeedback.vue'
 
 export default {
   components: {
-    DhaFooter,
     TopBar,
     DialogsContainer,
     DjangoFeedback,

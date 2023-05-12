@@ -13,7 +13,7 @@ import scheduler.celery  # noqa
 from django.utils.translation import ugettext_lazy as _
 
 from core.utils import send_mail_wrapper
-from country.models import CustomQuestion, CountryOffice
+from country.models import CustomQuestion, CountryOffice, Country
 from country.serializers import UserProfileSerializer
 from project.utils import remove_keys
 from tiip.validators import EmailEndingValidator
@@ -67,13 +67,15 @@ class LinkSerializer(serializers.Serializer):
     ]
 
     link_type = serializers.ChoiceField(choices=LINK_TYPE)
-    link_url = serializers.URLField(max_length=2048, required=False, allow_blank=True)
+    link_url = serializers.URLField(
+        max_length=2048, required=False, allow_blank=True)
 
 
 class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     date = serializers.CharField(required=True, max_length=10)
-    note = serializers.CharField(required=False, max_length=256, allow_null=True)
+    note = serializers.CharField(
+        required=False, max_length=256, allow_null=True)
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
@@ -90,9 +92,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
     )
     organisation = serializers.CharField(max_length=128)
     overview = serializers.CharField(max_length=300, required=True)
-    implementation_overview = serializers.CharField(max_length=1024, required=False)
+    implementation_overview = serializers.CharField(
+        max_length=1024, required=False)
     start_date = serializers.CharField(max_length=256, required=True)
-    end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date = serializers.CharField(
+        max_length=256, required=False, allow_blank=True)
     end_date_note = serializers.CharField(
         max_length=256, required=False, allow_blank=True
     )
@@ -123,9 +127,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
     )
     program_targets = serializers.CharField(max_length=1024, required=False)
-    program_targets_achieved = serializers.CharField(max_length=1024, required=False)
+    program_targets_achieved = serializers.CharField(
+        max_length=1024, required=False)
     target_group_reached = serializers.IntegerField(required=False)
-    current_achievements = serializers.CharField(max_length=2048, required=False)
+    current_achievements = serializers.CharField(
+        max_length=2048, required=False)
     cpd = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
     )
@@ -138,7 +144,8 @@ class ProjectPublishedSerializer(serializers.Serializer):
         allow_empty=True,
     )
     total_budget = serializers.IntegerField(required=False)
-    total_budget_narrative = serializers.CharField(max_length=500, required=False)
+    total_budget_narrative = serializers.CharField(
+        max_length=500, required=False)
     funding_needs = serializers.CharField(max_length=500, required=False)
     partnership_needs = serializers.CharField(max_length=500, required=False)
     currency = serializers.IntegerField(required=False)
@@ -259,7 +266,8 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128)
     organisation = serializers.CharField(max_length=128, required=False)
-    implementation_overview = serializers.CharField(max_length=1024, required=False)
+    implementation_overview = serializers.CharField(
+        max_length=1024, required=False)
     contact_name = serializers.CharField(max_length=256, required=False)
     contact_email = serializers.EmailField(required=False)
     start_date = serializers.CharField(max_length=256, required=False)
@@ -347,7 +355,8 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         # remove duplicates
         self.validated_data["team"] = list(set(self.validated_data["team"]))
-        self.validated_data["viewers"] = list(set(self.validated_data["viewers"]))
+        self.validated_data["viewers"] = list(
+            set(self.validated_data["viewers"]))
 
         return super().save(**kwargs)
 
@@ -356,7 +365,8 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         # don't allow empty team, so no orphan projects
         if "team" in validated_data and isinstance(validated_data["team"], list):
-            instance.team.set(validated_data.get("team") or instance.team.all())
+            instance.team.set(validated_data.get(
+                "team") or instance.team.all())
 
         # a project however can exist without viewers
         if "viewers" in validated_data and isinstance(validated_data["viewers"], list):
@@ -458,7 +468,8 @@ class CustomAnswerSerializer(serializers.Serializer):
 class CountryCustomAnswerListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
         instance = self.context["project"]
-        custom_answers = {k["question_id"]: k["answer"] for k in validated_data}
+        custom_answers = {k["question_id"]: k["answer"]
+                          for k in validated_data}
         instance.draft["country_custom_answers"] = custom_answers
         if not self.context["is_draft"]:
             private_ids = (
@@ -484,7 +495,8 @@ class DonorCustomAnswerListSerializer(serializers.ListSerializer):
         instance = self.context["project"]
         donor_id = self.context["donor_id"]
 
-        custom_answers = {k["question_id"]: k["answer"] for k in validated_data}
+        custom_answers = {k["question_id"]: k["answer"]
+                          for k in validated_data}
         instance.draft.setdefault("donor_custom_answers", {})
         instance.draft["donor_custom_answers"].setdefault(donor_id, {})
         instance.draft["donor_custom_answers"][donor_id] = custom_answers
@@ -500,7 +512,8 @@ class DonorCustomAnswerListSerializer(serializers.ListSerializer):
                     k: custom_answers[k] for k in custom_answers if k in private_ids
                 }
                 instance.data.setdefault("donor_custom_answers_private", {})
-                instance.data["donor_custom_answers_private"].setdefault(donor_id, {})
+                instance.data["donor_custom_answers_private"].setdefault(
+                    donor_id, {})
                 instance.data["donor_custom_answers_private"][
                     donor_id
                 ] = private_answers
@@ -603,7 +616,8 @@ class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=512,
         validators=[
-            UniqueValidator(queryset=TechnologyPlatform.objects.all(), lookup="iexact")
+            UniqueValidator(
+                queryset=TechnologyPlatform.objects.all(), lookup="iexact")
         ],
     )
 
@@ -617,7 +631,8 @@ class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=512,
         validators=[
-            UniqueValidator(queryset=HardwarePlatform.objects.all(), lookup="iexact")
+            UniqueValidator(
+                queryset=HardwarePlatform.objects.all(), lookup="iexact")
         ],
     )
 
@@ -631,7 +646,8 @@ class NontechPlatformCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=512,
         validators=[
-            UniqueValidator(queryset=NontechPlatform.objects.all(), lookup="iexact")
+            UniqueValidator(
+                queryset=NontechPlatform.objects.all(), lookup="iexact")
         ],
     )
 
@@ -645,7 +661,8 @@ class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=512,
         validators=[
-            UniqueValidator(queryset=PlatformFunction.objects.all(), lookup="iexact")
+            UniqueValidator(
+                queryset=PlatformFunction.objects.all(), lookup="iexact")
         ],
     )
 
@@ -742,8 +759,10 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
     )
     project = serializers.IntegerField(read_only=True, source="project.id")
     portfolio = serializers.IntegerField(read_only=True, source="portfolio.id")
-    review_scores = ReviewScoreSerializer(many=True, read_only=True, required=False)
-    averages = serializers.SerializerMethodField(read_only=True, required=False)
+    review_scores = ReviewScoreSerializer(
+        many=True, read_only=True, required=False)
+    averages = serializers.SerializerMethodField(
+        read_only=True, required=False)
 
     class Meta:
         model = ProjectPortfolioState
@@ -759,7 +778,8 @@ class ProjectPortfolioStateManagerSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_averages(obj):
-        complete_scores = obj.review_scores.filter(status=ReviewScore.STATUS_COMPLETE)
+        complete_scores = obj.review_scores.filter(
+            status=ReviewScore.STATUS_COMPLETE)
 
         def calc_avg(in_list: list):
             return (sum(in_list) / len(in_list)) if in_list else None
@@ -990,12 +1010,12 @@ class ProjectImageUploadSerializer(serializers.ModelSerializer):
 
 
 class CountrySolutionSerializer(serializers.ModelSerializer):
-    # Use the country's ID as the primary key in the serialized data
-    id = serializers.IntegerField(source="country.id")
+    country = serializers.PrimaryKeyRelatedField(
+        queryset=Country.objects.all())
 
     class Meta:
         model = CountrySolution
-        fields = ("id", "people_reached", "region")
+        fields = ("country", "people_reached", "region")
 
 
 class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
@@ -1004,36 +1024,88 @@ class PortfolioProblemStatementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CountrySolution
-        fields = ("id", "people_reached", "region")
+        fields = ("id", "people_reached", "region",
+                  "portfolio", "problem_statements")
 
 
 class SolutionSerializer(serializers.ModelSerializer):
-    # Define custom serializers for each field
-    regions = serializers.ListField(
-        child=serializers.IntegerField(), max_length=8, min_length=0
+    countries = CountrySolutionSerializer(
+        source='countrysolution_set', many=True, read_only=True)
+    country_solutions = CountrySolutionSerializer(
+        many=True, write_only=True, required=False)
+    portfolio_problem_statements = serializers.ListField(
+        child=serializers.DictField(),
+        write_only=True,
+        required=False,
     )
-    people_reached = serializers.IntegerField(allow_null=True)
-    countries = CountrySolutionSerializer(source="countrysolution_set", many=True)
+    people_reached = serializers.IntegerField()
     problem_statements = ProblemStatementSerializer(many=True, required=False)
-    portfolios = PortfolioSerializer(many=True)
+    portfolios = PortfolioSerializer(many=True, required=False)
 
     class Meta:
         model = Solution
-        # Define the fields to be included in the serialized data
         fields = (
-            "id",
-            "created",
-            "modified",
-            "name",
-            "regions",
-            "phase",
-            "countries",
-            "people_reached",
-            "open_source_frontier_tech",
-            "learning_investment",
-            "portfolios",
-            "problem_statements",
+            'id', 'name', 'portfolios', 'countries', 'problem_statements',
+            'phase', 'open_source_frontier_tech', 'learning_investment',
+            'people_reached', 'is_active', 'portfolio_problem_statements', 'country_solutions'
         )
+
+    def create(self, validated_data):
+        country_solutions_data = validated_data.pop('country_solutions', [])
+        portfolio_problem_statements_data = validated_data.pop(
+            'portfolio_problem_statements', [])
+        solution = Solution.objects.create(**validated_data)
+
+        for pps_data in portfolio_problem_statements_data:
+            portfolio_id = pps_data.pop("portfolio_id")
+            problem_statements_ids = pps_data.pop("problem_statements")
+            portfolio = Portfolio.objects.get(id=portfolio_id)
+            solution.portfolios.add(portfolio)
+
+            for ps_id in problem_statements_ids:
+                problem_statement = ProblemStatement.objects.get(id=ps_id)
+                solution.problem_statements.add(problem_statement)
+
+        for country_data in country_solutions_data:
+            country_solution = CountrySolution(solution=solution)
+            for attr, value in country_data.items():
+                setattr(country_solution, attr, value)
+            country_solution.save()
+
+        return solution
+
+    def update(self, instance, validated_data):
+        country_solutions_data = validated_data.pop('country_solutions', [])
+        portfolio_problem_statements_data = validated_data.pop(
+            'portfolio_problem_statements', [])
+        instance = super().update(instance, validated_data)
+
+        # Remove existing CountrySolution instances related to the current Solution instance
+        instance.countrysolution_set.all().delete()
+
+        for country_data in country_solutions_data:
+            if 'id' in country_data:
+                # We don't need this anymore, as we are creating a new instance
+                country_data.pop('id')
+            country_solution = CountrySolution(
+                solution=instance, **country_data)
+            country_solution.save()
+
+        # Clear existing problem_statements and portfolios
+        instance.problem_statements.clear()
+        instance.portfolios.clear()
+
+        for pps_data in portfolio_problem_statements_data:
+            portfolio_id = pps_data.pop("portfolio_id")
+            problem_statements_ids = pps_data.pop("problem_statements")
+            portfolio = Portfolio.objects.get(id=portfolio_id)
+            instance.portfolios.add(portfolio)
+
+            for ps_id in problem_statements_ids:
+                problem_statement = ProblemStatement.objects.get(id=ps_id)
+                instance.problem_statements.add(problem_statement)
+
+        return instance
 
 
 class ProjectVersionHistorySerializer(serializers.ModelSerializer):
@@ -1090,9 +1162,11 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
                 and len(cur[k]) > 0
                 and (isinstance(cur[k][0], list) or isinstance(cur[k][0], dict))
             ):
-                changes.append(dict(field=k, added=None, removed=None, special=True))
+                changes.append(
+                    dict(field=k, added=None, removed=None, special=True))
             else:
-                changes.append(dict(field=k, added=cur[k], removed=None, special=False))
+                changes.append(
+                    dict(field=k, added=cur[k], removed=None, special=False))
 
         for k in keys_removed:
             if (
@@ -1101,7 +1175,8 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
                 and len(prev[k]) > 0
                 and (isinstance(prev[k][0], list) or isinstance(prev[k][0], dict))
             ):
-                changes.append(dict(field=k, added=None, removed=None, special=True))
+                changes.append(
+                    dict(field=k, added=None, removed=None, special=True))
             else:
                 changes.append(
                     dict(field=k, added=None, removed=prev[k], special=False)
@@ -1113,7 +1188,8 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
                     if len(cur[k]) > 0:
                         if isinstance(cur[k][0], list) or isinstance(cur[k][0], dict):
                             changes.append(
-                                dict(field=k, added=None, removed=None, special=True)
+                                dict(field=k, added=None,
+                                     removed=None, special=True)
                             )
                         elif isinstance(prev[k], list):
                             changes.append(
@@ -1132,7 +1208,8 @@ class ProjectVersionHistorySerializer(serializers.ModelSerializer):
                     )
                 else:
                     changes.append(
-                        dict(field=k, added=cur[k], removed=prev[k], special=False)
+                        dict(field=k, added=cur[k],
+                             removed=prev[k], special=False)
                     )
         return changes
 
