@@ -1,9 +1,9 @@
-import json
-from pathlib import Path  # Remove after we receive actual AAD data
 import requests
+from time import sleep
 
 from allauth.account.utils import setup_user_email
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from rest_auth.registration.views import SocialLoginView
@@ -13,6 +13,9 @@ from azure.views import AzureOAuth2Adapter
 from country.models import Country
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.db import transaction
+from django.db import IntegrityError
+from django.db.models import Q
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -70,152 +73,207 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         return user
 
     def save_aad_users(self, azure_users):
+        """
+        This method updates the application's user database with information fetched from Azure AD.
+        It processes the users in batches to increase efficiency and reduce potential for errors or timeouts.
+
+        It separates out new users and existing users to handle them differently, creating new user entries for new users 
+        and updating existing entries for existing users. It uses Django's `bulk_create` and `bulk_update` methods 
+        to perform these operations more efficiently.
+
+        The whole process for each batch is wrapped in a database transaction to ensure data integrity. 
+        If any part of the process fails, the transaction will be rolled back to the state it was in before the transaction started.
+
+        Parameters:
+            azure_users (list): A list of dictionaries where each dictionary represents a user fetched from Azure AD. 
+            Each dictionary contains user attributes like email, name, job title, department, country, etc.
+
+        Returns:
+        list: A list of UserProfile objects that were updated or created in the process.
+        """
+        # Get the User model
         user_model = get_user_model()
+
+        # Set the number of users to process in each batch
+        batch_size = 1000
+
+        # Initialize a list to hold the users that have been updated
         updated_users = []
 
-        # Loop through the AAD users
-        for azure_user in azure_users:
-            email = azure_user['mail']
-            display_name = azure_user['displayName']
-            job_title = azure_user['jobTitle']
-            department = azure_user['department']
-            country_name = azure_user['country']
-            social_account_uid = azure_user['id']
+        # Process the users in batches
+        for i in range(0, len(azure_users), batch_size):
+            # Create a batch of users to process
+            batch = azure_users[i:i + batch_size]
 
-            # Try to get the User instance by email, if not found, create a new User instance
-            try:
-                user = user_model.objects.get(email=email)
-            except user_model.DoesNotExist:
-                user = user_model.objects.create(email=email, username=email)
+            # Initialize lists to hold data for new and existing users
+            new_users_data = []
+            existing_users_data = []
+
+            # Get a set of existing email addresses
+            existing_emails = set(
+                user_model.objects.values_list('email', flat=True))
+
+            # Separate the users in the batch into new and existing users
+            for azure_user in batch:
+                # Create a dictionary to hold the user's data
+                user_data = {
+                    'email': azure_user['mail'],
+                    'username': azure_user['mail'],
+                    'name': azure_user['displayName'],
+                    'job_title': azure_user['jobTitle'],
+                    'department': azure_user['department'],
+                    'country_name': azure_user['country'],
+                    'social_account_uid': azure_user['id'],
+                }
+                # Check if the user's email is already in the database
+                if user_data['email'] in existing_emails:
+                    existing_users_data.append(user_data)
+                else:
+                    new_users_data.append(user_data)
+
+            # Create new users and social accounts
+            new_users = []
+            user_profiles = []
+            social_accounts = []
+
+            # Create a new User, UserProfile, and SocialAccount for each new user
+            for user_data in new_users_data:
+                # Get or create the user's country
+                country, _ = Country.objects.get_or_create(
+                    name=user_data['country_name'])
+
+                # Create a new User
+                user = user_model(
+                    email=user_data['email'], username=user_data['username'])
                 user.set_unusable_password()
-                user.save()
 
-            # Check if the user already exists in the local database
-            try:
-                old_user = user_model.objects.filter(email=user.email).get()
-            except user_model.DoesNotExist:
-                # If the user doesn't exist, create a new UserProfile instance
-
-                # Get or create the Country instance for the user
-                country, _ = Country.objects.get_or_create(name=country_name)
-
-                # Create a new UserProfile instance for the user
-                user_profile = UserProfile.objects.create(
+                # Create a new UserProfile
+                user_profiles.append(UserProfile(
                     user=user,
-                    name=display_name,
-                    account_type=UserProfile.DONOR,
-                    job_title=job_title,
-                    department=department,
+                    name=user_data['name'],
+                    job_title=user_data['job_title'],
+                    department=user_data['department'],
                     country=country,
-                    # social_account_uid = social_account_uid
-                )
-                # Add the created UserProfile instance to the updated_users list
-                updated_users.append(user_profile)
+                    account_type=UserProfile.DONOR,
+                    social_account_uid=user_data['social_account_uid']
+                ))
 
-            else:
-                # Get or create the UserProfile instance for the user
-                user_profile, created = UserProfile.objects.get_or_create(user=old_user)
+                # Create a new SocialAccount
+                social_accounts.append(SocialAccount(
+                    user=user, provider='azure', uid=user_data['social_account_uid']))
 
-                # Update the UserProfile instance with the new data
-                user_profile.name = display_name
-                user_profile.job_title = job_title
-                user_profile.department = department
+                new_users.append(user)
 
-                # Get or create the Country instance for the user
-                country, _ = Country.objects.get_or_create(name=country_name)
+            # Use a transaction to create the new users, user profiles, and social accounts
+            try:
+                with transaction.atomic():
+                    user_model.objects.bulk_create(new_users)
+                    UserProfile.objects.bulk_create(user_profiles)
+                    SocialAccount.objects.bulk_create(social_accounts)
+            except Exception as e:
+                # Log any errors that occur during the creation process
+                print(f'Error while creating users: {e}')
+
+            # Initialize a list to hold the users that need to be updated
+            to_be_updated = []
+            for user_data in existing_users_data:
+                user = user_model.objects.get(email=user_data['email'])
+                country, _ = Country.objects.get_or_create(
+                    name=user_data['country_name'])
+                user_profile = UserProfile.objects.get(user=user)
+
+                # Update the user's profile
+                user_profile.name = user_data['name']
+                user_profile.job_title = user_data['job_title']
+                user_profile.department = user_data['department']
                 user_profile.country = country
+                user_profile.social_account_uid = user_data['social_account_uid']
 
-                # Save the updated UserProfile instance
-                user_profile.save()
-                # Add the updated UserProfile instance to the updated_users list
-                updated_users.append(user_profile)
+                # Add the updated profile to the list of profiles to be updated
+                to_be_updated.append(user_profile)
 
-        # Return the list of updated UserProfile instances
+            # Use a transaction to update the user profiles
+            try:
+                with transaction.atomic():
+                    # bulk_update is used to perform the updates in a single query for efficiency
+                    UserProfile.objects.bulk_update(to_be_updated, [
+                                                    'name', 'job_title', 'department', 'country', 'social_account_uid'])
+                    # Add the updated profiles to the list of all updated users
+                    updated_users.extend(to_be_updated)
+            except Exception as e:
+                # Log any errors that occur during the update process
+                print(f'Error while updating users: {e}')
+
+        # Return the list of updated users
         return updated_users
 
-    def get_mocked_aad_users(self):
-        users = []
-
-        mock_users_json = '''
-            [
-                {
-                    "id": "1",
-                    "displayName": "John Doe1",
-                    "givenName": "John",
-                    "surname": "Doe",
-                    "mail": "john.doe@example.com",
-                    "jobTitle": "Software Engineer",
-                    "userPrincipalName": "john.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "New York",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 2"],
-                    "country": "United States",
-                    "department": "Engineering"
-                },
-                {
-                    "id": "2",
-                    "displayName": "Jane Doe",
-                    "givenName": "Jane",
-                    "surname": "Doe",
-                    "mail": "jane.doe@example.com",
-                    "jobTitle": "Project Manager",
-                    "userPrincipalName": "jane.doe@example.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "San Francisco",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 3"],
-                    "country": "United States",
-                    "department": "Project Management"
-                },
-                {
-                    "id": "5535",
-                    "displayName": "KALOMALOS Georgios",
-                    "givenName": "",
-                    "surname": "KALOMALOS Georgios",
-                    "mail": "Georgios.KALOMALOS@sword-group.com",
-                    "jobTitle": "Software Engineer",
-                    "userPrincipalName": "Georgios.KALOMALOS@sword-group.com",
-                    "mobilePhone": "+1 555 555 5555",
-                    "officeLocation": "Athens",
-                    "preferredLanguage": "en-US",
-                    "businessPhones": ["+1 555 555 5555"],
-                    "memberOf": ["Group 1", "Group 2"],
-                    "country": "Greece",
-                    "department": "FPB"
-                }
-            ]
-        '''
-
-        users = json.loads(mock_users_json)
-
-        return users
-
     def get_aad_users(self):
-        url = 'https://graph.microsoft.com/v1.0/users'
+        """
+        Retrieves Azure Active Directory (AAD) users using Microsoft's Graph API.
+
+        This function sends GET requests to the Graph API endpoint for users, handling pagination 
+        by following the '@odata.nextLink' URL included in the response until no such link is present.
+        If the request fails, it retries up to 5 times with exponential backoff to handle temporary issues.
+
+        The function requires an access token which is fetched using the `get_access_token` method. 
+        The users are returned as a list of dictionaries in the format provided by the Graph API.
+
+        Returns:
+            list: A list of dictionaries where each dictionary represents an AAD user.
+
+        Raises:
+            requests.exceptions.RequestException: If a request to the Graph API fails.
+        """
+        # Define the endpoint URL.
+        url = 'https://graph.microsoft.com/v1.0/users?$top=1000'
+
+        # Get the access token.
         token = self.get_access_token()
 
+        # Prepare the request headers.
         headers = {
             'Authorization': f'Bearer {token}',
             'Content-Type': 'application/json'
         }
 
+        # Initialize an empty list to hold the users.
         users = []
 
-        while url:
-            response = requests.get(url, headers=headers)
-            response_data = response.json()
-            users.extend(response_data.get('value', []))
+        # Initialize the retry count to 0.
+        retry_count = 0
 
-            # Print response details
-            print(f"Response status code: {response.status_code}")
-            print(f"Response headers: {response.headers}")
-            print(f"Response text: {response.text}")
+        # Keep sending requests as long as there's a next page URL and the retry limit hasn't been reached.
+        while url and retry_count < 5:
+            try:
+                # Send the request.
+                response = requests.get(url, headers=headers)
 
-            url = response_data.get('@odata.nextLink', None)
+                # Raise an exception if the request was unsuccessful.
+                response.raise_for_status()
 
+                # Parse the response JSON.
+                response_data = response.json()
+
+                # Add the users from the current page to the list.
+                users.extend(response_data.get('value', []))
+
+                # Get the URL for the next page.
+                url = response_data.get('@odata.nextLink', None)
+
+                # Reset the retry count after a successful request.
+                retry_count = 0
+
+                # Wait for 10 seconds to avoid hitting the rate limit.
+                sleep(10)
+            except requests.exceptions.RequestException as e:
+                # Log the error and increment the retry count.
+                print(f"Error while making request to {url}: {e}")
+                retry_count += 1
+
+                # Use exponential backoff when retrying.
+                sleep(10 * (2 ** retry_count))
+
+        # Return the list of users.
         return users
 
     def is_auto_signup_allowed(self, request, sociallogin):
