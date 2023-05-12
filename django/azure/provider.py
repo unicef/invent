@@ -30,7 +30,7 @@ class AzureProvider(OAuth2Provider):
         Doc on scopes available at
         https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-scopes  # noqa
         """
-        return ['User.Read', 'openid']
+        return ['User.Read', 'openid', 'User.Read.All']
 
     def extract_uid(self, data):
         return str(data['id'])
