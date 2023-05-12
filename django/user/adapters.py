@@ -83,6 +83,9 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
             # Prepare data for new users and existing users
             new_users_data = []
             existing_users_data = []
+            existing_emails = set(
+                user_model.objects.values_list('email', flat=True))
+
             for azure_user in batch:
                 user_data = {
                     'email': azure_user['mail'],
@@ -93,7 +96,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                     'country_name': azure_user['country'],
                     'social_account_uid': azure_user['id'],
                 }
-                if user_model.objects.filter(email=user_data['email']).exists():
+                if user_data['email'] in existing_emails:
                     existing_users_data.append(user_data)
                 else:
                     new_users_data.append(user_data)
@@ -131,23 +134,29 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
                 # Log the error
                 print(f'Error while creating users: {e}')
 
+            # Update existing users
+            to_be_updated = []
+            for user_data in existing_users_data:
+                user = user_model.objects.get(email=user_data['email'])
+                country, _ = Country.objects.get_or_create(
+                    name=user_data['country_name'])
+                user_profile = UserProfile.objects.get(user=user)
+                user_profile.name = user_data['name']
+                user_profile.job_title = user_data['job_title']
+                user_profile.department = user_data['department']
+                user_profile.country = country
+                user_profile.social_account_uid = user_data['social_account_uid']
+                to_be_updated.append(user_profile)
+
             try:
-                # Update existing users
-                for user_data in existing_users_data:
-                    user = user_model.objects.get(email=user_data['email'])
-                    country, _ = Country.objects.get_or_create(
-                        name=user_data['country_name'])
-                    user_profile = UserProfile.objects.get(user=user)
-                    user_profile.name = user_data['name']
-                    user_profile.job_title = user_data['job_title']
-                    user_profile.department = user_data['department']
-                    user_profile.country = country
-                    user_profile.social_account_uid = user_data['social_account_uid']
-                    user_profile.save()
-                    updated_users.append(user_profile)
+                with transaction.atomic():
+                    # Using bulk_update to update existing users
+                    UserProfile.objects.bulk_update(to_be_updated, [
+                                                    'name', 'job_title', 'department', 'country', 'social_account_uid'])
+                    updated_users.extend(to_be_updated)
             except Exception as e:
                 # Log the error
-                print(f'Error while updating user {user.email}: {e}')
+                print(f'Error while updating users: {e}')
 
         return updated_users
 
