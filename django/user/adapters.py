@@ -95,7 +95,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
         user_model = get_user_model()
 
         # Set the number of users to process in each batch
-        batch_size = 1000
+        batch_size = 100
 
         # Initialize a list to hold the users that have been updated
         updated_users = []
@@ -225,7 +225,7 @@ class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
             requests.exceptions.RequestException: If a request to the Graph API fails.
         """
         # Define the endpoint URL.
-        url = 'https://graph.microsoft.com/v1.0/users?$top=1000'
+        url = 'https://graph.microsoft.com/v1.0/users'
 
         # Get the access token.
         token = self.get_access_token()
