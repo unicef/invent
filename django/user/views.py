@@ -8,6 +8,7 @@ from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
 from .adapters import MyAzureAccountAdapter
+from user.tasks import fetch_users_from_aad_and_update_db
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -55,6 +56,7 @@ class GetAADUsers(TokenAuthMixin, APIView):
         return Response({'users': azure_users}, status=status.HTTP_200_OK)
 
 
+
 class UpdateAADUsersView(TokenAuthMixin, APIView):
     """
     API View to update and save Azure Active Directory (AAD) users in the local database.
@@ -63,16 +65,7 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
     """
 
     def put(self, request, format=None):
-        # Create an instance of MyAzureAccountAdapter and fetch the AAD users
-        adapter = MyAzureAccountAdapter()
-        azure_users = adapter.get_aad_users()
+        # Call the Celery task to fetch and update the users
+        fetch_users_from_aad_and_update_db.delay()
 
-        # Save the AAD users to the local database and get the updated user profiles
-        updated_user_profiles = adapter.save_aad_users(azure_users)
-
-        # Serialize the updated user profiles
-        serialized_users = UserProfileSerializer(
-            updated_user_profiles, many=True)
-
-        # Return the serialized data in the response
-        return Response({'message': 'Azure users saved successfully.', 'updated_users': serialized_users.data}, status=status.HTTP_200_OK)
+        return Response({'message': 'Azure users update started.'}, status=status.HTTP_202_ACCEPTED)

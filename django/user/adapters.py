@@ -14,8 +14,6 @@ from country.models import Country
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db import transaction
-from django.db import IntegrityError
-from django.db.models import Q
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
