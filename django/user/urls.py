@@ -19,9 +19,6 @@ urlpatterns = [
     url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
     url(r"^email-confirmation/(?P<key>\w+)/$",
         confirm_email, name="account_confirm_email"),
-    url(r'^get-aad-users/', views.GetAADUsers.as_view(), name='get_aad_users'),
-    url(r"^update-aad-users/", views.UpdateAADUsersView.as_view(),
-        name="update_aad_users"),
 ]
 
 if settings.ENABLE_API_REGISTRATION:

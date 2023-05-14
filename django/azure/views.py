@@ -2,14 +2,20 @@ from __future__ import unicode_literals
 
 import requests
 
-from django.conf import settings
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
+from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from .provider import AzureProvider
+from .adapters import AzureUserManagement
+from core.views import TokenAuthMixin
+from .tasks import fetch_users_from_aad_and_update_db
 
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
@@ -57,6 +63,35 @@ class AzureOAuth2Adapter(OAuth2Adapter):
 
         return self.get_provider().sociallogin_from_response(request,
                                                              extra_data)
+
+
+class GetAADUsers(TokenAuthMixin, APIView):
+    """
+    API View to fetch Azure Active Directory (AAD) users.
+    Requires token authentication.
+    """
+
+    def get(self, request, format=None):
+        # Create an instance of MyAzureAccountAdapter and fetch the AAD users
+        adapter = AzureUserManagement()
+        azure_users = adapter.get_aad_users()
+
+        # Return the AAD users in the response
+        return Response({'users': azure_users}, status=status.HTTP_200_OK)
+
+
+class UpdateAADUsersView(TokenAuthMixin, APIView):
+    """
+    API View to update and save Azure Active Directory (AAD) users in the local database.
+    It fetches the AAD users, saves them, and returns the updated users' profiles.
+    Requires token authentication.
+    """
+
+    def put(self, request, format=None):
+        # Call the Celery task to fetch and update the users
+        fetch_users_from_aad_and_update_db.delay()
+
+        return Response({'message': 'Azure users update started.'}, status=status.HTTP_202_ACCEPTED)
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
