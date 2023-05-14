@@ -80,6 +80,19 @@ class GetAADUsers(TokenAuthMixin, APIView):
         return Response({'users': azure_users}, status=status.HTTP_200_OK)
 
 
+class GetMockAADUsers(TokenAuthMixin, APIView):
+    """
+    API View to fetch Azure Active Directory (AAD) users.
+    Requires token authentication.
+    """
+
+    def get(self, request, format=None):
+        adapter = AzureUserManagement()
+        azure_users = adapter.get_mock_aad_users(
+            max_users=100)  # Fetch 100 users
+        return Response({'users': azure_users}, status=status.HTTP_200_OK)
+
+
 class UpdateAADUsersView(TokenAuthMixin, APIView):
     """
     API View to update and save Azure Active Directory (AAD) users in the local database.

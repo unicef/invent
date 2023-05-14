@@ -64,8 +64,8 @@ class AzureUserManagement:
                     'email': azure_user['mail'],
                     'username': azure_user['mail'],
                     'name': azure_user['displayName'],
-                    'job_title': azure_user['jobTitle'],
-                    'department': azure_user['department'],
+                    'job_title': azure_user.get('jobTitle', ''),
+                    'department': azure_user.get('department', ''),
                     'country_name': azure_user['country'],
                     'social_account_uid': azure_user['id'],
                 }
@@ -130,8 +130,8 @@ class AzureUserManagement:
 
                 # Update the user's profile
                 user_profile.name = user_data['name']
-                user_profile.job_title = user_data['job_title']
-                user_profile.department = user_data['department']
+                user_profile.job_title = user_data.get('job_title', '')
+                user_profile.department = user_data.get('department', '')
                 user_profile.country = country
                 user_profile.social_account_uid = user_data['social_account_uid']
 
@@ -224,6 +224,34 @@ class AzureUserManagement:
                 sleep(10 * (2 ** retry_count))
 
         # Return the list of users.
+        return users
+
+    def get_mock_aad_users(self, max_users=100):
+        logger = logging.getLogger(__name__)
+        url = 'https://graph.microsoft.com/v1.0/users'
+        token = self.get_access_token()
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
+        users = []
+        retry_count = 0
+        while url and retry_count < 5 and len(users) < max_users:
+            try:
+                response = requests.get(url, headers=headers)
+                response.raise_for_status()
+                response_data = response.json()
+                users.extend(response_data.get('value', []))
+                if len(users) > max_users:
+                    # Limit the list to 'max_users' elements
+                    users = users[:max_users]
+                url = response_data.get('@odata.nextLink', None)
+                retry_count = 0
+                sleep(10)
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Error while making request to {url}: {e}")
+                retry_count += 1
+                sleep(10 * (2 ** retry_count))
         return users
 
     def is_auto_signup_allowed(self, request, sociallogin):

@@ -8,6 +8,7 @@ logger = get_task_logger(__name__)
 
 @app.task(name="fetch_users_from_aad_and_update_db")
 def fetch_users_from_aad_and_update_db():
+    logger.info("Starting to fetch and update users from AAD")
     adapter = AzureUserManagement()
     # Fetch the AAD users
     azure_users = adapter.get_aad_users()
