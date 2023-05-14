@@ -1,3 +1,4 @@
+import logging
 import requests
 from time import sleep
 
@@ -30,12 +31,14 @@ class AzureUserManagement:
         Returns:
         list: A list of UserProfile objects that were updated or created in the process.
         """
+        logger = logging.getLogger(__name__)
+        # Log the total number of users to be processed
+        logger.info(f"Total Azure users to be processed: {len(azure_users)}")
+
         # Get the User model
         user_model = get_user_model()
-
         # Set the number of users to process in each batch
         batch_size = 100
-
         # Initialize a list to hold the users that have been updated
         updated_users = []
 
@@ -43,6 +46,8 @@ class AzureUserManagement:
         for i in range(0, len(azure_users), batch_size):
             # Create a batch of users to process
             batch = azure_users[i:i + batch_size]
+
+            logger.info(f"Processing batch starting at index: {i}")
 
             # Initialize lists to hold data for new and existing users
             new_users_data = []
@@ -113,7 +118,7 @@ class AzureUserManagement:
                         social_accounts, batch_size=100)
             except Exception as e:
                 # Log any errors that occur during the creation process
-                print(f'Error while creating users: {e}')
+                logger.error(f'Error while creating users: {e}')
 
             # Initialize a list to hold the users that need to be updated
             to_be_updated = []
@@ -143,7 +148,10 @@ class AzureUserManagement:
                     updated_users.extend(to_be_updated)
             except Exception as e:
                 # Log any errors that occur during the update process
-                print(f'Error while updating users: {e}')
+                logger.error(f'Error while updating users: {e}')
+
+        # Log the total number of updated users
+        logger.info(f"Total updated users: {len(updated_users)}")
 
         # Return the list of updated users
         return updated_users
@@ -165,6 +173,7 @@ class AzureUserManagement:
         Raises:
             requests.exceptions.RequestException: If a request to the Graph API fails.
         """
+        logger = logging.getLogger(__name__)
         # Define the endpoint URL.
         url = 'https://graph.microsoft.com/v1.0/users'
 
@@ -208,7 +217,7 @@ class AzureUserManagement:
                 sleep(10)
             except requests.exceptions.RequestException as e:
                 # Log the error and increment the retry count.
-                print(f"Error while making request to {url}: {e}")
+                logger.error(f"Error while making request to {url}: {e}")
                 retry_count += 1
 
                 # Use exponential backoff when retrying.
