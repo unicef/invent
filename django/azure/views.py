@@ -81,15 +81,12 @@ class GetAADUsers(TokenAuthMixin, APIView):
 
 
 class GetMockAADUsers(TokenAuthMixin, APIView):
-    """
-    API View to fetch Azure Active Directory (AAD) users.
-    Requires token authentication.
-    """
 
-    def get(self, request, format=None):
+    def get(self, request, max_users, format=None):
+        max_users = int(max_users)
         adapter = AzureUserManagement()
-        azure_users = adapter.get_mock_aad_users(
-            max_users=100)  # Fetch 100 users
+        azure_users = adapter.get_mock_aad_users(max_users)
+
         return Response({'users': azure_users}, status=status.HTTP_200_OK)
 
 
