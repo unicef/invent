@@ -106,9 +106,11 @@ class AzureUserManagement:
             # Use a transaction to create the new users, user profiles, and social accounts
             try:
                 with transaction.atomic():
-                    user_model.objects.bulk_create(new_users)
-                    UserProfile.objects.bulk_create(user_profiles)
-                    SocialAccount.objects.bulk_create(social_accounts)
+                    user_model.objects.bulk_create(new_users, batch_size=100)
+                    UserProfile.objects.bulk_create(
+                        user_profiles, batch_size=100)
+                    SocialAccount.objects.bulk_create(
+                        social_accounts, batch_size=100)
             except Exception as e:
                 # Log any errors that occur during the creation process
                 print(f'Error while creating users: {e}')
@@ -136,7 +138,7 @@ class AzureUserManagement:
                 with transaction.atomic():
                     # bulk_update is used to perform the updates in a single query for efficiency
                     UserProfile.objects.bulk_update(to_be_updated, [
-                                                    'name', 'job_title', 'department', 'country', 'social_account_uid'])
+                                                    'name', 'job_title', 'department', 'country', 'social_account_uid'], batch_size=100)
                     # Add the updated profiles to the list of all updated users
                     updated_users.extend(to_be_updated)
             except Exception as e:
