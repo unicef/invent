@@ -77,9 +77,13 @@ class AzureUserManagement:
             social_accounts = []
             # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
-                # Get or create the user's country
-                country, _ = Country.objects.get_or_create(
-                    name=user_data['country_name'])
+                # Get or create the user's country only if 'country_name' is not None or an empty string
+                if user_data['country_name']:
+                    country, _ = Country.objects.get_or_create(
+                        name=user_data['country_name'])
+                else:
+                    # Strategy 1: Skip creating the Country object
+                    country = None
                 # Create a new User
                 user = user_model(
                     email=user_data['email'], username=user_data['username'])
@@ -118,8 +122,11 @@ class AzureUserManagement:
             to_be_updated = []
             for user_data in existing_users_data:
                 user = user_model.objects.get(email=user_data['email'])
-                country, _ = Country.objects.get_or_create(
-                    name=user_data['country_name'])
+                if user_data['country_name']:
+                    country, _ = Country.objects.get_or_create(
+                        name=user_data['country_name'])
+                else:
+                    country = None
                 user_profile = UserProfile.objects.get(user=user)
 
                 # Update the user's profile
@@ -268,7 +275,7 @@ class AzureUserManagement:
             json_response = response.json()
             access_token = json_response['access_token']
 
-            #TODO: Remove in production
+            # TODO: Remove in production
             logger.info(f'access_token: {access_token}')
             return access_token
         else:
