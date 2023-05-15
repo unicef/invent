@@ -15,7 +15,7 @@
       <el-table-column
         :resizable="false"
         :label="$gettext('Solution Name') | translate"
-        sortable
+        sortable="custom"
         prop="name"
         width="280"
         class-name="project-td"
@@ -43,11 +43,23 @@
         </template>
       </el-table-column>
 
-      <el-table-column :resizable="false" sortable :label="$gettext('Phase') | translate" prop="phase" width="180">
+      <el-table-column
+        :resizable="false"
+        sortable="custom"
+        :label="$gettext('Phase') | translate"
+        prop="phase"
+        width="180"
+      >
         <template slot-scope="scope"> <show-phase :phaseId="scope.row.phase" /></template>
       </el-table-column>
 
-      <el-table-column :resizable="false" sortable :label="$gettext('Reach') | translate" width="180" prop="reach">
+      <el-table-column
+        :resizable="false"
+        sortable="custom"
+        :label="$gettext('Reach') | translate"
+        width="180"
+        prop="reach"
+      >
         <template slot-scope="scope">
           <p>{{ scope.row.reach | formatNumber }}</p>
         </template>
@@ -117,10 +129,16 @@ export default {
   watch: {
     getSolutionsList() {
       this.table = [...this.getSolutionsList]
+      this.$nextTick(() => {
+        this.sortTable({ prop: 'name', order: 'ascending' })
+      })
     },
   },
   mounted() {
     this.table = [...this.getSolutionsList]
+    this.$nextTick(() => {
+      this.sortTable({ prop: 'name', order: 'ascending' })
+    })
 
     setTimeout(() => {
       this.fixTableHeight()
