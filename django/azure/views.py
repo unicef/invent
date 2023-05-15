@@ -98,11 +98,19 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
     """
 
     def put(self, request, format=None):
+        # TODO: Reinstate after development ends
         # Call the Celery task to fetch and update the users
-        fetch_users_from_aad_and_update_db.delay()
+        # fetch_users_from_aad_and_update_db.delay()
+
+        # TODO: Delete after development ends
+        adapter = AzureUserManagement()
+        # Fetch the Mock AAD users
+        azure_users = adapter.get_mock_aad_users()
+        # Save the AAD users to the local database and get the updated user profiles
+        adapter.save_aad_users(azure_users)
 
         return Response({'message': 'Azure users update started.'}, status=status.HTTP_202_ACCEPTED)
-
+    
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(AzureOAuth2Adapter)
