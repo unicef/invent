@@ -197,29 +197,22 @@ class AzureUserManagement:
             try:
                 # Send the request.
                 response = requests.get(url, headers=headers)
-
                 # Raise an exception if the request was unsuccessful.
                 response.raise_for_status()
-
                 # Parse the response JSON.
                 response_data = response.json()
-
                 # Add the users from the current page to the list.
                 users.extend(response_data.get('value', []))
-
                 # Get the URL for the next page.
                 url = response_data.get('@odata.nextLink', None)
-
                 # Reset the retry count after a successful request.
                 retry_count = 0
-
                 # Wait for 10 seconds to avoid hitting the rate limit.
                 sleep(10)
             except requests.exceptions.RequestException as e:
                 # Log the error and increment the retry count.
                 logger.error(f"Error while making request to {url}: {e}")
                 retry_count += 1
-
                 # Use exponential backoff when retrying.
                 sleep(10 * (2 ** retry_count))
 
@@ -229,7 +222,8 @@ class AzureUserManagement:
     def get_mock_aad_users(self, max_users=100):
         logger = logging.getLogger(__name__)
         max_users = int(max_users)
-        url = 'https://graph.microsoft.com/v1.0/users'
+        base_url = 'https://graph.microsoft.com/v1.0/users'
+        url = f'{base_url}?$top=100'
         token = self.get_access_token()
         headers = {
             'Authorization': f'Bearer {token}',
@@ -237,23 +231,30 @@ class AzureUserManagement:
         }
         users = []
         retry_count = 0
+        page_count = 0
         while url and retry_count < 5 and len(users) < max_users:
             try:
                 response = requests.get(url, headers=headers)
                 response.raise_for_status()
                 response_data = response.json()
-                users.extend(response_data.get('value', []))
+                logger.info(f'Response data: {response_data}')
+                users_batch = response_data.get('value', [])
+                users.extend(users_batch)
+                logger.info(f'Fetched {len(users_batch)} users in page {page_count+1}')
                 if len(users) > max_users:
                     # Limit the list to 'max_users' elements
                     users = users[:max_users]
                 url = response_data.get('@odata.nextLink', None)
+                page_count += 1
                 retry_count = 0
                 sleep(10)
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error while making request to {url}: {e}")
                 retry_count += 1
                 sleep(10 * (2 ** retry_count))
+        logger.info(f'Finished fetching users. Total users fetched: {len(users)}')
         return users
+
 
     def get_access_token(self):
         tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT
