@@ -46,28 +46,24 @@ class AzureUserManagement:
         for i in range(0, len(azure_users), batch_size):
             # Create a batch of users to process
             batch = azure_users[i:i + batch_size]
-
             logger.info(f"Processing batch starting at index: {i}")
-
             # Initialize lists to hold data for new and existing users
             new_users_data = []
             existing_users_data = []
-
             # Get a set of existing email addresses
             existing_emails = set(
                 user_model.objects.values_list('email', flat=True))
-
             # Separate the users in the batch into new and existing users
             for azure_user in batch:
                 # Create a dictionary to hold the user's data
                 user_data = {
-                    'email': azure_user['mail'],
-                    'username': azure_user['mail'],
-                    'name': azure_user['displayName'],
+                    'email': azure_user.get('mail', ''),
+                    'username': azure_user.get('mail', ''),
+                    'name': azure_user.get('displayName', ''),
                     'job_title': azure_user.get('jobTitle', ''),
                     'department': azure_user.get('department', ''),
-                    'country_name': azure_user['country'],
-                    'social_account_uid': azure_user['id'],
+                    'country_name': azure_user.get('country', ''),
+                    'social_account_uid': azure_user.get('id', ''),
                 }
                 # Check if the user's email is already in the database
                 if user_data['email'] in existing_emails:
@@ -79,13 +75,11 @@ class AzureUserManagement:
             new_users = []
             user_profiles = []
             social_accounts = []
-
             # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
                 # Get or create the user's country
                 country, _ = Country.objects.get_or_create(
                     name=user_data['country_name'])
-
                 # Create a new User
                 user = user_model(
                     email=user_data['email'], username=user_data['username'])
@@ -176,19 +170,15 @@ class AzureUserManagement:
         logger = logging.getLogger(__name__)
         # Define the endpoint URL.
         url = 'https://graph.microsoft.com/v1.0/users'
-
         # Get the access token.
         token = self.get_access_token()
-
         # Prepare the request headers.
         headers = {
             'Authorization': f'Bearer {token}',
             'Content-Type': 'application/json'
         }
-
         # Initialize an empty list to hold the users.
         users = []
-
         # Initialize the retry count to 0.
         retry_count = 0
 
@@ -240,7 +230,8 @@ class AzureUserManagement:
                 logger.info(f'Response data: {response_data}')
                 users_batch = response_data.get('value', [])
                 users.extend(users_batch)
-                logger.info(f'Fetched {len(users_batch)} users in page {page_count+1}')
+                logger.info(
+                    f'Fetched {len(users_batch)} users in page {page_count+1}')
                 if len(users) > max_users:
                     # Limit the list to 'max_users' elements
                     users = users[:max_users]
@@ -252,11 +243,12 @@ class AzureUserManagement:
                 logger.error(f"Error while making request to {url}: {e}")
                 retry_count += 1
                 sleep(10 * (2 ** retry_count))
-        logger.info(f'Finished fetching users. Total users fetched: {len(users)}')
+        logger.info(
+            f'Finished fetching users. Total users fetched: {len(users)}')
         return users
 
-
     def get_access_token(self):
+        logger = logging.getLogger(__name__)
         tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT
         client_id = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['client_id']
         client_secret = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['secret']
@@ -274,6 +266,9 @@ class AzureUserManagement:
         if response.status_code == 200:
             json_response = response.json()
             access_token = json_response['access_token']
+
+            #TODO: Remove in production
+            logger.info(f'access_token: {access_token}')
             return access_token
         else:
             print(f"Error: {response.status_code}")
