@@ -7,12 +7,13 @@
       :row-class-name="'NotSelected'"
       :stripe="false"
       :border="true"
-      :defalt-sort="{ prop: 'name', order: 'ascending' }"
+      @sort-change="sortTable"
     >
       <!-- <el-table-column :resizable="false" type="selection" align="center" width="45" class-name="selection-td" /> -->
       <el-table-column
         :resizable="false"
         :label="$gettext('Solution name') | translate"
+        sortable="custom"
         prop="name"
         width="280"
         class-name="project-td"
@@ -31,7 +32,7 @@
           >
         </template>
       </el-table-column>
-      <el-table-column :resizable="false" :label="$gettext('Portfolios') | translate" width="300">
+      <el-table-column :resizable="false" :label="$gettext('Portfolios') | translate" min-width="200">
         <template slot-scope="scope">
           <p>
             {{
@@ -42,7 +43,7 @@
           </p>
         </template>
       </el-table-column>
-      <el-table-column :resizable="false" :label="$gettext('Problem statement') | translate" min-width="280">
+      <el-table-column :resizable="false" :label="$gettext('Problem statement') | translate" min-width="300">
         <template slot-scope="scope">
           <div v-if="scope.row.portfolios.length > 1">
             <div v-for="ps in scope.row.problem_statements">
@@ -57,11 +58,23 @@
         </template>
       </el-table-column>
 
-      <el-table-column :resizable="false" :label="$gettext('Phase') | translate" prop="phase" width="180">
+      <el-table-column
+        sortable="custom"
+        :resizable="false"
+        :label="$gettext('Phase') | translate"
+        prop="phase"
+        width="180"
+      >
         <template slot-scope="scope"> <show-phase :phaseId="scope.row.phase" /> </template>
       </el-table-column>
 
-      <el-table-column :resizable="false" :label="$gettext('Reach') | translate" width="180" prop="people_reached">
+      <el-table-column
+        sortable="custom"
+        :resizable="false"
+        :label="$gettext('Reach') | translate"
+        width="180"
+        prop="people_reached"
+      >
         <template slot-scope="scope">
           <p>{{ scope.row.people_reached }}</p>
         </template>
@@ -102,6 +115,7 @@ export default {
       removeFavoriteText: this.$gettext('Remove from Favorites'),
       pageSize: 10,
       currentPage: 1,
+      table: [],
     }
   },
   computed: {
@@ -109,7 +123,7 @@ export default {
       getAllActiveSolutionsList: 'solutions/getAllActiveSolutionsList',
     }),
     total() {
-      return this.getAllActiveSolutionsList.length + 1
+      return this.table.length + 1
     },
     showPagination() {
       return this.total > 10
@@ -117,22 +131,27 @@ export default {
     currentList() {
       const start = this.pageSize * (this.currentPage - 1)
       const end = this.pageSize * this.currentPage
-      return this.currentOrderedList.slice(start, end)
+      return this.table.slice(start, end)
     },
-    currentOrderedList() {
-      return this.getAllActiveSolutionsList.map((solution) => {
-        const problem_statements = solution.problem_statements.sort((a, b) =>
-          a.portfolio_name.localeCompare(b.portfolio_name, this.$i18n.locale, { numeric: true })
-        )
-        return { ...solution, problem_statements }
-      })
-    },
+
     paginationOrderStr() {
       const loc = this.$i18n.locale
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
     },
   },
+  watch: {
+    getAllActiveSolutionsList() {
+      this.currentOrderedList()
+      this.$nextTick(() => {
+        this.sortTable({ prop: 'name', order: 'ascending' })
+      })
+    },
+  },
   mounted() {
+    this.currentOrderedList()
+    this.$nextTick(() => {
+      this.sortTable({ prop: 'name', order: 'ascending' })
+    })
     setTimeout(() => {
       this.fixTableHeight()
       this.fixSorting(this.$route.query.ordering)
@@ -146,6 +165,27 @@ export default {
     }, 500)
   },
   methods: {
+    currentOrderedList() {
+      let ctable = JSON.parse(JSON.stringify(this.getAllActiveSolutionsList))
+      this.table = ctable.map((solution) => {
+        const problem_statements = solution.problem_statements.sort((a, b) =>
+          a.portfolio_name.localeCompare(b.portfolio_name, this.$i18n.locale, { numeric: true })
+        )
+        return { ...solution, problem_statements }
+      })
+    },
+    sortTable({ column, prop, order }) {
+      const solutionsList = this.table
+      if (order === 'ascending') {
+        this.table = solutionsList.sort((a, b) =>
+          a[prop].toString().localeCompare(b[prop].toString(), this.$i18n.locale, { numeric: true })
+        )
+      } else {
+        this.table = solutionsList.sort((a, b) =>
+          b[prop].toString().localeCompare(a[prop].toString(), this.$i18n.locale, { numeric: true })
+        )
+      }
+    },
     fixTableHeight() {
       const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height')
       this.tableMaxHeight = +maxHeight.replace('px', '')
