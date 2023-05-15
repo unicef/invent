@@ -212,8 +212,9 @@ class AzureUserManagement:
     def get_mock_aad_users(self, max_users=100):
         logger = logging.getLogger(__name__)
         max_users = int(max_users)
-        base_url = 'https://graph.microsoft.com/v1.0/users'
-        url = f'{base_url}?$top=100'
+        # base_url = 'https://graph.microsoft.com/v1.0/users'
+        # url = f'{base_url}?$top=100'
+        url = 'https://graph.microsoft.com/v1.0/users?$select=businessPhones,displayName,givenName,jobTitle,mail,mobilePhone,officeLocation,preferredLanguage,surname,userPrincipalName,id,department,country&$top=100'
         token = self.get_access_token()
         headers = {
             'Authorization': f'Bearer {token}',
