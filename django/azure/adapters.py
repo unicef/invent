@@ -74,7 +74,6 @@ class AzureUserManagement:
             new_users = []
             user_profiles = []
             social_accounts = []
-            # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
                 # Get or create the user's country only if 'country_name' is not None or an empty string
                 country = None
@@ -87,6 +86,19 @@ class AzureUserManagement:
                 user.set_unusable_password()
                 new_users.append(user)
 
+            # Use a transaction to create the User instances
+            try:
+                with transaction.atomic():
+                    new_users = user_model.objects.bulk_create(
+                        new_users, batch_size=100)
+            except Exception as e:
+                # Log any errors that occur during the creation process
+                logger.error(
+                    f'Error while creating User instances: {e}')
+                # If an error occurred, don't continue to try to create UserProfile or SocialAccount instances
+                return
+
+            for user, user_data in zip(new_users, new_users_data):
                 # Create a new UserProfile
                 user_profiles.append(UserProfile(
                     user=user,
