@@ -74,30 +74,25 @@ class AzureUserManagement:
             new_users = []
             user_profiles = []
             social_accounts = []
+            # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
                 # Get or create the user's country only if 'country_name' is not None or an empty string
                 country = None
                 if user_data['country_name']:
                     country, _ = Country.objects.get_or_create(
                         name=user_data['country_name'])
+                else:
+                    country = None
                 # Create a new User
                 user = user_model(
                     email=user_data['email'], username=user_data['username'])
                 user.set_unusable_password()
                 new_users.append(user)
 
-            # Use a transaction to create the User instances
-            try:
-                with transaction.atomic():
-                    new_users = user_model.objects.bulk_create(
-                        new_users, batch_size=100)
-            except Exception as e:
-                # Log any errors that occur during the creation process
-                logger.error(
-                    f'Error while creating User instances: {e}')
-                # If an error occurred, don't continue to try to create UserProfile or SocialAccount instances
-                return
+            # Save the User instances
+            new_users = user_model.objects.bulk_create(new_users)
 
+            # Create UserProfile and SocialAccount instances for each new user
             for user, user_data in zip(new_users, new_users_data):
                 # Create a new UserProfile
                 user_profiles.append(UserProfile(
@@ -126,21 +121,22 @@ class AzureUserManagement:
 
             # Initialize a list to hold the users that need to be updated
             to_be_updated = []
-            for user_data in existing_users_data:
-                user = user_model.objects.get(email=user_data['email'])
+            existing_users = user_model.objects.filter(
+                email__in=[user_data['email'] for user_data in existing_users_data])
+            existing_user_profiles = UserProfile.objects.filter(
+                user__in=existing_users)
+
+            for user_data, user, user_profile in zip(existing_users_data, existing_users, existing_user_profiles):
                 if user_data['country_name']:
                     country, _ = Country.objects.get_or_create(
                         name=user_data['country_name'])
                 else:
                     country = None
-                user_profile = UserProfile.objects.get(user=user)
-
                 # Update the user's profile
                 user_profile.name = user_data['name']
                 user_profile.job_title = user_data.get('job_title', '')
                 user_profile.department = user_data.get('department', '')
                 user_profile.country = country
-
                 # Add the updated profile to the list of profiles to be updated
                 to_be_updated.append(user_profile)
 
