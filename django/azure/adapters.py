@@ -77,15 +77,15 @@ class AzureUserManagement:
             # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
                 # Get or create the user's country only if 'country_name' is not None or an empty string
+                country = None
                 if user_data['country_name']:
                     country, _ = Country.objects.get_or_create(
                         name=user_data['country_name'])
-                else:
-                    country = None
                 # Create a new User
                 user = user_model(
                     email=user_data['email'], username=user_data['username'])
                 user.set_unusable_password()
+                new_users.append(user)
 
                 # Create a new UserProfile
                 user_profiles.append(UserProfile(
@@ -96,24 +96,21 @@ class AzureUserManagement:
                     country=country,
                     account_type=UserProfile.DONOR,
                 ))
-
                 # Create a new SocialAccount
                 social_accounts.append(SocialAccount(
                     user=user, provider='azure', uid=user_data['social_account_uid']))
 
-                new_users.append(user)
-
-            # Use a transaction to create the new users, user profiles, and social accounts
+            # Use a transaction to create the UserProfile and SocialAccount instances
             try:
                 with transaction.atomic():
-                    user_model.objects.bulk_create(new_users, batch_size=100)
                     UserProfile.objects.bulk_create(
                         user_profiles, batch_size=100)
                     SocialAccount.objects.bulk_create(
                         social_accounts, batch_size=100)
             except Exception as e:
                 # Log any errors that occur during the creation process
-                logger.error(f'Error while creating users: {e}')
+                logger.error(
+                    f'Error while creating UserProfile and SocialAccount instances: {e}')
 
             # Initialize a list to hold the users that need to be updated
             to_be_updated = []
