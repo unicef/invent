@@ -31,11 +31,18 @@ export const getters = {
     return state.profiles
   },
   getUserProfilesWithLabel: (state) => {
-    const fields = ['name', 'email', 'job_title', 'department', 'country']
+    const labelFullInfo = ['job_title', 'department', 'country']
+
     const labeledProfiles = state.profiles.map((user) => {
-      let concLabel = []
-      fields.forEach((field) => (concLabel = user[field] ? [...concLabel, ` ${user[field]}`] : concLabel))
-      return { ...user, label: concLabel.toString() }
+      const username = user.name ? `${user.name} ` : ''
+      const useremail = user.email ? `(${user.email})` : ''
+      let concLabel = username + useremail
+
+      let concFullInfo = []
+      labelFullInfo.forEach(
+        (field) => (concFullInfo = user[field] ? [...concFullInfo, ` ${user[field]}`] : concFullInfo)
+      )
+      return { ...user, label: concLabel, info: concFullInfo.toString() }
     })
     return labeledProfiles
   },

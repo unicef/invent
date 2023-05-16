@@ -21,8 +21,11 @@
     @keyup.enter.native="onEnter"
   >
     <el-option v-for="person in optionsAndValues" :key="person.id" :label="person.label" :value="person.id">
-      <!-- N/A -->
-      <span style="float: left">{{ getUserLabel(person.id) }}</span>
+      <span style="float: left">{{ person.label }}</span>
+      <br />
+      <span class="email"
+        ><small>{{ person.info }}</small></span
+      >
     </el-option>
   </lazy-el-select>
 </template>
@@ -77,9 +80,6 @@ export default {
     }),
   },
   methods: {
-    getUserLabel(id) {
-      return this.userProfiles.find((user) => user.id === id).label
-    },
     changeHandler(value) {
       this.$emit('change', value)
     },
@@ -166,6 +166,31 @@ export default {
 
 .NoDisplay {
   display: none;
+}
+
+.TeamSelectorDropdown {
+  .OrganisationItem {
+    display: inline-block;
+    margin-left: 6px;
+    font-weight: 400;
+    color: @colorGray;
+    &::before {
+      content: '(';
+    }
+    &::after {
+      content: ')';
+    }
+  }
+  li {
+    height: fit-content;
+    padding-bottom: 4px;
+    .email {
+      float: left;
+      width: 100%;
+      margin-top: -8px;
+      line-height: 1.2;
+    }
+  }
 }
 
 .el-select-dropdown__item {

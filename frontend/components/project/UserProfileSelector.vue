@@ -3,15 +3,26 @@
     v-model="innerValue"
     :multiple="multiple"
     filterable
-    reserve-keyword
     autocomplete
     remote
     clearable
     :remote-method="filterMethod"
     :placeholder="$gettext('Type and select a user') | translate"
     class="UserProfileSelector"
+    :popper-class="popperClass ? 'TeamSelectorDropdown' : 'NoDisplay'"
   >
-    <el-option v-for="item in filteredOptions" :key="item.email" :label="item.label" :value="item.email"> </el-option>
+    <el-option
+      v-for="item in optionsWithValues"
+      :key="item.id"
+      :label="item.label"
+      :value="item.id"
+      :disabled="item.disabled ? item.disabled : false"
+      ><span style="float: left">{{ item.label }}</span>
+      <br />
+      <span class="email"
+        ><small>{{ item.info }}</small></span
+      >
+    </el-option>
   </el-select>
 </template>
 
@@ -46,7 +57,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    ommit: {
+    omit: {
       type: String,
       default: null,
     },
@@ -63,39 +74,43 @@ export default {
     }),
     innerValue: {
       get() {
-        /**Get user ids [numArray] and translate to email array from user list, if ommit email string exist we find if user id and remove it */
-        const stringEmailsArr = this.value.map(
-          (userId) => this.userProfiles.find((profile) => profile.id === userId).email
-        )
-
-        if (this.ommit) {
-          return stringEmailsArr.filter((user) => user !== this.ommit)
+        /**Get user ids [numArray] and translate to email array from user list, if omit email string exist we find if user id and remove it */
+        if (this.omit) {
+          const omitId = this.userProfiles.find((user) => user.email === this.omit).id
+          return this.value.filter((userId) => userId !== omitId)
         } else {
-          return stringEmailsArr
+          return this.value
         }
       },
       set(value) {
-        /**Get email array as input and translate to userIds number array, If ommit user exist we add it back */
+        /**Get email array as input and translate to userIds number array, If omit user exist we add it back */
 
-        if (this.ommit) {
-          const emailSet = new Set([...value, this.ommit])
-          const withOmmited = [...emailSet]
-          const userIds = withOmmited.map(
-            (userEmail) => this.userProfiles.find((profile) => profile.email === userEmail).id
-          )
-          this.$emit('change', userIds)
+        if (this.omit) {
+          const omitId = this.userProfiles.find((user) => user.email === this.omit).id
+          const idArray = omitId ? [...value, omitId] : value
+
+          this.$emit('change', [...new Set(idArray)])
         } else {
-          const userIds = value.map((userEmail) => this.userProfiles.find((profile) => profile.email === userEmail).id)
-          this.$emit('change', userIds)
+          this.$emit('change', value)
         }
       },
     },
     concatUserData() {
-      if (this.ommit) {
-        return this.userProfiles.filter((user) => user.email !== this.ommit)
+      if (this.omit) {
+        return this.userProfiles.map((user) => (user.email !== this.omit ? user : { ...user, disabled: true }))
       } else {
         return this.userProfiles
       }
+    },
+    optionsWithValues() {
+      const options = [
+        ...this.filteredOptions,
+        ...this.value.map((userId) => this.concatUserData.find((profile) => profile.id === userId)),
+      ]
+      return [...new Set(options)]
+    },
+    popperClass() {
+      return this.optionsWithValues.length > this.innerValue.length + (this.omit !== null ? 1 : 0)
     },
   },
   methods: {
@@ -147,6 +162,31 @@ export default {
 
 .NoDisplay {
   display: none;
+}
+
+.TeamSelectorDropdown {
+  .OrganisationItem {
+    display: inline-block;
+    margin-left: 6px;
+    font-weight: 400;
+    color: @colorGray;
+    &::before {
+      content: '(';
+    }
+    &::after {
+      content: ')';
+    }
+  }
+  li {
+    height: fit-content;
+    padding-bottom: 4px;
+    .email {
+      float: left;
+      width: 100%;
+      margin-top: -8px;
+      line-height: 1.2;
+    }
+  }
 }
 
 .el-select-dropdown__item {
