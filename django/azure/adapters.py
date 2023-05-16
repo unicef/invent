@@ -58,7 +58,7 @@ class AzureUserManagement:
                 # Create a dictionary to hold the user's data
                 user_data = {
                     'email': azure_user.get('mail', ''),
-                    'username': azure_user.get('mail', ''),
+                    'username': azure_user.get('mail') or azure_user.get('displayName') or azure_user.get('givenName') or azure_user.get('userPrincipalName') or '',
                     'name': azure_user.get('displayName', ''),
                     'job_title': azure_user.get('jobTitle', ''),
                     'department': azure_user.get('department', ''),
