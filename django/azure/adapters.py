@@ -71,7 +71,6 @@ class AzureUserManagement:
                 else:
                     new_users_data.append(user_data)
 
-            # Create new users and social accounts
             new_users = []
             user_profiles = []
             social_accounts = []
@@ -82,7 +81,6 @@ class AzureUserManagement:
                     country, _ = Country.objects.get_or_create(
                         name=user_data['country_name'])
                 else:
-                    # Strategy 1: Skip creating the Country object
                     country = None
                 # Create a new User
                 user = user_model(
@@ -97,7 +95,6 @@ class AzureUserManagement:
                     department=user_data['department'],
                     country=country,
                     account_type=UserProfile.DONOR,
-                    social_account_uid=user_data['social_account_uid']
                 ))
 
                 # Create a new SocialAccount
@@ -134,7 +131,6 @@ class AzureUserManagement:
                 user_profile.job_title = user_data.get('job_title', '')
                 user_profile.department = user_data.get('department', '')
                 user_profile.country = country
-                user_profile.social_account_uid = user_data['social_account_uid']
 
                 # Add the updated profile to the list of profiles to be updated
                 to_be_updated.append(user_profile)
@@ -143,8 +139,8 @@ class AzureUserManagement:
             try:
                 with transaction.atomic():
                     # bulk_update is used to perform the updates in a single query for efficiency
-                    UserProfile.objects.bulk_update(to_be_updated, [
-                                                    'name', 'job_title', 'department', 'country', 'social_account_uid'], batch_size=100)
+                    UserProfile.objects.bulk_update(
+                        to_be_updated, ['name', 'job_title', 'department', 'country'], batch_size=100)
                     # Add the updated profiles to the list of all updated users
                     updated_users.extend(to_be_updated)
             except Exception as e:
