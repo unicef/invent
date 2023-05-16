@@ -71,22 +71,15 @@ class GetAADUsers(TokenAuthMixin, APIView):
     Requires token authentication.
     """
 
-    def get(self, request, format=None):
+    def get(self, request, max_users=None, format=None):
+        # Get max_users from query parameters. Default is 100 if not provided.
+        max_users = request.query_params.get('max_users', 100)
+
         # Create an instance of MyAzureAccountAdapter and fetch the AAD users
         adapter = AzureUserManagement()
-        azure_users = adapter.get_aad_users()
+        azure_users = adapter.get_aad_users(max_users)
 
         # Return the AAD users in the response
-        return Response({'users': azure_users}, status=status.HTTP_200_OK)
-
-
-class GetMockAADUsers(TokenAuthMixin, APIView):
-
-    def get(self, request, max_users, format=None):
-        max_users = int(max_users)
-        adapter = AzureUserManagement()
-        azure_users = adapter.get_mock_aad_users(max_users)
-
         return Response({'users': azure_users}, status=status.HTTP_200_OK)
 
 
@@ -98,6 +91,8 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
     """
 
     def put(self, request, format=None):
+        # Default to 100 if not provided
+        max_users = request.data.get('max_users', 100)
         # TODO: Reinstate after development ends
         # Call the Celery task to fetch and update the users
         # fetch_users_from_aad_and_update_db.delay()
@@ -105,12 +100,12 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
         # TODO: Delete after development ends
         adapter = AzureUserManagement()
         # Fetch the Mock AAD users
-        azure_users = adapter.get_mock_aad_users()
+        azure_users = adapter.get_aad_users(max_users)
         # Save the AAD users to the local database and get the updated user profiles
         adapter.save_aad_users(azure_users)
 
         return Response({'message': 'Azure users update started.'}, status=status.HTTP_202_ACCEPTED)
-    
+
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(AzureOAuth2Adapter)

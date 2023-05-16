@@ -153,7 +153,7 @@ class AzureUserManagement:
         # Return the list of updated users
         return updated_users
 
-    def get_aad_users(self):
+    def get_aad_users(self, max_users=100):
         """
         Retrieves Azure Active Directory (AAD) users using Microsoft's Graph API.
 
@@ -162,7 +162,11 @@ class AzureUserManagement:
         If the request fails, it retries up to 5 times with exponential backoff to handle temporary issues.
 
         The function requires an access token which is fetched using the `get_access_token` method. 
-        The users are returned as a list of dictionaries in the format provided by the Graph API.
+        The users are returned as a list of dictionaries in the format provided by the Graph API. 
+        The number of users fetched is limited by the 'max_users' parameter.
+
+        Parameters:
+            max_users (int, optional): The maximum number of users to fetch. Default is 100.
 
         Returns:
             list: A list of dictionaries where each dictionary represents an AAD user.
@@ -171,52 +175,7 @@ class AzureUserManagement:
             requests.exceptions.RequestException: If a request to the Graph API fails.
         """
         logger = logging.getLogger(__name__)
-        # Define the endpoint URL.
-        url = 'https://graph.microsoft.com/v1.0/users'
-        # Get the access token.
-        token = self.get_access_token()
-        # Prepare the request headers.
-        headers = {
-            'Authorization': f'Bearer {token}',
-            'Content-Type': 'application/json'
-        }
-        # Initialize an empty list to hold the users.
-        users = []
-        # Initialize the retry count to 0.
-        retry_count = 0
-
-        # Keep sending requests as long as there's a next page URL and the retry limit hasn't been reached.
-        while url and retry_count < 5:
-            try:
-                # Send the request.
-                response = requests.get(url, headers=headers)
-                # Raise an exception if the request was unsuccessful.
-                response.raise_for_status()
-                # Parse the response JSON.
-                response_data = response.json()
-                # Add the users from the current page to the list.
-                users.extend(response_data.get('value', []))
-                # Get the URL for the next page.
-                url = response_data.get('@odata.nextLink', None)
-                # Reset the retry count after a successful request.
-                retry_count = 0
-                # Wait for 10 seconds to avoid hitting the rate limit.
-                sleep(10)
-            except requests.exceptions.RequestException as e:
-                # Log the error and increment the retry count.
-                logger.error(f"Error while making request to {url}: {e}")
-                retry_count += 1
-                # Use exponential backoff when retrying.
-                sleep(10 * (2 ** retry_count))
-
-        # Return the list of users.
-        return users
-
-    def get_mock_aad_users(self, max_users=100):
-        logger = logging.getLogger(__name__)
         max_users = int(max_users)
-        # base_url = 'https://graph.microsoft.com/v1.0/users'
-        # url = f'{base_url}?$top=100'
         url = 'https://graph.microsoft.com/v1.0/users?$select=businessPhones,displayName,givenName,jobTitle,mail,mobilePhone,officeLocation,preferredLanguage,surname,userPrincipalName,id,department,country&$top=100'
         token = self.get_access_token()
         headers = {
@@ -231,11 +190,11 @@ class AzureUserManagement:
                 response = requests.get(url, headers=headers)
                 response.raise_for_status()
                 response_data = response.json()
-                logger.info(f'Response data: {response_data}')
                 users_batch = response_data.get('value', [])
                 users.extend(users_batch)
                 logger.info(
                     f'Fetched {len(users_batch)} users in page {page_count+1}')
+                logger.info(f'Users batch: {users_batch}')
                 if len(users) > max_users:
                     # Limit the list to 'max_users' elements
                     users = users[:max_users]
@@ -252,13 +211,33 @@ class AzureUserManagement:
         return users
 
     def get_access_token(self):
+        """
+        This method is used to retrieve an access token from Azure AD.
+
+        The access token is needed to authenticate and authorize requests made to Azure AD Graph API.
+        This method sends a POST request to the Azure AD OAuth2 token endpoint with necessary details like client ID,
+        client secret, and resource URL.
+
+        The access token is returned from the function if the request is successful. If the request fails,
+        it logs the error and returns None.
+
+        Returns:
+            str: The access token if the request is successful. None otherwise.
+        """
         logger = logging.getLogger(__name__)
+
+        # Azure AD tenant ID
         tenant_id = settings.SOCIALACCOUNT_AZURE_TENANT
+        # Azure AD client ID
         client_id = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['client_id']
+        # Azure AD client secret
         client_secret = settings.SOCIALACCOUNT_PROVIDERS['azure']['APP']['secret']
+        # Resource URL for which the token is needed
         resource = 'https://graph.microsoft.com'
+        # Azure AD OAuth2 token endpoint URL
         url = f'https://login.microsoftonline.com/{tenant_id}/oauth2/token'
 
+        # Payload for the POST request
         payload = {
             'grant_type': 'client_credentials',
             'client_id': client_id,
@@ -266,17 +245,22 @@ class AzureUserManagement:
             'resource': resource
         }
 
+        # Send a POST request to the Azure AD OAuth2 token endpoint
         response = requests.post(url, data=payload)
-        if response.status_code == 200:
-            json_response = response.json()
-            access_token = json_response['access_token']
 
-            # TODO: Remove in production
-            logger.info(f'access_token: {access_token}')
+        # If the request is successful
+        if response.status_code == 200:
+            # Parse the JSON response
+            json_response = response.json()
+            # Extract the access token from the response
+            access_token = json_response['access_token']
+            # Return the access token
             return access_token
         else:
-            print(f"Error: {response.status_code}")
-            print(response.text)
+            # Log the error if the request fails
+            logger.error(
+                f"Failed to get access token. Status code: {response.status_code}, Response: {response.text}")
+            # Return None if the request fails
             return None
 
     def is_auto_signup_allowed(self, request, sociallogin):
