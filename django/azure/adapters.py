@@ -80,20 +80,15 @@ class AzureUserManagement:
             # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
                 # Get or create the user's country only if 'country_name' is not None or an empty string
-                country = None
                 try:
                     if user_data['country_name']:
                         country, _ = Country.objects.get_or_create(
                             name=user_data['country_name'])
                     else:
                         country = None
-                except Country.DoesNotExist:
+                except Exception:
                     country = None
 
-                # TODO: Delete in production
-                if not country:
-                    logger.info(
-                        f"User {user_data['email']} => country: {country}, office_location: {user_data['office_location']}, usage_location: {user_data['usage_location']}")
                 # Create a new User
                 user = user_model(
                     email=user_data['email'], username=user_data['username'])
@@ -106,10 +101,14 @@ class AzureUserManagement:
             # Create UserProfile and SocialAccount instances for each new user
             for user, user_data in zip(new_users, new_users_data):
                 # Get or create the user's country only if 'country_name' is not None or an empty string
-                country = None
-                if user_data['country_name']:
-                    country, _ = Country.objects.get_or_create(
-                        name=user_data['country_name'])
+                try:
+                    if user_data['country_name']:
+                        country, _ = Country.objects.get_or_create(
+                            name=user_data['country_name'])
+                    else:
+                        country = None
+                except Exception:
+                    country = None
 
                 # Create a new UserProfile
                 user_profiles.append(UserProfile(
@@ -151,7 +150,7 @@ class AzureUserManagement:
                             name=user_data['country_name'])
                     else:
                         country = None
-                except Country.DoesNotExist:
+                except Exception:
                     country = None
                 # Update the user's profile
                 user_profile.name = user_data['name']
