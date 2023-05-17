@@ -4,9 +4,7 @@ import Vue from 'vue'
 export const mapGettersActions = (collection) => {
   const result = {}
   for (const item in collection) {
-    const [module, getterName, setterName, waitTime, skipGetter] = collection[
-      item
-    ]
+    const [module, getterName, setterName, waitTime, skipGetter] = collection[item]
     const getter = module + '/' + getterName
     const setter = module + '/' + setterName
     const debounceWait = waitTime || 0
@@ -43,4 +41,10 @@ export const mapGettersActions = (collection) => {
     }
   }
   return result
+}
+
+export const concatStrings = (user, labelFields) => {
+  let concLabel = []
+  labelFields.forEach((field) => (concLabel = user[field] ? [...concLabel, ` ${user[field]}`] : concLabel))
+  return concLabel.toString()
 }
