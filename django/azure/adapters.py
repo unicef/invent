@@ -64,6 +64,9 @@ class AzureUserManagement:
                     'department': azure_user.get('department', ''),
                     'country_name': azure_user.get('country', ''),
                     'social_account_uid': azure_user.get('id', ''),
+                    # TODO: Delete in production
+                    'office_location': azure_user.get('officeLocation', ''),
+                    'usage_location': azure_user.get('id', 'usageLocation'),
                 }
                 # Check if the user's email is already in the database
                 if user_data['email'] in existing_emails:
@@ -83,6 +86,11 @@ class AzureUserManagement:
                         name=user_data['country_name'])
                 else:
                     country = None
+
+                # TODO: Delete in production
+                if not country:
+                    logger.info(
+                        f"User {user_data['email']} => country: {country}, office_location: {user_data['office_location']}, usage_location: {user_data['usage_location']}")
                 # Create a new User
                 user = user_model(
                     email=user_data['email'], username=user_data['username'])
@@ -94,6 +102,12 @@ class AzureUserManagement:
 
             # Create UserProfile and SocialAccount instances for each new user
             for user, user_data in zip(new_users, new_users_data):
+                # Get or create the user's country only if 'country_name' is not None or an empty string
+                country = None
+                if user_data['country_name']:
+                    country, _ = Country.objects.get_or_create(
+                        name=user_data['country_name'])
+
                 # Create a new UserProfile
                 user_profiles.append(UserProfile(
                     user=user,
@@ -103,6 +117,7 @@ class AzureUserManagement:
                     country=country,
                     account_type=UserProfile.DONOR,
                 ))
+
                 # Create a new SocialAccount
                 social_accounts.append(SocialAccount(
                     user=user, provider='azure', uid=user_data['social_account_uid']))
@@ -181,7 +196,7 @@ class AzureUserManagement:
         """
         logger = logging.getLogger(__name__)
         max_users = int(max_users)
-        url = 'https://graph.microsoft.com/v1.0/users?$select=businessPhones,displayName,givenName,jobTitle,mail,mobilePhone,officeLocation,preferredLanguage,surname,userPrincipalName,id,department,country&$top=100'
+        url = 'https://graph.microsoft.com/v1.0/users?$select=id,accountEnabled,assignedLicenses,assignedPlans,businessPhones,city,country,department,displayName,employeeId,givenName,jobTitle,mail,mobilePhone,officeLocation,preferredLanguage,provisionedPlans,state,streetAddress,surname,usageLocation,userPrincipalName,userType&$top=100'
         token = self.get_access_token()
         headers = {
             'Authorization': f'Bearer {token}',
