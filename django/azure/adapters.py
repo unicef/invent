@@ -81,10 +81,13 @@ class AzureUserManagement:
             for user_data in new_users_data:
                 # Get or create the user's country only if 'country_name' is not None or an empty string
                 country = None
-                if user_data['country_name']:
-                    country, _ = Country.objects.get_or_create(
-                        name=user_data['country_name'])
-                else:
+                try:
+                    if user_data['country_name']:
+                        country, _ = Country.objects.get_or_create(
+                            name=user_data['country_name'])
+                    else:
+                        country = None
+                except Country.DoesNotExist:
                     country = None
 
                 # TODO: Delete in production
@@ -142,10 +145,13 @@ class AzureUserManagement:
                 user__in=existing_users)
 
             for user_data, user, user_profile in zip(existing_users_data, existing_users, existing_user_profiles):
-                if user_data['country_name']:
-                    country, _ = Country.objects.get_or_create(
-                        name=user_data['country_name'])
-                else:
+                try:
+                    if user_data['country_name']:
+                        country = Country.objects.get(
+                            name=user_data['country_name'])
+                    else:
+                        country = None
+                except Country.DoesNotExist:
                     country = None
                 # Update the user's profile
                 user_profile.name = user_data['name']
