@@ -6,7 +6,7 @@ from modeltranslation.manager import MultilingualQuerySet
 from sorl.thumbnail import ImageField, get_thumbnail
 
 
-class GetObjectOrNoneMixin(models.QuerySet):
+class GetObjectOrNoneMixin(object):
     def get_object_or_none(self, select_for_update=False, **kwargs):
         """
         Hides Exception handling boilerplate when querying for single objects.
