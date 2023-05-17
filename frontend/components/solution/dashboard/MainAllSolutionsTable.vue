@@ -62,10 +62,12 @@
         sortable="custom"
         :resizable="false"
         :label="$gettext('Phase') | translate"
-        prop="phase"
+        prop="phase_name"
         width="180"
       >
-        <template slot-scope="scope"> <show-phase :phaseId="scope.row.phase" /> </template>
+        <template slot-scope="scope"
+          ><p>{{ scope.row.phase_name }}</p></template
+        >
       </el-table-column>
 
       <el-table-column
@@ -98,14 +100,12 @@
 <script>
 import { setTimeout } from 'timers'
 import { mapGetters } from 'vuex'
-import ShowPhase from '../ShowPhase.vue'
 
 import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
   components: {
     CurrentPage,
-    ShowPhase,
   },
   data() {
     return {
@@ -180,7 +180,7 @@ export default {
         this.table = solutionsList.sort((a, b) =>
           a[prop].toString().localeCompare(b[prop].toString(), this.$i18n.locale, { numeric: true })
         )
-      } else {
+      } else if (order === 'descending') {
         this.table = solutionsList.sort((a, b) =>
           b[prop].toString().localeCompare(a[prop].toString(), this.$i18n.locale, { numeric: true })
         )
