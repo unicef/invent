@@ -97,7 +97,9 @@ export default {
     },
     concatUserData() {
       if (this.omit) {
-        return this.userProfiles.map((user) => (user.email !== this.omit ? user : { ...user, disabled: true }))
+        return this.userProfiles.map((user) =>
+          user.email !== this.omit ? { ...user, disabled: false } : { ...user, disabled: true }
+        )
       } else {
         return this.userProfiles
       }
@@ -105,7 +107,9 @@ export default {
     optionsWithValues() {
       const options = [
         ...this.filteredOptions,
-        ...this.value.map((userId) => this.concatUserData.find((profile) => profile.id === userId)),
+        ...this.value
+          .map((userId) => this.concatUserData.find((profile) => profile.id === userId))
+          .sort((a, b) => (a.disabled ? 1 : -1)),
       ]
       return [...new Set(options)]
     },

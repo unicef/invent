@@ -42,7 +42,7 @@ export const getters = {
       labelFullInfo.forEach(
         (field) => (concFullInfo = user[field] ? [...concFullInfo, ` ${user[field]}`] : concFullInfo)
       )
-      return { ...user, label: concLabel, info: concFullInfo.toString() }
+      return { ...user, label: concLabel, info: concFullInfo.toString(), value: concLabel }
     })
     return labeledProfiles
   },
