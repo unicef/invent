@@ -8,8 +8,22 @@ export const state = () => ({
 })
 
 export const getters = {
-  getSolutionsList: (state) => state.allSolutionsList.solutions,
-  getAllActiveSolutionsList: (state) => state.allActiveSolutionsList,
+  getSolutionsList: (state, getters, rootState, rootGetters) => {
+    const phases = rootGetters['system/getSolutionPhases']
+    const solWithPhases = state.allSolutionsList.solutions.map((solution) => {
+      const phaseName = phases.find((phase) => phase.id === solution.phase).name
+      return { ...solution, phase_name: phaseName }
+    })
+    return solWithPhases
+  },
+  getAllActiveSolutionsList: (state, getters, rootState, rootGetters) => {
+    const phases = rootGetters['system/getSolutionPhases']
+    const solWithPhases = state.allActiveSolutionsList.map((solution) => {
+      const phaseName = phases.find((phase) => phase.id === solution.phase).name
+      return { ...solution, phase_name: phaseName }
+    })
+    return solWithPhases
+  },
 }
 
 export const actions = {
