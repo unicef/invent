@@ -40,11 +40,12 @@ class AzureUserManagement:
                 url = response_data.get('@odata.nextLink', None)
                 page_count += 1
                 retry_count = 0
-                sleep(10)
+                # TODO: Remove until further notice. If we stumple upon denial errors we can reinstate.
+                # sleep(10)
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error while making request to {url}: {e}")
                 retry_count += 1
-                sleep(10 * (2 ** retry_count))
+                sleep(2 * (2 ** retry_count))
         logger.info(
             f'Finished processing users. Total users processed: {processed_user_count}')
 
@@ -86,9 +87,12 @@ class AzureUserManagement:
             # Initialize lists to hold data for new and existing users
             new_users_data = []
             existing_users_data = []
-            # Get a set of existing email addresses
+            # Here, instead of fetching all the emails from the database,
+            # we fetch only the emails for the current batch of users.
+            batch_emails = [user.get('mail') or user.get(
+                'userPrincipalName') or '' for user in batch]
             existing_emails = set(
-                user_model.objects.values_list('email', flat=True))
+                user_model.objects.filter(email__in=batch_emails).values_list('email', flat=True))
             # Separate the users in the batch into new and existing users
             for azure_user in batch:
                 # Create a dictionary to hold the user's data
@@ -130,6 +134,14 @@ class AzureUserManagement:
 
             # Save the User instances
             new_users = user_model.objects.bulk_create(new_users)
+
+            # TODO: This needs refactoring, it's here for debug purposes.
+            try:  # catch the error here
+                new_users = user_model.objects.bulk_create(new_users)
+            except Exception as e:
+                logger.error(f"Error while bulk creating users: {e}")
+                logger.error(f"Batch of users that caused the error: {new_users_data}")
+                continue  # continue to the next batch
 
             # Create UserProfile and SocialAccount instances for each new user
             for user, user_data in zip(new_users, new_users_data):

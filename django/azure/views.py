@@ -96,7 +96,7 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
         # Call the Celery task and pass max_users as a parameter
         fetch_users_from_aad_and_update_db.delay(max_users)
 
-        return Response({'message': 'Azure users update started.'}, status=status.HTTP_202_ACCEPTED)
+        return Response({'message': 'Initiated celery task fetch_users_from_aad_and_update_db.'}, status=status.HTTP_202_ACCEPTED)
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
