@@ -12,21 +12,6 @@ from user.models import UserProfile
 
 
 class AzureUserManagement:
-    def get_country(self, country_name):
-        """
-        Helper function to get or create the Country instance.
-        """
-        logger = logging.getLogger(__name__)
-        if not country_name:
-            return None
-        try:
-            country, _ = Country.objects.get_or_create(name=country_name)
-            return country
-        except Exception as e:
-            logger.error(
-                f'Error while getting or creating Country instance: {e}')
-            return None
-
     def process_aad_users(self, max_users=100):
         logger = logging.getLogger(__name__)
         max_users = int(max_users)
@@ -127,8 +112,15 @@ class AzureUserManagement:
             social_accounts = []
             # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
-                # Get the user's country only if 'country_name' is not None or an empty string
-                country = self.get_country(user_data['country_name'])
+                # Get or create the user's country only if 'country_name' is not None or an empty string
+                try:
+                    if user_data['country_name']:
+                        country, _ = Country.objects.get_or_create(
+                            name=user_data['country_name'])
+                    else:
+                        country = None
+                except Exception:
+                    country = None
 
                 # Create a new User
                 user = user_model(
@@ -185,7 +177,14 @@ class AzureUserManagement:
                 user__in=existing_users)
 
             for user_data, user, user_profile in zip(existing_users_data, existing_users, existing_user_profiles):
-                country = self.get_country(user_data['country_name'])
+                try:
+                    if user_data['country_name']:
+                        country = Country.objects.get(
+                            name=user_data['country_name'])
+                    else:
+                        country = None
+                except Country.DoesNotExist:
+                    country = None
 
                 # Only update the user's country if the following conditions are met:
                 # 1. The user's current country is None and the new country is not None
