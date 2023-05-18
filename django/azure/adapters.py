@@ -133,14 +133,13 @@ class AzureUserManagement:
                 new_users.append(user)
 
             # Save the User instances
-            new_users = user_model.objects.bulk_create(new_users)
-
             # TODO: This needs refactoring, it's here for debug purposes.
             try:  # catch the error here
                 new_users = user_model.objects.bulk_create(new_users)
             except Exception as e:
                 logger.error(f"Error while bulk creating users: {e}")
-                logger.error(f"Batch of users that caused the error: {new_users_data}")
+                logger.error(
+                    f"Batch of users that caused the error: {new_users_data}")
                 continue  # continue to the next batch
 
             # Create UserProfile and SocialAccount instances for each new user
@@ -224,7 +223,8 @@ class AzureUserManagement:
                 logger.error(f'Error while updating users: {e}')
 
         # Log the total number of updated users
-        logger.info(f"Total updated users: {len(updated_users)}")
+        logger.info(
+            f"Total existing users updated: {len(updated_users)}. Total new users created: {len(new_users)}")
 
         # Return the list of updated users
         return updated_users
