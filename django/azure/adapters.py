@@ -138,18 +138,21 @@ class AzureUserManagement:
 
             # Initialize a list to hold the users that need to be updated
             to_be_updated = []
-            existing_users = user_model.objects.filter(email__in=[user_data['email'] for user_data in existing_users_data])
-            existing_user_profiles = UserProfile.objects.filter(user__in=existing_users)
+            existing_users = user_model.objects.filter(
+                email__in=[user_data['email'] for user_data in existing_users_data])
+            existing_user_profiles = UserProfile.objects.filter(
+                user__in=existing_users)
 
             for user_data, user, user_profile in zip(existing_users_data, existing_users, existing_user_profiles):
                 try:
                     if user_data['country_name']:
-                        country = Country.objects.get(name=user_data['country_name'])
+                        country = Country.objects.get(
+                            name=user_data['country_name'])
                     else:
                         country = None
                 except Country.DoesNotExist:
                     country = None
-                    
+
                 # Only update the user's country if the following conditions are met:
                 # 1. The user's current country is None and the new country is not None
                 # 2. The new country is not None
@@ -160,7 +163,7 @@ class AzureUserManagement:
                 user_profile.name = user_data['name']
                 user_profile.job_title = user_data.get('job_title', '')
                 user_profile.department = user_data.get('department', '')
-                
+
                 # Add the updated profile to the list of profiles to be updated
                 to_be_updated.append(user_profile)
 
@@ -168,7 +171,7 @@ class AzureUserManagement:
             try:
                 with transaction.atomic():
                     # bulk_update is used to perform the updates in a single query for efficiency
-                    UserProfile.objects_normal.bulk_update(
+                    UserProfile.objects_normal.filter(id__in=[user_profile.id for user_profile in to_be_updated]).bulk_update(
                         to_be_updated, ['name', 'job_title', 'department', 'country'], batch_size=100)
                     # for profile in to_be_updated:
                     #     profile.save()
