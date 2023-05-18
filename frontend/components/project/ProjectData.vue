@@ -50,8 +50,17 @@
         </collapsible-card>
 
         <collapsible-card id="categorization" :title="$gettext('2. Categorization') | translate">
-          <simple-field :header="$gettext('Sector') | translate">
-            <platforms-list :platforms="project.unicef_sector" source="getSectors" />
+          <simple-field
+            v-if="project.unicef_leading_sector"
+            :header="$gettext('Lead Sector') | translate"
+            :content="project.unicef_leading_sector"
+          />
+
+          <simple-field
+            v-if="project.unicef_supporting_sectors.length > 0"
+            :header="$gettext('Supporting Sector(s)') | translate"
+          >
+            <platforms-list :platforms="project.unicef_supporting_sectors" source="getSectors" />
           </simple-field>
 
           <simple-field :header="$gettext('Goal Area') | translate" :content="goalArea.name" />

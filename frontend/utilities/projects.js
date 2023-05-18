@@ -80,6 +80,8 @@ export const projectFields = () => ({
   donors: [],
   // INVENT
   unicef_sector: [],
+  unicef_leading_sector: null,
+  unicef_supporting_sectors: [],
   functions: [],
   hardware: [],
   nontech: [],

@@ -1,15 +1,5 @@
-import {
-  stateGenerator,
-  gettersGenerator,
-  actionsGenerator,
-  mutationsGenerator,
-} from '../utilities/map'
-import {
-  intArrayFromQs,
-  customColumnsMapper,
-  strArrayFromQs,
-  parseCustomAnswers,
-} from '../utilities/api'
+import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map'
+import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api'
 
 export const searchIn = () => ['name', 'overview', 'partner', 'desc', 'ach', 'id']
 export const defaultSelectedColumns = () => [
@@ -258,32 +248,22 @@ export const getters = {
   },
   getProjectsList: (state) => [...state.projectsList.map((r) => parseCustomAnswers(r))],
   getProjectsBucket: (state, getters) =>
-    state.selectAll
-      ? [...state.projectsBucket.map((r) => parseCustomAnswers(r))]
-      : getters.getProjectsList,
+    state.selectAll ? [...state.projectsBucket.map((r) => parseCustomAnswers(r))] : getters.getProjectsList,
   getCountryColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'country') {
       const country = rootGetters['countries/getCountryDetails'](state.dashboardId)
-      return country && country.country_questions
-        ? customColumnsMapper(country.country_questions, 'c')
-        : []
+      return country && country.country_questions ? customColumnsMapper(country.country_questions, 'c') : []
     }
     return []
   },
   getDonorColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'donor') {
       const donor = rootGetters['system/getDonorDetails'](state.dashboardId)
-      return donor && donor.donor_questions
-        ? customColumnsMapper(donor.donor_questions, 'd')
-        : []
+      return donor && donor.donor_questions ? customColumnsMapper(donor.donor_questions, 'd') : []
     }
     return []
   },
-  getAllColumns: (state, getters) => [
-    ...state.columns,
-    ...getters.getCountryColumns,
-    ...getters.getDonorColumns,
-  ],
+  getAllColumns: (state, getters) => [...state.columns, ...getters.getCountryColumns, ...getters.getDonorColumns],
   getAvailableColumns: (state, getters) => [
     ...getters.getAllColumns.map((c) => ({
       ...c,
@@ -299,22 +279,16 @@ export const getters = {
   getSelectedResult: (state) => state.selectedResult,
   getSelectedPlatforms: (state) => state.selectedPlatforms,
   getSelectedCapabilityLevels: (state) => state.selectedCapabilityLevels,
-  getSelectedCapabilityCategories: (state) =>
-    state.selectedCapabilityCategories,
-  getSelectedCapabilitySubcategories: (state) =>
-    state.selectedCapabilitySubcategories,
+  getSelectedCapabilityCategories: (state) => state.selectedCapabilityCategories,
+  getSelectedCapabilitySubcategories: (state) => state.selectedCapabilitySubcategories,
   getSelectedRows: (state) => state.selectedRows,
   getFilteredCountries: (state) => {
-    return state.dashboardType === 'country' && state.dashboardId
-      ? [state.dashboardId]
-      : state.filteredCountries
+    return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountries
   },
   getFilteredRegion: (state) => state.filteredRegion,
   getFilteredOffice: (state) => state.filteredOffice,
   getFilteredCountryOffice: (state) => {
-    return state.dashboardType === 'country' && state.dashboardId
-      ? [state.dashboardId]
-      : state.filteredCountryOffice
+    return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountryOffice
   },
   getFilteredRegionalOffice: (state) => {
     return state.filteredRegionalOffice
@@ -351,11 +325,18 @@ export const getters = {
       page_size: state.pageSize === DEFAULT_QUERY.pageSize ? undefined : state.pageSize,
       page: state.page === DEFAULT_QUERY.page ? undefined : state.page,
       ordering: state.sorting === null ? undefined : state.sorting,
-      q: (q === null || q === '') ? undefined : q,
-      in: state.searchIn.filter(x => !DEFAULT_QUERY.searchIn.includes(x)).concat(DEFAULT_QUERY.searchIn.filter(x => !state.searchIn.includes(x))).length ? state.searchIn : undefined,
+      q: q === null || q === '' ? undefined : q,
+      in: state.searchIn
+        .filter((x) => !DEFAULT_QUERY.searchIn.includes(x))
+        .concat(DEFAULT_QUERY.searchIn.filter((x) => !state.searchIn.includes(x))).length
+        ? state.searchIn
+        : undefined,
       country,
       donor: donor == 20 ? undefined : donor,
-      region: (state.filteredRegion === DEFAULT_QUERY.filteredRegion || state.filteredRegion === "") ? undefined : state.filteredRegion,
+      region:
+        state.filteredRegion === DEFAULT_QUERY.filteredRegion || state.filteredRegion === ''
+          ? undefined
+          : state.filteredRegion,
       ic: state.innovationCategories,
       fo: state.filteredOffice === null ? undefined : state.filteredOffice,
       co: state.filteredCountryOffice,
@@ -371,7 +352,11 @@ export const getters = {
       cc: state.selectedCapabilityCategories,
       cs: state.selectedCapabilitySubcategories,
       view_as: viewAs === '' ? undefined : viewAs,
-      sc: state.selectedColumns.filter(x => !DEFAULT_QUERY.selectedColumns.includes(x)).concat(DEFAULT_QUERY.selectedColumns.filter(x => !state.selectedColumns.includes(x))).length ? state.selectedColumns : undefined,
+      sc: state.selectedColumns
+        .filter((x) => !DEFAULT_QUERY.selectedColumns.includes(x))
+        .concat(DEFAULT_QUERY.selectedColumns.filter((x) => !state.selectedColumns.includes(x))).length
+        ? state.selectedColumns
+        : undefined,
       country,
       // new
       ro: state.filteredRegionalOffice,
@@ -701,9 +686,7 @@ export const mutations = {
     state.selectedCapabilityLevels = intArrayFromQs(options.cl)
     state.selectedCapabilityCategories = intArrayFromQs(options.cc)
     state.selectedCapabilitySubcategories = intArrayFromQs(options.cs)
-    state.selectedColumns = options.sc
-      ? strArrayFromQs(options.sc)
-      : defaultSelectedColumns()
+    state.selectedColumns = options.sc ? strArrayFromQs(options.sc) : defaultSelectedColumns()
     state.dashboardType = options.view_as ? options.view_as : 'user'
     state.dashboardId =
       options.view_as === 'country'
@@ -762,6 +745,12 @@ export const mutations = {
   },
   SET_UNICEF_SECTORS: (state, value) => {
     state.sectors = value
+  },
+  SET_UNICEF_LEADING_SECTOR: (state, value) => {
+    state.unicef_leading_sector = value
+  },
+  SET_UNICEF_SUPPORTING_SECTORS: (state, value) => {
+    state.unicef_supporting_sectors = value
   },
   SET_INNOVATION_CATEGORIES: (state, value) => {
     state.innovationCategories = value
