@@ -171,10 +171,10 @@ class AzureUserManagement:
             try:
                 with transaction.atomic():
                     # bulk_update is used to perform the updates in a single query for efficiency
-                    UserProfile.objects_normal.filter(id__in=[user_profile.id for user_profile in to_be_updated]).bulk_update(
-                        to_be_updated, ['name', 'job_title', 'department', 'country'], batch_size=100)
-                    # for profile in to_be_updated:
-                    #     profile.save()
+                    # UserProfile.objects_normal.filter(id__in=[user_profile.id for user_profile in to_be_updated]).bulk_update(
+                    #     to_be_updated, ['name', 'job_title', 'department', 'country'], batch_size=100)
+                    for profile in to_be_updated:
+                        profile.save()
                     # Add the updated profiles to the list of all updated users
                     updated_users.extend(to_be_updated)
             except Exception as e:
