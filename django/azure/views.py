@@ -93,16 +93,8 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
     def put(self, request, format=None):
         # Default to 100 if not provided
         max_users = request.data.get('max_users', 100)
-        # TODO: Reinstate after development ends
-        # Call the Celery task to fetch and update the users
-        # fetch_users_from_aad_and_update_db.delay()
-
-        # TODO: Delete after development ends
-        adapter = AzureUserManagement()
-        # Fetch the Mock AAD users
-        azure_users = adapter.get_aad_users(max_users)
-        # Save the AAD users to the local database and get the updated user profiles
-        adapter.save_aad_users(azure_users)
+        # Call the Celery task and pass max_users as a parameter
+        fetch_users_from_aad_and_update_db.delay(max_users)
 
         return Response({'message': 'Azure users update started.'}, status=status.HTTP_202_ACCEPTED)
 

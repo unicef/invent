@@ -12,6 +12,57 @@ from user.models import UserProfile
 
 
 class AzureUserManagement:
+    def get_country(self, country_name):
+        """
+        Helper function to get or create the Country instance.
+        """
+        logger = logging.getLogger(__name__)
+        if not country_name:
+            return None
+        try:
+            country, _ = Country.objects.get_or_create(name=country_name)
+            return country
+        except Exception as e:
+            logger.error(
+                f'Error while getting or creating Country instance: {e}')
+            return None
+
+    def process_aad_users(self, max_users=100):
+        logger = logging.getLogger(__name__)
+        max_users = int(max_users)
+        url = 'https://graph.microsoft.com/v1.0/users?$select=id,accountEnabled,assignedLicenses,assignedPlans,businessPhones,city,country,department,displayName,employeeId,givenName,jobTitle,mail,mobilePhone,officeLocation,preferredLanguage,provisionedPlans,state,streetAddress,surname,usageLocation,userPrincipalName,userType&$top=100'
+        token = self.get_access_token()
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
+        retry_count = 0
+        page_count = 0
+        processed_user_count = 0
+        while url and retry_count < 5 and processed_user_count < max_users:
+            try:
+                response = requests.get(url, headers=headers)
+                response.raise_for_status()
+                response_data = response.json()
+                users_batch = response_data.get('value', [])
+                logger.info(
+                    f'Fetched {len(users_batch)} users in page {page_count+1}')
+                processed_user_count += len(users_batch)
+
+                # process the batch of users right after fetching
+                self.save_aad_users(users_batch)
+
+                url = response_data.get('@odata.nextLink', None)
+                page_count += 1
+                retry_count = 0
+                sleep(10)
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Error while making request to {url}: {e}")
+                retry_count += 1
+                sleep(10 * (2 ** retry_count))
+        logger.info(
+            f'Finished processing users. Total users processed: {processed_user_count}')
+
     def save_aad_users(self, azure_users):
         """
         This method updates the application's user database with information fetched from Azure AD.
@@ -64,9 +115,6 @@ class AzureUserManagement:
                     'department': azure_user.get('department', ''),
                     'country_name': azure_user.get('country', ''),
                     'social_account_uid': azure_user.get('id', ''),
-                    # TODO: Delete in production
-                    'office_location': azure_user.get('officeLocation', ''),
-                    'usage_location': azure_user.get('id', 'usageLocation'),
                 }
                 # Check if the user's email is already in the database
                 if user_data['email'] in existing_emails:
@@ -79,15 +127,8 @@ class AzureUserManagement:
             social_accounts = []
             # Create a new User, UserProfile, and SocialAccount for each new user
             for user_data in new_users_data:
-                # Get or create the user's country only if 'country_name' is not None or an empty string
-                try:
-                    if user_data['country_name']:
-                        country, _ = Country.objects.get_or_create(
-                            name=user_data['country_name'])
-                    else:
-                        country = None
-                except Exception:
-                    country = None
+                # Get the user's country only if 'country_name' is not None or an empty string
+                country = self.get_country(user_data['country_name'])
 
                 # Create a new User
                 user = user_model(
@@ -144,14 +185,7 @@ class AzureUserManagement:
                 user__in=existing_users)
 
             for user_data, user, user_profile in zip(existing_users_data, existing_users, existing_user_profiles):
-                try:
-                    if user_data['country_name']:
-                        country = Country.objects.get(
-                            name=user_data['country_name'])
-                    else:
-                        country = None
-                except Country.DoesNotExist:
-                    country = None
+                country = self.get_country(user_data['country_name'])
 
                 # Only update the user's country if the following conditions are met:
                 # 1. The user's current country is None and the new country is not None
@@ -170,9 +204,6 @@ class AzureUserManagement:
             # Use a transaction to update the user profiles
             try:
                 with transaction.atomic():
-                    # bulk_update is used to perform the updates in a single query for efficiency
-                    # UserProfile.objects_normal.filter(id__in=[user_profile.id for user_profile in to_be_updated]).bulk_update(
-                    #     to_be_updated, ['name', 'job_title', 'department', 'country'], batch_size=100)
                     for profile in to_be_updated:
                         profile.save()
                     # Add the updated profiles to the list of all updated users
