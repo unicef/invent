@@ -232,7 +232,6 @@
               data-vv-name="contact_email"
               data-vv-as="Contact email"
               :multiple="false"
-              :api-errors="{}"
             />
 
             <span class="Hint">
@@ -264,7 +263,6 @@
             v-validate="rules.team"
             data-vv-name="team"
             data-vv-as="Team"
-            :api-errors="{}"
           />
           <span class="Hint">
             <fa icon="info-circle" />
