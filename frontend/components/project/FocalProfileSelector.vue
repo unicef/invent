@@ -25,16 +25,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
 
 export default {
-  mixins: [VeeValidationMixin],
-  filters: {
-    truncate(str) {
-      if (str.length > 50) return `${str.substr(0, 47)}...`
-      return str
-    },
-  },
   $_veeValidate: {
     value() {
       return this.value
