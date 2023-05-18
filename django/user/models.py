@@ -59,6 +59,8 @@ class UserProfile(ExtendedModel):
     job_title = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
 
+    objects_normal = models.Manager()
+
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
 
