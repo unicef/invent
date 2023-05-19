@@ -2,7 +2,6 @@
   <lazy-el-select
     :value="platforms"
     multiple
-    :multiple-limit="multipleLimit"
     filterable
     :disabled="disabled"
     :placeholder="placeholder || $gettext('Select from list') | translate"
@@ -40,9 +39,9 @@ export default {
       type: Array,
       default: () => [],
     },
-    multipleLimit: {
-      type: Number,
-      default: 0,
+    multiple: {
+      type: Boolean,
+      default: true,
     },
     source: {
       type: String,
@@ -81,7 +80,11 @@ export default {
   },
   methods: {
     changeHandler(value) {
-      this.$emit('change', value)
+      if (this.multiple === false) {
+        this.$emit('change', [value[value.length - 1]])
+      } else {
+        this.$emit('change', value)
+      }
     },
   },
 }

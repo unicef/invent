@@ -18,7 +18,7 @@
               data-vv-name="unicef_leading_sector"
               data-vv-as="UNICEF Leading Sector"
               source="getLeadingSector"
-              :multipleLimit="1"
+              :multiple="false"
             />
             <span class="Hint">
               <fa icon="info-circle" />
