@@ -13,9 +13,24 @@ from user.models import UserProfile
 
 class AzureUserManagement:
     def process_aad_users(self, max_users=100):
+        """
+        Fetches and processes Azure Active Directory (AAD) users.
+
+        This function fetches users from AAD in batches, processes them, and then
+        fetches the next batch, repeating this process until either there are no
+        more users to fetch or a maximum number of users have been processed.
+
+        Parameters
+            max_users (int, optional): The maximum number of users to process. Defaults to 100.
+
+        Raises
+            requests.exceptions.RequestException: If an error occurs while making the request to fetch users.
+        """
         logger = logging.getLogger(__name__)
         max_users = int(max_users)
-        url = 'https://graph.microsoft.com/v1.0/users?$select=id,accountEnabled,assignedLicenses,assignedPlans,businessPhones,city,country,department,displayName,employeeId,givenName,jobTitle,mail,mobilePhone,officeLocation,preferredLanguage,provisionedPlans,state,streetAddress,surname,usageLocation,userPrincipalName,userType&$top=100'
+        # Set initial url for fetching users
+        url = settings.AZURE_GET_USERS_URL
+        # Get access token and set headers for the request
         token = self.get_access_token()
         headers = {
             'Authorization': f'Bearer {token}',
@@ -24,17 +39,23 @@ class AzureUserManagement:
         retry_count = 0
         page_count = 0
         processed_user_count = 0
+        # Fetch and process users in batches until either there are no more users to fetch
+        # or the maximum number of users to process has been reached
         while url and retry_count < 5 and processed_user_count < max_users:
             try:
+                # Make request to fetch users
                 response = requests.get(url, headers=headers)
+                # Raise exception if status code is not 200
                 response.raise_for_status()
+                # Parse response data
                 response_data = response.json()
+                # Extract users from response data
                 users_batch = response_data.get('value', [])
                 logger.info(
                     f'Fetched {len(users_batch)} users in page {page_count+1}')
                 processed_user_count += len(users_batch)
 
-                # process the batch of users right after fetching
+                # Process the batch of users right after fetching
                 self.save_aad_users(users_batch)
 
                 url = response_data.get('@odata.nextLink', None)
@@ -45,6 +66,7 @@ class AzureUserManagement:
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error while making request to {url}: {e}")
                 retry_count += 1
+                # TODO: Refactor. We need to have a fallback measurement in case Azure blocks the request
                 sleep(2 * (2 ** retry_count))
         logger.info(
             f'Finished processing users. Total users processed: {processed_user_count}')
