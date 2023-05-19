@@ -5,10 +5,9 @@
     filterable
     autocomplete
     remote
-    clearable
     :remote-method="filterMethod"
     :placeholder="$gettext('Type and select a user') | translate"
-    class="UserProfileSelector"
+    :class="omit ? 'UserProfileSelector focalFirst' : 'UserProfileSelector'"
     :popper-class="popperClass ? 'TeamSelectorDropdown' : 'NoDisplay'"
   >
     <el-option
@@ -77,22 +76,15 @@ export default {
         /**Get user ids [numArray] and translate to email array from user list, if omit email string exist we find if user id and remove it */
         if (this.omit) {
           const omitId = this.userProfiles.find((user) => user.email === this.omit).id
-          return this.value.filter((userId) => userId !== omitId)
+          const restId = this.value.filter((userId) => userId !== omitId)
+          return [omitId, ...restId]
         } else {
           return this.value
         }
       },
       set(value) {
         /**Get email array as input and translate to userIds number array, If omit user exist we add it back */
-
-        if (this.omit) {
-          const omitId = this.userProfiles.find((user) => user.email === this.omit).id
-          const idArray = omitId ? [...value, omitId] : value
-
-          this.$emit('change', [...new Set(idArray)])
-        } else {
-          this.$emit('change', value)
-        }
+        this.$emit('change', [...new Set(value)])
       },
     },
     concatUserData() {
@@ -199,5 +191,27 @@ export default {
   height: fit-content;
   word-wrap: normal;
   white-space: normal;
+}
+
+.focalFirst {
+  &.el-select {
+    .el-tag:nth-child(1) {
+      background-color: #858585;
+      border-color: #807f7f;
+      .el-select__tags-text {
+        color: #f1f1f1;
+        &:hover {
+          color: black;
+        }
+      }
+      .el-icon-close {
+        display: none;
+      }
+      &:hover {
+        background-color: white;
+        border-color: #777779;
+      }
+    }
+  }
 }
 </style>

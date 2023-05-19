@@ -215,37 +215,33 @@
         </span>
       </el-form-item>
 
-      <el-row :gutter="20" type="flex">
-        <el-col :span="20">
-          <custom-required-form-team-item
-            :error="errors.first('contact_email')"
-            :draft-rule="draftRules.contact_email"
-            :publish-rule="publishRules.contact_email"
-          >
-            <template slot="label">
-              <translate key="contact-email">Who is the focal point of contact for this initiative?</translate>
-            </template>
+      <custom-required-form-team-item
+        :error="errors.first('contact_email')"
+        :draft-rule="draftRules.contact_email"
+        :publish-rule="publishRules.contact_email"
+      >
+        <template slot="label">
+          <translate key="contact-email">Who is the focal point of contact for this initiative?</translate>
+        </template>
 
-            <FocalProfileSelector
-              v-model="contact_email"
-              v-validate="rules.contact_email"
-              data-vv-name="contact_email"
-              data-vv-as="Contact email"
-              :multiple="false"
-            />
+        <FocalProfileSelector
+          v-model="contact_email"
+          v-validate="rules.contact_email"
+          data-vv-name="contact_email"
+          data-vv-as="Contact email"
+          :multiple="false"
+        />
 
-            <span class="Hint">
-              <fa icon="info-circle" />
-              <p>
-                <translate
-                  >The focal point is the team member who is leading this work, and will act as the point of contact for
-                  anyone wishing to connect with the team.</translate
-                >
-              </p>
-            </span>
-          </custom-required-form-team-item>
-        </el-col>
-      </el-row>
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate
+              >The focal point is the team member who is leading this work, and will act as the point of contact for
+              anyone wishing to connect with the team.</translate
+            >
+          </p>
+        </span>
+      </custom-required-form-team-item>
 
       <div class="TeamArea">
         <custom-required-form-team-item
@@ -255,7 +251,7 @@
           :publish-rule="publishRules.team"
         >
           <template slot="label">
-            <translate key="team">Who else should be able to modify this initiative's entry?</translate>
+            <translate key="team">Who should be able to modify this initiate's entry?</translate>
           </template>
           <UserProfileSelector
             v-model="team"
