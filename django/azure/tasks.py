@@ -54,3 +54,26 @@ def process_aad_user_changes(user_id):
     # Log the successful completion of the process
     logger.info(
         f"User {user_id} data processed and updated in the database successfully.")
+
+
+@app.task(name="create_aad_subscription")
+def create_subscription():
+    """
+    Subscribes to Azure Active Directory (AAD) change notifications.
+
+    This task initiates a subscription with Azure Active Directory to receive
+    change notifications. This includes changes like adding a new user or
+    modifications to an existing user's profile. The subscription needs to be
+    renewed periodically, which is handled by scheduling this task to run at
+    regular intervals.
+
+    Note: The specifics of the subscription (like the notification URL and the
+    expiration time) are handled in the `AzureUserManagement.create_subscription`
+    method.
+    """
+    # Log the start of the subscription process
+    logger.info(f"Subscribing to Azure Active Directory notifications")
+    # Create an instance of the AzureUserManagement class
+    adapter = AzureUserManagement()
+    # Initiate the subscription to AAD change notifications
+    adapter.create_subscription()

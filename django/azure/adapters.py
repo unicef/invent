@@ -385,33 +385,20 @@ class AzureUserManagement:
         response = requests.post(url, headers=headers, json=payload)
         response.raise_for_status()
 
-    def get_aad_user(self, user_id):
-        subscription_url = settings.MICROSOFT_GRAPH_SUBSCRIPTION_URL
-        url = f'{subscription_url}/{user_id}'
-        token = self.get_access_token()
-        headers = {
-            'Authorization': f'Bearer {token}',
-            'Content-Type': 'application/json'
-        }
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        return response.json()
+    def process_notification(self, notification):
+        """
+        Process a single change notification from Microsoft Graph.
 
-    @csrf_exempt
-    @require_POST
-    def notification_endpoint(request):
-        # verify the subscription
-        if request.GET.get('validationToken'):
-            return HttpResponse(request.GET['validationToken'])
+        This involves fetching the user's data from AAD and saving it in the local database.
 
-        # process the notifications
-        azure_ad = AzureUserManagement()
-        notifications = json.loads(request.body)['value']
-        for notification in notifications:
-            user_id = notification['resourceData']['id']
-            user = azure_ad.get_aad_user(user_id)
-            azure_ad.save_aad_users([user])
-        return HttpResponse('OK')
+        Parameters
+            notification (dict): A dictionary representing the change notification.
+        """
+        # Extract the user ID from the notification
+        user_id = notification['resourceData']['id']
+        
+        # Fetch the user's data from AAD and save it in the local database
+        self.process_aad_user(user_id)
 
     def process_aad_user(self, user_id):
         """

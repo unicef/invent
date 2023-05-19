@@ -8,6 +8,7 @@ from allauth.socialaccount.providers.oauth2.views import (
     OAuth2LoginView,
 )
 from django.conf import settings
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -97,6 +98,31 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
         fetch_users_from_aad_and_update_db.delay(max_users)
 
         return Response({'message': 'Initiated celery task fetch_users_from_aad_and_update_db.'}, status=status.HTTP_202_ACCEPTED)
+
+
+class NotificationEndpointView(APIView):
+    """
+    API View to handle notifications from Azure Active Directory (AAD) via Microsoft Graph.
+    This endpoint is called by Microsoft Graph when changes occur in the AAD tenant.
+    """
+
+    def post(self, request, format=None):
+        # Check for a validationToken in the request
+        validation_token = request.GET.get('validationToken')
+        if validation_token:
+            # Echo the validationToken back in the response
+            return HttpResponse(validation_token)
+
+        # Extract the data from the incoming request
+        data = request.data
+
+        # Process the change notifications
+        adapter = AzureUserManagement()
+        for value in data.get('value', []):
+            adapter.process_notification(value)
+
+        # Respond with a 202 status to acknowledge receipt of the notifications
+        return Response(status=status.HTTP_202_ACCEPTED)
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
