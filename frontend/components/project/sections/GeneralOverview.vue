@@ -221,7 +221,7 @@
         :publish-rule="publishRules.contact_email"
       >
         <template slot="label">
-          <translate key="contact-email">Who is the focal point of contact for this initiative?</translate>
+          <translate key="contact-email">Who is the focal point for this initiative?</translate>
         </template>
 
         <FocalProfileSelector
@@ -251,7 +251,7 @@
           :publish-rule="publishRules.team"
         >
           <template slot="label">
-            <translate key="team">Who should be able to modify this initiate's entry?</translate>
+            <translate key="team">Who are the team members for this initiative?</translate>
           </template>
           <UserProfileSelector
             v-model="team"
