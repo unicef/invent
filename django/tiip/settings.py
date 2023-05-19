@@ -264,6 +264,11 @@ ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
 AZURE_USER_PARAMETERS = ['id', 'businessPhones', 'country', 'department', 'displayName', 'givenName',
                          'jobTitle', 'mail', 'mobilePhone', 'officeLocation', 'preferredLanguage', 'surname', 'userPrincipalName']
 
+MICROSOFT_GRAPH_BASE_URL = 'https://graph.microsoft.com/v1.0/users'
+MICROSOFT_GRAPH_USERS_URL = f'{MICROSOFT_GRAPH_BASE_URL}/users'
+MICROSOFT_GRAPH_SUBSCRIPTION_URL = f'{MICROSOFT_GRAPH_BASE_URL}/subscriptions'
+
+
 def generate_azure_users_url(user_params: list, top: int = 100) -> str:
     """
     Generates a URL for fetching users from Azure Active Directory.
@@ -275,13 +280,12 @@ def generate_azure_users_url(user_params: list, top: int = 100) -> str:
     Returns
         str: The generated URL.
     """
-
-    base_url = 'https://graph.microsoft.com/v1.0/users'
     # Join parameters into a single string
     select_params = ','.join(user_params)
     # Add pagination
-    url = f'{base_url}?$select={select_params}&$top={top}'
+    url = f'{MICROSOFT_GRAPH_USERS_URL}?$select={select_params}&$top={top}'
     return url
+
 
 AZURE_GET_USERS_URL = generate_azure_users_url(AZURE_USER_PARAMETERS)
 
