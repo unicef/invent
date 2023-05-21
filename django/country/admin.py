@@ -3,6 +3,7 @@ from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
 from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
+# ,UserProfileManagerof
 from .resources import CountryOfficeResource, RegionalOfficeResource, CountryResource
 
 from import_export.admin import ExportActionMixin
@@ -22,8 +23,10 @@ class CountryAdmin(ExportActionMixin, AllObjectsAdmin):
         return self.model.objects.all()
 
     def get_list_display(self, request):
-        list_display = list(super(AllObjectsAdmin, self).get_list_display(request))
-        language_fields = ['is_translated_{}'.format(l[0]) for l in settings.LANGUAGES]
+        list_display = list(
+            super(AllObjectsAdmin, self).get_list_display(request))
+        language_fields = ['is_translated_{}'.format(
+            l[0]) for l in settings.LANGUAGES]
         return list_display + language_fields
 
     def get_fields(self, request, obj=None):
@@ -63,5 +66,14 @@ class DonorAdmin(admin.ModelAdmin):
 @admin.register(CountryOffice)
 class CountryOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
     resource_class = CountryOfficeResource
-    list_display = ('id', 'name', 'region', 'regional_office')
+    list_display = ('id', 'name', 'region',
+                    'regional_office', 'get_user_emails')
     search_fields = ['name']
+
+    # Get the emails of user profiles in a list separated with comma iterating over them
+    # utilizing the 'get_user_profiles' method in CountryOffice class
+    def get_user_emails(self, obj):
+        return ', '.join([user_profile.user.email for user_profile in obj.get_user_profiles()])
+
+    # Rename this column for the interface of admin
+    get_user_emails.short_description = 'INVENT Focal Points'

@@ -75,11 +75,14 @@ class CountryOfficeResource(resources.ModelResource):
     country = Field(column_name=_('Country'))
     regional_office = Field(column_name=_('Regional office'))
     city = Field(column_name=_('City'))
+    emails = Field(column_name=_('INVENT Focal Points'))
 
     class Meta:
         model = CountryOffice
-        fields = ('name', 'region', 'country', 'regional_office', 'city')
-        export_order = ('name', 'region', 'country', 'regional_office', 'city')
+        fields = ('name', 'region', 'country',
+                  'regional_office', 'city', 'emails')
+        export_order = ('name', 'region', 'country',
+                        'regional_office', 'city', 'emails')
 
     def dehydrate_name(self, office):  # pragma: no cover
         return office.name
@@ -96,3 +99,7 @@ class CountryOfficeResource(resources.ModelResource):
 
     def dehydrate_city(self, office):  # pragma: no cover
         return office.city
+
+    # extract the emails (focal points) of user profiles as a list
+    def dehydrate_emails(self, office):  # dehydrate method for export
+        return ', '.join([user_profile.user.email for user_profile in office.get_user_profiles()])

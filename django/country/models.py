@@ -48,20 +48,24 @@ class UserManagement(models.Model):
 
     def user_in_groups(self, profile):
         return self.admins.filter(id=profile.id).exists() or \
-               self.super_admins.filter(id=profile.id).exists() or \
-               self.users.filter(id=profile.id).exists()
+            self.super_admins.filter(id=profile.id).exists() or \
+            self.users.filter(id=profile.id).exists()
 
 
 class Country(UserManagement, LandingPageCommon):
-    code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
+    code = models.CharField(max_length=4, default="NULL",
+                            help_text="ISO3166-1 country code", unique=True)
     map_data = JSONField(default=dict, blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
     project_approval = models.BooleanField(default=False)
-    lat = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
-    lon = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
+    lat = models.DecimalField(null=True, blank=True,
+                              max_digits=18, decimal_places=15)
+    lon = models.DecimalField(null=True, blank=True,
+                              max_digits=18, decimal_places=15)
 
-    is_included = models.BooleanField(default=False, help_text="Included in KPI calculations")
+    is_included = models.BooleanField(
+        default=False, help_text="Included in KPI calculations")
 
     class Meta:
         verbose_name_plural = "Countries"
@@ -74,8 +78,10 @@ class Country(UserManagement, LandingPageCommon):
 
 class RegionalOffice(InvalidateCacheMixin, models.Model):
     name = models.CharField(max_length=256)
-    is_included = models.BooleanField(default=False, help_text="Included in KPI calculations")
-    is_empty_option = models.BooleanField(default=False, help_text="If there is an object to represent N/A, None")
+    is_included = models.BooleanField(
+        default=False, help_text="Included in KPI calculations")
+    is_empty_option = models.BooleanField(
+        default=False, help_text="If there is an object to represent N/A, None")
 
     def __str__(self):  # pragma: no cover
         return self.name
@@ -99,16 +105,22 @@ class CountryOffice(ExtendedModel):
     name = models.CharField(max_length=256)
     region = models.IntegerField(choices=REGIONS, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    regional_office = models.ForeignKey(RegionalOffice, on_delete=models.SET_NULL, null=True, blank=True)
+    regional_office = models.ForeignKey(
+        RegionalOffice, on_delete=models.SET_NULL, null=True, blank=True)
     city = models.CharField(max_length=256, null=True, blank=True)
 
-    def __str__(self):  # pragma: no cover
-        return self.name
+    # Get all the related user profiles through the managers (country_managers attribute
+    # from UserProfile class) for a 'CountryOffice' instance.
+    def get_user_profiles(self):
+        return self.country_managers.all()
 
     class Meta:
         verbose_name = 'UNICEF Office'
         verbose_name_plural = 'UNICEF Offices'
         ordering = ('name',)
+
+    def __str__(self):  # pragma: no cover
+        return self.name
 
 
 class Currency(InvalidateCacheMixin, models.Model):
@@ -142,7 +154,8 @@ class Donor(UserManagement, LandingPageCommon):
 
 
 class PartnerLogo(ExtendedModel):
-    country = models.ForeignKey(Country, related_name="partner_logos", on_delete=models.CASCADE)
+    country = models.ForeignKey(
+        Country, related_name="partner_logos", on_delete=models.CASCADE)
     image = models.ImageField(null=True)
 
     @property
@@ -151,7 +164,8 @@ class PartnerLogo(ExtendedModel):
 
 
 class DonorPartnerLogo(ExtendedModel):
-    donor = models.ForeignKey(Donor, related_name="partner_logos", on_delete=models.CASCADE)
+    donor = models.ForeignKey(
+        Donor, related_name="partner_logos", on_delete=models.CASCADE)
     image = models.ImageField(null=True)
 
     @property
@@ -160,7 +174,8 @@ class DonorPartnerLogo(ExtendedModel):
 
 
 class MapFile(ExtendedModel):
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='map_files')
+    country = models.ForeignKey(
+        Country, on_delete=models.CASCADE, related_name='map_files')
     map_file = models.FileField(null=True, upload_to='uploaded_maps/')
 
 
@@ -181,7 +196,8 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
 
     type = models.IntegerField(choices=TYPE_CHOICES, default=TEXT)
     question = models.CharField(max_length=256, blank=False)
-    options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
+    options = ArrayField(models.CharField(
+        max_length=256), blank=True, null=True)
 
     private = models.BooleanField(default=False)
     required = models.BooleanField(default=False)
@@ -193,7 +209,8 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
 
 
 class DonorCustomQuestion(CustomQuestion):
-    donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
+    donor = models.ForeignKey(
+        Donor, related_name='donor_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'donor'
 
     class Meta(OrderedModel.Meta):
@@ -204,7 +221,8 @@ class DonorCustomQuestion(CustomQuestion):
 
 
 class CountryCustomQuestion(CustomQuestion):
-    country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
+    country = models.ForeignKey(
+        Country, related_name='country_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'country'
 
     class Meta(OrderedModel.Meta):
