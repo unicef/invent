@@ -76,4 +76,4 @@ class CountryOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
         return ', '.join([user_profile.user.email for user_profile in obj.get_user_profiles()])
 
     # Rename this column for the interface of admin
-    get_user_emails.short_description = 'INVENT Focal Points'
+    get_user_emails.short_description = 'Focal Points'
