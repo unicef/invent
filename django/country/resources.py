@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from import_export import resources
 from import_export.fields import Field
@@ -102,4 +102,6 @@ class CountryOfficeResource(resources.ModelResource):
 
     # extract the emails (focal points) of user profiles as a list
     def dehydrate_emails(self, office):  # dehydrate method for export
-        return ', '.join([user_profile.user.email for user_profile in office.get_user_profiles()])
+        email_list = [str(user_profile.user.email)
+                      for user_profile in office.get_user_profiles()]  # tranform to regular string
+        return ', '.join(email_list)
