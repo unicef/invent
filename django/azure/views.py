@@ -13,9 +13,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .provider import AzureProvider
-from .adapters import AzureUserManagement
 from core.views import TokenAuthMixin
-from .tasks import fetch_users_from_aad_and_update_db
 
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
@@ -63,40 +61,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
 
         return self.get_provider().sociallogin_from_response(request,
                                                              extra_data)
-
-
-class GetAADUsers(TokenAuthMixin, APIView):
-    """
-    API View to fetch Azure Active Directory (AAD) users.
-    Requires token authentication.
-    """
-
-    def get(self, request, max_users=None, format=None):
-        # Get max_users from query parameters. Default is 100 if not provided.
-        max_users = request.query_params.get('max_users', 100)
-
-        # Create an instance of MyAzureAccountAdapter and fetch the AAD users
-        adapter = AzureUserManagement()
-        azure_users = adapter.get_aad_users(max_users)
-
-        # Return the AAD users in the response
-        return Response({'users': azure_users}, status=status.HTTP_200_OK)
-
-
-class UpdateAADUsersView(TokenAuthMixin, APIView):
-    """
-    API View to update and save Azure Active Directory (AAD) users in the local database.
-    It fetches the AAD users, saves them, and returns the updated users' profiles.
-    Requires token authentication.
-    """
-
-    def put(self, request, format=None):
-        # Default to 100 if not provided
-        max_users = request.data.get('max_users', 100)
-        # Call the Celery task and pass max_users as a parameter
-        fetch_users_from_aad_and_update_db.delay(max_users)
-
-        return Response({'message': 'Initiated celery task fetch_users_from_aad_and_update_db.'}, status=status.HTTP_202_ACCEPTED)
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)
