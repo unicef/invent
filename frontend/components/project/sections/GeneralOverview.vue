@@ -232,8 +232,6 @@
               data-vv-name="contact_email"
               data-vv-as="Contact email"
               :multiple="false"
-              @change="updateContactEmail"
-              :api-errors="{}"
             />
 
             <span class="Hint">
@@ -261,11 +259,10 @@
           </template>
           <UserProfileSelector
             v-model="team"
-            :ommit="ommitTeam"
+            :omit="contact_email"
             v-validate="rules.team"
             data-vv-name="team"
             data-vv-as="Team"
-            :api-errors="{}"
           />
           <span class="Hint">
             <fa icon="info-circle" />
@@ -333,11 +330,7 @@ export default {
     FocalProfileSelector,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
-  data() {
-    return {
-      ommitTeam: null,
-    }
-  },
+
   computed: {
     ...mapState({
       offices: (state) => state.offices.offices,
@@ -397,19 +390,8 @@ export default {
       }
     },
   },
-  mounted() {
-    this.ommitTeam = this.getContactEmail
-  },
-  methods: {
-    updateContactEmail() {
-      if (this.getContactEmail === '' || this.getContactEmail === null) {
-        this.ommitTeam = null
-      } else {
-        // contact email may or may not exist
-        this.ommitTeam = this.getContactEmail
-      }
-    },
 
+  methods: {
     openFeedback() {
       this.$store.commit('user/SET_FEEDBACK', {
         feedbackOn: true,

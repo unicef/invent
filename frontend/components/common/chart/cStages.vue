@@ -63,7 +63,6 @@ export default {
       return this.isPublished ? 'published' : 'draft'
     },
     showProject() {
-      console.log(this.project)
       return this.isPublished ? this.project.published : this.project
     },
   },

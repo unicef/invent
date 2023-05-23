@@ -8,6 +8,4 @@ django-admin makemessages -l es
 django-admin makemessages -l fr
 django-admin makemessages -l pt
 python manage.py compilemessages
-python manage.py makemigrations
-python manage.py migrate
 gunicorn tiip.wsgi:application -w 2 -b :8000 --reload --timeout 120

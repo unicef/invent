@@ -1,17 +1,25 @@
 <template>
   <el-select
     v-model="innerValue"
-    filterable
-    reserve-keyword
-    autocomplete
-    remote
-    clearable
     multiple
+    filterable
+    default-first-option
+    autocomplete
+    clearable
+    remote
+    value-key="email"
     :remote-method="filterMethod"
     :placeholder="$gettext('Type and select a user') | translate"
+    :popper-class="optionsWithValues.length > innerValue.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
     class="FocalPointSelector"
   >
-    <el-option v-for="item in filteredOptions" :key="item.email" :label="item.label" :value="item.email"> </el-option>
+    <el-option v-for="item in optionsWithValues" :key="item.email" :label="item.label" :value="item.email"
+      ><span style="float: left">{{ item.label }}</span>
+      <br />
+      <span class="email"
+        ><small>{{ item.info }}</small></span
+      >
+    </el-option>
   </el-select>
 </template>
 
@@ -56,18 +64,21 @@ export default {
     innerValue: {
       get() {
         if (this.value !== null) {
-          return [this.value.toString()]
+          return [this.value]
         } else {
           return []
         }
       },
       set(value) {
         if (value[0]) {
-          this.$emit('change', value[value.length - 1].toString())
+          this.$emit('change', value[value.length - 1])
         } else {
           this.$emit('change', null)
         }
       },
+    },
+    optionsWithValues() {
+      return [...this.filteredOptions, ...this.userProfiles.filter((profile) => profile.email === this.value)]
     },
   },
   methods: {
@@ -117,5 +128,38 @@ export default {
 
 .NoDisplay {
   display: none;
+}
+
+.TeamSelectorDropdown {
+  .OrganisationItem {
+    display: inline-block;
+    margin-left: 6px;
+    font-weight: 400;
+    color: @colorGray;
+    &::before {
+      content: '(';
+    }
+    &::after {
+      content: ')';
+    }
+  }
+  li {
+    height: fit-content;
+    padding-bottom: 4px;
+    .email {
+      float: left;
+      width: 100%;
+      margin-top: -8px;
+      line-height: 1.2;
+    }
+  }
+}
+
+.el-select-dropdown__item {
+  max-width: 64vw;
+  min-width: 740px;
+  height: fit-content;
+  word-wrap: normal;
+  white-space: normal;
 }
 </style>

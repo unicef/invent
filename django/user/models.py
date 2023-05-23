@@ -48,17 +48,20 @@ class UserProfile(ExtendedModel):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
-    organisation = models.ForeignKey(Organisation, blank=True, null=True, on_delete=models.SET_NULL)
-    country = models.ForeignKey('country.Country', null=True, on_delete=models.SET_NULL)
-    donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
-    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
+    organisation = models.ForeignKey(
+        Organisation, blank=True, null=True, on_delete=models.SET_NULL)
+    country = models.ForeignKey(
+        'country.Country', null=True, on_delete=models.SET_NULL)
+    donor = models.ForeignKey(
+        'country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
+    language = models.CharField(
+        max_length=2, choices=settings.LANGUAGES, default='en')
     global_portfolio_owner = models.BooleanField(default=False)
     filters = HStoreField(default=dict, blank=True)
     manager_of = models.ManyToManyField('country.CountryOffice', related_name="country_managers",
                                         verbose_name='Country Manager Of', blank=True)
     job_title = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
-    # social_account_uid = models.CharField(max_length=255, unique=True, null=True, blank=True)
 
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
@@ -81,4 +84,5 @@ def admin_request_on_change(sender, instance, **kwargs):
 @receiver(post_save, sender=UserProfile)
 def admin_request_on_create(sender, instance, created, **kwargs):
     if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
-        transaction.on_commit(lambda: send_user_request_to_admins.apply_async(args=(instance.pk, )))
+        transaction.on_commit(
+            lambda: send_user_request_to_admins.apply_async(args=(instance.pk, )))

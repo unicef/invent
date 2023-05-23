@@ -1,21 +1,15 @@
-from __future__ import absolute_import, unicode_literals
-from scheduler.celery import app
 from celery.utils.log import get_task_logger
 
-from .views import AzureOAuth2Adapter
-from user.adapters import MyAzureAccountAdapter
+from .adapters import AzureUserManagement
+from scheduler.celery import app
 
 logger = get_task_logger(__name__)
 
-
 @app.task(name="fetch_users_from_aad_and_update_db")
-def fetch_users_from_aad_and_update_db():
-    logger.info('Starting Azure users fetch and update task')
-    azure_adapter = AzureOAuth2Adapter()
-    account_adapter = MyAzureAccountAdapter()
+def fetch_users_from_aad_and_update_db(max_users=100):
+    logger.info("Starting to fetch and update users from AAD")
+    adapter = AzureUserManagement()
+    # Call process_aad_users instead of get_aad_users
+    adapter.process_aad_users(max_users)
 
-    azure_users = azure_adapter.get_all_users()
-    account_adapter.save_users_from_azure(azure_users)
-
-    logger.info('Azure users fetched and updated in the database successfully.')
-    return 'Azure users fetched and updated in the database successfully.'
+    logger.info("Azure users fetched and updated in the database successfully.")
