@@ -1,4 +1,3 @@
-import json
 import logging
 import requests
 from time import sleep
@@ -7,9 +6,6 @@ from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
 
 from country.models import Country
 from user.models import UserProfile
@@ -365,61 +361,3 @@ class AzureUserManagement:
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
-
-    def create_subscription(self):
-        url = 'https://graph.microsoft.com/v1.0/subscriptions'
-        token = self.get_access_token()
-        headers = {
-            'Authorization': f'Bearer {token}',
-            'Content-Type': 'application/json'
-        }
-        payload = {
-            'changeType': 'updated',
-            # replace with your actual notification URL
-            'notificationUrl': 'https://your-server.com/notification-endpoint',
-            'resource': '/users',
-            # replace with actual expiration time
-            'expirationDateTime': '2024-01-01T00:00:00Z',
-            'clientState': 'SecretClientState'  # replace with actual client state
-        }
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-
-    def process_notification(self, notification):
-        """
-        Process a single change notification from Microsoft Graph.
-
-        This involves fetching the user's data from AAD and saving it in the local database.
-
-        Parameters
-            notification (dict): A dictionary representing the change notification.
-        """
-        # Extract the user ID from the notification
-        user_id = notification['resourceData']['id']
-        
-        # Fetch the user's data from AAD and save it in the local database
-        self.process_aad_user(user_id)
-
-    def process_aad_user(self, user_id):
-        """
-        Fetches and processes a single user from Azure AD
-        """
-        base_url = settings.MICROSOFT_GRAPH_USERS_URL
-        url = f"{base_url}/{user_id}"
-        token = self.get_access_token()
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        }
-        try:
-            # Make request to fetch user
-            response = requests.get(url, headers=headers)
-            # Raise exception if status code is not 200
-            response.raise_for_status()
-            # Parse response data
-            user_data = response.json()
-            # Process the user
-            self.save_aad_users([user_data])
-            logger.info(f"Processed user: {user_id}")
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Error while making request to {url}: {e}")
