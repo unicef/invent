@@ -92,7 +92,7 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
 
     def put(self, request, format=None):
         # Default to 100 if not provided
-        max_users = request.data.get('max_users', 100)
+        max_users = request.data.get('max_users', None)
         # Call the Celery task and pass max_users as a parameter
         fetch_users_from_aad_and_update_db.delay(max_users)
 

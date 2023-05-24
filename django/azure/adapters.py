@@ -29,7 +29,6 @@ class AzureUserManagement:
         Raises
             requests.exceptions.RequestException: If an error occurs while making the request to fetch users.
         """
-        max_users = int(max_users)
         # Set initial url for fetching users
         url = settings.AZURE_GET_USERS_URL
         # Get access token and set headers for the request
@@ -43,7 +42,7 @@ class AzureUserManagement:
         processed_user_count = 0
         # Fetch and process users in batches until either there are no more users to fetch
         # or the maximum number of users to process has been reached
-        while url and retry_count < 5 and processed_user_count < max_users:
+        while url and retry_count < 5 and (max_users is None or processed_user_count < max_users):
             try:
                 # Make request to fetch users
                 response = requests.get(url, headers=headers)
@@ -110,12 +109,11 @@ class AzureUserManagement:
             # Initialize lists to hold data for new and existing users
             new_users_data = []
             existing_users_data = []
-            # Here, instead of fetching all the emails from the database,
-            # we fetch only the emails for the current batch of users.
-            batch_emails = [user.get('mail') or user.get(
-                'userPrincipalName') or '' for user in batch]
-            existing_emails = set(
-                user_model.objects.filter(email__in=batch_emails).values_list('email', flat=True))
+            batch_social_account_uids = [
+                user.get('id') or '' for user in batch]
+            existing_social_account_uids = set(
+                SocialAccount.objects.filter(uid__in=batch_social_account_uids).values_list('uid', flat=True))
+
             # Separate the users in the batch into new and existing users
             for azure_user in batch:
                 # Create a dictionary to hold the user's data
@@ -128,8 +126,8 @@ class AzureUserManagement:
                     'country_name': azure_user.get('country', ''),
                     'social_account_uid': azure_user.get('id', ''),
                 }
-                # Check if the user's email is already in the database
-                if user_data['email'] in existing_emails:
+                # Check if the user's social account ID is already in the database
+                if user_data['social_account_uid'] in existing_social_account_uids:
                     existing_users_data.append(user_data)
                 else:
                     new_users_data.append(user_data)
