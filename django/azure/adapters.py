@@ -5,7 +5,7 @@ from time import sleep
 from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.db import transaction
+from django.db import transaction, close_old_connections
 from django.db.models import Q
 
 from django.forms.models import model_to_dict
@@ -93,6 +93,11 @@ class AzureUserManagement:
             updated_users.extend(self.update_existing_users(
                 existing_users_data, user_model))
 
+        # This will close any connections to the database that were established before the current batch,
+        # and ensure that any old, unused connections are closed as well. This is useful in scenarios
+        # where connections could be left open indefinitely, such as in a long-running batch process.
+        close_old_connections()
+
         logger.info(
             f"Total existing users updated: {len(updated_users)}. Total new users created: {total_new_users}")
         return updated_users
@@ -140,41 +145,36 @@ class AzureUserManagement:
         social_accounts = []
 
         for user_data in new_users_data:
-            # Skip if user data is None (e.g. due to email not being "@unicef.org")
             if user_data is None:
                 continue
-            try:
-                # we are not using bulk_create for the User model as the get_or_create method is used to individually create users. 
-                # This avoids the potential for race conditions, but it may slow down the user creation process slightly 
-                # as each user is created individually rather than in bulk. However, user profiles and social accounts 
-                # are still being created in bulk, as before.
-                user, created = user_model.objects.get_or_create(
-                    username=user_data['username'],
-                    defaults={'email': user_data['email']}
-                )
-                if created:
-                    user.set_unusable_password()
-                    new_users.append(user)
 
-                    user_profiles.append(
-                        self.get_user_profile(user, user_data))
-                    social_accounts.append(
-                        self.get_social_account(user, user_data))
-                else:
-                    logger.warning(
-                        f"User with username {user_data['username']} or email {user_data['email']} already exists. Skipping...")
-            except Exception as e:
-                logger.error(f"Error while creating user: {e}")
+            # Check if user with the same username or email already exists
+            existing_user = user_model.objects.filter(
+                Q(username=user_data['username']) | Q(email=user_data['email'])).first()
+            if existing_user:
+                logger.warning(
+                    f"User with username {user_data['username']} or email {user_data['email']} already exists. Skipping..."
+                )
                 continue
 
+            user = user_model(
+                email=user_data['email'], username=user_data['username'])
+            user.set_unusable_password()
+            new_users.append(user)
+
         try:
-            with transaction.atomic():
-                UserProfile.objects.bulk_create(user_profiles, batch_size=100)
-                SocialAccount.objects.bulk_create(
-                    social_accounts, batch_size=100)
+            user_model.objects.bulk_create(new_users)
         except Exception as e:
-            logger.error(
-                f'Error while creating UserProfile and SocialAccount instances: {e}')
+            logger.error(f"Error while creating users: {e}")
+            return []
+
+        for user_data in new_users_data:
+            user = user_model.objects.get(username=user_data['username'])
+            user_profiles.append(self.get_user_profile(user, user_data))
+            social_accounts.append(self.get_social_account(user, user_data))
+
+        UserProfile.objects.bulk_create(user_profiles)
+        SocialAccount.objects.bulk_create(social_accounts)
 
         return new_users
 
@@ -200,19 +200,26 @@ class AzureUserManagement:
 
     def update_existing_users(self, existing_users_data, user_model):
         updated_users = []
+        existing_user_emails = [user_data['email']
+                                for user_data in existing_users_data]
         existing_users = user_model.objects.filter(
-            email__in=[user_data['email'] for user_data in existing_users_data])
+            email__in=existing_user_emails)
         existing_user_profiles = UserProfile.objects.filter(
             user__in=existing_users)
 
-        for user_data, user_profile in zip(existing_users_data, existing_user_profiles):
-            initial_user_profile_data = model_to_dict(
-                user_profile)  # get initial user profile data
-            updated_profile = self.update_user_profile(user_data, user_profile)
+        user_profile_map = {
+            profile.user.email: profile for profile in existing_user_profiles}
 
-            # Only append the user profile if it was updated
-            if initial_user_profile_data != model_to_dict(updated_profile):
-                updated_users.append(updated_profile)
+        for user_data in existing_users_data:
+            user_profile = user_profile_map.get(user_data['email'])
+            if not user_profile:
+                continue
+
+            user_profile, is_updated = self.update_user_profile(
+                user_data, user_profile)
+
+            if is_updated:
+                updated_users.append(user_profile)
 
         try:
             with transaction.atomic():
@@ -224,6 +231,8 @@ class AzureUserManagement:
         return updated_users
 
     def update_user_profile(self, user_data, user_profile):
+        is_updated = False
+
         try:
             country = Country.objects.get(
                 name=user_data['country_name']) if user_data['country_name'] else None
@@ -233,19 +242,14 @@ class AzureUserManagement:
         # If the user_profile's country field is None and a country was found, assign it
         if user_profile.country is None and country is not None:
             user_profile.country = country
+            is_updated = True
 
         # If the user_profile's name field is None or empty, update it
         if not user_profile.name:
             user_profile.name = user_data['name']
+            is_updated = True
 
-        # Similarly, only update job_title and department if they are not already set
-        if not user_profile.job_title:
-            user_profile.job_title = user_data.get('job_title', '')
-
-        if not user_profile.department:
-            user_profile.department = user_data.get('department', '')
-
-        return user_profile
+        return user_profile, is_updated
 
     def get_aad_users(self, max_users=100):
         """
