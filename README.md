@@ -6,12 +6,76 @@
 
 [https://unicef-invent.readthedocs.io](https://unicef-invent.readthedocs.io/en/latest/)
 
-## Command to run
+## Run the Invent application locally
 
-`fab up` - start all backend instances in daemon mode  
-`fab down` - stop all backend instances and make backup of db  
-`fab migrate` - to run new migrations  
-`docker-compose build` - if there were new django requirements
+### Table of Contents
+
+
+1. [Prerequisites](#prerequisites)
+2. [Start the Environment](#start-the-environment)
+3. [Setting up the Environment](#setting-up-the-environment)
+4. [Troubleshooting](#troubleshooting)
+
+### Prerequisites
+
+Before you proceed, ensure that you have the following software installed on your machine:
+1. [Docker Desktop](https://www.docker.com/products/docker-desktop/) - (With Kubernetes [enabled](https://docs.docker.com/desktop/kubernetes/))
+2. [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+3. [Helm](https://github.com/helm/helm/releases/latest)
+4. [Tilt](https://docs.tilt.dev/install.html)
+5. [Python](https://www.python.org/downloads/)
+6. [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+### Start the Environment
+Clone the repository using the following command:
+```bash
+git clone https://github.com/unicef/invent.git -b master
+```
+Navigate to the project folder:
+```bash
+cd invent
+```
+Start the environment:
+```bash
+kubectl config use-context docker-desktop
+tilt up
+```
+By navigating to http://localhost:10350/r/(all)/overview you can see the status of the resources. 
+The "copy-dump" and "import-dump" Tilt resources are ok to crash if you don't have a sql dump named "dump_anon.sql" present in the root of the repository.
+### Setting up the Environment
+Once all the services in Tilt (Postgres, Redis, Mailhog, Backend, Frontend) are up and running, 
+initiate the DB:
+```bash
+kubectl exec deployments/invent-django -- python manage.py migrate
+```
+Create a superuser by providing the necessary information:
+```bash
+kubectl exec -it deployments/invent-django -- python manage.py createsuperuser
+```
+Next, go to the URL http://localhost/admin and login using the user you just created.
+
+To create a User that can login to the Invent application, got to the [Users](http://localhost/admin/auth/user/) section, under the "AUTHENTICATION AND AUTHORIZATION".
+Click on ["ADD USER +"](http://localhost/admin/auth/user/add/) and fill out the fields as follows:
+
+| Field                  | Value                                                |
+|------------------------|------------------------------------------------------|
+| Username               | As you wish (you’ll use the email address to log in) |
+| Password               | As per hint                                          |
+| Account type           | Investor viewer (most accounts are of this type)     |
+| Name                   | A name that will be displayed in the INVENT page     |
+| Organisation           | UNICEF (choose the one in all CAPS)                  |
+| Country                | As wished                                            |
+| Donor                  | UNICEF                                               |
+| Language               | English                                              |
+| Global portfolio owner | Leave unchecked for a “normal” user                  |
+| Country manager of     | Leave unchanged for a “normal” user                  |
+
+Once ready, click "Save" (on the bottom right of the screen) and the page will reload with some additional fields.
+
+Add the email address (which will be used to log in and for notifications).
+Leave all the other fields alone for a “normal” user.
+
+To login with the "normal" user you just created, go to http://localhost/en/-/login and use the e-mail and password of the user.
 
 ### Project structure
 
