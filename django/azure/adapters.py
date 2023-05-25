@@ -73,182 +73,154 @@ class AzureUserManagement:
             f'Finished processing users. Total users processed: {processed_user_count}')
 
     def save_aad_users(self, azure_users):
-        """
-        This method updates the application's user database with information fetched from Azure AD.
-        It processes the users in batches to increase efficiency and reduce potential for errors or timeouts.
-
-        It separates out new users and existing users to handle them differently, creating new user entries for new users 
-        and updating existing entries for existing users. It uses Django's `bulk_create` and `bulk_update` methods 
-        to perform these operations more efficiently.
-
-        The whole process for each batch is wrapped in a database transaction to ensure data integrity. 
-        If any part of the process fails, the transaction will be rolled back to the state it was in before the transaction started.
-
-        Parameters:
-            azure_users (list): A list of dictionaries where each dictionary represents a user fetched from Azure AD. 
-            Each dictionary contains user attributes like email, name, job title, department, country, etc.
-
-        Returns:
-        list: A list of UserProfile objects that were updated or created in the process.
-        """
-        # Log the total number of users to be processed
         logger.info(f"Total Azure users to be processed: {len(azure_users)}")
 
-        # Get the User model
         user_model = get_user_model()
-        # Set the number of users to process in each batch
         batch_size = 100
-        # Initialize a list to hold the users that have been updated
         updated_users = []
+        total_new_users = 0
 
-        # Process the users in batches
         for i in range(0, len(azure_users), batch_size):
-            # Create a batch of users to process
             batch = azure_users[i:i + batch_size]
             logger.info(f"Processing batch starting at index: {i}")
-            # Initialize lists to hold data for new and existing users
-            new_users_data = []
-            existing_users_data = []
-            batch_social_account_uids = [
-                user.get('id') or '' for user in batch]
-            existing_social_account_uids = set(
-                SocialAccount.objects.filter(uid__in=batch_social_account_uids).values_list('uid', flat=True))
 
-            # Separate the users in the batch into new and existing users
-            for azure_user in batch:
-                # Create a dictionary to hold the user's data
-                user_data = {
-                    'email': azure_user.get('mail') or azure_user.get('userPrincipalName') or '',
-                    'username': azure_user.get('mail') or azure_user.get('displayName') or azure_user.get('givenName') or azure_user.get('userPrincipalName') or '',
-                    'name': azure_user.get('displayName', ''),
-                    'job_title': azure_user.get('jobTitle', ''),
-                    'department': azure_user.get('department', ''),
-                    'country_name': azure_user.get('country', ''),
-                    'social_account_uid': azure_user.get('id', ''),
-                }
-                # Check if the user's social account ID is already in the database
-                if user_data['social_account_uid'] in existing_social_account_uids:
-                    existing_users_data.append(user_data)
-                else:
-                    new_users_data.append(user_data)
+            existing_users_data, new_users_data = self.separate_users(batch)
+            new_users = self.create_new_users(new_users_data, user_model)
+            total_new_users += len(new_users)
+            updated_users.extend(self.update_existing_users(
+                existing_users_data, user_model))
 
-            new_users = []
-            user_profiles = []
-            social_accounts = []
-            # Create a new User, UserProfile, and SocialAccount for each new user
-            for user_data in new_users_data:
-                # Get or create the user's country only if 'country_name' is not None or an empty string
-                try:
-                    if user_data['country_name']:
-                        country, _ = Country.objects.get_or_create(
-                            name=user_data['country_name'])
-                    else:
-                        country = None
-                except Exception:
-                    country = None
-
-                # Create a new User
-                user = user_model(
-                    email=user_data['email'], username=user_data['username'])
-                user.set_unusable_password()
-                new_users.append(user)
-
-            # Save the User instances
-            # TODO: This needs refactoring, it's here for debug purposes.
-            try:  # catch the error here
-                new_users = user_model.objects.bulk_create(new_users)
-            except Exception as e:
-                logger.error(f"Error while bulk creating users: {e}")
-                logger.error(
-                    f"Batch of users that caused the error: {new_users_data}")
-                continue  # continue to the next batch
-
-            # Create UserProfile and SocialAccount instances for each new user
-            for user, user_data in zip(new_users, new_users_data):
-                # Get or create the user's country only if 'country_name' is not None or an empty string
-                try:
-                    if user_data['country_name']:
-                        country, _ = Country.objects.get_or_create(
-                            name=user_data['country_name'])
-                    else:
-                        country = None
-                except Exception:
-                    country = None
-
-                # Create a new UserProfile
-                user_profiles.append(UserProfile(
-                    user=user,
-                    name=user_data['name'],
-                    job_title=user_data['job_title'],
-                    department=user_data['department'],
-                    country=country,
-                    account_type=UserProfile.DONOR,
-                ))
-
-                # Create a new SocialAccount
-                social_accounts.append(SocialAccount(
-                    user=user, provider='azure', uid=user_data['social_account_uid']))
-
-            # Use a transaction to create the UserProfile and SocialAccount instances
-            try:
-                with transaction.atomic():
-                    UserProfile.objects.bulk_create(
-                        user_profiles, batch_size=100)
-                    SocialAccount.objects.bulk_create(
-                        social_accounts, batch_size=100)
-            except Exception as e:
-                # Log any errors that occur during the creation process
-                logger.error(
-                    f'Error while creating UserProfile and SocialAccount instances: {e}')
-
-            # Initialize a list to hold the users that need to be updated
-            to_be_updated = []
-            existing_users = user_model.objects.filter(
-                email__in=[user_data['email'] for user_data in existing_users_data])
-            existing_user_profiles = UserProfile.objects.filter(
-                user__in=existing_users)
-
-            for user_data, user, user_profile in zip(existing_users_data, existing_users, existing_user_profiles):
-                try:
-                    if user_data['country_name']:
-                        country = Country.objects.get(
-                            name=user_data['country_name'])
-                    else:
-                        country = None
-                except Country.DoesNotExist:
-                    country = None
-
-                # Only update the user's country if the following conditions are met:
-                # 1. The user's current country is None and the new country is not None
-                # 2. The new country is not None
-                if (user_profile.country is None and country is not None) or country is not None:
-                    user_profile.country = country
-
-                # Update the other user profile details
-                user_profile.name = user_data['name']
-                user_profile.job_title = user_data.get('job_title', '')
-                user_profile.department = user_data.get('department', '')
-
-                # Add the updated profile to the list of profiles to be updated
-                to_be_updated.append(user_profile)
-
-            # Use a transaction to update the user profiles
-            try:
-                with transaction.atomic():
-                    for profile in to_be_updated:
-                        profile.save()
-                    # Add the updated profiles to the list of all updated users
-                    updated_users.extend(to_be_updated)
-            except Exception as e:
-                # Log any errors that occur during the update process
-                logger.error(f'Error while updating users: {e}')
-
-        # Log the total number of updated users
         logger.info(
-            f"Total existing users updated: {len(updated_users)}. Total new users created: {len(new_users)}")
-
-        # Return the list of updated users
+            f"Total existing users updated: {len(updated_users)}. Total new users created: {total_new_users}")
         return updated_users
+
+    def separate_users(self, batch):
+        batch_social_account_uids = [user.get('id') or '' for user in batch]
+        existing_social_account_uids = set(SocialAccount.objects.filter(
+            uid__in=batch_social_account_uids).values_list('uid', flat=True))
+
+        new_users_data = []
+        existing_users_data = []
+
+        for azure_user in batch:
+            user_data = self.get_user_data(azure_user)
+
+            if user_data['social_account_uid'] in existing_social_account_uids:
+                existing_users_data.append(user_data)
+            else:
+                new_users_data.append(user_data)
+
+        return existing_users_data, new_users_data
+
+    def get_user_data(self, azure_user):
+        # Reject if email ends with "@unicef.org"
+        email = azure_user.get('mail') or azure_user.get(
+            'userPrincipalName') or ''
+        if email.lower().endswith("@unicef.org"):
+            return None
+        # Otherwise, return the user data
+        return {
+            'email': email,
+            'username': azure_user.get('mail') or azure_user.get('displayName') or azure_user.get('givenName') or azure_user.get('userPrincipalName') or '',
+            'name': azure_user.get('displayName', ''),
+            'job_title': azure_user.get('jobTitle', ''),
+            'department': azure_user.get('department', ''),
+            'country_name': azure_user.get('country', ''),
+            'social_account_uid': azure_user.get('id', ''),
+        }
+
+    def create_new_users(self, new_users_data, user_model):
+        new_users = []
+        user_profiles = []
+        social_accounts = []
+
+        for user_data in new_users_data:
+            # Skip if user data is None (e.g. due to email not being "@unicef.org")
+            if user_data is None:
+                continue
+            user = user_model(
+                email=user_data['email'], username=user_data['username'])
+            user.set_unusable_password()
+            new_users.append(user)
+
+        try:  # catch the error here
+            new_users = user_model.objects.bulk_create(new_users)
+        except Exception as e:
+            logger.error(f"Error while bulk creating users: {e}")
+            logger.error(
+                f"Batch of users that caused the error: {new_users_data}")
+            return []
+
+        for user, user_data in zip(new_users, new_users_data):
+            user_profiles.append(self.get_user_profile(user, user_data))
+            social_accounts.append(self.get_social_account(user, user_data))
+
+        try:
+            with transaction.atomic():
+                UserProfile.objects.bulk_create(user_profiles, batch_size=100)
+                SocialAccount.objects.bulk_create(
+                    social_accounts, batch_size=100)
+        except Exception as e:
+            logger.error(
+                f'Error while creating UserProfile and SocialAccount instances: {e}')
+
+        return new_users
+
+    def get_user_profile(self, user, user_data):
+        try:
+            country = Country.objects.get_or_create(name=user_data['country_name'])[
+                0] if user_data['country_name'] else None
+        except Exception:
+            country = None
+
+        return UserProfile(
+            user=user,
+            name=user_data['name'],
+            job_title=user_data['job_title'],
+            department=user_data['department'],
+            country=country,
+            account_type=UserProfile.DONOR,
+        )
+
+    def get_social_account(self, user, user_data):
+        return SocialAccount(
+            user=user, provider='azure', uid=user_data['social_account_uid'])
+
+    def update_existing_users(self, existing_users_data, user_model):
+        to_be_updated = []
+        existing_users = user_model.objects.filter(
+            email__in=[user_data['email'] for user_data in existing_users_data])
+        existing_user_profiles = UserProfile.objects.filter(
+            user__in=existing_users)
+
+        for user_data, user_profile in zip(existing_users_data, existing_user_profiles):
+            to_be_updated.append(
+                self.update_user_profile(user_data, user_profile))
+
+        try:
+            with transaction.atomic():
+                for profile in to_be_updated:
+                    profile.save()
+        except Exception as e:
+            logger.error(f'Error while updating users: {e}')
+
+        return to_be_updated
+
+    def update_user_profile(self, user_data, user_profile):
+        try:
+            country = Country.objects.get(
+                name=user_data['country_name']) if user_data['country_name'] else None
+        except Country.DoesNotExist:
+            country = None
+
+        if (user_profile.country is None and country is not None) or country is not None:
+            user_profile.country = country
+
+        user_profile.name = user_data['name']
+        user_profile.job_title = user_data.get('job_title', '')
+        user_profile.department = user_data.get('department', '')
+
+        return user_profile
 
     def get_aad_users(self, max_users=100):
         """
