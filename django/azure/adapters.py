@@ -6,6 +6,8 @@ from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.db.models import Q
+
 from django.forms.models import model_to_dict
 
 from country.models import Country
@@ -141,12 +143,12 @@ class AzureUserManagement:
             # Skip if user data is None (e.g. due to email not being "@unicef.org")
             if user_data is None:
                 continue
-            # Skip if user with the same username already exists
+            # Skip if user with the same username or email already exists
             existing_user = user_model.objects.filter(
-                username=user_data['username']).first()
+                Q(username=user_data['username']) | Q(email=user_data['email'])).first()
             if existing_user:
                 logger.warning(
-                    f"User with username {user_data['username']} already exists. Skipping...")
+                    f"User with username {user_data['username']} or email {user_data['email']} already exists. Skipping...")
                 continue
             user = user_model(
                 email=user_data['email'], username=user_data['username'])
