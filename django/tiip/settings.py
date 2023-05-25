@@ -264,7 +264,7 @@ ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
 AZURE_USER_PARAMETERS = ['id', 'businessPhones', 'country', 'department', 'displayName', 'givenName',
                          'jobTitle', 'mail', 'mobilePhone', 'officeLocation', 'preferredLanguage', 'surname', 'userPrincipalName']
 
-MICROSOFT_GRAPH_BASE_URL = 'https://graph.microsoft.com/v1.0/users'
+MICROSOFT_GRAPH_BASE_URL = 'https://graph.microsoft.com/v1.0'
 MICROSOFT_GRAPH_USERS_URL = f'{MICROSOFT_GRAPH_BASE_URL}/users'
 MICROSOFT_GRAPH_SUBSCRIPTION_URL = f'{MICROSOFT_GRAPH_BASE_URL}/subscriptions'
 
