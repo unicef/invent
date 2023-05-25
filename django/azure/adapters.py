@@ -143,29 +143,29 @@ class AzureUserManagement:
             # Skip if user data is None (e.g. due to email not being "@unicef.org")
             if user_data is None:
                 continue
-            # Skip if user with the same username or email already exists
-            existing_user = user_model.objects.filter(
-                Q(username=user_data['username']) | Q(email=user_data['email'])).first()
-            if existing_user:
-                logger.warning(
-                    f"User with username {user_data['username']} or email {user_data['email']} already exists. Skipping...")
+            try:
+                # we are not using bulk_create for the User model as the get_or_create method is used to individually create users. 
+                # This avoids the potential for race conditions, but it may slow down the user creation process slightly 
+                # as each user is created individually rather than in bulk. However, user profiles and social accounts 
+                # are still being created in bulk, as before.
+                user, created = user_model.objects.get_or_create(
+                    username=user_data['username'],
+                    defaults={'email': user_data['email']}
+                )
+                if created:
+                    user.set_unusable_password()
+                    new_users.append(user)
+
+                    user_profiles.append(
+                        self.get_user_profile(user, user_data))
+                    social_accounts.append(
+                        self.get_social_account(user, user_data))
+                else:
+                    logger.warning(
+                        f"User with username {user_data['username']} or email {user_data['email']} already exists. Skipping...")
+            except Exception as e:
+                logger.error(f"Error while creating user: {e}")
                 continue
-            user = user_model(
-                email=user_data['email'], username=user_data['username'])
-            user.set_unusable_password()
-            new_users.append(user)
-
-        try:  # catch the error here
-            new_users = user_model.objects.bulk_create(new_users)
-        except Exception as e:
-            logger.error(f"Error while bulk creating users: {e}")
-            logger.error(
-                f"Batch of users that caused the error: {new_users_data}")
-            return []
-
-        for user, user_data in zip(new_users, new_users_data):
-            user_profiles.append(self.get_user_profile(user, user_data))
-            social_accounts.append(self.get_social_account(user, user_data))
 
         try:
             with transaction.atomic():
