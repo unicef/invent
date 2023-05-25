@@ -215,12 +215,20 @@ class AzureUserManagement:
         except Country.DoesNotExist:
             country = None
 
-        if (user_profile.country is None and country is not None) or country is not None:
+        # If the user_profile's country field is None and a country was found, assign it
+        if user_profile.country is None and country is not None:
             user_profile.country = country
 
-        user_profile.name = user_data['name']
-        user_profile.job_title = user_data.get('job_title', '')
-        user_profile.department = user_data.get('department', '')
+        # If the user_profile's name field is None or empty, update it
+        if not user_profile.name:
+            user_profile.name = user_data['name']
+
+        # Similarly, only update job_title and department if they are not already set
+        if not user_profile.job_title:
+            user_profile.job_title = user_data.get('job_title', '')
+
+        if not user_profile.department:
+            user_profile.department = user_data.get('department', '')
 
         return user_profile
 
