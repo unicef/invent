@@ -140,6 +140,13 @@ class AzureUserManagement:
             # Skip if user data is None (e.g. due to email not being "@unicef.org")
             if user_data is None:
                 continue
+            # Skip if user with the same username already exists
+            existing_user = user_model.objects.filter(
+                username=user_data['username']).first()
+            if existing_user:
+                logger.warning(
+                    f"User with username {user_data['username']} already exists. Skipping...")
+                continue
             user = user_model(
                 email=user_data['email'], username=user_data['username'])
             user.set_unusable_password()
