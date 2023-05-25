@@ -104,6 +104,8 @@ class AzureUserManagement:
 
         for azure_user in batch:
             user_data = self.get_user_data(azure_user)
+            if user_data is None:
+                continue  # Skip if user_data is None
 
             if user_data['social_account_uid'] in existing_social_account_uids:
                 existing_users_data.append(user_data)
