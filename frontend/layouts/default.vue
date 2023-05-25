@@ -4,7 +4,7 @@
     <top-bar :auth="isAuthPage" />
     <action-bar v-if="showActionBar" />
     <nuxt />
-    <dha-footer />
+    <!-- <dha-footer /> -->
     <django-feedback />
   </div>
 </template>
@@ -53,13 +53,9 @@ export default {
     },
     layoutClass() {
       if (
-        ![
-          'organisation',
-          'auth',
-          'organisation-login',
-          'organisation-signup',
-          'organisation-reset-key',
-        ].includes(this.pureRoute)
+        !['organisation', 'auth', 'organisation-login', 'organisation-signup', 'organisation-reset-key'].includes(
+          this.pureRoute
+        )
       ) {
         return 'SubPage'
       } else if (this.$route.params.organisation !== '-') {

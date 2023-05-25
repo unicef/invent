@@ -119,15 +119,15 @@ spec:
               path: /health_check
               port: {{ .Values.service.port }}
               scheme: HTTP
-            initialDelaySeconds: 20
+            initialDelaySeconds: 40
             periodSeconds: 5
-            failureThreshold: 20
+            failureThreshold: 40
           readinessProbe:
             httpGet:
               path: /health_check
               port: {{ .Values.service.port }}
               scheme: HTTP
-            initialDelaySeconds: 20
+            initialDelaySeconds: 40
             periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

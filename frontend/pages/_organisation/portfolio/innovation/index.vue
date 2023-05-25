@@ -3,38 +3,56 @@
     <h1>
       <translate>UNICEF’s Global Innovation Portfolios</translate>
     </h1>
+    <div>
+      <h2>
+        <translate>Manage portfolio solutions</translate>
+      </h2>
+      <el-row :gutter="20" type="flex">
+        <el-col :span="16"
+          ><p>
+            <translate>
+              You can now see a list of all active Solutions. You can modify solutions from that list, including adding
+              them to or removing them from a portfolio.
+            </translate>
+          </p></el-col
+        >
+        <el-col :span="4" class="SolutionsButton"
+          ><nuxt-link
+            :to="
+              localePath({
+                name: 'organisation-portfolio-innovation-solutions',
+              })
+            "
+          >
+            <translate>See all solutions</translate>
+          </nuxt-link></el-col
+        >
+      </el-row>
+    </div>
     <h2>
       <translate>Explore the Portfolios</translate>
     </h2>
     <p>
       <translate>
-        UNICEF's portfolio approach to innovation ensures that innovation is
-        applied to the toughest, most pressing problems faced by some of the
-        most vulnerable children and young people. Our innovation portfolios are
-        curated sets of investments that focus on these pressing challenges to
-        accelerate results where we can achieve the greatest impact.
+        UNICEF's portfolio approach to innovation ensures that innovation is applied to the toughest, most pressing
+        problems faced by some of the most vulnerable children and young people. Our innovation portfolios are curated
+        sets of investments that focus on these pressing challenges to accelerate results where we can achieve the
+        greatest impact.
       </translate>
     </p>
     <p>
       <translate>
-        Expand the portfolios below to learn more about the key problems we seek
-        to solve in our priority areas for innovation, or select “View
-        Portfolio” to explore solutions.
+        Expand the portfolios below to learn more about the key problems we seek to solve in our priority areas for
+        innovation, or select “View Portfolio” to explore solutions.
       </translate>
     </p>
 
     <el-collapse v-model="activePortfolio" accordion class="MainAccordion">
-      <el-collapse-item
-        v-for="portfolio in portfolios"
-        :key="portfolio.name"
-        :name="portfolio.id"
-      >
+      <el-collapse-item v-for="portfolio in portfolios" :key="portfolio.name" :name="portfolio.id">
         <div slot="title" class="AccordionTitle">
           <span class="accordion-status"></span>
           <span :class="`icon-circle icon-tiip-${portfolio.icon}`">
-            <template v-if="path(portfolio.icon)">
-              <span class="path1" /><span class="path2" />
-            </template>
+            <template v-if="path(portfolio.icon)"> <span class="path1" /><span class="path2" /> </template>
           </span>
           <span class="portfolio-title">{{ portfolio.name }}</span>
           <nuxt-link
@@ -55,11 +73,7 @@
                 <translate>Problem Statements</translate>
               </div>
               <el-collapse v-model="activePS" accordion class="SubAccordion">
-                <el-collapse-item
-                  v-for="{ name, id, description } in portfolio.ps"
-                  :key="name"
-                  :name="id"
-                >
+                <el-collapse-item v-for="{ name, id, description } in portfolio.ps" :key="name" :name="id">
                   <div slot="title" class="SubAccordionTitle">
                     {{ name }}
                   </div>
@@ -76,17 +90,11 @@
               <p class="summary">
                 {{ portfolio.description }}
               </p>
-              <template
-                v-if="portfolio.managers && portfolio.managers.length > 0"
-              >
+              <template v-if="portfolio.managers && portfolio.managers.length > 0">
                 <div class="col-title">
                   <translate>Contact person</translate>
                 </div>
-                <div
-                  v-for="{ email, name } in portfolio.managers"
-                  :key="portfolio.id + name"
-                  class="contact"
-                >
+                <div v-for="{ email, name } in portfolio.managers" :key="portfolio.id + name" class="contact">
                   {{ name }} <br />
                   <a :href="`mailto:${email}`">{{ email }}</a>
                 </div>
@@ -163,7 +171,7 @@ p {
   flex-direction: column;
   justify-content: center;
   width: 1242px;
-  margin: 50px auto 170px;
+  margin: 50px auto 40px;
 
   &::v-deep {
     .SubAccordion {
@@ -327,6 +335,27 @@ p {
           background-color: transparent;
         }
       }
+    }
+  }
+  .SolutionsButton {
+    width: 40%;
+    display: flex;
+    align-items: flex-end;
+    color: @colorBrandPrimary;
+    padding-bottom: 18px;
+    a {
+      margin-left: auto;
+      margin-right: 12px;
+      background-color: @colorBrandPrimary;
+      color: @colorWhite;
+      height: 22px;
+      padding: 11px 24px 13px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 0;
+      line-height: 20px;
+      text-align: center;
+      text-decoration: none;
     }
   }
 }

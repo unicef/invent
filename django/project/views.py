@@ -16,8 +16,8 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from country.models import Donor, CountryOffice, RegionalOffice, Currency
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, GPOAccessMixin, PortfolioAccessMixin, \
-    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, get_object_or_404, GPOAccessMixin, PortfolioAccessMixin, \
+    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
@@ -25,7 +25,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
     ApprovalState, Stage, Phase, ProjectVersion, ProblemStatement, Solution
 from project.permissions import InCountryAdminForApproval
 from search.views import ResultsSetPagination
-from .models import Project, TechnologyPlatform, DigitalStrategy, \
+from .models import Project, TechnologyPlatform, DigitalStrategy, CountrySolution, \
     HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
 from user.models import UserProfile
 from .resources import ProjectResource
@@ -203,6 +203,7 @@ class ProjectLandingBlocks(TokenAuthMixin, ViewSet):
     2. Recent updates block
     3. Featured initiatives block
     """
+
     def list(self, request, *args, **kwargs):
         my_initiatives_qs = Project.objects.member_of(request.user)
         my_initiatives_count = my_initiatives_qs.count()
@@ -239,11 +240,11 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
             if co_id:
                 is_country_manager = self.request.user.userprofile.manager_of.filter(id=co_id).exists()
 
-            if is_member or is_country_user_or_admin or is_country_manager or self.request.user.is_superuser:
-                data = project.get_member_data()
-                draft = project.get_member_draft()
-            else:
-                data = project.get_non_member_data()
+            # if is_member or is_country_user_or_admin or is_country_manager or self.request.user.is_superuser:
+            data = project.get_member_data()
+            draft = project.get_member_draft()
+            # else:
+            #     data = project.get_non_member_data()
 
         if draft:
             draft = project.to_representation(data=draft, draft_mode=True)
@@ -258,6 +259,34 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
+
+
+class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return []  # Retrieve needs a bit more complex filtering based on user permission
+        else:
+            return super(SolutionRetrieveViewSet, self).get_permissions()
+
+    def _get_permission_based_data(self, solution):
+        draft = None
+        published = solution.to_representation()
+
+        return published
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieves a solution.
+        """
+        solution = get_object_or_404(Solution, "No such solution", id=kwargs.get("pk"))
+
+        return Response(self._get_permission_based_data(solution))
+
+
+class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSet):
+    serializer_class = SolutionSerializer
+    queryset = Solution.objects.all()
+
 
 
 class CheckRequiredMixin:
@@ -765,7 +794,7 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
     serializer_class = ReviewScoreBriefSerializer
 
     def get_project_and_portfolio(self):
-        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio_id"))
+        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio"))
 
         pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
         return portfolio, pps
@@ -902,6 +931,11 @@ class SolutionListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     serializer_class = SolutionSerializer
 
 
+class SolutionCreateViewSet(TokenAuthMixin, CreateModelMixin, GenericViewSet):
+    queryset = Solution.objects.all()
+    serializer_class = SolutionSerializer
+
+
 class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectVersionHistorySerializer
@@ -921,3 +955,28 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
             serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
 
         return Response(serializer.data)
+
+
+class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
+
+    queryset = Portfolio.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        portfolio = get_object_or_404(Portfolio, "No such portfolio", id=kwargs.get("pk"))
+        response_data = {
+            'id': portfolio.id,
+            'solutions': []
+        }
+
+        for solution in portfolio.solutions.all():
+            if solution.is_active == True:
+                solution_data = {
+                    'id': solution.pk,
+                    'name': solution.name,
+                    'problemStatements': [{'id': problem_statement.pk, 'name': problem_statement.name} for problem_statement in solution.problem_statements.filter(portfolio=portfolio)],
+                    'phase': solution.phase,
+                    'reach': solution.people_reached,
+                }
+                response_data['solutions'].append(solution_data)
+
+        return Response(response_data)

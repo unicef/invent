@@ -23,6 +23,7 @@ API_DESCRIPTION = 'Private API'
 urlpatterns = [
     url(r'^account/', include('allauth.urls')),
     url(r"^admin/", admin.site.urls),
+    url(r"^api/", include("azure.urls")),
     url(r"^api/", include("core.urls")),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),
@@ -80,5 +81,7 @@ api_schema_view = get_schema_view(
 )
 
 urlpatterns += [
-    path('api/docs/', api_schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
+    path('api/docs/', api_schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('api/swagger(?P<format>\.json|\.yaml)$', api_schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('api/swagger/$', api_schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

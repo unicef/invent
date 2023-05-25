@@ -129,7 +129,7 @@ class ProblemStatementResource(resources.ModelResource):  # pragma: no cover
     def dehydrate_description(self, problem_statement):
         return problem_statement.description
 
-
+from import_export import resources
 class ProjectResource(resources.ModelResource):  # pragma: no cover
     """
     This class is basically a serializer for the django-import-export module
@@ -184,6 +184,12 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         fields = ('id', 'name', 'published', 'contact', 'team', 'modified')
         export_order = ('id', 'name', 'published', 'modified', 'contact', 'team', 'overview')
 
+    def export_queryset(self, queryset, using_transactions=True, use_bulk=True, **kwargs):
+        if use_bulk:
+            return self.export_bulk(queryset, **kwargs)
+        else:
+            return super().export_queryset(queryset, using_transactions=using_transactions, **kwargs)
+    
     def export_field(self, field, obj):
         data = super().export_field(field, obj)
         if isinstance(data, str):

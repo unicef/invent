@@ -117,3 +117,4 @@ django-jsoneditor
 dj-anonymizer==0.3.1
 dj-anonymizer[bulk]
 django-health-check==3.16.0
+msal

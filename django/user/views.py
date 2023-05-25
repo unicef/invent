@@ -12,8 +12,11 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
 
 
 class UserProfileListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
-    queryset = UserProfile.objects.select_related('user', 'organisation').only('id', 'modified', 'account_type',
-                                                                               'name', 'user__email', 'organisation')
+    # Fetch user and organisation objects in a single query using select_related,
+    # and fetch related country objects in a separate query using prefetch_related,
+    # which optimizes the number of database queries and improves performance.
+    queryset = UserProfile.objects.select_related('user', 'organisation').prefetch_related('country').only(
+        'id', 'modified', 'account_type', 'name', 'user__email', 'organisation', 'job_title', 'department', 'country')
     serializer_class = UserProfileListSerializer
 
 

@@ -9,5 +9,5 @@ export default async function ({ store, req, redirect, app, route }) {
       query: { ...route.query, next: route.path },
     })
     redirect(path)
-  }
+  }  
 }

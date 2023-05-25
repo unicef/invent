@@ -1,14 +1,19 @@
 from __future__ import unicode_literals
 
 import requests
-from django.conf import settings
+
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
+from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from .provider import AzureProvider
+from core.views import TokenAuthMixin
 
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
@@ -36,20 +41,20 @@ class AzureOAuth2Adapter(OAuth2Adapter):
 
         resp = requests.get(self.profile_url, headers=headers)
 
-# See:
-#
-# https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_get  # noqa
-#
-# example of what's returned (in python format)
-#
-# {u'displayName': u'John Smith', u'mobilePhone': None,
-#  u'preferredLanguage': u'en-US', u'jobTitle': u'Director',
-#  u'userPrincipalName': u'john@smith.com',
-#  u'@odata.context':
-#  u'https://graph.microsoft.com/v1.0/$metadata#users/$entity',
-#  u'officeLocation': u'Paris', u'businessPhones': [],
-#  u'mail': u'john@smith.com', u'surname': u'Smith',
-#  u'givenName': u'John', u'id': u'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'}
+        # See:
+        #
+        # https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_get  # noqa
+        #
+        # example of what's returned (in python format)
+        #
+        # {u'displayName': u'John Smith', u'mobilePhone': None,
+        #  u'preferredLanguage': u'en-US', u'jobTitle': u'Director',
+        #  u'userPrincipalName': u'john@smith.com',
+        #  u'@odata.context':
+        #  u'https://graph.microsoft.com/v1.0/$metadata#users/$entity',
+        #  u'officeLocation': u'Paris', u'businessPhones': [],
+        #  u'mail': u'john@smith.com', u'surname': u'Smith',
+        #  u'givenName': u'John', u'id': u'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'}
 
         profile_data = resp.json()
         extra_data.update(profile_data)

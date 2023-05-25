@@ -98,7 +98,7 @@
           <dashboard-filters-header />
         </el-col>
       </template>
-      <template v-if="isPortfolioEdit || isPortfolioDetails">
+      <template v-if="isPortfolioEdit">
         <el-col class="DashboardFiltersHeaderWrapper">
           <portfolio-filters-header />
         </el-col>
@@ -158,9 +158,9 @@ export default {
         !this.$route.name.includes('organisation-portfolio-management-id-edit')
       )
     },
-    isPortfolioDetails() {
-      return this.$route.name.includes('organisation-portfolio-innovation-id')
-    },
+    // isPortfolioDetails() {
+    //   return this.$route.name.includes('organisation-portfolio-innovation-id')
+    // },
     isMapSubRoute() {
       return this.$route.name.includes('organisation-inventory___')
     },

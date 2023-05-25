@@ -57,7 +57,7 @@ CELERYBEAT_SCHEDULE = {
     "country_inclusion_log_task": {
         "task": "country_inclusion_log_task",
         "schedule": crontab(hour=1, minute=0),
-    }
+    },
 }
 
 DEBUG = env.str('DEBUG', default='False')

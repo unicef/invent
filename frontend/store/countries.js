@@ -86,6 +86,9 @@ export const getters = {
     })
     return [...filtered.map((c) => ({ ...c }))]
   },
+  getRegionsByCountry: (state) => (country) => {
+    return state.countries.filter((countryrec) => countryrec.id === country)[0].regions
+  },
 }
 
 export const actions = {

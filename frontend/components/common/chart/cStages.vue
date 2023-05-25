@@ -68,6 +68,7 @@ export default {
   },
   async mounted() {
     this.prepareStages(this.showProjectVersion)
+
     this.getStageData({ stages: this.stagesPrepared, project: this.showProject })
     await setTimeout(() => {
       this.loaded = true
