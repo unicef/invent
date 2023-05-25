@@ -6,6 +6,7 @@ from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.forms.models import model_to_dict
 
 from country.models import Country
 from user.models import UserProfile
@@ -196,24 +197,29 @@ class AzureUserManagement:
             user=user, provider='azure', uid=user_data['social_account_uid'])
 
     def update_existing_users(self, existing_users_data, user_model):
-        to_be_updated = []
+        updated_users = []
         existing_users = user_model.objects.filter(
             email__in=[user_data['email'] for user_data in existing_users_data])
         existing_user_profiles = UserProfile.objects.filter(
             user__in=existing_users)
 
         for user_data, user_profile in zip(existing_users_data, existing_user_profiles):
-            to_be_updated.append(
-                self.update_user_profile(user_data, user_profile))
+            initial_user_profile_data = model_to_dict(
+                user_profile)  # get initial user profile data
+            updated_profile = self.update_user_profile(user_data, user_profile)
+
+            # Only append the user profile if it was updated
+            if initial_user_profile_data != model_to_dict(updated_profile):
+                updated_users.append(updated_profile)
 
         try:
             with transaction.atomic():
-                for profile in to_be_updated:
+                for profile in updated_users:
                     profile.save()
         except Exception as e:
             logger.error(f'Error while updating users: {e}')
 
-        return to_be_updated
+        return updated_users
 
     def update_user_profile(self, user_data, user_profile):
         try:
