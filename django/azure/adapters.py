@@ -8,8 +8,6 @@ from django.contrib.auth import get_user_model
 from django.db import transaction, close_old_connections
 from django.db.models import Q
 
-from django.forms.models import model_to_dict
-
 from country.models import Country
 from user.models import UserProfile
 
@@ -65,8 +63,6 @@ class AzureUserManagement:
                 url = response_data.get('@odata.nextLink', None)
                 page_count += 1
                 retry_count = 0
-                # TODO: Remove until further notice. If we stumple upon denial errors we can reinstate.
-                # sleep(10)
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error while making request to {url}: {e}")
                 retry_count += 1
@@ -128,10 +124,16 @@ class AzureUserManagement:
             'userPrincipalName') or ''
         if email.lower().endswith("@unicef.org"):
             return None
+
+        username = azure_user.get('mail') or azure_user.get('displayName') or azure_user.get(
+            'givenName') or azure_user.get('userPrincipalName') or ''
+        # username will be the first part of the email
+        username = username.split('@')[0] if username else ''
+
         # Otherwise, return the user data
         return {
             'email': email,
-            'username': azure_user.get('mail') or azure_user.get('displayName') or azure_user.get('givenName') or azure_user.get('userPrincipalName') or '',
+            'username': username,
             'name': azure_user.get('displayName', ''),
             'job_title': azure_user.get('jobTitle', ''),
             'department': azure_user.get('department', ''),
@@ -148,7 +150,6 @@ class AzureUserManagement:
             if user_data is None:
                 continue
 
-            # Check if user with the same username or email already exists
             existing_user = user_model.objects.filter(
                 Q(username=user_data['username']) | Q(email=user_data['email'])).first()
             if existing_user:
@@ -157,21 +158,23 @@ class AzureUserManagement:
                 )
                 continue
 
+            # If username is empty, use the first part of the email
+            username = user_data['username'] if user_data['username'] else user_data['email'].split(
+                '@')[0]
+
             user = user_model(
-                email=user_data['email'], username=user_data['username'])
+                email=user_data['email'], username=username)
             user.set_unusable_password()
             new_users.append(user)
 
+            user_profiles.append(self.get_user_profile(user, user_data))
+            social_accounts.append(self.get_social_account(user, user_data))
+
         try:
-            user_model.objects.bulk_create(new_users)
+            new_users = user_model.objects.bulk_create(new_users)
         except Exception as e:
             logger.error(f"Error while creating users: {e}")
             return []
-
-        for user_data in new_users_data:
-            user = user_model.objects.get(username=user_data['username'])
-            user_profiles.append(self.get_user_profile(user, user_data))
-            social_accounts.append(self.get_social_account(user, user_data))
 
         UserProfile.objects.bulk_create(user_profiles)
         SocialAccount.objects.bulk_create(social_accounts)
@@ -202,54 +205,38 @@ class AzureUserManagement:
         updated_users = []
         existing_user_emails = [user_data['email']
                                 for user_data in existing_users_data]
-        existing_users = user_model.objects.filter(
-            email__in=existing_user_emails)
-        existing_user_profiles = UserProfile.objects.filter(
-            user__in=existing_users)
 
-        user_profile_map = {
-            profile.user.email: profile for profile in existing_user_profiles}
+        user_profiles = UserProfile.objects.select_related('user').filter(
+            user__email__in=existing_user_emails)
 
         for user_data in existing_users_data:
-            user_profile = user_profile_map.get(user_data['email'])
+            user_profile = next(
+                (up for up in user_profiles if up.user.email == user_data['email']), None)
             if not user_profile:
                 continue
 
-            user_profile, is_updated = self.update_user_profile(
+            # If username is empty, use the first part of the email
+            username = user_data['username'] if user_data['username'] else user_data['email'].split(
+                '@')[0]
+
+            user_profile.user.username = username
+            user_profile, is_profile_updated = self.update_user_profile(
                 user_data, user_profile)
+            user, is_user_updated = self.update_user_info(
+                user_data, user_profile.user)
 
-            if is_updated:
-                updated_users.append(user_profile)
-
-        try:
-            with transaction.atomic():
-                for profile in updated_users:
-                    profile.save()
-        except Exception as e:
-            logger.error(f'Error while updating users: {e}')
+            if is_user_updated or is_profile_updated:
+                try:
+                    with transaction.atomic():
+                        if is_user_updated:
+                            user.save()
+                        if is_profile_updated:
+                            user_profile.save()
+                    updated_users.append(user_profile.user)
+                except Exception as e:
+                    logger.error(f'Error while updating user: {e}')
 
         return updated_users
-
-    def update_user_profile(self, user_data, user_profile):
-        is_updated = False
-
-        try:
-            country = Country.objects.get(
-                name=user_data['country_name']) if user_data['country_name'] else None
-        except Country.DoesNotExist:
-            country = None
-
-        # If the user_profile's country field is None and a country was found, assign it
-        if user_profile.country is None and country is not None:
-            user_profile.country = country
-            is_updated = True
-
-        # If the user_profile's name field is None or empty, update it
-        if not user_profile.name:
-            user_profile.name = user_data['name']
-            is_updated = True
-
-        return user_profile, is_updated
 
     def get_aad_users(self, max_users=100):
         """
