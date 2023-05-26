@@ -217,6 +217,10 @@ class AzureUserManagement:
                 '@')[0]
 
             user_profile.user.username = username
+            # Add debug here
+            logger.debug(f"Existing User Profile: {user_profile.__dict__}")
+            # Add debug here
+            logger.debug(f"User Data from Azure AD: {user_data}")
             user_profile, is_profile_updated = self.update_user_profile(
                 user_data, user_profile)
             user, is_user_updated = self.update_user_info(
@@ -232,7 +236,6 @@ class AzureUserManagement:
                     updated_users.append(user_profile.user)
                 except Exception as e:
                     logger.error(f'Error while updating user: {e}')
-
         return updated_users
 
     def update_user_profile(self, user_data, user_profile):
@@ -273,11 +276,17 @@ class AzureUserManagement:
         username = user_data['username'] if user_data['username'] else user_data['email'].split(
             '@')[0]
         if user.username != username:
+            # Add debug here
+            logger.debug(
+                f"Updating User. Old username: {user.username}, New username: {username}")
             user.username = username
             is_user_updated = True
 
         # If the user's email is different from the fetched email, update it
         if user.email != user_data['email']:
+            # Add debug here
+            logger.debug(
+                f"Updating User. Old email: {user.email}, New email: {user_data['email']}")
             user.email = user_data['email']
             is_user_updated = True
 
