@@ -147,9 +147,6 @@ class AzureUserManagement:
         social_accounts = []
 
         for user_data in new_users_data:
-            if user_data is None:
-                continue
-
             existing_user = user_model.objects.filter(
                 Q(username=user_data['username']) | Q(email=user_data['email'])).first()
             if existing_user:
@@ -237,6 +234,54 @@ class AzureUserManagement:
                     logger.error(f'Error while updating user: {e}')
 
         return updated_users
+
+    def update_user_profile(self, user_data, user_profile):
+        is_profile_updated = False
+
+        try:
+            country = Country.objects.get(
+                name=user_data['country_name']) if user_data['country_name'] else None
+        except Country.DoesNotExist:
+            country = None
+
+        # If the user_profile's country field is None and a country was found, assign it
+        if user_profile.country is None and country is not None:
+            user_profile.country = country
+            is_profile_updated = True
+
+        # If the user_profile's name field is None or empty, update it
+        if not user_profile.name:
+            user_profile.name = user_data['name']
+            is_profile_updated = True
+
+        # If the user_profile's job title field is None or empty, update it
+        if not user_profile.job_title:
+            user_profile.job_title = user_data['job_title']
+            is_profile_updated = True
+
+        # If the user_profile's department field is None or empty, update it
+        if not user_profile.department:
+            user_profile.department = user_data['department']
+            is_profile_updated = True
+
+        return user_profile, is_profile_updated
+
+    def update_user_info(self, user_data, user):
+        is_user_updated = False
+
+        # If the user's username is different from the fetched username, update it
+        username = user_data['username'] if user_data['username'] else user_data['email'].split(
+            '@')[0]
+        if user.username != username:
+            user.username = username
+            is_user_updated = True
+
+        # If the user's email is different from the fetched email, update it
+        if user.email != user_data['email']:
+            user.email = user_data['email']
+            is_user_updated = True
+
+        return user, is_user_updated
 
     def get_aad_users(self, max_users=100):
         """
