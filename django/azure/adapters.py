@@ -41,6 +41,10 @@ class AzureUserManagement:
         retry_count = 0
         page_count = 0
         processed_user_count = 0
+
+        total_new_users = 0
+        total_updated_users = 0
+        total_skipped_users = 0
         # Fetch and process users in batches until either there are no more users to fetch
         # or the maximum number of users to process has been reached
         while url and retry_count < 5 and (max_users is None or processed_user_count < max_users):
@@ -58,7 +62,13 @@ class AzureUserManagement:
                 processed_user_count += len(users_batch)
 
                 # Process the batch of users right after fetching
-                self.save_aad_users(users_batch)
+                new_users, updated_users, skipped_users = self.save_aad_users(
+                    users_batch)
+
+                # Update totals
+                total_new_users += len(new_users)
+                total_updated_users += len(updated_users)
+                total_skipped_users += len(skipped_users)
 
                 url = response_data.get('@odata.nextLink', None)
                 page_count += 1
@@ -68,8 +78,12 @@ class AzureUserManagement:
                 retry_count += 1
                 # TODO: Refactor. We need to have a fallback measurement in case Azure blocks the request
                 sleep(2 * (2 ** retry_count))
+
         logger.info(
-            f'Finished processing users. Total users processed: {processed_user_count}')
+            f'Finished processing users. Total users processed: {processed_user_count}. '
+            f'Total new users created: {total_new_users}. Total current users updated: {total_updated_users}. '
+            f'Total users skipped due to inconsistencies: {total_skipped_users}.'
+        )
 
     def save_aad_users(self, users_batch):
         """
@@ -175,6 +189,8 @@ class AzureUserManagement:
 
         logger.info(
             f'New users created: {len(new_users)}. Current users updated: {len(updated_users)}. Skipped users: {len(skipped_users)}.')
+
+        return new_users, updated_users, skipped_users
 
     def get_access_token(self):
         """
