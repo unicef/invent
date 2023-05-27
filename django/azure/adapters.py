@@ -162,10 +162,7 @@ class AzureUserManagement:
                             # If the user profile was updated, save it and keep track of the updated user
                             if is_profile_updated:
                                 user_profile.save()
-                                updated_users.append(user_profile)
-                            else:
-                                logger.info(
-                                    f'User {user.email} processed but no changes made')
+                                updated_users.append(user_profile.user)
 
             except DatabaseError as e:
                 logger.error(
