@@ -122,16 +122,20 @@ class AzureUserManagement:
 
                     # If a new user was created
                     if created:
-                        # Create and save a new SocialAccount and UserProfile for the new user
-                        social_account = SocialAccount(
-                            user=user, uid=user_data['id'])
-                        user_profile = UserProfile(user=user, name=user_data.get('displayName', ''),
-                                                   job_title=user_data.get('jobTitle', ''), department=user_data.get('department', ''),
-                                                   account_type=UserProfile.DONOR)
-                        social_account.save()
-                        user_profile.save()
-                        # Keep track of the new user
-                        new_users.append(user)
+                        try:
+                            # Create and save a new SocialAccount and UserProfile for the new user
+                            social_account = SocialAccount(
+                                user=user, uid=user_data['id'])
+                            user_profile = UserProfile(user=user, name=user_data.get('displayName', ''),
+                                                       job_title=user_data.get('jobTitle', ''), department=user_data.get('department', ''),
+                                                       account_type=UserProfile.DONOR)
+                            social_account.save()
+                            user_profile.save()
+                            # Keep track of the new user
+                            new_users.append(user)
+                        except Exception as e:
+                            logger.error(
+                                f'Error while creating SocialAccount or UserProfile for new user {user.email}: {e}')
 
                     else:
                         # If the user was not created i.e. the user already exists
@@ -159,13 +163,18 @@ class AzureUserManagement:
                             if is_profile_updated:
                                 user_profile.save()
                                 updated_users.append(user_profile)
+                            else:
+                                logger.info(
+                                    f'User {user.email} processed but no changes made')
 
             except DatabaseError as e:
-                logger.error(f'Database error while processing user: {e}')
+                logger.error(
+                    f'Database error while processing user {user_data}: {e}')
             except KeyError as e:
-                logger.error(f'Missing key in user data: {e}')
+                logger.error(f'Missing key in user data {user_data}: {e}')
             except Exception as e:
-                logger.error(f'Other error while processing user: {e}')
+                logger.error(
+                    f'Other error while processing user {user_data}: {e}')
 
         logger.info(
             f'New users created: {len(new_users)}. Current users updated: {len(updated_users)}. Skipped users: {len(skipped_users)}.')
