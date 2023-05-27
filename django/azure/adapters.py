@@ -5,6 +5,7 @@ from time import sleep
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db import IntegrityError
 from django.db import transaction
 
 from country.models import Country
@@ -72,72 +73,106 @@ class AzureUserManagement:
 
     def save_aad_users(self, users_batch):
         """
-        Processes a batch of users fetched from AAD.
-        The users in the batch are either created (if they do not exist) or updated (if they exist)
-        in the local database.
+        Process a batch of users fetched from AAD.
+
+        For each user in the batch, the function checks if the user exists in the local database.
+        If the user doesn't exist, it creates a new User and UserProfile instance.
+        If the user does exist, it updates the user's information based on the new data fetched from AAD.
+
+        Parameters
+        ----------
+        users_batch : list
+            A list of dictionaries where each dictionary contains data for a user fetched from AAD.
+
+        Returns
+        -------
+        None
         """
+        # Track the new and updated users, and skipped users
         new_users = []
         updated_users = []
         skipped_users = 0
 
-        # Fetch all UserProfiles and map them to a dictionary with user id as the key
+        # Fetch all UserProfile objects and map them to their respective User's id for easy access
         user_profiles = UserProfile.objects.all().select_related('user')
         user_profiles_dict = {up.user.id: up for up in user_profiles}
 
+        # Process each user data in the batch
         for user_data in users_batch:
-            # Skip users with invalid email format
-            if '@unicef.org' not in user_data['mail'].lower():
-                skipped_users += 1
-                continue
+            try:
+                # Skip the user if 'mail' field is not in user_data or if the mail does not end with '@unicef.org'
+                if 'mail' not in user_data or '@unicef.org' not in user_data['mail'].lower():
+                    logger.warning(
+                        f'Skipped user with invalid email: {user_data.get("mail", "N/A")}')
+                    skipped_users += 1
+                    continue
 
-            username = user_data['mail'].split('@')[0]
-
-            # Determine if user exists
-            with transaction.atomic():
-                user, created = User.objects.get_or_create(
-                    email=user_data['mail'],
-                    defaults={'username': username},
-                )
-
-                # If user is new, create SocialAccount and UserProfile
-                if created:
-                    social_account = SocialAccount(
-                        user=user, uid=user_data['id'])
-                    user_profile = UserProfile(
-                        user=user,
-                        name=user_data.get('displayName', ''),
-                        job_title=user_data.get('jobTitle', ''),
-                        department=user_data.get('department', ''),
-                        account_type=UserProfile.DONOR,
+                # Ensure database consistency even if an error occurs while processing a user
+                with transaction.atomic():
+                    # Try to get the user by email, if the user doesn't exist, create a new user
+                    user, created = User.objects.get_or_create(
+                        email=user_data['mail'].lower(),
+                        defaults={'username': user_data['mail'].split(
+                            '@')[0].lower()},
                     )
-                    social_account.save()
-                    user_profile.save()
-                    new_users.append(user)
-                else:
-                    # Check and update UserProfile info if necessary from the dictionary
-                    user_profile = user_profiles_dict.get(user.id)
-                    if user_profile:
-                        if not user_profile.name:
-                            user_profile.name = user_data.get('displayName')
-                        if not user_profile.job_title:
-                            user_profile.job_title = user_data.get('jobTitle')
-                        if not user_profile.department:
-                            user_profile.department = user_data.get(
-                                'department')
-                        if user_profile.country is None and user_data.get('country') is not None:
-                            try:
-                                user_profile.country = Country.objects.get(
-                                    name=user_data.get('country'))
-                            except Country.DoesNotExist:
-                                pass  # No matching country found, do nothing
-                        updated_users.append(user_profile)
 
-        # Bulk update UserProfile objects outside the loop after all updates have been made
-        UserProfile.objects.bulk_update(
-            updated_users, ['name', 'job_title', 'department', 'country'])
+                    # If a new user was created
+                    if created:
+                        # Create and save a new SocialAccount and UserProfile for the new user
+                        social_account = SocialAccount(
+                            user=user, uid=user_data['id'])
+                        user_profile = UserProfile(user=user, name=user_data.get('displayName', ''),
+                                                   job_title=user_data.get('jobTitle', ''), department=user_data.get('department', ''),
+                                                   account_type=UserProfile.DONOR)
+                        social_account.save()
+                        user_profile.save()
+                        # Keep track of the new user
+                        new_users.append(user)
+                        logger.info(
+                            f'Created new user with email: {user.email}')
+                    else:
+                        # If the user was not created i.e. the user already exists
+                        # Get the user's profile
+                        user_profile = user_profiles_dict.get(user.id)
+                        if user_profile:
+                            is_profile_updated = False
+                            # Update the user profile's fields if they have changed
+                            for field in ['name', 'job_title', 'department']:
+                                new_value = user_data.get(field)
+                                if new_value and getattr(user_profile, field) != new_value:
+                                    setattr(user_profile, field, new_value)
+                                    is_profile_updated = True
+
+                            # Update the user's country if it is not set
+                            if user_profile.country is None and user_data.get('country') is not None:
+                                try:
+                                    user_profile.country = Country.objects.get(
+                                        name=user_data.get('country'))
+                                    is_profile_updated = True
+                                except Country.DoesNotExist:
+                                    pass
+
+                            # Update the user's fields if they have changed
+                            for field in ['email', 'username']:
+                                new_value = user_data.get(field)
+                                if new_value and getattr(user, field) != new_value:
+                                    setattr(user, field, new_value)
+                                    user.save()
+
+                            # If the user profile was updated, save it and keep track of the updated user
+                            if is_profile_updated:
+                                user_profile.save()
+                                updated_users.append(user_profile)
+                                logger.info(
+                                    f'Updated user with email: {user.email}')
+            except Exception as e:
+                # Log any error that occurs while processing a user
+                logger.error(f'Error while processing user: {e}')
 
         logger.info(
-            f'Batch processing completed. New users: {len(new_users)}, Updated users: {len(updated_users)}, Skipped users: {skipped_users}')
+            f'Created {len(new_users)} new users in this batch')
+        logger.info(
+            f'Updated {len(updated_users)} users in this batch')
 
     def get_access_token(self):
         """
