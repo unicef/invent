@@ -5,8 +5,8 @@ from time import sleep
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.db import IntegrityError
-from django.db import transaction
+from django.db import transaction, DatabaseError, IntegrityError
+
 
 from country.models import Country
 from user.models import UserProfile
@@ -88,32 +88,36 @@ class AzureUserManagement:
         -------
         None
         """
-        # Track the new and updated users, and skipped users
+        # Track the new and updated users
         new_users = []
         updated_users = []
-        skipped_users = 0
+        skipped_users = []
 
-        # Fetch all UserProfile objects and map them to their respective User's id for easy access
-        user_profiles = UserProfile.objects.all().select_related('user')
-        user_profiles_dict = {up.user.id: up for up in user_profiles}
+        # Fetch all UserProfile objects in this batch and map them to their respective User's id for easy access
+        user_emails_in_batch = [user_data['mail'].lower(
+        ) for user_data in users_batch if user_data.get('mail')]
+        user_profiles = UserProfile.objects.filter(
+            user__email__in=user_emails_in_batch).select_related('user')
+        user_profiles_dict = {up.user.email: up for up in user_profiles}
 
         # Process each user data in the batch
         for user_data in users_batch:
             try:
-                # Skip the user if 'mail' field is not in user_data or if the mail does not end with '@unicef.org'
-                if 'mail' not in user_data or '@unicef.org' not in user_data['mail'].lower():
-                    logger.warning(
-                        f'Skipped user with invalid email: {user_data.get("mail", "N/A")}')
-                    skipped_users += 1
+                # Skip the user if 'mail' field is not in user_data, if the mail is None, or if the mail does not end with '@unicef.org'
+                if not user_data.get('mail') or '@unicef.org' not in user_data['mail'].lower():
+                    skipped_users.append(user_data)
                     continue
 
                 # Ensure database consistency even if an error occurs while processing a user
                 with transaction.atomic():
+                    # Get the email in lowercase and the username in a case-insensitive manner
+                    email = user_data['mail'].lower()
+                    username = email.split('@')[0] if '@' in email else ''
+
                     # Try to get the user by email, if the user doesn't exist, create a new user
                     user, created = User.objects.get_or_create(
-                        email=user_data['mail'].lower(),
-                        defaults={'username': user_data['mail'].split(
-                            '@')[0].lower()},
+                        email=email,
+                        defaults={'username': username},
                     )
 
                     # If a new user was created
@@ -128,12 +132,11 @@ class AzureUserManagement:
                         user_profile.save()
                         # Keep track of the new user
                         new_users.append(user)
-                        logger.info(
-                            f'Created new user with email: {user.email}')
+
                     else:
                         # If the user was not created i.e. the user already exists
                         # Get the user's profile
-                        user_profile = user_profiles_dict.get(user.id)
+                        user_profile = user_profiles_dict.get(user.email)
                         if user_profile:
                             is_profile_updated = False
                             # Update the user profile's fields if they have changed
@@ -152,27 +155,20 @@ class AzureUserManagement:
                                 except Country.DoesNotExist:
                                     pass
 
-                            # Update the user's fields if they have changed
-                            for field in ['email', 'username']:
-                                new_value = user_data.get(field)
-                                if new_value and getattr(user, field) != new_value:
-                                    setattr(user, field, new_value)
-                                    user.save()
-
                             # If the user profile was updated, save it and keep track of the updated user
                             if is_profile_updated:
                                 user_profile.save()
                                 updated_users.append(user_profile)
-                                logger.info(
-                                    f'Updated user with email: {user.email}')
+
+            except DatabaseError as e:
+                logger.error(f'Database error while processing user: {e}')
+            except KeyError as e:
+                logger.error(f'Missing key in user data: {e}')
             except Exception as e:
-                # Log any error that occurs while processing a user
-                logger.error(f'Error while processing user: {e}')
+                logger.error(f'Other error while processing user: {e}')
 
         logger.info(
-            f'Created {len(new_users)} new users in this batch')
-        logger.info(
-            f'Updated {len(updated_users)} users in this batch')
+            f'New users created: {len(new_users)}. Current users updated: {len(updated_users)}. Skipped users: {len(skipped_users)}.')
 
     def get_access_token(self):
         """
