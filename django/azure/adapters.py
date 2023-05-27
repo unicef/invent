@@ -3,10 +3,9 @@ import requests
 from time import sleep
 
 from allauth.socialaccount.models import SocialAccount
+from django.contrib.auth.models import User
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.db import transaction, close_old_connections
-from django.db.models import Q
+from django.db import transaction
 
 from country.models import Country
 from user.models import UserProfile
@@ -71,282 +70,74 @@ class AzureUserManagement:
         logger.info(
             f'Finished processing users. Total users processed: {processed_user_count}')
 
-    def save_aad_users(self, azure_users):
-        logger.info(f"Total Azure users to be processed: {len(azure_users)}")
-
-        user_model = get_user_model()
-        batch_size = 100
-        updated_users = []
-        total_new_users = 0
-
-        for i in range(0, len(azure_users), batch_size):
-            batch = azure_users[i:i + batch_size]
-            logger.info(f"Processing batch starting at index: {i}")
-
-            existing_users_data, new_users_data = self.separate_users(batch)
-            new_users = self.create_new_users(new_users_data, user_model)
-            total_new_users += len(new_users)
-            updated_users.extend(self.update_existing_users(
-                existing_users_data, user_model))
-
-        # This will close any connections to the database that were established before the current batch,
-        # and ensure that any old, unused connections are closed as well. This is useful in scenarios
-        # where connections could be left open indefinitely, such as in a long-running batch process.
-        close_old_connections()
-
-        logger.info(
-            f"Total existing users updated: {len(updated_users)}. Total new users created: {total_new_users}")
-        return updated_users
-
-    def separate_users(self, batch):
-        batch_social_account_uids = [user.get('id') or '' for user in batch]
-        existing_social_account_uids = set(SocialAccount.objects.filter(
-            uid__in=batch_social_account_uids).values_list('uid', flat=True))
-
-        new_users_data = []
-        existing_users_data = []
-
-        for azure_user in batch:
-            user_data = self.get_user_data(azure_user)
-            if user_data is None:
-                continue  # Skip if user_data is None
-
-            if user_data['social_account_uid'] in existing_social_account_uids:
-                existing_users_data.append(user_data)
-            else:
-                new_users_data.append(user_data)
-
-        return existing_users_data, new_users_data
-
-    def get_user_data(self, azure_user):
-        # Reject if email ends with "@unicef.org"
-        email = azure_user.get('mail') or azure_user.get(
-            'userPrincipalName') or ''
-        if email.lower().endswith("@unicef.org"):
-            return None
-
-        username = azure_user.get('mail') or azure_user.get('displayName') or azure_user.get(
-            'givenName') or azure_user.get('userPrincipalName') or ''
-        # username will be the first part of the email
-        username = username.split('@')[0] if username else ''
-
-        # Otherwise, return the user data
-        return {
-            'email': email,
-            'username': username,
-            'name': azure_user.get('displayName', ''),
-            'job_title': azure_user.get('jobTitle', ''),
-            'department': azure_user.get('department', ''),
-            'country_name': azure_user.get('country', ''),
-            'social_account_uid': azure_user.get('id', ''),
-        }
-
-    def create_new_users(self, new_users_data, user_model):
+    def save_aad_users(self, users_batch):
+        """
+        Processes a batch of users fetched from AAD.
+        The users in the batch are either created (if they do not exist) or updated (if they exist)
+        in the local database.
+        """
         new_users = []
-        user_profiles = []
-        social_accounts = []
-
-        for user_data in new_users_data:
-            existing_user = user_model.objects.filter(
-                Q(username=user_data['username']) | Q(email=user_data['email'])).first()
-            if existing_user:
-                logger.warning(
-                    f"User with username {user_data['username']} or email {user_data['email']} already exists. Skipping..."
-                )
-                continue
-
-            # If username is empty, use the first part of the email
-            username = user_data['username'] if user_data['username'] else user_data['email'].split(
-                '@')[0]
-
-            user = user_model(
-                email=user_data['email'], username=username)
-            user.set_unusable_password()
-            new_users.append(user)
-
-            user_profiles.append(self.get_user_profile(user, user_data))
-            social_accounts.append(self.get_social_account(user, user_data))
-
-        try:
-            new_users = user_model.objects.bulk_create(new_users)
-        except Exception as e:
-            logger.error(f"Error while creating users: {e}")
-            return []
-
-        UserProfile.objects.bulk_create(user_profiles)
-        SocialAccount.objects.bulk_create(social_accounts)
-
-        return new_users
-
-    def get_user_profile(self, user, user_data):
-        try:
-            country = Country.objects.get_or_create(name=user_data['country_name'])[
-                0] if user_data['country_name'] else None
-        except Exception:
-            country = None
-
-        return UserProfile(
-            user=user,
-            name=user_data['name'],
-            job_title=user_data['job_title'],
-            department=user_data['department'],
-            country=country,
-            account_type=UserProfile.DONOR,
-        )
-
-    def get_social_account(self, user, user_data):
-        return SocialAccount(
-            user=user, provider='azure', uid=user_data['social_account_uid'])
-
-    def update_existing_users(self, existing_users_data, user_model):
         updated_users = []
-        existing_user_emails = [user_data['email']
-                                for user_data in existing_users_data]
+        skipped_users = 0
 
-        user_profiles = UserProfile.objects.select_related('user').filter(
-            user__email__in=existing_user_emails)
+        # Fetch all UserProfiles and map them to a dictionary with user id as the key
+        user_profiles = UserProfile.objects.all().select_related('user')
+        user_profiles_dict = {up.user.id: up for up in user_profiles}
 
-        for user_data in existing_users_data:
-            user_profile = next(
-                (up for up in user_profiles if up.user.email == user_data['email']), None)
-            if not user_profile:
+        for user_data in users_batch:
+            # Skip users with invalid email format
+            if '@unicef.org' not in user_data['mail'].lower():
+                skipped_users += 1
                 continue
 
-            # If username is empty, use the first part of the email
-            username = user_data['username'] if user_data['username'] else user_data['email'].split(
-                '@')[0]
+            username = user_data['mail'].split('@')[0]
 
-            user_profile.user.username = username
-            # Add debug here
-            logger.debug(f"Existing User Profile: {user_profile.__dict__}")
-            # Add debug here
-            logger.debug(f"User Data from Azure AD: {user_data}")
-            user_profile, is_profile_updated = self.update_user_profile(
-                user_data, user_profile)
-            user, is_user_updated = self.update_user_info(
-                user_data, user_profile.user)
+            # Determine if user exists
+            with transaction.atomic():
+                user, created = User.objects.get_or_create(
+                    email=user_data['mail'],
+                    defaults={'username': username},
+                )
 
-            if is_user_updated or is_profile_updated:
-                try:
-                    with transaction.atomic():
-                        if is_user_updated:
-                            user.save()
-                        if is_profile_updated:
-                            user_profile.save()
-                    updated_users.append(user_profile.user)
-                except Exception as e:
-                    logger.error(f'Error while updating user: {e}')
-        return updated_users
+                # If user is new, create SocialAccount and UserProfile
+                if created:
+                    social_account = SocialAccount(
+                        user=user, uid=user_data['id'])
+                    user_profile = UserProfile(
+                        user=user,
+                        name=user_data.get('displayName', ''),
+                        job_title=user_data.get('jobTitle', ''),
+                        department=user_data.get('department', ''),
+                        account_type=UserProfile.DONOR,
+                    )
+                    social_account.save()
+                    user_profile.save()
+                    new_users.append(user)
+                else:
+                    # Check and update UserProfile info if necessary from the dictionary
+                    user_profile = user_profiles_dict.get(user.id)
+                    if user_profile:
+                        if not user_profile.name:
+                            user_profile.name = user_data.get('displayName')
+                        if not user_profile.job_title:
+                            user_profile.job_title = user_data.get('jobTitle')
+                        if not user_profile.department:
+                            user_profile.department = user_data.get(
+                                'department')
+                        if user_profile.country is None and user_data.get('country') is not None:
+                            try:
+                                user_profile.country = Country.objects.get(
+                                    name=user_data.get('country'))
+                            except Country.DoesNotExist:
+                                pass  # No matching country found, do nothing
+                        updated_users.append(user_profile)
 
-    def update_user_profile(self, user_data, user_profile):
-        is_profile_updated = False
+        # Bulk update UserProfile objects outside the loop after all updates have been made
+        UserProfile.objects.bulk_update(
+            updated_users, ['name', 'job_title', 'department', 'country'])
 
-        try:
-            country = Country.objects.get(
-                name=user_data['country_name']) if user_data['country_name'] else None
-        except Country.DoesNotExist:
-            country = None
-
-        # If the user_profile's country field is None and a country was found, assign it
-        if user_profile.country is None and country is not None:
-            user_profile.country = country
-            is_profile_updated = True
-
-        # If the user_profile's name field is None or empty, update it
-        if not user_profile.name:
-            user_profile.name = user_data['name']
-            is_profile_updated = True
-
-        # If the user_profile's job title field is None or empty, update it
-        if not user_profile.job_title:
-            user_profile.job_title = user_data['job_title']
-            is_profile_updated = True
-
-        # If the user_profile's department field is None or empty, update it
-        if not user_profile.department:
-            user_profile.department = user_data['department']
-            is_profile_updated = True
-
-        return user_profile, is_profile_updated
-
-    def update_user_info(self, user_data, user):
-        is_user_updated = False
-
-        # If the user's username is different from the fetched username, update it
-        username = user_data['username'] if user_data['username'] else user_data['email'].split(
-            '@')[0]
-        if user.username != username:
-            # Add debug here
-            logger.debug(
-                f"Updating User. Old username: {user.username}, New username: {username}")
-            user.username = username
-            is_user_updated = True
-
-        # If the user's email is different from the fetched email, update it
-        if user.email != user_data['email']:
-            # Add debug here
-            logger.debug(
-                f"Updating User. Old email: {user.email}, New email: {user_data['email']}")
-            user.email = user_data['email']
-            is_user_updated = True
-
-        return user, is_user_updated
-
-    def get_aad_users(self, max_users=100):
-        """
-        Retrieves Azure Active Directory (AAD) users using Microsoft's Graph API.
-
-        This function sends GET requests to the Graph API endpoint for users, handling pagination 
-        by following the '@odata.nextLink' URL included in the response until no such link is present.
-        If the request fails, it retries up to 5 times with exponential backoff to handle temporary issues.
-
-        The function requires an access token which is fetched using the `get_access_token` method. 
-        The users are returned as a list of dictionaries in the format provided by the Graph API. 
-        The number of users fetched is limited by the 'max_users' parameter.
-
-        Parameters:
-            max_users (int, optional): The maximum number of users to fetch. Default is 100.
-
-        Returns:
-            list: A list of dictionaries where each dictionary represents an AAD user.
-
-        Raises:
-            requests.exceptions.RequestException: If a request to the Graph API fails.
-        """
-        max_users = int(max_users)
-        url = settings.AZURE_GET_USERS_URL
-        token = self.get_access_token()
-        headers = {
-            'Authorization': f'Bearer {token}',
-            'Content-Type': 'application/json'
-        }
-        users = []
-        retry_count = 0
-        page_count = 0
-        while url and retry_count < 5 and len(users) < max_users:
-            try:
-                response = requests.get(url, headers=headers)
-                response.raise_for_status()
-                response_data = response.json()
-                users_batch = response_data.get('value', [])
-                users.extend(users_batch)
-                logger.info(
-                    f'Fetched {len(users_batch)} users in page {page_count+1}')
-                logger.info(f'Users batch: {users_batch}')
-                if len(users) > max_users:
-                    # Limit the list to 'max_users' elements
-                    users = users[:max_users]
-                url = response_data.get('@odata.nextLink', None)
-                page_count += 1
-                retry_count = 0
-                sleep(10)
-            except requests.exceptions.RequestException as e:
-                logger.error(f"Error while making request to {url}: {e}")
-                retry_count += 1
-                sleep(10 * (2 ** retry_count))
         logger.info(
-            f'Finished fetching users. Total users fetched: {len(users)}')
-        return users
+            f'Batch processing completed. New users: {len(new_users)}, Updated users: {len(updated_users)}, Skipped users: {skipped_users}')
 
     def get_access_token(self):
         """
