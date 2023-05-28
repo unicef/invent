@@ -160,19 +160,33 @@ class AzureUserManagement:
                             # Update the user profile's fields if they have changed
                             for field in ['name', 'job_title', 'department']:
                                 new_value = user_data.get(field)
-                                if new_value and getattr(user_profile, field) != new_value:
+                                current_value = getattr(user_profile, field)
+                                if new_value is not None and current_value != new_value:
                                     setattr(user_profile, field, new_value)
                                     is_profile_updated = True
+                                elif new_value is None and current_value is not None:
+                                    # If the new value is None but the current value is not None, ignore the update
+                                    pass
+                                else:
+                                    # In all other cases, don't consider this as an update
+                                    pass
 
                             # Update the user's country if it is not set
                             if user_profile.country is None and user_data.get('country') is not None:
                                 try:
-                                    user_profile.country = Country.objects.get(
+                                    country = Country.objects.get(
                                         name=user_data.get('country'))
+                                    user_profile.country = country
                                     is_profile_updated = True
                                 except Country.DoesNotExist:
+                                    # If the country doesn't exist in the database, don't count this as an update
                                     pass
-
+                            elif user_profile.country is None and user_data.get('country') is None:
+                                # If the country value from AAD is also None, don't count this as an update
+                                pass
+                            else:
+                                # If the user_profile.country is not None, we may have other fields to update
+                                pass
                             # If the user profile was updated, save it and keep track of the updated user
                             if is_profile_updated:
                                 user_profile.save()
