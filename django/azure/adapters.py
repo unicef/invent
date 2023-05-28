@@ -107,9 +107,15 @@ class AzureUserManagement:
         updated_users = []
         skipped_users = []
 
-        # Fetch all UserProfile objects in this batch and map them to their respective User's id for easy access
+        # Fetch all User objects in this batch
         user_emails_in_batch = [user_data['mail'].lower(
         ) for user_data in users_batch if user_data.get('mail')]
+        existing_users = User.objects.filter(email__in=user_emails_in_batch)
+        existing_users_dict = {user.email: user for user in existing_users}
+        # for faster "in" checks
+        existing_users_set = set(existing_users_dict.keys())
+
+        # Fetch all UserProfile objects in this batch and map them to their respective User's id for easy access
         user_profiles = UserProfile.objects.filter(
             user__email__in=user_emails_in_batch).select_related('user')
         user_profiles_dict = {up.user.email: up for up in user_profiles}
@@ -128,14 +134,12 @@ class AzureUserManagement:
                     email = user_data['mail'].lower()
                     username = email.split('@')[0] if '@' in email else ''
 
-                    # Try to get the user by email, if the user doesn't exist, create a new user
-                    user, created = User.objects.get_or_create(
-                        email=email,
-                        defaults={'username': username},
-                    )
+                    # Check if the user already exists in the existing_users_set
+                    if email not in existing_users_set:
+                        # Create a new user
+                        user = User.objects.create(
+                            email=email, username=username)
 
-                    # If a new user was created
-                    if created:
                         try:
                             # Create and save a new SocialAccount and UserProfile for the new user
                             social_account = SocialAccount(
@@ -150,10 +154,10 @@ class AzureUserManagement:
                         except Exception as e:
                             logger.error(
                                 f'Error while creating SocialAccount or UserProfile for new user {user.email}: {e}')
-
                     else:
                         # If the user was not created i.e. the user already exists
                         # Get the user's profile
+                        user = existing_users_dict.get(email)
                         user_profile = user_profiles_dict.get(user.email)
                         if user_profile:
                             is_profile_updated = False
@@ -191,7 +195,6 @@ class AzureUserManagement:
                             if is_profile_updated:
                                 user_profile.save()
                                 updated_users.append(user_profile.user)
-
             except DatabaseError as e:
                 logger.error(
                     f'Database error while processing user {user_data}: {e}')
@@ -200,7 +203,6 @@ class AzureUserManagement:
             except Exception as e:
                 logger.error(
                     f'Other error while processing user {user_data}: {e}')
-
         logger.info(
             f'New users created: {len(new_users)}. Current users updated: {len(updated_users)}. Skipped users: {len(skipped_users)}.')
 
