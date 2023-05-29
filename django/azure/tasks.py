@@ -7,7 +7,7 @@ logger = get_task_logger(__name__)
 
 
 @app.task(name="fetch_users_from_aad_and_update_db")
-def fetch_users_from_aad_and_update_db(max_users=100):
+def fetch_users_from_aad_and_update_db(max_users=None):
     """
     Fetches users from Azure Active Directory (AAD) and updates the database with their information.
 
@@ -18,7 +18,7 @@ def fetch_users_from_aad_and_update_db(max_users=100):
     Parameters
     ----------
     max_users : int, optional
-        The maximum number of users to process. Defaults to 100.
+        The maximum number of users to process. Defaults to None, that means every user available in the db.
     """
 
     # Log the beginning of the process
