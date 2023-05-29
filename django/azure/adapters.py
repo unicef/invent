@@ -5,7 +5,7 @@ from time import sleep
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.db import transaction, DatabaseError, IntegrityError
+from django.db import transaction, DatabaseError
 
 
 from country.models import Country
@@ -81,8 +81,10 @@ class AzureUserManagement:
 
         logger.info(
             f'Finished processing users. Total users processed: {processed_user_count}. '
-            f'Total new users created: {total_new_users}. Total current users updated: {total_updated_users}. '
-            f'Total users skipped due to inconsistencies: {total_skipped_users}.'
+            f'Total new users created: {total_new_users}. '
+            f'Total current users updated: {total_updated_users}. '
+            f'Total users skipped due to inconsistencies: {total_skipped_users}.\n'
+            f'Updated users details: {[(user["user"].id, user["user"].email, user["changes"]) for user in updated_users]}'
         )
 
     def save_aad_users(self, users_batch):
@@ -134,6 +136,9 @@ class AzureUserManagement:
                     email = user_data['mail'].lower()
                     username = email.split('@')[0] if '@' in email else ''
 
+                    # Instantiate changes dictionary here for each user
+                    changes = {}
+
                     # Check if the user already exists in the existing_users_set
                     if email not in existing_users_set:
                         # Create a new user
@@ -168,6 +173,9 @@ class AzureUserManagement:
                                 if new_value is not None and current_value != new_value:
                                     setattr(user_profile, field, new_value)
                                     is_profile_updated = True
+                                    # Add to the changes dictionary
+                                    changes[field] = {
+                                        'previous': current_value, 'updated': new_value}
                                 elif new_value is None and current_value is not None:
                                     # If the new value is None but the current value is not None, ignore the update
                                     pass
@@ -194,7 +202,9 @@ class AzureUserManagement:
                             # If the user profile was updated, save it and keep track of the updated user
                             if is_profile_updated:
                                 user_profile.save()
-                                updated_users.append(user_profile.user)
+                                # Append user with changes to the updated_users list
+                                updated_users.append(
+                                    {'user': user_profile.user, 'changes': changes})
             except DatabaseError as e:
                 logger.error(
                     f'Database error while processing user {user_data}: {e}')
