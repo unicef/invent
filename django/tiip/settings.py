@@ -1,7 +1,6 @@
 import os
 import datetime
 import sys
-import urllib
 
 from environs import Env
 from django.utils.translation import ugettext_lazy as _
@@ -27,7 +26,7 @@ elif environment == "uat":
     SITE_ID = 5
     env_name = "UAT"
     env_color = "orange"
-elif environment == "prod":
+elif environment == "prd":
     SITE_ID = 4
     env_name = "PRODUCTION"
     env_color = "red"
@@ -283,10 +282,8 @@ def generate_azure_users_url(user_params: list, top: int = 100) -> str:
     """
     # Join parameters into a single string
     select_params = ','.join(user_params)
-    # Add filter for unicef.org domain
-    filter_unicef = urllib.parse.quote("endsWith(mail, '@unicef.org')")
     # Add pagination
-    url = f'{MICROSOFT_GRAPH_USERS_URL}?$select={select_params}&$top={top}&$filter={filter_unicef}'
+    url = f'{MICROSOFT_GRAPH_USERS_URL}?$select={select_params}&$top={top}'
     return url
 
 

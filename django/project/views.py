@@ -288,6 +288,7 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
     queryset = Solution.objects.all()
 
 
+
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
         required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
