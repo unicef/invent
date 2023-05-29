@@ -175,11 +175,16 @@ class AzureUserManagement:
                                 if new_value is not None and current_value != new_value:
                                     setattr(user_profile, field, new_value)
                                     is_profile_updated = True
-                                    # Add to the changes dictionary
                                     changes[field] = {
                                         'previous': current_value, 'updated': new_value}
                                 elif new_value is None and current_value is not None:
                                     # If the new value is None but the current value is not None, ignore the update
+                                    pass
+                                elif new_value is None and current_value is None:
+                                    # If both the new value and the current value are None, also ignore the update
+                                    pass
+                                elif new_value == current_value:
+                                    # If the new value is the same as the current value, also ignore the update
                                     pass
                                 else:
                                     # In all other cases, don't consider this as an update
@@ -202,11 +207,12 @@ class AzureUserManagement:
                                 # If the user_profile.country is not None, we may have other fields to update
                                 pass
                             # If the user profile was updated, save it and keep track of the updated user
-                            if is_profile_updated:
+                            if is_profile_updated and changes:
                                 user_profile.save()
                                 # Append user with changes to the updated_users list
-                                updated_users.append(
-                                    {'user': user_profile.user, 'changes': changes})
+                                if changes:
+                                    updated_users.append(
+                                        {'user': user_profile.user, 'changes': changes})
             except DatabaseError as e:
                 logger.error(
                     f'Database error while processing user {user_data}: {e}')
