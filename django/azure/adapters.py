@@ -206,11 +206,6 @@ class AzureUserManagement:
         logger.info(
             f'New users created: {len(new_users)}. Current users updated: {len(updated_users)}. Skipped users: {len(skipped_users)}.')
 
-        # TODO: Only for debuggin, remove in prd
-        logger.info(f'BATCH: {users_batch}')
-        logger.info(f'new_users users: {new_users}')
-        logger.info(f'updated users: {updated_users}')
-        logger.info(f'skipped_users users: {skipped_users}')
         return new_users, updated_users, skipped_users
 
     def get_access_token(self):
