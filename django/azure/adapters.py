@@ -138,6 +138,10 @@ class AzureUserManagement:
                     email = user_data['mail'].lower()
                     username = email.split('@')[0] if '@' in email else ''
 
+                    # Get the first name and last name from the user data
+                    first_name = user_data.get('givenName', '')
+                    last_name = user_data.get('surname', '')
+
                     # Instantiate changes dictionary here for each user
                     changes = {}
 
@@ -145,7 +149,8 @@ class AzureUserManagement:
                     if email not in existing_users_set:
                         # Create a new user
                         user = User.objects.create(
-                            email=email, username=username)
+                            email=email, username=username,
+                            first_name=first_name, last_name=last_name)
 
                         try:
                             # Create and save a new SocialAccount and UserProfile for the new user
@@ -168,6 +173,19 @@ class AzureUserManagement:
                         user_profile = user_profiles_dict.get(user.email)
                         if user_profile:
                             is_profile_updated = False
+
+                            # Check if the user's first name or last name has changed
+                            if user.first_name != first_name:
+                                user.first_name = first_name
+                                is_profile_updated = True
+                                changes['first_name'] = {
+                                    'previous': user.first_name, 'updated': first_name}
+                            if user.last_name != last_name:
+                                user.last_name = last_name
+                                is_profile_updated = True
+                                changes['last_name'] = {
+                                    'previous': user.last_name, 'updated': last_name}
+
                             # Update the user profile's fields if they have changed
                             for field in ['name', 'job_title', 'department']:
                                 new_value = user_data.get(field)
@@ -206,8 +224,9 @@ class AzureUserManagement:
                             else:
                                 # If the user_profile.country is not None, we may have other fields to update
                                 pass
-                            # If the user profile was updated, save it and keep track of the updated user
+                            # If the user profile or the user was updated, save it and keep track of the updated user
                             if is_profile_updated and changes:
+                                user.save()
                                 user_profile.save()
                                 # Append user with changes to the updated_users list
                                 if changes:
