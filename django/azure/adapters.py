@@ -43,7 +43,7 @@ class AzureUserManagement:
         processed_user_count = 0
 
         total_new_users = 0
-        total_updated_users = 0
+        total_updated_users = []
         total_skipped_users = 0
         # Fetch and process users in batches until either there are no more users to fetch
         # or the maximum number of users to process has been reached
@@ -67,7 +67,8 @@ class AzureUserManagement:
 
                 # Update totals
                 total_new_users += len(new_users)
-                total_updated_users += len(updated_users)
+                # We extend the list now
+                total_updated_users.extend(updated_users)
                 total_skipped_users += len(skipped_users)
 
                 url = response_data.get('@odata.nextLink', None)
@@ -82,9 +83,10 @@ class AzureUserManagement:
         logger.info(
             f'Finished processing users. Total users processed: {processed_user_count}. '
             f'Total new users created: {total_new_users}. '
-            f'Total current users updated: {total_updated_users}. '
+            f'Total current users updated: {len(total_updated_users)}. '
             f'Total users skipped due to inconsistencies: {total_skipped_users}.\n'
-            f'Updated users details: {[(user["user"].id, user["user"].email, user["changes"]) for user in updated_users]}'
+            f'Updated users details: '
+            f'{[(user["user"].id, user["user"].email, user["changes"]) for user in total_updated_users]}'
         )
 
     def save_aad_users(self, users_batch):
