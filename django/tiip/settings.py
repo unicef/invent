@@ -35,7 +35,8 @@ else:
     env_name = "LOCAL"
     env_color = "purple"
 
-SECRET_KEY = os.environ.get('SECRET_KEY', default='thisisthedefaultkeyforlocalenv')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', default='thisisthedefaultkeyforlocalenv')
 
 DEBUG = env.str('DEBUG', default=False)
 
@@ -244,7 +245,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 SOCIALACCOUNT_ADAPTER = 'user.adapters.MyAzureAccountAdapter'
 SOCIALACCOUNT_AZURE_TENANT = os.environ.get('AZURE_TENANT', default='')
-SOCIALACCOUNT_CALLBACK_URL = env.str('AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')
+SOCIALACCOUNT_CALLBACK_URL = env.str(
+    'AZURE_CALLBACK_URL', default='http://localhost/accounts/azure/login/callback/')
 LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
@@ -254,7 +256,38 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
-ACCOUNT_EMAIL_CONFIRMATION_HMAC = False  # This is for backwards compat, should move to True to not store it in DB
+# This is for backwards compat, should move to True to not store it in DB
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
+
+
+# List of user parameters to select
+AZURE_USER_PARAMETERS = ['id', 'businessPhones', 'country', 'department', 'displayName', 'givenName',
+                         'jobTitle', 'mail', 'mobilePhone', 'officeLocation', 'preferredLanguage', 'surname', 'userPrincipalName']
+
+MICROSOFT_GRAPH_BASE_URL = 'https://graph.microsoft.com/v1.0'
+MICROSOFT_GRAPH_USERS_URL = f'{MICROSOFT_GRAPH_BASE_URL}/users'
+MICROSOFT_GRAPH_SUBSCRIPTION_URL = f'{MICROSOFT_GRAPH_BASE_URL}/subscriptions'
+
+
+def generate_azure_users_url(user_params: list, top: int = 100) -> str:
+    """
+    Generates a URL for fetching users from Azure Active Directory.
+
+    Parameters
+        user_params (list): The list of parameters to select for each user.
+        top (int, optional): The maximum number of users to fetch at a time.
+
+    Returns
+        str: The generated URL.
+    """
+    # Join parameters into a single string
+    select_params = ','.join(user_params)
+    # Add pagination
+    url = f'{MICROSOFT_GRAPH_USERS_URL}?$select={select_params}&$top={top}'
+    return url
+
+
+AZURE_GET_USERS_URL = generate_azure_users_url(AZURE_USER_PARAMETERS)
 
 ENABLE_API_REGISTRATION = env.str('ENABLE_API_REGISTRATION', default=True)
 
@@ -308,7 +341,8 @@ ROSETTA_WSGI_AUTO_RELOAD = True
 ROSETTA_MESSAGES_PER_PAGE = 25
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'translations'),  # don't move this, update_translations mgmt cmd is using it
+    # don't move this, update_translations mgmt cmd is using it
+    os.path.join(BASE_DIR, 'translations'),
     os.path.join(BASE_DIR, 'locale'),
     os.path.join(BASE_DIR, 'core/locale'),
     os.path.join(BASE_DIR, 'country/locale'),
@@ -355,13 +389,15 @@ THUMBNAIL_PADDING = True
 THUMBNAIL_HEIGHT = 520
 # THUMBNAIL_WIDTH = round(THUMBNAIL_HEIGHT*THUMBNAIL_RATIO)
 
-SIMPLE_FEEDBACK_SEND_TO = env.str('SIMPLE_FEEDBACK_SEND_TO', default='john@example.org')
+SIMPLE_FEEDBACK_SEND_TO = env.str(
+    'SIMPLE_FEEDBACK_SEND_TO', default='john@example.org')
 
 ENVIRONMENT_NAME = f"{env_name} - ({env.str('DEPLOY_VERSION', default='Unknown')})"
 ENVIRONMENT_COLOR = env_color
 
 # Validator for emails that can be registered as team members, viewers, eg.: r'(example.org|example.com)$'
-EMAIL_VALIDATOR_REGEX = r'{}'.format(env.str('EMAIL_VALIDATOR_REGEX', default=''))
+EMAIL_VALIDATOR_REGEX = r'{}'.format(
+    env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
 # Import the setting_azure settings only in the Azure environments
 if environment in ["dev", "tst", "uat", "prd"]:

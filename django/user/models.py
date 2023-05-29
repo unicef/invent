@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel
-from .tasks import send_user_request_to_admins
+# from .tasks import send_user_request_to_admins
 
 
 class Organisation(ExtendedModel):
@@ -81,8 +81,8 @@ def admin_request_on_change(sender, instance, **kwargs):
             instance.__trigger_send = True
 
 
-@receiver(post_save, sender=UserProfile)
-def admin_request_on_create(sender, instance, created, **kwargs):
-    if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
-        transaction.on_commit(
-            lambda: send_user_request_to_admins.apply_async(args=(instance.pk, )))
+# @receiver(post_save, sender=UserProfile)
+# def admin_request_on_create(sender, instance, created, **kwargs):
+#     if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
+#         transaction.on_commit(
+#             lambda: send_user_request_to_admins.apply_async(args=(instance.pk, )))
