@@ -9,20 +9,17 @@
           <img :src="countryFlag" alt="country flag" class="CountryFlag" />
         </el-col>
         <el-col>
-          <el-row>
-            <div class="country-text">
-              <div class="CountryName">
-                {{ landingData.name }}
-              </div>
-              <p>
-                {{
-                  $gettext(
-                    'Welcome to country view. This view is scoped to show all initiatives of the chosen country.'
-                  ) | translate
-                }}
-              </p>
+          <div class="country-text">
+            <div class="CountryName">
+              {{ landingData.name }}
             </div>
-          </el-row>
+            <p>
+              {{
+                $gettext('Welcome to country view. This view is scoped to show all initiatives of the chosen country.')
+                  | translate
+              }}
+            </p>
+          </div>
         </el-col>
       </el-row>
     </el-col>
@@ -71,19 +68,18 @@ export default {
     }
     .country-text {
       display: flex;
+      height: 100%;
       flex-direction: column;
-      padding: 24px 0 0 24px;
+      padding-left: 24px;
 
       .CountryName {
+        margin-top: auto;
         font-size: @fontSizeLarge;
         font-weight: 700;
         color: @colorTextPrimary;
         line-height: 24px;
       }
     }
-  }
-  p {
-    align-self: baseline;
   }
 }
 </style>

@@ -1,7 +1,13 @@
 <template>
   <div class="LandingInitiativesTable">
     <el-table :data="tableData" :highlight-current-row="false" max-height="600">
-      <el-table-column v-for="column in columns" :label="$gettext(column) | translate" :prop="column" :key="column">
+      <el-table-column
+        v-for="column in columns"
+        :label="$gettext(column) | translate"
+        :prop="column"
+        :key="column"
+        min-width="180"
+      >
         <template slot-scope="scope">
           <!-- <draggable :list="tableData[0][column]"> -->
           <nuxt-link
@@ -67,7 +73,7 @@ export default {
   },
   data() {
     return {
-      columns: ['col1', 'col2', 'col3', 'col4', 'col5', 'col6'],
+      columns: ['col1', 'col2', 'col3', 'col4', 'col5', 'col6', 'col7', 'col8', 'col9'],
       tableData: [
         {
           col1: [
