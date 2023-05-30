@@ -173,18 +173,19 @@ class AzureUserManagement:
                         user_profile = user_profiles_dict.get(user.email)
                         if user_profile:
                             is_profile_updated = False
-
                             # Check if the user's first name or last name has changed
                             if user.first_name != first_name:
+                                old_first_name = user.first_name
                                 user.first_name = first_name
                                 is_profile_updated = True
                                 changes['first_name'] = {
-                                    'previous': user.first_name, 'updated': first_name}
+                                    'previous': old_first_name, 'updated': first_name}
                             if user.last_name != last_name:
+                                old_last_name = user.last_name
                                 user.last_name = last_name
                                 is_profile_updated = True
                                 changes['last_name'] = {
-                                    'previous': user.last_name, 'updated': last_name}
+                                    'previous': old_last_name, 'updated': last_name}
 
                             # Update the user profile's fields if they have changed
                             for field in ['name', 'job_title', 'department']:
