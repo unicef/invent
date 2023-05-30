@@ -139,8 +139,8 @@ class AzureUserManagement:
                     username = email.split('@')[0] if '@' in email else ''
 
                     # Get the first name and last name from the user data
-                    first_name = user_data.get('givenName', '')
-                    last_name = user_data.get('surname', '')
+                    first_name = user_data.get('givenName', '') or ''
+                    last_name = user_data.get('surname', '') or ''
 
                     # Instantiate changes dictionary here for each user
                     changes = {}
