@@ -31,8 +31,9 @@ export default {
           this.profile.is_superuser ||
           this.profile.member.includes(parseInt(this.$route.params.id, 10)) ||
           this.profile.manager_of.includes(this.project.country_office) ||
-          this.$route.name.split('__')[0] === 'organisation-initiatives-id-published'
-        if (!allowed && !this.$route.name.split('__')[0] === 'organisation-initiatives-id-published-stages') {
+          this.$route.name.split('__')[0] === 'organisation-initiatives-id-published' ||
+          this.$route.name.split('__')[0] === 'organisation-initiatives-id-published-stages'
+        if (!allowed) {
           this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
             confirmButtonText: 'OK',
             callback: () => {
