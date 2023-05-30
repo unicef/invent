@@ -299,3 +299,31 @@ class AzureUserManagement:
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
+
+    # TODO: Log the changes to the initial 3500 users to make sure that the user info is correct. Remove when ready.
+    def fetch_specific_users(self, start_id=1987, end_id=5555):
+        try:
+            user_dict = {}
+            user_profiles = UserProfile.objects.filter(user_id__range=(start_id, end_id)).select_related('user')
+            
+            for user_profile in user_profiles:
+                user = user_profile.user
+                user_dict[user.id] = {
+                    'user': {
+                        'email': user.email,
+                        'username': user.username,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                    },
+                    'user_profile': {
+                        'name': user_profile.name,
+                        'job_title': user_profile.job_title,
+                        'department': user_profile.department,
+                        'country': str(user_profile.country) if user_profile.country else None,
+                    }
+                }
+            
+            return user_dict
+        except Exception as e:
+            logger.error(f"Error in fetch_specific_users: {str(e)}")
+            return {}
