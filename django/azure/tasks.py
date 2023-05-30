@@ -1,4 +1,5 @@
 from celery.utils.log import get_task_logger
+from django.conf import settings
 
 from .adapters import AzureUserManagement
 from scheduler.celery import app
@@ -20,6 +21,11 @@ def fetch_users_from_aad_and_update_db(max_users=None):
     max_users : int, optional
         The maximum number of users to process. Defaults to None, that means every user available in the db.
     """
+    # define environments where this task is allowed to run
+    allowed_environments = ['prd']  
+    if settings.ENVIRONMENT not in allowed_environments:
+        logger.info(f"Environment '{settings.ENVIRONMENT}' is not in allowed environments. Task will not be executed.")
+        return
 
     # Log the beginning of the process
     logger.info("Starting to fetch and update users from AAD")
