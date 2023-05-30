@@ -1,7 +1,7 @@
 <template>
   <div class="LandingInitiativesTable">
-    <el-table :data="tableData" :highlight-current-row="false">
-      <el-table-column v-for="column in columns" :label="column" :prop="column" :key="column">
+    <el-table :data="tableData" :highlight-current-row="false" max-height="600">
+      <el-table-column v-for="column in columns" :label="$gettext(column) | translate" :prop="column" :key="column">
         <template slot-scope="scope">
           <!-- <draggable :list="tableData[0][column]"> -->
           <nuxt-link
@@ -30,6 +30,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="caption">
+      <div class="icon-div">
+        <i class="el-icon-time"></i>
+      </div>
+
+      <p>{{ $gettext('Indicates an initiative that has been in the same phase for over 90 days') | translate }}</p>
+    </div>
     <!-- <div class="LandingInitiativesTable">
       <el-row>
         <el-col v-for="column in columns" :key="column" class="initiatives-phase-col">
@@ -64,6 +71,20 @@ export default {
       tableData: [
         {
           col1: [
+            {
+              name: 'test initiative af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
+              lastUpdated: '01/01/2022',
+              unicefOffice: 'Jakarda',
+              id: 3310,
+              stale: true,
+            },
+            {
+              name: 'test initiative2 af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
+              lastUpdated: '01/01/2022',
+              unicefOffice: 'Jakarda2',
+              id: 3310,
+              stale: false,
+            },
             {
               name: 'test initiative af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
               lastUpdated: '01/01/2022',
@@ -146,8 +167,6 @@ export default {
 
   .el-table {
     border: solid @colorBrandPrimary 2px;
-    max-height: 600px;
-    overflow-y: auto;
     overflow-x: auto;
 
     td {
@@ -195,12 +214,12 @@ export default {
       background-color: #ffffff;
 
       .list-group-card-data {
-        padding: 4px;
+        padding: 4px 8px;
       }
       .icon-div {
-        width: inherit;
+        position: absolute;
+        right: 24px;
         z-index: 10;
-        position: fixed;
 
         .el-icon-time {
           display: none;
@@ -235,16 +254,14 @@ export default {
         border-top-color: #fe8900;
         .icon-div {
           .el-icon-time {
-            display: block;
-            font-size: 20px;
+            display: flex;
+
+            font-size: 18px;
             background-color: #fe8900;
             border-radius: 0 0 2px 2px;
             box-shadow: 0px 1px 1px 0px rgba(194, 204, 210, 1);
-            padding: 2px;
             color: white;
-            position: relative;
-            top: -2px;
-            left: 150px;
+            padding: 2px;
           }
         }
         .initiative-office {
@@ -255,6 +272,28 @@ export default {
         }
       }
     }
+  }
+}
+.caption {
+  width: 420px;
+  display: inline-flex;
+  padding: 10px;
+  margin: 20px 0 20px 0;
+  .icon-div {
+    width: fit-content;
+    height: fit-content;
+    background-color: #fe8900;
+    border-radius: 6px;
+    box-shadow: 0px 4px 4px 0px rgba(194, 204, 210, 1);
+    padding: 4px;
+    margin-right: 10px;
+    .el-icon-time {
+      font-size: 36px;
+      color: white;
+    }
+  }
+  p {
+    margin: 0 0 0 10px;
   }
 }
 </style>

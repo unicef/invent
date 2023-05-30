@@ -1,17 +1,89 @@
 <template>
-  <div class="Flag">
-    <p>Flag info</p>
+  <div class="flag-info">
+    <el-col class="CountryHolder">
+      <el-row type="flex">
+        <el-col class="CountryHolder">
+          <div class="Separator" />
+        </el-col>
+        <el-col class="CountryHolder">
+          <img :src="countryFlag" alt="country flag" class="CountryFlag" />
+        </el-col>
+        <el-col>
+          <el-row>
+            <div class="country-text">
+              <div class="CountryName">
+                {{ landingData.name }}
+              </div>
+              <p>
+                {{
+                  $gettext(
+                    'Welcome to country view. This view is scoped to show all initiatives of the chosen country.'
+                  ) | translate
+                }}
+              </p>
+            </div>
+          </el-row>
+        </el-col>
+      </el-row>
+    </el-col>
   </div>
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters({
+      landingData: 'landing/getLandingPageData',
+    }),
+    countryFlag() {
+      if (this.landingData) {
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
+      }
+      return null
+    },
+  },
+}
 </script>
 
-<style>
-.Flag {
-  height: 150px;
-  border: solid 2px black;
-  width: 100%;
+<style lang="less">
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
+
+.flag-info {
+  height: 100px;
+  width: inherit;
+  margin: 12px;
+  padding: 8px 36px 8px 220px;
+  display: flex;
+  align-items: start;
+
+  .CountryHolder {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+
+    .CountryFlag {
+      height: 84px;
+      margin-right: 6px;
+      padding: 5px 0;
+    }
+    .country-text {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0 0 24px;
+
+      .CountryName {
+        font-size: @fontSizeLarge;
+        font-weight: 700;
+        color: @colorTextPrimary;
+        line-height: 24px;
+      }
+    }
+  }
+  p {
+    align-self: baseline;
+  }
 }
 </style>
