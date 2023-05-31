@@ -60,7 +60,7 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
-if environment in ['uat', 'prd']:
+if environment in ['prd']:
     CELERYBEAT_SCHEDULE["fetch_users_from_aad_task"] = {
         "task": "fetch_users_from_aad_and_update_db",
         "schedule": crontab(minute=0, hour=0),
