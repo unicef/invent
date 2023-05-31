@@ -15,66 +15,37 @@
       >
         <el-row type="flex">
           <el-col :span="12" class="UserForm">
-            <el-form-item
-              :label="$gettext('First and Last Name') | translate"
-              prop="name"
-            >
+            <el-form-item :label="$gettext('First and Last Name') | translate" prop="name">
               <el-input v-model="innerProfile.name" type="text" />
             </el-form-item>
 
-            <el-form-item
-              :label="$gettext('Email address') | translate"
-              class="is-required"
-            >
+            <el-form-item :label="$gettext('Email address') | translate" class="is-required">
               <el-input v-model="innerProfile.email" disabled type="text" />
             </el-form-item>
 
-            <el-form-item
-              :label="$gettext('Country') | translate"
-              prop="country"
-            >
+            <el-form-item :label="$gettext('Country') | translate" prop="country">
               <country-select v-model="innerProfile.country" />
-              <div
-                v-if="nonFieldErrors"
-                class="el-form-item__error ModifiedFormError"
-              >
+              <div v-if="nonFieldErrors" class="el-form-item__error ModifiedFormError">
                 {{ nonFieldErrors }}
               </div>
             </el-form-item>
 
-            <el-form-item
-              :label="$gettext('Site language') | translate"
-              prop="language"
-            >
+            <el-form-item :label="$gettext('Site language') | translate" prop="language">
               <language-select v-model="innerProfile.language" />
             </el-form-item>
           </el-col>
         </el-row>
 
         <div class="CardActionsBottom">
-          <el-row
-            type="flex"
-            justify="space-between"
-            align="middle"
-            class="cardActions"
-          >
+          <el-row type="flex" justify="space-between" align="middle" class="cardActions">
             <el-col :span="6" class="SecondaryAction">
-              <el-button
-                type="text"
-                class="CancelButton IconLeft"
-                @click="dismissChanges"
-              >
+              <el-button type="text" class="CancelButton IconLeft" @click="dismissChanges">
                 <fa icon="reply" />
                 <translate>Dismiss changes</translate>
               </el-button>
             </el-col>
             <el-col :span="6" class="PrimaryAction">
-              <el-button
-                type="primary"
-                size="medium"
-                native-type="submit"
-                @click="submit"
-              >
+              <el-button type="primary" size="medium" native-type="submit" @click="submit">
                 <translate>Save settings</translate>
               </el-button>
             </el-col>
@@ -124,11 +95,7 @@ export default {
     }),
 
     userTypeRequested() {
-      return (
-        this.profile &&
-        this.profile.account_type !== 'I' &&
-        !this.profile.account_type_approved
-      )
+      return this.profile && this.profile.account_type !== 'I' && !this.profile.account_type_approved
     },
     isDonorRequired() {
       return (
@@ -233,10 +200,7 @@ export default {
       }
     },
     routeToDashboard(locale) {
-      const path = this.localePath(
-        { name: 'organisation-inventory-list', params: this.$route.params },
-        locale
-      )
+      const path = this.localePath({ name: 'organisation', params: this.$route.params }, locale)
       this.$router.push(path)
     },
     changingUserRole() {
