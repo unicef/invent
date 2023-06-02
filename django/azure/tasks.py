@@ -20,7 +20,6 @@ def fetch_users_from_aad_and_update_db(max_users=None):
     max_users : int, optional
         The maximum number of users to process. Defaults to None, that means every user available in the db.
     """
-
     # Log the beginning of the process
     logger.info("Starting to fetch and update users from AAD")
     # Create an instance of the AzureUserManagement class

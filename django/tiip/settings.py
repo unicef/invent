@@ -8,25 +8,25 @@ from django.utils.translation import ugettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = Env()
-environment = os.environ.get('ENVIRONMENT', default='local')
-if environment:
-    env.read_env(path=".env." + environment)
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='local')
+if ENVIRONMENT:
+    env.read_env(path=".env." + ENVIRONMENT)
 else:
     env.read_env(path=".env.local")
 
-if environment == "dev":
+if ENVIRONMENT == "dev":
     SITE_ID = 2
     env_name = "DEVELOPMENT"
     env_color = "blue"
-elif environment == "tst":
+elif ENVIRONMENT == "tst":
     SITE_ID = 3
     env_name = "TEST"
     env_color = "green"
-elif environment == "uat":
+elif ENVIRONMENT == "uat":
     SITE_ID = 5
     env_name = "UAT"
     env_color = "orange"
-elif environment == "prd":
+elif ENVIRONMENT == "prd":
     SITE_ID = 4
     env_name = "PRODUCTION"
     env_color = "red"
@@ -400,5 +400,5 @@ EMAIL_VALIDATOR_REGEX = r'{}'.format(
     env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
 # Import the setting_azure settings only in the Azure environments
-if environment in ["dev", "tst", "uat", "prd"]:
+if ENVIRONMENT in ["dev", "tst", "uat", "prd"]:
     from .settings_deployed import *
