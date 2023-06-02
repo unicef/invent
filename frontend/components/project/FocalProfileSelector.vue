@@ -78,7 +78,10 @@ export default {
       },
     },
     optionsWithValues() {
-      return [...this.filteredOptions, ...this.userProfiles.filter((profile) => profile.email === this.value)]
+      return [
+        ...this.filteredOptions.filter((profile) => profile.email !== this.value),
+        ...this.userProfiles.filter((profile) => profile.email === this.value),
+      ]
     },
   },
   methods: {
