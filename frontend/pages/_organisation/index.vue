@@ -1,7 +1,9 @@
 <template>
   <div class="LandingPage">
-    <WelcomeSection />
-    <InitiativesSection />
+    <WelcomeSection v-if="!landingData" />
+    <InitiativesSection v-if="!landingData" />
+    <CountryFlagInfo v-if="landingData" />
+    <LandingInitiativesTable v-if="landingData" />
     <NewsSection />
     <div class="MapBoxContainer">
       <LandingMap v-if="!showCoverImage" />
@@ -20,6 +22,8 @@ import CountryProjectsBox from '@/components/landing/CountryProjectsBox.vue'
 import InitiativesSection from '@/components/landing/InitiativesSection.vue'
 import NewsSection from '@/components/landing/NewsSection.vue'
 import AboutSection from '@/components/landing/AboutSection.vue'
+import LandingInitiativesTable from '~/components/landing/LandingInitiativesTable.vue'
+import CountryFlagInfo from '~/components/landing/CountryFlagInfo.vue'
 
 export default {
   components: {
@@ -29,10 +33,14 @@ export default {
     InitiativesSection,
     NewsSection,
     AboutSection,
+    LandingInitiativesTable,
+    CountryFlagInfo,
   },
   async fetch({ store }) {
     await store.dispatch('landing/resetSearch')
+    // await store.dispatch('landing/loadCountryData', 'MY')
     await store.dispatch('dashboard/setDashboardSection', 'map')
+
     await Promise.all([
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('countries/loadMapData'),
