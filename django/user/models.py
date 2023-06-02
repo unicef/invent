@@ -38,7 +38,17 @@ class UserProfile(ExtendedModel):
         (SUPER_COUNTRY_ADMIN, _('Government System Admin')),
         (INVENTORY, _('Inventory User')),
     )
-
+    REGIONS = [
+        (0, _('EAPR')),
+        (1, _('ECAR')),
+        (2, _('ESAR')),
+        (3, _('LACR')),
+        (4, _('MENA')),
+        (5, _('SAR')),
+        (6, _('WCAR')),
+        (7, _('HQ'))
+    ]
+    
     account_type = models.CharField(
         max_length=3,
         choices=ACCOUNT_TYPE_CHOICES,
@@ -56,6 +66,7 @@ class UserProfile(ExtendedModel):
     language = models.CharField(
         max_length=2, choices=settings.LANGUAGES, default='en')
     global_portfolio_owner = models.BooleanField(default=False)
+    region = models.IntegerField(choices=REGIONS, null=True, blank=True)
     filters = HStoreField(default=dict, blank=True)
     manager_of = models.ManyToManyField('country.CountryOffice', related_name="country_managers",
                                         verbose_name='Country Manager Of', blank=True)
