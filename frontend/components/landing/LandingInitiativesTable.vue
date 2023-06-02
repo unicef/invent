@@ -1,15 +1,20 @@
 <template>
   <div class="LandingInitiativesTable">
-    <el-table :data="tableData" :highlight-current-row="false" max-height="600">
+    <el-table
+      :data="initiativesTableData"
+      :highlight-current-row="false"
+      max-height="600"
+      :lazy="true"
+      :empty-text="$gettext('No initiatives available') | translate"
+    >
       <el-table-column
-        v-for="column in columns"
-        :label="$gettext(column) | translate"
-        :prop="column"
-        :key="column"
+        v-for="{ name, id } in ommitedPhases"
+        :label="$gettext(name) | translate"
+        :prop="name"
+        :key="id"
         min-width="180"
       >
         <template slot-scope="scope">
-          <!-- <draggable :list="tableData[0][column]"> -->
           <nuxt-link
             :to="
               localePath({
@@ -17,8 +22,8 @@
                 params: { ...$route.params, id: card.id },
               })
             "
-            v-for="card in scope.row[column]"
-            :key="card.name"
+            v-for="card in scope.row[id]"
+            :key="card.id"
             :class="card.stale ? 'link-card stale' : 'link-card'"
           >
             <div class="list-group-card">
@@ -32,7 +37,6 @@
               </div>
             </div>
           </nuxt-link>
-          <!-- </draggable> -->
         </template>
       </el-table-column>
     </el-table>
@@ -41,125 +45,87 @@
         <i class="el-icon-time"></i>
       </div>
 
-      <p>{{ $gettext('Indicates an initiative that has been in the same phase for over 90 days') | translate }}</p>
+      <p><translate>Indicates an initiative that has been in this phase for over 6 months</translate></p>
     </div>
-    <!-- <div class="LandingInitiativesTable">
-      <el-row>
-        <el-col v-for="column in columns" :key="column" class="initiatives-phase-col">
-          <draggable class="list-group" :list="tableData[column]" group="people">
-            <div class="header">
-              {{ column }}
-            </div>
-            <div class="list-group-card" v-for="(element, index) in tableData[column]" :key="element.name">
-              <div class="">
-                <i class="el-icon-time"></i>
-              </div>
-              <p>{{ element.name }}</p>
-              <p>{{ element.lastUpdated }}</p>
-            </div>
-          </draggable>
-        </el-col>
-      </el-row>
-    </div> -->
   </div>
 </template>
-
 <script>
-import draggable from 'vuedraggable'
-
+import { mapGetters } from 'vuex'
+import { format, differenceInDays } from 'date-fns'
 export default {
-  components: {
-    draggable,
-  },
   data() {
     return {
-      columns: ['col1', 'col2', 'col3', 'col4', 'col5', 'col6', 'col7', 'col8', 'col9'],
-      tableData: [
-        {
-          col1: [
-            {
-              name: 'test initiative af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
-              lastUpdated: '01/01/2022',
-              unicefOffice: 'Jakarda',
-              id: 3310,
-              stale: true,
-            },
-            {
-              name: 'test initiative2 af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
-              lastUpdated: '01/01/2022',
-              unicefOffice: 'Jakarda2',
-              id: 3310,
-              stale: false,
-            },
-            {
-              name: 'test initiative af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
-              lastUpdated: '01/01/2022',
-              unicefOffice: 'Jakarda',
-              id: 3310,
-              stale: true,
-            },
-            {
-              name: 'test initiative2 af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
-              lastUpdated: '01/01/2022',
-              unicefOffice: 'Jakarda2',
-              id: 3310,
-              stale: false,
-            },
-          ],
-          col2: [
-            {
-              name: 'test initiative1 col2  af a dfalsdjaf qwerq tqtfaiopuiop afapoiuqwer ergc',
-              lastUpdated: '01/01/2022',
-              unicefOffice: 'Jakarda2',
-              id: 3310,
-              stale: true,
-            },
-          ],
-          col3: [],
-          col4: [],
-          col5: [],
-          col6: [],
-        },
-      ],
+      daysStale: 180,
+      phasesOmit: ['Handover or Complete', 'Discontinued'],
     }
+  },
+  computed: {
+    ...mapGetters({
+      phases: 'projects/getStages',
+      landingProjectsList: 'landing/getCountryProjectsList',
+      unicefOffice: 'offices/getOffices',
+    }),
+    ommitedPhases() {
+      return this.phases
+        .filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
+        .sort((a, b) => a.order - b.order)
+    },
+    initiativesTableData() {
+      const dataObj = {}
+      this.phases.map((phase) => {
+        dataObj[phase.id] = []
+      })
+      const initiatives = this.landingProjectsList
+
+      initiatives.map((initiative) => {
+        let lastUpdated
+        if (initiative.stages && initiative.stages.length > 0) {
+          /*
+          Some initiatives have equal current_phase as the last phase in stages field
+          Some other initiatives have equal current_phase -1 as the last phase in stages field
+          Added also 
+           **/
+          const prevPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase - 1)
+          const lastPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase)
+          if (lastPhase) {
+            lastUpdated = lastPhase.date
+          } else if (prevPhase) {
+            lastUpdated = prevPhase.date
+          } else {
+            lastUpdated = initiative.start_date ? format(initiative.start_date, 'YYYY-MM-DD') : new Date()
+          }
+        }
+
+        let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+
+        dataObj[`${initiative.current_phase}`] = [
+          ...dataObj[`${initiative.current_phase}`],
+          {
+            ...initiative,
+            lastUpdated: lastUpdated,
+            unicefOffice: this.unicefOffice
+              .find((office) => office.id === initiative.country_office)
+              .name.split(':')[1],
+            stale: isStale,
+          },
+        ]
+      })
+
+      for (const key in dataObj) {
+        const staleInit = dataObj[key]
+          .filter((initiative) => initiative.stale === true)
+          .sort((a, b) => a.name.localeCompare(b.name))
+        const notStateInit = dataObj[key]
+          .filter((initiative) => initiative.stale === false)
+          .sort((a, b) => a.name.localeCompare(b.name))
+        dataObj[key] = [...staleInit, ...notStateInit]
+      }
+
+      return initiatives.length > 0 ? [dataObj] : null
+    },
   },
 }
 </script>
-
-<!-- <style lang="less">
-@import '~assets/style/variables.less';
-@import '~assets/style/mixins.less';
-
-.LandingInitiativesTable {
-  padding: 10px 0;
-  .el-row {
-    background-color: #aedcf7;
-    border: solid 2px @colorBrandPrimary;
-
-    .header {
-      background-color: @colorBrandPrimaryLight;
-      margin: 0;
-      padding: 8px 6px;
-    }
-
-    .initiatives-phase-col {
-      max-width: 240px;
-      border-right: dashed 2px @colorBrandPrimary;
-      height: inherit;
-
-      .list-group-card {
-        border: solid 1px gray;
-        border-radius: 2px;
-        width: 200px;
-        border-top-color: blue;
-        border-top-width: 6px;
-        background-color: rgb(219, 217, 215);
-        margin: 4px;
-      }
-    }
-  }
-}
-</style> -->
 
 <style lang="less">
 @import '~assets/style/variables.less';
@@ -176,10 +142,32 @@ export default {
     overflow-x: auto;
 
     td {
-      border-left: dashed @colorBrandPrimary 2px;
+      border-left: dashed @colorBrandPrimary 1px;
     }
     td:first-child {
       border-left: none;
+    }
+
+    th {
+      background-color: @colorBrandPrimary;
+      vertical-align: top;
+      > .cell {
+        word-wrap: normal;
+        white-space: normal;
+        word-break: normal;
+        text-overflow: unset;
+
+        font-size: @fontSizeSmall;
+        color: @colorWhite;
+        font-weight: bold;
+        letter-spacing: 0;
+        line-height: 29px;
+        text-align: start;
+      }
+
+      &.is-leaf {
+        border-bottom-color: @colorWhite;
+      }
     }
   }
   .el-table__row {
@@ -187,22 +175,6 @@ export default {
 
     > td {
       vertical-align: top;
-    }
-  }
-
-  th {
-    background-color: @colorBrandPrimary;
-    > .cell {
-      font-size: @fontSizeSmall;
-      color: @colorWhite;
-      font-weight: bold;
-      letter-spacing: 0;
-      line-height: 29px;
-      white-space: nowrap;
-    }
-
-    &.is-leaf {
-      border-bottom-color: @colorWhite;
     }
   }
 

@@ -10,14 +10,11 @@
         </el-col>
         <el-col>
           <div class="country-text">
-            <div class="CountryName">
-              {{ landingData.name }}
-            </div>
+            <div class="CountryName">{{ landingData.name }}</div>
             <p>
-              {{
-                $gettext('Welcome to country view. This view is scoped to show all initiatives of the chosen country.')
-                  | translate
-              }}
+              <translate>
+                Welcome to country view. This view is scoped to show all initiatives of the chosen country.
+              </translate>
             </p>
           </div>
         </el-col>

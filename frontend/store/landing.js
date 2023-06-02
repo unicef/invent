@@ -1,9 +1,4 @@
-import {
-  stateGenerator,
-  gettersGenerator,
-  actionsGenerator,
-  mutationsGenerator,
-} from '../utilities/map'
+import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map'
 
 export const state = () => ({
   ...stateGenerator(),
@@ -11,10 +6,12 @@ export const state = () => ({
   searched: null,
   foundIn: {},
   newsFeed: [],
+  countryProjectsList: [],
 })
 
 export const getters = {
   ...gettersGenerator(),
+  getCountryProjectsList: (state) => state.countryProjectsList,
   getSearched: (state) => state.searched,
   getNewsFeed: (state) => state.newsFeed,
   getLandingPageData: (state) => state.landingPageData,
@@ -37,6 +34,19 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
+  async loadCountryProjectsList({ commit, getters }) {
+    const countryId = getters.getLandingPageData.id
+
+    if (countryId) {
+      try {
+        const response = await this.$axios.get(`/api/search/?type=list&country=${countryId}`)
+
+        commit('SET_COUNTRY_PROJECTS_LIST', response.data.results.projects)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
   async search({ commit, dispatch }) {
     try {
       commit('SET_SEARCHED', null)
@@ -103,5 +113,8 @@ export const mutations = {
   },
   SET_FOUND_IN: (state, found) => {
     state.foundIn = { ...found }
+  },
+  SET_COUNTRY_PROJECTS_LIST: (state, data) => {
+    state.countryProjectsList = data
   },
 }

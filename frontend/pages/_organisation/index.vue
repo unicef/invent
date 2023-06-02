@@ -38,7 +38,9 @@ export default {
   },
   async fetch({ store }) {
     await store.dispatch('landing/resetSearch')
+    // await store.dispatch('landing/loadCountryData', 'MY')
     await store.dispatch('dashboard/setDashboardSection', 'map')
+
     await Promise.all([
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('countries/loadMapData'),
