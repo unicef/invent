@@ -23,6 +23,27 @@ class InTeamOrReadOnly(permissions.BasePermission):
 
         return request.user.is_superuser or is_country_manager or obj.team.filter(
             id=request.user.userprofile.id).exists()
+    
+class InRegionOrReadOnly(permissions.BasePermission):
+    """
+    Object-level permission to only allow regional focal point of a project to edit it.
+
+    `obj` needs to be a `Project` instance
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+    #     is_country_manager = False
+    #     co_id = obj.get_country_office_id()
+    #     if co_id:
+    #         is_country_manager = request.user.userprofile.manager_of.filter(id=co_id).exists()
+
+    #     return request.user.is_superuser or is_country_manager or obj.team.filter(
+    #         id=request.user.userprofile.id).exists()
 
 
 class InCountryAdminForApproval(permissions.BasePermission):
