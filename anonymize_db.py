@@ -35,7 +35,8 @@ try:
         port=DB_PORT
     )
 except psycopg2.Error as e:
-    logging.error(f"Failed to connect to the source database. More info: {str(e)}")
+    logging.error(
+        f"Failed to connect to the source database. More info: {str(e)}")
     raise
 
 conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
@@ -59,7 +60,8 @@ try:
     logging.info("Created the new database")
 
 except psycopg2.Error as e:
-    logging.error(f"Failed to execute a database operation. More info: {str(e)}")
+    logging.error(
+        f"Failed to execute a database operation. More info: {str(e)}")
     raise
 finally:
     cursor.close()
@@ -119,8 +121,14 @@ try:
             tables_to_anonymize = {
                 'account_emailaddress': ['email'],
                 'auth_user': ['username', 'first_name', 'last_name', 'email'],
-                'core_newsitem': ['title', 'description', 'description_en', 'description_es', 'description_fr', 'description_pt']
+                'core_newsitem': ['title', 'description', 'description_en', 'description_es', 'description_fr', 'description_pt', 'title_en', 'title_fr', 'title_es', 'title_pt'],
+                'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                'project_nontechplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                'project_project': ['name', 'data']
             }
+            # List of options that will be excluded from the anonymization script.
+            non_anonymized_options = ['N/A', 'Unknown', 'Other']
 
             column_faker_map = {
                 'email': 'email',
@@ -130,6 +138,8 @@ try:
             }
 
             # Anonymize data
+            # In the anonymization process, add a check before creating the fake value.
+
             for table, columns in tables_to_anonymize.items():
                 try:
                     # Fetch data from the original table
@@ -147,21 +157,23 @@ try:
                                     column_index = i
                                     break
                             if column_index is not None:
-                                faker_method = column_faker_map[column]
-                                new_row[column_index] = getattr(fake, faker_method)()
+                                # Check if the value is in the non_anonymized_options list
+                                if row[column_index] not in non_anonymized_options:
+                                    faker_method = column_faker_map[column]
+                                    new_row[column_index] = getattr(fake, faker_method)()
+                                else:
+                                    new_row[column_index] = row[column_index]
 
                         anonymized_rows.append(new_row)
 
                     # Insert anonymized data into the new table
                     values_placeholder = ','.join(['%s'] * len(row))
-                    new_cursor.executemany(f"INSERT INTO {table} VALUES ({values_placeholder});", anonymized_rows)
+                    new_cursor.executemany(
+                        f"INSERT INTO {table} VALUES ({values_placeholder});", anonymized_rows)
 
                     logging.info(f"Anonymized data in table {table}")
 
-                except psycopg2.Error as e:
-                    logging.error(f"Failed to anonymize data in table {table}. More info: {str(e)}")
-                    raise
-
 except psycopg2.Error as e:
-    logging.error(f"Failed to connect to the new database or execute a database operation. More info: {str(e)}")
+    logging.error(
+        f"Failed to anonymize data in table {table}. More info: {str(e)}")
     raise
