@@ -173,7 +173,12 @@ try:
 
                     logging.info(f"Anonymized data in table {table}")
 
+                except psycopg2.Error as e:
+                    logging.error(
+                        f"Failed to anonymize data in table {table}. More info: {str(e)}")
+                    raise
+
 except psycopg2.Error as e:
     logging.error(
-        f"Failed to anonymize data in table {table}. More info: {str(e)}")
+        f"Failed to connect to the new database or execute a database operation. More info: {str(e)}")
     raise
