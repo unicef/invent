@@ -125,7 +125,15 @@ try:
                 'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
                 'project_nontechplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
                 'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
-                'project_project': ['name', 'data']
+                'project_technologyplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                'project_project': ['name', 'data'],
+                'project_projectportfoliostate': ['overall_reviewer_feedback'],
+                'project_projectversion': ['name', 'data'],
+                'project_reviewscore': ['psa_comment', 'rnci_comment', 'ratp_comment', 'ra_comment', 'ee_comment', 'nct_comment', 'nc_comment', 'ps_comment'],
+                'project_solution': ['name'],
+                'search_projectsearch': ['partner_names'],
+                'socialaccount_socialaccount': ['data'],
+                'user_userprofile': ['name', 'department', 'job_title']
             }
             # List of options that will be excluded from the anonymization script.
             non_anonymized_options = ['N/A', 'Unknown', 'Other']
@@ -160,7 +168,8 @@ try:
                                 # Check if the value is in the non_anonymized_options list
                                 if row[column_index] not in non_anonymized_options:
                                     faker_method = column_faker_map[column]
-                                    new_row[column_index] = getattr(fake, faker_method)()
+                                    new_row[column_index] = getattr(
+                                        fake, faker_method)()
                                 else:
                                     new_row[column_index] = row[column_index]
 
