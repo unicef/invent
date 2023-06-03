@@ -1,7 +1,7 @@
 <template>
   <div v-scroll-class:FixedNavigation="266" class="ProjectNavigation">
     <el-card :body-style="{ padding: '0px' }">
-      <div v-if="isTeam || isNewProject || isSuper" class="NavigationActions">
+      <div v-if="canEdit" class="NavigationActions">
         <el-button
           v-if="true"
           :disabled="!!loading || disabled"
@@ -22,43 +22,18 @@
           @click="emitAction('cancel')"
         >
           <fa v-show="loading === 'draft'" icon="spinner" spin />
-          <translate>Cancel</translate><br />
-          <translate class="Rt-dashboard">Return to the Dashboard</translate>
+          <translate>Cancel</translate>
         </el-button>
-
-        <el-button v-if="true" :disabled="!!loading" type="text" class="DeleteButton" @click="emitAction('delete')">
-          <fa v-show="loading === 'discard'" icon="spinner" spin />
-          <translate>Delete</translate>
-        </el-button>
-
-        <el-tooltip
-          v-if="isPublished"
-          effect="dark"
-          placement="top"
-          popper-class="tooltip--width"
-          :hide-after="parseInt(3200, 10)"
-        >
-          <div slot="content">
-            {{ $gettext('The action will update the timestamp') | translate }}<br />
-            {{ $gettext('of the initiative to the current date.') | translate }}
-          </div>
-          <el-button :disabled="!!loading" type="primary" size="medium" @click="emitAction('handleClickLatest')">
-            <fa v-show="loading === 'latest'" icon="spinner" spin />
-            <translate>Publish as latest</translate>
-            <fa icon="question-circle" />
-          </el-button>
-        </el-tooltip>
 
         <el-button
-          v-if="isPublished"
+          v-if="canDelete"
           :disabled="!!loading"
-          type="danger"
-          size="medium"
-          class="button--danger"
-          @click="emitAction('handleClickUnPublish')"
+          type="text"
+          class="el-button button--danger el-button--danger el-button--medium"
+          @click="emitAction('delete')"
         >
-          <fa v-show="loading === 'unpublish'" icon="spinner" spin />
-          <translate>Unpublish</translate>
+          <fa v-show="loading === 'discard'" icon="spinner" spin />
+          <translate>Delete</translate>
         </el-button>
       </div>
     </el-card>
@@ -78,6 +53,10 @@ export default {
       required: false,
       default: false,
     },
+    canDelete: {
+      required: false,
+      default: true,
+    },
   },
   computed: {
     ...mapGetters({
@@ -94,23 +73,14 @@ export default {
     isNewProject() {
       return this.route === 'organisation-initiatives-create'
     },
-    isPublished() {
-      return this.route === 'organisation-initiatives-id'
-    },
-    isDraft() {
-      return this.route === 'organisation-initiatives-id-edit'
-    },
     canEdit() {
       if (this.user) {
-        return this.user.is_superuser
+        return this.user.is_superuser || this.user.global_portfolio_owner || this.user.manager.length > 0
       }
       return false
     },
     isTeam() {
       return this.user ? this.user.member.includes(+this.$route.params.id) : false
-    },
-    isSuper() {
-      return this.user && this.user.is_superuser
     },
   },
   mounted() {
@@ -136,17 +106,6 @@ export default {
       this.$nextTick(() => {
         this.$router.replace(`#${where}`)
       })
-    },
-    goToDraft() {
-      const name =
-        this.isTeam || this.isSuper
-          ? 'organisation-innovation-solutions-id-edit'
-          : 'organisation-innovation-solutions-id'
-      const localised = this.localePath({
-        name,
-        params: { ...this.$route.params },
-      })
-      this.$router.push(localised)
     },
     goToPublished() {
       const localised = this.localePath({
@@ -360,6 +319,9 @@ export default {
   }
   .Cancel {
     color: gray;
+    padding: 30px;
+    margin-top: -14px !important;
+    margin-bottom: 6px !important;
     :hover {
       color: lightgray;
     }

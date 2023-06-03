@@ -50,16 +50,7 @@
         <template slot="label">
           <translate key="country_office"> Which UNICEF Office supports the initiative? </translate>
         </template>
-        <!--        <template slot="tooltip">-->
-        <!--          <el-tooltip-->
-        <!--            class="item"-->
-        <!--            content="If you encounter an error and/or can not locate the UNICEF Office-->
-        <!--            you would like to see in this list, please send a request with details to invent@unicef.org"-->
-        <!--            placement="right"-->
-        <!--          >-->
-        <!--            <i class="el-icon-warning warning" />-->
-        <!--          </el-tooltip>-->
-        <!--        </template>-->
+
         <country-office-select
           v-model="country_office"
           v-validate="rules.country_office"
@@ -224,48 +215,33 @@
         </span>
       </el-form-item>
 
-      <el-row :gutter="20" type="flex">
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('contact_name')"
-            :draft-rule="draftRules.contact_name"
-            :publish-rule="publishRules.contact_name"
-          >
-            <template slot="label">
-              <translate key="contact-name">Who is the focal point of contact for this initiative?</translate>
-            </template>
+      <custom-required-form-team-item
+        :error="errors.first('contact_email')"
+        :draft-rule="draftRules.contact_email"
+        :publish-rule="publishRules.contact_email"
+      >
+        <template slot="label">
+          <translate key="contact-email">Who is the focal point for this initiative?</translate>
+        </template>
 
-            <character-count-input
-              v-model="contact_name"
-              v-validate="rules.contact_name"
-              :rules="rules.contact_name"
-              data-vv-name="contact_name"
-              data-vv-as="Contact name"
-            />
-          </custom-required-form-item>
-        </el-col>
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('contact_email')"
-            :draft-rule="draftRules.contact_email"
-            :publish-rule="publishRules.contact_email"
-          >
-            <template slot="label">
-              <translate key="contact-email"> Focal Point Email </translate>
-            </template>
+        <FocalProfileSelector
+          v-model="contact_email"
+          v-validate="rules.contact_email"
+          data-vv-name="contact_email"
+          data-vv-as="Contact email"
+          :multiple="false"
+        />
 
-            <character-count-input
-              v-model="contact_email"
-              v-validate="rules.contact_email"
-              :rules="rules.contact_email"
-              data-vv-name="contact_email"
-              data-vv-as="Contact email"
-              @blur="addContactToTeam"
-              @keyup.enter.native="addContactToTeam"
-            />
-          </custom-required-form-item>
-        </el-col>
-      </el-row>
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate
+              >The focal point is the team member who is leading this work, and will act as the point of contact for
+              anyone wishing to connect with the team.</translate
+            >
+          </p>
+        </span>
+      </custom-required-form-team-item>
 
       <div class="TeamArea">
         <custom-required-form-team-item
@@ -275,11 +251,15 @@
           :publish-rule="publishRules.team"
         >
           <template slot="label">
-            <translate key="team">Who else should be able to modify this initiative's entry?</translate>
+            <translate key="team">Who are the team members for this initiative?</translate>
           </template>
-
-          <team-selector v-model="team" v-validate="rules.team" data-vv-name="team" data-vv-as="Team" />
-
+          <UserProfileSelector
+            v-model="team"
+            :omit="contact_email"
+            v-validate="rules.team"
+            data-vv-name="team"
+            data-vv-as="Team"
+          />
           <span class="Hint">
             <fa icon="info-circle" />
             <p>
@@ -332,6 +312,8 @@ import CollapsibleCard from '../CollapsibleCard'
 import TeamSelector from '../TeamSelector'
 import CountryOfficeSelect from '../../common/CountryOfficeSelect'
 import { mapGettersActions } from '../../../utilities/form'
+import UserProfileSelector from '../UserProfileSelector.vue'
+import FocalProfileSelector from '../FocalProfileSelector.vue'
 
 export default {
   components: {
@@ -340,8 +322,11 @@ export default {
     TeamSelector,
     CustomRequiredFormTeamItem,
     FileUpload,
+    UserProfileSelector,
+    FocalProfileSelector,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+
   computed: {
     ...mapState({
       offices: (state) => state.offices.offices,
@@ -352,8 +337,9 @@ export default {
       getCountryDetails: 'countries/getCountryDetails',
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
-      userProfiles: 'system/getUserProfilesNoFilter',
+      getContactEmail: 'project/getContactEmail',
     }),
+
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
@@ -361,7 +347,6 @@ export default {
       overview: ['project', 'getOverview', 'setOverview', 0],
       coverImage: ['project', 'getCoverImage', 'setCoverImage', 0],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
       contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0],
@@ -401,29 +386,8 @@ export default {
       }
     },
   },
+
   methods: {
-    async addContactToTeam() {
-      const validEmail = await this.$validator.validate('contact_email')
-      if (!validEmail || this.contact_email === '') return
-      const teamMember = this.userProfiles.find((user) => {
-        return user.email === this.contact_email
-      })
-      if (teamMember !== undefined) {
-        if (!this.team.includes(teamMember.id)) {
-          const team = this.team.concat(teamMember.id)
-          this.team = team
-        }
-      } else {
-        const addToTeam =
-          validEmail &&
-          (this.contact_email.endsWith('unicef.org') || this.contact_email.endsWith('pulilab.com')) &&
-          !this.team.includes(this.contact_email)
-        if (addToTeam) {
-          const team = this.team.concat(this.contact_email)
-          this.team = team
-        }
-      }
-    },
     openFeedback() {
       this.$store.commit('user/SET_FEEDBACK', {
         feedbackOn: true,

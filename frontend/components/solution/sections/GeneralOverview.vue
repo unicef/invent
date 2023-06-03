@@ -72,6 +72,7 @@
         :rules="rules"
         :error="errors.first('portfolio-table')"
         name="portfolio-table"
+        class="portfolio-table"
       />
     </collapsible-solution-card>
   </div>
@@ -152,11 +153,18 @@ export default {
 }
 .tech__checkbox {
   color: @colorTextPrimary;
+  .el-checkbox__label {
+    font-weight: bold;
+  }
+
   .el-checkbox__inner {
     border-color: @colorTextPrimary;
   }
 }
 .TeamArea {
   position: relative;
+}
+.portfolio-table {
+  padding-top: 16px;
 }
 </style>

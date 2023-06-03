@@ -17,7 +17,8 @@ urlpatterns = [
     url(r"^", include("django.contrib.auth.urls")),
     url(r'^rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
     url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
-    url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
+    url(r"^email-confirmation/(?P<key>\w+)/$",
+        confirm_email, name="account_confirm_email"),
 ]
 
 if settings.ENABLE_API_REGISTRATION:

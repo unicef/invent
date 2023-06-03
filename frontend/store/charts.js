@@ -1,10 +1,5 @@
 // utilities
-import {
-  dataInfoFill,
-  fillArr,
-  phaseInfo,
-  lastLabelType,
-} from '@/utilities/charts'
+import { dataInfoFill, fillArr, phaseInfo, lastLabelType } from '@/utilities/charts'
 import { formatDate } from '@/utilities/projects'
 import { isBefore } from 'date-fns'
 
@@ -27,15 +22,11 @@ export const actions = {
     const end = formatDate(project.end_date)
     const today = formatDate(new Date())
 
-    const labels = [start].concat(
-      stages.filter((i) => i.checked).map((i) => formatDate(i.date))
-    )
+    const labels = [start].concat(stages.filter((i) => i.checked).map((i) => formatDate(i.date)))
     // const lastLabel = labels[labels.length - 1];
 
     // data
-    const data = [0].concat(
-      stages.filter((i) => i.checked).map((i) => phases.indexOf(i.name))
-    )
+    const data = [0].concat(stages.filter((i) => i.checked).map((i) => phases.indexOf(i.name)))
     const lastDataPoint = data[data.length - 1]
 
     // today and end date data points, if needed
@@ -67,8 +58,7 @@ export const actions = {
           )
         : []
     // stages calc
-    const stagesData =
-      todayIncludes.length > 0 ? data.slice(0, -checkLabels.length) : data
+    const stagesData = todayIncludes.length > 0 ? data.slice(0, -checkLabels.length) : data
 
     const { color, rotation, dash, point } = phaseInfo(lastLabelType(labels))
 
@@ -153,9 +143,7 @@ export const actions = {
             if (xLabel.includes('Ended')) {
               return `Note: ${notes[notes.length - 1]}`.match(/.{1,38}/g)
             }
-            return notes[yLabel]
-              ? `Note: ${notes[yLabel]}`.match(/.{1,38}/g)
-              : null
+            return notes[yLabel] ? `Note: ${notes[yLabel]}`.match(/.{1,38}/g) : null
           },
         },
         backgroundColor: '#474747',

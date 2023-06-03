@@ -17,7 +17,7 @@
 
           <el-row>
             <el-col :span="12">
-              <simple-field :content="project.contact_name" :header="$gettext('Contact name') | translate" />
+              <simple-field :content="getUserName" :header="$gettext('Contact name') | translate" />
             </el-col>
             <el-col :span="12">
               <simple-field :content="project.contact_email" :header="$gettext('Contact email') | translate" />
@@ -367,7 +367,12 @@ export default {
       modified: 'project/getModified',
       regionalOffices: 'projects/getRegionalOffices',
       innovationWays: 'projects/getInnovationWays',
+      userProfiles: 'system/getUserProfilesNoFilter',
     }),
+    getUserName() {
+      const userName = this.userProfiles.find((profile) => profile.email === this.project.contact_email)
+      return userName && userName.name ? userName.name : this.project.contact_name
+    },
     location() {
       const { selectedRegionOffice, office, country, selectedRegion } = this
       if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {
@@ -408,7 +413,9 @@ export default {
       return ''
     },
     lastUpdated() {
-      return format(new Date(this.modified), 'DD/MM/YYYY HH:mm')
+      return this.published.modified
+        ? format(this.published.modified, 'DD/MM/YYYY HH:mm')
+        : format(this.draft.modified, 'DD/MM/YYYY HH:mm')
     },
     countryQuestions() {
       if (this.country) {

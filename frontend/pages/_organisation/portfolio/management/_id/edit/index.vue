@@ -2,15 +2,13 @@
   <div class="portfolio">
     <div class="title">
       <nuxt-link
-        :to="localePath({ name: 'organisation-portfolio-management' })"
+        :to="localePath({ name: 'organisation-portfolio-innovation-id', params: { id: this.$route.params.id } })"
       >
         <fa icon="angle-left" size="sm" />
         <translate>Back</translate>
       </nuxt-link>
       <h2>
-        <translate :parameters="{ name: fixedName }">
-          Edit `{name}` portfolio
-        </translate>
+        <translate :parameters="{ name: fixedName }"> Edit `{name}` portfolio </translate>
       </h2>
     </div>
     <new-portfolio-form edit />
@@ -30,8 +28,12 @@ export default {
       fixedName: '',
     }
   },
-  async fetch({ store, params }) {
-    await store.dispatch('portfolio/getPortfolioDetails', { id: params.id })
+  async fetch({ store, params, error }) {
+    try {
+      await store.dispatch('portfolio/getPortfolioDetails', { id: params.id })
+    } catch (e) {
+      error({ statusCode: 403, message: 'Forbidden' })
+    }
   },
   computed: {
     ...mapState({

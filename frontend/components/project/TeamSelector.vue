@@ -1,51 +1,22 @@
 <template>
   <lazy-el-select
+    v-model="innerValue"
+    :multiple="multiple"
     slot="reference"
-    v-outside="{
-      exclude: [],
-      handler: 'onOutside',
-    }"
-    v-paste="{
-      exclude: [],
-      handler: 'onPaste',
-    }"
-    :value="value"
-    :placeholder="$gettext('Type and select a name') | translate"
-    :remote-method="filterList"
-    multiple
     filterable
+    autocomplete
     remote
+    clearable
+    :remote-method="filterMethod"
+    :placeholder="$gettext('Type and select a name') | translate"
+    :popper-class="optionsWithValues.length > innerValue.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
     class="TeamSelector"
-    :popper-class="
-      optionsAndValues.length > value.length
-        ? 'TeamSelectorDropdown'
-        : 'NoDisplay'
-    "
-    @change="changeHandler"
-    @keyup.enter.native="onEnter"
   >
-    <el-option
-      v-for="person in optionsAndValues"
-      :key="person.id"
-      :label="
-        `${person.name ? person.name + ', ' : ''}${
-          person.organisation
-            ? getOrganisationDetails(person.organisation).name
-            : ''
-        } ${person.name ? '(' + person.email + ')' : person.email}` | truncate
-      "
-      :value="person.id"
-    >
-      <!-- N/A -->
-      <span style="float: left">{{ person.name ? person.name : ' ' }}</span>
-      <template v-if="person.organisation">
-        <organisation-item :id="person.organisation" />
-      </template>
-      <template v-else>
-        <br/>
-      </template>
+    <el-option v-for="person in optionsWithValues" :key="person.id" :label="person.label" :value="person.id">
+      <span style="float: left">{{ person.label }}</span>
+      <br />
       <span class="email"
-        ><small>{{ person.email }}</small></span
+        ><small>{{ person.info }}</small></span
       >
     </el-option>
   </lazy-el-select>
@@ -53,21 +24,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import validator from 'validator'
-import LightSelectMixin from '../mixins/LightSelectMixin.js'
+
 import OrganisationItem from '../common/OrganisationItem'
 
 export default {
   components: {
     OrganisationItem,
   },
-  filters: {
-    truncate(str) {
-      if (str.length > 50) return `${str.substr(0, 47)}...`
-      return str
-    },
-  },
-  mixins: [LightSelectMixin],
+
   $_veeValidate: {
     value() {
       return this.value
@@ -83,75 +47,48 @@ export default {
       type: Array,
       default: null,
     },
+    multiple: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
-      invalidEmails: [],
+      filteredOptions: [],
     }
   },
   computed: {
     ...mapGetters({
-      items: 'system/getUserProfilesNoFilter',
-      getOrganisationDetails: 'system/getOrganisationDetails',
+      userProfiles: 'system/getUserProfilesWithLabel',
     }),
+    innerValue: {
+      get() {
+        return this.value
+      },
+      set(value) {
+        this.$emit('change', value)
+      },
+    },
+    optionsWithValues() {
+      const options = [
+        ...this.filteredOptions,
+        ...this.value.map((userId) => this.userProfiles.find((profile) => profile.id === userId)),
+      ]
+      return [...new Set(options)]
+    },
   },
   methods: {
-    changeHandler(value) {
-      this.$emit('change', value)
-    },
-    onOutside() {
-      this.emitEmails(this.validEmails(this.emailList(this.query)))
-      this.query = ''
-      this.errorMessage()
-    },
-    onPaste(str, e) {
-      const emails = this.emailList(str)
-      const validEmails = this.validEmails(emails)
-      this.errorMessage()
-
-      if (emails.length === validEmails.length) {
-        this.emitEmails(validEmails)
-        e.target.blur()
+    filterMethod(query) {
+      if (query) {
+        this.filteredOptions = this.userProfiles.filter(
+          (p) => this.filter(p.name ? p.name : p.email, query) || (p.email ? this.filter(p.email, query) : false)
+        )
+      } else {
+        this.filteredOptions = []
       }
     },
-    onEnter(e) {
-      this.emitEmails(this.validEmails(this.emailList(e.target.value)))
-      this.errorMessage()
-    },
-    emailList(str) {
-      return str.trim().replace(/ /g, '').split(',')
-    },
-    emitEmails(mails) {
-      mails.map((email) => this.$emit('change', email))
-    },
-    validEmails(mails) {
-      return mails.filter(
-        (email) => this.validateEmail(email) && !this.arrIncludes(email)
-      )
-    },
-    arrIncludes(val) {
-      return this.value.includes(val)
-    },
-    validateEmail(email) {
-      const valid =
-        validator.isEmail(email) &&
-        (email.endsWith('unicef.org') || email.endsWith('pulilab.com'))
-      if (!valid) {
-        this.invalidEmails = [...this.invalidEmails, email]
-      }
-      return valid
-    },
-    errorMessage() {
-      if (this.invalidEmails.length > 0 && this.invalidEmails[0] !== '') {
-        this.$message({
-          dangerouslyUseHTMLString: true,
-          message: `<b>${this.invalidEmails.join(', ')}</b> ${this.$gettext(
-            `cant't be added. Make sure email is part of unicef.org`
-          )}`,
-          type: 'error',
-        })
-      }
-      this.invalidEmails = []
+    filter(val, query) {
+      return val.toLowerCase().startsWith(query.toLowerCase())
     },
   },
 }
@@ -163,8 +100,15 @@ export default {
 
 .TeamSelector {
   width: 100%;
+  word-wrap: normal;
   .el-select-dropdown__item.selected {
     display: none;
+  }
+
+  .el-tag {
+    height: fit-content;
+    word-wrap: normal;
+    white-space: normal;
   }
 
   &.el-select {
@@ -187,22 +131,30 @@ export default {
     margin-left: 6px;
     font-weight: 400;
     color: @colorGray;
-
     &::before {
       content: '(';
     }
-
     &::after {
       content: ')';
     }
   }
   li {
-    height: 50px;
+    height: fit-content;
+    padding-bottom: 4px;
     .email {
       float: left;
       width: 100%;
-      margin-top: -18px;
+      margin-top: -8px;
+      line-height: 1.2;
     }
   }
+}
+
+.el-select-dropdown__item {
+  max-width: 64vw;
+  min-width: 740px;
+  height: fit-content;
+  word-wrap: normal;
+  white-space: normal;
 }
 </style>

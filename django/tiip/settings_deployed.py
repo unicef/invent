@@ -4,9 +4,11 @@ import sentry_sdk
 from environs import Env
 from celery.schedules import crontab
 from sentry_sdk.integrations.django import DjangoIntegration
+import os
 
 env = Env()
 env.read_env()
+environment = os.environ.get('ENVIRONMENT')
 sentry_sdk.init(
     dsn=env.str('SENTRY_DSN', default=''),
     integrations=[DjangoIntegration()],
@@ -58,7 +60,15 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
+if environment in ['prd']:
+    CELERYBEAT_SCHEDULE["fetch_users_from_aad_task"] = {
+        "task": "fetch_users_from_aad_and_update_db",
+        "schedule": crontab(minute=0, hour=0),
+    }
+
 DEBUG = env.str('DEBUG', default='False')
+if environment == "prd":
+    DEBUG = False
 # allowed_hosts = env.str('ALLOWED_HOSTS', default='')
 ALLOWED_HOSTS = ['*']
 

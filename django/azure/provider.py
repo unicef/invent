@@ -30,7 +30,7 @@ class AzureProvider(OAuth2Provider):
         Doc on scopes available at
         https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-scopes  # noqa
         """
-        return ['User.Read', 'openid']
+        return ['User.Read', 'openid', 'User.Read.All']
 
     def extract_uid(self, data):
         return str(data['id'])
@@ -40,7 +40,11 @@ class AzureProvider(OAuth2Provider):
         return dict(email=email,
                     username=email,
                     last_name=data.get('displayName'),
-                    first_name=data.get('givenName'))
+                    first_name=data.get('givenName'),
+                    job_title=data.get('jobTitle'),
+                    department=data.get('department'),
+                    country=data.get('country')
+                    )
 
 
 provider_classes = [AzureProvider]

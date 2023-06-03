@@ -14,14 +14,15 @@
       <transition name="slide-fade">
         <div v-show="open" class="ContentContainer">
           <div v-if="showLegend" class="Legend">
-            <div>
-              <span class="Required Publish">
+            <div class="Star-div">
+              <span class="Star Publish">
                 <span> * </span>
               </span>
-              <span class="Text">
-                <translate ref="publish_required"> Required to publish </translate>
-              </span>
             </div>
+
+            <span class="Text">
+              <translate ref="publish_required"> Required to save </translate>
+            </span>
           </div>
           <slot />
         </div>
@@ -71,20 +72,25 @@ export default {
     .Text {
       font-size: @fontSizeSmall;
     }
+    .Star-div {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
 
-    .Required {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      font-size: 16px;
-      line-height: 12px;
-      font-weight: 900;
-      text-align: center;
-      border-radius: 50%;
+      .Star {
+        display: inline-flex;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
 
-      > span {
-        position: relative;
-        top: 3px;
+        > span {
+          font-size: 16px;
+          font-weight: 900;
+          position: relative;
+          top: 25%;
+        }
       }
     }
 

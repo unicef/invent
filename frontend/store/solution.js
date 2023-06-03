@@ -9,7 +9,7 @@ const cleanState = () => ({
   open_source_frontier_tech: false,
   learning_investment: false,
   portfolios: [],
-  people_reached: 0,
+  people_reached: null,
   problem_statements: [],
   country_solutions: [],
   problem_statement_list: [],
@@ -79,6 +79,22 @@ export const actions = {
         people_reached: state.people_reached,
         country_solutions: state.country_solutions,
         portfolio_problem_statements: state.portfolio_problem_statements,
+      },
+    })
+  },
+  async createNewSolution({ state }, data) {
+    return this.$axios({
+      method: 'post',
+      url: `/api/solution/create/`,
+      data: {
+        name: data.name,
+        is_active: true,
+        phase: data.phase,
+        open_source_frontier_tech: data.open_source_frontier_tech,
+        learning_investment: data.learning_investment,
+        people_reached: data.people_reached,
+        country_solutions: data.country_solutions,
+        portfolio_problem_statements: data.portfolio_problem_statements,
       },
     })
   },

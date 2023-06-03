@@ -50,6 +50,7 @@ export default {
       const localised = this.localePath({
         name: `organisation-portfolio-innovation-solutions-id-edit`,
         params: { ...this.$route.params },
+        query: { portfolio: this.$route.query.portfolio },
       })
       this.$router.push(localised)
     },

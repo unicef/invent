@@ -1,0 +1,13 @@
+trigger:
+  branches:
+    include:
+      - tst
+
+  paths:
+    include:
+      - frontend/*
+
+pr: none
+
+steps:
+- script: echo "This pipeline will trigger the TST Frontend pipeline in Azure DevOps."

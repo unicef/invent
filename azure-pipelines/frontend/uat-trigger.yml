@@ -1,0 +1,13 @@
+trigger:
+  branches:
+    include:
+      - uat
+
+  paths:
+    include:
+      - frontend/*
+
+pr: none
+
+steps:
+- script: echo "This pipeline will trigger the UAT Frontend pipeline in Azure DevOps."

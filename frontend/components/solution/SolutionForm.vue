@@ -67,7 +67,7 @@ export default {
           portfolio_problem_statements: [],
         },
         activity_reach: {
-          override_reach: 0,
+          override_reach: null,
           people_reached: 0,
           country_solutions: [],
         },
@@ -78,12 +78,7 @@ export default {
     ...mapGetters({
       getSolution: 'solution/getSolutionData',
     }),
-    isDraft() {
-      return this.$route.name.includes('organisation-portfolio-innovation-solutions-edit')
-    },
-    isNewSolution() {
-      return this.$route.name.includes('organisation-portfolio-innovation-solutions-create')
-    },
+
     showForm() {
       return this.readyElements >= this.createdElements
     },
@@ -93,7 +88,6 @@ export default {
     const s = this.getSolution
     this.solution = {
       activity_reach: {
-        override_reach: 0,
         people_reached: s.people_reached,
         country_solutions: s.country_solutions,
       },
@@ -111,7 +105,6 @@ export default {
       const s = this.getSolution
       this.solution = {
         activity_reach: {
-          override_reach: 0,
           people_reached: s.people_reached,
           country_solutions: s.country_solutions,
         },
@@ -144,6 +137,7 @@ export default {
       // console.log(countriesTable)
       // this.solution.activity_reach.country_solutions = countriesTable.find((row) => row.country !== null)
     },
+
     handleErrorMessages() {},
     async validate() {
       const validations = await Promise.all([
@@ -158,8 +152,23 @@ export default {
       this.$refs.solutionGeneral.clear()
       this.$refs.solutionActivityAndReach.clear()
     },
+    peopleReached(people_reached) {
+      if (people_reached === undefined || people_reached === null) {
+        return null
+      } else {
+        return people_reached
+      }
+    },
+    goToViewSolution() {
+      const id = this.$route.params.id
+      const localised = this.localePath({
+        name: 'organisation-portfolio-innovation-solutions-id',
+        params: { ...this.$route.params, id },
+        query: { ...this.$route.query },
+      })
+      this.$router.push(localised)
+    },
     async handleSave() {
-      console.log('handle Save clicked')
       // this.trimEmptyRows()
 
       // this.setLoading(true)
@@ -172,23 +181,16 @@ export default {
         if (general && solutionActivityAndReach) {
           const s = this.solution
           try {
-            const response = await this.updateSolution({
+            await this.updateSolution({
               name: s.general_overview.name,
               phase: s.general_overview.phase,
               open_source_frontier_tech: s.general_overview.open_source_frontier_tech,
               learning_investment: s.general_overview.learning_investment,
               portfolio_problem_statements: s.general_overview.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
-              people_reached: s.activity_reach.override_reach
-                ? s.activity_reach.override_reach
-                : s.activity_reach.people_reached,
+              people_reached: this.peopleReached(s.activity_reach.override_reach),
             })
-            const id = response.data.id
-            const localised = this.localePath({
-              name: 'organisation-portfolio-innovation-solutions-id',
-              params: { ...this.$route.params, id },
-            })
-            this.$router.push(localised)
+            this.goToViewSolution()
 
             this.$alert(this.$gettext('Your Solution has been saved successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close'),
@@ -196,6 +198,13 @@ export default {
             this.usePublishRules = false
             return
           } catch (e) {
+            this.$alert(
+              `${this.$gettext('Request failed, please retry, or contact support with code: ')} ${e.message}`,
+              this.$gettext('Error'),
+              {
+                confirmButtonText: this.$gettext('Close'),
+              }
+            )
             if (e.response) {
               this.apiErrors = e.response.data
             } else {
@@ -219,7 +228,7 @@ export default {
     async handleCancel() {
       try {
         await this.$confirm(
-          this.$gettext('Any changes will be lost and you will be navigated to Dashboard'),
+          this.$gettext('Any changes will be lost and you will be navigated to View Solution page'),
           this.$gettext('Attention'),
           {
             confirmButtonText: this.$gettext('Ok'),
@@ -228,7 +237,7 @@ export default {
           }
         )
         await this.cancelSolution()
-        this.$router.push(this.localePath('organisation'))
+        this.goToViewSolution()
         this.$message({
           type: 'success',
           message: this.$gettext('Edit canceled'),
@@ -237,30 +246,53 @@ export default {
         // this.setLoading(false)
         this.$message({
           type: 'info',
-          message: this.$gettext('Action cancelled'),
+          message: this.$gettext('Action Canceled.'),
         })
       }
     },
     async handleDeleteSolution() {
       this.clearValidation()
       try {
-        await this.$confirm(this.$gettext('The current solution will be deleted'), this.$gettext('Attention'), {
+        await this.$confirm(this.$gettext('This solution will be deleted!'), this.$gettext('Attention'), {
           confirmButtonText: this.$gettext('Ok'),
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning',
         })
+        await this.doDeleteSolution()
+      } catch (e) {
+        // this.setLoading(false)
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action Canceled.'),
+        })
+      }
+    },
+    async doDeleteSolution() {
+      try {
         await this.deleteSolution()
-        this.$router.push(this.localePath('organisation'))
+        const localised = this.localePath({
+          name: 'organisation-portfolio-innovation-solutions',
+          params: { ...this.$route.params },
+        })
+        this.$router.replace(localised)
+
         this.$message({
           type: 'success',
           message: this.$gettext('Solution deleted succesfully'),
         })
       } catch (e) {
-        // this.setLoading(false)
+        this.$alert(
+          `${this.$gettext('Request failed, please retry, or contact support with code: ')} ${e.message}`,
+          this.$gettext('Error'),
+          {
+            confirmButtonText: this.$gettext('Close'),
+          }
+        )
         this.$message({
           type: 'info',
-          message: this.$gettext('Action cancelled'),
+          message: this.$gettext('Action failed'),
         })
+        this.apiErrors = e.response.data ? e.response.data : 'error'
       }
     },
     async doPublishProject() {
@@ -287,7 +319,15 @@ export default {
           }
         }
         this.handleErrorMessages()
-        // this.setLoading(false)
+        this.$nextTick(() => {
+          const errors = [...this.$el.querySelectorAll('.is-error')]
+          const visibleErrors = errors.filter((e) => e.offsetParent !== null)
+          if (visibleErrors && visibleErrors.length > 0) {
+            visibleErrors[0].scrollIntoView()
+          } else {
+            this.unCaughtErrorHandler(errors)
+          }
+        })
       })
     },
     createdHandler() {

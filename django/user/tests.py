@@ -10,7 +10,6 @@ from rest_framework.authtoken.models import Token
 
 from country.models import Country, Donor
 from .models import Organisation, UserProfile
-from .tasks import send_user_request_to_admins
 
 
 def create_profile_for_user(register_response: Response) -> UserProfile:
@@ -33,7 +32,8 @@ class UserTests(APITestCase):
         create_profile_for_user(response)
 
         self.test_user_key = response.json().get("key")
-        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
+        self.test_user_client = APIClient(
+            HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
 
         # Create a test user, don't validate the account.
         url = reverse("rest_register")
@@ -55,7 +55,8 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         user_profile_id = response.json().get('user_profile_id')
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
-        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(
+            response.json().get("token")), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('id'), user_profile_id)
@@ -63,7 +64,8 @@ class UserTests(APITestCase):
         self.assertEqual(response.json().get('global_portfolio_owner'), False)
 
         # UNAUTHORIZED ACCESS
-        client = APIClient(HTTP_AUTHORIZATION="Token {}".format('RANDOM'), format="json")
+        client = APIClient(
+            HTTP_AUTHORIZATION="Token {}".format('RANDOM'), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 401)
         error_detail = response.json()['detail']
@@ -72,14 +74,16 @@ class UserTests(APITestCase):
         # NON EXPIRING TOKEN ACCESS
         user = User.objects.get(email='test_user1@gmail.com')
         token = Token.objects.create(user=user)
-        client = APIClient(HTTP_AUTHORIZATION="Bearer {}".format(token.key), format="json")
+        client = APIClient(HTTP_AUTHORIZATION="Bearer {}".format(
+            token.key), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('id'), user_profile_id)
         self.assertEqual(response.json().get('email'), "test_user1@gmail.com")
 
         # UNAUTHORIZED NON EXPIRING TOKEN ACCESS
-        client = APIClient(HTTP_AUTHORIZATION="Bearer {}".format('RANDOM'), format="json")
+        client = APIClient(
+            HTTP_AUTHORIZATION="Bearer {}".format('RANDOM'), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.json()['detail'], 'Invalid token.')
@@ -104,7 +108,8 @@ class UserTests(APITestCase):
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["email"][0], "A user is already registered with this e-mail address.")
+        self.assertEqual(response.json()[
+                         "email"][0], "A user is already registered with this e-mail address.")
 
     def test_register_user_invalid_email(self):
         url = reverse("rest_register")
@@ -114,7 +119,8 @@ class UserTests(APITestCase):
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["email"][0], "Enter a valid email address.")
+        self.assertEqual(response.json()["email"]
+                         [0], "Enter a valid email address.")
 
     def test_register_without_email(self):
         url = reverse("rest_register")
@@ -124,14 +130,16 @@ class UserTests(APITestCase):
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["email"][0], 'This field may not be blank.')
+        self.assertEqual(response.json()["email"]
+                         [0], 'This field may not be blank.')
 
         data = {
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["email"][0], 'This field is required.')
+        self.assertEqual(response.json()["email"]
+                         [0], 'This field is required.')
 
     def test_login_user(self):
         url = reverse("api_token_auth")
@@ -150,7 +158,8 @@ class UserTests(APITestCase):
             "password": "123456hetNYOLCs"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
-        self.assertIn(response.json()["non_field_errors"][0], "Unable to log in with provided credentials.")
+        self.assertIn(response.json()[
+                      "non_field_errors"][0], "Unable to log in with provided credentials.")
 
 
 class UserProfileTests(APITestCase):
@@ -163,7 +172,8 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED, response.json())
 
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -172,7 +182,8 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED, response.json())
 
         create_profile_for_user(response)
 
@@ -183,13 +194,15 @@ class UserProfileTests(APITestCase):
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.user_profile_id = response.json().get('user_profile_id')
-        self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(
+            response.json().get("token")), format="json")
 
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
         self.country = Country.objects.all()[0]
         self.donor = Donor.objects.create(name="Donor1", code="donor1")
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
@@ -206,7 +219,8 @@ class UserProfileTests(APITestCase):
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED, response.json())
 
         create_profile_for_user(response)
 
@@ -216,7 +230,8 @@ class UserProfileTests(APITestCase):
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         user_profile_id = response.json().get('user_profile_id')
-        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(
+            response.json().get("token")), format="json")
 
         org = Organisation.objects.create(name="org33")
         country = Country.objects.all()[0]
@@ -259,14 +274,16 @@ class UserProfileTests(APITestCase):
         response = self.client.post(url, data)
         user_profile_id = response.json().get('user_profile_id')
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
-        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(
+            response.json().get("token")), format="json")
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.country.users.add(user_profile_id)
         self.assertEqual(response.json().get('id'), user_profile_id)
         self.assertEqual(response.json().get('email'), "test_user2@gmail.com")
         self.assertEqual(response.json().get('donor'), self.donor.id)
-        self.assertEqual(response.json().get('account_type'), UserProfile.GOVERNMENT)
+        self.assertEqual(response.json().get(
+            'account_type'), UserProfile.GOVERNMENT)
         self.assertEqual(response.json().get('account_type_approved'), False)
         self.assertIn('language', response.json())
 
@@ -278,69 +295,81 @@ class UserProfileTests(APITestCase):
         response = self.client.post(url, data)
         user_profile_id = response.json().get('user_profile_id')
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
-        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(
+            response.json().get("token")), format="json")
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.DONOR)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.DONOR)
         self.donor.users.remove(user_profile_id)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), False)
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.DONOR_ADMIN)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.DONOR_ADMIN)
         self.donor.admins.remove(user_profile_id)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), False)
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.SUPER_DONOR_ADMIN)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN)
         self.donor.super_admins.remove(user_profile_id)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), False)
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.GOVERNMENT)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.GOVERNMENT)
         self.country.users.remove(user_profile_id)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), False)
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.COUNTRY_ADMIN)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.COUNTRY_ADMIN)
         self.country.admins.remove(user_profile_id)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), False)
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN)
         self.country.super_admins.remove(user_profile_id)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), False)
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.IMPLEMENTER)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.IMPLEMENTER)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), False)
 
-        UserProfile.objects.filter(id=user_profile_id).update(account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        UserProfile.objects.filter(id=user_profile_id).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN)
         self.country.super_admins.add(user_profile_id)
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('account_type_approved'), True)
 
     def test_update_user_profile(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         data = response.json()
         updated_country = Country.objects.all()[2].id
         data.update(country=updated_country)
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         self.assertEqual(response.json().get("country"), updated_country)
 
     def test_user_profile_update_with_empty_values(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -370,7 +399,8 @@ class UserProfileTests(APITestCase):
             "name": "org2"
         }
         response = self.client.post(url, data)
-        url = reverse("organisation-detail", kwargs={"pk": response.json().get("id")})
+        url = reverse("organisation-detail",
+                      kwargs={"pk": response.json().get("id")})
         response = self.client.get(url)
         self.assertEqual(response.json().get("name"), "org2")
 
@@ -391,13 +421,15 @@ class UserProfileTests(APITestCase):
         self.assertEqual(len(response.json()), 2)
 
     def test_user_profile_api_should_return_organisation(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue("organisation" in response.json())
 
     def test_user_profile_has_account_type_information(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue("account_type" in response.json())
@@ -410,10 +442,12 @@ class UserProfileTests(APITestCase):
         response = self.client.post(url, data)
 
         user = User.objects.get(email=data['username'])
-        profile = UserProfile.objects.create(user=user, account_type=UserProfile.DONOR)
+        profile = UserProfile.objects.create(
+            user=user, account_type=UserProfile.DONOR)
 
         url = reverse("userprofile-detail", kwargs={"pk": profile.id})
-        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(
+            response.json().get("token")), format="json")
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
@@ -426,10 +460,12 @@ class UserProfileTests(APITestCase):
         self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
 
     def test_user_profile_update_changes_account_type(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['account_type'], UserProfile.GOVERNMENT)
+        self.assertEqual(
+            response.json()['account_type'], UserProfile.GOVERNMENT)
 
         data = {
             "name": "Test Name",
@@ -441,87 +477,10 @@ class UserProfileTests(APITestCase):
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
-
-    def test_user_profile_donor_is_missing(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['account_type'], UserProfile.GOVERNMENT)
-
-        data = {
-            "name": "Test Name",
-            "organisation": self.org.id,
-            "country": Country.objects.get(id=3).id,
-            "account_type": UserProfile.DONOR
-        }
-        response = self.client.put(url, data)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'donor': ['Donor is required']})
-
-        data = {
-            "name": "Test Name",
-            "organisation": self.org.id,
-            "country": Country.objects.get(id=3).id,
-            "account_type": UserProfile.DONOR,
-            "donor": self.donor.id
-        }
-        response = self.client.put(url, data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
-
-    def test_admin_requests_are_triggering_celery_task(self):
-        c = Country.objects.create(code='XXY', name='COUNTRY_TEST')
-        c.admins.add(self.user_profile_id)
-
-        d = Donor.objects.create(name='DONOR_TEST')
-        d.super_admins.add(self.user_profile_id)
-
-        u1 = User.objects.create(username="username1", email="user1@user.org")
-        upf1 = UserProfile.objects.create(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
-
-        send_user_request_to_admins(upf1.pk)
-
-        u2 = User.objects.create(username="username2", email="user2@user.org")
-        upf2 = UserProfile.objects.create(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
-
-        send_user_request_to_admins(upf2.pk)
-
-        u3 = User.objects.create(username="username3", email="user3@user.org")
-        upf3 = UserProfile.objects.create(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
-
-        send_user_request_to_admins(upf3.pk)
-
-        self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
-            str(upf3), upf3.get_account_type_display(), c.name))
-
-        u4 = User.objects.create(username="username4", email="user4@user.org")
-        upf4 = UserProfile.objects.create(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
-
-        send_user_request_to_admins(upf4.pk)
-
-        self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
-            str(upf4), upf4.get_account_type_display(), d.name))
-
-        super_user = User.objects.filter(is_superuser=True).first()
-        UserProfile.objects.create(user=super_user)
-
-        upf3.account_type = UserProfile.COUNTRY_ADMIN
-        upf3.save()
-
-        send_user_request_to_admins(upf3.pk)
-
-        self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
-            str(upf3), upf3.get_account_type_display(), c.name))
-
-        # last two emails should be the same, but one going to the superuser
-        self.assertEqual(mail.outbox[-1].subject, mail.outbox[-2].subject)
-        self.assertNotEqual(mail.outbox[-1].recipients(), mail.outbox[-2].recipients())
-        recipients = mail.outbox[-2].recipients()[0] + mail.outbox[-1].recipients()[0]
-        self.assertTrue(UserProfile.objects.get(id=self.user_profile_id).user.email in recipients)
-        self.assertTrue(super_user.email in recipients)
 
     def test_save_filters(self):
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 

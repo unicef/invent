@@ -51,7 +51,22 @@ class IsGPOOrManagerPortfolio(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj: Portfolio):
         return request.user.userprofile.global_portfolio_owner or obj.managers.filter(id=request.user.userprofile.id)
+    
+class IsGPOOrManagerOfAtLeastOnePortfolio(permissions.BasePermission):
+    """
+    GPOs and managers have full access to at least one portfolio.
+    """
 
+    def has_object_permission(self, request, view, obj: Portfolio):
+        # Get the user from the request
+        user = request.user
+
+        # Check if the user is authenticated
+        if not user.is_authenticated:
+            return False
+
+        # Check if the user is a member of at least one portfolio
+        return user.userprofile.global_portfolio_owner or user.userprofile.portfolios.exists()
 
 class IsGPOOrManagerProjectPortfolioState(permissions.BasePermission):
     """

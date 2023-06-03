@@ -41,7 +41,7 @@
                   <translate>Innovation Portfolios</translate>
                 </nuxt-link>
               </div>
-              <div v-if="displayManager">
+              <div v-if="false">
                 <nuxt-link
                   key="managerBtn"
                   :to="localePath({ name: 'organisation-portfolio-management' })"
@@ -87,22 +87,6 @@
               <UserDropdown />
             </el-col>
           </template>
-
-          <el-col v-if="countrySpecific" class="CountryHolder">
-            <el-row type="flex">
-              <el-col class="CountryHolder">
-                <div class="Separator" />
-              </el-col>
-              <el-col class="CountryHolder">
-                <img :src="countryFlag" alt="country flag" class="CountryFlag" />
-              </el-col>
-              <el-col>
-                <div class="CountryName">
-                  {{ landingData.code }}
-                </div>
-              </el-col>
-            </el-row>
-          </el-col>
         </el-row>
       </el-col>
     </el-row>
@@ -153,12 +137,6 @@ export default {
     organisationLogo() {
       if (this.landingData) {
         return this.landingData.logo_url
-      }
-      return null
-    },
-    countryFlag() {
-      if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
       return null
     },
@@ -315,24 +293,6 @@ export default {
     .SeparatorStyle();
     display: inline-block;
     margin: 0 20px;
-  }
-
-  .CountryHolder {
-    display: flex;
-    align-items: center;
-
-    .CountryFlag {
-      height: 14px;
-      margin-right: 6px;
-      padding: 5px 0;
-    }
-
-    .CountryName {
-      font-size: @fontSizeBase;
-      font-weight: 700;
-      color: @colorTextPrimary;
-      line-height: 24px;
-    }
   }
 
   .AuthLinks,

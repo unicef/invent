@@ -23,17 +23,12 @@
                 </el-button>
               </div>
             </el-col>
-            <el-col :span="8" class="InfoSection">
-              <translate tag="div" class="Label">Organisation</translate>
-              <div class="Info">
-                <organisation-item :id="project.organisation" />
-              </div>
-            </el-col>
+
             <el-col :span="8" class="InfoSection">
               <translate tag="div" class="Label">Contact person</translate>
               <div class="Info">
                 <a :href="`mailto:${project.contact_email}`" class="NuxtLink Small IconRight">
-                  {{ project.contact_name }}
+                  {{ getUserName }}
                   <fa icon="envelope" />
                 </a>
               </div>
@@ -47,7 +42,7 @@
 
       <div class="ProjectMenu">
         <nuxt-link
-          v-if="isTeam"
+          v-if="isTeam && !isInitiativeView"
           :class="{ Active: isProjectActive }"
           :to="
             localePath({
@@ -59,7 +54,7 @@
           <translate>Initiative</translate>
         </nuxt-link>
         <nuxt-link
-          v-if="isViewer && !isTeam"
+          v-if="isViewer && !isTeam && !isInitiativeView"
           :class="{ Active: isProjectActive }"
           :to="
             localePath({
@@ -71,7 +66,7 @@
           <translate>Initiative</translate>
         </nuxt-link>
         <nuxt-link
-          v-if="anon"
+          v-if="anon && !isInitiativeView"
           :class="{ Active: isProjectActive }"
           :to="
             localePath({
@@ -82,7 +77,7 @@
         >
           <translate>Initiative</translate>
         </nuxt-link>
-        <nuxt-link :to="stagesUrl">
+        <nuxt-link v-if="!isInitiativeView" :to="stagesUrl">
           <translate>Phases</translate>
         </nuxt-link>
       </div>
@@ -97,11 +92,9 @@ import { mapGetters } from 'vuex'
 import Favorite from '@/components/common/Favorite'
 import ProjectHistoryDialog from '@/components/dialogs/ProjectHistoryDialog'
 import toInteger from 'lodash/toInteger'
-import OrganisationItem from './OrganisationItem'
 
 export default {
   components: {
-    OrganisationItem,
     Favorite,
     ProjectHistoryDialog,
   },
@@ -110,7 +103,12 @@ export default {
       draft: 'project/getProjectData',
       published: 'project/getPublished',
       user: 'user/getProfile',
+      userProfiles: 'system/getUserProfilesNoFilter',
     }),
+    getUserName() {
+      const userName = this.userProfiles.find((profile) => profile.email === this.project.contact_email)
+      return userName && userName.name ? userName.name : this.project.contact_name
+    },
     favorite() {
       return this.user ? this.user.favorite.includes(toInteger(this.$route.params.id)) : undefined
     },
@@ -132,6 +130,9 @@ export default {
         this.route === 'organisation-initiatives-id-edit' ||
         this.route === 'organisation-initiatives-id'
       )
+    },
+    isInitiativeView() {
+      return this.route === 'organisation-initiatives-id-published'
     },
     stagesUrl() {
       const versionRoute =
@@ -187,6 +188,7 @@ export default {
 .ProjectBar {
   background-color: @colorWhite;
   border-bottom: 1px solid @colorGrayLight;
+  height: 88px;
 
   .ProjectBarWrapper {
     overflow: hidden;
