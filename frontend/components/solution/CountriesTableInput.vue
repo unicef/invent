@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in tableData" :key="row.row_id" :data-test="`country-input-row-${row.row_id}`">
+        <tr v-for="(row, index) in tableData" :key="row.row_id" :data-test="`country-input-row-${index}`">
           <td>
             <CountrySelectDisabledSingle
               @change="() => updateRegion(row.row_id, row.country)"
@@ -18,7 +18,7 @@
               :selectedCountries="tableData"
               v-validate="rules.countrySingleSelect"
               name="country-single-select"
-              :data-test="`country-single-select-${row.row_id}`"
+              :data-test="`country-single-select-${index}`"
             />
           </td>
           <td :data-test="`region-name-${row.row_id}`">{{ getRegionName(row.region) }}</td>
@@ -31,7 +31,7 @@
               controls-position="right"
               :min="0"
               class="number-input"
-              :data-test="`people-reached-input-${row.row_id}`"
+              :data-test="`people-reached-input-${index}`"
             />
           </td>
           <td>
@@ -39,7 +39,7 @@
               type="text"
               class="IconLeft"
               @click="() => deleteRow(row.row_id)"
-              :data-test="`delete-row-button-${row.row_id}`"
+              :data-test="`delete-row-button-${index}`"
             >
               <translate>Delete</translate>
             </el-button>
