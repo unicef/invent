@@ -1,4 +1,5 @@
 # anonymize_db.py
+from json import dumps, loads
 import os
 import logging
 import random
@@ -127,7 +128,7 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                     'project_nontechplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
                     'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
                     'project_technologyplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
-                    'project_project': ['name', 'data'],
+                    'project_project': ['name', 'data', 'draft'],
                     'project_projectportfoliostate': ['overall_reviewer_feedback'],
                     'project_projectversion': ['name', 'data'],
                     'project_reviewscore': ['psa_comment', 'rnci_comment', 'ratp_comment', 'ra_comment', 'ee_comment', 'nct_comment', 'nc_comment', 'ps_comment'],
@@ -159,7 +160,8 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                     'name_es': 'name',
                     'name_fr': 'name',
                     'name_pt': 'name',
-                    'data': 'pystruct',
+                    'data': anonymize_json_project_data,
+                    'draft': anonymize_json_project_data,
                     'overall_reviewer_feedback': 'paragraph',
                     'psa_comment': 'sentence',
                     'rnci_comment': 'sentence',
@@ -203,7 +205,11 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                                     # Check if the value is in the non_anonymized_options list
                                     if row[column_index] not in non_anonymized_options:
                                         faker_method = column_faker_map[column]
-                                        if column == 'email' and table == 'account_emailaddress':
+                                        if callable(faker_method):
+                                            # If it's a function, call it with the JSON data as an argument
+                                            new_row[column_index] = dumps(
+                                                faker_method(loads(row[column_index])))
+                                        elif column == 'email' and table == 'account_emailaddress':
                                             # Generate a unique email
                                             email = getattr(
                                                 fake, faker_method)()
@@ -263,7 +269,7 @@ def anonymize_json_project_data(json_data):
         json_data['current_achievements'] = fake.sentence()
     if 'implementation_overview' in json_data:
         json_data['implementation_overview'] = fake.sentence()
-    if 'implementation_overview' in json_data:
+    if 'program_targets_achieved' in json_data:
         json_data['program_targets_achieved'] = fake.sentence()
 
     return json_data
