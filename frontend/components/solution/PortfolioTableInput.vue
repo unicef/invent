@@ -9,13 +9,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in innerValue" :key="row.portfolio_id">
+        <tr v-for="row in innerValue" :key="row.portfolio_id" :data-test="`portfolio-row-${row.portfolio_id}`">
           <td>
             <PortfolioSelectSingle
               v-model.number="row.portfolio_id"
               :portfoliosList="innerValue"
               v-validate="rules.portfolioSingleSelect"
               name="portfolio-single-select"
+              :data-test="`portfolio-select-single-${row.portfolio_id}`"
             />
           </td>
           <td>
@@ -24,10 +25,16 @@
               :portfolio="row.portfolio_id"
               v-validate="rules.problemStatementSelect"
               name="problem-statement-select"
+              :data-test="`problem-statement-${row.portfolio_id}`"
             />
           </td>
           <td>
-            <el-button type="text" class="IconLeft" @click="() => deleteRow(row.portfolio_id)">
+            <el-button
+              type="text"
+              class="IconLeft"
+              @click="() => deleteRow(row.portfolio_id)"
+              :data-test="`delete-portfolio-row-${row.portfolio_id}`"
+            >
               <translate>Delete</translate>
             </el-button>
           </td>
@@ -43,7 +50,7 @@
     <p v-show="errors.first('problem-statement-select')" class="error">
       <translate>Problem Statements, cannot be empty.</translate>
     </p>
-    <el-button type="text" class="IconLeft" @click="addRow">
+    <el-button type="text" class="IconLeft" @click="addRow" data-test="add-portfolio-row-button">
       <fa icon="plus" /> <translate>Add Portfolio</translate>
     </el-button>
   </div>
