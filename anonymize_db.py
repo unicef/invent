@@ -8,6 +8,7 @@ import subprocess
 from faker import Faker
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from tqdm import tqdm
 
 
 # Set up logging
@@ -18,145 +19,135 @@ logging.basicConfig(
 )
 
 
-def terminate_existing_connections(cursor, target_db_name):
-    # Terminate all connections to the new database
-    cursor.execute(f"""
-        SELECT pg_terminate_backend(pg_stat_activity.pid)
-        FROM pg_stat_activity
-        WHERE pg_stat_activity.datname = '{target_db_name}';
-    """)
-    logging.info("Terminated connections to the new database")
-
-
-def drop_database_if_exists(cursor, target_db_name):
-    # Drop the new database if it already exists
-    cursor.execute(f"DROP DATABASE IF EXISTS {target_db_name};")
-    logging.info("Dropped the new database if it already existed")
-
-
-def create_new_database(cursor, target_db_name):
-    # Create the new database
-    cursor.execute(f"CREATE DATABASE {target_db_name};")
-    logging.info("Created the new database")
-
-
-def copy_schema(source_db_name, db_user, db_host, db_port, target_db_name):
-    # Copy schema from the original database to the new one
-    subprocess.run(
-        [
-            "pg_dump",
-            "--schema-only",
-            "-U", db_user,
-            "-h", db_host,
-            "-p", str(db_port),
-            "-f", "postgres_dump.sql",
-            source_db_name,
-        ],
-        check=True,
+def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_db_name):
+    # Initialize logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[logging.StreamHandler()]
     )
-    logging.info("Dumped schema from the source database")
 
-    subprocess.run(
-        [
-            "psql",
-            "-U", db_user,
-            "-h", db_host,
-            "-p", str(db_port),
-            "-d", target_db_name,
-            "-f", "postgres_dump.sql",
-        ],
-        check=True,
-    )
-    logging.info("Loaded schema to the new database")
-
-
-def get_existing_values(cursor, table, column):
-    # Fetch the existing values from the specified table and column
-    cursor.execute(f"SELECT {column} FROM {table};")
-    existing_values = {result[0] for result in cursor.fetchall()}
-    return existing_values
-
-
-def anonymize_table_data(cursor, new_cursor, table, columns, existing_emails, existing_usernames, column_faker_map, non_anonymized_options):
-    # Fetch data from the original table
-    cursor.execute(f"SELECT * FROM {table};")
-    rows = cursor.fetchall()
-
-    # Anonymize sensitive data
-    anonymized_rows = []
-    for row in rows:
-        new_row = list(row)
-        for column in columns:
-            column_index = None
-            for i, desc in enumerate(cursor.description):
-                if desc.name == column:
-                    column_index = i
-                    break
-            if column_index is not None:
-                # Check if the value is in the non_anonymized_options list
-                if row[column_index] not in non_anonymized_options:
-                    faker_method = column_faker_map[column]
-                    new_row[column_index] = anonymize_data(
-                        row, column_index, faker_method, existing_emails, existing_usernames, column, table)
-                else:
-                    new_row[column_index] = row[column_index]
-        anonymized_rows.append(new_row)
-
-    # Insert anonymized data into the new table
-    values_placeholder = ','.join(['%s'] * len(row))
-    new_cursor.executemany(
-        f"INSERT INTO {table} VALUES ({values_placeholder});", anonymized_rows)
-
-    logging.info(f"Adding anonymized data in table {table}...")
-
-
-def anonymize_data(row, column_index, faker_method, existing_emails, existing_usernames, column, table):
     fake = Faker()
-    if callable(faker_method):
-        # If it's a function, call it with the JSON data as an argument
-        return dumps(faker_method(loads(row[column_index])))
-    elif column == 'username' and table == 'auth_user':
-        # Generate a unique username
-        username = getattr(fake, faker_method)()
-        while username in existing_usernames:
-            username = getattr(fake, faker_method)()
-        existing_usernames.add(username)
-        return username
-    elif column == 'email' and table == 'account_emailaddress':
-        # Generate a unique email
-        email = getattr(fake, faker_method)()
-        while email in existing_emails:
-            email = getattr(fake, faker_method)()
-        existing_emails.add(email)
-        return email
-    else:
-        return getattr(fake, faker_method)()
 
+    try:
+        conn = psycopg2.connect(
+            dbname=source_db_name,
+            user=db_user,
+            password=db_password,
+            host=db_host,
+            port=db_port
+        )
+    except psycopg2.Error as e:
+        logging.error(
+            f"Failed to connect to the source database. More info: {str(e)}")
+        raise
 
-def get_tables_to_anonymize():
-    return {
-        'account_emailaddress': ['email'],
-        'auth_user': ['username', 'first_name', 'last_name', 'email'],
-        'core_newsitem': ['title', 'description', 'description_en', 'description_es', 'description_fr', 'description_pt', 'title_en', 'title_fr', 'title_es', 'title_pt'],
-        'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
-        'project_nontechplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
-        'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
-        'project_technologyplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
-        'project_project': ['name', 'data', 'draft'],
-        'project_projectportfoliostate': ['overall_reviewer_feedback'],
-        'project_projectversion': ['name', 'data'],
-        'project_reviewscore': ['psa_comment', 'rnci_comment', 'ratp_comment', 'ra_comment', 'ee_comment', 'nct_comment', 'nc_comment', 'ps_comment'],
-        'project_solution': ['name'],
-        'search_projectsearch': ['partner_names'],
-        'socialaccount_socialaccount': ['data'],
-        'user_userprofile': ['name', 'department', 'job_title']
-    }
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    cursor = conn.cursor()
 
+    try:
+        # Terminate all connections to the new database
+        cursor.execute(f"""
+            SELECT pg_terminate_backend(pg_stat_activity.pid)
+            FROM pg_stat_activity
+            WHERE pg_stat_activity.datname = '{target_db_name}';
+        """)
+        logging.info("Terminated connections to the new database")
 
-def get_column_faker_map():
-    return {
-        'email': 'email',
-        'username': 'user_name',
+        # Drop the new database if it already exists
+        cursor.execute(f"DROP DATABASE IF EXISTS {target_db_name};")
+        logging.info("Dropped the new database if it already existed")
+
+        # Create the new database
+        cursor.execute(f"CREATE DATABASE {target_db_name};")
+        logging.info("Created the new database")
+
+    except psycopg2.Error as e:
+        logging.error(
+            f"Failed to execute a database operation. More info: {str(e)}")
+        raise
+    finally:
+        cursor.close()
+        conn.close()
+
+    try:
+        # Copy schema from the original database to the new one
+        subprocess.run(
+            [
+                "pg_dump",
+                "--schema-only",
+                "-U", db_user,
+                "-h", db_host,
+                "-p", str(db_port),
+                "-f", "postgres_dump.sql",
+                source_db_name,
+            ],
+            stdout=subprocess.DEVNULL,  # silence the stdout
+            stderr=subprocess.DEVNULL,  # silence the stderr
+            check=True,
+        )
+        logging.info("Dumped schema from the source database")
+
+        subprocess.run(
+            [
+                "psql",
+                "-U", db_user,
+                "-h", db_host,
+                "-p", str(db_port),
+                "-d", target_db_name,
+                "-f", "postgres_dump.sql",
+            ],
+            stdout=subprocess.DEVNULL,  # silence the stdout
+            stderr=subprocess.DEVNULL,  # silence the stderr
+            check=True,
+        )
+        logging.info("Loaded schema to the new database")
+
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Failed to copy schema. More info: {str(e)}")
+        raise
+    # finally:
+    #     os.remove("postgres_dump.sql")
+
+    try:
+        with psycopg2.connect(
+            dbname=target_db_name,
+            user=db_user,
+            password=db_password,
+            host=db_host,
+            port=db_port
+        ) as new_conn:
+            with new_conn.cursor() as new_cursor, psycopg2.connect(
+                dbname=source_db_name,
+                user=db_user,
+                password=db_password,
+                host=db_host,
+                port=db_port
+            ).cursor() as cursor:
+                # Define the tables and columns to anonymize
+                tables_to_anonymize = {
+                    'account_emailaddress': ['email'],
+                    'auth_user': ['username', 'first_name', 'last_name', 'email'],
+                    'core_newsitem': ['title', 'description', 'description_en', 'description_es', 'description_fr', 'description_pt', 'title_en', 'title_fr', 'title_es', 'title_pt'],
+                    'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                    'project_nontechplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                    'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                    'project_technologyplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
+                    'project_project': ['name', 'data', 'draft'],
+                    'project_projectportfoliostate': ['overall_reviewer_feedback'],
+                    'project_projectversion': ['name', 'data'],
+                    'project_reviewscore': ['psa_comment', 'rnci_comment', 'ratp_comment', 'ra_comment', 'ee_comment', 'nct_comment', 'nc_comment', 'ps_comment'],
+                    'project_solution': ['name'],
+                    'search_projectsearch': ['partner_names'],
+                    'socialaccount_socialaccount': ['data'],
+                    'user_userprofile': ['name', 'department', 'job_title']
+                }
+                # List of options that will be excluded from the anonymization script.
+                non_anonymized_options = ['N/A', 'Unknown', 'Other']
+
+                column_faker_map = {
+                    'email': 'email',
+                    'username': 'user_name',
                     'first_name': 'first_name',
                     'last_name': 'last_name',
                     'title': 'sentence',
@@ -188,82 +179,96 @@ def get_column_faker_map():
                     'partner_names': 'name',
                     'department': 'bs',  # Generates random business nonsense
                     'job_title': 'job',
-    }
+                }
 
-
-def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_db_name):
-    try:
-        logging.info("Connecting to the source database...")
-        conn = psycopg2.connect(
-            dbname=source_db_name,
-            user=db_user,
-            password=db_password,
-            host=db_host,
-            port=db_port
-        )
-        logging.info("Successfully connected to the source database.")
-    except psycopg2.Error as e:
-        logging.error(
-            f"Failed to connect to the source database. More info: {str(e)}")
-        raise
-
-    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    cursor = conn.cursor()
-
-    try:
-        terminate_existing_connections(cursor, target_db_name)
-        drop_database_if_exists(cursor, target_db_name)
-        create_new_database(cursor, target_db_name)
-    except psycopg2.Error as e:
-        logging.error(
-            f"Failed to execute a database operation. More info: {str(e)}")
-        raise
-    finally:
-        cursor.close()
-        conn.close()
-
-    try:
-        logging.info("Copying schema from source to target database...")
-        copy_schema(source_db_name, db_user, db_host, db_port, target_db_name)
-        logging.info("Successfully copied schema.")
-    except subprocess.CalledProcessError as e:
-        logging.error(f"Failed to copy schema. More info: {str(e)}")
-        raise
-
-    try:
-        with psycopg2.connect(
-            dbname=target_db_name,
-            user=db_user,
-            password=db_password,
-            host=db_host,
-            port=db_port
-        ) as new_conn:
-            with new_conn.cursor() as new_cursor, psycopg2.connect(
-                dbname=source_db_name,
-                user=db_user,
-                password=db_password,
-                host=db_host,
-                port=db_port
-            ).cursor() as cursor:
-                # Define the tables and columns to anonymize
-                tables_to_anonymize = get_tables_to_anonymize()
-                # List of options that will be excluded from the anonymization script.
-                non_anonymized_options = ['N/A', 'Unknown', 'Other']
-                column_faker_map = get_column_faker_map()
-
-                # Get existing usernames and emails
-                existing_usernames = get_existing_values(
-                    new_cursor, 'auth_user', 'username')
-                existing_emails = get_existing_values(
-                    new_cursor, 'account_emailaddress', 'email')
+                # Set your chunk size
+                chunk_size = 1000
 
                 # Anonymize data
+                # In the anonymization process, add a check before creating the fake value.
                 for table, columns in tables_to_anonymize.items():
-                    logging.info(f"Starting to anonymize table {table}...")
                     try:
-                        anonymize_table_data(cursor, new_cursor, table, columns, existing_emails,
-                                             existing_usernames, column_faker_map, non_anonymized_options)
+                        # Fetch data from the original table
+                        cursor.execute(f"SELECT * FROM {table};")
+                        rows = cursor.fetchall()
+
+                        if not rows:
+                            logging.info(f"No data found in table {table}, skipping.")
+                            continue
+
+                        # Get the column names
+                        column_names = [desc[0] for desc in cursor.description]
+
+                        # Fetch the existing emails from the account_emailaddress table
+                        if table == 'account_emailaddress':
+                            new_cursor.execute(
+                                "SELECT email FROM account_emailaddress;")
+                            existing_emails = {result[0]
+                                               for result in new_cursor.fetchall()}
+
+                        # Fetch the existing usernames from the auth_user table
+                        if table == 'auth_user':
+                            new_cursor.execute(
+                                "SELECT username FROM auth_user;")
+                            existing_usernames = {
+                                result[0] for result in new_cursor.fetchall()}
+
+                        # Anonymize sensitive data
+                        anonymized_rows = []
+                        for row in tqdm(rows, desc=f"Processing table {table}"):
+                            new_row = list(row)
+                            for column in columns:
+                                column_index = None
+                                for i, desc in enumerate(cursor.description):
+                                    if desc.name == column:
+                                        column_index = i
+                                        break
+                                if column_index is not None:
+                                    # Check if the value is in the non_anonymized_options list
+                                    if row[column_index] not in non_anonymized_options:
+                                        faker_method = column_faker_map[column]
+                                        if callable(faker_method):
+                                            # If it's a function, call it with the JSON data as an argument
+                                            data = row[column_index]
+                                            if isinstance(data, str):
+                                                data = loads(data)
+                                            new_row[column_index] = dumps(
+                                                faker_method(data))
+
+                                        elif column == 'username' and table == 'auth_user':
+                                            # Generate a unique username
+                                            username = getattr(
+                                                fake, faker_method)()
+                                            while username in existing_usernames:
+                                                username = getattr(
+                                                    fake, faker_method)()
+                                            existing_usernames.add(username)
+                                            new_row[column_index] = username
+                                        elif column == 'email' and table == 'account_emailaddress':
+                                            # Generate a unique email
+                                            email = getattr(
+                                                fake, faker_method)()
+                                            while email in existing_emails:
+                                                email = getattr(
+                                                    fake, faker_method)()
+                                            existing_emails.add(email)
+                                            new_row[column_index] = email
+                                        else:
+                                            new_row[column_index] = getattr(
+                                                fake, faker_method)()
+                                    else:
+                                        new_row[column_index] = row[column_index]
+                        anonymized_rows.append(new_row)
+
+                        # Insert anonymized data into the new table
+                        columns_placeholder = ', '.join(
+                            [f'"{col}"' for col in column_names])
+                        values_placeholder = ', '.join(['%s'] * len(rows[0]))
+                        new_cursor.executemany(
+                            f"INSERT INTO {table} ({columns_placeholder}) VALUES ({values_placeholder});", anonymized_rows)
+
                         logging.info(f"Finished anonymizing table {table}.")
+
                     except psycopg2.Error as e:
                         logging.error(
                             f"Failed to anonymize data in table {table}. More info: {str(e)}")
