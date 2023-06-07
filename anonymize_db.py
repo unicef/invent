@@ -181,9 +181,6 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                     'job_title': 'job',
                 }
 
-                # Set your chunk size
-                chunk_size = 1000
-
                 # Anonymize data
                 # In the anonymization process, add a check before creating the fake value.
                 for table, columns in tables_to_anonymize.items():
@@ -193,7 +190,8 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                         rows = cursor.fetchall()
 
                         if not rows:
-                            logging.info(f"No data found in table {table}, skipping.")
+                            logging.info(
+                                f"No data found in table {table}, skipping.")
                             continue
 
                         # Get the column names
