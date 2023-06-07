@@ -1,6 +1,5 @@
 # anonymize_db.py
 from json import dumps, loads
-import os
 import logging
 import random
 import subprocess
@@ -106,8 +105,6 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
     except subprocess.CalledProcessError as e:
         logging.error(f"Failed to copy schema. More info: {str(e)}")
         raise
-    # finally:
-    #     os.remove("postgres_dump.sql")
 
     try:
         with psycopg2.connect(
@@ -126,8 +123,8 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
             ).cursor() as cursor:
                 # Define the tables and columns to anonymize
                 tables_to_anonymize = {
-                    'account_emailaddress': ['email'],
                     'auth_user': ['username', 'first_name', 'last_name', 'email'],
+                    'account_emailaddress': ['email'],
                     'core_newsitem': ['title', 'description', 'description_en', 'description_es', 'description_fr', 'description_pt', 'title_en', 'title_fr', 'title_es', 'title_pt'],
                     'project_hardwareplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
                     'project_nontechplatform': ['name', 'name_en', 'name_es', 'name_fr', 'name_pt'],
@@ -181,6 +178,8 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                     'job_title': 'job',
                 }
 
+                auth_user_anonymized = {}
+
                 # Anonymize data
                 # In the anonymization process, add a check before creating the fake value.
                 for table, columns in tables_to_anonymize.items():
@@ -197,19 +196,14 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                         # Get the column names
                         column_names = [desc[0] for desc in cursor.description]
 
-                        # Fetch the existing emails from the account_emailaddress table
-                        if table == 'account_emailaddress':
-                            new_cursor.execute(
-                                "SELECT email FROM account_emailaddress;")
-                            existing_emails = {result[0]
-                                               for result in new_cursor.fetchall()}
-
-                        # Fetch the existing usernames from the auth_user table
+                        # Fetch the existing usernames and emails from the auth_user table
                         if table == 'auth_user':
                             new_cursor.execute(
-                                "SELECT username FROM auth_user;")
-                            existing_usernames = {
-                                result[0] for result in new_cursor.fetchall()}
+                                "SELECT username, email FROM auth_user;")
+                            results = new_cursor.fetchall()
+                            existing_usernames = {result[0]
+                                                  for result in results}
+                            existing_emails = {result[1] for result in results}
 
                         # Anonymize sensitive data
                         anonymized_rows = []
@@ -222,41 +216,63 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                                         column_index = i
                                         break
                                 if column_index is not None:
-                                    # Check if the value is in the non_anonymized_options list
                                     if row[column_index] not in non_anonymized_options:
                                         faker_method = column_faker_map[column]
-                                        if callable(faker_method):
-                                            # If it's a function, call it with the JSON data as an argument
+
+                                        # CHANGE HERE
+                                        if table == 'auth_user' and column in ['username', 'email', 'first_name', 'last_name']:
+                                            if column == 'username':
+                                                username = getattr(
+                                                    fake, faker_method)()
+                                                while username in existing_usernames:
+                                                    username = getattr(
+                                                        fake, faker_method)()
+                                                existing_usernames.add(
+                                                    username)
+                                                new_row[column_index] = username
+                                                # CHANGE HERE: Save the anonymized username
+                                                auth_user_anonymized[row[0]] = {
+                                                    'username': username}
+                                            elif column == 'email':
+                                                email = getattr(
+                                                    fake, faker_method)()
+                                                while email in existing_emails:
+                                                    email = getattr(
+                                                        fake, faker_method)()
+                                                existing_emails.add(email)
+                                                new_row[column_index] = email
+                                                # CHANGE HERE: Save the anonymized email
+                                                auth_user_anonymized[row[0]
+                                                                     ]['email'] = email
+                                            elif column == 'first_name':
+                                                first_name = getattr(
+                                                    fake, faker_method)()
+                                                new_row[column_index] = first_name
+                                                # CHANGE HERE: Save the anonymized first_name
+                                                auth_user_anonymized[row[0]
+                                                                     ]['first_name'] = first_name
+                                            elif column == 'last_name':
+                                                last_name = getattr(
+                                                    fake, faker_method)()
+                                                new_row[column_index] = last_name
+                                                # CHANGE HERE: Save the anonymized last_name
+                                                auth_user_anonymized[row[0]
+                                                                     ]['last_name'] = last_name
+                                        elif table == 'account_emailaddress' and column == 'email':  # CHANGE HERE
+                                            # CHANGE HERE: Use the anonymized email from auth_user
+                                            new_row[column_index] = auth_user_anonymized[row[0]]['email']
+                                        elif table == 'user_userprofile' and column == 'name':  # CHANGE HERE
+                                            # CHANGE HERE: Use the anonymized first_name and last_name from auth_user
+                                            new_row[column_index] = f"{auth_user_anonymized[row[0]]['first_name']} {auth_user_anonymized[row[0]]['last_name']}"
+                                        elif callable(faker_method):
                                             data = row[column_index]
                                             if isinstance(data, str):
                                                 data = loads(data)
                                             new_row[column_index] = dumps(
                                                 faker_method(data))
-
-                                        elif column == 'username' and table == 'auth_user':
-                                            # Generate a unique username
-                                            username = getattr(
-                                                fake, faker_method)()
-                                            while username in existing_usernames:
-                                                username = getattr(
-                                                    fake, faker_method)()
-                                            existing_usernames.add(username)
-                                            new_row[column_index] = username
-                                        elif column == 'email' and table == 'account_emailaddress':
-                                            # Generate a unique email
-                                            email = getattr(
-                                                fake, faker_method)()
-                                            while email in existing_emails:
-                                                email = getattr(
-                                                    fake, faker_method)()
-                                            existing_emails.add(email)
-                                            new_row[column_index] = email
                                         else:
-                                            new_row[column_index] = getattr(
-                                                fake, faker_method)()
-                                    else:
-                                        new_row[column_index] = row[column_index]
-                        anonymized_rows.append(new_row)
+                                            new_row[column_index] = row[column_index]
+                            anonymized_rows.append(new_row)
 
                         # Insert anonymized data into the new table
                         columns_placeholder = ', '.join(
