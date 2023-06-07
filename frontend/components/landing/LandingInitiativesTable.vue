@@ -91,9 +91,9 @@ export default {
             lastUpdated = lastPhase.date
           } else if (prevPhase) {
             lastUpdated = prevPhase.date
-          } else {
-            lastUpdated = initiative.start_date ? format(initiative.start_date, 'YYYY-MM-DD') : new Date()
           }
+        } else {
+          lastUpdated = initiative.start_date ? format(initiative.start_date, 'YYYY-MM-DD') : new Date()
         }
 
         let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
