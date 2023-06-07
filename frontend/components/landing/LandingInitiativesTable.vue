@@ -7,13 +7,13 @@
       :lazy="true"
       :empty-text="$gettext('No initiatives available') | translate"
     >
-      <el-table-column
-        v-for="{ name, id } in ommitedPhases"
-        :label="$gettext(name) | translate"
-        :prop="name"
-        :key="id"
-        min-width="180"
-      >
+      <el-table-column v-for="{ name, id } in ommitedPhases" :prop="name" :key="id" min-width="180">
+        <template slot="header" slot-scope="scope">
+          <div id="header">
+            <p id="header-title">{{ $gettext(name) | translate }}</p>
+            <p id="header-count">{{ initiativesTableData[0][id].length }}</p>
+          </div>
+        </template>
         <template slot-scope="scope">
           <nuxt-link
             :to="
@@ -150,19 +150,37 @@ export default {
 
     th {
       background-color: @colorBrandPrimary;
-      vertical-align: top;
-      > .cell {
-        word-wrap: normal;
-        white-space: normal;
-        word-break: normal;
-        text-overflow: unset;
 
+      padding: 0;
+
+      > .cell {
         font-size: @fontSizeSmall;
         color: @colorWhite;
         font-weight: bold;
-        letter-spacing: 0;
-        line-height: 29px;
-        text-align: start;
+        height: 68px;
+        #header {
+          height: inherit;
+          display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          padding-top: 2px;
+          #header-title {
+            text-align: center;
+            word-wrap: normal;
+            white-space: normal;
+            word-break: normal;
+            text-overflow: unset;
+            line-height: 20px;
+            margin-top: 0;
+            margin-bottom: auto;
+          }
+          #header-count {
+            text-align: center;
+            line-height: 26px;
+            margin-top: auto;
+            margin-bottom: 0;
+          }
+        }
       }
 
       &.is-leaf {
