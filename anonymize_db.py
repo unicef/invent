@@ -6,6 +6,7 @@ import subprocess
 
 from faker import Faker
 import psycopg2
+import psycopg2.extras
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from tqdm import tqdm
 
@@ -268,15 +269,16 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                                                 faker_method = column_faker_map[column]
                                                 new_row[column_index] = getattr(
                                                     fake, faker_method)()
-                                            elif callable(faker_method):
+                                        else:
+                                            if callable(faker_method):
                                                 data = row[column_index]
                                                 if isinstance(data, str):
                                                     data = loads(data)
                                                 new_row[column_index] = faker_method(
                                                     data)
-                                        else:
-                                            new_row[column_index] = getattr(
-                                                fake, faker_method)()
+                                            else:
+                                                new_row[column_index] = getattr(
+                                                    fake, faker_method)()
                             anonymized_rows.append(new_row)
 
                         # Insert anonymized data into the new table
