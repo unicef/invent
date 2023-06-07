@@ -25,6 +25,7 @@
               class="number-input"
               placeholder=" "
               :min="0"
+              data-test="override-reach-input"
             />
           </custom-required-form-item>
         </el-col>
