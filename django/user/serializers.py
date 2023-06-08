@@ -47,7 +47,7 @@ class UserProfileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ('id', 'modified', 'account_type', 'name', 'email',
-                  'organisation', 'job_title', 'department', 'country')
+                  'organisation', 'job_title', 'department', 'country', 'region')
 
     # Custom method to get the country name from the UserProfile instance
     def get_country_name(self, obj):
@@ -58,14 +58,18 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
-    name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    name = serializers.CharField(
+        required=True, allow_blank=False, allow_null=False)
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
     country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=True,
                                                  allow_null=False)
     organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
                                                       allow_null=False)
-    job_title = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    department = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    job_title = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True)
+    department = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True)
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()
