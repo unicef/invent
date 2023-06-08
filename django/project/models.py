@@ -108,7 +108,6 @@ class Project(SoftDeleteModel, ExtendedModel):
         default="",
         help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1",
     )
-
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
     # added here to avoid circular imports
@@ -122,6 +121,15 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+    @property
+    def region(self):
+        co_id = self.get_country_office_id()
+        if co_id:
+            country_office = CountryOffice.objects.get(id=co_id)
+            if country_office:
+                return country_office.get_region_display()
+        return None
 
     @property
     def thumbnail(self):
@@ -203,6 +211,7 @@ class Project(SoftDeleteModel, ExtendedModel):
             created=self.created,
             image=self.image_url,
             thumbnail=self.thumbnail.url if self.thumbnail else None,
+            region=self.region
         )
 
         data.update(extra_data)
