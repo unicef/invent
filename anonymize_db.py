@@ -137,7 +137,7 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                     'project_projectversion': ['name', 'data'],
                     'project_reviewscore': ['psa_comment', 'rnci_comment', 'ratp_comment', 'ra_comment', 'ee_comment', 'nct_comment', 'nc_comment', 'ps_comment'],
                     'project_solution': ['name'],
-                    'country_country': [],
+                    'country_country': ["map_data"],
                     'search_projectsearch': ['partner_names'],
                     'socialaccount_socialaccount': ['data'],
                     'user_userprofile': ['name', 'department', 'job_title']
@@ -177,7 +177,7 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                     'nc_comment': 'sentence',
                     'ps_comment': 'sentence',
                     'partner_names': 'name',
-                    'department': 'bs',  # Generates random business nonsense
+                    'department': 'bs',
                     'job_title': 'job',
                 }
 
