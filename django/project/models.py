@@ -128,7 +128,7 @@ class Project(SoftDeleteModel, ExtendedModel):
         if co_id:
             country_office = CountryOffice.objects.get(id=co_id)
             if country_office:
-                return country_office.get_region_display()
+                return country_office.region
         return None
 
     @property
