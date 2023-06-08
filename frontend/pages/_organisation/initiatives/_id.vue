@@ -19,12 +19,13 @@ export default {
       getProjectDetails: 'projects/getUserProjectDetails',
       profile: 'user/getProfile',
       project: 'project/getProjectData',
-      published: 'project/getPublished'
+      published: 'project/getPublished',
     }),
     currentProject() {
       return this.getProjectDetails(this.$route.params.id)
     },
-    allowed() {      const allowed =
+    allowed() {
+      const allowed =
         this.profile.is_superuser ||
         this.profile.member.includes(parseInt(this.$route.params.id, 10)) ||
         this.profile.manager_of.includes(this.project.country_office) ||
