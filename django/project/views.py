@@ -82,7 +82,8 @@ class ProjectPublicViewSet(ViewSet):
                 sub_groups.append(dict(
                     id=parent.id,
                     name=parent.name,
-                    strategies=parent.strategies.filter(is_active=True).values('id', 'name')
+                    strategies=parent.strategies.filter(
+                        is_active=True).values('id', 'name')
                 ))
             strategies.append(dict(
                 name=group_name,
@@ -94,7 +95,8 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas.append(dict(
                 id=category.id,
                 name=category.name,
-                health_focus_areas=category.health_focus_areas.filter(is_active=True).values('id', 'name')
+                health_focus_areas=category.health_focus_areas.filter(
+                    is_active=True).values('id', 'name')
             ))
 
         hsc_challenges = []
@@ -106,14 +108,18 @@ class ProjectPublicViewSet(ViewSet):
             ))
 
         return dict(
-            result_areas=UNICEFResultArea.objects.values('id', 'name', 'goal_area_id').custom_ordered(),
+            result_areas=UNICEFResultArea.objects.values(
+                'id', 'name', 'goal_area_id').custom_ordered(),
             goal_areas=UNICEFGoal.objects.values('id', 'name', 'capability_level_question',
                                                  'capability_category_question', 'capability_subcategory_question')
                 .custom_ordered(),  # noqa: E131
-            capability_levels=UNICEFCapabilityLevel.objects.values('id', 'name', 'goal_area_id').custom_ordered(),
-            capability_categories=UNICEFCapabilityCategory.objects.values('id', 'name', 'goal_area_id')
+            capability_levels=UNICEFCapabilityLevel.objects.values(
+                'id', 'name', 'goal_area_id').custom_ordered(),
+            capability_categories=UNICEFCapabilityCategory.objects.values(
+                'id', 'name', 'goal_area_id')
                 .custom_ordered(),
-            capability_subcategories=UNICEFCapabilitySubCategory.objects.values('id', 'name', 'goal_area_id')
+            capability_subcategories=UNICEFCapabilitySubCategory.objects.values(
+                'id', 'name', 'goal_area_id')
                 .custom_ordered(),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
@@ -121,18 +127,25 @@ class ProjectPublicViewSet(ViewSet):
             regional_offices=RegionalOffice.objects.values('id', 'name'),
             currencies=Currency.objects.values('id', 'name', 'code'),
             sectors=UNICEFSector.objects.values('id', 'name').custom_ordered(),
-            regional_priorities=RegionalPriority.objects.values('id', 'name', 'region').custom_ordered(),
-            technology_platforms=TechnologyPlatform.objects.exclude(state=ApprovalState.DECLINED)
+            regional_priorities=RegionalPriority.objects.values(
+                'id', 'name', 'region').custom_ordered(),
+            technology_platforms=TechnologyPlatform.objects.exclude(
+                state=ApprovalState.DECLINED)
                 .values('id', 'name', 'state').custom_ordered(),
-            hardware=HardwarePlatform.objects.exclude(state=ApprovalState.DECLINED)
+            hardware=HardwarePlatform.objects.exclude(
+                state=ApprovalState.DECLINED)
                 .values('id', 'name', 'state').custom_ordered(),
-            nontech=NontechPlatform.objects.exclude(state=ApprovalState.DECLINED)
+            nontech=NontechPlatform.objects.exclude(
+                state=ApprovalState.DECLINED)
                 .values('id', 'name', 'state').custom_ordered(),
-            functions=PlatformFunction.objects.exclude(state=ApprovalState.DECLINED)
+            functions=PlatformFunction.objects.exclude(
+                state=ApprovalState.DECLINED)
                 .values('id', 'name', 'state').custom_ordered(),
             cpd=CPD.objects.values('id', 'name').custom_ordered(),
-            innovation_categories=InnovationCategory.objects.values('id', 'name').custom_ordered(),
-            innovation_ways=InnovationWay.objects.values('id', 'name').custom_ordered(),
+            innovation_categories=InnovationCategory.objects.values(
+                'id', 'name').custom_ordered(),
+            innovation_ways=InnovationWay.objects.values(
+                'id', 'name').custom_ordered(),
             isc=ISC.objects.values('id', 'name').custom_ordered(),
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
             phases=Phase.objects.values('id', 'name').custom_ordered(),
@@ -149,16 +162,19 @@ class ProjectListViewSet(TokenAuthMixin, GenericViewSet):
         for project in page:
             published = project.to_representation()
             draft = project.to_representation(draft_mode=True)
-            data.append(project.to_response_dict(published=published, draft=draft))
+            data.append(project.to_response_dict(
+                published=published, draft=draft))
         return data
 
     def favorite_list(self, user):
         data = []
-        qs = Project.objects.published_only().filter(favorited_by=user.userprofile).order_by('-modified')
+        qs = Project.objects.published_only().filter(
+            favorited_by=user.userprofile).order_by('-modified')
         page = self.paginate_queryset(qs)
         for project in page:
             published = project.to_representation()
-            data.append(project.to_response_dict(published=published, draft=None))
+            data.append(project.to_response_dict(
+                published=published, draft=None))
         return data
 
     def country_manager_list(self, user):
@@ -168,7 +184,8 @@ class ProjectListViewSet(TokenAuthMixin, GenericViewSet):
         for project in page:
             published = project.to_representation()
             draft = project.to_representation(draft_mode=True)
-            data.append(project.to_response_dict(published=published, draft=draft))
+            data.append(project.to_response_dict(
+                published=published, draft=draft))
         return data
 
     def list(self, request, *args, **kwargs):
@@ -186,12 +203,14 @@ class ProjectListViewSet(TokenAuthMixin, GenericViewSet):
             # Bug: Reverse lookup does not work here for filtering
             qs = ReviewScore.objects.exclude(status=ReviewScore.STATUS_COMPLETE).\
                 filter(portfolio_review__is_active=True, reviewer=request.user.userprofile). \
-                exclude(portfolio_review__project__public_id__exact='').order_by('-id')
+                exclude(portfolio_review__project__public_id__exact='').order_by(
+                    '-id')
             page = self.paginate_queryset(qs)
             data_serializer = ReviewScoreDetailedSerializer(page, many=True)
             data = data_serializer.data
         else:
-            raise ValidationError({'list_name': 'Unknown list type'})  # pragma: no cover
+            raise ValidationError(
+                {'list_name': 'Unknown list type'})  # pragma: no cover
 
         return self.get_paginated_response(data)
 
@@ -210,23 +229,19 @@ class ProjectLandingBlocks(TokenAuthMixin, ViewSet):
         my_initiatives = my_initiatives_qs.order_by('-modified')[:3]
         recently_updated = Project.objects.published_only().exclude(
             id__in=my_initiatives_qs.values('id')).order_by('-modified')[:3]
-        featured = Project.objects.published_only().filter(featured=True).order_by('-featured_rank')
+        featured = Project.objects.published_only().filter(
+            featured=True).order_by('-featured_rank')
 
         data = dict(my_initiatives=ProjectCardSerializer(my_initiatives, many=True, context=dict(request=request)).data,
                     my_initiatives_count=my_initiatives_count,
-                    recents=ProjectCardSerializer(recently_updated, many=True, context=dict(request=request)).data,
+                    recents=ProjectCardSerializer(
+                        recently_updated, many=True, context=dict(request=request)).data,
                     featured=ProjectCardSerializer(featured, many=True, context=dict(request=request)).data)
 
         return Response(data)
 
 
 class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
-    def get_permissions(self):
-        if self.action == "retrieve":
-            return []  # Retrieve needs a bit more complex filtering based on user permission
-        else:
-            return super(ProjectRetrieveViewSet, self).get_permissions()
-
     def _get_permission_based_data(self, project):
         draft = None
 
@@ -246,20 +261,14 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Retrieves a project.
         """
-        project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
+        project = get_object_or_400(
+            Project, "No such project", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
 
 
 class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
-    def get_permissions(self):
-        if self.action == "retrieve":
-            return []  # Retrieve needs a bit more complex filtering based on user permission
-        else:
-            return super(SolutionRetrieveViewSet, self).get_permissions()
-
     def _get_permission_based_data(self, solution):
-        draft = None
         published = solution.to_representation()
 
         return published
@@ -268,7 +277,8 @@ class SolutionRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Retrieves a solution.
         """
-        solution = get_object_or_404(Solution, "No such solution", id=kwargs.get("pk"))
+        solution = get_object_or_404(
+            Solution, "No such solution", id=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(solution))
 
@@ -278,10 +288,10 @@ class SolutionUpdateViewSet(SolutionAccessMixin, UpdateModelMixin, GenericViewSe
     queryset = Solution.objects.all()
 
 
-
 class CheckRequiredMixin:
     def check_required(self, queryset: QuerySet, answers: OrderedDict):
-        required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
+        required_ids = set(queryset.filter(
+            required=True).values_list('id', flat=True))
         present_ids = {answer['question_id'] for answer in answers}
         missing_ids = required_ids - present_ids
         if missing_ids:
@@ -295,11 +305,14 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         Publish a project
         Takes project data and custom question-answers in one go.
         """
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-        country_office = get_object_or_400(CountryOffice, error_message="No such country office", id=country_office_id)
+        project = get_object_or_400(
+            Project, select_for_update=True, error_message="No such project", id=project_id)
+        country_office = get_object_or_400(
+            CountryOffice, error_message="No such country office", id=country_office_id)
         country = country_office.country
 
-        project_data = copy.deepcopy(request.data['project']) if 'project' in request.data else {}
+        project_data = copy.deepcopy(
+            request.data['project']) if 'project' in request.data else {}
         project_data['country'] = country.id
         project.data['country_office'] = country_office_id
 
@@ -310,10 +323,12 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
 
-        data_serializer = ProjectPublishedSerializer(project, data=project_data)
+        data_serializer = ProjectPublishedSerializer(
+            project, data=project_data)
 
         data_serializer.fields.get('name').validators = \
-            [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
+            [v for v in data_serializer.fields.get(
+                'name').validators if not isinstance(v, UniqueValidator)]
         data_serializer.fields.get('name').validators \
             .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
 
@@ -324,7 +339,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
         if country.country_questions.exists():
             if 'country_custom_answers' not in request.data:
-                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+                raise ValidationError(
+                    {'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
                                                                 context=dict(
@@ -332,7 +348,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                                                                     is_draft=False))
 
                 if country_answers.is_valid():
-                    required_errors = self.check_required(country.country_questions, country_answers.validated_data)
+                    required_errors = self.check_required(
+                        country.country_questions, country_answers.validated_data)
                     if required_errors:
                         errors['country_custom_answers'] = required_errors
                 else:
@@ -342,9 +359,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
             donor = Donor.objects.get(id=donor_id)
             if donor and donor.donor_questions.exists():
                 if 'donor_custom_answers' not in request.data:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                    raise ValidationError(
+                        {'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                    raise ValidationError(
+                        {'non_field_errors': 'Donor answers are missing'})
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,
@@ -355,7 +374,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                     errors['donor_custom_answers'].setdefault(donor_id, {})
                     errors['donor_custom_answers'][donor_id] = donor_answers.errors
                 else:
-                    required_errors = self.check_required(donor.donor_questions, donor_answers.validated_data)
+                    required_errors = self.check_required(
+                        donor.donor_questions, donor_answers.validated_data)
                     if required_errors:
                         errors.setdefault('donor_custom_answers', {})
                         errors['donor_custom_answers'].setdefault(donor_id, {})
@@ -396,7 +416,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id):
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        project = get_object_or_400(
+            Project, select_for_update=True, error_message="No such project", id=project_id)
         project.unpublish()
         data = project.to_representation(draft_mode=True)
 
@@ -408,7 +429,8 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 class ProjectPublishAsLatestViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id):
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        project = get_object_or_400(
+            Project, select_for_update=True, error_message="No such project", id=project_id)
 
         if not project.public_id:
             raise ValidationError({'project': 'Project is not published'})
@@ -425,10 +447,12 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Creates a Draft project.
         """
-        country_office = get_object_or_400(CountryOffice, error_message="No such country office", id=country_office_id)
+        country_office = get_object_or_400(
+            CountryOffice, error_message="No such country office", id=country_office_id)
         country = country_office.country
 
-        project_data = copy.deepcopy(request.data['project']) if 'project' in request.data else {}
+        project_data = copy.deepcopy(
+            request.data['project']) if 'project' in request.data else {}
         project_data['country'] = country.id
 
         instance = country_answers = None
@@ -448,7 +472,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         if country.country_questions.exists():
             if 'country_custom_answers' not in request.data:
-                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+                raise ValidationError(
+                    {'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
                                                                 context=dict(
@@ -462,9 +487,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             donor = Donor.objects.filter(id=donor_id).first()
             if donor and donor.donor_questions.exists():
                 if 'donor_custom_answers' not in request.data:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                    raise ValidationError(
+                        {'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                    raise ValidationError(
+                        {'non_field_errors': 'Donor answers are missing'})
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,
@@ -503,11 +530,14 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Updates a draft project.
         """
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-        country_office = get_object_or_400(CountryOffice, error_message="No such country office", id=country_office_id)
+        project = get_object_or_400(
+            Project, select_for_update=True, error_message="No such project", id=project_id)
+        country_office = get_object_or_400(
+            CountryOffice, error_message="No such country office", id=country_office_id)
         country = country_office.country
 
-        project_data = copy.deepcopy(request.data['project']) if 'project' in request.data else {}
+        project_data = copy.deepcopy(
+            request.data['project']) if 'project' in request.data else {}
         project_data['country'] = country.id
 
         country_answers = None
@@ -517,7 +547,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
 
-        data_serializer = ProjectDraftSerializer(project, data=request.data['project'])
+        data_serializer = ProjectDraftSerializer(
+            project, data=request.data['project'])
         self.check_object_permissions(self.request, project)
         data_serializer.is_valid()
         if data_serializer.errors:
@@ -525,7 +556,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         if country.country_questions.exists():
             if 'country_custom_answers' not in request.data:
-                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+                raise ValidationError(
+                    {'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
                                                                 context=dict(
@@ -539,9 +571,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             donor = Donor.objects.get(id=donor_id)
             if donor and donor.donor_questions.exists():
                 if 'donor_custom_answers' not in request.data:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                    raise ValidationError(
+                        {'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                    raise ValidationError(
+                        {'non_field_errors': 'Donor answers are missing'})
 
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
@@ -588,9 +622,11 @@ class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
-        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        instance = get_object_or_400(
+            Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
         self.check_object_permissions(self.request, instance)
-        serializer = ProjectGroupSerializer(instance, data=request.data, context=self.get_serializer_context())
+        serializer = ProjectGroupSerializer(
+            instance, data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -608,7 +644,8 @@ class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
         .select_related('project', 'project__search', 'project__search__country').exclude(project__public_id='')
 
     def list(self, request, country_id):
-        queryset = self.filter_queryset(self.get_queryset().filter(project__search__country=country_id))
+        queryset = self.filter_queryset(
+            self.get_queryset().filter(project__search__country=country_id))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -636,8 +673,10 @@ class ApprovalRequestViewSet(CreateModelMixin, GenericViewSet):
     model = None
 
     def perform_create(self, serializer) -> None:
-        serializer.save(added_by=self.request.user.userprofile, state=ApprovalState.PENDING)
-        notify_superusers_about_new_pending_approval.apply_async((self.model._meta.model_name, serializer.instance.id,))
+        serializer.save(added_by=self.request.user.userprofile,
+                        state=ApprovalState.PENDING)
+        notify_superusers_about_new_pending_approval.apply_async(
+            (self.model._meta.model_name, serializer.instance.id,))
 
 
 class TechnologyPlatformRequestViewSet(ApprovalRequestViewSet):
@@ -692,14 +731,17 @@ class PortfolioUpdateViewSet(PortfolioAccessMixin, UpdateModelMixin, GenericView
         instance = self.get_object()
 
         if 'problem_statements' in request.data:
-            r_ps_ids = {ps['id'] for ps in request.data.get('problem_statements', []) if 'id' in ps}
+            r_ps_ids = {ps['id'] for ps in request.data.get(
+                'problem_statements', []) if 'id' in ps}
 
-            non_modifiable_ps = instance.problem_statements.filter(projectportfoliostate__approved=True)
+            non_modifiable_ps = instance.problem_statements.filter(
+                projectportfoliostate__approved=True)
             ps_removed = instance.problem_statements.exclude(id__in=r_ps_ids)
 
             if non_modifiable_ps.intersection(ps_removed):
                 raise PermissionDenied("Problem Statements linked to approved projects may not be deleted: [{}]".format(
-                    ", ".join([str(x) for x in non_modifiable_ps.intersection(ps_removed).values_list('id', flat=True)])
+                    ", ".join([str(x) for x in non_modifiable_ps.intersection(
+                        ps_removed).values_list('id', flat=True)])
                 ))
 
     def update(self, request, *args, **kwargs):
@@ -712,7 +754,8 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
 
     def _check_input_and_permissions(self, request, *args, **kwargs):
         # check if portfolio exists
-        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=kwargs.get("pk"))
+        portfolio = get_object_or_400(
+            Portfolio, "No such portfolio", id=kwargs.get("pk"))
 
         self.check_object_permissions(request, portfolio)
         if 'project' not in request.data or len(request.data['project']) == 0:
@@ -722,31 +765,37 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
     def move_from_inventory_to_review(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
         # For some reason the reverse lookup for ActiveQuerySet fails at this point
-        projects_in_portfolio = list(portfolio.review_states.all().values_list('project', flat=True))
+        projects_in_portfolio = list(
+            portfolio.review_states.all().values_list('project', flat=True))
         projects = Project.objects.filter(id__in=request.data['project']).\
             exclude(id__in=projects_in_portfolio)
         if len(projects) == 0:
             raise ValidationError({'project': 'Project data is incorrect'})
         # create a new review for each project if needed
         for project in projects:
-            qs_pps = ProjectPortfolioState.all_objects.filter(portfolio=portfolio, project=project, is_active=False)
+            qs_pps = ProjectPortfolioState.all_objects.filter(
+                portfolio=portfolio, project=project, is_active=False)
             if qs_pps:
-                ReviewScore.all_objects.filter(portfolio_review=qs_pps[0]).update(is_active=True)
+                ReviewScore.all_objects.filter(
+                    portfolio_review=qs_pps[0]).update(is_active=True)
             qs_pps.update(is_active=True)
-            ProjectPortfolioState.objects.get_or_create(portfolio=portfolio, project=project)
+            ProjectPortfolioState.objects.get_or_create(
+                portfolio=portfolio, project=project)
 
         return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_201_CREATED)
 
     def move_to_inventory(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
 
-        review_states = portfolio.review_states.filter(project__in=request.data['project'], approved=False)
+        review_states = portfolio.review_states.filter(
+            project__in=request.data['project'], approved=False)
         if len(review_states) == 0:
             raise ValidationError({'project': 'Projects are not in review'})
 
         # Remove each review_state from portfolio
         for rev_state in review_states:
-            rev_state.review_scores.all().update(is_active=False)  # disable reviews linked to pps
+            rev_state.review_scores.all().update(
+                is_active=False)  # disable reviews linked to pps
             rev_state.delete()
         return Response(PortfolioStateChangeSerializer(portfolio).data, status=status.HTTP_200_OK)
 
@@ -756,7 +805,8 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
         review_states = portfolio.review_states.filter(project__in=request.data['project'],
                                                        reviewed=True, approved=False)
         if len(review_states) == 0:
-            raise ValidationError({'project': 'Status change not valid for provided projects'})
+            raise ValidationError(
+                {'project': 'Status change not valid for provided projects'})
 
         # Approve each review state
         for rev_state in review_states:
@@ -768,9 +818,11 @@ class PortfolioProjectChangeReviewStatusViewSet(PortfolioAccessMixin, GenericVie
     def disapprove(self, request, *args, **kwargs):
         portfolio = self._check_input_and_permissions(request, *args, **kwargs)
         # only approved projects can be disapproved
-        review_states = portfolio.review_states.filter(project__in=request.data['project'], approved=True)
+        review_states = portfolio.review_states.filter(
+            project__in=request.data['project'], approved=True)
         if len(review_states) == 0:
-            raise ValidationError({'project': 'Status change not valid for provided projects'})  # pragma: no cover
+            raise ValidationError(
+                {'project': 'Status change not valid for provided projects'})  # pragma: no cover
 
         # Disapprove each review state
         for rev_state in review_states:
@@ -784,9 +836,11 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
     serializer_class = ReviewScoreBriefSerializer
 
     def get_project_and_portfolio(self):
-        portfolio = get_object_or_400(Portfolio, "No such portfolio", id=self.kwargs.get("portfolio"))
+        portfolio = get_object_or_400(
+            Portfolio, "No such portfolio", id=self.kwargs.get("portfolio"))
 
-        pps = portfolio.review_states.get(project=self.kwargs.get('project_id'))
+        pps = portfolio.review_states.get(
+            project=self.kwargs.get('project_id'))
         return portfolio, pps
 
     def create_questionnaire(self, request, *args, **kwargs):
@@ -794,8 +848,10 @@ class PortfolioReviewAssignQuestionnaireViewSet(PortfolioAccessMixin, GenericVie
         self.check_object_permissions(request, portfolio)
 
         if 'userprofile' not in request.data:
-            raise ValidationError({'userprofile': 'UserProfile data is missing'})  # pragma: no cover
-        userprofiles = UserProfile.objects.filter(pk__in=request.data.get('userprofile'))
+            raise ValidationError(
+                {'userprofile': 'UserProfile data is missing'})  # pragma: no cover
+        userprofiles = UserProfile.objects.filter(
+            pk__in=request.data.get('userprofile'))
         scores = list()
         for profile in userprofiles:
             score, created = pps.assign_questionnaire(user=profile)
@@ -849,11 +905,13 @@ class ProjectPortfolioStateManagerViewSet(ProjectPortfolioStateAccessMixin, Retr
     serializer_class = ProjectPortfolioStateManagerSerializer
 
     def get_object(self):
-        pps = get_object_or_400(ProjectPortfolioState, pk=self.kwargs.get('pk'))
+        pps = get_object_or_400(ProjectPortfolioState,
+                                pk=self.kwargs.get('pk'))
         self.check_object_permissions(self.request, pps)
 
         if self.request.method == 'POST' and pps.approved:
-            raise PermissionDenied("Approved project reviews may not be edited")
+            raise PermissionDenied(
+                "Approved project reviews may not be edited")
 
         return pps
 
@@ -881,7 +939,8 @@ class ProjectModifyFavoritesViewSet(TokenAuthMixin, RetrieveModelMixin, GenericV
         Request body can be EMPTY
 
         """
-        self.request.user.userprofile.favorite_projects.remove(self.get_object())
+        self.request.user.userprofile.favorite_projects.remove(
+            self.get_object())
         self.request.user.userprofile.save()
 
         data_serializer = UserProfileSerializer(self.request.user.userprofile)
@@ -936,13 +995,16 @@ class ProjectVersionHistoryViewSet(TokenAuthMixin, RetrieveModelMixin, GenericVi
         is_country_manager = False
         co_id = instance.get_country_office_id()
         if co_id:
-            is_country_manager = request.user.userprofile.manager_of.filter(id=co_id).exists()
+            is_country_manager = request.user.userprofile.manager_of.filter(
+                id=co_id).exists()
 
         if request.user.is_superuser or instance.team.filter(id=request.user.userprofile.id).exists() or \
                 instance.viewers.filter(id=request.user.userprofile.id).exists() or is_country_manager:
-            serializer = self.serializer_class(instance.versions.all(), many=True)
+            serializer = self.serializer_class(
+                instance.versions.all(), many=True)
         else:
-            serializer = self.serializer_class(instance.versions.filter(published=True), many=True)
+            serializer = self.serializer_class(
+                instance.versions.filter(published=True), many=True)
 
         return Response(serializer.data)
 
@@ -952,7 +1014,8 @@ class PortfolioViewSet(TokenAuthMixin, GenericViewSet):
     queryset = Portfolio.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
-        portfolio = get_object_or_404(Portfolio, "No such portfolio", id=kwargs.get("pk"))
+        portfolio = get_object_or_404(
+            Portfolio, "No such portfolio", id=kwargs.get("pk"))
         response_data = {
             'id': portfolio.id,
             'solutions': []
