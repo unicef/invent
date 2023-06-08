@@ -137,7 +137,7 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                     'project_projectversion': ['name', 'data'],
                     'project_reviewscore': ['psa_comment', 'rnci_comment', 'ratp_comment', 'ra_comment', 'ee_comment', 'nct_comment', 'nc_comment', 'ps_comment'],
                     'project_solution': ['name'],
-                    'country_country': ["map_data"],
+                    'country_country': [],
                     'search_projectsearch': ['partner_names'],
                     'socialaccount_socialaccount': ['data'],
                     'user_userprofile': ['name', 'department', 'job_title']
@@ -211,8 +211,13 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                                     if desc.name == column:
                                         column_index = i
                                         break
-                                if column_index is not None:
-                                    if row[column_index] not in non_anonymized_options:
+                                # Check if the column exists in the table
+                                if column_index is None:
+                                    logging.warning(f"Column {column} not found in table {table}, skipping.")
+                                    continue
+                                if column_index is not None and row[column_index] not in non_anonymized_options:
+                                    # Check if column exists in column_faker_map
+                                    if column in column_faker_map:
                                         faker_method = column_faker_map[column]
                                         if table == 'auth_user':
                                             if column in ['username', 'email', 'first_name', 'last_name']:
@@ -279,6 +284,9 @@ def anonymize_db(source_db_name, db_user, db_password, db_host, db_port, target_
                                             else:
                                                 new_row[column_index] = getattr(
                                                     fake, faker_method)()
+                                else:
+                                    # copy the data as is if column not in column_faker_map
+                                    new_row[column_index] = row[column_index]
                             anonymized_rows.append(new_row)
 
                         # Insert anonymized data into the new table
