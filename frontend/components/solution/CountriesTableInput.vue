@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in tableData" :key="row.row_id">
+        <tr v-for="(row, index) in tableData" :key="row.row_id" :data-test="`country-input-row-${index}`">
           <td>
             <CountrySelectDisabledSingle
               @change="() => updateRegion(row.row_id, row.country)"
@@ -18,9 +18,10 @@
               :selectedCountries="tableData"
               v-validate="rules.countrySingleSelect"
               name="country-single-select"
+              :data-test="`country-single-select-${index}`"
             />
           </td>
-          <td>{{ getRegionName(row.region) }}</td>
+          <td :data-test="`region-name-${row.row_id}`">{{ getRegionName(row.region) }}</td>
           <td>
             <el-input-number
               v-model="row.people_reached"
@@ -30,10 +31,16 @@
               controls-position="right"
               :min="0"
               class="number-input"
+              :data-test="`people-reached-input-${index}`"
             />
           </td>
           <td>
-            <el-button type="text" class="IconLeft" @click="() => deleteRow(row.row_id)">
+            <el-button
+              type="text"
+              class="IconLeft"
+              @click="() => deleteRow(row.row_id)"
+              :data-test="`delete-row-button-${index}`"
+            >
               <translate>Delete</translate>
             </el-button>
           </td>
@@ -43,7 +50,7 @@
     <p v-show="errors.first('country-single-select')" class="error">
       <translate>Country, cannot be empty.</translate>
     </p>
-    <el-button type="text" class="IconLeft" @click="addRow">
+    <el-button type="text" class="IconLeft" @click="addRow" data-test="add-country-button">
       <fa icon="plus" /> <translate>Add Country</translate>
     </el-button>
   </div>
