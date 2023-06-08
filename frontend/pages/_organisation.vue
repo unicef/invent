@@ -12,6 +12,7 @@ export default {
   components: {},
   middleware: ['profile'],
   async fetch({ store, params }) {
+    store.dispatch('system/loadUserProfiles')
     await Promise.all([
       store.dispatch('system/loadStaticData'),
       store.dispatch('system/loadDonors'),
@@ -25,7 +26,7 @@ export default {
       store.dispatch('landing/clearCustomLandingPage')
     }
     if (store.getters['user/getProfile']) {
-      await Promise.all([store.dispatch('system/loadOrganisations'), store.dispatch('system/loadUserProfiles')])
+      await Promise.all([store.dispatch('system/loadOrganisations')])
     }
   },
   computed: {
