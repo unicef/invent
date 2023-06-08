@@ -56,6 +56,7 @@ export const projectFields = () => ({
   name: null,
   organisation: null,
   country: null,
+  region: null,
   country_office: null,
   created: null,
   modified: null,

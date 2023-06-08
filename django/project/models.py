@@ -101,13 +101,13 @@ class Project(SoftDeleteModel, ExtendedModel):
     data = JSONField(default=dict)
     draft = JSONField(default=dict)
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
-    viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
+    viewers = models.ManyToManyField(
+        UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64,
         default="",
         help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1",
     )
-
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
     # added here to avoid circular imports
@@ -121,6 +121,15 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+    @property
+    def region(self):
+        co_id = self.get_country_office_id()
+        if co_id:
+            country_office = CountryOffice.objects.get(id=co_id)
+            if country_office:
+                return country_office.region
+        return None
 
     @property
     def thumbnail(self):
@@ -149,6 +158,14 @@ class Project(SoftDeleteModel, ExtendedModel):
         else:
             co_id = self.data.get("country_office")
         return co_id
+
+    def get_project_region_id(self):
+        co_id = self.get_country_office_id()
+        if co_id:
+            country_office = CountryOffice.objects.get(id=co_id)
+            if country_office:
+                return country_office.region
+        return None
 
     def is_member(self, user):
         return (
@@ -188,11 +205,13 @@ class Project(SoftDeleteModel, ExtendedModel):
         extra_data = dict(
             id=self.pk,
             name=self.draft.get("name", "") if draft_mode else self.name,
-            approved=self.approval.approved if hasattr(self, "approval") else None,
+            approved=self.approval.approved if hasattr(
+                self, "approval") else None,
             modified=self.modified,
             created=self.created,
             image=self.image_url,
             thumbnail=self.thumbnail.url if self.thumbnail else None,
+            region=self.region
         )
 
         data.update(extra_data)
@@ -210,7 +229,8 @@ class Project(SoftDeleteModel, ExtendedModel):
 
         project_country = Country.objects.filter(id=country_id).first()
         if project_country:
-            self.public_id = project_country.code + str(uuid.uuid1()).split("-")[0]
+            self.public_id = project_country.code + \
+                str(uuid.uuid1()).split("-")[0]
 
     def approve(self):
         self.approval.approved = True
@@ -350,7 +370,8 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         """
         filtered_reviews = self.review_states.filter(approved=True)
         if project_ids:
-            filtered_reviews = filtered_reviews.filter(project_id__in=project_ids)
+            filtered_reviews = filtered_reviews.filter(
+                project_id__in=project_ids)
         if not filtered_reviews:
             return None  # pragma: no cover
 
@@ -381,7 +402,8 @@ class Portfolio(ExtendedNameOrderedSoftDeletedModel):
         """
         filtered_reviews = self.review_states.filter(approved=True)
         if project_ids:
-            filtered_reviews = filtered_reviews.filter(project_id__in=project_ids)
+            filtered_reviews = filtered_reviews.filter(
+                project_id__in=project_ids)
         if not filtered_reviews:
             return None  # pragma: no cover
 
@@ -743,7 +765,8 @@ class UNICEFSector(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class RegionalPriority(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    region = models.IntegerField(choices=CountryOffice.REGIONS, null=True, blank=True)
+    region = models.IntegerField(
+        choices=CountryOffice.REGIONS, null=True, blank=True)
 
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Regional Priorities"
@@ -772,7 +795,8 @@ class ISC(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class ProjectImport(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
-    headers = ArrayField(models.CharField(max_length=512), blank=True, null=True)
+    headers = ArrayField(models.CharField(
+        max_length=512), blank=True, null=True)
     mapping = JSONField(default=dict)
     imported = models.TextField(null=True, blank=True, default="")
     failed = models.TextField(null=True, blank=True, default="")
@@ -784,7 +808,8 @@ class ProjectImport(ExtendedModel):
 
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
+    status = models.NullBooleanField(
+        null=True, blank=True)  # TODO: maybe remove this
     header_mapping = JSONField(default=dict, blank=True)
     country = models.ForeignKey(
         Country, null=True, blank=True, on_delete=models.SET_NULL
@@ -792,7 +817,8 @@ class ProjectImportV2(ExtendedModel):
     country_office = models.ForeignKey(
         CountryOffice, null=True, blank=True, on_delete=models.SET_NULL
     )
-    donor = models.ForeignKey(Donor, null=True, blank=True, on_delete=models.SET_NULL)
+    donor = models.ForeignKey(
+        Donor, null=True, blank=True, on_delete=models.SET_NULL)
     filename = models.CharField(max_length=256, null=True, blank=True)
     sheet_name = models.CharField(max_length=256, null=True, blank=True)
     draft = models.BooleanField(default=True)
@@ -844,7 +870,8 @@ class BaseScore(SoftDeleteModel, ExtendedModel):
     ps = models.IntegerField(
         choices=BASE_CHOICES, null=True, blank=True
     )  # Path to Scale
-    overall_reviewer_feedback = models.CharField(max_length=1024, null=True, blank=True)
+    overall_reviewer_feedback = models.CharField(
+        max_length=1024, null=True, blank=True)
 
     objects = BaseScoreManager.as_manager()
 
@@ -868,8 +895,10 @@ class ProjectPortfolioState(BaseScore):
         (6, _("6 - Sustainable Scale")),
     )
 
-    impact = models.IntegerField(choices=BaseScore.BASE_CHOICES, null=True, blank=True)
-    scale_phase = models.IntegerField(choices=SCALE_CHOICES, null=True, blank=True)
+    impact = models.IntegerField(
+        choices=BaseScore.BASE_CHOICES, null=True, blank=True)
+    scale_phase = models.IntegerField(
+        choices=SCALE_CHOICES, null=True, blank=True)
     portfolio = models.ForeignKey(
         Portfolio, related_name="review_states", on_delete=models.CASCADE
     )
@@ -981,14 +1010,17 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     @classmethod
     def calc_current_phase(cls, stages: List[Dict]):
         discontinued_id = cls.get_discontinued().id
-        all_stages = list(cls.objects.order_by("order").values_list("id", flat=True))
-        one_before_discontinued_id = all_stages[all_stages.index(discontinued_id) - 1]
+        all_stages = list(cls.objects.order_by(
+            "order").values_list("id", flat=True))
+        one_before_discontinued_id = all_stages[all_stages.index(
+            discontinued_id) - 1]
 
         if not stages:  # when no phases are selected the current phase is the first one
             return all_stages[0]
 
         stage_ids = [stage["id"] for stage in stages]
-        selected_stages = cls.objects.filter(id__in=stage_ids).order_by("order")
+        selected_stages = cls.objects.filter(
+            id__in=stage_ids).order_by("order")
         last_stage = selected_stages.last()
 
         if last_stage.id == discontinued_id:
@@ -1160,7 +1192,8 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         )
 
         portfolios = self.portfolios.values_list("id", flat=True)
-        problem_statements = self.problem_statements.values_list("id", flat=True)
+        problem_statements = self.problem_statements.values_list(
+            "id", flat=True)
         country_solutions = self.countrysolution_set.values(
             "id", "country", "people_reached", "region"
         )
