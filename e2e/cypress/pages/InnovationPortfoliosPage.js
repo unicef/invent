@@ -10,8 +10,8 @@ class InnovationPortfoliosPage{
         return cy.get('[class="portfolio-title"]')
     }
 
-    getEditPortfolioButton(){
-        return cy.get('.SolutionsButton > a').contains("Edit Portfolio")
+    getSeeAllSolutions(){
+        return cy.get('.SolutionsButton > a').contains("See all solutions")
     }
 
     getViewPortfolios(){
@@ -20,6 +20,7 @@ class InnovationPortfoliosPage{
         })
 
     }
+
     openSolution(){
         return cy.get('[class="ProjectName"]').eq(1).click()
     }
@@ -29,5 +30,12 @@ class InnovationPortfoliosPage{
         cy.get('[class="el-collapse-item is-active"]').contains('View Portfolio').click()
         cy.get('.portfolio-summary > span').contains("Summary")
     }
+
+    openAllSolution(){
+        this.getSeeAllSolutions().click()
+        //return cy.get('.SolutionsButton > a').click()
+    }
+
+
 }
 export default InnovationPortfoliosPage
