@@ -1,5 +1,7 @@
 /// <reference types="Cypress" />
 
+import _ from "cypress/types/lodash"
+
 class NewSolutionPage {
 
     getTitle() {
@@ -35,17 +37,25 @@ class NewSolutionPage {
     }
 
     getSaveButton(){
-        return cy.get('.NavigationActions > .el-button--primary')
+        return cy.get('[data-test="save-solution"]')
     }
 
     getCancelButton(){
-        return cy.get('.Cancel')
+        return cy.get('[data-test="cancel-solution"]')
     }
 
-    getCloseButton(){
-        return cy.get('.el-message-box__close')
+    getCancelCancelButton(){
+        return cy.get('.el-message-box__btns > :nth-child(1)')
     }
- 
+
+    getCloseButton() {
+        return cy.get('.el-message-box__btns > .el-button')
+    }
+
+    getOverrideReachValue() {
+        return cy.get('[data-test="override-reach-input"]')
+    }
+
     //
 
 	typeSolutionName(name) {
@@ -66,36 +76,23 @@ class NewSolutionPage {
 
     setInnovationPortfolio(portfolio){
         this.getInnovationPortfolio().click()
-        //
         this.getInnovationPortfolio().scrollIntoView().should('be.visible')
-        this.getInnovationPortfolio().type(portfolio)
-        cy.get('li').eq(portfolio).last().click({force: true})
-        //cy.get('.PortfolioSelectorPopper').eq(portfolio).should('have.value', portfolio).click()
-
-        //cy.get('[class="el-select-dropdown__item"]').eq('portfolio').click({force: true})
-        //cy.get('[class="el-select-dropdown__item"]').first().click({force: true})
-        //cy.get('select[name="dropdown"]').select('option').eq(0).click();
-        //this.getInnovationPortfolio().click({force: true})
+        cy.get('li').contains(portfolio).click()
     }
 
-    setProblemStatements(problem){
+    setProblemStatements(){
         this.getProblemStatements().click()
-        this.getProblemStatements().type(problem)
-        this.getProblemStatements().scrollIntoView()
-        cy.get('li').last().click({force: true})
-        this.getProblemStatements().click()
+        this.getProblemStatements().scrollIntoView().should('be.visible')
+        cy.get('li').contains("1").click()
+        cy.get('#general').click()
     }
 
+    setOverrideReachValue(value) {
+        this.getOverrideReachValue().click
 
+    }
 
-
-
-
-
-
-
-
-
+    //
 
     saveSolution() {
         this.getSaveButton().click()
@@ -105,9 +102,15 @@ class NewSolutionPage {
         this.getCancelButton().click()
     }
 
-    closePopUpWindow(){
+    cancelCancelButton() {
+        this.getCancelCancelButton().click()
+    }
+
+    closeButton() {
         this.getCloseButton().click()
     }
+
+
 
 }
 export default NewSolutionPage

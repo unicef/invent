@@ -25,15 +25,20 @@ describe('Demo test', () => {
         const allSolutionPage = new AllSolutionsPage
         allSolutionPage.pressCreateNewSolution()
         const newSolutionPage = new NewSolutionPage
-        //newSolutionPage.getTitle().contains("Create Solution")
+        newSolutionPage.getTitle().contains("Create Solution")
         //newSolutionPage.getNewSolutionTitle().contains("What is the name of the solution?")
-        //newSolutionPage.typeSolutionName('Automation Creates a New Solution'+(Math.floor(Math.random() * 1000000000000000)).toString())
-        //newSolutionPage.setOpenSourceFrontierTech()
-        //newSolutionPage.setLearningInvestment()
+        newSolutionPage.typeSolutionName('Automation Creates a New Solution'+(Math.floor(Math.random() * 1000000000000000)).toString())
+        newSolutionPage.setOpenSourceFrontierTech()
+        newSolutionPage.setLearningInvestment()
         newSolutionPage.pressAddPortfolio()
         newSolutionPage.setInnovationPortfolio('Climate Change')
-        //newSolutionPage.cancelSolution()
-        //newSolutionPage.saveSolution()
+        newSolutionPage.setProblemStatements()
+        newSolutionPage.setOverrideReachValue((Math.floor(Math.random() * 100)))
+        newSolutionPage.cancelSolution()
+        newSolutionPage.cancelCancelButton()
+        newSolutionPage.saveSolution()
+        newSolutionPage.closeButton()
+        
 
 
 
