@@ -195,6 +195,25 @@ class Project(SoftDeleteModel, ExtendedModel):
             keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN,
         )
 
+    @property
+    def unicef_leading_sector(self):
+        sector_id = self.data.get("unicef_leading_sector")
+        if sector_id:
+            try:
+                sector = UNICEFSector.objects.get(id=sector_id)
+                return sector.name
+            except UNICEFSector.DoesNotExist:
+                pass
+        return None
+
+    @property
+    def unicef_supporting_sectors(self):
+        sector_ids = self.data.get("unicef_supporting_sectors")
+        if sector_ids:
+            sectors = UNICEFSector.objects.filter(id__in=sector_ids)
+            return [sector.name for sector in sectors]
+        return []
+
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
@@ -211,7 +230,9 @@ class Project(SoftDeleteModel, ExtendedModel):
             created=self.created,
             image=self.image_url,
             thumbnail=self.thumbnail.url if self.thumbnail else None,
-            region=self.region
+            region=self.region,
+            unicef_leading_sector=self.unicef_leading_sector,
+            unicef_supporting_sectors=self.unicef_supporting_sectors
         )
 
         data.update(extra_data)
