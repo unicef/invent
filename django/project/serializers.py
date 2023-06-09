@@ -278,6 +278,12 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     unicef_sector = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
     )
+    unicef_supporting_sectors = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
+    unicef_leading_sector = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
 
     def create(self, validated_data):
         validated_data["country"] = self.co.country.id
