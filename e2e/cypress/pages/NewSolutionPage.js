@@ -1,14 +1,12 @@
 /// <reference types="Cypress" />
 
-import _ from "cypress/types/lodash"
-
 class NewSolutionPage {
 
     getTitle() {
         return cy.get('.PageTitle')
     }
 	
-    getNewSolutionTitle(){
+    getNewSolutionTitle() {
         return cy.get('[data-test="solution-name-input"]')
     }
 
@@ -16,35 +14,51 @@ class NewSolutionPage {
         return cy.get('.el-input > [data-test="solution-name-input"]')
     }
 
-    getAddPortfolio(){
+    getAddPortfolio() {
         return cy.get('[data-test="add-portfolio-row-button"]')
     }
 
-    getOpenSourceFrontierTech(){
+    getOpenSourceFrontierTech() {
         return cy.get('[data-test="solution-tech-checkbox"]')
     }
 
-    getLearningInvestment(){
+    getLearningInvestment() {
         return cy.get('[data-test="solution-learning-checkbox"]')
     }
     
-    getInnovationPortfolio(){
+    getInnovationPortfolio() {
         return cy.get('[data-test="portfolio-select-single-0"]')
     }
 
-    getProblemStatements(){
+    getProblemStatements() {
         return cy.get('[data-test="problem-statement-0"]')
     }
 
-    getSaveButton(){
+    getOverrideReachValue() {
+        return cy.get('[data-test="override-reach-input"]')
+    }
+
+    getAddCountry() {
+        return cy.get('[data-test="add-country-button"]')
+    }
+
+    getCountry() {
+        return cy.get('[data-test="country-single-select-0"]')
+    }
+
+    getPeopleReach() {
+        return cy.get('[data-test="people-reached-input-0"]')
+    }
+
+    getSaveButton() {
         return cy.get('[data-test="save-solution"]')
     }
 
-    getCancelButton(){
+    getCancelButton() {
         return cy.get('[data-test="cancel-solution"]')
     }
 
-    getCancelCancelButton(){
+    getCancelCancelButton() {
         return cy.get('.el-message-box__btns > :nth-child(1)')
     }
 
@@ -52,35 +66,29 @@ class NewSolutionPage {
         return cy.get('.el-message-box__btns > .el-button')
     }
 
-    getOverrideReachValue() {
-        return cy.get('[data-test="override-reach-input"]')
-    }
-
-    //
-
 	typeSolutionName(name) {
         this.getSolutionName().type(name)
     }
     
-    pressAddPortfolio(){
+    pressAddPortfolio() {
         this.getAddPortfolio().click()
     }
 
-    setOpenSourceFrontierTech(){
+    setOpenSourceFrontierTech() {
         this.getOpenSourceFrontierTech().click()
     }
 
-    setLearningInvestment(){
+    setLearningInvestment() {
         this.getLearningInvestment().click()
     }
 
-    setInnovationPortfolio(portfolio){
+    setInnovationPortfolio(portfolio) {
         this.getInnovationPortfolio().click()
         this.getInnovationPortfolio().scrollIntoView().should('be.visible')
         cy.get('li').contains(portfolio).click()
     }
 
-    setProblemStatements(){
+    setProblemStatements() {
         this.getProblemStatements().click()
         this.getProblemStatements().scrollIntoView().should('be.visible')
         cy.get('li').contains("1").click()
@@ -88,11 +96,26 @@ class NewSolutionPage {
     }
 
     setOverrideReachValue(value) {
-        this.getOverrideReachValue().click
-
+        this.getOverrideReachValue().click()
+        this.getOverrideReachValue().type(value)
     }
 
-    //
+    pressAddCountry() {
+        this.getAddCountry().click()
+    }
+
+    setCountry(country) {
+        this.getCountry().click()
+        this.getCountry().scrollIntoView().should('be.visible')
+        this.getCountry().type(country)
+        cy.get('li').contains(country).click()
+    }
+
+    setPeopleReach(people) {
+        this.getPeopleReach().click()
+        this.getPeopleReach().type(people)
+        cy.get('#general').click()
+    }
 
     saveSolution() {
         this.getSaveButton().click()
@@ -107,10 +130,8 @@ class NewSolutionPage {
     }
 
     closeButton() {
-        this.getCloseButton().click()
+        this.getCloseButton().click({ multiple: true })
+        //Kserw thelei kalytero approach tha to dw otan gyrisw
     }
-
-
-
 }
 export default NewSolutionPage
