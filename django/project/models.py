@@ -201,7 +201,7 @@ class Project(SoftDeleteModel, ExtendedModel):
         if sector_id:
             try:
                 sector = UNICEFSector.objects.get(id=sector_id)
-                return sector.name
+                return sector.id
             except UNICEFSector.DoesNotExist:
                 pass
         return None
@@ -211,7 +211,7 @@ class Project(SoftDeleteModel, ExtendedModel):
         sector_ids = self.data.get("unicef_supporting_sectors")
         if sector_ids:
             sectors = UNICEFSector.objects.filter(id__in=sector_ids)
-            return [sector.name for sector in sectors]
+            return [sector.id for sector in sectors]
         return []
 
     def to_representation(self, data=None, draft_mode=False):
