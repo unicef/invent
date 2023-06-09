@@ -23,14 +23,15 @@ export default {
   async fetch({ store, query, error }) {
     store.dispatch('landing/resetSearch')
     store.dispatch('dashboard/setDashboardSection', 'list')
-    await Promise.all([
-      store.dispatch('projects/loadUserProjects'),
-      store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('countries/loadMapData'),
-    ])
     await store.dispatch('dashboard/setSearchOptions', query)
+
     try {
-      await store.dispatch('dashboard/loadProjectList')
+      await Promise.all([
+        store.dispatch('projects/loadUserProjects'),
+        store.dispatch('projects/loadProjectStructure'),
+        store.dispatch('countries/loadMapData'),
+        store.dispatch('dashboard/loadProjectList'),
+      ])
     } catch (e) {
       console.log(e)
       error({
@@ -39,15 +40,9 @@ export default {
       })
     }
     if (store.getters['dashboard/getDashboardType'] === 'donor') {
-      await store.dispatch(
-        'system/loadDonorDetails',
-        store.getters['dashboard/getDashboardId']
-      )
+      await store.dispatch('system/loadDonorDetails', store.getters['dashboard/getDashboardId'])
     } else if (store.getters['dashboard/getDashboardType'] === 'country') {
-      await store.dispatch(
-        'countries/loadCountryDetails',
-        store.getters['dashboard/getDashboardId']
-      )
+      await store.dispatch('countries/loadCountryDetails', store.getters['dashboard/getDashboardId'])
     }
   },
   computed: {

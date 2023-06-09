@@ -136,7 +136,8 @@ export const actions = {
     }
   },
 
-  async loadStaticData({ commit, dispatch }) {
+  async loadStaticData({ state, commit, dispatch }) {
+    if (state.unicef_regions.length > 0 && state.solutionPhases > 0) return
     try {
       const { data } = await this.$axios.get('/api/static-data/')
       commit('SET_AXIS', data.axis)
@@ -170,7 +171,8 @@ export const actions = {
     }
   },
 
-  async loadOrganisations({ commit, rootGetters }) {
+  async loadOrganisations({ state, commit, rootGetters }) {
+    if (state.organisations.length > 0) return
     const profile = rootGetters['user/getProfile']
     if (profile) {
       try {
@@ -181,7 +183,8 @@ export const actions = {
       }
     }
   },
-  async loadDonors({ commit }) {
+  async loadDonors({ state, commit }) {
+    if (state.donors.length > 0) return
     try {
       const { data } = await this.$axios.get(`/api/landing-donor/`)
       commit('SET_DONORS', data)
