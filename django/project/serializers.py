@@ -122,7 +122,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
     unicef_supporting_sectors = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
     )
-    unicef_leading_sector = serializers.IntegerField(required=False)
+    unicef_leading_sector = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
+    )
     regional_priorities = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True
     )
