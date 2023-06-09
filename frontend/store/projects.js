@@ -80,6 +80,28 @@ export const getters = {
   getTechnologyPlatforms: (state) =>
     state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
   getSectors: (state) => (state.projectStructure.sectors ? [...state.projectStructure.sectors] : []),
+  getLeadingSector: (state, getters, rootState, rootGetters) => {
+    const selectedSupportingSectors = rootGetters['project/getSupportingSectors']
+    const sectors = state.projectStructure.sectors
+    const remainingSectors = sectors.map((sector) =>
+      selectedSupportingSectors.some((selSector) => selSector === sector.id)
+        ? { ...sector, disabled: true, value: sector.id }
+        : { ...sector, disabled: false, value: sector.id }
+    )
+
+    return remainingSectors
+  },
+  getSupportingSectors: (state, getters, rootState, rootGetters) => {
+    const selectedLeadingSectors = rootGetters['project/getLeadingSector']
+    const sectors = state.projectStructure.sectors
+    const remainingSectors = sectors.map((sector) =>
+      selectedLeadingSectors.some((selSector) => selSector === sector.id)
+        ? { ...sector, disabled: true, value: sector.id }
+        : { ...sector, disabled: false, value: sector.id }
+    )
+
+    return remainingSectors
+  },
   getInfoSec: (state) => (state.projectStructure.isc ? [...state.projectStructure.isc] : []),
   getInnovationWays: (state) =>
     state.projectStructure.innovation_ways ? [...state.projectStructure.innovation_ways] : [],
@@ -128,7 +150,7 @@ export const actions = {
       let countries = rootGetters['countries/getCountries']
       if (countries.length === 0) {
         await dispatch('countries/loadMapData', {}, { root: true })
-      countries = rootGetters['countries/getCountries']
+        countries = rootGetters['countries/getCountries']
       }
       countries.map((c) => {
         return {

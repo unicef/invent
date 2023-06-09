@@ -81,6 +81,8 @@ export const projectFields = () => ({
   donors: [],
   // INVENT
   unicef_sector: [],
+  unicef_leading_sector: null,
+  unicef_supporting_sectors: [],
   functions: [],
   hardware: [],
   nontech: [],
@@ -150,6 +152,12 @@ export const draftRules = () => {
       max: 30,
     },
     unicef_sector: {
+      required: false,
+    },
+    unicef_leading_sector: {
+      required: false,
+    },
+    unicef_supporting_sectors: {
       required: false,
     },
     regional_priorities: {
@@ -242,6 +250,12 @@ export const publishRules = () => {
     },
     unicef_sector: {
       required: true,
+    },
+    unicef_leading_sector: {
+      required: true,
+    },
+    unicef_supporting_sectors: {
+      required: false,
     },
     regional_priorities: {
       required: false,
