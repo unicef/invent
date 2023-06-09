@@ -92,7 +92,7 @@
         </ul>
       </div>
 
-      <div v-if="isTeam || isNewProject || isSuper" class="NavigationActions">
+      <div v-if="isTeam || isNewProject || isSuper || isRegion" class="NavigationActions">
         <el-button
           v-if="isDraft"
           :disabled="!!loading"
@@ -214,7 +214,7 @@ export default {
           this.user.is_superuser ||
           this.user.member.includes(this.project.id) ||
           this.user.manager_of.includes(this.project.country_office) ||
-          this.user.region === this.project.region
+          this.isRegion
         )
       }
       return false
@@ -224,6 +224,9 @@ export default {
         ? this.user.member.includes(+this.$route.params.id) ||
             this.user.manager_of.includes(this.project.country_office)
         : false
+    },
+    isRegion() {
+      return this.user.region === (this.draft.region || this.published.region)
     },
     isSuper() {
       return this.user && this.user.is_superuser
@@ -275,7 +278,10 @@ export default {
       })
     },
     goToDraft() {
-      const name = this.isTeam || this.isSuper ? 'organisation-initiatives-id-edit' : 'organisation-initiatives-id'
+      const name =
+        this.isTeam || this.isSuper || this.isRegion
+          ? 'organisation-initiatives-id-edit'
+          : 'organisation-initiatives-id'
       const localised = this.localePath({
         name,
         params: { ...this.$route.params },
