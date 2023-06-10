@@ -16,6 +16,8 @@ class Command(BaseCommand):
     help = 'Splits sector into lead_sector and supporting_sector'
 
     def handle(self, *args, **options):
+        self.stdout.write(self.style.MIGRATE_HEADING(
+            'Splitting sectors to lead and supporting...'))
         # Iterating over all projects
         for project in Project.objects.all():
             # Checking if 'unicef_sector' field exists in project's data
