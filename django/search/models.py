@@ -212,8 +212,10 @@ class ProjectSearch(ExtendedModel):
                 'innovation_categories', [])
             self.innovation_ways = project.data.get('innovation_ways', [])
             self.unicef_sector = project.data.get('unicef_sector', [])
-            self.unicef_leading_sector = project.data.get('unicef_leading_sector', [])
-            self.unicef_supporting_sectors = project.data.get('unicef_supporting_sectors', [])
+            self.unicef_leading_sector = project.data.get(
+                'unicef_leading_sector', [])
+            self.unicef_supporting_sectors = project.data.get(
+                'unicef_supporting_sectors', [])
             self.hardware = project.data.get('hardware', [])
             self.nontech = project.data.get('nontech', [])
             self.functions = project.data.get('functions', [])
