@@ -200,11 +200,11 @@ class Project(SoftDeleteModel, ExtendedModel):
         sector_id = self.data.get("unicef_leading_sector")
         if sector_id:
             try:
-                sector = UNICEFSector.objects.get(id=sector_id)
-                return sector.id
+                sector = UNICEFSector.objects.get(id=sector_id[0])
+                return sector_id
             except UNICEFSector.DoesNotExist:
                 pass
-        return None
+        return []
 
     @property
     def unicef_supporting_sectors(self):

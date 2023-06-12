@@ -24,7 +24,7 @@ class Command(BaseCommand):
             if 'unicef_sector' in project.data:
                 # If it does, create a new field 'unicef_leading_sector' which is the first element of 'unicef_sector'
                 # If 'unicef_sector' is empty, set 'unicef_leading_sector' as empty list
-                project.data['unicef_leading_sector'] = project.data['unicef_sector'][0] if len(
+                project.data['unicef_leading_sector'] = [project.data['unicef_sector'][0]] if len(
                     project.data['unicef_sector']) > 0 else []
                 # Create another new field 'unicef_supporting_sectors' which are all other elements of 'unicef_sector'
                 # If 'unicef_sector' has only one or zero elements, set 'unicef_supporting_sectors' as empty list
@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 project.save()
             # Repeat the same process for project's draft data
             if 'unicef_sector' in project.draft:
-                project.draft['unicef_leading_sector'] = project.draft['unicef_sector'][0] if len(
+                project.draft['unicef_leading_sector'] = [project.draft['unicef_sector'][0]] if len(
                     project.draft['unicef_sector']) > 0 else []
                 project.draft['unicef_supporting_sectors'] = project.draft['unicef_sector'][1:] if len(
                     project.draft['unicef_sector']) > 1 else []
@@ -45,7 +45,7 @@ class Command(BaseCommand):
             if 'unicef_sector' in search_project.project.data:
                 # If it does, create or update 'unicef_leading_sector' and 'unicef_supporting_sectors' fields for the search project record
                 # Similar to what we did for Project records
-                search_project.unicef_leading_sector = search_project.project.data['unicef_sector'][0] if len(
+                search_project.unicef_leading_sector = [search_project.project.data['unicef_sector'][0]] if len(
                     search_project.project.data['unicef_sector']) > 0 else []
                 search_project.unicef_supporting_sectors = search_project.project.data['unicef_sector'][1:] if len(
                     search_project.project.data['unicef_sector']) > 1 else []
