@@ -51,9 +51,9 @@
 
         <collapsible-card id="categorization" :title="$gettext('2. Categorization') | translate">
           <simple-field
-            v-if="project.unicef_leading_sector"
+            v-if="project.unicef_leading_sector.length > 0"
             :header="$gettext('Lead Sector') | translate"
-            :content="project.unicef_leading_sector"
+            :content="getLeadingSector"
           />
 
           <simple-field
@@ -377,7 +377,14 @@ export default {
       regionalOffices: 'projects/getRegionalOffices',
       innovationWays: 'projects/getInnovationWays',
       userProfiles: 'system/getUserProfilesNoFilter',
+      sectors: 'projects/getSectors',
     }),
+    getLeadingSector() {
+      const list = this.sectors
+      return list && this.project && this.project.unicef_leading_sector
+        ? list.find((tp) => this.project.unicef_leading_sector.some((sectorId) => sectorId === tp.id)).name
+        : ''
+    },
     getUserName() {
       const userName = this.userProfiles.find((profile) => profile.email === this.project.contact_email)
       return userName && userName.name ? userName.name : this.project.contact_name
