@@ -20,14 +20,12 @@ export default {
     ])
     if (params.organisation !== '-') {
       await store.dispatch('landing/loadCustomLandingPage', params.organisation)
+      await store.dispatch('landing/loadCountryProjectsList')
     } else {
       store.dispatch('landing/clearCustomLandingPage')
     }
     if (store.getters['user/getProfile']) {
-      await Promise.all([
-        store.dispatch('system/loadOrganisations'),
-        store.dispatch('system/loadUserProfiles'),
-      ])
+      await Promise.all([store.dispatch('system/loadOrganisations'), store.dispatch('system/loadUserProfiles')])
     }
   },
   computed: {

@@ -23,6 +23,7 @@
           :rules="rules.name"
           data-as-name="Name"
           data-vv-name="name"
+          data-test="solution-name-input"
         />
         <span class="Hint">
           <fa icon="info-circle" />
@@ -44,7 +45,7 @@
           <translate key="phase"> Phase </translate>
         </template>
 
-        <SolutionPhaseSelect v-model="innerValue.phase" />
+        <SolutionPhaseSelect v-model="innerValue.phase" data-test="solution-phase-select" />
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -52,7 +53,11 @@
         :draft-rule="rules.tech"
         :publish-rule="rules.tech"
       >
-        <el-checkbox v-model="innerValue.open_source_frontier_tech" class="tech__checkbox" :label="'tech'"
+        <el-checkbox
+          v-model="innerValue.open_source_frontier_tech"
+          class="tech__checkbox"
+          :label="'tech'"
+          data-test="solution-tech-checkbox"
           ><translate>Open source frontier tech</translate>
         </el-checkbox>
       </custom-required-form-item>
@@ -62,7 +67,11 @@
         :draft-rule="rules.learning"
         :publish-rule="rules.learning"
       >
-        <el-checkbox v-model="innerValue.learning_investment" class="tech__checkbox" :label="'investment'"
+        <el-checkbox
+          v-model="innerValue.learning_investment"
+          class="tech__checkbox"
+          :label="'investment'"
+          data-test="solution-learning-checkbox"
           ><translate>Learning investment</translate>
         </el-checkbox>
       </custom-required-form-item>

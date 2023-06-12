@@ -8,6 +8,7 @@
           type="primary"
           size="medium"
           @click="emitAction('save')"
+          data-test="save-solution"
         >
           <fa v-show="loading === true" icon="spinner" spin />
           <translate>Save</translate>
@@ -20,6 +21,7 @@
           class="Cancel"
           :disabled="!!loading"
           @click="emitAction('cancel')"
+          data-test="cancel-solution"
         >
           <fa v-show="loading === 'draft'" icon="spinner" spin />
           <translate>Cancel</translate>
@@ -31,6 +33,7 @@
           type="text"
           class="el-button button--danger el-button--danger el-button--medium"
           @click="emitAction('delete')"
+          data-test="delete-solution"
         >
           <fa v-show="loading === 'discard'" icon="spinner" spin />
           <translate>Delete</translate>
