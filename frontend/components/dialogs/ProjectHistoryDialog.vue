@@ -185,6 +185,16 @@ export default {
           title: this.$gettext('Sector'),
           parse: (unicef_sector) => this.parseList(this.getSectors, unicef_sector),
         },
+        unicef_leading_sector: {
+          component: 'ValueTags',
+          title: this.$gettext('Lead Sector'),
+          parse: (unicef_leading_sector) => this.parseList(this.getLeadingSectors, unicef_leading_sector),
+        },
+        unicef_suppoting_sectors: {
+          component: 'ValueTags',
+          title: this.$gettext('Supporting Sectors'),
+          parse: (unicef_supporting_sectors) => this.parseList(this.getSupportingSectors, unicef_supporting_sectors),
+        },
         functions: {
           component: 'ValueTags',
           title: this.$gettext('Platform/Product Function'),

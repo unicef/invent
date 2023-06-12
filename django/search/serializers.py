@@ -45,6 +45,8 @@ class ListResultSerializer(serializers.Serializer):
     innovation_categories = serializers.ReadOnlyField(source="project.data.innovation_categories")
     innovation_ways = serializers.ReadOnlyField()
     unicef_sector = serializers.ReadOnlyField()
+    unicef_leading_sector = serializers.ReadOnlyField()
+    unicef_supporting_sectors = serializers.ReadOnlyField()
     hardware = serializers.ReadOnlyField()
     nontech = serializers.ReadOnlyField()
     functions = serializers.ReadOnlyField()

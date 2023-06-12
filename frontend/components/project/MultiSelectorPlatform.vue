@@ -2,7 +2,6 @@
   <lazy-el-select
     :value="platforms"
     multiple
-    :multiple-limit="multipleLimit"
     filterable
     :disabled="disabled"
     :placeholder="placeholder || $gettext('Select from list') | translate"
@@ -25,14 +24,14 @@
 <script>
 import find from 'lodash/find'
 export default {
-  name: 'MultiSelector',
+  name: 'MultiSelectorPlatform',
   model: {
     prop: 'platforms',
     event: 'change',
   },
   $_veeValidate: {
     value() {
-      return this.platform
+      return this.platforms
     },
   },
   props: {
@@ -40,9 +39,9 @@ export default {
       type: Array,
       default: () => [],
     },
-    multipleLimit: {
-      type: Number,
-      default: 0,
+    multiple: {
+      type: Boolean,
+      default: true,
     },
     source: {
       type: String,
@@ -56,44 +55,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    filter: {
-      type: [Array, Number],
-      default: null,
-    },
   },
   computed: {
     sourceList() {
-      // source list logic
-      let sourceList
-      const fullList = this.$store.getters['projects/' + this.source] || []
-      if (this.filter === null) {
-        sourceList = fullList
-      } else if (this.filter && this.filter.length) {
-        sourceList = fullList.filter(({ id }) => this.filter.includes(id))
-      } else {
-        sourceList = fullList.filter(({ region }) => region === this.filter)
-      }
-      // disabled list logic
-      const targets = this.$store.getters['projects/' + this.source].filter((i) => i.name === 'N/A' || i.name === 'No')
-      let target
-      targets.forEach((tar) => {
-        if (this.platforms.includes(tar.id)) {
-          target = tar
-        }
-      })
-      if (target !== undefined && this.platforms.includes(target.id)) {
-        sourceList = sourceList.map((i) => {
-          if (i.id === target.id) {
-            return { ...i, disabled: false }
-          }
-          return { ...i, disabled: true }
-        })
-      } else {
-        sourceList = sourceList.map((i) => {
-          return { ...i, disabled: false }
-        })
-      }
-      return sourceList
+      return this.$store.getters['projects/' + this.source] || []
     },
   },
   watch: {
@@ -112,25 +77,14 @@ export default {
       }
       this.changeHandler(newValue)
     },
-    platforms(val) {
-      const target = this.sourceList.find((i) => i.name === 'N/A')
-      if (target !== undefined && val.includes(target.id)) {
-        this.platformList = this.sourceList.map((i) => {
-          if (i.name === 'N/A') {
-            return { ...i, disabled: false }
-          }
-          return { ...i, disabled: true }
-        })
-      } else {
-        this.platformList = this.sourceList.map((i) => {
-          return { ...i, disabled: false }
-        })
-      }
-    },
   },
   methods: {
     changeHandler(value) {
-      this.$emit('change', value)
+      if (this.multiple === false) {
+        this.$emit('change', [value[value.length - 1]])
+      } else {
+        this.$emit('change', value)
+      }
     },
   },
 }

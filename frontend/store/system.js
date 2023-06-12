@@ -161,6 +161,7 @@ export const actions = {
       commit('SET_DATA', { key: 'solutionPhases', value: data.solution_phases })
       // columns are coming from
       // console.log(data.dashboard_columns)
+
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
         root: true,
       })
