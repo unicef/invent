@@ -17,7 +17,7 @@ export const defaultSelectedColumns = () => [
   '14',
   '15',
   '18',
-  '19',
+  //'19',
   '20',
   '17', // 45 renumbered
   '21',
@@ -48,6 +48,9 @@ export const defaultSelectedColumns = () => [
   '60',
   '61',
   '62',
+  '63',
+  '64',
+  '65',
 ]
 
 const DEFAULT_QUERY = {
@@ -85,6 +88,8 @@ const DEFAULT_QUERY = {
   dashboardSection: 'map',
   regionalPriorities: [],
   sectors: [],
+  leadSector: [],
+  supportingSectors: [],
   filteredRegionalOffice: [],
   stage: null,
   innovationWays: [],
@@ -141,7 +146,9 @@ const DEFAULT_QUERY = {
       label: 'Multicountry or Regional Office',
       key: 'regional_office',
     },
-    { id: '19', label: 'UNICEF Sector', key: 'unicef_sector' },
+    // { id: '19', label: 'UNICEF Sector', key: 'unicef_sector' },
+    { id: '64', label: 'Lead Sector', key: 'unicef_leading_sector' },
+    { id: '65', label: 'Supporting Sector', key: 'unicef_supporting_sectors' },
     {
       id: '20',
       label: 'Innovation Ways',
@@ -294,6 +301,8 @@ export const getters = {
     return state.filteredRegionalOffice
   },
   getUnicefSectors: (state) => state.sectors,
+  getLeadingSector: (state) => state.unicef_leading_sector,
+  getSupportingSectors: (state) => state.unicef_supporting_sectors,
   getInnovationWays: (state) => state.innovationWays,
   getPhase: (state) => state.stage,
   getHardwarePlatforms: (state) => state.hardwarePlatforms,
@@ -521,6 +530,14 @@ export const actions = {
   },
   setUnicefSectors({ commit }, value) {
     commit('SET_UNICEF_SECTORS', value)
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setLeadingSector({ commit }, value) {
+    commit('SET_UNICEF_LEADING_SECTOR', value)
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setSupportingSectors({ commit }, value) {
+    commit('SET_UNICEF_SUPPORTING_SECTORS', value)
     commit('SET_CURRENT_PAGE', 1)
   },
   setInnovationCategories({ commit }, value) {
