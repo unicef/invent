@@ -141,7 +141,7 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
     TODO: write unit tests if necessary
     """
     # General Overview
-    published = Field(column_name=_('Published?'))
+    published = Field(column_name=_('Published'))
     contact = Field(column_name=_('Contact'))
     team = Field(column_name=_('Team'))
     overview = Field(column_name=_('Overview'))
@@ -150,7 +150,6 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
     unicef_office = Field(column_name=_('UNICEF Office'))
 
     # Categorization
-    sector = Field(column_name=_('Sector'))
     unicef_leading_sector = Field(column_name=_('Lead Sector'))
     unicef_supporting_sectors = Field(column_name=_('Supporting Sectors'))
     goal_area = Field(column_name=_('Goal Area'))
@@ -240,17 +239,12 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         except Country.DoesNotExist:
             return None
 
-    def dehydrate_sector(self, project):
-        sector = self.get_data_member(project).get('unicef_sector')
-        qs = UNICEFSector.objects.filter(id__in=sector)
-        return ", ".join(res.name for res in qs) if qs.count() else None
-
-    def dehydrate_lead_sector(self, project):
+    def dehydrate_unicef_leading_sector(self, project):
         sector = self.get_data_member(project).get('unicef_leading_sector')
-        qs = UNICEFSector.objects.filter(id__in=[sector])
+        qs = UNICEFSector.objects.filter(id__in=sector)
         return qs[0].name if qs.count() else None
 
-    def dehydrate_supporting_sector(self, project):
+    def dehydrate_unicef_supporting_sectors(self, project):
         sector = self.get_data_member(project).get('unicef_supporting_sectors')
         qs = UNICEFSector.objects.filter(id__in=sector)
         return ", ".join(res.name for res in qs) if qs.count() else None
