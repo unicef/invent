@@ -1,19 +1,10 @@
 <template>
-  <el-row
-    type="flex"
-    justify="space-between"
-    align="middle"
-    class="TableTopActions"
-  >
+  <el-row type="flex" justify="space-between" align="middle" class="TableTopActions">
     <el-col class="TableExportOptions">
       <el-row type="flex">
         <el-button size="small" type="text" @click="toggleSelectAll">
-          <translate v-show="!allSelected" :parameters="{ total }">
-            Select all {total} initiatives
-          </translate>
-          <translate v-show="allSelected" :parameters="{ total }">
-            Deselect all {total} initiatives
-          </translate>
+          <translate v-show="!allSelected" :parameters="{ total }"> Select all {total} initiatives </translate>
+          <translate v-show="allSelected" :parameters="{ total }"> Deselect all {total} initiatives </translate>
         </el-button>
 
         <div class="Separator" />
@@ -39,9 +30,7 @@
                       <translate>Export selected</translate>
                     </span>
                     <span v-show="selected">
-                      <translate :parameters="{ selected }">
-                        Export {selected} selected
-                      </translate>
+                      <translate :parameters="{ selected }"> Export {selected} selected </translate>
                     </span>
                   </el-button>
                 </template>
@@ -66,9 +55,7 @@
           >
             <fa icon="envelope" />
             <translate v-show="selected === 0"> Contact selected </translate>
-            <translate v-show="selected > 0" :parameters="{ selected }">
-              Contact {selected} selected
-            </translate>
+            <translate v-show="selected > 0" :parameters="{ selected }"> Contact {selected} selected </translate>
           </el-button>
           <pdf-export ref="pdfExport" />
         </template>
@@ -77,13 +64,7 @@
 
     <el-col class="TableLegend">
       <el-row type="flex" align="middle">
-        <project-legend
-          :compact-mode="viewportSize < 1440"
-          force-star
-          force-eye
-          force-globe
-          show-label
-        />
+        <project-legend :compact-mode="viewportSize < 1440" force-star force-eye force-globe show-label />
 
         <div class="Separator" />
 
@@ -96,12 +77,7 @@
           popper-class="CustomPopover TableSettingsDropdown"
           @show="popperOpenHandler"
         >
-          <el-button
-            slot="reference"
-            type="text"
-            size="small"
-            class="TableSettingsButton IconLeft"
-          >
+          <el-button slot="reference" type="text" size="small" class="TableSettingsButton IconLeft">
             <fa icon="cog" />
           </el-button>
 
@@ -120,32 +96,17 @@
             <div class="CustomPopoverActions">
               <el-row type="flex" align="middle">
                 <el-col>
-                  <el-button
-                    type="text"
-                    size="small"
-                    class="CancelButton"
-                    @click="columnSelectorOpen = false"
-                  >
+                  <el-button type="text" size="small" class="CancelButton" @click="columnSelectorOpen = false">
                     <translate>Cancel</translate>
                   </el-button>
                 </el-col>
                 <el-col>
-                  <el-button
-                    type="text"
-                    size="small"
-                    class="CancelButton"
-                    @click="deselectAllCols"
-                  >
+                  <el-button type="text" size="small" class="CancelButton" @click="deselectAllCols">
                     <translate>Deselect all</translate>
                   </el-button>
                 </el-col>
                 <el-col>
-                  <el-button
-                    type="text"
-                    size="small"
-                    class="PrimaryButton"
-                    @click="updateColumns"
-                  >
+                  <el-button type="text" size="small" class="PrimaryButton" @click="updateColumns">
                     <translate>Update</translate>
                   </el-button>
                 </el-col>
@@ -197,15 +158,9 @@ export default {
       total: 'dashboard/getTotal',
       user: 'user/getProfile',
       projects: 'dashboard/getProjectsBucket',
-      dashboardId: 'dashboard/getDashboardId',
-      dashboardType: 'dashboard/getDashboardType',
-      getAllColumns: 'dashboard/getAllColumns',
-      getAvailableColumns: 'dashboard/getAvailableColumns',
     }),
     settingsTitle() {
-      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${
-        this.columns.length
-      })`
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`
     },
     selected() {
       return this.allSelected ? this.total : this.selectedRows.length
@@ -213,9 +168,7 @@ export default {
     rowToExport() {
       let projects = this.allSelected
         ? this.projects
-        : this.projects.filter((p) =>
-            this.selectedRows.some((sr) => sr === p.id)
-          )
+        : this.projects.filter((p) => this.selectedRows.some((sr) => sr === p.id))
       let selectedCols = []
       this.mapColKeys.forEach((i) => {
         if (this.selectedCol.includes(i.id)) selectedCols.push(i.key)
@@ -229,9 +182,7 @@ export default {
     showEmailButton() {
       const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA']
       if (this.user) {
-        return (
-          allowed.includes(this.user.account_type) || this.user.is_superuser
-        )
+        return allowed.includes(this.user.account_type) || this.user.is_superuser
       }
       return false
     },
@@ -262,15 +213,12 @@ export default {
       }
     },
     popperOpenHandler() {
-      const colFilter = (hide = ['61', '62']) =>
-        filter(columns, (c) => !hide.includes(c.id))
+      const colFilter = (hide = ['61', '62']) => filter(columns, (c) => !hide.includes(c.id))
       const columns = [...this.columns.map((s) => ({ ...s }))]
       this.selectedColumns = colFilter()
     },
     updateColumns() {
-      this.setSelectedColumns(
-        this.selectedColumns.filter((s) => s.selected).map((s) => s.id)
-      )
+      this.setSelectedColumns(this.selectedColumns.filter((s) => s.selected).map((s) => s.id))
       this.columnSelectorOpen = false
     },
     deselectAllCols() {

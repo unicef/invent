@@ -359,7 +359,7 @@ export default {
       // new fields
       getSectors: 'projects/getSectors',
       getLeadingSector: 'projects/getLeadingSector',
-      getSupportingSectors: 'projects/getSupportringSectors',
+      getSupportingSectors: 'projects/getSupportingSectors',
       getRegionalPriorities: 'projects/getRegionalPriorities',
       getInnovationWays: 'projects/getInnovationWays',
       getInnovationCategories: 'projects/getInnovationCategories',

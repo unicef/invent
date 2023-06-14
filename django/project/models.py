@@ -220,6 +220,7 @@ class Project(SoftDeleteModel, ExtendedModel):
 
         if not data:
             return {}
+        
 
         extra_data = dict(
             id=self.pk,
@@ -231,8 +232,8 @@ class Project(SoftDeleteModel, ExtendedModel):
             image=self.image_url,
             thumbnail=self.thumbnail.url if self.thumbnail else None,
             region=self.region,
-            unicef_leading_sector=self.unicef_leading_sector,
-            unicef_supporting_sectors=self.unicef_supporting_sectors
+            unicef_leading_sector=self.draft.get("unicef_leading_sector", "") if draft_mode else self.unicef_leading_sector,
+            unicef_supporting_sectors=self.draft.get("unicef_supporting_sectors", "") if draft_mode else self.unicef_supporting_sectors
         )
 
         data.update(extra_data)

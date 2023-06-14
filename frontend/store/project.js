@@ -85,7 +85,7 @@ export const getters = {
   getCapabilitySubcategories: (state) => state.capability_subcategories,
   getPlatforms: (state) => (state.platforms.length === 0 ? [] : state.platforms),
   getSectors: (state) => (state.unicef_sector.length === 0 ? [null] : state.unicef_sector),
-  getLeadingSector: (state) => (state.unicef_leading_sector === null ? [] : state.unicef_leading_sector),
+  getLeadingSector: (state) => (state.unicef_leading_sector.length === 0 ? [] : state.unicef_leading_sector),
   getSupportingSectors: (state) =>
     state.unicef_supporting_sectors.length === 0 ? [] : state.unicef_supporting_sectors,
   getRegionalPriorities: (state) => (state.regional_priorities.length === 0 ? [null] : state.regional_priorities),
@@ -353,9 +353,17 @@ export const actions = {
   },
   setLeadingSector({ commit, rootGetters }, value) {
     commit('SET_LEADING_SECTOR', naFilter(rootGetters['projects/getLeadingSector'], value))
+    commit('SET_SECTORS', [
+      ...naFilter(rootGetters['projects/getLeadingSector'], value),
+      ...rootGetters['project/getSupportingSectors'],
+    ])
   },
   setSupportingSectors({ commit, rootGetters }, value) {
     commit('SET_SUPPORTING_SECTORS', naFilter(rootGetters['projects/getSupportingSectors'], value))
+    commit('SET_SECTORS', [
+      ...naFilter(rootGetters['projects/getSupportingSectors'], value),
+      ...rootGetters['project/getLeadingSector'],
+    ])
   },
   setRegionalPriorities({ commit }, value) {
     commit('SET_REGIONAL_PRIORITIES', value)
