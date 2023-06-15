@@ -4,6 +4,8 @@
 export const nameInventMapping = {
   // INVENT
   unicef_sector: 'Served Sector(s)',
+  unicef_leading_sector: 'Leading Sector',
+  unicef_supporting_sectors: 'Supporting Sectors',
   functions: 'Function(s) of Platform',
   hardware: 'Hardware platforms',
   nontech: 'Non-Technology platforms',
@@ -29,6 +31,8 @@ export const nameInventMapping = {
 
 export const apiNameInvenMapping = {
   unicef_sector: 'getSectors',
+  unicef_leading_sector: 'getLeadingSector',
+  unicef_supporting_sectors: 'getSupportingSectors',
   functions: 'getFunctions',
   hardware: 'getHardware',
   nontech: 'getNontech',
@@ -68,12 +72,9 @@ export const importTemplate = [
     'Programme Focal Point Name': 'Nico',
     'Programme Focal Point Email': 'nico@pulilab.com',
     Software: 'Bamboo|Agora|Adobe Froms',
-    'Digital Health Interventions':
-      '3.4.1 Notify birth event|3.4.2 Register birth event',
-    'Health Focus Areas':
-      'Adolescents and communicable diseases|Other sexual and reproductive health',
-    'Health System Challenges':
-      '1.1 Lack of population denominator|1.2 Delayed reporting of events',
+    'Digital Health Interventions': '3.4.1 Notify birth event|3.4.2 Register birth event',
+    'Health Focus Areas': 'Adolescents and communicable diseases|Other sexual and reproductive health',
+    'Health System Challenges': '1.1 Lack of population denominator|1.2 Delayed reporting of events',
     'Goal Area': '21. Survive and Thrive',
     'Result Area': '21-01 Maternal and newborn health',
     Overview: 'text',
@@ -106,8 +107,7 @@ export const importTemplate = [
     'Result Area': '22-01 Equitable access to quality education',
     'Capability Levels': '4. Interventions for data services',
     'Capability Categories': '1.3 Student to student communication',
-    'Capability Subcategories':
-      '1.1.1 Transmit education event alerts to specific population group(s)',
+    'Capability Subcategories': '1.1.1 Transmit education event alerts to specific population group(s)',
     Overview: '',
     'Program Targets': '',
     'Program Targets Achieved': '',

@@ -72,9 +72,7 @@ export default {
           label: 'Unicef Office',
           key: 'country_office',
           parse: (country_office) =>
-            country_office
-              ? this.offices.find((obj) => obj.id === country_office).name || ''
-              : '',
+            country_office ? this.offices.find((obj) => obj.id === country_office).name || '' : '',
         },
         {
           id: '5',
@@ -99,74 +97,74 @@ export default {
           id: '10',
           label: 'Health Focus Areas',
           key: 'health_focus_areas',
-          parse: (health_focus_areas) =>
-            this.parseHealthFocusAreas(health_focus_areas),
+          parse: (health_focus_areas) => this.parseHealthFocusAreas(health_focus_areas),
         },
         {
           id: '11',
           label: 'Goal Area',
           key: 'goal_area',
-          parse: (goal_area) =>
-            this.parseSingleSelection(goal_area, 'goalAreas'),
+          parse: (goal_area) => this.parseSingleSelection(goal_area, 'goalAreas'),
         },
         {
           id: '12',
           label: 'Result Area',
           key: 'result_area',
-          parse: (result_area) =>
-            this.parseSingleSelection(result_area, 'resultAreas'),
+          parse: (result_area) => this.parseSingleSelection(result_area, 'resultAreas'),
         },
         {
           id: '13',
           label: 'Capability Levels',
           key: 'capability_levels',
-          parse: (capability_levels) =>
-            this.parseFlatList(capability_levels, 'capabilityLevels'),
+          parse: (capability_levels) => this.parseFlatList(capability_levels, 'capabilityLevels'),
         },
         {
           id: '14',
           label: 'Capability Categories',
           key: 'capability_categories',
-          parse: (capability_categories) =>
-            this.parseFlatList(capability_categories, 'capabilityCategories'),
+          parse: (capability_categories) => this.parseFlatList(capability_categories, 'capabilityCategories'),
         },
         {
           id: '15',
           label: 'Capability Subcategories',
           key: 'capability_subcategories',
-          parse: (capability_subcategories) =>
-            this.parseFlatList(
-              capability_subcategories,
-              'capabilitySubcategories'
-            ),
+          parse: (capability_subcategories) => this.parseFlatList(capability_subcategories, 'capabilitySubcategories'),
         },
         {
           id: '18',
           label: 'Multicountry or Regional Office',
           key: 'regional_office',
-          parse: (regional_office) =>
-            this.parseList(this.getRegionalOffices, [regional_office]),
+          parse: (regional_office) => this.parseList(this.getRegionalOffices, [regional_office]),
+        },
+        // {
+        //   id: '19',
+        //   label: 'UNICEF Sector',
+        //   key: 'unicef_sector',
+        //   parse: (unicef_sector) =>
+        //     this.parseList(this.getSectors, unicef_sector),
+        // },
+        {
+          id: '64',
+          label: 'Lead Sector',
+          key: 'unicef_leading_sector',
+          parse: (unicef_leading_sector) => this.parseList(this.getLeadingSector, unicef_leading_sector),
         },
         {
-          id: '19',
-          label: 'UNICEF Sector',
-          key: 'unicef_sector',
-          parse: (unicef_sector) =>
-            this.parseList(this.getSectors, unicef_sector),
+          id: '65',
+          label: 'Supporting Sectors',
+          key: 'unicef_supporting_sectors',
+          parse: (unicef_supporting_sectors) => this.parseList(this.getSupportingSectors, unicef_supporting_sectors),
         },
         {
           id: '20',
           label: 'Innovation Ways',
           key: 'innovation_ways',
-          parse: (innovation_ways) =>
-            this.parseList(this.getInnovationWays, innovation_ways),
+          parse: (innovation_ways) => this.parseList(this.getInnovationWays, innovation_ways),
         },
         {
           id: '17',
           label: 'Innovation Categories',
           key: 'innovation_categories',
-          parse: (innovation_categories) =>
-            this.parseList(this.getInnovationCategories, innovation_categories),
+          parse: (innovation_categories) => this.parseList(this.getInnovationCategories, innovation_categories),
         },
         {
           id: '21',
@@ -208,8 +206,7 @@ export default {
           id: '26',
           label: 'Regional priority(ies)',
           key: 'regional_priorities',
-          parse: (regional_priorities) =>
-            this.parseList(this.getRegionalPriorities, regional_priorities),
+          parse: (regional_priorities) => this.parseList(this.getRegionalPriorities, regional_priorities),
         },
         // { id: '27', label: 'Programme Focal Point Email' },
         {
@@ -361,6 +358,8 @@ export default {
       review_statuses: 'system/getReviewStatuses',
       // new fields
       getSectors: 'projects/getSectors',
+      getLeadingSector: 'projects/getLeadingSector',
+      getSupportingSectors: 'projects/getSupportingSectors',
       getRegionalPriorities: 'projects/getRegionalPriorities',
       getInnovationWays: 'projects/getInnovationWays',
       getInnovationCategories: 'projects/getInnovationCategories',
@@ -374,9 +373,7 @@ export default {
     }),
     parsedScores() {
       if (
-        (!this.projects ||
-          !this.projects[0] ||
-          typeof this.projects !== 'object') &&
+        (!this.projects || !this.projects[0] || typeof this.projects !== 'object') &&
         this.projects[0]?.review_states
       ) {
         return null
@@ -402,9 +399,7 @@ export default {
         if (this.selectedCol.includes('61')) {
           // get the max of reviews per project, then generate header for each one of them
           const maxReviewColGroups = this.projects.reduce((maxGroup, p) => {
-            return p.review_states.review_scores.length > maxGroup
-              ? p.review_states.review_scores.length
-              : maxGroup
+            return p.review_states.review_scores.length > maxGroup ? p.review_states.review_scores.length : maxGroup
           }, 0)
           for (let i = 0; i < maxReviewColGroups; i++) {
             row.push(...['', ...this.reviewScoresFields])
@@ -430,11 +425,7 @@ export default {
         })
 
         // generate reviews
-        if (
-          this.portfolioPage !== 'inventory' &&
-          this.selectedCol.includes('61') &&
-          this.projects[0]?.review_states
-        ) {
+        if (this.portfolioPage !== 'inventory' && this.selectedCol.includes('61') && this.projects[0]?.review_states) {
           row.push(...this.parseReviews(p.review_states.review_scores))
         }
 
@@ -451,9 +442,7 @@ export default {
         const parsed = {
           ...s,
           country: this.parseCountry(s.country),
-          country_office: s.country_office
-            ? this.offices.find((obj) => obj.id === s.country_office).name || ''
-            : '',
+          country_office: s.country_office ? this.offices.find((obj) => obj.id === s.country_office).name || '' : '',
           // investors: this.parseDonors(s.donors),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
@@ -474,6 +463,8 @@ export default {
           // new fields
           regional_office: this.parseList(this.getRegionalOffices, [s.regional_office]),
           unicef_sector: this.parseList(this.getSectors, s.unicef_sector),
+          unicef_leading_sector: this.parseList(this.getLeadingSector, s.unicef_leading_sector),
+          unicef_supporting_sectors: this.parseList(this.getSupportingSectors, s.unicef_supporting_sectors),
           innovation_ways: this.parseList(this.getInnovationWays, s.innovation_ways),
           innovation_categories: this.parseList(this.getInnovationCategories, s.innovation_categories),
           stages: this.parseListWithObjects(this.getStages, s.stages),
@@ -598,10 +589,7 @@ export default {
       if (this.dashboardType === 'donor') {
         try {
           this.donorColumns.forEach((dc) => {
-            const value =
-              donor_answers && donor_answers[dc.donorId]
-                ? donor_answers[dc.donorId][dc.originalId]
-                : ''
+            const value = donor_answers && donor_answers[dc.donorId] ? donor_answers[dc.donorId][dc.originalId] : ''
             custom[dc.label] = value.join(',')
           })
         } catch (e) {

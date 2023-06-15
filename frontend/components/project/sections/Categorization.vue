@@ -1,40 +1,66 @@
 <template>
   <div id="categorization" class="GeneralOverview">
-    <collapsible-card
-      ref="collapsible"
-      :title="$gettext('Categorization') | translate"
-      show-legend
-    >
+    <collapsible-card ref="collapsible" :title="$gettext('Categorization') | translate" show-legend>
       <el-row :gutter="20" type="flex">
         <el-col :span="24">
           <custom-required-form-item
-            :error="errors.first('unicef_sector')"
-            :draft-rule="draftRules.unicef_sector"
-            :publish-rule="publishRules.unicef_sector"
+            :error="errors.first('unicef_leading_sector')"
+            :draft-rule="draftRules.unicef_leading_sector"
+            :publish-rule="publishRules.unicef_leading_sector"
           >
             <template slot="label">
-              <translate key="sector-label">
-                Please select the sector(s) the initiative serves.
-              </translate>
+              <translate key="leading-sector-label"> Please select the Lead sector the initiative serves. </translate>
             </template>
 
-            <multi-selector
-              v-model="unicef_sector"
-              v-validate="rules.unicef_sector"
-              data-vv-name="unicef_sector"
-              data-vv-as="UNICEF Sector"
-              source="getSectors"
+            <multi-selector-platform
+              v-model="unicef_leading_sector"
+              v-validate="rules.unicef_leading_sector"
+              data-vv-name="unicef_leading_sector"
+              data-vv-as="UNICEF Leading Sector"
+              source="getLeadingSector"
+              :multiple="false"
             />
             <span class="Hint">
               <fa icon="info-circle" />
               <p>
                 <translate>
-                  UNICEF's programmes emphasize developing community-level
-                  services to promote the health and well-being of children via
-                  interventions in health, child protection, social policy,
-                  education etc. An initiative is cross-sectoral if it falls in
-                  more than one sector or programme area e.g. Introduction of
-                  latrines in schools falls in both WASH as well as Education.
+                  UNICEF's programmes emphasize developing community-level services to promote the health and well-being
+                  of children via interventions in health, child protection, social policy, education etc. An initiative
+                  is cross-sectoral if it falls in more than one sector or programme area e.g. Introduction of latrines
+                  in schools falls in both WASH as well as Education.
+                </translate>
+              </p>
+            </span>
+          </custom-required-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20" type="flex">
+        <el-col :span="24">
+          <custom-required-form-item
+            :error="errors.first('unicef_supporting_sectors')"
+            :draft-rule="draftRules.unicef_supporting_sectors"
+            :publish-rule="publishRules.unicef_supporting_sectors"
+          >
+            <template slot="label">
+              <translate key="sector-label"> Please select the Supporting sector(s) the initiative serves. </translate>
+            </template>
+
+            <multi-selector-platform
+              v-model="unicef_supporting_sectors"
+              v-validate="rules.unicef_supporting_sectors"
+              data-vv-name="unicef_supporting_sectors"
+              data-vv-as="UNICEF Supporting Sectors"
+              source="getSupportingSectors"
+            />
+            <span class="Hint">
+              <fa icon="info-circle" />
+              <p>
+                <translate>
+                  UNICEF's programmes emphasize developing community-level services to promote the health and well-being
+                  of children via interventions in health, child protection, social policy, education etc. An initiative
+                  is cross-sectoral if it falls in more than one sector or programme area e.g. Introduction of latrines
+                  in schools falls in both WASH as well as Education.
                 </translate>
               </p>
             </span>
@@ -48,9 +74,7 @@
         :publish-rule="publishRules.goal_area"
       >
         <template slot="label">
-          <translate key="unicef-goal">
-            Which Goal Area does the initiative focus on?
-          </translate>
+          <translate key="unicef-goal"> Which Goal Area does the initiative focus on? </translate>
         </template>
 
         <GoalAreasSelector
@@ -64,12 +88,10 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              Every initiative has a clear, focused goal which is tied to
-              specific results and change strategies to achieve them, according
-              to the UNICEF Strategic Plan 2018–2021. The goal is what has to be
-              ultimately achieved; the final form or situation that we would
-              like to see. Country work planning activities are linked to a
-              single goal area.
+              Every initiative has a clear, focused goal which is tied to specific results and change strategies to
+              achieve them, according to the UNICEF Strategic Plan 2018–2021. The goal is what has to be ultimately
+              achieved; the final form or situation that we would like to see. Country work planning activities are
+              linked to a single goal area.
             </translate>
           </p>
         </span>
@@ -81,9 +103,7 @@
         :publish-rule="publishRules.result_area"
       >
         <template slot="label">
-          <translate key="result-area">
-            Which Result Area does the initiative serve?
-          </translate>
+          <translate key="result-area"> Which Result Area does the initiative serve? </translate>
         </template>
 
         <ResultAreasSelector
@@ -99,11 +119,9 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              Every Goal Area is tied to Result Areas, which target the key
-              barriers that hold children and young people back, deny them the
-              agency to shape their destinies and prevent them from accessing
-              critical services that can save their lives and help them fulfil
-              their potential.
+              Every Goal Area is tied to Result Areas, which target the key barriers that hold children and young people
+              back, deny them the agency to shape their destinies and prevent them from accessing critical services that
+              can save their lives and help them fulfil their potential.
             </translate>
           </p>
         </span>
@@ -117,9 +135,7 @@
           class="DigitalHealthIntervention"
         >
           <template slot="label">
-            <translate key="strategies">
-              What are the Digital Health Intervention(s)?
-            </translate>
+            <translate key="strategies"> What are the Digital Health Intervention(s)? </translate>
             <a
               class="TooltipLink"
               target="_blank"
@@ -141,9 +157,7 @@
           :publish-rule="publishRules.health_focus_areas"
         >
           <template slot="label">
-            <translate key="health-focus-areas">
-              Which Focus Area(s) are addressed by the initiative?
-            </translate>
+            <translate key="health-focus-areas"> Which Focus Area(s) are addressed by the initiative? </translate>
           </template>
           <template slot="tooltip">
             <el-tooltip
@@ -167,8 +181,7 @@
             <fa icon="info-circle" />
             <p>
               <translate>
-                Choose relevant entries from the list to help classify your
-                initiative by topic/focus area.
+                Choose relevant entries from the list to help classify your initiative by topic/focus area.
               </translate>
             </p>
           </span>
@@ -180,9 +193,7 @@
           :publish-rule="publishRules.hsc_challenges"
         >
           <template slot="label">
-            <translate key="hsc-challenges">
-              What are the System Challenges addressed by the intervention?
-            </translate>
+            <translate key="hsc-challenges"> What are the System Challenges addressed by the intervention? </translate>
           </template>
           <template slot="tooltip">
             <el-tooltip
@@ -208,10 +219,9 @@
             <fa icon="info-circle" />
             <p>
               <translate>
-                The System Challenge framework provides an overview of needs and
-                challenges faced, and assists programme planners to express what
-                they expect to achieve through implementation of a digital
-                intervention. For more info: https://uni.cf/invent-help
+                The System Challenge framework provides an overview of needs and challenges faced, and assists programme
+                planners to express what they expect to achieve through implementation of a digital intervention. For
+                more info: https://uni.cf/invent-help
               </translate>
             </p>
           </span>
@@ -237,9 +247,7 @@
             :data-vv-as="selectedGoalArea.capability_level_question"
           />
         </custom-required-form-item>
-        <custom-required-form-item
-          v-if="selectedGoalArea.capability_category_question !== 'MISSING'"
-        >
+        <custom-required-form-item v-if="selectedGoalArea.capability_category_question !== 'MISSING'">
           <template slot="label">
             {{ selectedGoalArea.capability_category_question }}
           </template>
@@ -249,9 +257,7 @@
             :values-function="getCapabilityCategoriesItems"
           />
         </custom-required-form-item>
-        <custom-required-form-item
-          v-if="selectedGoalArea.capability_subcategory_question !== 'MISSING'"
-        >
+        <custom-required-form-item v-if="selectedGoalArea.capability_subcategory_question !== 'MISSING'">
           <template slot="label">
             {{ selectedGoalArea.capability_subcategory_question }}
           </template>
@@ -271,9 +277,7 @@
             :publish-rule="publishRules.regional_priorities"
           >
             <template slot="label">
-              <translate key="priorities-label">
-                What regional priorities are addressed by the initiative?
-              </translate>
+              <translate key="priorities-label"> What regional priorities are addressed by the initiative? </translate>
             </template>
             <template slot="tooltip">
               <el-tooltip
@@ -296,10 +300,8 @@
               <fa icon="info-circle" />
               <p>
                 <translate>
-                  For field based initiatives, regions identify their own
-                  regional priorities designed to capture the key activities
-                  being pursued to address regional development issues and
-                  needs.
+                  For field based initiatives, regions identify their own regional priorities designed to capture the
+                  key activities being pursued to address regional development issues and needs.
                 </translate>
               </p>
             </span>
@@ -315,8 +317,7 @@
           >
             <template slot="label">
               <translate key="ways-label">
-                If this is an innovation initiative, in which way is it
-                innovative?
+                If this is an innovation initiative, in which way is it innovative?
               </translate>
             </template>
             <multi-selector
@@ -330,9 +331,8 @@
               <fa icon="info-circle" />
               <p>
                 <translate>
-                  Innovation can be defined as a new or significantly improved
-                  solution that accelerates a result for children or young
-                  people and/or increased organizational efficiency.
+                  Innovation can be defined as a new or significantly improved solution that accelerates a result for
+                  children or young people and/or increased organizational efficiency.
                 </translate>
               </p>
             </span>
@@ -348,8 +348,7 @@
           >
             <template slot="label">
               <translate key="priorities-label">
-                Please select all UNICEF Innovation categories this initiative
-                applies to.
+                Please select all UNICEF Innovation categories this initiative applies to.
               </translate>
             </template>
 
@@ -364,8 +363,7 @@
               <fa icon="info-circle" />
               <p>
                 <translate>
-                  For more info and definitions of the UNICEF Innovation
-                  categories visit: https://uni.cf/invent-help
+                  For more info and definitions of the UNICEF Innovation categories visit: https://uni.cf/invent-help
                 </translate>
               </p>
             </span>
@@ -382,6 +380,7 @@ import { mapGetters, mapState } from 'vuex'
 import { mapGettersActions } from '@/utilities/form'
 // components
 import MultiSelector from '@/components/project/MultiSelector'
+import MultiSelectorPlatform from '../MultiSelectorPlatform.vue'
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector'
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
 import GoalAreasSelector from '@/components/common/GoalAreasSelector'
@@ -403,6 +402,7 @@ export default {
     ResultAreasSelector,
     CapabilitySelector,
     DigitalHealthInterventionsSelector,
+    MultiSelectorPlatform,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
@@ -421,45 +421,17 @@ export default {
     ...mapGettersActions({
       goal_area: ['project', 'getGoalArea', 'setGoalArea', 0],
       result_area: ['project', 'getResultArea', 'setResultArea', 0],
-      capability_levels: [
-        'project',
-        'getCapabilityLevels',
-        'setCapabilityLevels',
-        0,
-      ],
-      capability_categories: [
-        'project',
-        'getCapabilityCategories',
-        'setCapabilityCategories',
-        0,
-      ],
-      capability_subcategories: [
-        'project',
-        'getCapabilitySubcategories',
-        'setCapabilitySubcategories',
-        0,
-      ],
-      health_focus_areas: [
-        'project',
-        'getHealthFocusAreas',
-        'setHealthFocusAreas',
-        0,
-      ],
+      capability_levels: ['project', 'getCapabilityLevels', 'setCapabilityLevels', 0],
+      capability_categories: ['project', 'getCapabilityCategories', 'setCapabilityCategories', 0],
+      capability_subcategories: ['project', 'getCapabilitySubcategories', 'setCapabilitySubcategories', 0],
+      health_focus_areas: ['project', 'getHealthFocusAreas', 'setHealthFocusAreas', 0],
       hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
       unicef_sector: ['project', 'getSectors', 'setSectors', 0],
-      regional_priorities: [
-        'project',
-        'getRegionalPriorities',
-        'setRegionalPriorities',
-        0,
-      ],
+      unicef_leading_sector: ['project', 'getLeadingSector', 'setLeadingSector', 0],
+      unicef_supporting_sectors: ['project', 'getSupportingSectors', 'setSupportingSectors', 0],
+      regional_priorities: ['project', 'getRegionalPriorities', 'setRegionalPriorities', 0],
       innovation_ways: ['project', 'getInnovationWays', 'setInnovationWays', 0],
-      innovation_categories: [
-        'project',
-        'getInnovationCategories',
-        'setInnovationCategories',
-        0,
-      ],
+      innovation_categories: ['project', 'getInnovationCategories', 'setInnovationCategories', 0],
       platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
     }),
     shoDHAFields() {
@@ -490,7 +462,8 @@ export default {
     async validateDraft() {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
-        this.$validator.validate('unicef_sector'),
+        this.$validator.validate('unicef_leading_sector'),
+        this.$validator.validate('unicef_supporting_sectors'),
         this.$validator.validate('regional_priorities'),
         this.$validator.validate('innovation_categories'),
       ])

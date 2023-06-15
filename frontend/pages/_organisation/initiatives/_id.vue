@@ -19,6 +19,7 @@ export default {
       getProjectDetails: 'projects/getUserProjectDetails',
       profile: 'user/getProfile',
       project: 'project/getProjectData',
+      published: 'project/getPublished',
     }),
     currentProject() {
       return this.getProjectDetails(this.$route.params.id)
@@ -28,6 +29,7 @@ export default {
         this.profile.is_superuser ||
         this.profile.member.includes(parseInt(this.$route.params.id, 10)) ||
         this.profile.manager_of.includes(this.project.country_office) ||
+        this.profile.region === (this.project.region || this.published.region) ||
         this.$route.name.split('__')[0] === 'organisation-initiatives-id-published' ||
         this.$route.name.split('__')[0] === 'organisation-initiatives-id-published-stages'
       return allowed

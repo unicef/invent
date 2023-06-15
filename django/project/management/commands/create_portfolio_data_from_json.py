@@ -81,6 +81,8 @@ class Command(BaseCommand, TestProjectData):
                 "capability_subcategories": [],
                 "dhis": [],
                 "unicef_sector": [1, 2],
+                "unicef_leading_sector": [1],
+                "unicef_supporting_sectors": [2],
                 "innovation_categories": [1, 2],
                 "cpd": [1, 2],
                 "regional_priorities": [1, 2],

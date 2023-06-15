@@ -50,8 +50,17 @@
         </collapsible-card>
 
         <collapsible-card id="categorization" :title="$gettext('2. Categorization') | translate">
-          <simple-field :header="$gettext('Sector') | translate">
-            <platforms-list :platforms="project.unicef_sector" source="getSectors" />
+          <simple-field
+            v-if="project.unicef_leading_sector.length > 0"
+            :header="$gettext('Lead Sector') | translate"
+            :content="getLeadingSector"
+          />
+
+          <simple-field
+            v-if="project.unicef_supporting_sectors.length > 0"
+            :header="$gettext('Supporting Sector(s)') | translate"
+          >
+            <platforms-list :platforms="project.unicef_supporting_sectors" source="getSectors" />
           </simple-field>
 
           <simple-field :header="$gettext('Goal Area') | translate" :content="goalArea.name" />
@@ -368,7 +377,14 @@ export default {
       regionalOffices: 'projects/getRegionalOffices',
       innovationWays: 'projects/getInnovationWays',
       userProfiles: 'system/getUserProfilesNoFilter',
+      sectors: 'projects/getSectors',
     }),
+    getLeadingSector() {
+      const list = this.sectors
+      return list && this.project && this.project.unicef_leading_sector
+        ? list.find((tp) => this.project.unicef_leading_sector.some((sectorId) => sectorId === tp.id)).name
+        : ''
+    },
     getUserName() {
       const userName = this.userProfiles.find((profile) => profile.email === this.project.contact_email)
       return userName && userName.name ? userName.name : this.project.contact_name
