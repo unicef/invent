@@ -39,7 +39,7 @@ export const actions = {
 
     if (countryId) {
       try {
-        const response = await this.$axios.get(`/api/search/?type=list&country=${countryId}`)
+        const response = await this.$axios.get(`/api/search/?type=list&country=${countryId}&page_size=999999`)
 
         commit('SET_COUNTRY_PROJECTS_LIST', response.data.results.projects)
       } catch (e) {
