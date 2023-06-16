@@ -213,8 +213,7 @@ export default {
         return (
           this.user.is_superuser ||
           this.user.member.includes(this.project.id) ||
-          this.user.manager_of.includes(this.project.country_office) ||
-          this.user.region === this.project.region
+          this.user.manager_of.includes(this.project.country_office)
         )
       }
       return false
