@@ -23,28 +23,25 @@ class FastCountPaginator(Paginator):
 
 
 class ResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    django_paginator_class = FastCountPaginator
+    page_size = 10 
+    page_size_query_param = 'page_size' 
+    django_paginator_class = FastCountPaginator 
+    
+    def paginate_queryset(self, queryset, request, view=None): 
+        max_page_size = request.query_params.get(self.page_size_query_param, None) 
+        if max_page_size is not None: 
+            try: 
+                self.max_page_size = int(max_page_size) 
+            except ValueError: 
+                max_page_size = 999999 
+        return super().paginate_queryset(queryset, request, view) 
 
-    def paginate_queryset(self, queryset, request, view=None):
-        max_page_size = request.query_params.get(
-            self.page_size_query_param, None)
-        if max_page_size is not None:
-            try:
-                self.max_page_size = int(max_page_size)
-            except ValueError:
-                max_page_size = 999999
-        return super().paginate_queryset(queryset, request, view)
-
-    def get_paginated_response(self, data):
-        return Response(OrderedDict([
-            ('count', self.page.paginator.count),
-            ('next', self.page.next_page_number()
-             if self.page.has_next() else None),
-            ('previous', self.page.previous_page_number()
-             if self.page.has_previous() else None),
-            ('results', data)
+    def get_paginated_response(self, data): 
+        return Response(OrderedDict([ 
+            ('count', self.page.paginator.count), 
+            ('next', self.page.next_page_number() if self.page.has_next() else None), 
+            ('previous', self.page.previous_page_number() if self.page.has_previous() else None), 
+            ('results', data) 
         ]))
 
 
@@ -60,34 +57,8 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
     serializer_class = ListResultSerializer
 
     def get_queryset(self):
-        """
-        Override the default get_queryset method to provide custom filtering 
-        based on 'published' query parameter.
-
-        'published' query parameter values:
-        - If 'published' is not provided, only published projects are returned.
-        - If 'published=0', only unpublished projects are returned.
-        - If 'published=1', both unpublished and published projects are returned.
-
-        Returns:
-            QuerySet: The QuerySet of ProjectSearch objects after applying the filters.
-        """
-        # Start with a base queryset, excluding inactive projects
-        queryset = ProjectSearch.objects.exclude(project__is_active=False) \
+        return ProjectSearch.objects.exclude(project__public_id='').exclude(project__is_active=False) \
             .select_related('project', 'project__approval', 'organisation', 'country', 'country_office')
-
-        # Retrieve 'published' query parameter value
-        published = self.request.query_params.get('published')
-
-        if published == '0':
-            # Filter to include only unpublished projects when 'published=0'
-            queryset = queryset.filter(project__public_id='')
-        elif published != '1':
-            # If 'published' query parameter is not provided or any value other than '0' or '1',
-            # exclude unpublished projects
-            queryset = queryset.exclude(project__public_id='')
-
-        return queryset
 
     def list(self, request, *args, **kwargs):
         """
@@ -118,7 +89,6 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         `donor` eg: donor=1&donor=2  
         `approved` eg: approved=0 (for not approved), approved=1 (for approved)  
         `stage` eg: stage=1&stage=2  
-        `published` eg: published=0 (for unpublished), published=1 (for both published and unpublished)
 
         ** UNICEF FILTERS **
 
@@ -188,8 +158,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             if not donor_list:
                 raise ValidationError("No donor selected for view as.")
             elif len(donor_list) > 1:
-                raise ValidationError(
-                    "View as can only work with one donor selected.")
+                raise ValidationError("View as can only work with one donor selected.")
 
             try:
                 donor = Donor.objects.get(id=int(donor_list[0]))
@@ -206,8 +175,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             if not country_list:
                 raise ValidationError("No country selected for view as.")
             elif len(country_list) > 1:
-                raise ValidationError(
-                    "View as can only work with one country selected.")
+                raise ValidationError("View as can only work with one country selected.")
 
             try:
                 country = Country.objects.get(id=int(country_list[0]))
@@ -222,8 +190,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             raise ValidationError("You can only view as country or donor.")
 
         if portfolio_page in ["inventory", "review"]:
-            portfolio = get_object_or_400(
-                Portfolio, "No such portfolio", id=portfolio_id)
+            portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio_id)
             self.check_object_permissions(request, portfolio)
             query_params._mutable = True
             query_params.pop('ps', None)
@@ -232,8 +199,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             if portfolio_page == "inventory":
                 active_reviews_for_portfolio = list(
                     ProjectPortfolioState.objects.filter(portfolio=portfolio_id).values_list('pk', flat=True))
-                qs = qs.exclude(
-                    project__review_states__in=active_reviews_for_portfolio)
+                qs = qs.exclude(project__review_states__in=active_reviews_for_portfolio)
                 # edge case scenario where we need to ignore all the portfolio reliant query params from here
                 query_params.pop('portfolio', None)
             elif portfolio_page == "review":
@@ -246,18 +212,16 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             #     raise ValidationError("Search term must be at least two characters long.")
 
             search_in = query_params.getlist('in')
-            qs = self.search(
-                queryset=qs, search_term=search_term, search_in=search_in)
+            qs = self.search(queryset=qs, search_term=search_term, search_in=search_in)
             if 'found' in query_params:
-                results.update(found_in=self.found_in(
-                    queryset=qs, search_term=search_term))
+                results.update(found_in=self.found_in(queryset=qs, search_term=search_term))
 
         qs = self.filter(queryset=qs, query_params=query_params)
         qs = self.filter_queryset(qs)
 
         results_type = query_params.get('type', 'map')
 
-        context = dict(donor=donor, country=country,
+        context = dict(donor=donor, country=country, 
                        has_country_permission=has_country_permission, has_donor_permission=has_donor_permission)
 
         if results_type == 'list':
@@ -265,26 +229,22 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
             data = ListResultSerializer(page, many=True, context=context).data
         elif results_type == 'portfolio':
             if 'scores' in query_params and portfolio_page not in ["inventory", "review"]:
-                portfolio = get_object_or_400(
-                    Portfolio, "No such portfolio", id=portfolio_id)
+                portfolio = get_object_or_400(Portfolio, "No such portfolio", id=portfolio_id)
                 project_ids = qs.values_list('project_id', flat=True)
                 results.update(
                     ambition_matrix=portfolio.get_ambition_matrix(project_ids),
-                    risk_impact_matrix=portfolio.get_risk_impact_matrix(
-                        project_ids),
+                    risk_impact_matrix=portfolio.get_risk_impact_matrix(project_ids),
                     problem_statement_matrix=portfolio.get_problem_statement_matrix())
 
             page = self.paginate_queryset(qs)
 
-            context.update(dict(portfolio_id=portfolio_id,
-                                portfolio_page=portfolio_page,
+            context.update(dict(portfolio_id=portfolio_id, 
+                                portfolio_page=portfolio_page, 
                                 profile=request.user.userprofile))
-            data = PortfolioResultSerializer(
-                page, many=True, context=context).data
+            data = PortfolioResultSerializer(page, many=True, context=context).data
         else:
             page = self.paginate_queryset(qs)
             data = MapResultSerializer(page, many=True).data
 
-        results.update(projects=data, type=results_type,
-                       search_term=search_term, search_in=search_fields)
+        results.update(projects=data, type=results_type, search_term=search_term, search_in=search_fields)
         return self.get_paginated_response(results)
