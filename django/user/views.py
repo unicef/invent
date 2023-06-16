@@ -16,7 +16,7 @@ class UserProfileListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     # and fetch related country objects in a separate query using prefetch_related,
     # which optimizes the number of database queries and improves performance.
     queryset = UserProfile.objects.select_related('user', 'organisation').prefetch_related('country').only(
-        'id', 'modified', 'account_type', 'name', 'user__email', 'organisation', 'job_title', 'department', 'country')
+        'id', 'modified', 'account_type', 'name', 'user__email', 'organisation', 'job_title', 'department', 'country', "region")
     serializer_class = UserProfileListSerializer
 
 

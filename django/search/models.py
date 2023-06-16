@@ -58,10 +58,13 @@ class ProjectSearch(ExtendedModel):
         "rp": "regional_priorities",
     }
 
-    project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
-    country_office = models.ForeignKey(CountryOffice, null=True, on_delete=models.SET_NULL)
+    project = models.OneToOneField(
+        Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
+    country_office = models.ForeignKey(
+        CountryOffice, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
-    organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
+    organisation = models.ForeignKey(
+        Organisation, null=True, on_delete=models.SET_NULL)
 
     donors = ArrayField(models.IntegerField(), default=list)
     partner_names = models.TextField(null=True, blank=True)
@@ -78,6 +81,8 @@ class ProjectSearch(ExtendedModel):
     innovation_categories = ArrayField(models.IntegerField(), default=list)
     innovation_ways = ArrayField(models.IntegerField(), default=list)
     unicef_sector = ArrayField(models.IntegerField(), default=list)
+    unicef_leading_sector = ArrayField(models.IntegerField(), default=list)
+    unicef_supporting_sectors = ArrayField(models.IntegerField(), default=list)
     hardware = ArrayField(models.IntegerField(), default=list)
     nontech = ArrayField(models.IntegerField(), default=list)
     functions = ArrayField(models.IntegerField(), default=list)
@@ -91,7 +96,8 @@ class ProjectSearch(ExtendedModel):
         search_in: what field to search in
         """
         selectable_fields = set(cls.SEARCH_BY.keys())
-        selected_fields = selectable_fields & set(search_in) if search_in else selectable_fields
+        selected_fields = selectable_fields & set(
+            search_in) if search_in else selectable_fields
         q = Q()
 
         for field in selected_fields:
@@ -101,9 +107,11 @@ class ProjectSearch(ExtendedModel):
                 except ValueError:
                     pass
                 else:
-                    q |= Q(**{"{}__exact".format(cls.SEARCH_BY[field]): search_id})
+                    q |= Q(
+                        **{"{}__exact".format(cls.SEARCH_BY[field]): search_id})
             else:
-                q |= Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term})
+                q |= Q(
+                    **{"{}__icontains".format(cls.SEARCH_BY[field]): search_term})
 
         return queryset.filter(q) if selected_fields else queryset
 
@@ -141,10 +149,12 @@ class ProjectSearch(ExtendedModel):
                         lookup = query_params.get(field) == '1'
                     elif field == "portfolio":
                         filter_params = dict(scale_phase=query_params.get('sp'),
-                                             portfolio_id=query_params.get('portfolio'),
+                                             portfolio_id=query_params.get(
+                                                 'portfolio'),
                                              psa=query_params.get('ps'),
                                              approved=not query_params.get('review', False))
-                        pps_filter_params = {k: v for k, v in filter_params.items() if v is not None}
+                        pps_filter_params = {
+                            k: v for k, v in filter_params.items() if v is not None}
                         lookup_param = "in"
                         lookup = list(ProjectPortfolioState.objects.filter(**pps_filter_params)
                                       .values_list('pk', flat=True))
@@ -152,7 +162,8 @@ class ProjectSearch(ExtendedModel):
                         if not lookup:
                             return queryset.none()
 
-                    queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
+                    queryset &= queryset.filter(
+                        **{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
         return queryset
 
     @classmethod
@@ -193,15 +204,23 @@ class ProjectSearch(ExtendedModel):
                                                   [HealthFocusArea.get_parent_id(int(id), 'health_category') for
                                                    id in project.data.get("health_focus_areas", [])])))
             self.capability_levels = project.data.get('capability_levels')
-            self.capability_categories = project.data.get('capability_categories')
-            self.capability_subcategories = project.data.get('capability_subcategories')
-            self.innovation_categories = project.data.get('innovation_categories', [])
+            self.capability_categories = project.data.get(
+                'capability_categories')
+            self.capability_subcategories = project.data.get(
+                'capability_subcategories')
+            self.innovation_categories = project.data.get(
+                'innovation_categories', [])
             self.innovation_ways = project.data.get('innovation_ways', [])
             self.unicef_sector = project.data.get('unicef_sector', [])
+            self.unicef_leading_sector = project.data.get(
+                'unicef_leading_sector', [])
+            self.unicef_supporting_sectors = project.data.get(
+                'unicef_supporting_sectors', [])
             self.hardware = project.data.get('hardware', [])
             self.nontech = project.data.get('nontech', [])
             self.functions = project.data.get('functions', [])
-            self.regional_priorities = project.data.get('regional_priorities', [])
+            self.regional_priorities = project.data.get(
+                'regional_priorities', [])
             self.partner_names = ", ".join([x.get('partner_name', "") for x in project.data.get("partners")]) \
                 if project.data.get("partners") else ""
             self.save()

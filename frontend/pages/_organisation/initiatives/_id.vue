@@ -19,6 +19,7 @@ export default {
       getProjectDetails: 'projects/getUserProjectDetails',
       profile: 'user/getProfile',
       project: 'project/getProjectData',
+      published: 'project/getPublished',
     }),
     currentProject() {
       return this.getProjectDetails(this.$route.params.id)

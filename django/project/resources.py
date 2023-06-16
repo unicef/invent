@@ -17,10 +17,13 @@ class SolutionsResource(resources.ModelResource):
     name = Field(column_name=_('Solution name'))
     portfolio_list = Field(column_name=_('Portfolios'))
     phase = Field(column_name=_('Phase'))
-    open_source_frontier_tech = Field(column_name=_('Open source frontier tech'))
+    open_source_frontier_tech = Field(
+        column_name=_('Open source frontier tech'))
     learning_investment = Field(column_name=_('Learning investment'))
-    people_reached = Field(column_name=_('People reached [if empty -> sum of countries]'))
-    list_of_countries = Field(column_name=_('Countries [Country - Region - People reached]'))
+    people_reached = Field(column_name=_(
+        'People reached [if empty -> sum of countries]'))
+    list_of_countries = Field(column_name=_(
+        'Countries [Country - Region - People reached]'))
 
     class Meta:
         model = Solution
@@ -109,8 +112,10 @@ class ProblemStatementResource(resources.ModelResource):  # pragma: no cover
 
     class Meta:
         model = ProblemStatement
-        fields = ('id', 'name', 'portfolio_id', 'portfolio_name', 'description')
-        export_order = ('portfolio_id', 'portfolio_name', 'id', 'name', 'description')
+        fields = ('id', 'name', 'portfolio_id',
+                  'portfolio_name', 'description')
+        export_order = ('portfolio_id', 'portfolio_name',
+                        'id', 'name', 'description')
 
     def dehydrate_portfolio_id(self, problem_statement):
         portfolio_id = getattr(problem_statement.portfolio, 'id', '')
@@ -129,14 +134,14 @@ class ProblemStatementResource(resources.ModelResource):  # pragma: no cover
     def dehydrate_description(self, problem_statement):
         return problem_statement.description
 
-from import_export import resources
+
 class ProjectResource(resources.ModelResource):  # pragma: no cover
     """
     This class is basically a serializer for the django-import-export module
     TODO: write unit tests if necessary
     """
     # General Overview
-    published = Field(column_name=_('Published?'))
+    published = Field(column_name=_('Published'))
     contact = Field(column_name=_('Contact'))
     team = Field(column_name=_('Team'))
     overview = Field(column_name=_('Overview'))
@@ -145,7 +150,8 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
     unicef_office = Field(column_name=_('UNICEF Office'))
 
     # Categorization
-    sector = Field(column_name=_('Sector'))
+    unicef_leading_sector = Field(column_name=_('Lead Sector'))
+    unicef_supporting_sectors = Field(column_name=_('Supporting Sectors'))
     goal_area = Field(column_name=_('Goal Area'))
     result_area = Field(column_name=_('Result Area'))
     innovations = Field(column_name=_('Innovation(s)'))
@@ -154,13 +160,15 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
     # Implementation Overview
     program_targets = Field(column_name=_('Program targets'))
     program_targets_achieved = Field(column_name=_('Program targets achieved'))
-    beneficiaries_number = Field(column_name=_('Number of beneficiaries reached'))
+    beneficiaries_number = Field(
+        column_name=_('Number of beneficiaries reached'))
     current_achievements = Field(column_name=_('Current achievements'))
     cpd = Field(column_name=_('Country Programme Document inclusion'))
     awp_note = Field(column_name=_('Outcome in Annual Work Plan'))
     wbs = Field(column_name=_('Work Breakdown Structure (WBS) number'))
     budget = Field(column_name=_('Budget'))
-    total_budget_narrative = Field(column_name=_('Activities covered by budget'))
+    total_budget_narrative = Field(
+        column_name=_('Activities covered by budget'))
     funding_needs = Field(column_name=_('Funding gaps'))
     partnership_needs = Field(column_name=_('Partnership needs'))
     links = Field(column_name=_('Links'))
@@ -182,14 +190,15 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
     class Meta:
         model = Project
         fields = ('id', 'name', 'published', 'contact', 'team', 'modified')
-        export_order = ('id', 'name', 'published', 'modified', 'contact', 'team', 'overview')
+        export_order = ('id', 'name', 'published', 'modified',
+                        'contact', 'team', 'overview')
 
     def export_queryset(self, queryset, using_transactions=True, use_bulk=True, **kwargs):
         if use_bulk:
             return self.export_bulk(queryset, **kwargs)
         else:
             return super().export_queryset(queryset, using_transactions=using_transactions, **kwargs)
-    
+
     def export_field(self, field, obj):
         data = super().export_field(field, obj)
         if isinstance(data, str):
@@ -230,8 +239,13 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         except Country.DoesNotExist:
             return None
 
-    def dehydrate_sector(self, project):
-        sector = self.get_data_member(project).get('unicef_sector')
+    def dehydrate_unicef_leading_sector(self, project):
+        sector = self.get_data_member(project).get('unicef_leading_sector')
+        qs = UNICEFSector.objects.filter(id__in=sector)
+        return qs[0].name if qs.count() else None
+
+    def dehydrate_unicef_supporting_sectors(self, project):
+        sector = self.get_data_member(project).get('unicef_supporting_sectors')
         qs = UNICEFSector.objects.filter(id__in=sector)
         return ", ".join(res.name for res in qs) if qs.count() else None
 
@@ -324,7 +338,8 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         if stages_data:
             for stage in stages_data:
                 try:
-                    stages.append(f'{Stage.objects.get(id=stage["id"]).name} ({stage.get("date", "")})')
+                    stages.append(
+                        f'{Stage.objects.get(id=stage["id"]).name} ({stage.get("date", "")})')
                 except Stage.DoesNotExist:
                     continue
         end_date = self.get_data_member(project).get('end_date')
@@ -345,7 +360,8 @@ class ProjectResource(resources.ModelResource):  # pragma: no cover
         p_type_lookup = {p[0]: p[1] for p in PartnerSerializer.PARTNER_TYPE}
         partners = []
         for partner in self.get_data_member(project)['partners']:
-            p_type = p_type_lookup[partner['partner_type']] if 'partner_type' in partner else "n/a"
+            p_type = p_type_lookup[partner['partner_type']
+                                   ] if 'partner_type' in partner else "n/a"
             p_string = f'{p_type}: {partner.get("partner_name")} ({partner.get("partner_contact")} - ' \
                        f'{partner.get("partner_email")} - {partner.get("partner_website")})'
             partners.append(p_string)

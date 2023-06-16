@@ -110,14 +110,29 @@
       </el-table-column>
 
       <el-table-column
-        v-if="selectedColumns.includes('19')"
+        v-if="selectedColumns.includes('64')"
         :resizable="false"
-        :label="$gettext('UNICEF Sector') | translate"
+        :label="$gettext('Lead Sector') | translate"
         sortable="custom"
         width="180"
       >
         <template slot-scope="scope">
-          <PlatformsList class="SimpleList" :platforms="scope.row.unicef_sector" source="getSectors" />
+          <PlatformsList class="SimpleList" :platforms="scope.row.unicef_leading_sector" source="getLeadingSector" />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('65')"
+        :resizable="false"
+        :label="$gettext('Supporting Sectors') | translate"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <PlatformsList
+            class="SimpleList"
+            :platforms="scope.row.unicef_supporting_sectors"
+            source="getSupportingSectors"
+          />
         </template>
       </el-table-column>
 

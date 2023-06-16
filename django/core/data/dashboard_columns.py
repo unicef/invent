@@ -15,7 +15,7 @@ DASHBOARD_COLUMNS = [
     {'id': 14, 'label': _('Capability Categories')},
     {'id': 15, 'label': _('Capability Subcategories')},
     {'id': 18, 'label': _('Multicountry or Regional Office')},
-    {'id': 19, 'label': _('UNICEF Sector')},
+   # {'id': 19, 'label': _('UNICEF Sector')},
     {'id': 20, 'label': _('Innovation Ways')},
     {'id': 21, 'label': _('Completed phases')},
     {'id': 63, 'label': _('Current Phase')},
@@ -43,4 +43,6 @@ DASHBOARD_COLUMNS = [
     {'id': 43, 'label': _('Total Budget (Narrative)')},
     {'id': 44, 'label': _('Work Breakdown Structure (WBS)')},
     {'id': 17, 'label': _('Innovation Categories')},
+    {'id': 64, 'label': _('Lead Sector')},
+    {'id': 65, 'label': _('Supporting Sector')}
 ]
