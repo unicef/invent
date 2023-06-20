@@ -44,6 +44,7 @@ describe('"Create a New Solution" as a portfolio manager', () => {
         newSolutionPage.cancelSolution()
         newSolutionPage.cancelCancelButton()
         newSolutionPage.saveSolution()
+        newSolutionPage.getTitle().contains("View Solution Information")
         newSolutionPage.closeButton()
         
     })

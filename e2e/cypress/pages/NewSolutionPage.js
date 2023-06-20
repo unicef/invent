@@ -130,8 +130,7 @@ class NewSolutionPage {
     }
 
     closeButton() {
-        this.getCloseButton().click({ multiple: true })
-        //Kserw thelei kalytero approach tha to dw otan gyrisw
+        this.getCloseButton().click()
     }
 }
 export default NewSolutionPage
