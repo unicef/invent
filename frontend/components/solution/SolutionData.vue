@@ -5,6 +5,12 @@
       <el-col>
         <collapsible-card id="general" :title="$gettext('1. General') | translate">
           <simple-field :content="solution.name" :header="$gettext('Name') | translate" />
+        </collapsible-card>
+
+        <collapsible-card id="innovation-portfolios" :title="$gettext('2. Innovation portfolios') | translate">
+          <simple-field :header="$gettext('Innovation portfolios and problem statements') | translate">
+            <PortfolioTable :portfoliosProblemStatements="solution.portfolio_problem_statements" />
+          </simple-field>
 
           <simple-field :header="$gettext('Phase') | translate" :content="phaseName" />
 
@@ -17,13 +23,9 @@
             :content="yesNo(solution.learning_investment)"
             :header="$gettext('Learning investment') | translate"
           />
-
-          <simple-field :header="$gettext('Innovation portfolios and problem statements') | translate">
-            <PortfolioTable :portfoliosProblemStatements="solution.portfolio_problem_statements" />
-          </simple-field>
         </collapsible-card>
 
-        <collapsible-card id="activity-and-reach" :title="$gettext('2. Activity and Reach') | translate">
+        <collapsible-card id="activity-and-reach" :title="$gettext('3. Activity and Reach') | translate">
           <simple-field :header="$gettext('Global reach of this solution') | translate" :content="peopleReached" />
 
           <simple-field :header="$gettext('Countries where this solution is active') | translate">
