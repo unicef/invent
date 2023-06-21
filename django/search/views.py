@@ -159,35 +159,23 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         portfolio_id = query_params.get('portfolio')
 
         # Add published/unpublished parameters
-        published = query_params.get('published')
-        unpublished = query_params.get('unpublished')
+        published = query_params.get('published', 'true').lower()
+        unpublished = query_params.get('unpublished', 'false').lower()
 
-        if not published and not unpublished:
-            # Published: yes / Unpublished: no
-            qs = qs.exclude(project__public_id='')
-        elif not published and unpublished:
-            if unpublished.lower() == 'false':
-                # Published: yes / Unpublished: no
-                qs = qs.exclude(project__public_id='')
-            if unpublished.lower() == 'true':
-                pass  # Published: yes / Unpublished: yes
-        elif published and not unpublished:
-            if published.lower() == 'false':
-                qs = qs.none()  # Published: no / Unpublished: no (No results)
-            if published.lower() == 'true':
-                # Published: yes / Unpublished: no
-                qs = qs.exclude(project__public_id='')
-        elif published and unpublished:
-            if published.lower() == 'false' and unpublished.lower() == 'false':
-                qs = qs.none()  # Published: no / Unpublished: no (No results)
-            elif published.lower() == 'false' and unpublished.lower() == 'true':
-                # Published: no / Unpublished: yes
-                qs = qs.filter(project__public_id='')
-            elif published.lower() == 'true' and unpublished.lower() == 'false':
-                # Published: yes / Unpublished: no
-                qs = qs.exclude(project__public_id='')
-            elif published.lower() == 'true' and unpublished.lower() == 'true':
-                pass  # Published: yes / Unpublished: yes
+        # Handling invalid inputs/default values
+        if published not in ['true', 'false']:
+            published = 'true'
+        if unpublished not in ['true', 'false']:
+            unpublished = 'false'
+
+        # Using dict-based switch-case
+        query_cases = {
+            ('true', 'false'): qs.exclude(project__public_id=''), # Published: yes / Unpublished: no
+            ('true', 'true'): qs,  # Published: yes / Unpublished: yes
+            ('false', 'true'): qs.filter(project__public_id=''), # Published: no / Unpublished: yes
+            ('false', 'false'): qs.none()  # Published: no / Unpublished: no
+        }
+        qs = query_cases[(published, unpublished)]
 
         if view_as and view_as == 'donor':
             donor_list = query_params.getlist('donor')
