@@ -403,9 +403,8 @@ if ENVIRONMENT in ["dev", "tst", "uat", "prd"]:
     from .settings_deployed import *
 
 # Azure Monitor OpenTelemetry
-if ENVIRONMENT in ['dev']:
+if ENVIRONMENT in ['tst']:
     from azure.monitor.opentelemetry import configure_azure_monitor
-    from opentelemetry import trace
 
     # Fetch the connection string from the environment variable
     APPLICATIONINSIGHTS_CONNECTION_STRING = os.environ.get(
@@ -413,4 +412,3 @@ if ENVIRONMENT in ['dev']:
 
     if APPLICATIONINSIGHTS_CONNECTION_STRING:  # Ensure the connection string exists
         configure_azure_monitor(APPLICATIONINSIGHTS_CONNECTION_STRING)
-
