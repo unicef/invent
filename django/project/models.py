@@ -220,8 +220,6 @@ class Project(SoftDeleteModel, ExtendedModel):
 
         if not data:
             return {}
-        
-
         extra_data = dict(
             id=self.pk,
             name=self.draft.get("name", "") if draft_mode else self.name,
@@ -232,8 +230,10 @@ class Project(SoftDeleteModel, ExtendedModel):
             image=self.image_url,
             thumbnail=self.thumbnail.url if self.thumbnail else None,
             region=self.region,
-            unicef_leading_sector=self.draft.get("unicef_leading_sector", "") if draft_mode else self.unicef_leading_sector,
-            unicef_supporting_sectors=self.draft.get("unicef_supporting_sectors", "") if draft_mode else self.unicef_supporting_sectors
+            unicef_leading_sector=self.draft.get(
+                "unicef_leading_sector", "") if draft_mode else self.unicef_leading_sector,
+            unicef_supporting_sectors=self.draft.get(
+                "unicef_supporting_sectors", "") if draft_mode else self.unicef_supporting_sectors
         )
 
         data.update(extra_data)
@@ -1054,6 +1054,89 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         else:
             current = all_stages[all_stages.index(last_stage.id) + 1]
         return current
+
+
+class PhasesStages(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    name = models.CharField(max_length=128)
+    order = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+
+    class Meta:
+        ordering = ["order", "name"]
+        verbose_name = "Phase of initiative"
+        verbose_name_plural = "Phases of initiative"
+
+    def __str__(self):  # pragma: no cover
+        return self.name
+
+    @classmethod
+    def get_discontinued(cls):
+        """
+        Hardcoded for now. Object with this name must exist in the DB to work.
+        """
+        return cls.objects.get(name="Discontinued")
+
+    @classmethod
+    def calc_current_phase(cls, stages: List[Dict]):
+        discontinued_id = cls.get_discontinued().id
+        all_stages = list(cls.objects.order_by(
+            "order").values_list("id", flat=True))
+        one_before_discontinued_id = all_stages[all_stages.index(
+            discontinued_id) - 1]
+
+        if not stages:  # when no phases are selected the current phase is the first one
+            return all_stages[0]
+
+        stage_ids = [stage["id"] for stage in stages]
+        selected_stages = cls.objects.filter(
+            id__in=stage_ids).order_by("order")
+        last_stage = selected_stages.last()
+
+        if last_stage.id == discontinued_id:
+            current = discontinued_id
+        elif last_stage.id == one_before_discontinued_id:
+            current = last_stage.id
+        elif last_stage.id == all_stages[-1]:
+            current = last_stage.id
+        else:
+            current = all_stages[all_stages.index(last_stage.id) + 1]
+        return current
+
+
+#     # define the mapping
+#     # mapping for phases and stages
+#     mapping = {
+#         1: {'phase_name': 'Opportunity and Ideation', 'stage_no': 1, 'stage_name': 'Initiation'},
+#         2: {'phase_name': 'Preparation and Scoping', 'stage_no': 1, 'stage_name': 'Initiation'},
+#         3: {'phase_name': 'Analysis and Design', 'stage_no': 2, 'stage_name': 'Analysis and Design'},
+#         4: {'phase_name': 'Implementation Planning', 'stage_no': 2, 'stage_name': 'Analysis and Design'},
+#         5: {'phase_name': 'Developing or Adapting Solution', 'stage_no': 3, 'stage_name': 'Develop and Pilot'},
+#         6: {'phase_name': 'Piloting and Evidence Generation', 'stage_no': 3, 'stage_name': 'Develop and Pilot'},
+#         7: {'phase_name': 'Package and Advocacy', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+#         8: {'phase_name': 'Deploying', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+#         9: {'phase_name': 'Scaling Up', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+#         10: {'phase_name': 'Handover or Complete', 'stage_no': 5, 'stage_name': 'Completion'},
+#         11: {'phase_name': 'Discontinued', 'stage_no': 5, 'stage_name': 'Completion'}
+#     }
+
+#     # fields
+#     stage_no = models.PositiveSmallIntegerField(
+#         default=0, blank=True, null=True)
+#     stage_name = models.CharField(max_length=128)
+#     phase_no = models.PositiveSmallIntegerField(
+#         default=0, blank=True, null=True)
+#     phase_name = models.CharField(max_length=128)
+
+#     # # Get the phases_stages mapping
+#     phases_stages = []
+#     for phase_no, phase_name in mapping.items():
+#         stage_no = phase_name['stage_no']
+#         stage_name = phase_name['stage_name']
+#         phases_stages.append({
+#             'phase_no': phase_no,
+#             'phase_name': phase_name,
+#             'stage_no': stage_no,
+#             'stage_name': stage_name
+#         })
 
 
 class Phase(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):

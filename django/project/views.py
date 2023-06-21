@@ -22,7 +22,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
     HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
-    ApprovalState, Stage, Phase, ProjectVersion, ProblemStatement, Solution
+    ApprovalState, Stage, Phase,  ProjectVersion, ProblemStatement, Solution, PhasesStages
 from project.permissions import InCountryAdminForApproval
 from search.views import ResultsSetPagination
 from .models import Project, TechnologyPlatform, DigitalStrategy, CountrySolution, \
@@ -43,6 +43,7 @@ from .tasks import notify_superusers_about_new_pending_approval
 
 
 class ProjectPublicViewSet(ViewSet):
+
     def project_structure(self, request):
         """
         Terminology and taxonomy endpoint - List all the available taxonomies and terminologies
@@ -70,11 +71,30 @@ class ProjectPublicViewSet(ViewSet):
         `isc` = Information Security Classification  
         `phases` = [DEPRECATED] Phase of Initiative  
         `stages` = [New] Phases of initiative  
+        `phases_stages` = [New] Mapping Phases and Stages of initiative  
+
         """
+
         return Response(self._get_project_structure())
 
     @cache_structure
     def _get_project_structure(self):
+
+        # # mapping for phases and stages
+        # mapping = {
+        #     1: {'phase_name': 'Opportunity and Ideation', 'stage_no': 1, 'stage_name': 'Initiation'},
+        #     2: {'phase_name': 'Preparation and Scoping', 'stage_no': 1, 'stage_name': 'Initiation'},
+        #     3: {'phase_name': 'Analysis and Design', 'stage_no': 2, 'stage_name': 'Analysis and Design'},
+        #     4: {'phase_name': 'Implementation Planning', 'stage_no': 2, 'stage_name': 'Analysis and Design'},
+        #     5: {'phase_name': 'Developing or Adapting Solution', 'stage_no': 3, 'stage_name': 'Develop and Pilot'},
+        #     6: {'phase_name': 'Piloting and Evidence Generation', 'stage_no': 3, 'stage_name': 'Develop and Pilot'},
+        #     7: {'phase_name': 'Package and Advocacy', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+        #     8: {'phase_name': 'Deploying', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+        #     9: {'phase_name': 'Scaling Up', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+        #     10: {'phase_name': 'Handover or Complete', 'stage_no': 5, 'stage_name': 'Completion'},
+        #     11: {'phase_name': 'Discontinued', 'stage_no': 5, 'stage_name': 'Completion'}
+        # }
+
         strategies = []
         for group, group_name in DigitalStrategy.GROUP_CHOICES:
             sub_groups = []
@@ -106,6 +126,18 @@ class ProjectPublicViewSet(ViewSet):
                 challenges=[{'id': c['id'], 'challenge': c['name']}
                             for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
             ))
+
+        # # Get the phases_stages mapping
+        # phases_stages = []
+        # for phase_no, phase_name in mapping.items():
+        #     stage_no = phase_name['stage_no']
+        #     stage_name = phase_name['stage_name']
+        #     phases_stages.append({
+        #         'phase_no': phase_no,
+        #         'phase_name': phase_name,
+        #         'stage_no': stage_no,
+        #         'stage_name': stage_name
+        #     })
 
         return dict(
             result_areas=UNICEFResultArea.objects.values(
@@ -148,7 +180,10 @@ class ProjectPublicViewSet(ViewSet):
                 'id', 'name').custom_ordered(),
             isc=ISC.objects.values('id', 'name').custom_ordered(),
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
+            phases_stages=PhasesStages.objects.values('id', 'name', 'order'),
+            # ('stage_no','stage_name','phase_no','phase_name'),
             phases=Phase.objects.values('id', 'name').custom_ordered(),
+
         )
 
 
