@@ -403,7 +403,7 @@ if ENVIRONMENT in ["dev", "tst", "uat", "prd"]:
     from .settings_deployed import *
 
 # Azure Monitor OpenTelemetry
-if ENVIRONMENT in ['tst']:
+if ENVIRONMENT in ['dev']:
     from azure.monitor.opentelemetry import configure_azure_monitor
 
     # Fetch the connection string from the environment variable
