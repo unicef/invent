@@ -22,15 +22,65 @@ class InitiativePage {
     }
 	
 	// Who is the focal point of contact for this initiative? ||| Required to publish
-    getFocalPointName() {
-        return cy.get('input[data-vv-name="contact_name"]')
-    }
+    // getFocalPointName() {
+    //     return cy.get('input[data-vv-name="contact_name"]')
+    // }
 	
 	// Focal Point Email ||| Required to publish
     getFocalPointMail() {
         return cy.get('input[data-vv-name="contact_email"]')
     }
+
+    // Focal Point Label
+    getFocalPointLabel() {
+        return cy.get(':nth-child(9) > .el-form-item__label')
+    }
+
+    // Focal Point Field
+    getFocalPointField() {
+        return cy.get('[data-vv-name="contact_email"]')
+    }
+
+    // Focal Point Hint
+    getFocalPointHint() {
+        return cy.get(':nth-child(9) > .el-form-item__content > .Hint')
+    }
+
+    // Team Members Label
+    getTeamMembersLabel() {
+        return cy.get('.TeamArea > [draftrule="[object Object]"] > .el-form-item__label > :nth-child(1)')
+    }
+
+    // Team Members field
+    getTeamMembersField() {
+        return cy.get('[data-vv-name="team"]')
+    }
+
+    // Team Members Hint
+    getTeamMembersHint() {
+        return cy.get('.TeamArea > [draftrule="[object Object]"] > .el-form-item__content > .Hint')
+    }
 	
+    // Members Dropdown menu
+    getMembersDropdown() {
+        return cy.get('.TeamSelectorDropdown')
+    }
+
+    // Receive Updates Label
+    getReceiveUpdatesLabel() {
+        return cy.get('[value=""] > .el-form-item__label > :nth-child(1)')
+    }
+
+    // Receive Updates field
+    getReceiveUpdatesField() {
+        return cy.get('[data-vv-name="viewers"]')
+    }
+
+    // Receive Updates Hint
+    getReceiveUpdatesHint() {
+        return cy.get('[value=""] > .el-form-item__content > .Hint')
+    }
+
     // Who else should be able to modify this initiative's entry? ||| Required to save draft + Required to publish
     getModifyInitiative() {
         return cy.get('[data-vv-name="team"]').click()
@@ -66,78 +116,75 @@ class InitiativePage {
         return cy.get('[data-vv-name="platforms"]')
     }
 	
-	//Pop up Window
+	// Pop up Window
 	getPopWindow(){
         return cy.get('[role="dialog"]')
     }
     
-    //Save Draft Button on Page
+    // Save Draft Button on Page
 	getSaveDraftButton() {
         return cy.get('[class="el-button el-button--primary el-button--medium SaveDraft NewProject"]')
     }
 	
-    //Draft Button on Switch View
+    // Draft Button on Switch View
     getViewDraftButton() {
         return cy.get('.DraftButton')
     }
 
-    //Publish Button on Page
+    // Publish Button on Page
     getPublishButton() {
 		return cy.get('.NavigationActions > .el-button--primary')
 	}
 	
-    //Publish Button on Switch View
+    // Publish Button on Switch View
     getViewPublishButton() {
         return cy.get('.PublishedButton')
     }
 
-    //Publish as latest
+    // Publish as latest
     getPublishAsLatestButton() {
         return cy.get('.NavigationActions > .el-tooltip')
     }
 
-    //Unpublish Button
+    // Unpublish Button
     getUnpublishButton() {
         return cy.get('.button--danger')
     }
 
-    //Go to Dashboard
+    // Go to Dashboard
     getGoToDashboard() {
         return cy.get('.GoToDashboard').contains('Go to Dashboard')
     }
 
-	//Close Button
+	// Close Button
 	getCloseButton(){
         return cy.contains('Close')
     }
 
-    //Cancel Button on Page
+    // Cancel Button on Page
     getCancelButton() {
         return cy.get('.NavigationActions > .CancelButton')
     }
 	
-    //Verify Draft Label
+    // Verify Draft Label
     getDraftLabel() {
         return cy.get('[class="DraftLabel"]')
     }
 
-    //Verify Published Label
+    // Verify Published Label
     getPublishLabel() {
         return cy.get('.PublishedLabel')
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // Verify Focal Point Field is Empty
+    emptyFocalPointField() {
+        this.getFocalPointField().should('have.value', '')
+    }
+    
+    // Verify Focal Point Field is Empty 
+    emptyReceiveUpdatesField() {
+        this.getReceiveUpdatesField().should('have.value', '')
+    }
 
 	typeInitiativeName(name) {
         this.getInitiativeName().type(name)
@@ -147,12 +194,24 @@ class InitiativePage {
         this.getIniativeOverview().type(overview)
     }
 	
-	typeFocalPointName(name) {
-        this.getFocalPointName().type(name)
-    }
+	// typeFocalPointName(name) {
+    //     this.getFocalPointName().type(name)
+    // }
 	
 	typeFocalPointMail(email) {
         this.getFocalPointMail().type(email)
+    }
+
+    typeFocalPointField(focalpointmember) {
+        this.getFocalPointField().type(focalpointmember)
+        cy.contains(focalpointmember)
+        this.getMembersDropdown().click()
+    }
+
+    typeTeamMembersField(teammebername) {
+        this.getTeamMembersField().type(teammebername)
+        cy.contains(teammebername)
+        this.getMembersDropdown().click()
     }
 	
     typeModifyInitiative(email)  {
