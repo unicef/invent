@@ -15,7 +15,7 @@ describe('Create Publish Iniative', () => {
         initiativePage.typeInitiativeOverview('Automate Publish Initiative')
         initiativePage.typeFocalPointName('Publish Initiative')
         initiativePage.typeFocalPointMail('konstantinos.zagklis@sword-group.com')
-        initiativePage.selectSectorInitiative('C4D')
+        initiativePage.selectLeadSectorInitiative('C4D')
         initiativePage.selectGoalArea('22. Learn')
         initiativePage.selectStartDate('2002-02-02')
         initiativePage.selectPartnerType('Investment')

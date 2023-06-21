@@ -37,9 +37,14 @@ class InitiativePage {
     }
 	
 	// Please select the sector(s) the initiative serves. ||| Required to publish
-    getSectorInitiative() {
-        return cy.get('[data-vv-name="unicef_sector"]').click()
+    getLeadSectorInitiative() {
+        return cy.get('div[data-vv-name="unicef_leading_sector"]')
     }
+
+    getSupportingSectorsInitiative() {
+        return cy.get('div[data-vv-name="unicef_supporting_sectors"]')
+    }
+	
 	
 	// Which Goal Area does the initiative focus on? ||| Required to publish
     getGoalArea() {
@@ -126,6 +131,10 @@ class InitiativePage {
         return cy.get('.PublishedLabel')
     }
 
+    getDropDownList() {
+        return  cy.get('ul[class="el-scrollbar__view el-select-dropdown__list"]')
+    }
+
 
 
 
@@ -172,12 +181,17 @@ class InitiativePage {
         cy.contains(office).click({force:true})
     }
 	
-	selectSectorInitiative(sector) {
-        this.getSectorInitiative().click()
-        //this.getSectorInitiative().type(sector)
-        cy.contains(sector).click({force:true})
-        this.getSectorInitiative().click()
-   }
+	selectLeadSectorInitiative(sector) {
+        this.getLeadSectorInitiative().click()
+        this.getDropDownList().eq(19).contains(sector).click({force:true})
+        this.getLeadSectorInitiative().dblclick()
+    }
+
+    selectSupportingSectorsInitiative(sector) {
+        this.getSupportingSectorsInitiative().click()
+        this.getDropDownList().eq(19).contains(sector).click({force:true})
+        this.getSupportingSectorsInitiative().dblclick()
+    }
 	
 	selectGoalArea(goalarea) {
        this.getGoalArea().click()
