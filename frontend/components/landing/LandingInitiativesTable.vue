@@ -131,7 +131,7 @@ export default {
       })
       const nonEmptyRowTableData = this.removeEmptyRows(tableData)
 
-      return this.includedPhasesInitiatives.length > 0 ? nonEmptyRowTableData : null
+      return this.includedPhasesInitiatives.length > 0 ? nonEmptyRowTableData : []
     },
   },
   methods: {
