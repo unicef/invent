@@ -9,7 +9,7 @@
       :empty-text="$gettext('No initiatives available') | translate"
     >
       <el-table-column
-        v-for="({ name, id, count }, index) in ommitedPhases"
+        v-for="({ name, id, count }, index) in omitedPhasesCount"
         :prop="name"
         :key="id"
         min-width="180"
@@ -78,7 +78,7 @@ export default {
       unicefOffice: 'offices/getOffices',
       sectors: 'projects/getSectors',
     }),
-    ommitedPhases() {
+    omitedPhasesCount() {
       const columns = this.phases
         .filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
         .sort((a, b) => a.order - b.order)
@@ -88,12 +88,15 @@ export default {
       }))
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
     },
-    initiativesTableData() {
-      let tableData = []
+    includedPhasesInitiatives() {
       const phaseIdsOmit = this.phasesOmit.map((phaseName) => this.phases.find((phase) => phase.name === phaseName).id)
-      const initiatives = this.landingProjectsList.filter(
+      return this.landingProjectsList.filter(
         (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
       )
+    },
+    initiativesTableData() {
+      let tableData = []
+
       const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
       const sortedSectors = this.sectors.sort((a, b) => a.name.localeCompare(b.name))
       sortedSectors.map((sector) => {
@@ -102,30 +105,15 @@ export default {
         omPhases.map((phase) => {
           dataObj[phase.id] = []
         })
-        const sectorInitiatives = initiatives.filter((initiative) =>
+        const sectorInitiatives = this.includedPhasesInitiatives.filter((initiative) =>
           initiative.unicef_leading_sector.some((lsector) => lsector === sector.id)
         )
         sectorInitiatives.map((initiative) => {
-          let lastUpdated
-          if (initiative.stages && initiative.stages.length > 0) {
-            /*
-          Some initiatives have equal current_phase as the last phase in stages field
-          Some other initiatives have equal current_phase -1 as the last phase in stages field
-          Added also 
-           **/
-            const prevPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase - 1)
-            const lastPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase)
-            if (lastPhase) {
-              lastUpdated = lastPhase.date
-            } else if (prevPhase) {
-              lastUpdated = prevPhase.date
-            }
-          } else {
-            lastUpdated = initiative.start_date ? format(initiative.start_date, 'YYYY-MM-DD') : new Date()
-          }
+          const lastUpdated = this.calcLastUpdated(initiative)
 
           let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
 
+          /*Create the card and add it to tableData **/
           dataObj[`${initiative.current_phase}`] = [
             ...dataObj[`${initiative.current_phase}`],
             {
@@ -139,25 +127,51 @@ export default {
           ]
         })
 
-        for (const key in dataObj) {
-          if (key !== 'sector') {
-            const staleInit = dataObj[key]
-              .filter((initiative) => initiative.stale === true)
-              .sort((a, b) => a.name.localeCompare(b.name))
-            const notStateInit = dataObj[key]
-              .filter((initiative) => initiative.stale === false)
-              .sort((a, b) => a.name.localeCompare(b.name))
-            dataObj[key] = [...staleInit, ...notStateInit]
-          }
-        }
-
-        tableData.push(dataObj)
+        tableData.push(this.sortCards(dataObj))
       })
-      const nonEmptyRowTableData = tableData.filter((row) => {
+      const nonEmptyRowTableData = this.removeEmptyRows(tableData)
+
+      return this.includedPhasesInitiatives.length > 0 ? nonEmptyRowTableData : null
+    },
+  },
+  methods: {
+    calcLastUpdated(initiative) {
+      if (initiative.stages && initiative.stages.length > 0) {
+        /*
+          Some initiatives have equal current_phase as the last phase in stages field
+          Some other initiatives have equal current_phase -1 as the last phase in stages field
+          Added also 
+           **/
+        const prevPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase - 1)
+        const lastPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase)
+        if (lastPhase) {
+          return lastPhase.date
+        } else if (prevPhase) {
+          return prevPhase.date
+        }
+      } else {
+        return initiative.start_date ? format(initiative.start_date, 'YYYY-MM-DD') : new Date()
+      }
+    },
+    sortCards(dataObj) {
+      for (const key in dataObj) {
+        if (key !== 'sector') {
+          const staleInit = dataObj[key]
+            .filter((initiative) => initiative.stale === true)
+            .sort((a, b) => a.name.localeCompare(b.name))
+          const notStateInit = dataObj[key]
+            .filter((initiative) => initiative.stale === false)
+            .sort((a, b) => a.name.localeCompare(b.name))
+          dataObj[key] = [...staleInit, ...notStateInit]
+        }
+      }
+      return dataObj
+    },
+    removeEmptyRows(data) {
+      return data.filter((row) => {
         let keep = false
         for (const key in row) {
           if (key !== 'sector') {
-            //add count to header
             if (row[key].length > 0) {
               keep = true
             }
@@ -165,8 +179,6 @@ export default {
         }
         return keep
       })
-
-      return initiatives.length > 0 ? nonEmptyRowTableData : null
     },
   },
 }
