@@ -22,7 +22,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
     HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
-    ApprovalState, Stage, Phase, ProjectVersion, ProblemStatement, Solution
+    ApprovalState, Stage, Phase,  ProjectVersion, ProblemStatement, Solution
 from project.permissions import InCountryAdminForApproval
 from search.views import ResultsSetPagination
 from .models import Project, TechnologyPlatform, DigitalStrategy, CountrySolution, \
@@ -43,6 +43,7 @@ from .tasks import notify_superusers_about_new_pending_approval
 
 
 class ProjectPublicViewSet(ViewSet):
+
     def project_structure(self, request):
         """
         Terminology and taxonomy endpoint - List all the available taxonomies and terminologies
@@ -70,11 +71,30 @@ class ProjectPublicViewSet(ViewSet):
         `isc` = Information Security Classification  
         `phases` = [DEPRECATED] Phase of Initiative  
         `stages` = [New] Phases of initiative  
+        `phases_stages` = [New] Mapping Phases and Stages of initiative  
+
         """
+
         return Response(self._get_project_structure())
 
     @cache_structure
     def _get_project_structure(self):
+
+        # create a mapping for phases and stages
+        mapping = {
+            1: {'phase_name': 'Opportunity and Ideation', 'stage_no': 1, 'stage_name': 'Initiation'},
+            2: {'phase_name': 'Preparation and Scoping', 'stage_no': 1, 'stage_name': 'Initiation'},
+            3: {'phase_name': 'Analysis and Design', 'stage_no': 2, 'stage_name': 'Analysis and Design'},
+            4: {'phase_name': 'Implementation Planning', 'stage_no': 2, 'stage_name': 'Analysis and Design'},
+            5: {'phase_name': 'Developing or Adapting Solution', 'stage_no': 3, 'stage_name': 'Develop and Pilot'},
+            6: {'phase_name': 'Piloting and Evidence Generation', 'stage_no': 3, 'stage_name': 'Develop and Pilot'},
+            7: {'phase_name': 'Package and Advocacy', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+            8: {'phase_name': 'Deploying', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+            9: {'phase_name': 'Scaling Up', 'stage_no': 4, 'stage_name': 'Package and Deploy'},
+            10: {'phase_name': 'Handover or Complete', 'stage_no': 5, 'stage_name': 'Completion'},
+            11: {'phase_name': 'Discontinued', 'stage_no': 5, 'stage_name': 'Completion'}
+        }
+
         strategies = []
         for group, group_name in DigitalStrategy.GROUP_CHOICES:
             sub_groups = []
@@ -106,6 +126,30 @@ class ProjectPublicViewSet(ViewSet):
                 challenges=[{'id': c['id'], 'challenge': c['name']}
                             for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
             ))
+
+        # create a list grouping the phases under their respective stages
+        grouped_phases = []
+        for phase_number, phase_info in mapping.items():
+            stage_number = phase_info['stage_no']
+            stage_name = phase_info['stage_name']
+            phase_name = phase_info['phase_name']
+
+            # create and initialize a flag for grouping phases and avoiding creating duplicate stages
+            found_stage = False
+            for stage_info in grouped_phases:
+                # compare if current phase belongs to an existing stage--> add only corresponding phases
+                if stage_info['stage_number'] == stage_number and stage_info['stage_name'] == stage_name:
+                    stage_info['phases'].append(
+                        {'phase_number': phase_number, 'phase_name': phase_name})
+                    found_stage = True
+                    break
+            # compare if current phase belongs to new stage-> add stages and corrresponding phases
+            if not found_stage:
+                grouped_phases.append({
+                    'stage_number': stage_number,
+                    'stage_name': stage_name,
+                    'phases': [{'phase_number': phase_number, 'phase_name': phase_name}]
+                })
 
         return dict(
             result_areas=UNICEFResultArea.objects.values(
@@ -149,6 +193,9 @@ class ProjectPublicViewSet(ViewSet):
             isc=ISC.objects.values('id', 'name').custom_ordered(),
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
             phases=Phase.objects.values('id', 'name').custom_ordered(),
+            phases_stages=grouped_phases
+
+
         )
 
 
