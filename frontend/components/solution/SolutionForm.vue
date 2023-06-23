@@ -17,6 +17,16 @@
             @hook:created="createdHandler"
             v-model="solution.general_overview"
           />
+          <InnovationPortfolios
+            key="innovationPortfolios"
+            ref="innovationPortfolios"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+            v-model="solution.innovation_portfolios"
+          />
           <ActivityAndReach
             key="solutionActivityAndReach"
             ref="solutionActivityAndReach"
@@ -41,6 +51,7 @@ import { rules } from '@/utilities/solutions'
 import { mapGetters, mapActions } from 'vuex'
 import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
+import InnovationPortfolios from './sections/InnovationPortfolios.vue'
 import FormActionsAside from './FormActionsAside.vue'
 
 export default {
@@ -48,6 +59,7 @@ export default {
     GeneralOverview,
     ActivityAndReach,
     FormActionsAside,
+    InnovationPortfolios,
   },
   $_veeValidate: {
     validator: 'new',
@@ -61,6 +73,8 @@ export default {
       solution: {
         general_overview: {
           name: '',
+        },
+        innovation_portfolios: {
           phase: 0,
           open_source_frontier_tech: false,
           learning_investment: false,
@@ -85,37 +99,11 @@ export default {
     rules,
   },
   mounted() {
-    const s = this.getSolution
-    this.solution = {
-      activity_reach: {
-        people_reached: s.people_reached,
-        country_solutions: s.country_solutions,
-      },
-      general_overview: {
-        name: s.name,
-        phase: s.phase,
-        open_source_frontier_tech: s.open_source_frontier_tech,
-        learning_investment: s.learning_investment,
-        portfolio_problem_statements: s.portfolio_problem_statements,
-      },
-    }
+    this.syncSolution()
   },
   watch: {
     getSolution() {
-      const s = this.getSolution
-      this.solution = {
-        activity_reach: {
-          people_reached: s.people_reached,
-          country_solutions: s.country_solutions,
-        },
-        general_overview: {
-          name: s.name,
-          phase: s.phase,
-          open_source_frontier_tech: s.open_source_frontier_tech,
-          learning_investment: s.learning_investment,
-          portfolio_problem_statements: s.portfolio_problem_statements,
-        },
-      }
+      this.syncSolution()
     },
   },
 
@@ -127,6 +115,24 @@ export default {
       cancelSolution: 'solution/cancelSolution',
       setLoading: 'solution/setLoading',
     }),
+    syncSolution() {
+      const s = this.getSolution
+      this.solution = {
+        activity_reach: {
+          people_reached: s.people_reached,
+          country_solutions: s.country_solutions,
+        },
+        general_overview: {
+          name: s.name,
+        },
+        innovation_portfolios: {
+          phase: s.phase,
+          open_source_frontier_tech: s.open_source_frontier_tech,
+          learning_investment: s.learning_investment,
+          portfolio_problem_statements: s.portfolio_problem_statements,
+        },
+      }
+    },
     trimEmptyRows() {
       const portfolioTable = this.solution.general_overview.portfolio_problem_statements
       const trimedTable = portfolioTable.find((row) => row.portfolio_id !== null)
@@ -143,6 +149,7 @@ export default {
       const validations = await Promise.all([
         this.$refs.solutionGeneral.validate(),
         this.$refs.solutionActivityAndReach.validate(),
+        this.$refs.innovationPortfolios.validate(),
       ])
       console.log('root validations', validations)
       return validations.reduce((a, c) => a && c, true)
@@ -151,6 +158,7 @@ export default {
       this.apiErrors = {}
       this.$refs.solutionGeneral.clear()
       this.$refs.solutionActivityAndReach.clear()
+      this.$refs.innovationPortfolios.clear()
     },
     peopleReached(people_reached) {
       if (people_reached === undefined || people_reached === null) {
@@ -177,16 +185,17 @@ export default {
       await this.$nextTick(async () => {
         const general = await this.$refs.solutionGeneral.validate()
         const solutionActivityAndReach = await this.$refs.solutionActivityAndReach.validate()
+        const innovationPortfolios = await this.$refs.innovationPortfolios.validate()
 
-        if (general && solutionActivityAndReach) {
+        if (general && solutionActivityAndReach && innovationPortfolios) {
           const s = this.solution
           try {
             await this.updateSolution({
               name: s.general_overview.name,
-              phase: s.general_overview.phase,
-              open_source_frontier_tech: s.general_overview.open_source_frontier_tech,
-              learning_investment: s.general_overview.learning_investment,
-              portfolio_problem_statements: s.general_overview.portfolio_problem_statements,
+              phase: s.innovation_portfolios.phase,
+              open_source_frontier_tech: s.innovation_portfolios.open_source_frontier_tech,
+              learning_investment: s.innovation_portfolios.learning_investment,
+              portfolio_problem_statements: s.innovation_portfolios.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
               people_reached: this.peopleReached(s.activity_reach.override_reach),
             })

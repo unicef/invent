@@ -36,53 +36,6 @@
           </p>
         </span>
       </custom-required-form-item>
-
-      <custom-required-form-item
-        :error="errors.first('phase') ? errors.first('phase').replace('_', ' ') : undefined"
-        :publish-rule="rules.phase"
-      >
-        <template slot="label">
-          <translate key="phase"> Phase </translate>
-        </template>
-
-        <SolutionPhaseSelect v-model="innerValue.phase" data-test="solution-phase-select" />
-      </custom-required-form-item>
-
-      <custom-required-form-item
-        :error="errors.first('tech') ? errors.first('tech').replace('_', ' ') : undefined"
-        :draft-rule="rules.tech"
-        :publish-rule="rules.tech"
-      >
-        <el-checkbox
-          v-model="innerValue.open_source_frontier_tech"
-          class="tech__checkbox"
-          :label="'tech'"
-          data-test="solution-tech-checkbox"
-          ><translate>Open source frontier tech</translate>
-        </el-checkbox>
-      </custom-required-form-item>
-
-      <custom-required-form-item
-        :error="errors.first('learning') ? errors.first('learning').replace('_', ' ') : undefined"
-        :draft-rule="rules.learning"
-        :publish-rule="rules.learning"
-      >
-        <el-checkbox
-          v-model="innerValue.learning_investment"
-          class="tech__checkbox"
-          :label="'investment'"
-          data-test="solution-learning-checkbox"
-          ><translate>Learning investment</translate>
-        </el-checkbox>
-      </custom-required-form-item>
-      <portfolio-table-input
-        v-model="innerValue.portfolio_problem_statements"
-        v-validate="rules.portfolio_statements_table"
-        :rules="rules"
-        :error="errors.first('portfolio-table')"
-        name="portfolio-table"
-        class="portfolio-table"
-      />
     </collapsible-solution-card>
   </div>
 </template>
@@ -91,14 +44,10 @@
 import VeeValidationMixin from '@/components/mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '@/components/mixins/ProjectFieldsetMixin.js'
 import CollapsibleSolutionCard from '../CollapsibleSolutionCard.vue'
-import SolutionPhaseSelect from '../SolutionPhaseSelect.vue'
-import PortfolioTableInput from '../PortfolioTableInput.vue'
 
 export default {
   components: {
     CollapsibleSolutionCard,
-    SolutionPhaseSelect,
-    PortfolioTableInput,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   model: {

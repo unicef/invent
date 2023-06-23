@@ -167,15 +167,16 @@ export default {
     .limitPageWidth();
     background-color: @colorWhite;
     align-items: stretch;
+    height: 56px;
 
     &.IsAuth {
-      height: @topBarHeight !important;
+      // height: @topBarHeightSubpage;
     }
   }
 
   .LogoHolder {
     display: flex;
-    // align-self: flex-start;
+    align-self: center;
     width: auto;
 
     .LogoWHO {
@@ -202,10 +203,9 @@ export default {
       top: 2px;
 
       img.UnicefLogoNormal {
-        padding-bottom: 10px;
+        display: none;
       }
       img.UnicefLogoLong {
-        display: none;
       }
     }
 

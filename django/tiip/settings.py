@@ -188,7 +188,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/share/django/static'
 
 MEDIA_ROOT = '/usr/share/django/media'
-# MEDIA_ROOT = '/usr/share/nginx/html/media'
 MEDIA_URL = '/media/'
 
 FILE_UPLOAD_PERMISSIONS = 0o644
