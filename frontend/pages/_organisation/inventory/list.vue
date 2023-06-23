@@ -23,15 +23,14 @@ export default {
   async fetch({ store, query, error }) {
     store.dispatch('landing/resetSearch')
     store.dispatch('dashboard/setDashboardSection', 'list')
+    await Promise.all([
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('countries/loadMapData'),
+    ])
     await store.dispatch('dashboard/setSearchOptions', query)
-
     try {
-      await Promise.all([
-        store.dispatch('projects/loadUserProjects'),
-        store.dispatch('projects/loadProjectStructure'),
-        store.dispatch('countries/loadMapData'),
-        store.dispatch('dashboard/loadProjectList'),
-      ])
+      await store.dispatch('dashboard/loadProjectList')
     } catch (e) {
       console.log(e)
       error({
@@ -68,7 +67,7 @@ export default {
         this.$router.replace({ ...this.$route, query })
         this.load()
       }
-    }, 350),
+    }, 100),
     async load() {
       this.$nuxt.$loading.start()
       await this.loadProjectList()
