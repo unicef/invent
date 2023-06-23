@@ -186,13 +186,13 @@ const config = {
   build: {
     babel: {
       presets({ isServer }) {
-        const targets = isServer ? { node: '10' } : { ie: '11' }
+        const targets = isServer ? { node: '14' } : { ie: '11' }
         return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
       },
     },
     extractCSS: true,
     optimization: {},
-    transpile: ['redux', 'redux-async-thunk'],
+    // transpile: ['redux', 'redux-async-thunk'],
     extend(config, { isDev }) {
       config.plugins.forEach(function (plugin) {
         if (plugin.constructor && plugin.constructor.name === 'ExtractCssChunksPlugin') {
