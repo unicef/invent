@@ -179,14 +179,6 @@ export default {
           confirmButtonText: this.$gettext('OK'),
         }
       )
-      if (this.$sentry) {
-        this.$sentry.captureMessage('Un-caught validation error in initiative page', {
-          level: 'warning',
-          extra: {
-            e,
-          },
-        })
-      }
     },
     async loginLocal() {
       this.$nuxt.$loading.start('loginLoader')

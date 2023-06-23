@@ -37,13 +37,7 @@ export default {
   watch: {
     userProfile: {
       immediate: true,
-      handler(profile) {
-        if (this.$sentry) {
-          this.$sentry.configureScope((scope) => {
-            scope.setUser(profile)
-          })
-        }
-      },
+      handler(profile) {},
     },
   },
 }

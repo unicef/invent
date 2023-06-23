@@ -96,15 +96,6 @@ export default {
       setLoading: 'portfolio/setLoading',
     }),
     async unCaughtErrorHandler(errors) {
-      if (this.$sentry) {
-        this.$sentry.captureMessage('Un-caught validation error in portfolio page', {
-          level: 'error',
-          extra: {
-            apiErrors: this.apiErrors,
-            errors,
-          },
-        })
-      }
       const errorList = Object.entries(this.apiErrors).map((e) => {
         if (e[0] === 'problem_statements') {
           return `${e[0]}: ${join(
