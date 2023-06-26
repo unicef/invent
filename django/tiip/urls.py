@@ -23,7 +23,7 @@ API_DESCRIPTION = 'Private API'
 urlpatterns = [
     url(r'^account/', include('allauth.urls')),
     url(r"^admin/", admin.site.urls),
-    url(r"^api/", include("azure.urls")),
+    url(r"^api/", include("azure_services.urls")),
     url(r"^api/", include("core.urls")),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),
