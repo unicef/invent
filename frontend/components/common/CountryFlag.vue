@@ -1,5 +1,5 @@
 <template>
-  <img :class="['CountryFlag', `${size}`]" :src="countryFlagUrl" />
+  <img :class="['CountryFlag', `${size}`]" :src="countryFlagUrl" loading="lazy" />
 </template>
 
 <script>

@@ -6,7 +6,7 @@
           <div class="Separator" />
         </el-col>
         <el-col class="CountryHolder">
-          <img :src="countryFlag" alt="country flag" class="CountryFlag" />
+          <img :src="countryFlag" alt="country flag" class="CountryFlag" loading="lazy" />
         </el-col>
         <el-col>
           <div class="country-text">

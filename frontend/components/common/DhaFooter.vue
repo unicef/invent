@@ -1,15 +1,12 @@
 <template>
   <div class="footer-bg">
-    <img class="logo-who" src="/unicef-logo-footer-blue.png" alt="WHO" />
+    <img class="logo-who" src="/unicef-logo-footer-blue.png" alt="WHO" loading="lazy" />
     <div class="text">
       <span><translate>Disclaimer:</translate>&nbsp;</span>
       <span>
-        <span v-html="translateFooter">
-        </span>
+        <span v-html="translateFooter"> </span>
       </span>
-      <nuxt-link
-        :to="localePath({ name: 'organisation-terms', params: $route.params })"
-      >
+      <nuxt-link :to="localePath({ name: 'organisation-terms', params: $route.params })">
         <translate>Terms of use</translate>
       </nuxt-link>
     </div>
@@ -19,10 +16,12 @@
 <script>
 export default {
   computed: {
-    translateFooter () {
-      return this.$gettext('All reasonable precautions have been taken by the UNICEF to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the UNICEF be liable for damages arising from its use. Please read our')
-    }
-  }
+    translateFooter() {
+      return this.$gettext(
+        'All reasonable precautions have been taken by the UNICEF to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the UNICEF be liable for damages arising from its use. Please read our'
+      )
+    },
+  },
 }
 </script>
 

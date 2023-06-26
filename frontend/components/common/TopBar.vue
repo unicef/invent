@@ -6,7 +6,7 @@
           <el-row type="flex" align="middle">
             <el-col class="LogoUnicef">
               <!-- <img class="UnicefLogoNormal" src="/unicef-logo-banner.svg" alt="Unicef" /> -->
-              <img class="UnicefLogoLong" src="/unicef-logo-horizontal.svg" alt="Unicef" />
+              <img class="UnicefLogoLong" src="/unicef-logo-horizontal.svg" alt="Unicef" loading="lazy" />
             </el-col>
           </el-row>
         </nuxt-link>
