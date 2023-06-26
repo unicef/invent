@@ -411,4 +411,4 @@ if ENVIRONMENT in ['dev']:
         'APPLICATIONINSIGHTS_CONNECTION_STRING', default='')
 
     if APPLICATIONINSIGHTS_CONNECTION_STRING:  # Ensure the connection string exists
-        configure_azure_monitor(APPLICATIONINSIGHTS_CONNECTION_STRING)
+        configure_azure_monitor(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING)
