@@ -5,8 +5,6 @@ import sys
 from environs import Env
 from django.utils.translation import ugettext_lazy as _
 
-from azure.monitor.opentelemetry import configure_azure_monitor
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = Env()
