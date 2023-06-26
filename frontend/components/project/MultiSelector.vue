@@ -145,7 +145,7 @@ export default {
   display: none;
 }
 .AdvancedSearch > div .el-select .el-select__tags {
-  overflow-x: scroll !important;
+  // overflow-x: scroll !important;
 }
 
 .el-select .el-select__tags .el-tag__close {

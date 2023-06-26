@@ -9,6 +9,8 @@ environment: toBeSetFromPipeline
 envFullName: toBeSetFromPipeline
 lifecycle: toBeSetFromPipeline
 instance: toBeSetFromPipeline
+applicationsightsConnectionSrting: "InstrumentationKey=87fc03e2-140c-4b6b-928d-85c2868cd76c;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"
+
 
 image:
   repository: uniinventacrdev.azurecr.io/invent_django

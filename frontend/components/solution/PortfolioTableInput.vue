@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, index) in innerValue" :key="row.portfolio_id" :data-test="`portfolio-row-${index}`">
+        <tr v-for="(row, index) in innerValue" :key="index" :data-test="`portfolio-row-${index}`">
           <td>
             <PortfolioSelectSingle
               v-model.number="row.portfolio_id"
@@ -32,7 +32,7 @@
             <el-button
               type="text"
               class="IconLeft"
-              @click="() => deleteRow(row.portfolio_id)"
+              @click="() => deleteRow(index)"
               :data-test="`delete-portfolio-row-${index}`"
             >
               <translate>Delete</translate>
@@ -102,8 +102,10 @@ export default {
       this.$emit('change', newValue)
     },
     deleteRow: function (id) {
-      const newValue = this.value.filter((row) => row.portfolio_id !== id)
-      this.$emit('change', newValue)
+      let arr = [...this.value]
+      arr.splice(id, 1)
+
+      this.$emit('change', arr)
     },
   },
 }
@@ -117,6 +119,7 @@ export default {
   width: 100%;
   box-sizing: border-box;
   border-collapse: collapse;
+
   thead {
     background-color: gray;
     color: white;

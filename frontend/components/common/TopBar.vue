@@ -169,7 +169,7 @@ export default {
     align-items: stretch;
 
     &.IsAuth {
-      height: @topBarHeight !important;
+      // height: @topBarHeight !important;
     }
   }
 
@@ -200,12 +200,12 @@ export default {
       display: flex;
       position: relative;
       top: 2px;
+      height: 56px;
 
       img.UnicefLogoNormal {
-        padding-bottom: 10px;
+        display: none;
       }
       img.UnicefLogoLong {
-        display: none;
       }
     }
 

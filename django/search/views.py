@@ -60,20 +60,7 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
     serializer_class = ListResultSerializer
 
     def get_queryset(self):
-        """
-        Override the default get_queryset method to provide custom filtering 
-        based on 'published' query parameter.
-
-        'published' query parameter values:
-        - If 'published' is not provided, only published projects are returned.
-        - If 'published=0', only unpublished projects are returned.
-        - If 'published=1', both unpublished and published projects are returned.
-
-        Returns:
-            QuerySet: The QuerySet of ProjectSearch objects after applying the filters.
-        """
-        # Start with a base queryset, excluding inactive projects
-        queryset = ProjectSearch.objects.exclude(project__is_active=False) \
+        return ProjectSearch.objects.exclude(project__is_active=False) \
             .select_related('project', 'project__approval', 'organisation', 'country', 'country_office')
 
         # Retrieve 'published' query parameter value
@@ -118,7 +105,8 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         `donor` eg: donor=1&donor=2  
         `approved` eg: approved=0 (for not approved), approved=1 (for approved)  
         `stage` eg: stage=1&stage=2  
-        `published` eg: published=0 (for unpublished), published=1 (for both published and unpublished)
+        `published` eg: published=true (for published), published=false (for not published)
+        `unpublished` eg: unpublished=true (for unpublished), unpublished=false (for not unpublished)
 
         ** UNICEF FILTERS **
 
@@ -182,6 +170,25 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         view_as = query_params.get('view_as')
         portfolio_page = query_params.get('portfolio_page', 'portfolio')
         portfolio_id = query_params.get('portfolio')
+
+        # Add published/unpublished parameters
+        published = query_params.get('published', 'true').lower()
+        unpublished = query_params.get('unpublished', 'false').lower()
+
+        # Handling invalid inputs/default values
+        if published not in ['true', 'false']:
+            published = 'true'
+        if unpublished not in ['true', 'false']:
+            unpublished = 'false'
+
+        # Using dict-based switch-case
+        query_cases = {
+            ('true', 'false'): qs.exclude(project__public_id=''), # Published: yes / Unpublished: no
+            ('true', 'true'): qs,  # Published: yes / Unpublished: yes
+            ('false', 'true'): qs.filter(project__public_id=''), # Published: no / Unpublished: yes
+            ('false', 'false'): qs.none()  # Published: no / Unpublished: no
+        }
+        qs = query_cases[(published, unpublished)]
 
         if view_as and view_as == 'donor':
             donor_list = query_params.getlist('donor')
