@@ -5,7 +5,7 @@ from allauth.account.adapter import DefaultAccountAdapter
 from rest_auth.registration.views import SocialLoginView
 
 from .models import UserProfile
-from azure.views import AzureOAuth2Adapter
+from azure_services.views import AzureOAuth2Adapter
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
