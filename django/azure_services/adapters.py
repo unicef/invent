@@ -30,8 +30,12 @@ class AzureUserManagement:
         Raises
             requests.exceptions.RequestException: If an error occurs while making the request to fetch users.
         """
-        # Set initial url for fetching users
-        url = settings.AZURE_GET_USERS_URL
+        # Fetch last stored delta link
+        delta_link = self.get_last_delta_link()
+
+        # If delta_link doesn't exist (i.e., first-time fetch), use the initial URL
+        url = delta_link if delta_link else settings.AZURE_GET_USERS_URL
+
         # Get access token and set headers for the request
         token = self.get_access_token()
         headers = {
@@ -71,7 +75,10 @@ class AzureUserManagement:
                 total_updated_users.extend(updated_users)
                 total_skipped_users += len(skipped_users)
 
-                url = response_data.get('@odata.nextLink', None)
+                url = response_data.get('@odata.deltaLink', None)
+                if url:
+                    # Save deltaLink for subsequent use
+                    self.save_delta_link(url)
                 page_count += 1
                 retry_count = 0
             except requests.exceptions.RequestException as e:
