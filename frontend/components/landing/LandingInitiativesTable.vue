@@ -1,15 +1,24 @@
 <template>
   <div class="LandingInitiativesTable">
+    <div class="TopSwitchBar">
+      <el-switch
+        v-model="board"
+        :active-text="$gettext('Phases board') | translate"
+        :inactive-text="$gettext('Stages board') | translate"
+        class="Switch"
+      >
+      </el-switch>
+    </div>
     <el-table
       :data="initiativesTableData"
       :highlight-current-row="false"
-      max-height="600"
+      max-height="580"
       :lazy="true"
       stripe
       :empty-text="$gettext('No initiatives available') | translate"
     >
       <el-table-column
-        v-for="({ name, id, count }, index) in omitedPhasesCount"
+        v-for="({ name, id, count }, index) in columns"
         :prop="name"
         :key="id"
         min-width="180"
@@ -42,7 +51,7 @@
                   <i class="el-icon-time"></i>
                 </div>
                 <div class="list-group-card-data">
-                  <p class="initiative-office">{{ card.unicefOffice }}</p>
+                  <p class="initiative-office">{{ card.title }}</p>
                   <p class="initiative-name">{{ card.name }}</p>
                   <p class="initiative-date">{{ `${$gettext('Since')} ${card.lastUpdated}` }}</p>
                 </div>
@@ -69,6 +78,7 @@ export default {
     return {
       daysStale: 180,
       phasesOmit: ['Handover or Complete', 'Discontinued'],
+      board: true,
     }
   },
   computed: {
@@ -77,7 +87,20 @@ export default {
       landingProjectsList: 'landing/getCountryProjectsList',
       unicefOffice: 'offices/getOffices',
       sectors: 'projects/getSectors',
+      phasesStages: 'projects/getPhasesStages',
+      unicef_regions: 'system/getUnicefRegions',
     }),
+    columns() {
+      return this.board ? this.omitedPhasesCount : this.stagesCount
+    },
+    stagesCount() {
+      const columns = this.phasesStages.map((phst) => ({ name: phst.stage_label, id: phst.stage_number }))
+      const colsWithCount = columns.map((col) => ({
+        count: this.landingProjectsList.filter((project) => this.getStage(project.current_phase) === col.id).length,
+        ...col,
+      }))
+      return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
+    },
     omitedPhasesCount() {
       const columns = this.phases
         .filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
@@ -94,17 +117,61 @@ export default {
         (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
       )
     },
+    sortedSectors() {
+      return this.sectors.sort((a, b) => a.name.localeCompare(b.name))
+    },
     initiativesTableData() {
+      return this.board ? this.initiativesPhasesTableData : this.initiativesStagesTableData
+    },
+    initiativesStagesTableData() {
+      let tableData = []
+      /* Creates each table row per sector**/
+      this.sortedSectors.map((sector) => {
+        const dataObj = {}
+        dataObj['sector'] = { sector_name: sector.name }
+        this.phasesStages.map((stage) => {
+          dataObj[stage.stage_number] = []
+        })
+        /* Filters the relative initiatives **/
+        const sectorInitiatives = this.landingProjectsList.filter((project) =>
+          project.unicef_leading_sector.some((lsector) => lsector === sector.id)
+        )
+        sectorInitiatives.map((initiative) => {
+          const lastUpdated = this.calcLastUpdated(initiative)
+
+          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+
+          /*Create the card and add it to tableData **/
+          const regionId = this.unicefOffice.find((office) => office.id === initiative.country_office).region
+          const regionName = this.unicef_regions.find((region) => region.id === regionId).name
+          dataObj[`${this.getStage(initiative.current_phase)}`] = [
+            ...dataObj[`${this.getStage(initiative.current_phase)}`],
+            {
+              ...initiative,
+              lastUpdated: lastUpdated,
+              title: regionName,
+              stale: isStale,
+            },
+          ]
+        })
+
+        tableData.push(this.sortCards(dataObj))
+      })
+
+      return this.removeEmptyRows(tableData)
+    },
+    initiativesPhasesTableData() {
       let tableData = []
 
       const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
-      const sortedSectors = this.sectors.sort((a, b) => a.name.localeCompare(b.name))
-      sortedSectors.map((sector) => {
+      /* Creates each table row per sector**/
+      this.sortedSectors.map((sector) => {
         const dataObj = {}
         dataObj['sector'] = { sector_name: sector.name }
         omPhases.map((phase) => {
           dataObj[phase.id] = []
         })
+        /* Filters the relative initiatives **/
         const sectorInitiatives = this.includedPhasesInitiatives.filter((initiative) =>
           initiative.unicef_leading_sector.some((lsector) => lsector === sector.id)
         )
@@ -119,9 +186,7 @@ export default {
             {
               ...initiative,
               lastUpdated: lastUpdated,
-              unicefOffice: this.unicefOffice
-                .find((office) => office.id === initiative.country_office)
-                .name.split(':')[1],
+              title: this.unicefOffice.find((office) => office.id === initiative.country_office).name.split(':')[1],
               stale: isStale,
             },
           ]
@@ -129,12 +194,15 @@ export default {
 
         tableData.push(this.sortCards(dataObj))
       })
-      const nonEmptyRowTableData = this.removeEmptyRows(tableData)
 
-      return this.includedPhasesInitiatives.length > 0 ? nonEmptyRowTableData : []
+      return this.removeEmptyRows(tableData)
     },
   },
   methods: {
+    getStage(phase) {
+      return this.phasesStages.find((stage) => stage.phases.some((stphase) => stphase.phase_number === phase))
+        .stage_number
+    },
     calcLastUpdated(initiative) {
       if (initiative.stages && initiative.stages.length > 0) {
         /*
@@ -189,6 +257,19 @@ export default {
 @import '~assets/style/mixins.less';
 .LandingInitiativesTable {
   margin: 10px 0;
+
+  .TopSwitchBar {
+    background-color: @colorGrayLight;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+
+    .Switch {
+      padding-right: 24px;
+      padding-top: 4px;
+    }
+  }
 
   .el-table--enable-row-hover .el-table__body tr:hover > td {
     background-color: unset;
