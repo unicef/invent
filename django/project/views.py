@@ -138,17 +138,17 @@ class ProjectPublicViewSet(ViewSet):
             found_stage = False
             for stage_info in grouped_phases:
                 # compare if current phase belongs to an existing stage--> add only corresponding phases
-                if stage_info['stage_number'] == stage_number and stage_info['stage_name'] == stage_name:
+                if stage_info['stage_number'] == stage_number and stage_info['stage_label'] == stage_name:
                     stage_info['phases'].append(
-                        {'phase_number': phase_number, 'phase_name': phase_name})
+                        {'phase_number': phase_number, 'phase_label': phase_name})
                     found_stage = True
                     break
             # compare if current phase belongs to new stage-> add stages and corrresponding phases
             if not found_stage:
                 grouped_phases.append({
                     'stage_number': stage_number,
-                    'stage_name': stage_name,
-                    'phases': [{'phase_number': phase_number, 'phase_name': phase_name}]
+                    'stage_label': stage_name,
+                    'phases': [{'phase_number': phase_number, 'phase_label': phase_name}]
                 })
 
         return dict(
