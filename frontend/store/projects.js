@@ -79,6 +79,7 @@ export const getters = {
   },
   getTechnologyPlatforms: (state) =>
     state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
+  getPhasesStages: (state) => (state.projectStructure.phases_stages ? [...state.projectStructure.phases_stages] : []),
   getSectors: (state) => (state.projectStructure.sectors ? [...state.projectStructure.sectors] : []),
   getLeadingSector: (state, getters, rootState, rootGetters) => {
     const selectedSupportingSectors = rootGetters['project/getSupportingSectors']
