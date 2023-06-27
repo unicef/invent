@@ -6,6 +6,7 @@ from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import transaction, DatabaseError
+import psycopg2
 
 
 from country.models import Country
@@ -306,3 +307,82 @@ class AzureUserManagement:
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
+
+    def get_last_delta_link(self):
+        """
+        Retrieves the last saved delta link from the database.
+
+        This method connects to the database, executes a query to fetch the most
+        recently updated delta link, and returns it.
+
+        Returns:
+            str: The last saved delta link, or None if no delta link was found.
+        """
+        # Get the database configuration from Django settings
+        db_config = settings.DATABASES['default']
+
+        try:
+            # Connect to the database
+            conn = psycopg2.connect(
+                dbname=db_config['NAME'],
+                user=db_config['USER'],
+                password=db_config['PASSWORD'],
+                host=db_config['HOST']
+            )
+
+            # Execute the query
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT link FROM delta_link ORDER BY updated_at DESC LIMIT 1")
+
+            # Fetch the result of the query
+            row = cur.fetchone()
+
+            # Close the database connection
+            conn.close()
+
+            # Return the fetched delta link or None if no link was found
+            return row[0] if row else None
+
+        except psycopg2.DatabaseError as e:
+            print(f"Error: {e}")
+            return None
+
+    def save_delta_link(self, delta_link):
+        """
+        Saves the given delta link to the database.
+
+        This method connects to the database and executes a query to save the delta link. 
+        If a link already exists, it updates the link and sets the updated_at timestamp to the current time.
+
+        Parameters:
+            delta_link (str): The delta link to save.
+        """
+        # Get the database configuration from Django settings
+        db_config = settings.DATABASES['default']
+
+        try:
+            # Connect to the database
+            conn = psycopg2.connect(
+                dbname=db_config['NAME'],
+                user=db_config['USER'],
+                password=db_config['PASSWORD'],
+                host=db_config['HOST']
+            )
+
+            # Execute the query
+            cur = conn.cursor()
+            cur.execute(f"""
+                INSERT INTO delta_link (link) 
+                VALUES ('{delta_link}')
+                ON CONFLICT (id) 
+                DO UPDATE SET link = '{delta_link}', updated_at = NOW()
+                WHERE delta_link.id = 1
+            """)
+
+            # Commit the changes and close the connection
+            conn.commit()
+            conn.close()
+
+        except psycopg2.DatabaseError as e:
+            print(f"Error: {e}")
