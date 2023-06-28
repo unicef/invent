@@ -1253,3 +1253,8 @@ class CountrySolution(models.Model):
 
     def __str__(self):  # pragma: no cover
         return f"{self.solution} in {self.country}"
+
+
+class DeltaLink(models.Model):
+    link = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)

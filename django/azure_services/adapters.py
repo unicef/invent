@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import transaction, DatabaseError
 
-
 from country.models import Country
+from project.models import DeltaLink
 from user.models import UserProfile
 
 # Initialize the logger at the module level
@@ -30,8 +30,12 @@ class AzureUserManagement:
         Raises
             requests.exceptions.RequestException: If an error occurs while making the request to fetch users.
         """
-        # Set initial url for fetching users
-        url = settings.AZURE_GET_USERS_URL
+        # Fetch last stored delta link
+        delta_link = self.get_last_delta_link()
+
+        # If delta_link doesn't exist (i.e., first-time fetch), use the initial URL
+        url = delta_link if delta_link else settings.AZURE_GET_USERS_URL
+
         # Get access token and set headers for the request
         token = self.get_access_token()
         headers = {
@@ -47,7 +51,7 @@ class AzureUserManagement:
         total_skipped_users = 0
         # Fetch and process users in batches until either there are no more users to fetch
         # or the maximum number of users to process has been reached
-        while url and retry_count < 5 and (max_users is None or processed_user_count < max_users):
+        while retry_count < 5 and (max_users is None or processed_user_count < max_users):
             try:
                 # Make request to fetch users
                 response = requests.get(url, headers=headers)
@@ -55,6 +59,10 @@ class AzureUserManagement:
                 response.raise_for_status()
                 # Parse response data
                 response_data = response.json()
+
+                # Log the entire response data
+                logger.info(f"Response Data: {response_data}")
+
                 # Extract users from response data
                 users_batch = response_data.get('value', [])
                 logger.info(
@@ -67,11 +75,26 @@ class AzureUserManagement:
 
                 # Update totals
                 total_new_users += len(new_users)
-                # We extend the list now
                 total_updated_users.extend(updated_users)
                 total_skipped_users += len(skipped_users)
 
-                url = response_data.get('@odata.nextLink', None)
+                # If '@odata.nextLink' exists, set it as the next URL to fetch users
+                next_link = response_data.get('@odata.nextLink')
+                delta_link = response_data.get('@odata.deltaLink')
+
+                # Log nextLink and deltaLink separately
+                logger.info(f"@odata.nextLink: {next_link}")
+                logger.info(f"@odata.deltaLink: {delta_link}")
+
+                url = next_link
+                if url is None:
+                    # If '@odata.nextLink' doesn't exist, use '@odata.deltaLink'
+                    url = response_data.get('@odata.deltaLink')
+                    if url:
+                        logger.info(f"DeltaLink from response: {url}")
+                        self.save_delta_link(url)
+                    else:
+                        logger.info("No DeltaLink found in response.")
                 page_count += 1
                 retry_count = 0
             except requests.exceptions.RequestException as e:
@@ -299,3 +322,45 @@ class AzureUserManagement:
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
+
+    def get_last_delta_link(self):
+        """
+        This method fetches the most recently updated delta link from the database.
+
+        A delta link is a URL provided by Microsoft's Azure Active Directory 
+        that points to the changes since the last request for users data. 
+        This method tries to fetch the delta link object that was updated last 
+        (i.e., the latest one) and returns its link.
+
+        If no delta link is found in the database, this method returns None.
+
+        Returns:
+            str: The most recently updated delta link, or None if not found.
+        """
+        try:
+            delta_link = DeltaLink.objects.latest('updated_at')
+            return delta_link.link
+        except DeltaLink.DoesNotExist:
+            return None
+
+    def save_delta_link(self, delta_link):
+        """
+        This method saves a given delta link to the database. 
+
+        If a delta link object with id=1 already exists in the database, it updates 
+        the link of this object with the given delta link. 
+        If no such object exists, it creates a new one with id=1 and the given delta link.
+
+        Note: This method assumes that you only want to keep one DeltaLink object in your database.
+        It always tries to update or create the object with id=1. If you want to keep more than 
+        one DeltaLink object in your database, you will need to adjust your code accordingly.
+
+        Args:
+            delta_link (str): The delta link to be saved.
+        """
+        try:
+            delta_link_obj, created = DeltaLink.objects.update_or_create(
+                id=1, defaults={'link': delta_link})
+            logger.info(f"Saved DeltaLink: {delta_link}, created: {created}")
+        except Exception as e:
+            logger.error(f"Error saving DeltaLink: {e}")

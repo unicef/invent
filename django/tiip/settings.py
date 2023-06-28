@@ -282,7 +282,7 @@ def generate_azure_users_url(user_params: list, top: int = 100) -> str:
     # Join parameters into a single string
     select_params = ','.join(user_params)
     # Add pagination
-    url = f'{MICROSOFT_GRAPH_USERS_URL}?$select={select_params}&$top={top}'
+    url = f'{MICROSOFT_GRAPH_USERS_URL}/delta?$select={select_params}&$top={top}'
     return url
 
 
