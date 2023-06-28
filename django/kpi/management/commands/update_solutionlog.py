@@ -6,10 +6,7 @@ class Command(BaseCommand):
     help = 'Updates solution log data for May and June 2023'
 
     def handle(self, *args, **options):
-        may_entries = SolutionLog.objects.filter(date__year=2023, date__month=5)
-        june_entries = SolutionLog.objects.filter(date__year=2023, date__month=6)
-
-        all_entries = may_entries | june_entries
+        all_entries = SolutionLog.objects.all()
 
         for entry in all_entries:
             data = entry.data
