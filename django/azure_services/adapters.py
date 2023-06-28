@@ -59,6 +59,10 @@ class AzureUserManagement:
                 response.raise_for_status()
                 # Parse response data
                 response_data = response.json()
+
+                # Log the entire response data
+                logger.info(f"Response Data: {response_data}")
+
                 # Extract users from response data
                 users_batch = response_data.get('value', [])
                 logger.info(
@@ -75,14 +79,22 @@ class AzureUserManagement:
                 total_skipped_users += len(skipped_users)
 
                 # If '@odata.nextLink' exists, set it as the next URL to fetch users
-                url = response_data.get('@odata.nextLink')
+                next_link = response_data.get('@odata.nextLink')
+                delta_link = response_data.get('@odata.deltaLink')
+
+                # Log nextLink and deltaLink separately
+                logger.info(f"@odata.nextLink: {next_link}")
+                logger.info(f"@odata.deltaLink: {delta_link}")
+
+                url = next_link
                 if url is None:
                     # If '@odata.nextLink' doesn't exist, use '@odata.deltaLink'
                     url = response_data.get('@odata.deltaLink')
                     if url:
-                        # Save deltaLink for subsequent use
+                        logger.info(f"DeltaLink from response: {url}")
                         self.save_delta_link(url)
-
+                    else:
+                        logger.info("No DeltaLink found in response.")
                 page_count += 1
                 retry_count = 0
             except requests.exceptions.RequestException as e:
@@ -346,6 +358,9 @@ class AzureUserManagement:
         Args:
             delta_link (str): The delta link to be saved.
         """
-        delta_link_obj, created = DeltaLink.objects.update_or_create(
-            id=1, defaults={'link': delta_link})
-        logger.info(f"Saved DeltaLink: {delta_link}, created: {created}")
+        try:
+            delta_link_obj, created = DeltaLink.objects.update_or_create(
+                id=1, defaults={'link': delta_link})
+            logger.info(f"Saved DeltaLink: {delta_link}, created: {created}")
+        except Exception as e:
+            logger.error(f"Error saving DeltaLink: {e}")
