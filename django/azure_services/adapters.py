@@ -51,7 +51,7 @@ class AzureUserManagement:
         total_skipped_users = 0
         # Fetch and process users in batches until either there are no more users to fetch
         # or the maximum number of users to process has been reached
-        while url and retry_count < 5 and (max_users is None or processed_user_count < max_users):
+        while retry_count < 5 and (max_users is None or processed_user_count < max_users):
             try:
                 # Make request to fetch users
                 response = requests.get(url, headers=headers)
@@ -71,14 +71,18 @@ class AzureUserManagement:
 
                 # Update totals
                 total_new_users += len(new_users)
-                # We extend the list now
                 total_updated_users.extend(updated_users)
                 total_skipped_users += len(skipped_users)
 
-                url = response_data.get('@odata.deltaLink', None)
-                if url:
-                    # Save deltaLink for subsequent use
-                    self.save_delta_link(url)
+                # If '@odata.nextLink' exists, set it as the next URL to fetch users
+                url = response_data.get('@odata.nextLink')
+                if url is None:
+                    # If '@odata.nextLink' doesn't exist, use '@odata.deltaLink'
+                    url = response_data.get('@odata.deltaLink')
+                    if url:
+                        # Save deltaLink for subsequent use
+                        self.save_delta_link(url)
+
                 page_count += 1
                 retry_count = 0
             except requests.exceptions.RequestException as e:
