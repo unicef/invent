@@ -53,14 +53,20 @@ class AzureUserManagement:
         # or the maximum number of users to process has been reached
         while url and retry_count < 5 and (max_users is None or processed_user_count < max_users):
             try:
+                logger.info(f"Making request to {url}")
                 # Make request to fetch users
                 response = requests.get(url, headers=headers)
                 # Raise exception if status code is not 200
                 response.raise_for_status()
                 # Parse response data
                 response_data = response.json()
+                logger.info(f"Response data: {response_data}")
                 # Extract users from response data
                 users_batch = response_data.get('value', [])
+                if url:
+                    logger.info(f"DeltaLink found: {url}")
+                else:
+                    logger.warning("No DeltaLink found in response data")
                 logger.info(
                     f'Fetched {len(users_batch)} users in page {page_count+1}')
                 processed_user_count += len(users_batch)
@@ -344,3 +350,4 @@ class AzureUserManagement:
         """
         delta_link_obj, created = DeltaLink.objects.update_or_create(
             id=1, defaults={'link': delta_link})
+        logger.info(f"Saved DeltaLink: {delta_link}, created: {created}")
