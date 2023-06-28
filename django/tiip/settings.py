@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'azure',
+    'azure_services',
     'rest_auth',
     'rest_auth.registration',
     'rest_framework',
@@ -401,3 +401,14 @@ EMAIL_VALIDATOR_REGEX = r'{}'.format(
 # Import the setting_azure settings only in the Azure environments
 if ENVIRONMENT in ["dev", "tst", "uat", "prd"]:
     from .settings_deployed import *
+
+# Azure Monitor OpenTelemetry
+if ENVIRONMENT in ['dev']:
+    from azure.monitor.opentelemetry import configure_azure_monitor
+
+    # Fetch the connection string from the environment variable
+    APPLICATIONINSIGHTS_CONNECTION_STRING = os.environ.get(
+        'APPLICATIONINSIGHTS_CONNECTION_STRING', default='')
+
+    if APPLICATIONINSIGHTS_CONNECTION_STRING:  # Ensure the connection string exists
+        configure_azure_monitor(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING)
