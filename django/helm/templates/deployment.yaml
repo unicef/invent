@@ -75,6 +75,8 @@ spec:
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
+            - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+              value: {{ .Values.applicationsightsConnectionSrting }}
             {{- if not (eq .Values.environment "local") }}
             - name: SECRET_KEY
               valueFrom:

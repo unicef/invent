@@ -1,42 +1,63 @@
 <template>
   <div class="LandingInitiativesTable">
+    <div class="TopSwitchBar">
+      <el-switch
+        v-model="board"
+        :active-text="$gettext('Phases board') | translate"
+        :inactive-text="$gettext('Stages board') | translate"
+        class="Switch"
+      >
+      </el-switch>
+    </div>
     <el-table
       :data="initiativesTableData"
       :highlight-current-row="false"
-      max-height="600"
+      max-height="580"
       :lazy="true"
+      stripe
       :empty-text="$gettext('No initiatives available') | translate"
     >
-      <el-table-column v-for="{ name, id } in ommitedPhases" :prop="name" :key="id" min-width="180">
+      <el-table-column
+        v-for="({ name, id, count }, index) in columns"
+        :prop="name"
+        :key="id"
+        min-width="180"
+        :fixed="index === 0 ? true : false"
+      >
         <template slot="header" slot-scope="scope">
           <div id="header">
             <p id="header-title">{{ $gettext(name) | translate }}</p>
-            <p id="header-count">{{ initiativesTableData[0][id].length }}</p>
+            <p id="header-count">{{ count }}</p>
           </div>
         </template>
         <template slot-scope="scope">
-          <nuxt-link
-            :to="
-              localePath({
-                name: 'organisation-initiatives-id-published',
-                params: { ...$route.params, id: card.id },
-              })
-            "
-            v-for="card in scope.row[id]"
-            :key="card.id"
-            :class="card.stale ? 'link-card stale' : 'link-card'"
-          >
-            <div class="list-group-card">
-              <div class="icon-div">
-                <i class="el-icon-time"></i>
+          <div v-if="index === 0">
+            <p>{{ scope.row.sector.sector_name }}</p>
+          </div>
+          <div v-else>
+            <nuxt-link
+              :to="
+                localePath({
+                  name: 'organisation-initiatives-id-published',
+                  params: { ...$route.params, id: card.id },
+                })
+              "
+              v-for="card in scope.row[id]"
+              :key="card.id"
+              :class="card.stale ? 'link-card stale' : 'link-card'"
+            >
+              <div class="list-group-card">
+                <div class="icon-div">
+                  <i class="el-icon-time"></i>
+                </div>
+                <div class="list-group-card-data">
+                  <p class="initiative-office">{{ card.title }}</p>
+                  <p class="initiative-name">{{ card.name }}</p>
+                  <p class="initiative-date">{{ `${$gettext('Since')} ${card.lastUpdated}` }}</p>
+                </div>
               </div>
-              <div class="list-group-card-data">
-                <p class="initiative-office">{{ card.unicefOffice }}</p>
-                <p class="initiative-name">{{ card.name }}</p>
-                <p class="initiative-date">{{ `${$gettext('Since')} ${card.lastUpdated}` }}</p>
-              </div>
-            </div>
-          </nuxt-link>
+            </nuxt-link>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -57,6 +78,7 @@ export default {
     return {
       daysStale: 180,
       phasesOmit: ['Handover or Complete', 'Discontinued'],
+      board: true,
     }
   },
   computed: {
@@ -64,64 +86,167 @@ export default {
       phases: 'projects/getStages',
       landingProjectsList: 'landing/getCountryProjectsList',
       unicefOffice: 'offices/getOffices',
+      sectors: 'projects/getSectors',
+      phasesStages: 'projects/getPhasesStages',
+      unicef_regions: 'system/getUnicefRegions',
     }),
-    ommitedPhases() {
-      return this.phases
+    columns() {
+      return this.board ? this.omitedPhasesCount : this.stagesCount
+    },
+    stagesCount() {
+      const columns = this.phasesStages.map((phst) => ({ name: phst.stage_label, id: phst.stage_number }))
+      const colsWithCount = columns.map((col) => ({
+        count: this.landingProjectsList.filter((project) => this.getStage(project.current_phase) === col.id).length,
+        ...col,
+      }))
+      return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
+    },
+    omitedPhasesCount() {
+      const columns = this.phases
         .filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
         .sort((a, b) => a.order - b.order)
+      const colsWithCount = columns.map((col) => ({
+        count: this.landingProjectsList.filter((project) => project.current_phase === col.id).length,
+        ...col,
+      }))
+      return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
+    },
+    includedPhasesInitiatives() {
+      const phaseIdsOmit = this.phasesOmit.map((phaseName) => this.phases.find((phase) => phase.name === phaseName).id)
+      return this.landingProjectsList.filter(
+        (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
+      )
+    },
+    sortedSectors() {
+      return this.sectors.sort((a, b) => a.name.localeCompare(b.name))
     },
     initiativesTableData() {
-      const dataObj = {}
-      this.phases.map((phase) => {
-        dataObj[phase.id] = []
-      })
-      const initiatives = this.landingProjectsList
+      return this.board ? this.initiativesPhasesTableData : this.initiativesStagesTableData
+    },
+    initiativesStagesTableData() {
+      let tableData = []
+      /* Creates each table row per sector**/
+      this.sortedSectors.map((sector) => {
+        const dataObj = {}
+        dataObj['sector'] = { sector_name: sector.name }
+        this.phasesStages.map((stage) => {
+          dataObj[stage.stage_number] = []
+        })
+        /* Filters the relative initiatives **/
+        const sectorInitiatives = this.landingProjectsList.filter((project) =>
+          project.unicef_leading_sector.some((lsector) => lsector === sector.id)
+        )
+        sectorInitiatives.map((initiative) => {
+          const lastUpdated = this.calcLastUpdated(initiative)
 
-      initiatives.map((initiative) => {
-        let lastUpdated
-        if (initiative.stages && initiative.stages.length > 0) {
-          /*
+          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+
+          /*Create the card and add it to tableData **/
+          const regionId = this.unicefOffice.find((office) => office.id === initiative.country_office).region
+          const regionName = this.unicef_regions.find((region) => region.id === regionId).name
+          dataObj[`${this.getStage(initiative.current_phase)}`] = [
+            ...dataObj[`${this.getStage(initiative.current_phase)}`],
+            {
+              ...initiative,
+              lastUpdated: lastUpdated,
+              title: regionName,
+              stale: isStale,
+            },
+          ]
+        })
+
+        tableData.push(this.sortCards(dataObj))
+      })
+
+      return this.removeEmptyRows(tableData)
+    },
+    initiativesPhasesTableData() {
+      let tableData = []
+
+      const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
+      /* Creates each table row per sector**/
+      this.sortedSectors.map((sector) => {
+        const dataObj = {}
+        dataObj['sector'] = { sector_name: sector.name }
+        omPhases.map((phase) => {
+          dataObj[phase.id] = []
+        })
+        /* Filters the relative initiatives **/
+        const sectorInitiatives = this.includedPhasesInitiatives.filter((initiative) =>
+          initiative.unicef_leading_sector.some((lsector) => lsector === sector.id)
+        )
+        sectorInitiatives.map((initiative) => {
+          const lastUpdated = this.calcLastUpdated(initiative)
+
+          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+
+          /*Create the card and add it to tableData **/
+          dataObj[`${initiative.current_phase}`] = [
+            ...dataObj[`${initiative.current_phase}`],
+            {
+              ...initiative,
+              lastUpdated: lastUpdated,
+              title: this.unicefOffice.find((office) => office.id === initiative.country_office).name.split(':')[1],
+              stale: isStale,
+            },
+          ]
+        })
+
+        tableData.push(this.sortCards(dataObj))
+      })
+
+      return this.removeEmptyRows(tableData)
+    },
+  },
+  methods: {
+    getStage(phase) {
+      return this.phasesStages.find((stage) => stage.phases.some((stphase) => stphase.phase_number === phase))
+        .stage_number
+    },
+    calcLastUpdated(initiative) {
+      if (initiative.stages && initiative.stages.length > 0) {
+        /*
           Some initiatives have equal current_phase as the last phase in stages field
           Some other initiatives have equal current_phase -1 as the last phase in stages field
           Added also 
            **/
-          const prevPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase - 1)
-          const lastPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase)
-          if (lastPhase) {
-            lastUpdated = lastPhase.date
-          } else if (prevPhase) {
-            lastUpdated = prevPhase.date
-          }
-        } else {
-          lastUpdated = initiative.start_date ? format(initiative.start_date, 'YYYY-MM-DD') : new Date()
+        const prevPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase - 1)
+        const lastPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase)
+        if (lastPhase) {
+          return lastPhase.date
+        } else if (prevPhase) {
+          return prevPhase.date
         }
-
-        let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
-
-        dataObj[`${initiative.current_phase}`] = [
-          ...dataObj[`${initiative.current_phase}`],
-          {
-            ...initiative,
-            lastUpdated: lastUpdated,
-            unicefOffice: this.unicefOffice
-              .find((office) => office.id === initiative.country_office)
-              .name.split(':')[1],
-            stale: isStale,
-          },
-        ]
-      })
-
-      for (const key in dataObj) {
-        const staleInit = dataObj[key]
-          .filter((initiative) => initiative.stale === true)
-          .sort((a, b) => a.name.localeCompare(b.name))
-        const notStateInit = dataObj[key]
-          .filter((initiative) => initiative.stale === false)
-          .sort((a, b) => a.name.localeCompare(b.name))
-        dataObj[key] = [...staleInit, ...notStateInit]
+      } else {
+        return initiative.start_date ? format(initiative.start_date, 'YYYY-MM-DD') : new Date()
       }
-
-      return initiatives.length > 0 ? [dataObj] : null
+    },
+    sortCards(dataObj) {
+      for (const key in dataObj) {
+        if (key !== 'sector') {
+          const staleInit = dataObj[key]
+            .filter((initiative) => initiative.stale === true)
+            .sort((a, b) => a.name.localeCompare(b.name))
+          const notStateInit = dataObj[key]
+            .filter((initiative) => initiative.stale === false)
+            .sort((a, b) => a.name.localeCompare(b.name))
+          dataObj[key] = [...staleInit, ...notStateInit]
+        }
+      }
+      return dataObj
+    },
+    removeEmptyRows(data) {
+      return data.filter((row) => {
+        let keep = false
+        for (const key in row) {
+          if (key !== 'sector') {
+            if (row[key].length > 0) {
+              keep = true
+            }
+          }
+        }
+        return keep
+      })
     },
   },
 }
@@ -132,6 +257,19 @@ export default {
 @import '~assets/style/mixins.less';
 .LandingInitiativesTable {
   margin: 10px 0;
+
+  .TopSwitchBar {
+    background-color: @colorGrayLight;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+
+    .Switch {
+      padding-right: 24px;
+      padding-top: 4px;
+    }
+  }
 
   .el-table--enable-row-hover .el-table__body tr:hover > td {
     background-color: unset;
@@ -215,7 +353,6 @@ export default {
       .icon-div {
         position: absolute;
         right: 24px;
-        z-index: 10;
 
         .el-icon-time {
           display: none;

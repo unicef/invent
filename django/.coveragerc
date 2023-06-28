@@ -1,2 +1,2 @@
 [run]
-omit = */*virtualenvs/*, */migrations/*, */settings.py, */__init__.py, test_user_generator.py, */*venv/*, azure/*, scripts/*
+omit = */*virtualenvs/*, */migrations/*, */settings.py, */__init__.py, test_user_generator.py, */*venv/*, azure_services/*, scripts/*

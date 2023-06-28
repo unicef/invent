@@ -1,6 +1,10 @@
 <template>
   <div id="activity-and-reach" class="GeneralSolution">
-    <collapsible-solution-card ref="collapsible" key="general" :title="$gettext('Activity and Reach') | translate">
+    <collapsible-solution-card
+      ref="collapsible"
+      key="activity-reach"
+      :title="$gettext('Activity and Reach') | translate"
+    >
       <el-row>
         <simple-field
           :header="$gettext('Global reach of this solution') | translate"
