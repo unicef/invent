@@ -329,11 +329,6 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'azure.monitor.opentelemetry': {
-            'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
     },
 }
 
