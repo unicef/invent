@@ -25,6 +25,21 @@ def update_solution_log_task(current_date=None):
     portfolios = PortfolioKPISerializer(Portfolio.objects.all(), many=True)
     solutions = SolutionKPISerializer(Solution.objects.all(), many=True)
 
+    #making sure that solutions['data']['problem_statements'] and solutions['data']['portfolios'] 
+    #are both lists containing unique ids instead of the whole object
+    for solution in solutions.data:
+        if "problem_statements" in solution:
+            #checking if the item is a dictionary
+            if isinstance(solution["problem_statements"][0], dict):
+                solution["problem_statements"] = [x["id"] for x in solution["problem_statements"]]
+            #keeping unique ids only
+            solution["problem_statements"] = list(set(solution["problem_statements"]))
+
+        if "portfolios" in solution:
+            if isinstance(solution["portfolios"][0], dict):
+                solution["portfolios"] = [x["id"] for x in solution["portfolios"]]
+            solution["portfolios"] = list(set(solution["portfolios"]))
+
     log_entry.data = dict(portfolios=portfolios.data, solutions=solutions.data)
     log_entry.save()
 
