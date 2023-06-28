@@ -6,10 +6,9 @@ from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import transaction, DatabaseError
-import psycopg2
-
 
 from country.models import Country
+from project.models import DeltaLink
 from user.models import UserProfile
 
 # Initialize the logger at the module level
@@ -310,79 +309,38 @@ class AzureUserManagement:
 
     def get_last_delta_link(self):
         """
-        Retrieves the last saved delta link from the database.
+        This method fetches the most recently updated delta link from the database.
 
-        This method connects to the database, executes a query to fetch the most
-        recently updated delta link, and returns it.
+        A delta link is a URL provided by Microsoft's Azure Active Directory 
+        that points to the changes since the last request for users data. 
+        This method tries to fetch the delta link object that was updated last 
+        (i.e., the latest one) and returns its link.
+
+        If no delta link is found in the database, this method returns None.
 
         Returns:
-            str: The last saved delta link, or None if no delta link was found.
+            str: The most recently updated delta link, or None if not found.
         """
-        # Get the database configuration from Django settings
-        db_config = settings.DATABASES['default']
-
         try:
-            # Connect to the database
-            conn = psycopg2.connect(
-                dbname=db_config['NAME'],
-                user=db_config['USER'],
-                password=db_config['PASSWORD'],
-                host=db_config['HOST']
-            )
-
-            # Execute the query
-            cur = conn.cursor()
-            cur.execute(
-                "SELECT link FROM delta_link ORDER BY updated_at DESC LIMIT 1")
-
-            # Fetch the result of the query
-            row = cur.fetchone()
-
-            # Close the database connection
-            conn.close()
-
-            # Return the fetched delta link or None if no link was found
-            return row[0] if row else None
-
-        except psycopg2.DatabaseError as e:
-            print(f"Error: {e}")
+            delta_link = DeltaLink.objects.latest('updated_at')
+            return delta_link.link
+        except DeltaLink.DoesNotExist:
             return None
 
     def save_delta_link(self, delta_link):
         """
-        Saves the given delta link to the database.
+        This method saves a given delta link to the database. 
 
-        This method connects to the database and executes a query to save the delta link. 
-        If a link already exists, it updates the link and sets the updated_at timestamp to the current time.
+        If a delta link object with id=1 already exists in the database, it updates 
+        the link of this object with the given delta link. 
+        If no such object exists, it creates a new one with id=1 and the given delta link.
 
-        Parameters:
-            delta_link (str): The delta link to save.
+        Note: This method assumes that you only want to keep one DeltaLink object in your database.
+        It always tries to update or create the object with id=1. If you want to keep more than 
+        one DeltaLink object in your database, you will need to adjust your code accordingly.
+
+        Args:
+            delta_link (str): The delta link to be saved.
         """
-        # Get the database configuration from Django settings
-        db_config = settings.DATABASES['default']
-
-        try:
-            # Connect to the database
-            conn = psycopg2.connect(
-                dbname=db_config['NAME'],
-                user=db_config['USER'],
-                password=db_config['PASSWORD'],
-                host=db_config['HOST']
-            )
-
-            # Execute the query
-            cur = conn.cursor()
-            cur.execute(f"""
-                INSERT INTO delta_link (link) 
-                VALUES ('{delta_link}')
-                ON CONFLICT (id) 
-                DO UPDATE SET link = '{delta_link}', updated_at = NOW()
-                WHERE delta_link.id = 1
-            """)
-
-            # Commit the changes and close the connection
-            conn.commit()
-            conn.close()
-
-        except psycopg2.DatabaseError as e:
-            print(f"Error: {e}")
+        delta_link_obj, created = DeltaLink.objects.update_or_create(
+            id=1, defaults={'link': delta_link})
