@@ -3,8 +3,6 @@ from kpi.models import SolutionLog
 
 
 class Command(BaseCommand):
-    '''Please run 'python manage.py update_solutionlog'
-       To be run only once in each environment. '''
     help = 'Updates solution log data for May and June 2023'
 
     def handle(self, *args, **options):
