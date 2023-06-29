@@ -60,9 +60,6 @@ class AzureUserManagement:
                 # Parse response data
                 response_data = response.json()
 
-                # Log the entire response data
-                logger.info(f"Response Data: {response_data}")
-
                 # Extract users from response data
                 users_batch = response_data.get('value', [])
                 logger.info(
@@ -80,21 +77,13 @@ class AzureUserManagement:
 
                 # If '@odata.nextLink' exists, set it as the next URL to fetch users
                 next_link = response_data.get('@odata.nextLink')
-                delta_link = response_data.get('@odata.deltaLink')
 
-                # Log nextLink and deltaLink separately
-                logger.info(f"@odata.nextLink: {next_link}")
-                logger.info(f"@odata.deltaLink: {delta_link}")
-
-                url = next_link
-                if url is None:
+                if next_link is None:
                     # If '@odata.nextLink' doesn't exist, use '@odata.deltaLink'
-                    url = response_data.get('@odata.deltaLink')
-                    if url:
-                        logger.info(f"DeltaLink from response: {url}")
-                        self.save_delta_link(url)
-                    else:
-                        logger.info("No DeltaLink found in response.")
+                    delta_link = response_data.get('@odata.deltaLink')
+                    if delta_link:
+                        self.save_delta_link(delta_link)
+                        break
                 page_count += 1
                 retry_count = 0
             except requests.exceptions.RequestException as e:
