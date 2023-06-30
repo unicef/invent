@@ -1,4 +1,4 @@
-FROM node:12.21.0-alpine
+FROM node:14.21.0-alpine
 # This is to allow yarn to install from github
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh

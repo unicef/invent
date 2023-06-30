@@ -39,15 +39,9 @@ export default {
       })
     }
     if (store.getters['dashboard/getDashboardType'] === 'donor') {
-      await store.dispatch(
-        'system/loadDonorDetails',
-        store.getters['dashboard/getDashboardId']
-      )
+      await store.dispatch('system/loadDonorDetails', store.getters['dashboard/getDashboardId'])
     } else if (store.getters['dashboard/getDashboardType'] === 'country') {
-      await store.dispatch(
-        'countries/loadCountryDetails',
-        store.getters['dashboard/getDashboardId']
-      )
+      await store.dispatch('countries/loadCountryDetails', store.getters['dashboard/getDashboardId'])
     }
   },
   computed: {
@@ -73,7 +67,7 @@ export default {
         this.$router.replace({ ...this.$route, query })
         this.load()
       }
-    }, 350),
+    }, 100),
     async load() {
       this.$nuxt.$loading.start()
       await this.loadProjectList()
