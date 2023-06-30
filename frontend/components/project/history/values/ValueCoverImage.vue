@@ -3,7 +3,7 @@
     <div class="field">{{ index + 1 }}) {{ changes.fieldTitle }}</div>
     <div v-for="(value, idx) in changes.values" :key="idx" :class="`value ${value.changeType}`">
       <i :class="value.changeTypeIcon"></i>
-      <img v-if="value.imageUrl" :src="value.imageUrl" class="cover" />
+      <img v-if="value.imageUrl" :src="value.imageUrl" class="cover" loading="lazy" />
       <a v-if="value.imageUrl" :href="value.imageUrl" target="_blank">{{ value.imageUrl }}</a>
       <span v-else>N/A</span>
     </div>

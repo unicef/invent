@@ -493,10 +493,6 @@ export default {
         return { added, removed }
       } catch (error) {
         console.error('🚀 ~ parseChanges ~ error', error)
-        this.$sentry.captureMessage('Field parsing error', {
-          level: 'error',
-          extra: change,
-        })
       }
     },
     parseDate(value) {

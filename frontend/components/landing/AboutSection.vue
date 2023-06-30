@@ -8,7 +8,7 @@
     </div>
     <div class="partners">
       <div v-for="partner in partners" :key="partner.name">
-        <img :src="partner.logo" :alt="partner.name" />
+        <img :src="partner.logo" :alt="partner.name" loading="lazy" />
       </div>
     </div>
   </div>

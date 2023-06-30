@@ -4,7 +4,7 @@
       :class="`Avatar ${noBorder}`"
       :style="`color: ${colors.text}; background-color: ${colors.background}; border: ${colors.border};`"
     >
-      <img v-if="profileImage" :src="profileImage" />
+      <img v-if="profileImage" :src="profileImage" alt="Profile image" loading="lazy" />
       <template v-else-if="profileIcon">
         <i :class="`icon ${profileIcon}`"></i>
       </template>

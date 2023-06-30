@@ -59,10 +59,7 @@ export const actions = {
     return data
   },
 
-  async doSignup(
-    { commit, dispatch },
-    { account_type, password1, password2, email }
-  ) {
+  async doSignup({ commit, dispatch }, { account_type, password1, password2, email }) {
     const { data } = await this.$axios.post('/api/rest-auth/registration/', {
       account_type,
       password1,
@@ -76,10 +73,7 @@ export const actions = {
     await dispatch('system/loadOrganisations', {}, { root: true })
   },
 
-  async dorResetPassword(
-    { commit, dispatch },
-    { token, password1, password2 }
-  ) {
+  async dorResetPassword({ commit, dispatch }, { token, password1, password2 }) {
     await this.$axios.post(
       '/api/rest-auth/password/reset-password', // TODO
       { token, password1, password2 }
@@ -96,12 +90,11 @@ export const actions = {
     deleteToken()
   },
 
-  async loadProfile({ commit, getters }, profileId) {
+  async loadProfile({ state, commit, getters }, profileId) {
+    if (state.profile && state.profile.id === profileId) return
     try {
       if (getters.getToken && !getters.getProfile) {
-        const { data } = await this.$axios.get(
-          `/api/userprofiles/${profileId}/`
-        )
+        const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
         commit('SET_PROFILE', data)
       }
     } catch (e) {
@@ -112,9 +105,7 @@ export const actions = {
   async refreshProfile({ commit, getters }) {
     try {
       if (getters.getToken && getters.getProfile && getters.getProfile.id) {
-        const { data } = await this.$axios.get(
-          `/api/userprofiles/${getters.getProfile.id}/`
-        )
+        const { data } = await this.$axios.get(`/api/userprofiles/${getters.getProfile.id}/`)
         commit('SET_PROFILE', data)
       }
     } catch (e) {
@@ -124,17 +115,10 @@ export const actions = {
 
   async updateUserProfile({ commit, dispatch }, profile) {
     if (isNaN(profile.organisation)) {
-      const organisation = await dispatch(
-        'system/addOrganisation',
-        profile.organisation,
-        { root: true }
-      )
+      const organisation = await dispatch('system/addOrganisation', profile.organisation, { root: true })
       profile.organisation = organisation.id
     }
-    const { data } = await this.$axios.put(
-      `/api/userprofiles/${profile.id}/`,
-      profile
-    )
+    const { data } = await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile)
     data.email = data.email || data.user_email
     commit('SET_PROFILE', data)
   },
@@ -148,12 +132,8 @@ export const actions = {
     const user = getters.getProfile.id
     const originalTeam = getters.getProfile.member
     const originalViewer = getters.getProfile.viewer
-    const member = team.includes(user)
-      ? union(originalTeam, [id])
-      : originalTeam.filter((o) => o !== id)
-    const viewer = viewers.includes(user)
-      ? union(originalViewer, [id])
-      : originalViewer.filter((o) => o !== id)
+    const member = team.includes(user) ? union(originalTeam, [id]) : originalTeam.filter((o) => o !== id)
+    const viewer = viewers.includes(user) ? union(originalViewer, [id]) : originalViewer.filter((o) => o !== id)
     commit('UPDATE_TEAM_VIEWER', { member, viewer })
     return team.includes(user) || viewers.includes(user)
   },

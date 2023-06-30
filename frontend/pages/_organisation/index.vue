@@ -37,18 +37,18 @@ export default {
     CountryFlagInfo,
   },
   async fetch({ store }) {
-    await store.dispatch('landing/resetSearch')
-    // await store.dispatch('landing/loadCountryData', 'MY')
+    store.dispatch('landing/resetSearch')
+
     await store.dispatch('dashboard/setDashboardSection', 'map')
 
     await Promise.all([
       store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('countries/loadMapData'),
+
       store.dispatch('offices/loadOffices'),
       store.dispatch('projects/loadLandingProjects'),
       store.dispatch('landing/loadNewsFeed'),
+      store.dispatch('dashboard/loadProjectsMap'),
     ])
-    await store.dispatch('dashboard/loadProjectsMap')
   },
   computed: {
     ...mapGetters({

@@ -3,7 +3,7 @@
     <el-row type="flex">
       <el-col>
         <div class="SquareWrapper">
-          <img src="~assets/img/icons-all.svg" />
+          <img src="~assets/img/icons-all.svg" loading="lazy" />
         </div>
       </el-col>
     </el-row>

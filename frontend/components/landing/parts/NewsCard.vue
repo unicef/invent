@@ -1,6 +1,6 @@
 <template>
   <a :href="news.link" target="_blank" class="NewsCard" :class="{ noImg: !news.thumbnail }">
-    <img v-if="news.thumbnail" :src="news.thumbnail" :alt="news.alt_text" />
+    <img v-if="news.thumbnail" :src="news.thumbnail" :alt="news.alt_text" loading="lazy" />
     <div class="content">
       <div class="title">
         {{ news.title }}
