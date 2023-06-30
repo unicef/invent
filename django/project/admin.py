@@ -10,7 +10,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     UNICEFGoal, UNICEFResultArea, UNICEFCapabilityLevel, UNICEFCapabilityCategory, \
     UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, HardwarePlatform, NontechPlatform, \
     PlatformFunction, Portfolio, InnovationCategory, CPD, ProjectImportV2, InnovationWay, ISC, ApprovalState, Stage, \
-    Phase, ProjectVersion, Solution, CountrySolution
+    Phase, ProjectVersion, Solution, CountrySolution, UserProfile
 from country.models import CountryOffice
 from core.utils import make_admin_list
 
@@ -100,6 +100,7 @@ class ApprovalStateAdmin(AllObjectsAdmin):
     list_display = [
         'name', 'state', 'added_by'
     ]
+    autocomplete_fields = ['added_by']
     ordering = search_fields = ['name']
     list_filter = [ApprovalStateFilter]
     actions = (approve, decline)
@@ -410,6 +411,11 @@ class SolutionAdmin(ExportActionMixin, admin.ModelAdmin):
         countries_with_people_reached = ['{} - {} - {}'.format(cwd.country, CountryOffice.REGIONS[cwd.region][1],
                                                                cwd.people_reached) for cwd in countries_with_data]
         return ', '.join(countries_with_people_reached)
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    search_fields = ['name']
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
