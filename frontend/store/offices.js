@@ -27,7 +27,8 @@ export const mutations = {
 }
 
 export const actions = {
-  async loadOffices({ commit }) {
+  async loadOffices({ state, commit }) {
+    if (state.offices.length > 0) return
     const data = await utilities.handleRequest(this.$axios)
     utilities.sortArr(data instanceof Error ? [] : data)
     commit('SET_OFFICES', data instanceof Error ? [] : data)

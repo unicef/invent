@@ -1,7 +1,5 @@
 <template>
-  <div
-    :class="['vue-django-feedback', 'main', 'container', 'right', { opened }]"
-  >
+  <div :class="['vue-django-feedback', 'main', 'container', 'right', { opened }]">
     <button
       class="feedback-button"
       @click="togglePopUp()"
@@ -20,8 +18,7 @@
       <div>
         <div>
           <slot name="hint-text">
-            Click here if you are experiencing any issues or have suggestion for
-            improving the website!
+            Click here if you are experiencing any issues or have suggestion for improving the website!
           </slot>
         </div>
       </div>
@@ -40,12 +37,7 @@
       <div v-show="!submitted" class="form-container">
         <div v-show="showUserBlock" class="user-block">
           <div class="avatar">
-            <img
-              v-if="!showAvatarPlaceholder"
-              :src="avatarUrl"
-              class="avatar-img"
-              alt="avatar"
-            />
+            <img v-if="!showAvatarPlaceholder" :src="avatarUrl" class="avatar-img" alt="avatar" loading="lazy" />
             <div v-show="showAvatarPlaceholder" class="avatar-placeholder">
               <i class="icon icon-avatar" />
             </div>
@@ -60,24 +52,11 @@
           </div>
         </div>
 
-        <div
-          v-if="!showUserBlock"
-          :class="[
-            'input-container',
-            'input',
-            'name',
-            { danger: errors.has('name') },
-          ]"
-        >
+        <div v-if="!showUserBlock" :class="['input-container', 'input', 'name', { danger: errors.has('name') }]">
           <label>
             {{ nameLabel }}
           </label>
-          <input
-            v-model="form.name"
-            v-validate="{ required: true }"
-            name="name"
-            type="text"
-          />
+          <input v-model="form.name" v-validate="{ required: true }" name="name" type="text" />
           <div class="feedback">
             <div class="errors">
               <span v-show="errors.has('name')" class="error danger">
@@ -87,24 +66,11 @@
           </div>
         </div>
 
-        <div
-          v-if="!showUserBlock"
-          :class="[
-            'input-container',
-            'input',
-            'email',
-            { danger: errors.has('email') },
-          ]"
-        >
+        <div v-if="!showUserBlock" :class="['input-container', 'input', 'email', { danger: errors.has('email') }]">
           <label>
             {{ emailLabel }}
           </label>
-          <input
-            v-model="form.email"
-            v-validate="{ required: true, email: true }"
-            name="email"
-            type="email"
-          />
+          <input v-model="form.email" v-validate="{ required: true, email: true }" name="email" type="email" />
           <div class="feedback">
             <div class="errors">
               <span v-show="errors.has('email')" class="error danger">
@@ -114,14 +80,7 @@
           </div>
         </div>
 
-        <div
-          :class="[
-            'input-container',
-            'input',
-            'subject',
-            { danger: errors.has('subject') },
-          ]"
-        >
+        <div :class="['input-container', 'input', 'subject', { danger: errors.has('subject') }]">
           <label>
             {{ subjectLabel }}
           </label>
@@ -137,20 +96,11 @@
                 {{ errors.first('subject') }}
               </span>
             </div>
-            <div class="char-count">
-              {{ form.subject.length }} / {{ limit.subjectLimit }}
-            </div>
+            <div class="char-count">{{ form.subject.length }} / {{ limit.subjectLimit }}</div>
           </div>
         </div>
 
-        <div
-          :class="[
-            'input-container',
-            'textarea',
-            'message',
-            { danger: errors.has('message') },
-          ]"
-        >
+        <div :class="['input-container', 'textarea', 'message', { danger: errors.has('message') }]">
           <label>
             {{ messageLabel }}
           </label>
@@ -166,9 +116,7 @@
                 {{ errors.first('message') }}
               </span>
             </div>
-            <div class="char-count">
-              {{ form.message.length }} / {{ limit.messageLimit }}
-            </div>
+            <div class="char-count">{{ form.message.length }} / {{ limit.messageLimit }}</div>
           </div>
         </div>
       </div>
@@ -192,10 +140,7 @@
           <slot name="success-header"> Thank you! </slot>
         </h4>
         <p>
-          <slot name="success-message">
-            Your message has been successfully sent! We will be back to you
-            soon!
-          </slot>
+          <slot name="success-message"> Your message has been successfully sent! We will be back to you soon! </slot>
         </p>
       </div>
 
@@ -204,9 +149,7 @@
           <slot name="error-header"> Sorry </slot>
         </h4>
         <p>
-          <slot name="error-message">
-            There was a problem processing your ticket, please try again
-          </slot>
+          <slot name="error-message"> There was a problem processing your ticket, please try again </slot>
         </p>
       </div>
     </div>

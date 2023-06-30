@@ -198,16 +198,6 @@ export default {
       }
     },
     async unCaughtErrorHandler(errors) {
-      if (this.$sentry) {
-        this.$sentry.captureMessage('Un-caught validation error in project page', {
-          level: 'error',
-          extra: {
-            apiErrors: this.apiErrors,
-            errors,
-          },
-        })
-      }
-
       try {
         await this.$confirm(
           this.$gettext('There was an un-caught validation error an automatic report has been submitted'),
