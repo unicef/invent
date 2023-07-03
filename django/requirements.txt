@@ -33,7 +33,6 @@ django-cors-headers==4.1.0
 django-extensions==2.2.5
 django-modeltranslation==0.13-beta1
 django-redis==4.9.0
-django-rest-auth==0.9.5
 django-rosetta==0.8.1
 django-simplefeedback==0.9
 django-simple-history==2.4.0
