@@ -29,7 +29,7 @@ urlpatterns = [
     url(r"^api/", include("project.urls")),
     url(r"^api/", include("country.urls")),
     url(r"^api/", include("search.urls")),
-    url(r"^api/", include("simple-feedback.urls")),
+    url(r"^api/", include("simple_feedback.urls")),
     url(r"^api/kpi/", include("kpi.urls")),
     url(r'^translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
     url(r'^translation/', include('rosetta.urls')),

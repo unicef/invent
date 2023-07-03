@@ -87,7 +87,7 @@ INSTALLED_APPS = [
     'search',
     'scheduler',
     'kpi',
-    'simple-feedback',
+    'tiip.apps.SimpleFeedbackConfig', # includes the simple-feedback module
     "dj_anonymizer",
     'import_export',
     'health_check',
