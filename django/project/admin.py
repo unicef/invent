@@ -18,7 +18,7 @@ from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter,
     RegionFilter
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
-import scheduler.celery # noqa
+import scheduler.celery  # noqa
 
 from import_export.admin import ExportActionMixin
 from import_export_celery.admin_actions import create_export_job_action
@@ -175,14 +175,16 @@ class ProjectVersionInline(admin.TabularInline):
 
 
 class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
-    create_export_job_action.short_description = _("Generate export in the background")
+    create_export_job_action.short_description = _(
+        "Generate export in the background")
     actions = (create_export_job_action,)
     list_display = ['__str__', 'modified', 'get_country', 'get_team', 'get_published', 'is_active', 'versions',
                     'featured', 'featured_rank']
     list_filter = ('featured', IsPublishedFilter, UserFilter, OverViewFilter, DescriptionFilter,
                    RegionFilter, CountryFilter)
 
-    readonly_fields = ['name', 'team', 'viewers', 'link', 'created', 'modified', 'data', 'draft', 'versions_detailed']
+    readonly_fields = ['name', 'team', 'viewers', 'link',
+                       'created', 'modified', 'data', 'draft', 'versions_detailed']
     fields = ['is_active', 'featured', 'featured_rank'] + readonly_fields
     search_fields = ['name']
     resource_class = ProjectResource
@@ -219,7 +221,8 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
         prev_version = None
         for version in ProjectVersion.objects.filter(project=obj):
             if prev_version is None:
-                results_list.append(f'{version.version} - {version.created} - Initial version')
+                results_list.append(
+                    f'{version.version} - {version.created} - Initial version')
             else:
                 status_change = project_status_change(prev_version, version)
                 results_list.append(
@@ -253,7 +256,8 @@ class PortfolioForm(forms.ModelForm):
         model = Portfolio
         fields = ['name', 'description', 'status', 'is_active',
                   'managers', 'icon', 'innovation_hub', 'landscape_review', 'investment_to_date']
-        labels = {'investment_to_date': 'Cumulative investment.', 'landscape_review': 'Completed landscape review'}
+        labels = {'investment_to_date': 'Cumulative investment.',
+                  'landscape_review': 'Completed landscape review'}
         widgets = {'innovation_hub': forms.CheckboxInput,
                    'icon': forms.Select(choices=[(1, 'education'),
                                                  (2, 'nutrition'),
@@ -295,6 +299,7 @@ class PortfolioAdmin(ExportActionMixin, AllObjectsAdmin):
                     'created', 'icon', 'managers_list', 'is_active', 'innovation_hub', 'investment_to_date']
     inlines = [ProblemStatementsInline]
     form = PortfolioForm
+    autocomplete_fields = ['managers']
     filter_horizontal = ['managers']
 
     def managers_list(self, obj):
@@ -330,7 +335,8 @@ class CapabilitySubCategoryInline(ViewOnlyInlineMixin, admin.TabularInline):
 
 class UNICEFGoalAdmin(admin.ModelAdmin):
     ordering = search_fields = ['name']
-    inlines = [ResultAreaInline, CapabilityLevelInline, CapabilityCategoryInline, CapabilitySubCategoryInline]
+    inlines = [ResultAreaInline, CapabilityLevelInline,
+               CapabilityCategoryInline, CapabilitySubCategoryInline]
 
 
 class UNICEFResultAreaAdmin(admin.ModelAdmin):
@@ -397,7 +403,8 @@ class SolutionAdmin(ExportActionMixin, admin.ModelAdmin):
     ordering = search_fields = ['name']
     list_display = ['__str__', 'portfolio_list', 'phase', 'open_source_frontier_tech',
                     'learning_investment', 'people_reached', 'list_of_countries']
-    list_filter = ['portfolios', 'open_source_frontier_tech', 'learning_investment']
+    list_filter = ['portfolios',
+                   'open_source_frontier_tech', 'learning_investment']
     filter_horizontal = ['portfolios', 'problem_statements']
     readonly_fields = ['people_reached', 'regions_display']
     inlines = (CountrySolutionInline,)
@@ -431,7 +438,8 @@ admin.site.register(UNICEFGoal, UNICEFGoalAdmin)
 admin.site.register(UNICEFResultArea, UNICEFResultAreaAdmin)
 admin.site.register(UNICEFCapabilityLevel, UNICEFCapabilityLevelAdmin)
 admin.site.register(UNICEFCapabilityCategory, UNICEFCapabilityCategoryAdmin)
-admin.site.register(UNICEFCapabilitySubCategory, UNICEFCapabilitySubCategoryAdmin)
+admin.site.register(UNICEFCapabilitySubCategory,
+                    UNICEFCapabilitySubCategoryAdmin)
 admin.site.register(UNICEFSector, UNICEFSectorAdmin)
 admin.site.register(RegionalPriority, RegionalPriorityAdmin)
 admin.site.register(HardwarePlatform, HardwarePlatformAdmin)
