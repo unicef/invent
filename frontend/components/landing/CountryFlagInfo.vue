@@ -1,14 +1,11 @@
 <template>
   <div class="flag-info">
     <el-col class="CountryHolder">
-      <el-row type="flex">
-        <el-col class="CountryHolder">
-          <div class="Separator" />
-        </el-col>
-        <el-col class="CountryHolder">
+      <el-row :gutter="30" type="flex">
+        <el-col :span="4" class="CountryHolder">
           <img :src="countryFlag" alt="country flag" class="CountryFlag" loading="lazy" />
         </el-col>
-        <el-col>
+        <el-col :span="22">
           <div class="country-text">
             <div class="CountryName">{{ landingData.name }}</div>
             <p>
@@ -17,6 +14,19 @@
               </translate>
             </p>
           </div>
+        </el-col>
+        <el-col :span="4" class="InventoryButton">
+          <nuxt-link
+            :to="
+              localePath({
+                name: 'organisation-inventory-list',
+                params: this.landingData.code,
+                query: { ...this.$route.query, page_size: 100, country: 32 },
+              })
+            "
+          >
+            <translate>{{ this.landingData.name }}'s Inventory</translate>
+          </nuxt-link>
         </el-col>
       </el-row>
     </el-col>
@@ -48,10 +58,11 @@ export default {
 .flag-info {
   height: 100px;
   width: inherit;
-  margin: 12px;
-  padding: 8px 36px 8px 220px;
+  margin: 12px auto;
+  padding: 8px 36px 8px 36px;
   display: flex;
-  align-items: start;
+
+  justify-content: center;
 
   .CountryHolder {
     display: flex;
@@ -67,7 +78,7 @@ export default {
       display: flex;
       height: 100%;
       flex-direction: column;
-      padding-left: 24px;
+      padding-left: 12px;
 
       .CountryName {
         margin-top: auto;
@@ -76,6 +87,29 @@ export default {
         color: @colorTextPrimary;
         line-height: 24px;
       }
+    }
+  }
+  .InventoryButton {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: end;
+    color: @colorBrandPrimary;
+
+    a {
+      margin: auto;
+      width: 100px;
+      background-color: @colorBrandPrimary;
+      color: @colorWhite;
+      height: 36px;
+      padding: 11px 24px 13px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 0;
+      line-height: 20px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 4px;
     }
   }
 }
