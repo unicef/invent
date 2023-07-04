@@ -75,7 +75,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     is_superuser = serializers.SerializerMethodField()
     account_type_approved = serializers.SerializerMethodField()
     manager = serializers.SerializerMethodField(required=False)
-    global_portfolio_owner = serializers.NullBooleanField(required=False)
+    global_portfolio_owner = serializers.BooleanField(required=False, allow_null=True)
     favorite = serializers.SerializerMethodField(required=False)
     reviews = serializers.SerializerMethodField(required=False)
 
