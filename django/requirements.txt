@@ -28,15 +28,15 @@ Django==3.2
 django-admin-sortable2==1.0.4
 django-allauth==0.41.0
 django-appconf==1.0.2
-django-celery-email==2.0.0
+django-celery-email==3.0.0
 django-cors-headers==4.1.0
 django-extensions==2.2.5
-django-modeltranslation==0.13-beta1
+django-modeltranslation==0.17.7
 django-redis==4.9.0
 django-rosetta==0.8.1
-django-simplefeedback==0.9
-django-simple-history==2.4.0
-django-ordered-model==2.1.0
+django-simplefeedback==1.1.2
+django-simple-history==3.3.0
+django-ordered-model==3.7.4
 djangorestframework==3.14.0
 djangorestframework-jwt==1.11.0
 dj-rest-auth==4.0.1
@@ -100,7 +100,6 @@ redis==2.10.6
 requests==2.19.1
 requests-oauthlib==1.0.0
 simplegeneric==0.8.1
-six==1.13.0
 traitlets==4.3.2
 uritemplate==3.0.0
 urllib3==1.23
@@ -118,4 +117,3 @@ django-jsoneditor
 dj-anonymizer==0.3.1
 dj-anonymizer[bulk]
 django-health-check==3.16.0
-msal

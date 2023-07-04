@@ -506,7 +506,7 @@ class ProjectApproval(ExtendedModel):
         help_text="Administrator who approved the project",
         on_delete=models.CASCADE,
     )
-    approved = models.NullBooleanField(blank=True, null=True)
+    approved = models.BooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
     history = HistoricalRecords(excluded_fields=["project", "created"])
 
@@ -822,7 +822,7 @@ class ProjectImport(ExtendedModel):
     mapping = JSONField(default=dict)
     imported = models.TextField(null=True, blank=True, default="")
     failed = models.TextField(null=True, blank=True, default="")
-    status = models.NullBooleanField(null=True, blank=True)
+    status = models.BooleanField(null=True, blank=True)
 
     def __str__(self):  # pragma: no cover
         return self.csv.name
@@ -830,7 +830,7 @@ class ProjectImport(ExtendedModel):
 
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    status = models.NullBooleanField(
+    status = models.BooleanField(
         null=True, blank=True)  # TODO: maybe remove this
     header_mapping = JSONField(default=dict, blank=True)
     country = models.ForeignKey(

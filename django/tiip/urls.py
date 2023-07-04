@@ -47,12 +47,12 @@ api_info = openapi.Info(
 )
 
 api_info_router = SimpleRouter()
-api_info_router.register('api/countryoffices', CountryOfficeViewSet, base_name='countryoffice')
-api_info_router.register('api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
-api_info_router.register('api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
-api_info_router.register('api/organisations', OrganisationViewSet, base_name='organisation')
-api_info_router.register('api/kpi/solutions', SolutionKPIViewSet, base_name="solutions-kpi")
-api_info_router.register('api/kpi/country-inclusion', CountryInclusionKPIViewSet, base_name="country-inclusion-kpi")
+api_info_router.register('api/countryoffices', CountryOfficeViewSet, basename='countryoffice')
+api_info_router.register('api/landing-country', CountryLandingPageViewSet, basename='landing-country'),
+api_info_router.register('api/landing-country', CountryLandingListPageViewSet, basename='landing-country'),
+api_info_router.register('api/organisations', OrganisationViewSet, basename='organisation')
+api_info_router.register('api/kpi/solutions', SolutionKPIViewSet, basename="solutions-kpi")
+api_info_router.register('api/kpi/country-inclusion', CountryInclusionKPIViewSet, basename="country-inclusion-kpi")
 
 api_info_urlpatterns = [
     path("api/", include("search.urls")),

@@ -7,20 +7,20 @@ from country.views import CountryViewSet, PartnerLogoViewSet, DonorViewSet, Dono
 from . import views
 
 router = DefaultRouter()
-router.register(r'landing-country', CountryLandingPageViewSet, base_name='landing-country'),
-router.register(r'landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
-router.register(r'landing-donor', DonorLandingPageViewSet, base_name='landing-donor'),
-router.register(r'landing-donor', DonorLandingListPageViewSet, base_name='landing-donor'),
-router.register(r'countries', CountryViewSet, base_name='country')
-router.register(r'countryoffices', CountryOfficeViewSet, base_name='countryoffice')
-router.register(r'donors', DonorViewSet, base_name='donor')
-router.register(r'country-partner-logos', PartnerLogoViewSet, base_name='country-partner-logo')
-router.register(r'donor-partner-logos', DonorPartnerLogoViewSet, base_name='donor-partner-logo')
-router.register(r'map-files', MapFileViewSet, base_name='map-file')
-router.register(r'country-images', CountryImageViewSet, base_name='country-image')
-router.register(r'donor-images', DonorImageViewSet, base_name='donor-image')
-router.register(r'country-custom-questions', CountryCustomQuestionViewSet, base_name='country-custom-questions')
-router.register(r'donor-custom-questions', DonorCustomQuestionViewSet, base_name='donor-custom-questions')
+router.register(r'landing-country', CountryLandingPageViewSet, basename='landing-country'),
+router.register(r'landing-country', CountryLandingListPageViewSet, basename='landing-country'),
+router.register(r'landing-donor', DonorLandingPageViewSet, basename='landing-donor'),
+router.register(r'landing-donor', DonorLandingListPageViewSet, basename='landing-donor'),
+router.register(r'countries', CountryViewSet, basename='country')
+router.register(r'countryoffices', CountryOfficeViewSet, basename='countryoffice')
+router.register(r'donors', DonorViewSet, basename='donor')
+router.register(r'country-partner-logos', PartnerLogoViewSet, basename='country-partner-logo')
+router.register(r'donor-partner-logos', DonorPartnerLogoViewSet, basename='donor-partner-logo')
+router.register(r'map-files', MapFileViewSet, basename='map-file')
+router.register(r'country-images', CountryImageViewSet, basename='country-image')
+router.register(r'donor-images', DonorImageViewSet, basename='donor-image')
+router.register(r'country-custom-questions', CountryCustomQuestionViewSet, basename='country-custom-questions')
+router.register(r'donor-custom-questions', DonorCustomQuestionViewSet, basename='donor-custom-questions')
 
 urlpatterns = [
                   url(r"^countries/map-download/(?P<country_id>\d+)/$",

@@ -22,7 +22,6 @@ from country.admin import CountryAdmin
 from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion, CountryOffice
 from project.utils import get_temp_image
 from user.models import UserProfile
-from django.utils.six import StringIO
 from django.conf import settings
 
 from user.tests import create_profile_for_user
@@ -1332,22 +1331,3 @@ class CountryManagementCommandTest(TestCase):
         for file in os.listdir(self.backup_folder):
             if fnmatch(file, '*null.json'):
                 os.remove(os.path.join(self.backup_folder, file))
-
-    # def test_country_management_command_clean_maps(self):
-    #     out = StringIO()
-    #     call_command('clean_maps', stdout=out)
-    #     output = out.getvalue().strip()
-    #     self.assertEqual(output, 'No country code provided')
-
-    #     out = StringIO()
-    #     call_command('clean_maps', 'something', stdout=out)
-    #     output = out.getvalue().strip()
-    #     self.assertEqual(output, 'Selected country does not exist')
-
-    #     out = StringIO()
-    #     call_command('clean_maps', 'NULL', stdout=out)
-    #     output = out.getvalue().strip()
-    #     self.assertEqual(output, 'Removing unused features from Null Land geojson')
-
-    #     topo_stats = os.stat(self.null_topo)
-    #     self.assertTrue(topo_stats.st_size > 10)
