@@ -6,11 +6,11 @@ class CountryPage {
     }
 
     getVisibleFlag() {
-        return cy.get('.flag-info')
+        return cy.get('[class="flag-info"]')
     }
 
     getSwitch() {
-        return cy.get('.el-switch__core')
+        return cy.get('[role="switch"]')
     }
 
     getCaption() {
@@ -57,37 +57,33 @@ class CountryPage {
         return cy.get("[class='el-table_1_column_10     is-leaf']")
     }
 
+    getPhasesTable() {
+        return cy.get('[class="el-table__body-wrapper is-scrolling-left"]')
+    }
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    getStagesTable() {
+        return cy.get('[class="el-table__body-wrapper is-scrolling-none"]')
+    }
 
     //
+
+    phaseBoardActive() {
+        this.getSwitch().should('have.class', 'el-switch Switch is-checked')
+    }
+
+    stageBoardActive() {
+        this.getSwitch().should('have.class', 'el-switch Switch')
+    }
+
+    //
+
+    isPhasesTableEmpty() {
+        this.getPhasesTable().contains('No initiatives available')
+    }
+
+    isStagesTableEmpty() {
+        this.getStagesTable().contains('No initiatives available')
+    }
 
     visibleMap() {
         this.getMap().should('be.visible')
