@@ -24,6 +24,6 @@ urlpatterns = [
 if settings.ENABLE_API_REGISTRATION:
     urlpatterns += [
         url(r"^all-auth/", include("allauth.urls")),
-        url(r"^rest-auth/", include("rest_auth.urls")),
-        url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
+        url(r"dj-rest-auth/", include('dj_rest_auth.urls')),
+        url(r"dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     ]
