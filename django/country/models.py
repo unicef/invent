@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from ordered_model.models import OrderedModel
 
-from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel, ActiveManager
 from project.cache import InvalidateCacheMixin
 from user.models import UserProfile
 
@@ -201,6 +201,7 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
 
     private = models.BooleanField(default=False)
     required = models.BooleanField(default=False)
+    objects = ActiveManager()
 
     class Meta:
         abstract = True
@@ -212,7 +213,6 @@ class DonorCustomQuestion(CustomQuestion):
     donor = models.ForeignKey(
         Donor, related_name='donor_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'donor'
-    objects = ActiveManager()  # Add this line
 
     class Meta(OrderedModel.Meta):
         pass
@@ -225,7 +225,6 @@ class CountryCustomQuestion(CustomQuestion):
     country = models.ForeignKey(
         Country, related_name='country_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'country'
-    objects = ActiveManager()
 
     class Meta(OrderedModel.Meta):
         pass
