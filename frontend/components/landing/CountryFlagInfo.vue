@@ -26,7 +26,7 @@
               })
             "
           >
-            <translate>{{ this.landingData.name }}'s Inventory</translate>
+            <translate>{{ this.landingData.name }} Inventory</translate>
           </nuxt-link>
         </el-col>
       </el-row>
