@@ -17,11 +17,12 @@
         </el-col>
         <el-col :span="4" class="InventoryButton">
           <nuxt-link
+            data-test="country-inventory-link"
             :to="
               localePath({
                 name: 'organisation-inventory-list',
                 params: this.landingData.code,
-                query: { ...this.$route.query, page_size: 100, country: 32 },
+                query: { ...this.$route.query, country: this.landingData.id },
               })
             "
           >
