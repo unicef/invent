@@ -2,7 +2,14 @@
   <div class="LandingInitiativesTable">
     <div class="TopSwitchBar">
       <el-switch
-        v-model="board"
+        v-model="stdHeight"
+        :active-text="$gettext('Standard height') | translate"
+        :inactive-text="$gettext('Full height') | translate"
+        class="Switch"
+      >
+      </el-switch>
+      <el-switch
+        v-model="boardType"
         :active-text="$gettext('Phases board') | translate"
         :inactive-text="$gettext('Stages board') | translate"
         class="Switch"
@@ -12,7 +19,8 @@
     <el-table
       :data="initiativesTableData"
       :highlight-current-row="false"
-      max-height="580"
+      :key="stdHeight ? 'custom' : 'full'"
+      v-bind="setMaxHeight"
       :lazy="true"
       stripe
       :empty-text="$gettext('No initiatives available') | translate"
@@ -78,7 +86,8 @@ export default {
     return {
       daysStale: 180,
       phasesOmit: ['Handover or Complete', 'Discontinued'],
-      board: true,
+      boardType: true,
+      stdHeight: true,
     }
   },
   computed: {
@@ -90,8 +99,11 @@ export default {
       phasesStages: 'projects/getPhasesStages',
       unicef_regions: 'system/getUnicefRegions',
     }),
+    setMaxHeight() {
+      return this.stdHeight ? { 'max-height': 580 } : { 'max-height': false }
+    },
     columns() {
-      return this.board ? this.omitedPhasesCount : this.stagesCount
+      return this.boardType ? this.omitedPhasesCount : this.stagesCount
     },
     stagesCount() {
       const columns = this.phasesStages.map((phst) => ({ name: phst.stage_label, id: phst.stage_number }))
@@ -121,7 +133,7 @@ export default {
       return this.sectors.sort((a, b) => a.name.localeCompare(b.name))
     },
     initiativesTableData() {
-      return this.board ? this.initiativesPhasesTableData : this.initiativesStagesTableData
+      return this.boardType ? this.initiativesPhasesTableData : this.initiativesStagesTableData
     },
     initiativesStagesTableData() {
       let tableData = []
@@ -263,10 +275,9 @@ export default {
     width: 100%;
     height: 30px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
 
     .Switch {
-      padding-right: 24px;
       padding-top: 4px;
     }
   }
