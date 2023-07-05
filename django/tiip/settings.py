@@ -397,6 +397,9 @@ ENVIRONMENT_COLOR = env_color
 EMAIL_VALIDATOR_REGEX = r'{}'.format(
     env.str('EMAIL_VALIDATOR_REGEX', default=''))
 
+# Addresses warnings introduced in Django 3.2 to change AutoField to BigAutoField
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # Import the setting_azure settings only in the Azure environments
 if ENVIRONMENT in ["dev", "tst", "uat", "prd"]:
     from .settings_deployed import *
@@ -410,4 +413,5 @@ if ENVIRONMENT in ['dev']:
         'APPLICATIONINSIGHTS_CONNECTION_STRING', default='')
 
     if APPLICATIONINSIGHTS_CONNECTION_STRING:  # Ensure the connection string exists
-        configure_azure_monitor(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING)
+        configure_azure_monitor(
+            connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING)
