@@ -2,6 +2,7 @@
   <div class="LandingInitiativesTable">
     <div class="TopSwitchBar">
       <el-switch
+        data-test="height-switch"
         v-model="stdHeight"
         :active-text="$gettext('Standard height') | translate"
         :inactive-text="$gettext('Full height') | translate"
@@ -9,12 +10,89 @@
       >
       </el-switch>
       <el-switch
+        data-test="phases-stages-switch"
         v-model="boardType"
         :active-text="$gettext('Phases board') | translate"
         :inactive-text="$gettext('Stages board') | translate"
         class="Switch"
       >
       </el-switch>
+      <el-popover
+        data-test="sectors-select"
+        v-model="columnSelectorOpen"
+        :title="settingsTitle"
+        placement="bottom-end"
+        width="420"
+        trigger="click"
+        popper-class="CustomPopover popoverAlign"
+        @show="popperOpenHandler"
+      >
+        <el-button slot="reference" type="text" class="cogIcon">
+          <fa icon="cog" />
+        </el-button>
+
+        <div class="CustomPopoverList Small ColumnSelector">
+          <ul class="ColumnList">
+            <li
+              v-for="c in getSelectedSectors"
+              :key="c.id"
+              :class="['Item', { Selected: c.selected }]"
+              @click="() => invertSelectSector(c.id)"
+            >
+              <fa icon="check" />
+              {{ c.name }}
+            </li>
+          </ul>
+          <div class="CustomPopoverActions">
+            <el-row type="flex" align="middle">
+              <el-col>
+                <el-button
+                  data-test="select-sectors-cancel"
+                  type="text"
+                  size="small"
+                  class="CancelButton"
+                  @click="columnSelectorOpen = false"
+                >
+                  <translate>Cancel</translate>
+                </el-button>
+              </el-col>
+              <el-col>
+                <el-button
+                  data-test="select-sectors-deselect-all"
+                  type="text"
+                  size="small"
+                  class="CancelButton"
+                  @click="deselectAllSectors"
+                >
+                  <translate>Deselect all</translate>
+                </el-button>
+              </el-col>
+              <el-col>
+                <el-button
+                  data-test="select-sectors-select-all"
+                  type="text"
+                  size="small"
+                  class="CancelButton"
+                  @click="selectAllSectors"
+                >
+                  <translate>Select all</translate>
+                </el-button>
+              </el-col>
+              <el-col>
+                <el-button
+                  data-test="select-sectors-update"
+                  type="text"
+                  size="small"
+                  class="PrimaryButton"
+                  @click="updateSectors"
+                >
+                  <translate>Update</translate>
+                </el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+      </el-popover>
     </div>
     <el-table
       :data="initiativesTableData"
@@ -88,17 +166,27 @@ export default {
       phasesOmit: ['Handover or Complete', 'Discontinued'],
       boardType: true,
       stdHeight: true,
+      columnSelectorOpen: false,
     }
+  },
+  mounted() {
+    this.$store.dispatch('phasesStagesBoard/initSectors')
   },
   computed: {
     ...mapGetters({
       phases: 'projects/getStages',
       landingProjectsList: 'landing/getCountryProjectsList',
       unicefOffice: 'offices/getOffices',
-      sectors: 'projects/getSectors',
       phasesStages: 'projects/getPhasesStages',
       unicef_regions: 'system/getUnicefRegions',
+      getSelectedSectors: 'phasesStagesBoard/getSelectedSectors',
+      getShownSectors: 'phasesStagesBoard/getShownSectors',
     }),
+    settingsTitle() {
+      return `${this.$gettext('selected sectors')} (${this.sortedSelectedSectors.length}/${
+        this.getSelectedSectors.length
+      })`
+    },
     setMaxHeight() {
       return this.stdHeight ? { 'max-height': 580 } : { 'max-height': false }
     },
@@ -129,8 +217,8 @@ export default {
         (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
       )
     },
-    sortedSectors() {
-      return this.sectors.sort((a, b) => a.name.localeCompare(b.name))
+    sortedSelectedSectors() {
+      return this.getShownSectors.sort((a, b) => a.name.localeCompare(b.name)).filter((sector) => sector.selected)
     },
     initiativesTableData() {
       return this.boardType ? this.initiativesPhasesTableData : this.initiativesStagesTableData
@@ -138,7 +226,7 @@ export default {
     initiativesStagesTableData() {
       let tableData = []
       /* Creates each table row per sector**/
-      this.sortedSectors.map((sector) => {
+      this.sortedSelectedSectors.map((sector) => {
         const dataObj = {}
         dataObj['sector'] = { sector_name: sector.name }
         this.phasesStages.map((stage) => {
@@ -177,7 +265,7 @@ export default {
 
       const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
       /* Creates each table row per sector**/
-      this.sortedSectors.map((sector) => {
+      this.sortedSelectedSectors.map((sector) => {
         const dataObj = {}
         dataObj['sector'] = { sector_name: sector.name }
         omPhases.map((phase) => {
@@ -211,6 +299,19 @@ export default {
     },
   },
   methods: {
+    deselectAllSectors() {
+      this.$store.dispatch('phasesStagesBoard/deselectAll')
+    },
+    selectAllSectors() {
+      this.$store.dispatch('phasesStagesBoard/selectAll')
+    },
+    updateSectors() {
+      this.$store.dispatch('phasesStagesBoard/updateSectors')
+      this.columnSelectorOpen = false
+    },
+    invertSelectSector(sectorId) {
+      this.$store.dispatch('phasesStagesBoard/invertSelectSector', sectorId)
+    },
     getStage(phase) {
       return this.phasesStages.find((stage) => stage.phases.some((stphase) => stphase.phase_number === phase))
         .stage_number
@@ -275,10 +376,18 @@ export default {
     width: 100%;
     height: 30px;
     display: flex;
-    justify-content: space-around;
+    justify-content: end;
 
     .Switch {
-      padding-top: 4px;
+      padding: 5px 18px 0;
+    }
+
+    .cogIcon {
+      padding: unset;
+      .fa-cog {
+        padding: 4px 24px 0 12px;
+        font-size: 22px;
+      }
     }
   }
 
@@ -418,6 +527,10 @@ export default {
     }
   }
 }
+.popoverAlign {
+  transform: translate(-5px, 0px);
+}
+
 .caption {
   width: 420px;
   display: inline-flex;
