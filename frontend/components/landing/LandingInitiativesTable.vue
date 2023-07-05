@@ -183,9 +183,9 @@ export default {
       getShownSectors: 'phasesStagesBoard/getShownSectors',
     }),
     settingsTitle() {
-      return `${this.$gettext('selected sectors')} (${this.sortedSelectedSectors.length}/${
-        this.getSelectedSectors.length
-      })`
+      return `${this.$gettext('selected sectors')} (${
+        this.getSelectedSectors.filter((sector) => sector.selected === true).length
+      }/${this.getSelectedSectors.length})`
     },
     setMaxHeight() {
       return this.stdHeight ? { 'max-height': 580 } : { 'max-height': false }
@@ -218,7 +218,9 @@ export default {
       )
     },
     sortedSelectedSectors() {
-      return this.getShownSectors.sort((a, b) => a.name.localeCompare(b.name)).filter((sector) => sector.selected)
+      return this.getShownSectors
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter((sector) => sector.selected === true)
     },
     initiativesTableData() {
       return this.boardType ? this.initiativesPhasesTableData : this.initiativesStagesTableData
