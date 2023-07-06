@@ -21,6 +21,9 @@ RUN apt-get install -y nodejs
 
 RUN npm install -g mapshaper
 
+# Install PostgreSQL client
+RUN apt-get install -y libpq-dev gcc
+
 RUN mkdir /src
 WORKDIR /src
 ADD django/requirements.txt .
