@@ -53,19 +53,19 @@ class UserResource(resources.ModelResource):  # pragma: no cover
         column_name=_('Initiatives where INVENT focal point'))
     favorited_initiatives = Field(column_name=_('Favorited initiatives'))
     job_title = Field(column_name=_('Job title'))
-    section = Field(column_name=_('Section'))
+    department = Field(column_name=_('Department'))
 
     class Meta:
         model = User
         fields = ('id', 'name', 'email', 'account_type', 'organization', 'country', 'donor', 'groups', 'language',
                   'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser', 'is_gpo',
                   'initiatives_where_team_member', 'initiatives_where_viewer',
-                  'initiatives_where_invent_focal_point', 'favorited_initiatives', 'job_title', 'section')
+                  'initiatives_where_invent_focal_point', 'favorited_initiatives', 'job_title', 'department')
         export_order = ('id', 'name', 'email', 'account_type', 'organization', 'country', 'donor', 'groups',
                         'language', 'last_login', 'date_joined', 'is_active',
                         'is_staff', 'is_superuser', 'is_gpo',
                         'initiatives_where_team_member', 'initiatives_where_viewer',
-                        'initiatives_where_invent_focal_point', 'favorited_initiatives', 'job_title', 'section')
+                        'initiatives_where_invent_focal_point', 'favorited_initiatives', 'job_title', 'department')
 
     def dehydrate_favorited_initiatives(self, user: User):
         favorite_count = Project.objects.filter(favorited_by=user.userprofile).count() \
@@ -133,5 +133,5 @@ class UserResource(resources.ModelResource):  # pragma: no cover
     def dehydrate_job_title(self, user: User):
         return user.userprofile.job_title if hasattr(user, 'userprofile') and user.userprofile.job_title else 'None'
 
-    def dehydrate_section(self, user: User):
+    def dehydrate_department(self, user: User):
         return user.userprofile.department if hasattr(user, 'userprofile') and user.userprofile.department else 'None'
