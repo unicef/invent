@@ -65,7 +65,9 @@ class CountryPage {
         return cy.get('[class="el-table__body-wrapper is-scrolling-none"]')
     }
 
-    //
+    getInventoryButton() {
+        return cy.get('[data-test="country-inventory-link"]')
+    }
 
     phaseBoardActive() {
         this.getSwitch().should('have.class', 'el-switch Switch is-checked')
@@ -74,8 +76,6 @@ class CountryPage {
     stageBoardActive() {
         this.getSwitch().should('have.class', 'el-switch Switch')
     }
-
-    //
 
     isPhasesTableEmpty() {
         this.getPhasesTable().contains('No initiatives available')
@@ -89,8 +89,12 @@ class CountryPage {
         this.getMap().should('be.visible')
     }
 
+    pressCountryInitiativeButton() {
+        this.getInventoryButton().click()
+    }
+
     pressSwitch() {
-        this.getSwitch().click()
+        this.getSwitch().contains('Stages').click()
     }
 
 }
