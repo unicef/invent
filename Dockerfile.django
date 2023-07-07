@@ -4,8 +4,8 @@ FROM python:3.8-buster
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Update pip
-RUN pip install --upgrade pip
+# Update pip setuptools wheel
+RUN pip install --upgrade pip setuptools wheel
 
 # Use appropriate Debian buster repositories
 RUN echo "deb http://deb.debian.org/debian/ buster main contrib non-free" > /etc/apt/sources.list
