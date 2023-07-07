@@ -9,8 +9,12 @@ class CountryPage {
         return cy.get('[class="flag-info"]')
     }
 
-    getSwitch() {
-        return cy.get('[role="switch"]')
+    getBoardSwitch() {
+        return cy.get('[data-test="phases-stages-switch"]')
+    }
+
+    getHeightSwitch() {
+        return cy.get('[data-test="height-switch"]')
     }
 
     getCaption() {
@@ -65,16 +69,16 @@ class CountryPage {
         return cy.get('[class="el-table__body-wrapper is-scrolling-none"]')
     }
 
-    getInventoryButton() {
+    getInventoryLink() {
         return cy.get('[data-test="country-inventory-link"]')
     }
 
     phaseBoardActive() {
-        this.getSwitch().should('have.class', 'el-switch Switch is-checked')
+        this.getBoardSwitch().should('have.class', 'el-switch Switch is-checked')
     }
 
     stageBoardActive() {
-        this.getSwitch().should('have.class', 'el-switch Switch')
+        this.getBoardSwitch().should('have.class', 'el-switch Switch')
     }
 
     isPhasesTableEmpty() {
@@ -89,12 +93,16 @@ class CountryPage {
         this.getMap().should('be.visible')
     }
 
-    pressCountryInitiativeButton() {
-        this.getInventoryButton().click()
+    pressCountryInitiativeLink() {
+        this.getInventoryLink().click()
     }
 
-    pressSwitch() {
-        this.getSwitch().contains('Stages').click()
+    pressBoardSwitch() {
+        this.getBoardSwitch().click()
+    }
+
+    pressHeightSwitch() {
+        this.getHeightSwitch().click()
     }
 
 }
