@@ -67,7 +67,7 @@ oauthlib==2.1.0
 paramiko==2.4.1
 parse==1.8.4
 parse-type==0.4.2
-parso==0.3.0
+parso==0.8.3                        # Updated from 0.3.0. jedi 0.18.2 depends on parso<0.9.0 and >=0.8.0
 pathtools==0.1.2
 pbr==4.1.0
 pexpect==4.6.0
