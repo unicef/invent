@@ -172,9 +172,10 @@ export const getters = {
 
 export const actions = {
   async loadProject({ state, commit, dispatch, rootGetters }, id) {
-    const userProject = rootGetters['projects/getUserProjectList'].find((p) => p.id === id)
-    const { data } =
-      userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`)
+    // const userProject = rootGetters['projects/getUserProjectList'].find((p) => p.id === id)
+    // const { data } =
+    //   userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`)
+    const { data } = await this.$axios.get(`/api/projects/${id}/`)
     commit('SET_ORIGINAL', Object.freeze(data))
     const clean = cleanState()
     let unicefDonor = rootGetters['system/getUnicefDonor']
