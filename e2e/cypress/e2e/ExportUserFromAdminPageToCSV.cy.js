@@ -1,4 +1,6 @@
 /// <reference types="Cypress" />
+/// <reference types="cypress-downloadfile"/>
+
 import AdminLoginForm from "../pages/AdminLoginForm"
 import AdminPage from "../pages/AdminPage"
 import AdminUsersPage from "../pages/AdminUsersPage"
@@ -20,25 +22,21 @@ describe('Export user with Job title and Section data on CSV format', () => {
         adminUsersPage.pressUserCheckbox()
         adminUsersPage.selectExportAction()
         adminUsersPage.selectCSV()
-        adminUsersPage.getUserNameLink()//.should('contain', 'FullDataUser')
-        //adminUsersPage.pressGoButton() need to find a solution cypress not wait after click download
+        adminUsersPage.getUserNameLink().should('contain', 'Full Data User')
+        //adminUsersPage.pressGoButton() // need to find a solution cypress not wait after click download
         adminUsersPage.pressUserNameLink()
         const adminChangeUserPage = new AdminChangeUserPage
         adminChangeUserPage.getChangeUserPageTitle().should('be.visible')
+        cy.scrollTo('bottom')
         adminChangeUserPage.getJobTitleLabel().should('contain', 'Job title:')
-        adminChangeUserPage.getJobTitleValue().should('contain', 'Chief Beverage Officer')
-        adminChangeUserPage.verifyJobTitleValue('Chief Beverage Officer')
-        //
+        adminChangeUserPage.getJobTitleValue('Chief Beverage Officer')
         adminChangeUserPage.getDepartmentLabel().should('contain', 'Department:')
-        //adminChangeUserPage.getDepartmentValue().should('contain', 'Specialists Parkour Office')
-        
-
-        //
+        adminChangeUserPage.getDepartmentValue('Specialists Parkour Office')
         //adminUsersPage.selectXLS()
-
-
-
-
+        //
+        //
+        //
+        //
     })
 })
 

@@ -10,20 +10,16 @@ class AdminChangeUserPage{
         return cy.get('[for="id_userprofile-0-job_title"]')
     }
 
-    getJobTitleValue() {
-        return cy.get('[input[id="id_userprofile-0-job_title"]')
-    }
-
-    verifyJobTitleValue(job) {
-        this.getJobTitleValue().contains(job)
+    getJobTitleValue(jobvalue) {
+        return cy.get('[name="userprofile-0-job_title"]').invoke('val').should('equal', jobvalue)
     }
 
     getDepartmentLabel() {
         return cy.get('[for="id_userprofile-0-department"]')
-    } 
+    }
 
-    getDepartmentValue() {
-        return cy.get('')
-    } 
+    getDepartmentValue(departmentvalue) {
+        return cy.get('[name="userprofile-0-department"]').invoke('val').should('equal', departmentvalue)
+    }
 }
 export default AdminChangeUserPage
