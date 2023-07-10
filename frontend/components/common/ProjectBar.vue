@@ -34,7 +34,7 @@
               </div>
             </el-col>
             <el-col v-if="isPublished" :span="2" class="InfoSection">
-              <favorite :id="published.id" :favorite="favorite" />
+              <favorite :id="id" :favorite="favorite" />
             </el-col>
           </el-row>
         </el-col>
