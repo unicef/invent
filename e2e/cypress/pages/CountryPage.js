@@ -1,6 +1,8 @@
 /// <reference types="Cypress" />
 
 class CountryPage {
+
+    //get
     goToCountryPage(countryCode) {
         cy.visit('en/' + countryCode);
     }
@@ -15,6 +17,10 @@ class CountryPage {
 
     getHeightSwitch() {
         return cy.get('[data-test="height-switch"]')
+    }
+
+    getGear() {
+        return cy.get('[data-test="sectors-select"]')
     }
 
     getCaption() {
@@ -73,6 +79,26 @@ class CountryPage {
         return cy.get('[data-test="country-inventory-link"]')
     }
 
+    //Press
+
+    pressCountryInitiativeLink() {
+        this.getInventoryLink().click()
+    }
+
+    pressBoardSwitch() {
+        this.getBoardSwitch().click()
+    }
+
+    pressHeightSwitch() {
+        this.getHeightSwitch().click()
+    }
+
+    pressGear() {
+        this.getGear().click()
+    }
+
+    //misc
+
     phaseBoardActive() {
         this.getBoardSwitch().should('have.class', 'el-switch Switch is-checked')
     }
@@ -91,18 +117,6 @@ class CountryPage {
 
     visibleMap() {
         this.getMap().should('be.visible')
-    }
-
-    pressCountryInitiativeLink() {
-        this.getInventoryLink().click()
-    }
-
-    pressBoardSwitch() {
-        this.getBoardSwitch().click()
-    }
-
-    pressHeightSwitch() {
-        this.getHeightSwitch().click()
     }
 
 }

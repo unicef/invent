@@ -13,7 +13,7 @@ describe('Explore Phase And Stage board with no Active Initiative', () => {
         countryPage.getCaption().contains('Indicates an initiative that has been in this phase for over 6 months')
         countryPage.getMap().should('be.visible')
         countryPage.isPhasesTableEmpty()
-        countryPage.pressSwitch()
+        countryPage.getBoardSwitch()
         countryPage.isStagesTableEmpty()
     })
 })

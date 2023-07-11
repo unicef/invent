@@ -6,6 +6,8 @@ import AdminPage from "../pages/AdminPage"
 import AdminUsersPage from "../pages/AdminUsersPage"
 import AdminChangeUserPage from "../pages/AdminChangeUserPage"
 
+// Download is not implemented
+
 describe('Export user with Job title and Section data on CSV format', () => {
 
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/165892',() => {
