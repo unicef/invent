@@ -83,6 +83,15 @@ class UserProfile(ExtendedModel):
     def is_investor_type(self):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
 
+    
+    
+class UserExport(User):
+    @classmethod
+    def export_resource_classes(cls):  # pragma: no cover
+        from core.resources import UserResource
+
+        return {"userprofiles": ("UserProfiles", UserResource)}
+
 
 @receiver(pre_save, sender=UserProfile)
 def admin_request_on_change(sender, instance, **kwargs):
