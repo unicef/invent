@@ -103,10 +103,13 @@ def get_object_or_400(cls, error_message="No such object.", select_for_update=Fa
         error_message: to be used in the error response if no such object
         kwargs: filter parameters for object query
     """
-    obj = cls.objects.get_object_or_none(select_for_update, **kwargs)
-    if obj:
+    try:
+        if select_for_update:
+            obj = cls.objects.select_for_update().get(**kwargs)
+        else:
+            obj = cls.objects.get(**kwargs)
         return obj
-    else:
+    except cls.DoesNotExist:
         raise Http400(error_message)
 
 
