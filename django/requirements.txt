@@ -13,7 +13,7 @@ chardet==5.1.0                          # Updated from 3.0.4
 coreapi==2.3.3                          # This project is discontinued and not maintained. Required by rest_framework to resolve AssertionError: `coreapi` must be installed for schema support
 # coreschema==0.0.4                       # This project is discontinued and not maintained. TODO: Test if this is needed and if we can safely remove this
 coverage==7.2.7                         # Updated from 4.5.1. Supports pytest 7.4.0
-cryptography==2.2.2                     # TODO: Test if this is needed and if we can safely remove this
+cryptography==41.0.2                    # Updated from 2.2.2. paramiko 3.2.0 depends on cryptography>=3.3
 decorator==4.3.0                        # TODO: Test if this is needed and if we can safely remove this
 defusedxml==0.7.1                       # Updated from 0.5.0
 dj-inmemorystorage==2.1.0               # Updated from 1.4.1
@@ -43,64 +43,64 @@ flake8==6.0.0                           # Updated from 3.8.2
 freezegun==1.2.2                        # Updated from 0.3.15. TODO: Test if this is needed and if we can safely remove this
 gunicorn==20.1.0                        # Updated from 19.9.0
 hashids==1.3.1                          # Updated from 1.2.0. TODO: Test if this is needed and if we can safely remove this
-idna==2.7
+idna==3.4                               # Updated from 2.7. TODO: Test if this is needed and if we can safely remove this
 ipdb==0.13.13                           # Updated from 0.11
 ipython==8.12.2                         # Updated from 6.4.0. ipdb 0.13.13 depends on ipython>=7.31.1; python > 3.6 < 3.11
-ipython-genutils==0.2.0
+# ipython-genutils==0.2.0                 # This project is discontinued and not maintained. TODO: Test if this is needed and if we can safely remove this
 isort==5.12.0                           # Updated from 4.3.4
 jedi==0.18.2                            # Updated from 0.12.1. ipython 8.12.2 depends on jedi>=0.16
 kombu==5.3.1                            # Updated from 4.2.1. Celery depends on kombu<6.0 and >=5.2.3. Updating kombu > 5.2.3 caused building issues
-lazy-object-proxy==1.4.3
-Markdown==2.6.11
-MarkupSafe==1.1.1
+lazy-object-proxy==1.9.0                # Updated from 1.4.3. TODO: Test if this is needed and if we can safely remove this
+Markdown==2.6.11                        # Updated from 3.4.3. TODO: Test if this is needed and if we can safely remove this
+MarkupSafe==2.1.3                       # Updated from 1.1.1. TODO: Test if this is needed and if we can safely remove this
 mccabe==0.7.0                           # Updated from 0.6.1. flake8 6.0.0 depends on mccabe<0.8.0 and >=0.7.0
-microsofttranslator==0.8
-mock==2.0.0
-more-itertools==4.2.0
+# microsofttranslator==0.8                # This project is discontinued and not maintained. TODO: Test if this is needed and if we can safely remove this
+mock==5.0.2                             # Updated from 2.0.0. mock is now part of the Python standard library. Test if this is needed and if we can safely remove this 
+more-itertools==4.2.0                   # Updated from 4.2.0. TODO: Test if this is needed and if we can safely remove this
 oauthlib==3.2.2                         # Updated from 2.1.0
 openpyxl==3.1.2                         # Added to freeze version in order to resolve issue when trying to use DefusedXMLParser
-paramiko==2.4.1
-parse==1.8.4
-parse-type==0.4.2
+paramiko==3.2.0                         # Updated from 2.4.1. TODO: Test if this is needed and if we can safely remove this
+parse==1.19.1                           # Updated frrom 1.8.4. parse-type 0.6.2 depends on parse>=1.18.0; python_version >= "3.0" 
+parse-type==0.6.2                       # Updated from 0.4.2
 parso==0.8.3                            # Updated from 0.3.0. jedi 0.18.2 depends on parso<0.9.0 and >=0.8.0
-pathtools==0.1.2
-pbr==4.1.0
-pexpect==4.6.0
-pickleshare==0.7.4
-Pillow==5.2.0
+# pathtools==0.1.2                        # This project is discontinued and not maintained. TODO: Test if this is needed and if we can safely remove this
+pbr==5.11.1                             # Updated from 4.1.0
+pexpect==4.8.0                          # Updated from 4.6.0. TODO: Test if this is needed and if we can safely remove this
+# pickleshare==0.7.4                      # This project is not maintained. TODO: Test if this is needed and if we can safely remove this
+Pillow==10.0.0                          # Updated from 5.2.0
 pluggy==1.2.0                           # Updated from 0.6.0. Supports pytest 7.4.0
-polib==1.1.0
+polib==1.2.0                            # Updated from 1.1.0. TODO: Test if this is needed and if we can safely remove this
 prompt-toolkit==3.0.39                  # Updated from 1.0.15. ipython 8.12.2 depends on prompt-toolkit!=3.0.37, <3.1.0 and >=3.0.30
 psycopg2-binary==2.9.6                  # Updated from 2.7.5
-ptyprocess==0.6.0
-py==1.5.4
-pyasn1==0.4.3
-pycodestyle==2.10.0                      # Updated from 2.6.0. flake8 6.0.0 depends on pycodestyle<2.11.0 and >=2.10.0
-pycountry==18.5.26
-pycparser==2.18
-pycrypto==2.6.1
+ptyprocess==0.6.0                       # Updated from 0.6.0. TODO: Test if this is needed and if we can safely remove this
+py==1.11.0                              # Updated from 1.5.4. TODO: Test if this is needed and if we can safely remove this
+pyasn1==0.5.0                           # Updated from 0.4.3. TODO: Test if this is needed and if we can safely remove this
+pycodestyle==2.10.0                     # Updated from 2.6.0. flake8 6.0.0 depends on pycodestyle<2.11.0 and >=2.10.0
+pycountry==22.3.5                       # Updated from 18.5.26 
+pycparser==2.21                         # Updated from 2.18. TODO: Test if this is needed and if we can safely remove this
+# pycrypto==2.6.1                         # This project is discontinued and not maintained. TODO: Test if this is needed and if we can safely remove this
 pyflakes==3.0.1                         # Updated from 2.2.0. flake8 6.0.0 depends on pyflakes<3.1.0 and >=3.0.0  
 Pygments==2.15.1                        # Updated from 2.2.0. ipython 8.12.2 depends on pygments>=2.4.0 
 pylint==2.17.4                          # Updated from 2.4.3
-PyNaCl==1.2.1
+PyNaCl==1.5.0                           # Updated from 1.2.1. TODO: Test if this is needed and if we can safely remove this
 pytest==7.4.0                           # Updated from 3.6.3
 pytest-cov==4.1.0                       # Updated from 2.5.1. Supports pytest==7.4.0.
 pytest-django==4.5.2                    # Updated from 3.3.2. Supports pytest==7.4.0.
 pytest-testmon==2.0.9                   # Updated from 0.9.12. Supports pytest==7.4.0.
 pytest-watch==4.2.0                     # [Current latest]
 pytest-timeout==2.1.0                   # Updated from 1.3.3. Supports pytest==7.4.0.
-python3-openid==3.1.0
-pytz==2023.3                            # Updated from 2018.5
+python3-openid==3.2.0                   # Updated from 3.1.0. TODO: Test if this is needed and if we can safely remove this
+pytz==2023.3                            # Updated from 2018.5. TODO: Test if this is needed and if we can safely remove this
 PyYAML==6.0                             # Updated from 3.13
 redis==4.6.0                            # Updated from 2.10.6
 requests==2.31.0                        # Updated from 2.19.1. Supports chardet==5.1.0
-requests-oauthlib==1.0.0
+requests-oauthlib==1.0.0                # Updated from 1.0.0. TODO: Test if this is needed and if we can safely remove this
 sentry-sdk                              # TODO: Test if this is needed and if we can safely remove this
 sorl-thumbnail==12.9.0                  # Updated from 12.7.0. Supports Django 3.2, 4.0, 4.1 - Python >= 3.7 <= 3.10
 traitlets==5.9.0                        # Updated from 4.3.2. ipython 8.12.2 depends on traitlets>=5
-uritemplate==3.0.0
-urllib3==1.23
+uritemplate==4.1.1                      # Updated from 3.0.0. TODO: Test if this is needed and if we can safely remove this
+urllib3==2.0.3                           # Updated from 1.23. TODO: Test if this is needed and if we can safely remove this   
 vine==5.0.0                             # Updated from 1.1.4.
 wcwidth==0.2.6                          # Updated from 0.1.7. Support Python 3.8
-wrapt==1.11.2
+wrapt==1.11.2                           # Updated from 1.15.0. TODO: Test if this is needed and if we can safely remove this   
 git+https://github.com/pulilab/django-import-export-celery@1.16.3
