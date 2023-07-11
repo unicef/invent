@@ -189,12 +189,16 @@ export const actions = {
       const draft = { ...clean, ...apiReadParser(data.draft) }
       draft.donors.forEach((d) => donorsToFetch.add(d))
       commit('INIT_PROJECT', draft)
+    } else {
+      commit('INIT_PROJECT', clean)
     }
     // if (data.published) {
     if (data.published && !isEmpty(data.published)) {
       const published = { ...clean, ...apiReadParser(data.published) }
       published.donors.forEach((d) => donorsToFetch.add(d))
       commit('SET_PUBLISHED', Object.freeze(published))
+    } else {
+      commit('SET_PUBLISHED', clean)
     }
     const country = data.draft ? data.draft.country : data.published.country
     await Promise.all([
