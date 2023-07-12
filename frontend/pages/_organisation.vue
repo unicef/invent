@@ -12,8 +12,8 @@ export default {
   components: {},
   middleware: ['profile'],
   async fetch({ store, params }) {
-    store.dispatch('system/loadUserProfiles')
     await Promise.all([
+      store.dispatch('system/loadUserProfiles'),
       store.dispatch('system/loadStaticData'),
       store.dispatch('system/loadDonors'),
       store.dispatch('countries/loadMapData'),
