@@ -1,98 +1,103 @@
 <template>
   <div class="LandingInitiativesTable">
     <div class="TopSwitchBar">
-      <el-switch
-        data-test="height-switch"
-        v-model="stdHeight"
-        :active-text="$gettext('Standard height') | translate"
-        :inactive-text="$gettext('Full height') | translate"
-        class="Switch"
-      >
-      </el-switch>
-      <el-switch
-        data-test="phases-stages-switch"
-        v-model="boardType"
-        :active-text="$gettext('Phases board') | translate"
-        :inactive-text="$gettext('Stages board') | translate"
-        class="Switch"
-      >
-      </el-switch>
-      <el-popover
-        data-test="sectors-select"
-        v-model="columnSelectorOpen"
-        :title="settingsTitle"
-        placement="bottom-end"
-        width="420"
-        trigger="click"
-        popper-class="CustomPopover popoverAlign"
-        @show="popperOpenHandler"
-      >
-        <el-button slot="reference" type="text" class="cogIcon">
-          <fa icon="cog" />
-        </el-button>
+      <div class="Select-sectors">
+        <el-popover
+          data-test="sectors-select"
+          v-model="columnSelectorOpen"
+          :title="settingsTitle"
+          placement="bottom-end"
+          width="420"
+          trigger="click"
+          popper-class="CustomPopover popoverAlign"
+          @show="popperOpenHandler"
+        >
+          <el-button slot="reference" type="text" class="cogIcon">
+            <fa icon="cog" />
+            <translate id="select-sectors-label">Select sectors</translate>
+          </el-button>
 
-        <div class="CustomPopoverList Small ColumnSelector">
-          <ul class="ColumnList">
-            <li
-              v-for="c in getSelectedSectors"
-              :key="c.id"
-              :class="['Item', { Selected: c.selected }]"
-              @click="() => invertSelectSector(c.id)"
-            >
-              <fa icon="check" />
-              {{ c.name }}
-            </li>
-          </ul>
-          <div class="CustomPopoverActions">
-            <el-row type="flex" align="middle">
-              <el-col>
-                <el-button
-                  data-test="select-sectors-cancel"
-                  type="text"
-                  size="small"
-                  class="CancelButton"
-                  @click="columnSelectorOpen = false"
-                >
-                  <translate>Cancel</translate>
-                </el-button>
-              </el-col>
-              <el-col>
-                <el-button
-                  data-test="select-sectors-deselect-all"
-                  type="text"
-                  size="small"
-                  class="CancelButton"
-                  @click="deselectAllSectors"
-                >
-                  <translate>Deselect all</translate>
-                </el-button>
-              </el-col>
-              <el-col>
-                <el-button
-                  data-test="select-sectors-select-all"
-                  type="text"
-                  size="small"
-                  class="CancelButton"
-                  @click="selectAllSectors"
-                >
-                  <translate>Select all</translate>
-                </el-button>
-              </el-col>
-              <el-col>
-                <el-button
-                  data-test="select-sectors-update"
-                  type="text"
-                  size="small"
-                  class="PrimaryButton"
-                  @click="updateSectors"
-                >
-                  <translate>Update</translate>
-                </el-button>
-              </el-col>
-            </el-row>
+          <div class="CustomPopoverList Small ColumnSelector">
+            <ul class="ColumnList">
+              <li
+                v-for="c in getSelectedSectors"
+                :key="c.id"
+                :class="['Item', { Selected: c.selected }]"
+                @click="() => invertSelectSector(c.id)"
+              >
+                <fa icon="check" />
+                {{ c.name }}
+              </li>
+            </ul>
+            <div class="CustomPopoverActions">
+              <el-row type="flex" align="middle">
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-cancel"
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="columnSelectorOpen = false"
+                  >
+                    <translate>Cancel</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-deselect-all"
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="deselectAllSectors"
+                  >
+                    <translate>Deselect all</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-select-all"
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="selectAllSectors"
+                  >
+                    <translate>Select all</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-update"
+                    type="text"
+                    size="small"
+                    class="PrimaryButton"
+                    @click="updateSectors"
+                  >
+                    <translate>Update</translate>
+                  </el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
-        </div>
-      </el-popover>
+        </el-popover>
+      </div>
+      <div>
+        <el-switch
+          data-test="height-switch"
+          v-model="stdHeight"
+          :active-text="$gettext('Standard height') | translate"
+          :inactive-text="$gettext('Full height') | translate"
+          class="Switch"
+        >
+        </el-switch>
+        <el-switch
+          data-test="phases-stages-switch"
+          v-model="boardType"
+          :active-text="$gettext('Phases board') | translate"
+          :inactive-text="$gettext('Stages board') | translate"
+          class="Switch"
+        >
+        </el-switch>
+      </div>
     </div>
     <el-table
       :data="initiativesTableData"
@@ -378,18 +383,27 @@ export default {
     width: 100%;
     height: 30px;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+
+    .Select-sectors {
+      padding-left: 12px;
+
+      #select-sectors-label {
+        position: relative;
+        font-size: 14px;
+        top: -3px;
+      }
+      .cogIcon {
+        padding: unset;
+        .fa-cog {
+          padding: 4px 8px 0 20px;
+          font-size: 22px;
+        }
+      }
+    }
 
     .Switch {
       padding: 5px 18px 0;
-    }
-
-    .cogIcon {
-      padding: unset;
-      .fa-cog {
-        padding: 4px 24px 0 12px;
-        font-size: 22px;
-      }
     }
   }
 
@@ -531,6 +545,7 @@ export default {
 }
 .popoverAlign {
   transform: translate(-5px, 0px);
+  margin: 0 28px;
 }
 
 .caption {
