@@ -62,6 +62,8 @@ export default {
       initiative: 'project/getProjectData',
       portfolioInnovationName: 'portfolio/getName',
       getPortfolios: 'solution/getPortfoliosList',
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
     }),
     pureRoute() {
       if (this.$route && this.$route.name) {
@@ -139,7 +141,7 @@ export default {
     idToName(route) {
       switch (route) {
         case 'organisation-initiatives-id':
-          return this.initiative.name
+          return this.$route.name.includes('published') ? this.published.name : this.draft.name
         case 'organisation-portfolio-innovation-solutions-id':
           return this.solutionName
         // case 'organisation-portfolio-innovation-id':
