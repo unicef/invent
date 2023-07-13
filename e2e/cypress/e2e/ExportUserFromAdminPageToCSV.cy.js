@@ -25,7 +25,7 @@ describe('Export user with Job title and Section data on CSV format', () => {
         adminUsersPage.selectExportAction()
         adminUsersPage.selectCSV()
         adminUsersPage.getUserNameLink().should('contain', 'Full Data User')
-        //adminUsersPage.pressGoButton() // need to find a solution cypress not wait after click download
+        adminUsersPage.pressGoButton() // need to find a solution cypress not wait after click download
         adminUsersPage.pressUserNameLink()
         const adminChangeUserPage = new AdminChangeUserPage
         adminChangeUserPage.getChangeUserPageTitle().should('be.visible')

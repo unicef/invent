@@ -40,9 +40,17 @@ class AdminUsersPage{
 
     pressGoButton() {
         //this.getButton().contains('Go').click()
-        this.getButton().contains('Go').then(el => { 
-            el.attr('Go', '')
-          }).click()
+        cy.window().document().then(function (doc) {
+            doc.addEventListener('click', () => {
+              // this adds a listener that reloads your page 
+              // after 5 seconds from clicking the download button
+              setTimeout(function () { doc.location.reload() }, 5000)
+            })
+            cy.get('[title="Run the selected action"]').contains('Go').click()
+          })
+        // this.getButton().contains('Go').then(el => { 
+        //     el.attr('Go', '')
+        //   }).click()
     }
 
     pressUserCheckbox() {
