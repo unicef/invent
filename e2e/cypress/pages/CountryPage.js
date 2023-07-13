@@ -23,6 +23,38 @@ class CountryPage {
         return cy.get('[data-test="sectors-select"]')
     }
 
+    getGearMenuTitle() {
+        return cy.get('[class="el-popover__title"]')
+    }
+
+    getGearMenuList() {
+        return cy.get('[class="ColumnList"]')
+    }
+
+    getGearMenuSelectedItems() {
+        return cy.get('[class="ColumnList"] > [class="Item Selected"]')
+    }
+
+    getGearMenuUnselectedItems() {
+        return cy.get('[class="ColumnList"] > [class="Item"]')
+    }
+
+    getGearMenuCancel() {
+        return cy.get('[data-test="select-sectors-cancel"]')
+    }
+
+    getGearMenuDeselectAll() {
+        return cy.get('[data-test="select-sectors-deselect-all"]')
+    }
+
+    getGearMenuSelectAll() {
+        return cy.get('[data-test="select-sectors-select-all"]')
+    }
+
+    getGearMenuUpdate() {
+        return cy.get('[data-test="select-sectors-update"]')
+    }
+
     getCaption() {
         return cy.get('.caption')
     }
@@ -97,7 +129,7 @@ class CountryPage {
         this.getGear().click()
     }
 
-    //misc
+    //Boards
 
     phaseBoardActive() {
         this.getBoardSwitch().should('have.class', 'el-switch Switch is-checked')
@@ -114,6 +146,11 @@ class CountryPage {
     isStagesTableEmpty() {
         this.getStagesTable().contains('No initiatives available')
     }
+
+    //
+
+
+    // map
 
     visibleMap() {
         this.getMap().should('be.visible')
