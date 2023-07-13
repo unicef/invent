@@ -13,7 +13,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.MIGRATE_HEADING(
             'Rollback Project modified dates from ProjectVersion...'))
         # Get the date '2023-07-6' as a timezone-aware datetime object
-        cutoff_date = make_aware(datetime(2023, 7, 13))
+        cutoff_date = make_aware(datetime(2023, 7, 6))
 
         # Fetch all projects that were modified on '2023-07-06'
         projects = Project.objects.filter(modified__date=cutoff_date)
