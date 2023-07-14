@@ -10,7 +10,7 @@ from dateutil.parser import parse, ParserError
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from core.utils import send_mail_wrapper
 from country.models import CustomQuestion, CountryOffice, Country

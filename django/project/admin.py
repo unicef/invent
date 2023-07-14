@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.contrib.admin import SimpleListFilter
 from django.utils.html import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from adminsortable2.admin import SortableAdminMixin
 from core.admin import AllObjectsAdmin
 from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
