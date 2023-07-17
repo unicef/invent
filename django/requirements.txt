@@ -17,7 +17,7 @@ defusedxml==0.7.1                       # Updated from 0.5.0
 dj-inmemorystorage==2.1.0               # Updated from 1.4.1
 Django==4.2.3
 django-admin-sortable2==2.1.8           # Updated from 1.0.4. django-admin-sortable2 2.1.8 depends on Django>=4.0 
-django-allauth==0.41.0                  # [Current latest]
+django-allauth==0.54.0                  # Updated from 0.41.0
 django-appconf==1.0.5                   # Updated from 1.0.2. appconf/base.py imports six, which is not supported in Django==3.2
 django-celery-email==3.0.0              # Upgrade from 2.0.0. Does not support Django 3.2, needs alternative solution
 django-cors-headers==4.1.0              # Updated from 2.3.0
@@ -32,7 +32,7 @@ django-simplefeedback==1.1.2            # Updated from 0.9
 django-simple-history==3.3.0            # Updated from 2.4.0
 django-ordered-model==3.7.4             # Updated from 2.1.0
 djangorestframework==3.14.0             # Updated from 3.8.2
-djangorestframework-jwt==1.11.0         # [Current latest]
+djangorestframework-jwt==1.11.0         # This project is discontinued and not maintained. Does not support Python 3.8 or Django>4. TODO: Test if this is needed and if we can safely remove this
 dj-rest-auth==4.0.1                     # [Current latest]
 drf-yasg==1.21.6                        # Updated from 1.17.1
 environs==9.5.0                         # [Current latest]
@@ -96,9 +96,9 @@ urllib3==2.0.3                          # Updated from 1.23. TODO: Test if this 
 vine==5.0.0                             # Updated from 1.1.4.
 wcwidth==0.2.6                          # Updated from 0.1.7. Support Python 3.8
 wrapt==1.11.2                           # Updated from 1.15.0. TODO: Test if this is needed and if we can safely remove this   
-git+https://github.com/pulilab/django-import-export-celery@1.16.3
 
-
+# git+https://github.com/gkalomalos/django-import-export-celery
+django-import-export-celery==1.5
 
 datadog==0.45.0                         # Updated from 0.37.0. TODO: Test if this is needed and if we can safely remove this
 dj-database-url==2.0.0                  # Updated from 0.5.0. TODO: Test if this is needed and if we can safely remove this
