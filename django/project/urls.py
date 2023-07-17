@@ -1,5 +1,4 @@
-from django.conf.urls import url
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
 from . import views
@@ -56,18 +55,18 @@ urlpatterns = [
          view=views.ProjectLandingBlocks.as_view({
              'get': 'list'
          }), name="project-landing"),
-    url(r"^projects/structure/$",
+    path('projects/structure/',
         view=views.ProjectPublicViewSet.as_view({
             'get': 'project_structure'
         }),
         name="get-project-structure"),
-    url(r"^projects/(?P<pk>\d+)/groups/$",
+    re_path(r"^projects/(?P<pk>\d+)/groups/$",
         view=views.ProjectGroupViewSet.as_view({
             'get': 'retrieve',
             'put': 'update'
         }),
         name="project-groups"),
-    url(r"^projects/map/$",
+    path('projects/map/',
         view=views.MapProjectCountryViewSet.as_view({
             'get': 'list',
         }),
@@ -97,11 +96,11 @@ urlpatterns = [
              'put': 'update'
          }),
          name="approval"),
-    url("portfolio/active-list/",
+    path("portfolio/active-list/",
         view=views.PortfolioActiveListViewSet.as_view({
             'get': 'list'
         }), name="portfolio-list-active"),
-    url('portfolio/create/',
+    path('portfolio/create/',
         view=views.PortfolioCreateViewSet.as_view({
             'post': 'create'
         }), name="portfolio-create"),
@@ -111,7 +110,7 @@ urlpatterns = [
              'patch': 'partial_update'
          }),
          name="portfolio-update"),
-    url('portfolio/manager-of/',
+    path('portfolio/manager-of/',
         view=views.PortfolioUserListViewSet.as_view({
             'get': 'list'
         }), name="portfolio-list"),
@@ -168,7 +167,7 @@ urlpatterns = [
              'get': 'retrieve',
          }),
          name="solution-retrieve"),
-    url('solution/create/',
+    path('solution/create/',
         view=views.SolutionCreateViewSet.as_view({
             'post': 'create'
         }), name="solution-create"),

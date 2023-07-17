@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url, include
+from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.i18n import JSONCatalog
@@ -21,23 +21,23 @@ API_TITLE = f'{settings.PROJECT_NAME} API'
 API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
-    url(r'^account/', include('allauth.urls')),
-    url(r"^admin/", admin.site.urls),
-    url(r"^api/", include("azure_services.urls")),
-    url(r"^api/", include("core.urls")),
-    url(r"^api/", include("user.urls")),
-    url(r"^api/", include("project.urls")),
-    url(r"^api/", include("country.urls")),
-    url(r"^api/", include("search.urls")),
-    url(r"^api/", include("simple_feedback.urls")),
-    url(r"^api/kpi/", include("kpi.urls")),
-    url(r'^translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
-    url(r'^translation/', include('rosetta.urls')),
-    url(r'^health_check/', include('health_check.urls'))
+    path('account/', include('allauth.urls')),
+    path("admin/", admin.site.urls),
+    path("api/", include("azure_services.urls")),
+    path("api/", include("core.urls")),
+    path("api/", include("user.urls")),
+    path("api/", include("project.urls")),
+    path("api/", include("country.urls")),
+    path("api/", include("search.urls")),
+    path("api/", include("simple_feedback.urls")),
+    path("api/kpi/", include("kpi.urls")),
+    path('translation/json/', JSONCatalog.as_view(), name='json-catalog'),
+    path('translation/', include('rosetta.urls')),
+    path('health_check/', include('health_check.urls'))
 ]
 
 if settings.DEBUG:  # pragma: no cover
-    urlpatterns.append(url(r'^api/devdocs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)))
+    urlpatterns.append(path('api/devdocs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)))
 
 api_info = openapi.Info(
     title=API_TITLE,

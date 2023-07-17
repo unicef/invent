@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import re_path
 from rest_framework.routers import DefaultRouter
 from country.views import CountryViewSet, PartnerLogoViewSet, DonorViewSet, DonorPartnerLogoViewSet, \
     MapFileViewSet, CountryImageViewSet, DonorImageViewSet, CountryLandingPageViewSet, DonorLandingPageViewSet, \
@@ -23,7 +23,5 @@ router.register(r'country-custom-questions', CountryCustomQuestionViewSet, basen
 router.register(r'donor-custom-questions', DonorCustomQuestionViewSet, basename='donor-custom-questions')
 
 urlpatterns = [
-                  url(r"^countries/map-download/(?P<country_id>\d+)/$",
-                      view=views.MapDownloadViewSet.as_view({'get': 'map_download'}),
-                      name="country-map-download"),
-              ] + router.urls
+    re_path(r"^countries/map-download/(?P<country_id>\d+)/$", view=views.MapDownloadViewSet.as_view({'get': 'map_download'}), name="country-map-download"),
+] + router.urls
