@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 from allauth.account.views import confirm_email
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_simplejwt.views import TokenObtainPairView # refresh token functionality can be added with TokenRefreshView
 
 from . import views as views
 from .adapters import AzureLogin
@@ -16,7 +16,7 @@ urlpatterns = [
     path("", include(router.urls)),
     path("", include("django.contrib.auth.urls")),
     path('rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
-    path('api-token-auth/', obtain_jwt_token, name="api_token_auth"),
+    path('api-token-auth/', TokenObtainPairView.as_view(), name='api_token_auth'),
     re_path(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
 ]
 

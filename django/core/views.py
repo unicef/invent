@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
     IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState, IsGPOOrManagerOfAtLeastOnePortfolio
@@ -30,42 +30,42 @@ class TokenAuthMixin:
     Mixin class for defining general permission and authentication settings on
     REST Framework Class Based Views.
     """
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated,)
 
 
 class TeamTokenAuthMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
 class GPOAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrReadOnly)
 
 
 class PortfolioAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerPortfolio)
 
 
 class SolutionAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerOfAtLeastOnePortfolio)
 
 
 class ProjectPortfolioStateAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerProjectPortfolioState)
 
 
 class ReviewScoreAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsReviewerGPOOrManager)
 
 
 class ReviewScoreReviewerAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsReviewable)
 
 
