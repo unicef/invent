@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
@@ -161,7 +161,7 @@ class StaticDataView(GenericAPIView):
         languages = []
         for code, name in settings.LANGUAGES:
             languages.append({'code': code,
-                              'name': ugettext(name),
+                              'name': gettext(name),
                               'flag': self.flag_mapping.get(code, '')})
         return languages
 
