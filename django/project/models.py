@@ -3,7 +3,7 @@ from copy import deepcopy
 from collections import namedtuple
 from typing import List, Union, Dict
 
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
+from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
 from simple_history.models import HistoricalRecords
 from sorl.thumbnail import ImageField, get_thumbnail
