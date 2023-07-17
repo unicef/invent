@@ -1013,6 +1013,15 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     name = models.CharField(max_length=128)
     order = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     tooltip = models.CharField(max_length=256, blank=True, null=True)
+    completion_marks_an_initiative_as_inactive = models.BooleanField(help_text="When this phase is marked as completed (with an end date) it means that the initiative is no longer active.<br>It will not move automatically to a following phase, but will stay in this phase.",
+                                                                     default=False)
+
+    # define a function for setting different default value for the two end phases
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Check the variable as default for specific stages
+        if self.name in ['Handover or Complete', 'Discontinued']:
+            self.completion_marks_an_initiative_as_inactive = True
 
     class Meta:
         ordering = ["order", "name"]
