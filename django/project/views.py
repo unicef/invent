@@ -82,17 +82,19 @@ class ProjectPublicViewSet(ViewSet):
     def get_updated_stages(self):
         stages = Stage.objects.values(
             'id', 'name', 'tooltip', 'order', 'completion_marks_an_initiative_as_inactive')
-        return [
-            {
+        stage_data = []
+        for stage in stages:
+            stage_info = {
                 'id': stage['id'],
                 'name': stage['name'],
                 'tooltip': stage['tooltip'],
                 'order': stage['order'],
-                # rename the field for the frond-end
-                'end_phase': bool(stage['completion_marks_an_initiative_as_inactive']),
+                'end_phase': stage['completion_marks_an_initiative_as_inactive'],
             }
-            for stage in stages
-        ]
+            if stage['name'] in ['Handover or Complete', 'Discontinued']:
+                stage_info['end_phase'] = True
+            stage_data.append(stage_info)
+        return stage_data
 
     def _get_project_structure(self):
 
@@ -210,8 +212,6 @@ class ProjectPublicViewSet(ViewSet):
             stages=self.get_updated_stages(),
             phases=Phase.objects.values('id', 'name').custom_ordered(),
             phases_stages=grouped_phases
-
-
         )
 
 
