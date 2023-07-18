@@ -32,7 +32,6 @@ django-simplefeedback==1.1.2            # Updated from 0.9
 django-simple-history==3.3.0            # Updated from 2.4.0
 django-ordered-model==3.7.4             # Updated from 2.1.0
 djangorestframework==3.14.0             # Updated from 3.8.2
-# djangorestframework-jwt==1.11.0         # This project is discontinued and not maintained. Does not support Python 3.8 or Django>4. TODO: Test if this is needed and if we can safely remove this
 djangorestframework-simplejwt==5.2.2    # [Current latest]. This is introduced to counter the issues with the djangorestframework-jwt module. Supports Python==3.8 and Django==4.2.3
 dj-rest-auth==4.0.1                     # [Current latest]
 drf-yasg==1.21.6                        # Updated from 1.17.1

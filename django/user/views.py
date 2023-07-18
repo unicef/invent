@@ -1,5 +1,7 @@
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
@@ -34,3 +36,33 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.filter(name__contains=search_term)
         else:
             return Organisation.objects.all()
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['user_profile_id'] = user.userprofile.id if hasattr(user, 'userprofile') else None
+        token['account_type'] = user.userprofile.account_type if hasattr(user, 'userprofile') else None
+        token['is_superuser'] = user.is_superuser
+
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # customize the response to your needs
+        data = {
+            'token': data['access'],
+            'user_profile_id': self.user.userprofile.id if hasattr(self.user, 'userprofile') else None,
+            'account_type': self.user.userprofile.account_type if hasattr(self.user, 'userprofile') else None,
+            'is_superuser': self.user.is_superuser
+        }
+
+        return data
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

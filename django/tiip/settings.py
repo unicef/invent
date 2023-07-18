@@ -1,5 +1,5 @@
 import os
-import datetime
+from datetime import timedelta
 import sys
 
 from environs import Env
@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'django_extensions',
     'drf_yasg',
     'ordered_model',
@@ -202,20 +203,9 @@ REST_FRAMEWORK = {
     ),
 }
 
-
-def jwt_response_payload_handler(token, user=None, request=None):
-    return {
-        'token': token,
-        'user_profile_id': user.userprofile.id if hasattr(user, 'userprofile') else None,
-        'account_type': user.userprofile.account_type if hasattr(user, 'userprofile') else None,
-        'is_superuser': user.is_superuser
-    }
-
-
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
-    'JWT_AUTH_HEADER_PREFIX': 'Token',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7)
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Token',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
 }
 
 # django-allauth and rest-auth settings
