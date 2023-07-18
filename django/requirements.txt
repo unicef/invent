@@ -110,3 +110,23 @@ django-ckeditor==6.6.1                  # Updated from 5.9.0. TODO: Test if this
 django-js-asset==2.1.0                  # Updated from 1.2.2. TODO: Test if this is needed and if we can safely remove this
 django-crispy-forms==2.0                # Updated from 1.9.0. TODO: Test if this is needed and if we can safely remove this
 django-widget-tweaks==1.4.12            # Updated from 1.4.8. TODO: Test if this is needed and if we can safely remove this
+
+
+# anyjson==0.3.3
+# appnope==0.1.0
+# bcrypt==3.1.4
+# behave==1.2.6
+# colorama==0.3.9
+# coreschema==0.0.4
+# docopt==0.6.2
+# Fabric3==1.14.post1
+# ipython-genutils==0.2.0
+# itypes==1.1.0
+# Jinja2==2.10
+# microsofttranslator==0.8
+# pathtools==0.1.2
+# pickleshare==0.7.4
+# simplegeneric==0.8.1
+# six==1.13.0
+# watchdog==0.8.3
+# pycrypto==2.6.1
