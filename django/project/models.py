@@ -1022,6 +1022,7 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         # Check the variable as default for specific stages
         if self.name in ['Handover or Complete', 'Discontinued']:
             self.completion_marks_an_initiative_as_inactive = True
+            self.save()  # Save the instance to persist the changes in database
 
     class Meta:
         ordering = ["order", "name"]
