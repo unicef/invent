@@ -1,13 +1,13 @@
 <template>
   <div class="flag-info">
     <el-col class="CountryHolder">
-      <el-row :gutter="30" type="flex">
-        <el-col :span="4" class="CountryHolder">
-          <img :src="countryFlag" alt="country flag" class="CountryFlag" loading="lazy" />
-        </el-col>
-        <el-col :span="26">
+      <el-row type="flex">
+        <el-col>
           <div class="country-text">
-            <div class="CountryName">{{ landingData.name }}</div>
+            <div class="CountryName">
+              {{ landingData.name }}
+              <span><img :src="countryFlag" alt="country flag" class="CountryFlag" loading="lazy" /></span>
+            </div>
             <p>
               <translate>
                 Welcome to country view. This view is scoped to show all initiatives of the chosen country.
@@ -58,10 +58,10 @@ export default {
   height: 100px;
   width: inherit;
   margin: 12px auto;
-  padding: 8px 36px 8px 36px;
+  padding: 8px 36px 8px @leftHomepageIndentation;
   display: flex;
 
-  justify-content: center;
+  justify-content: start;
 
   .CountryHolder {
     display: flex;
@@ -69,15 +69,15 @@ export default {
     width: fit-content;
 
     .CountryFlag {
-      height: 84px;
-      margin-right: 6px;
-      padding: 5px 0;
+      position: relative;
+      top: 2px;
+      height: 22px;
+      margin-left: 6px;
     }
     .country-text {
       display: flex;
       height: 100%;
       flex-direction: column;
-      padding-left: 12px;
 
       a {
         color: @colorBrandPrimary;
