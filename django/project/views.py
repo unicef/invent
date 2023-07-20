@@ -89,13 +89,13 @@ class ProjectPublicViewSet(ViewSet):
                 'name': stage['name'],
                 'tooltip': stage['tooltip'],
                 'order': stage['order'],
+                # rename the checkbox (for the frond-end)
                 'end_phase': stage['completion_marks_an_initiative_as_inactive'],
             }
-            if stage['name'] in ['Handover or Complete', 'Discontinued']:
-                stage_info['end_phase'] = True
             stage_data.append(stage_info)
         return stage_data
 
+    @cache_structure
     def _get_project_structure(self):
 
         # create a mapping for phases and stages
