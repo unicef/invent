@@ -90,6 +90,7 @@ class UserProfile(ExtendedModel):
 
 @classmethod
 def export_resource_classes(cls):  # pragma: no cover
+    #this import needs to stay here to avoid circular import error
     from core.resources import UserResource
     return {"userprofiles": ("UserProfiles", UserResource)}
 
