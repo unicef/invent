@@ -34,7 +34,7 @@
               </div>
             </el-col>
             <el-col v-if="isPublished" :span="2" class="InfoSection">
-              <favorite :id="project.id" :favorite="favorite" />
+              <favorite :id="id" :favorite="favorite" />
             </el-col>
           </el-row>
         </el-col>
@@ -113,7 +113,11 @@ export default {
       return this.user ? this.user.favorite.includes(toInteger(this.$route.params.id)) : undefined
     },
     project() {
-      return this.published && this.published.name ? this.published : this.draft
+      if (this.route === 'organisation-initiatives-id-published') {
+        return this.published
+      } else {
+        return this.draft
+      }
     },
     isPublished() {
       return !!(this.published && this.published.name)

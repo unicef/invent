@@ -31,7 +31,7 @@ export default {
       'organisation-portfolio-innovation-solutions-id-edit': this.$gettext('Edit solution'),
       'organisation-portfolio-innovation-solutions-create': this.$gettext('Create new solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
-      'organisation-initiatives': this.$gettext('My initiatives'),
+      'organisation-initiatives': this.$gettext('Initiatives'),
       'organisation-portfolio-management-new': this.$gettext('New portfolio'),
       'organisation-portfolio-management-id-edit': this.$gettext('Edit portfolio'),
       'organisation-initiatives-create': this.$gettext('New Initiative'),
@@ -62,6 +62,8 @@ export default {
       initiative: 'project/getProjectData',
       portfolioInnovationName: 'portfolio/getName',
       getPortfolios: 'solution/getPortfoliosList',
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
     }),
     pureRoute() {
       if (this.$route && this.$route.name) {
@@ -116,6 +118,18 @@ export default {
                 text: this[name] || '',
               },
             ]
+          } else if (name === 'organisation-initiatives') {
+            breadcrumbs = [
+              ...breadcrumbs,
+              {
+                id: item,
+                localePath: {
+                  name: 'organisation-inventory-list',
+                  params: { ...this.$route.params },
+                },
+                text: this.$gettext('Initiatives'),
+              },
+            ]
           } else {
             breadcrumbs = [
               ...breadcrumbs,
@@ -139,7 +153,7 @@ export default {
     idToName(route) {
       switch (route) {
         case 'organisation-initiatives-id':
-          return this.initiative.name
+          return this.$route.name.includes('published') ? this.published.name : this.draft.name
         case 'organisation-portfolio-innovation-solutions-id':
           return this.solutionName
         // case 'organisation-portfolio-innovation-id':
