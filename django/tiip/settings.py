@@ -324,25 +324,10 @@ LOGGING = {
         },
     },
     'loggers': {
-        '': {  # default logger
+        '': {
             'handlers': ['console', 'logfile'],
             'level': 'INFO',
             'propagate': True,
-        },
-        'opentelemetry': {  # OpenTelemetry logger
-            'handlers': ['console', 'logfile'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
-        'opentelemetry.sdk': {  # OpenTelemetry SDK logger
-            'handlers': ['console', 'logfile'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
-        'opentelemetry.ext.azure_monitor': {  # Azure Monitor OpenTelemetry logger
-            'handlers': ['console', 'logfile'],
-            'level': 'WARNING',
-            'propagate': False,
         },
     },
 }
@@ -427,10 +412,3 @@ if ENVIRONMENT in ['dev']:
 
     if APPLICATIONINSIGHTS_CONNECTION_STRING:  # Ensure the connection string exists
         configure_azure_monitor(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING)
-
-
-print(f"AZURE_SECRET: {os.environ.get('AZURE_SECRET', default='')}")
-print(f"AZURE_CLIENT_ID: {os.environ.get('AZURE_CLIENT_ID', default='')}")
-print(f"AZURE_TENANT: {os.environ.get('AZURE_TENANT', default='')}")
-print(f"OSM_MAP_CLI_KEY: {os.environ.get('OSM_MAP_CLI_KEY', default='')}")
-print(f"SECRET_KEY: {os.environ.get('SECRET_KEY', default='')}")
