@@ -77,7 +77,6 @@ class ProjectPublicViewSet(ViewSet):
 
         return Response(self._get_project_structure())
 
-    @cache_structure
     # get the updated 'completion_marks_an_initiative_as_inactive' for all stages
     def get_updated_stages(self):
         stages = Stage.objects.values(
