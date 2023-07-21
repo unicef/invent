@@ -78,6 +78,24 @@ class ProjectPublicViewSet(ViewSet):
         return Response(self._get_project_structure())
 
     @cache_structure
+    # get the updated 'completion_marks_an_initiative_as_inactive' for all stages
+    def get_updated_stages(self):
+        stages = Stage.objects.values(
+            'id', 'name', 'tooltip', 'order', 'completion_marks_an_initiative_as_inactive')
+        stage_data = []
+        for stage in stages:
+            stage_info = {
+                'id': stage['id'],
+                'name': stage['name'],
+                'tooltip': stage['tooltip'],
+                'order': stage['order'],
+                # rename the checkbox (for the frond-end)
+                'end_phase': stage['completion_marks_an_initiative_as_inactive'],
+            }
+            stage_data.append(stage_info)
+        return stage_data
+
+    @cache_structure
     def _get_project_structure(self):
 
         # create a mapping for phases and stages
@@ -191,7 +209,7 @@ class ProjectPublicViewSet(ViewSet):
             innovation_ways=InnovationWay.objects.values(
                 'id', 'name').custom_ordered(),
             isc=ISC.objects.values('id', 'name').custom_ordered(),
-            stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
+            stages=self.get_updated_stages(),
             phases=Phase.objects.values('id', 'name').custom_ordered(),
             phases_stages=grouped_phases
 
