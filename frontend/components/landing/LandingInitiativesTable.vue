@@ -1,22 +1,116 @@
 <template>
   <div class="LandingInitiativesTable">
     <div class="TopSwitchBar">
-      <el-switch
-        v-model="board"
-        :active-text="$gettext('Phases board') | translate"
-        :inactive-text="$gettext('Stages board') | translate"
-        class="Switch"
-      >
-      </el-switch>
+      <div class="Select-sectors">
+        <el-popover
+          data-test="sectors-select"
+          v-model="columnSelectorOpen"
+          :title="settingsTitle"
+          placement="bottom-end"
+          width="420"
+          trigger="click"
+          popper-class="CustomPopover popoverAlign"
+          @show="popperOpenHandler"
+        >
+          <el-button slot="reference" type="text" class="cogIcon">
+            <fa icon="cog" />
+            <translate id="select-sectors-label">Select sectors</translate>
+          </el-button>
+
+          <div class="CustomPopoverList Small ColumnSelector">
+            <ul class="ColumnList">
+              <li
+                v-for="c in getSelectedSectors"
+                :key="c.id"
+                :class="['Item', { Selected: c.selected }]"
+                @click="() => invertSelectSector(c.id)"
+              >
+                <fa icon="check" />
+                {{ c.name }}
+              </li>
+            </ul>
+            <div class="CustomPopoverActions">
+              <el-row type="flex" align="middle">
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-cancel"
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="columnSelectorOpen = false"
+                  >
+                    <translate>Cancel</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-deselect-all"
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="deselectAllSectors"
+                  >
+                    <translate>Deselect all</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-select-all"
+                    type="text"
+                    size="small"
+                    class="CancelButton"
+                    @click="selectAllSectors"
+                  >
+                    <translate>Select all</translate>
+                  </el-button>
+                </el-col>
+                <el-col>
+                  <el-button
+                    data-test="select-sectors-update"
+                    type="text"
+                    size="small"
+                    class="PrimaryButton"
+                    @click="updateSectors"
+                  >
+                    <translate>Update</translate>
+                  </el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-popover>
+      </div>
+      <div>
+        <el-switch
+          data-test="height-switch"
+          v-model="stdHeight"
+          :active-text="$gettext('Standard height') | translate"
+          :inactive-text="$gettext('Full height') | translate"
+          class="Switch"
+        >
+        </el-switch>
+        <el-switch
+          data-test="phases-stages-switch"
+          v-model="boardType"
+          :active-text="$gettext('Phases board') | translate"
+          :inactive-text="$gettext('Stages board') | translate"
+          class="Switch"
+        >
+        </el-switch>
+      </div>
     </div>
     <el-table
       :data="initiativesTableData"
       :highlight-current-row="false"
-      max-height="580"
+      :key="stdHeight ? 'custom' : 'full'"
+      v-bind="setMaxHeight"
       :lazy="true"
       stripe
-      :empty-text="$gettext('No initiatives available') | translate"
+      :empty-text="$gettext('No initiatives') | translate"
     >
+      <template slot="empty">
+        <translate key="empty-sector-initiatives-table-text">No initiatives to show</translate>
+      </template>
       <el-table-column
         v-for="({ name, id, count }, index) in columns"
         :prop="name"
@@ -31,7 +125,7 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <div v-if="index === 0">
+          <div v-if="index === 0" class="sectors-cell">
             <p>{{ scope.row.sector.sector_name }}</p>
           </div>
           <div v-else>
@@ -78,20 +172,34 @@ export default {
     return {
       daysStale: 180,
       phasesOmit: ['Handover or Complete', 'Discontinued'],
-      board: true,
+      boardType: true,
+      stdHeight: true,
+      columnSelectorOpen: false,
     }
+  },
+  mounted() {
+    this.$store.dispatch('phasesStagesBoard/initSectors')
   },
   computed: {
     ...mapGetters({
       phases: 'projects/getStages',
       landingProjectsList: 'landing/getCountryProjectsList',
       unicefOffice: 'offices/getOffices',
-      sectors: 'projects/getSectors',
       phasesStages: 'projects/getPhasesStages',
       unicef_regions: 'system/getUnicefRegions',
+      getSelectedSectors: 'phasesStagesBoard/getSelectedSectors',
+      getShownSectors: 'phasesStagesBoard/getShownSectors',
     }),
+    settingsTitle() {
+      return `${this.$gettext('selected sectors')} (${
+        this.getSelectedSectors.filter((sector) => sector.selected === true).length
+      }/${this.getSelectedSectors.length})`
+    },
+    setMaxHeight() {
+      return this.stdHeight ? { 'max-height': 580 } : { 'max-height': false }
+    },
     columns() {
-      return this.board ? this.omitedPhasesCount : this.stagesCount
+      return this.boardType ? this.omitedPhasesCount : this.stagesCount
     },
     stagesCount() {
       const columns = this.phasesStages.map((phst) => ({ name: phst.stage_label, id: phst.stage_number }))
@@ -117,16 +225,18 @@ export default {
         (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
       )
     },
-    sortedSectors() {
-      return this.sectors.sort((a, b) => a.name.localeCompare(b.name))
+    sortedSelectedSectors() {
+      return this.getShownSectors
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter((sector) => sector.selected === true)
     },
     initiativesTableData() {
-      return this.board ? this.initiativesPhasesTableData : this.initiativesStagesTableData
+      return this.boardType ? this.initiativesPhasesTableData : this.initiativesStagesTableData
     },
     initiativesStagesTableData() {
       let tableData = []
       /* Creates each table row per sector**/
-      this.sortedSectors.map((sector) => {
+      this.sortedSelectedSectors.map((sector) => {
         const dataObj = {}
         dataObj['sector'] = { sector_name: sector.name }
         this.phasesStages.map((stage) => {
@@ -165,7 +275,7 @@ export default {
 
       const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
       /* Creates each table row per sector**/
-      this.sortedSectors.map((sector) => {
+      this.sortedSelectedSectors.map((sector) => {
         const dataObj = {}
         dataObj['sector'] = { sector_name: sector.name }
         omPhases.map((phase) => {
@@ -199,6 +309,19 @@ export default {
     },
   },
   methods: {
+    deselectAllSectors() {
+      this.$store.dispatch('phasesStagesBoard/deselectAll')
+    },
+    selectAllSectors() {
+      this.$store.dispatch('phasesStagesBoard/selectAll')
+    },
+    updateSectors() {
+      this.$store.dispatch('phasesStagesBoard/updateSectors')
+      this.columnSelectorOpen = false
+    },
+    invertSelectSector(sectorId) {
+      this.$store.dispatch('phasesStagesBoard/invertSelectSector', sectorId)
+    },
     getStage(phase) {
       return this.phasesStages.find((stage) => stage.phases.some((stphase) => stphase.phase_number === phase))
         .stage_number
@@ -256,28 +379,49 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 .LandingInitiativesTable {
-  margin: 10px 0;
+  padding-top: 30px;
+  margin: 20px 0 60px 0;
 
   .TopSwitchBar {
-    background-color: @colorGrayLight;
     width: 100%;
     height: 30px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    .Select-sectors {
+      padding-left: @leftHomepageIndentation;
+
+      span {
+        position: relative;
+        top: 1px;
+        #select-sectors-label {
+          position: relative;
+          font-size: 14px;
+          font-weight: normal;
+          top: -2px;
+        }
+        .cogIcon {
+          padding: unset;
+          .fa-cog {
+            padding: 4px 8px 0 0;
+            font-size: 18px;
+          }
+        }
+      }
+    }
 
     .Switch {
-      padding-right: 24px;
-      padding-top: 4px;
+      padding: 5px 18px 0;
     }
   }
 
-  .el-table--enable-row-hover .el-table__body tr:hover > td {
-    background-color: unset;
-  }
-
   .el-table {
-    border: solid @colorBrandPrimary 2px;
     overflow-x: auto;
+
+    .sectors-cell {
+      text-align: end;
+      font-weight: bold;
+    }
 
     td {
       border-left: dashed @colorBrandPrimary 1px;
@@ -303,6 +447,7 @@ export default {
           flex-direction: column;
           padding-top: 2px;
           #header-title {
+            font-size: @fontSizeSmall;
             text-align: center;
             word-wrap: normal;
             white-space: normal;
@@ -331,6 +476,13 @@ export default {
 
     > td {
       vertical-align: top;
+    }
+  }
+  .el-table__row .hover-row {
+    > tr {
+      > td {
+        background-color: unset !important;
+      }
     }
   }
 
@@ -407,26 +559,41 @@ export default {
     }
   }
 }
+.popoverAlign {
+  transform: translate(-5px, 0px);
+  margin: 0 28px;
+}
+
 .caption {
-  width: 420px;
+  width: 340px;
   display: inline-flex;
-  padding: 10px;
+  padding: 10px 10px 10px @leftHomepageIndentation;
   margin: 20px 0 20px 0;
   .icon-div {
     width: fit-content;
-    height: fit-content;
+    height: 20px;
     background-color: #fe8900;
     border-radius: 6px;
     box-shadow: 0px 4px 4px 0px rgba(194, 204, 210, 1);
     padding: 4px;
     margin-right: 10px;
     .el-icon-time {
-      font-size: 36px;
+      font-size: 20px;
       color: white;
     }
   }
   p {
     margin: 0 0 0 10px;
+    font-size: @fontSizeSmall;
   }
+}
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background-color: unset !important;
+}
+.el-table__body tr.hover-row > td,
+.el-table__body tr.hover-row.current-row > td,
+.el-table__body tr.hover-row.el-table__row--striped > td,
+.el-table__body tr.hover-row.el-table__row--striped.current-row > td {
+  background-color: unset !important;
 }
 </style>
