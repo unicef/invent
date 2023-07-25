@@ -15,6 +15,7 @@ from kpi.views import SolutionKPIViewSet, CountryInclusionKPIViewSet
 from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet, ProblemStatementListViewSet, \
     SolutionListViewSet
 from user.views import OrganisationViewSet
+from django.core.admin.custom_admin import custom_admin_site
 
 admin.site.site_header = settings.PROJECT_NAME
 API_TITLE = f'{settings.PROJECT_NAME} API'
@@ -23,6 +24,7 @@ API_DESCRIPTION = 'Private API'
 urlpatterns = [
     path('account/', include('allauth.urls')),
     path("admin/", admin.site.urls),
+    path("admin/", custom_admin_site.urls),
     path("api/", include("azure_services.urls")),
     path("api/", include("core.urls")),
     path("api/", include("user.urls")),

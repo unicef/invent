@@ -18,6 +18,7 @@ from modeltranslation.translator import translator
 from adminsortable2.admin import SortableAdminMixin
 from user.models import UserProfile
 from .widgets import AdminArrayField
+from .custom_admin import custom_admin_site
 
 from import_export.admin import ExportActionMixin
 from core.resources import UserResource
@@ -127,20 +128,20 @@ class ArrayFieldMixin(object):
         js = ('arrayfield.js',)
 
 
-@admin.register(NewsItem)
+@custom_admin.register(NewsItem)
 class NewsFeedAdmin(SortableAdminMixin, TranslationAdmin):
     list_display = ('__str__', 'order', 'link', 'visible')
 
 
-admin.site.login_form = CustomAuthenticationForm
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
-admin.site.unregister(EmailAddress)
-admin.site.unregister(EmailConfirmation)
-admin.site.unregister(SocialAccount)
-admin.site.unregister(SocialToken)
-admin.site.unregister(SocialApp)
-admin.site.unregister(ImportJob)
+custom_admin_site.login_form = CustomAuthenticationForm
+custom_admin_site.unregister(User)
+custom_admin_site.register(User, CustomUserAdmin)
+custom_admin_site.unregister(EmailAddress)
+custom_admin_site.unregister(EmailConfirmation)
+custom_admin_site.unregister(SocialAccount)
+custom_admin_site.unregister(SocialToken)
+custom_admin_site.unregister(SocialApp)
+custom_admin_site.unregister(ImportJob)
 
 # renaming the admin section name
 iec = proj_apps.get_app_config('import_export_celery')
@@ -148,7 +149,7 @@ iec.verbose_name = "Generate Export"
 
 # the order of the loaded apps might change, and here we check if its registered or not
 try:
-    admin.site.unregister(ExportJob)
+    custom_admin_site.unregister(ExportJob)
 except NotRegistered:
     pass
 
@@ -167,9 +168,9 @@ class ExportJobAdminNew(ExportJobAdmin):
 
 # the order of loaded apps might require this try
 try:
-    admin.site.unregister(ExportJob)
+    custom_admin_site.unregister(ExportJob)
 except NotRegistered:
     pass
 
 # after the unregistering we register the django-import-export-celery ExportJobAdmin again
-admin.site.register(ExportJob, ExportJobAdminNew)
+custom_admin_site.register(ExportJob, ExportJobAdminNew)
