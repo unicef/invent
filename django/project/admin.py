@@ -13,6 +13,7 @@ from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
     Phase, ProjectVersion, Solution, CountrySolution, UserProfile
 from country.models import CountryOffice
 from core.utils import make_admin_list
+from core.admin.custom_admin import custom_admin_site
 
 from project.admin_filters import IsPublishedFilter, UserFilter, OverViewFilter, CountryFilter, DescriptionFilter, \
     RegionFilter
@@ -420,37 +421,40 @@ class SolutionAdmin(ExportActionMixin, admin.ModelAdmin):
         return ', '.join(countries_with_people_reached)
 
 
-@admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
-admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
-admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
-admin.site.register(HealthCategory, HealthCategoryAdmin)
-admin.site.register(HSCGroup, HSCGroupAdmin)
-admin.site.register(HSCChallenge, HSCChallengeAdmin)
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(ProjectVersion, ProjectVersionAdmin)
-admin.site.register(Portfolio, PortfolioAdmin)
-admin.site.register(UNICEFGoal, UNICEFGoalAdmin)
-admin.site.register(UNICEFResultArea, UNICEFResultAreaAdmin)
-admin.site.register(UNICEFCapabilityLevel, UNICEFCapabilityLevelAdmin)
-admin.site.register(UNICEFCapabilityCategory, UNICEFCapabilityCategoryAdmin)
-admin.site.register(UNICEFCapabilitySubCategory,
-                    UNICEFCapabilitySubCategoryAdmin)
-admin.site.register(UNICEFSector, UNICEFSectorAdmin)
-admin.site.register(RegionalPriority, RegionalPriorityAdmin)
-admin.site.register(HardwarePlatform, HardwarePlatformAdmin)
-admin.site.register(NontechPlatform, NontechPlatformAdmin)
-admin.site.register(PlatformFunction, PlatformFunctionAdmin)
-admin.site.register(InnovationWay, InnovationWayAdmin)
-admin.site.register(InnovationCategory, InnovationCategoryAdmin)
-admin.site.register(CPD, CPDAdmin)
-admin.site.register(ISC, ISCAdmin)
-admin.site.register(ProjectImportV2, ProjectImportAdmin)
-admin.site.register(Stage, StageAdmin)
-admin.site.register(Phase, PhaseAdmin)
-admin.site.register(ProblemStatement, ProblemStatementAdmin)
-admin.site.register(Solution, SolutionAdmin)
+custom_admin_site.register(UserProfile, UserProfileAdmin)
+
+
+custom_admin_site.register(TechnologyPlatform, TechnologyPlatformAdmin)
+custom_admin_site.register(DigitalStrategy, DigitalStrategyAdmin)
+custom_admin_site.register(HealthFocusArea, HealthFocusAreaAdmin)
+custom_admin_site.register(HealthCategory, HealthCategoryAdmin)
+custom_admin_site.register(HSCGroup, HSCGroupAdmin)
+custom_admin_site.register(HSCChallenge, HSCChallengeAdmin)
+custom_admin_site.register(Project, ProjectAdmin)
+custom_admin_site.register(ProjectVersion, ProjectVersionAdmin)
+custom_admin_site.register(Portfolio, PortfolioAdmin)
+custom_admin_site.register(UNICEFGoal, UNICEFGoalAdmin)
+custom_admin_site.register(UNICEFResultArea, UNICEFResultAreaAdmin)
+custom_admin_site.register(UNICEFCapabilityLevel, UNICEFCapabilityLevelAdmin)
+custom_admin_site.register(UNICEFCapabilityCategory,
+                           UNICEFCapabilityCategoryAdmin)
+custom_admin_site.register(UNICEFCapabilitySubCategory,
+                           UNICEFCapabilitySubCategoryAdmin)
+custom_admin_site.register(UNICEFSector, UNICEFSectorAdmin)
+custom_admin_site.register(RegionalPriority, RegionalPriorityAdmin)
+custom_admin_site.register(HardwarePlatform, HardwarePlatformAdmin)
+custom_admin_site.register(NontechPlatform, NontechPlatformAdmin)
+custom_admin_site.register(PlatformFunction, PlatformFunctionAdmin)
+custom_admin_site.register(InnovationWay, InnovationWayAdmin)
+custom_admin_site.register(InnovationCategory, InnovationCategoryAdmin)
+custom_admin_site.register(CPD, CPDAdmin)
+custom_admin_site.register(ISC, ISCAdmin)
+custom_admin_site.register(ProjectImportV2, ProjectImportAdmin)
+custom_admin_site.register(Stage, StageAdmin)
+custom_admin_site.register(Phase, PhaseAdmin)
+custom_admin_site.register(ProblemStatement, ProblemStatementAdmin)
+custom_admin_site.register(Solution, SolutionAdmin)

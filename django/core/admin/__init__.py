@@ -128,20 +128,27 @@ class ArrayFieldMixin(object):
         js = ('arrayfield.js',)
 
 
-@custom_admin.register(NewsItem)
+@admin.register(NewsItem)
 class NewsFeedAdmin(SortableAdminMixin, TranslationAdmin):
     list_display = ('__str__', 'order', 'link', 'visible')
 
 
 custom_admin_site.login_form = CustomAuthenticationForm
-custom_admin_site.unregister(User)
+if User in custom_admin_site._registry:
+    custom_admin_site.unregister(User)
 custom_admin_site.register(User, CustomUserAdmin)
-custom_admin_site.unregister(EmailAddress)
-custom_admin_site.unregister(EmailConfirmation)
-custom_admin_site.unregister(SocialAccount)
-custom_admin_site.unregister(SocialToken)
-custom_admin_site.unregister(SocialApp)
-custom_admin_site.unregister(ImportJob)
+if EmailAddress in custom_admin_site._registry:
+    custom_admin_site.unregister(EmailAddress)
+if EmailConfirmation in custom_admin_site._registry:
+    custom_admin_site.unregister(EmailConfirmation)
+if SocialAccount in custom_admin_site._registry:
+    custom_admin_site.unregister(SocialAccount)
+if SocialToken in custom_admin_site._registry:
+    custom_admin_site.unregister(SocialToken)
+if SocialApp in custom_admin_site._registry:
+    custom_admin_site.unregister(SocialApp)
+if ImportJob in custom_admin_site._registry:
+    custom_admin_site.unregister(ImportJob)
 
 # renaming the admin section name
 iec = proj_apps.get_app_config('import_export_celery')
