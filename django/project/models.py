@@ -1014,6 +1014,8 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     name = models.CharField(max_length=128)
     order = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     tooltip = models.CharField(max_length=256, blank=True, null=True)
+    completion_marks_an_initiative_as_inactive = models.BooleanField(
+        help_text="When this phase is marked as completed (with an end date) it means that the initiative is no longer active.<br>It will not move automatically to a following phase, but will stay in this phase.", default=False)
 
     class Meta:
         ordering = ["order", "name"]
@@ -1024,36 +1026,35 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         return self.name
 
     @classmethod
-    def get_discontinued(cls):
-        """
-        Hardcoded for now. Object with this name must exist in the DB to work.
-        """
-        return cls.objects.get(name="Discontinued")
-
-    @classmethod
     def calc_current_phase(cls, stages: List[Dict]):
-        discontinued_id = cls.get_discontinued().id
         all_stages = list(cls.objects.order_by(
             "order").values_list("id", flat=True))
-        one_before_discontinued_id = all_stages[all_stages.index(
-            discontinued_id) - 1]
-
         if not stages:  # when no phases are selected the current phase is the first one
             return all_stages[0]
 
         stage_ids = [stage["id"] for stage in stages]
+        # get the completed phases of the initiative and order them
         selected_stages = cls.objects.filter(
             id__in=stage_ids).order_by("order")
+        # get the last phase from initiative's completed phases
         last_stage = selected_stages.last()
 
-        if last_stage.id == discontinued_id:
-            current = discontinued_id
-        elif last_stage.id == one_before_discontinued_id:
-            current = last_stage.id
-        elif last_stage.id == all_stages[-1]:
-            current = last_stage.id
-        else:
-            current = all_stages[all_stages.index(last_stage.id) + 1]
+        # apply the business requirements
+        if not last_stage.completion_marks_an_initiative_as_inactive:  # selected phase's checkbox unchecked
+            # compute if there are already previous completed end phases (checkbox=checked)
+            completed_stages = selected_stages.filter(
+                completion_marks_an_initiative_as_inactive=True)
+            if completed_stages:  # if there completed end phases
+                current = last_stage.id
+            else:  # if there are not completed end phases
+                if last_stage.id != all_stages[-1]:  # not the last in list
+                    current = all_stages[all_stages.index(
+                        last_stage.id) + 1]  # get the next phase
+                else:  # the last in list
+                    current = last_stage.id  # set this phase as current
+        else:  # selected phase's checkbox checked
+            current = last_stage.id  # set this phase as current
+
         return current
 
 

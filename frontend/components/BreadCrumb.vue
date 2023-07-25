@@ -31,7 +31,7 @@ export default {
       'organisation-portfolio-innovation-solutions-id-edit': this.$gettext('Edit solution'),
       'organisation-portfolio-innovation-solutions-create': this.$gettext('Create new solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
-      'organisation-initiatives': this.$gettext('My initiatives'),
+      'organisation-initiatives': this.$gettext('Initiatives'),
       'organisation-portfolio-management-new': this.$gettext('New portfolio'),
       'organisation-portfolio-management-id-edit': this.$gettext('Edit portfolio'),
       'organisation-initiatives-create': this.$gettext('New Initiative'),
@@ -116,6 +116,18 @@ export default {
                   params: { ...this.$route.params },
                 },
                 text: this[name] || '',
+              },
+            ]
+          } else if (name === 'organisation-initiatives') {
+            breadcrumbs = [
+              ...breadcrumbs,
+              {
+                id: item,
+                localePath: {
+                  name: 'organisation-inventory-list',
+                  params: { ...this.$route.params },
+                },
+                text: this.$gettext('Initiatives'),
               },
             ]
           } else {

@@ -32,6 +32,9 @@ class UserProfileInline(admin.StackedInline):
 
 
 class CustomUserAdmin(ExportActionMixin, UserAdmin):
+    from import_export_celery.admin_actions import create_export_job_action
+    create_export_job_action.short_description = "Generate export in the background"
+    actions = (create_export_job_action,)
     list_display = ('userprofile', 'country', 'type', 'organisation', 'is_staff', 'is_superuser')
     search_fields = ('userprofile__name', 'email', 'userprofile__country__name', 'userprofile__organisation__name')
     inlines = (UserProfileInline,)

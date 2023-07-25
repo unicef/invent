@@ -106,8 +106,11 @@
       v-bind="setMaxHeight"
       :lazy="true"
       stripe
-      :empty-text="$gettext('No initiatives available') | translate"
+      :empty-text="$gettext('No initiatives') | translate"
     >
+      <template slot="empty">
+        <translate key="empty-sector-initiatives-table-text">No initiatives to show</translate>
+      </template>
       <el-table-column
         v-for="({ name, id, count }, index) in columns"
         :prop="name"
@@ -122,7 +125,7 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <div v-if="index === 0">
+          <div v-if="index === 0" class="sectors-cell">
             <p>{{ scope.row.sector.sector_name }}</p>
           </div>
           <div v-else>
@@ -168,7 +171,6 @@ export default {
   data() {
     return {
       daysStale: 180,
-      phasesOmit: ['Handover or Complete', 'Discontinued'],
       boardType: true,
       stdHeight: true,
       columnSelectorOpen: false,
@@ -179,7 +181,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      phases: 'projects/getStages',
+      initPhases: 'projects/getStages',
       landingProjectsList: 'landing/getCountryProjectsList',
       unicefOffice: 'offices/getOffices',
       phasesStages: 'projects/getPhasesStages',
@@ -187,6 +189,17 @@ export default {
       getSelectedSectors: 'phasesStagesBoard/getSelectedSectors',
       getShownSectors: 'phasesStagesBoard/getShownSectors',
     }),
+    phases() {
+      if (this.initPhases.length > 0) {
+        //Counts always last phase as end phase
+        const ph = this.initPhases.sort((a, b) => a.order - b.order)
+        const lastEl = ph.pop()
+        ph.push({ ...lastEl, end_phase: true })
+        return ph
+      } else {
+        return []
+      }
+    },
     settingsTitle() {
       return `${this.$gettext('selected sectors')} (${
         this.getSelectedSectors.filter((sector) => sector.selected === true).length
@@ -207,9 +220,7 @@ export default {
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
     },
     omitedPhasesCount() {
-      const columns = this.phases
-        .filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
-        .sort((a, b) => a.order - b.order)
+      const columns = this.phases.filter((phase) => !phase.end_phase).sort((a, b) => a.order - b.order)
       const colsWithCount = columns.map((col) => ({
         count: this.landingProjectsList.filter((project) => project.current_phase === col.id).length,
         ...col,
@@ -217,7 +228,7 @@ export default {
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
     },
     includedPhasesInitiatives() {
-      const phaseIdsOmit = this.phasesOmit.map((phaseName) => this.phases.find((phase) => phase.name === phaseName).id)
+      const phaseIdsOmit = this.phases.filter((phase) => phase.end_phase).map((phase) => phase.id)
       return this.landingProjectsList.filter(
         (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
       )
@@ -270,7 +281,7 @@ export default {
     initiativesPhasesTableData() {
       let tableData = []
 
-      const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
+      const omPhases = this.phases.filter((phase) => !phase.end_phase)
       /* Creates each table row per sector**/
       this.sortedSelectedSectors.map((sector) => {
         const dataObj = {}
@@ -376,28 +387,33 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 .LandingInitiativesTable {
-  margin: 10px 0;
+  padding-top: 30px;
+  margin: 20px 0 60px 0;
 
   .TopSwitchBar {
-    background-color: @colorGrayLight;
     width: 100%;
     height: 30px;
     display: flex;
     justify-content: space-between;
 
     .Select-sectors {
-      padding-left: 12px;
+      padding-left: @leftHomepageIndentation;
 
-      #select-sectors-label {
+      span {
         position: relative;
-        font-size: 14px;
-        top: -3px;
-      }
-      .cogIcon {
-        padding: unset;
-        .fa-cog {
-          padding: 4px 8px 0 20px;
-          font-size: 22px;
+        top: 1px;
+        #select-sectors-label {
+          position: relative;
+          font-size: 14px;
+          font-weight: normal;
+          top: -2px;
+        }
+        .cogIcon {
+          padding: unset;
+          .fa-cog {
+            padding: 4px 8px 0 0;
+            font-size: 18px;
+          }
         }
       }
     }
@@ -407,13 +423,13 @@ export default {
     }
   }
 
-  .el-table--enable-row-hover .el-table__body tr:hover > td {
-    background-color: unset;
-  }
-
   .el-table {
-    border: solid @colorBrandPrimary 2px;
     overflow-x: auto;
+
+    .sectors-cell {
+      text-align: end;
+      font-weight: bold;
+    }
 
     td {
       border-left: dashed @colorBrandPrimary 1px;
@@ -439,6 +455,7 @@ export default {
           flex-direction: column;
           padding-top: 2px;
           #header-title {
+            font-size: @fontSizeSmall;
             text-align: center;
             word-wrap: normal;
             white-space: normal;
@@ -467,6 +484,13 @@ export default {
 
     > td {
       vertical-align: top;
+    }
+  }
+  .el-table__row .hover-row {
+    > tr {
+      > td {
+        background-color: unset !important;
+      }
     }
   }
 
@@ -549,25 +573,35 @@ export default {
 }
 
 .caption {
-  width: 420px;
+  width: 340px;
   display: inline-flex;
-  padding: 10px;
+  padding: 10px 10px 10px @leftHomepageIndentation;
   margin: 20px 0 20px 0;
   .icon-div {
     width: fit-content;
-    height: fit-content;
+    height: 20px;
     background-color: #fe8900;
     border-radius: 6px;
     box-shadow: 0px 4px 4px 0px rgba(194, 204, 210, 1);
     padding: 4px;
     margin-right: 10px;
     .el-icon-time {
-      font-size: 36px;
+      font-size: 20px;
       color: white;
     }
   }
   p {
     margin: 0 0 0 10px;
+    font-size: @fontSizeSmall;
   }
+}
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background-color: unset !important;
+}
+.el-table__body tr.hover-row > td,
+.el-table__body tr.hover-row.current-row > td,
+.el-table__body tr.hover-row.el-table__row--striped > td,
+.el-table__body tr.hover-row.el-table__row--striped.current-row > td {
+  background-color: unset !important;
 }
 </style>

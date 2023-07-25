@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from core.models import ExtendedModel
 
 
+
 class Organisation(ExtendedModel):
     name = models.CharField(unique=True, max_length=255)
 
@@ -82,6 +83,19 @@ class UserProfile(ExtendedModel):
 
     def is_investor_type(self):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
+    
+    
+
+
+
+@classmethod
+def export_resource_classes(cls):  # pragma: no cover
+    #this import needs to stay here to avoid circular import error
+    from core.resources import UserResource
+    return {"userprofiles": ("UserProfiles", UserResource)}
+
+#patching the above method to the User model
+User.export_resource_classes = export_resource_classes
 
 
 @receiver(pre_save, sender=UserProfile)
