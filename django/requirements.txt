@@ -15,7 +15,7 @@ cryptography==41.0.2                    # Updated from 2.2.2. paramiko 3.2.0 dep
 decorator==4.3.0                        # TODO: Test if this is needed and if we can safely remove this
 defusedxml==0.7.1                       # Updated from 0.5.0
 dj-inmemorystorage==2.1.0               # Updated from 1.4.1
-Django==4.2.3
+Django==4.2.3                           # Django > 4.2 causes issues in the UI of the django admin panel.
 django-admin-sortable2==2.1.8           # Updated from 1.0.4. django-admin-sortable2 2.1.8 depends on Django>=4.0 
 django-allauth==0.54.0                  # Updated from 0.41.0
 django-appconf==1.0.5                   # Updated from 1.0.2. appconf/base.py imports six, which is not supported in Django==3.2
