@@ -27,6 +27,8 @@ class UserResource(resources.ModelResource):  # pragma: no cover
        - Country
        - Donor
        - Language
+       - job title
+       - section (= department)
     """
     # Stats
     last_login = Field(column_name=_('Last login date'))
@@ -44,22 +46,26 @@ class UserResource(resources.ModelResource):  # pragma: no cover
     country = Field(column_name=_('Country'))
     donor = Field(column_name=_('Donor'))
     language = Field(column_name=_('Language'))
-    initiatives_where_team_member = Field(column_name=_('Initiatives where team member'))
+    initiatives_where_team_member = Field(
+        column_name=_('Initiatives where team member'))
     initiatives_where_viewer = Field(column_name=_('Initiatives where viewer'))
-    initiatives_where_invent_focal_point = Field(column_name=_('Initiatives where INVENT focal point'))
+    initiatives_where_invent_focal_point = Field(
+        column_name=_('Initiatives where INVENT focal point'))
     favorited_initiatives = Field(column_name=_('Favorited initiatives'))
+    job_title = Field(column_name=_('Job title'))
+    department = Field(column_name=_('Department'))
 
     class Meta:
         model = User
         fields = ('id', 'name', 'email', 'account_type', 'organization', 'country', 'donor', 'groups', 'language',
                   'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser', 'is_gpo',
                   'initiatives_where_team_member', 'initiatives_where_viewer',
-                  'initiatives_where_invent_focal_point', 'favorited_initiatives')
+                  'initiatives_where_invent_focal_point', 'favorited_initiatives', 'job_title', 'department')
         export_order = ('id', 'name', 'email', 'account_type', 'organization', 'country', 'donor', 'groups',
                         'language', 'last_login', 'date_joined', 'is_active',
-                        'is_staff', 'is_superuser', 'is_gpo', 
+                        'is_staff', 'is_superuser', 'is_gpo',
                         'initiatives_where_team_member', 'initiatives_where_viewer',
-                        'initiatives_where_invent_focal_point', 'favorited_initiatives')
+                        'initiatives_where_invent_focal_point', 'favorited_initiatives', 'job_title', 'department')
 
     def dehydrate_favorited_initiatives(self, user: User):
         favorite_count = Project.objects.filter(favorited_by=user.userprofile).count() \
@@ -68,7 +74,8 @@ class UserResource(resources.ModelResource):  # pragma: no cover
         return favorite_count
 
     def dehydrate_initiatives_where_invent_focal_point(self, user: User):
-        focal_point_counter = user.userprofile.manager_of.all().count() if hasattr(user, 'userprofile') else 0
+        focal_point_counter = user.userprofile.manager_of.all(
+        ).count() if hasattr(user, 'userprofile') else 0
         return focal_point_counter
 
     def dehydrate_initiatives_where_viewer(self, user: User):
@@ -78,7 +85,8 @@ class UserResource(resources.ModelResource):  # pragma: no cover
         return viewer_counter
 
     def dehydrate_initiatives_where_team_member(self, user: User):
-        team_at_counter = Project.objects.filter(team=user.userprofile).count() if hasattr(user, 'userprofile') else 0
+        team_at_counter = Project.objects.filter(
+            team=user.userprofile).count() if hasattr(user, 'userprofile') else 0
         return team_at_counter
 
     def dehydrate_last_login(self, user: User):
@@ -121,3 +129,9 @@ class UserResource(resources.ModelResource):  # pragma: no cover
 
     def dehydrate_language(self, user: User):
         return user.userprofile.language if hasattr(user, 'userprofile') else 'None'
+
+    def dehydrate_job_title(self, user: User):
+        return user.userprofile.job_title if hasattr(user, 'userprofile') and user.userprofile.job_title else 'None'
+
+    def dehydrate_department(self, user: User):
+        return user.userprofile.department if hasattr(user, 'userprofile') and user.userprofile.department else 'None'

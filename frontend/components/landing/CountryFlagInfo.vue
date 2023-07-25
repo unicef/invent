@@ -2,20 +2,29 @@
   <div class="flag-info">
     <el-col class="CountryHolder">
       <el-row type="flex">
-        <el-col class="CountryHolder">
-          <div class="Separator" />
-        </el-col>
-        <el-col class="CountryHolder">
-          <img :src="countryFlag" alt="country flag" class="CountryFlag" loading="lazy" />
-        </el-col>
         <el-col>
           <div class="country-text">
-            <div class="CountryName">{{ landingData.name }}</div>
+            <div class="CountryName">
+              {{ landingData.name }}
+              <span><img :src="countryFlag" alt="country flag" class="CountryFlag" loading="lazy" /></span>
+            </div>
             <p>
               <translate>
                 Welcome to country view. This view is scoped to show all initiatives of the chosen country.
               </translate>
             </p>
+            <nuxt-link
+              data-test="country-inventory-link"
+              :to="
+                localePath({
+                  name: 'organisation-inventory-list',
+                  params: this.landingData.code,
+                  query: { ...this.$route.query, country: this.landingData.id },
+                })
+              "
+            >
+              <translate>See this country's initiatives in the inventory</translate>
+            </nuxt-link>
           </div>
         </el-col>
       </el-row>
@@ -41,17 +50,18 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
 .flag-info {
   height: 100px;
   width: inherit;
-  margin: 12px;
-  padding: 8px 36px 8px 220px;
+  margin: 12px auto;
+  padding: 8px 36px 8px @leftHomepageIndentation;
   display: flex;
-  align-items: start;
+
+  justify-content: start;
 
   .CountryHolder {
     display: flex;
@@ -59,22 +69,28 @@ export default {
     width: fit-content;
 
     .CountryFlag {
-      height: 84px;
-      margin-right: 6px;
-      padding: 5px 0;
+      position: relative;
+      top: 2px;
+      height: 22px;
+      margin-left: 6px;
     }
     .country-text {
       display: flex;
       height: 100%;
       flex-direction: column;
-      padding-left: 24px;
+
+      a {
+        color: @colorBrandPrimary;
+        line-height: 6px;
+        padding-bottom: 12px;
+      }
 
       .CountryName {
         margin-top: auto;
+
         font-size: @fontSizeLarge;
         font-weight: 700;
         color: @colorTextPrimary;
-        line-height: 24px;
       }
     }
   }
