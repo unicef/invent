@@ -181,7 +181,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      phases: 'projects/getStages',
+      initPhases: 'projects/getStages',
       landingProjectsList: 'landing/getCountryProjectsList',
       unicefOffice: 'offices/getOffices',
       phasesStages: 'projects/getPhasesStages',
@@ -189,6 +189,17 @@ export default {
       getSelectedSectors: 'phasesStagesBoard/getSelectedSectors',
       getShownSectors: 'phasesStagesBoard/getShownSectors',
     }),
+    phases() {
+      if (this.initPhases.length > 0) {
+        //Counts always last phase as end phase
+        const ph = this.initPhases.sort((a, b) => a.order - b.order)
+        const lastEl = ph.pop()
+        ph.push({ ...lastEl, end_phase: true })
+        return ph
+      } else {
+        return []
+      }
+    },
     settingsTitle() {
       return `${this.$gettext('selected sectors')} (${
         this.getSelectedSectors.filter((sector) => sector.selected === true).length
