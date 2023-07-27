@@ -39,9 +39,10 @@ class Command(BaseCommand):
     @staticmethod
     def fill_named_model(data, model):
         for entry in data:
-            _, created = model.objects.get_or_create(name=entry)
+            instance, created = model.objects.get_or_create(name=entry)
             if created:
                 pp.pprint(f'{entry} created')
+            return instance
 
     @staticmethod
     def fill_currencies(data):
@@ -59,10 +60,12 @@ class Command(BaseCommand):
 
         for block_name in data:
             if block_name in self.data_model_map:
-                self.fill_named_model(data[block_name], self.data_model_map[block_name])
+                self.fill_named_model(
+                    data[block_name], self.data_model_map[block_name])
             elif block_name == 'Currency':
                 self.fill_currencies(data[block_name])
             elif block_name in self.nonmodel_blocks:
-                pp.pprint(f"Warning: need to check {block_name} by hand as it's non-model")
+                pp.pprint(
+                    f"Warning: need to check {block_name} by hand as it's non-model")
             else:  # pragma: no cover
                 pp.pprint(f"Warning: unhandled block name: {block_name}")
