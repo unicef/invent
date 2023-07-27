@@ -11,19 +11,6 @@ def add_taxonomies(apps, schema_editor):
     call_command('add_taxonomies', '--verbosity', 0)
 
 
-def rebuild_search(apps, schema_editor):
-    call_command('rebuild_search')
-
-
-def reorder_stages(apps, schema_editor):
-    Stage = apps.get_model('project', 'Stage')
-    order = 0
-    for item in Stage.objects.all():
-        order += 1
-        item.order = order
-        item.save()
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ('project', '0085_auto_20201211_1433'),
@@ -33,6 +20,4 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(update_translation_fields, reverse_code=migrations.RunPython.noop),
         migrations.RunPython(add_taxonomies, reverse_code=migrations.RunPython.noop),
-        # migrations.RunPython(rebuild_search, reverse_code=migrations.RunPython.noop),
-        migrations.RunPython(reorder_stages, reverse_code=migrations.RunPython.noop),
     ]
