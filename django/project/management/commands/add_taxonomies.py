@@ -37,11 +37,32 @@ class Command(BaseCommand):
             return json.load(f)
 
     @staticmethod
+    def fill_named_model(key, data, model):
+        for entry in data:
+            if model == Stage:
+                defaults = {}
+                if hasattr(Stage, 'completion_marks_an_initiative_as_inactive'):
+                    if entry in ["Handover or Complete", "Discontinued"]:
+                        defaults['completion_marks_an_initiative_as_inactive'] = True
+                    else:
+                        defaults['completion_marks_an_initiative_as_inactive'] = False
+                _, created = model.objects.get_or_create(name=entry, defaults=defaults)
+            else:
+                _, created = model.objects.get_or_create(name=entry)
+            if created:
+                print(f'{key}: {entry} created')  # This will print the key and entry
+                pp.pprint(f'{key}: {entry} created')
+
+
+
+    @staticmethod
     def fill_named_model(data, model):
         for entry in data:
             _, created = model.objects.get_or_create(name=entry)
             if created:
                 pp.pprint(f'{entry} created')
+
+
 
     @staticmethod
     def fill_currencies(data):
