@@ -3,17 +3,8 @@ from django.core.management import call_command
 from django.db import migrations
 
 
-def rebuild_search(apps, schema_editor):
-    call_command('rebuild_search')
-
-
-def reorder_stages(apps, schema_editor):
-    Stage = apps.get_model('project', 'Stage')
-    order = 0
-    for item in Stage.objects.all():
-        order += 1
-        item.order = order
-        item.save()
+def add_taxonomies(apps, schema_editor):
+    call_command('add_taxonomies', '--verbosity', 0)
 
 
 class Migration(migrations.Migration):
@@ -22,6 +13,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # migrations.RunPython(rebuild_search, reverse_code=migrations.RunPython.noop),
-        # migrations.RunPython(reorder_stages, reverse_code=migrations.RunPython.noop),
+        migrations.RunPython(
+            add_taxonomies, reverse_code=migrations.RunPython.noop),
     ]
