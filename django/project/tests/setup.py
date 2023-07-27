@@ -129,10 +129,12 @@ class TestProjectData:
                 "id": stages[0].id,
                 "date": str(datetime.today().date()),
                 "note": "stage 1 note",
+                'completion_marks_an_initiative_as_inactive': False,
             }, {
                 "id": stages[1].id,
                 "date": str(datetime.today().date()),
                 "note": "stage 2 note",
+                'completion_marks_an_initiative_as_inactive': False,
             }],
             "innovation_ways": [3, 2],
             "isc": 3,
