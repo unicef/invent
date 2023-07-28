@@ -39,10 +39,9 @@ class Command(BaseCommand):
     @staticmethod
     def fill_named_model(data, model):
         for entry in data:
-            instance, created = model.objects.get_or_create(name=entry)
+            _, created = model.objects.get_or_create(name=entry)
             if created:
                 pp.pprint(f'{entry} created')
-            return instance
 
     @staticmethod
     def fill_currencies(data):
