@@ -171,6 +171,7 @@ export default {
   data() {
     return {
       daysStale: 180,
+      phasesOmit: ['Handover or Complete', 'Discontinued'],
       boardType: true,
       stdHeight: true,
       columnSelectorOpen: false,
@@ -209,7 +210,9 @@ export default {
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
     },
     omitedPhasesCount() {
-      const columns = this.phases.filter((phase) => !phase.end_phase).sort((a, b) => a.order - b.order)
+      const columns = this.phases
+        .filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
+        .sort((a, b) => a.order - b.order)
       const colsWithCount = columns.map((col) => ({
         count: this.landingProjectsList.filter((project) => project.current_phase === col.id).length,
         ...col,
@@ -217,7 +220,7 @@ export default {
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
     },
     includedPhasesInitiatives() {
-      const phaseIdsOmit = this.phases.filter((phase) => phase.end_phase).map((phase) => phase.id)
+      const phaseIdsOmit = this.phasesOmit.map((phaseName) => this.phases.find((phase) => phase.name === phaseName).id)
       return this.landingProjectsList.filter(
         (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
       )
@@ -270,7 +273,7 @@ export default {
     initiativesPhasesTableData() {
       let tableData = []
 
-      const omPhases = this.phases.filter((phase) => !phase.end_phase)
+      const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
       /* Creates each table row per sector**/
       this.sortedSelectedSectors.map((sector) => {
         const dataObj = {}
