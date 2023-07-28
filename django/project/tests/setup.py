@@ -38,7 +38,8 @@ class TestProjectData:
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
         test_user_key = response.json().get("token")
-        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        test_user_client = APIClient(
+            HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
         user_profile_id = response.json().get('user_profile_id')
         return user_profile_id, test_user_client, test_user_key
 
@@ -56,7 +57,8 @@ class TestProjectData:
         country_office, _ = CountryOffice.objects.get_or_create(
             name=f'Test Country Office ({name})',
             region=CountryOffice.REGIONS[0][0],
-            regional_office=RegionalOffice.objects.get_or_create(name='RO test')[0],
+            regional_office=RegionalOffice.objects.get_or_create(name='RO test')[
+                0],
             country=country,
             city="Zion"
         )
@@ -77,7 +79,8 @@ class TestProjectData:
             d2, _ = Donor.objects.get_or_create(name="Donor2", code="donor2")
         else:
             if new_country_only:
-                country, country_office = self.create_new_country_and_office(project_approval=False)
+                country, country_office = self.create_new_country_and_office(
+                    project_approval=False)
             else:
                 country = self.country
                 country_office = self.country_office
@@ -86,6 +89,7 @@ class TestProjectData:
             d2 = self.d2
 
         stages = Stage.objects.all()
+
         return {"project": {
             "date": str(datetime.utcnow()) if convert_datetime else datetime.utcnow(),
             "name": name,
@@ -118,7 +122,7 @@ class TestProjectData:
             "hardware": [1, 2],
             "nontech": [1, 2],
             "functions": [1, 2],
-            "phase": 1,
+            "current_phase": 1,
             "partners": [dict(partner_type=0, partner_name="test partner 1", partner_email="p1@partner.ppp",
                               partner_contact="test partner contact 1", partner_website="https://partner1.com"),
                          dict(partner_type=1, partner_name="test partner 2", partner_email="p2@partner.ppp",
@@ -128,13 +132,7 @@ class TestProjectData:
             "stages": [{
                 "id": stages[0].id,
                 "date": str(datetime.today().date()),
-                "note": "stage 1 note",
-                'completion_marks_an_initiative_as_inactive': False,
-            }, {
-                "id": stages[1].id,
-                "date": str(datetime.today().date()),
-                "note": "stage 2 note",
-                'completion_marks_an_initiative_as_inactive': False,
+                "note": "stage 1 note"
             }],
             "innovation_ways": [3, 2],
             "isc": 3,
@@ -163,7 +161,8 @@ class TestProjectData:
                                                                                    new_country_only=new_country_only)
 
         # Create project draft
-        url = reverse("project-create", kwargs={"country_office_id": country_office.id})
+        url = reverse("project-create",
+                      kwargs={"country_office_id": country_office.id})
         response = test_user_client.post(url, project_data, format="json")
         assert response.status_code == 201
 
@@ -234,7 +233,8 @@ class SetupTests(TestProjectData, APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200, response.json())
         self.test_user_key = response.json().get("token")
-        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
+        self.test_user_client = APIClient(
+            HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
         self.user_profile_id = response.json().get('user_profile_id')
 
         # Update profile.
@@ -243,7 +243,8 @@ class SetupTests(TestProjectData, APITestCase):
         self.country.name_fr = 'Hongrie'
         self.country.save()
 
-        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        url = reverse("userprofile-detail",
+                      kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
@@ -256,8 +257,10 @@ class SetupTests(TestProjectData, APITestCase):
         self.country.users.add(self.userprofile)
 
         # Create project draft
-        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
-        response = self.test_user_client.post(url, self.project_data, format="json")
+        url = reverse("project-create",
+                      kwargs={"country_office_id": self.country_office.id})
+        response = self.test_user_client.post(
+            url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
         self.project_id = response.json().get("id")
@@ -265,7 +268,8 @@ class SetupTests(TestProjectData, APITestCase):
         # Publish
         url = reverse("project-publish", kwargs={"project_id": self.project_id,
                                                  "country_office_id": self.country_office.id})
-        response = self.test_user_client.put(url, self.project_data, format="json")
+        response = self.test_user_client.put(
+            url, self.project_data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
 
     def check_project_search_init_state(self, project):
