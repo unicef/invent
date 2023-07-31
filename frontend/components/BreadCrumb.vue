@@ -118,6 +118,18 @@ export default {
                 text: this[name] || '',
               },
             ]
+          } else if (name === 'organisation-initiatives') {
+            breadcrumbs = [
+              ...breadcrumbs,
+              {
+                id: item,
+                localePath: {
+                  name: 'organisation-inventory-list',
+                  params: { ...this.$route.params },
+                },
+                text: this.$gettext('Initiatives'),
+              },
+            ]
           } else {
             breadcrumbs = [
               ...breadcrumbs,
