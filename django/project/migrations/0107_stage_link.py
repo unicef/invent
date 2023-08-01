@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0107_reorder_stages'),
+        ('project', '0106_stage_completion_marks_an_initiative_as_inactive'),
     ]
 
     operations = [
