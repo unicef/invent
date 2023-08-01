@@ -80,7 +80,7 @@ class ProjectPublicViewSet(ViewSet):
     # get the updated 'completion_marks_an_initiative_as_inactive' for all stages
     def get_updated_stages(self):
         stages = Stage.objects.values(
-            'id', 'name', 'tooltip', 'order', 'completion_marks_an_initiative_as_inactive')
+            'id', 'name', 'tooltip', 'order', 'link', 'completion_marks_an_initiative_as_inactive')
         stage_data = []
         for stage in stages:
             stage_info = {
@@ -90,6 +90,7 @@ class ProjectPublicViewSet(ViewSet):
                 'order': stage['order'],
                 # rename the checkbox (for the frond-end)
                 'end_phase': stage['completion_marks_an_initiative_as_inactive'],
+                'link': stage['link']
             }
             stage_data.append(stage_info)
         return stage_data
