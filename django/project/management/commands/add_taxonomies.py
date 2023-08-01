@@ -37,11 +37,7 @@ class Command(BaseCommand):
             return json.load(f)
 
     @staticmethod
-    # def fill_named_model(data, model):
-    #     for entry in data:
-    #         _, created = model.objects.get_or_create(name=entry)
-    #         if created:
-    #             pp.pprint(f'{entry} created')
+    # update so as to get the first element
     def fill_named_model(data, model):
         for entry in data:
             objects = model.objects.filter(name=entry)
