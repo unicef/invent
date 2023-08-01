@@ -8,7 +8,7 @@
     <div class="Content">
       <span>{{ office }}</span>
       <nuxt-link
-        data-test="country-inventory-link"
+        data-test="published-country-homepage-link"
         :to="
           localePath({
             name: 'organisation',
