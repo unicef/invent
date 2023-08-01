@@ -3,7 +3,7 @@ argh==0.28.1                            # Updated from 0.26.2. Supports Python >
 asn1crypto==1.5.1                       # Updated from 0.24.0. Supports Python >= 3.7 <= 3.10
 astroid==2.15.6                         # Updated from 2.3.3. pylint 2.4.3 depends on astroid<2.4 and >=2.3.0
 attrs==23.1.0                           # Updated from 18.1.0
-azure-monitor-opentelemetry==1.0.0b13   # [Current latest]
+azure-monitor-opentelemetry==1.0.0b15   # [Current latest]
 billiard==4.1.0                         # Updated from 3.5.0.4. celery 5.2.7 depends on billiard<4.0 and >=3.6.4.0 
 celery==5.3.1                           # Updated from 4.2.0. Run unto some building issues with 5.3.1 and rolled back to 5.2.7. Supports Django >= 2.2
 certifi==2023.5.7                       # Updated from 2023.5.7
@@ -55,6 +55,9 @@ mock==5.0.2                             # Updated from 2.0.0. mock is now part o
 more-itertools==4.2.0                   # Updated from 4.2.0. TODO: Test if this is needed and if we can safely remove this
 oauthlib==3.2.2                         # Updated from 2.1.0
 openpyxl==3.1.2                         # Added to freeze version in order to resolve issue when trying to use DefusedXMLParser
+opentelemetry-instrumentation-django==0.40b0 # [Current latest]
+opentelemetry-semantic-conventions==0.40b0 # [Current latest]. opentelemetry-instrumentation-django 0.40b0 depends on opentelemetry-semantic-conventions==0.40b0
+opentelemetry-sdk==1.19.0               # [Current latest].
 paramiko==3.2.0                         # Updated from 2.4.1. TODO: Test if this is needed and if we can safely remove this
 parse==1.19.1                           # Updated frrom 1.8.4. parse-type 0.6.2 depends on parse>=1.18.0; python_version >= "3.0" 
 parse-type==0.6.2                       # Updated from 0.4.2
