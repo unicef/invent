@@ -283,11 +283,9 @@ import { format } from 'date-fns'
 // components
 import handleProjectActions from '@/components/mixins/handleProjectActions'
 import ListElement from '@/components/project/ListElement'
-// import CountryItem from '../common/CountryItem'
 import StageHistory from '@/components/project/sections/StageHistory'
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList'
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
-// import DonorsList from '../common/list/DonorsList'
 import ProjectNavigation from './ProjectNavigation'
 import CollapsibleCard from './CollapsibleCard'
 import SimpleField from './SimpleField'
@@ -303,13 +301,11 @@ export default {
     ProjectNavigation,
     CollapsibleCard,
     SimpleField,
-    // CountryItem,
     TeamList,
     PlatformsList,
     DhiList,
     HealthFocusAreasList,
     HealthSystemChallengesList,
-    // DonorsList,
     CustomReadonlyField,
     CapabilitiesList,
     ListElement,
@@ -403,13 +399,6 @@ export default {
       }
       return `UNICEF ${country.name}, ${office.city}, `
     },
-    // country() {
-    //   const { selectedRegionOffice, country } = this
-    //   if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {
-    //     return country
-    //   }
-    //   return country
-    // },
     region() {
       const { selectedRegionOffice, selectedRegion } = this
       if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {

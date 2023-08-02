@@ -194,7 +194,8 @@ export default {
     },
     shownPhases() {
       const shPhases = [...this.allPhases]
-
+      //Always hide last phase (remove)
+      shPhases.pop()
       return shPhases
     },
     landingProjectsList() {
