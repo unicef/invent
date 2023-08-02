@@ -9,7 +9,7 @@
               <span><img :src="countryFlag" alt="country flag" class="CountryFlag" loading="lazy" /></span>
             </div>
             <p>
-              <translate>
+              <translate key="country-comp-welcome-message">
                 Welcome to country view. This view is scoped to show all initiatives of the chosen country.
               </translate>
             </p>
@@ -23,7 +23,7 @@
                 })
               "
             >
-              <translate>See this country's initiatives in the inventory</translate>
+              <translate key="country-comp-link-message">See this country's initiatives in the inventory</translate>
             </nuxt-link>
           </div>
         </el-col>

@@ -194,7 +194,8 @@ export default {
     },
     shownPhases() {
       const shPhases = [...this.allPhases]
-
+      //Always hide last phase (remove)
+      shPhases.pop()
       return shPhases
     },
     landingProjectsList() {
@@ -244,14 +245,22 @@ export default {
       const columns = this.phasesStages.map((phst) => ({ name: phst.stage_label, id: phst.stage_number }))
 
       const colsWithCount = columns.map((col) => ({
-        count: this.landingProjectsList.filter((project) => this.getStage(project.current_phase) === col.id).length,
+        count: this.landingProjectsList.filter(
+          (project) =>
+            this.getStage(project.current_phase) === col.id &&
+            this.sortedSelectedSectors.some((selSect) => selSect.id === project.unicef_leading_sector[0])
+        ).length,
         ...col,
       }))
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
     },
     phasesCount() {
       const colsWithCount = this.shownPhases.map((col) => ({
-        count: this.landingProjectsList.filter((project) => project.current_phase === col.id).length,
+        count: this.landingProjectsList.filter(
+          (project) =>
+            project.current_phase === col.id &&
+            this.sortedSelectedSectors.some((selSect) => selSect.id === project.unicef_leading_sector[0])
+        ).length,
         ...col,
       }))
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
