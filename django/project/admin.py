@@ -388,7 +388,7 @@ class ProjectImportAdmin(admin.ModelAdmin):
 class StageAdmin(SortableAdminMixin, AllObjectsAdmin):
     # fix the size of the box of url fields in admin site
     formfield_overrides = {
-        models.URLField: {'widget': forms.TextInput(attrs={'size': '35'})},
+        models.URLField: {'widget': forms.TextInput(attrs={'size': '37'})},
     }
 
 
