@@ -29,7 +29,7 @@ Before you proceed, ensure that you have the following software installed on you
 ### Start the Environment
 Clone the repository using the following command:
 ```bash
-git clone https://github.com/unicef/invent.git -b master
+git clone https://github.com/unicef/invent.git -b dev
 ```
 Navigate to the project folder:
 ```bash
