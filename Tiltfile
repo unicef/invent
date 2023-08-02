@@ -118,10 +118,10 @@ cmd_button('exec_create_super_user',
     resource='invent-django',
     env=[
         'deployment=invent-django',
-        'command=echo "from django.contrib.auth.models import User; User.objects.create_superuser(\'admin_test12345\', \'admin_test12345@example.com\', \'12345\')" | python manage.py shell',
+        'command=python manage.py create_superuser',
     ],
     icon_name='check_circle',
-    text='Create the Super User',
+    text='Create superuser',
 )
 
 # Run the django migrations
