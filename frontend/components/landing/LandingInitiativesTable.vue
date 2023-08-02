@@ -114,7 +114,7 @@
       <el-table-column
         v-for="({ name, id, count }, index) in columns"
         :prop="name"
-        :key="id"
+        :key="`${id} ${sortedSelectedSectors.length} ${boardType}`"
         min-width="180"
         :fixed="index === 0 ? true : false"
       >
@@ -171,7 +171,6 @@ export default {
   data() {
     return {
       daysStale: 180,
-      phasesOmit: ['Handover or Complete', 'Discontinued'],
       boardType: true,
       stdHeight: true,
       columnSelectorOpen: false,
@@ -182,14 +181,55 @@ export default {
   },
   computed: {
     ...mapGetters({
-      phases: 'projects/getStages',
-      landingProjectsList: 'landing/getCountryProjectsList',
+      getPhases: 'projects/getStages',
+      getLandingProjectsList: 'landing/getCountryProjectsList',
       unicefOffice: 'offices/getOffices',
       phasesStages: 'projects/getPhasesStages',
       unicef_regions: 'system/getUnicefRegions',
       getSelectedSectors: 'phasesStagesBoard/getSelectedSectors',
       getShownSectors: 'phasesStagesBoard/getShownSectors',
     }),
+    allPhases() {
+      return [...this.getPhases].sort((a, b) => a.order - b.order)
+    },
+    shownPhases() {
+      const shPhases = [...this.allPhases]
+      //Always hide last phase (remove)
+      shPhases.pop()
+      return shPhases
+    },
+    landingProjectsList() {
+      const projectsList = [...this.getLandingProjectsList]
+      //filter out endPhase and unknown phase projects and update current phase for the rest
+      const filtProjects = projectsList.filter((project) => {
+        //if stages exist
+        if (project.stages.length > 0) {
+          //Last initiative stage is calculated as the last in array of project.stages
+          const lastStageId = project.stages[project.stages.length - 1].id
+          //if last initiative stage id does not exist in phases list then remove initiative
+          if (!this.shownPhases.some((phase) => phase.id === lastStageId)) {
+            return false
+          }
+          //if the last stage is an end phase then remove initiative
+          if (this.allPhases.find((phase) => phase.id === lastStageId)?.end_phase) {
+            return false
+          } else {
+            //if last stage is not end phase then update current phase and return initiative
+            const phOrder = this.allPhases.find((phase) => phase.id === lastStageId)?.order
+            const hasNextPhase = this.allPhases.find((phase) => phase.order === phOrder + 1) ? true : false
+            project.current_phase = hasNextPhase
+              ? this.allPhases.find((phase) => phase.order === phOrder + 1)?.id
+              : lastStageId
+            return true
+          }
+        } else {
+          //if no stages exist
+          project.current_phase = this.allPhases[0].id
+          return true
+        }
+      })
+      return filtProjects
+    },
     settingsTitle() {
       return `${this.$gettext('selected sectors')} (${
         this.getSelectedSectors.filter((sector) => sector.selected === true).length
@@ -199,31 +239,31 @@ export default {
       return this.stdHeight ? { 'max-height': 580 } : { 'max-height': false }
     },
     columns() {
-      return this.boardType ? this.omitedPhasesCount : this.stagesCount
+      return this.boardType ? this.phasesCount : this.stagesCount
     },
     stagesCount() {
       const columns = this.phasesStages.map((phst) => ({ name: phst.stage_label, id: phst.stage_number }))
+
       const colsWithCount = columns.map((col) => ({
-        count: this.landingProjectsList.filter((project) => this.getStage(project.current_phase) === col.id).length,
+        count: this.landingProjectsList.filter(
+          (project) =>
+            this.getStage(project.current_phase) === col.id &&
+            this.sortedSelectedSectors.some((selSect) => selSect.id === project.unicef_leading_sector[0])
+        ).length,
         ...col,
       }))
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
     },
-    omitedPhasesCount() {
-      const columns = this.phases
-        .filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
-        .sort((a, b) => a.order - b.order)
-      const colsWithCount = columns.map((col) => ({
-        count: this.landingProjectsList.filter((project) => project.current_phase === col.id).length,
+    phasesCount() {
+      const colsWithCount = this.shownPhases.map((col) => ({
+        count: this.landingProjectsList.filter(
+          (project) =>
+            project.current_phase === col.id &&
+            this.sortedSelectedSectors.some((selSect) => selSect.id === project.unicef_leading_sector[0])
+        ).length,
         ...col,
       }))
       return [{ name: '', id: 'sectors', count: null }, ...colsWithCount]
-    },
-    includedPhasesInitiatives() {
-      const phaseIdsOmit = this.phasesOmit.map((phaseName) => this.phases.find((phase) => phase.name === phaseName).id)
-      return this.landingProjectsList.filter(
-        (project) => !phaseIdsOmit.some((phaseId) => phaseId === project.current_phase)
-      )
     },
     sortedSelectedSectors() {
       return this.getShownSectors
@@ -252,17 +292,20 @@ export default {
           let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
 
           /*Create the card and add it to tableData **/
-          const regionId = this.unicefOffice.find((office) => office.id === initiative.country_office).region
-          const regionName = this.unicef_regions.find((region) => region.id === regionId).name
-          dataObj[`${this.getStage(initiative.current_phase)}`] = [
-            ...dataObj[`${this.getStage(initiative.current_phase)}`],
-            {
-              ...initiative,
-              lastUpdated: lastUpdated,
-              title: regionName,
-              stale: isStale,
-            },
-          ]
+          const regionId = this.unicefOffice.find((office) => office.id === initiative.country_office)?.region
+          const regionName = this.unicef_regions.find((region) => region.id === regionId)?.name
+          const propName = this.getStage(initiative.current_phase)
+          if (propName && dataObj.hasOwnProperty(propName.toString())) {
+            dataObj[propName.toString()] = [
+              ...dataObj[propName.toString()],
+              {
+                ...initiative,
+                lastUpdated: lastUpdated,
+                title: regionName,
+                stale: isStale,
+              },
+            ]
+          }
         })
 
         tableData.push(this.sortCards(dataObj))
@@ -272,17 +315,15 @@ export default {
     },
     initiativesPhasesTableData() {
       let tableData = []
-
-      const omPhases = this.phases.filter((phase) => !this.phasesOmit.some((omphase) => omphase === phase.name))
       /* Creates each table row per sector**/
       this.sortedSelectedSectors.map((sector) => {
         const dataObj = {}
         dataObj['sector'] = { sector_name: sector.name }
-        omPhases.map((phase) => {
+        this.shownPhases.map((phase) => {
           dataObj[phase.id] = []
         })
         /* Filters the relative initiatives **/
-        const sectorInitiatives = this.includedPhasesInitiatives.filter((initiative) =>
+        const sectorInitiatives = this.landingProjectsList.filter((initiative) =>
           initiative.unicef_leading_sector.some((lsector) => lsector === sector.id)
         )
         sectorInitiatives.map((initiative) => {
@@ -291,15 +332,17 @@ export default {
           let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
 
           /*Create the card and add it to tableData **/
-          dataObj[`${initiative.current_phase}`] = [
-            ...dataObj[`${initiative.current_phase}`],
-            {
-              ...initiative,
-              lastUpdated: lastUpdated,
-              title: this.unicefOffice.find((office) => office.id === initiative.country_office).name.split(':')[1],
-              stale: isStale,
-            },
-          ]
+          if (dataObj.hasOwnProperty(`${initiative.current_phase}`)) {
+            dataObj[`${initiative.current_phase}`] = [
+              ...dataObj[`${initiative.current_phase}`],
+              {
+                ...initiative,
+                lastUpdated: lastUpdated,
+                title: this.unicefOffice.find((office) => office.id === initiative.country_office)?.name.split(':')[1],
+                stale: isStale,
+              },
+            ]
+          }
         })
 
         tableData.push(this.sortCards(dataObj))
@@ -323,15 +366,17 @@ export default {
       this.$store.dispatch('phasesStagesBoard/invertSelectSector', sectorId)
     },
     getStage(phase) {
-      return this.phasesStages.find((stage) => stage.phases.some((stphase) => stphase.phase_number === phase))
-        .stage_number
+      return (
+        this.phasesStages.find((stage) => stage.phases.some((stphase) => stphase.phase_number === phase))
+          ?.stage_number || null
+      )
     },
     calcLastUpdated(initiative) {
       if (initiative.stages && initiative.stages.length > 0) {
         /*
           Some initiatives have equal current_phase as the last phase in stages field
           Some other initiatives have equal current_phase -1 as the last phase in stages field
-          Added also 
+          Added also
            **/
         const prevPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase - 1)
         const lastPhase = initiative.stages.find((stage) => stage.id === initiative.current_phase)
