@@ -5,7 +5,12 @@
         <collapsible-card id="general" :title="$gettext('1. General Overview') | translate">
           <simple-field :content="project.name" :header="$gettext('Initiative Name') | translate" />
 
-          <simple-field :header="$gettext('UNICEF Office') | translate" :content="location" />
+          <OfficeLinkField
+            :header="$gettext('UNICEF Office') | translate"
+            :office="officeString"
+            :country="country"
+            :region="region"
+          />
 
           <simple-field :content="project.overview" :header="$gettext('Overview of the initiative') | translate" />
 
@@ -291,6 +296,7 @@ import PlatformsList from './PlatformsList'
 import DhiList from './DhiList'
 import CapabilitiesList from './CapabilitiesList'
 import CustomReadonlyField from './CustomReadonlyField'
+import OfficeLinkField from './OfficeLinkField.vue'
 
 export default {
   components: {
@@ -308,6 +314,7 @@ export default {
     CapabilitiesList,
     ListElement,
     StageHistory,
+    OfficeLinkField,
   },
   mixins: [handleProjectActions],
   data() {
@@ -389,12 +396,26 @@ export default {
       const userName = this.userProfiles.find((profile) => profile.email === this.project.contact_email)
       return userName && userName.name ? userName.name : this.project.contact_name
     },
-    location() {
-      const { selectedRegionOffice, office, country, selectedRegion } = this
+    officeString() {
+      const { selectedRegionOffice, office, country } = this
       if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {
-        return `UNICEF ${selectedRegionOffice}, ${office.city}, ${country.name}, ${selectedRegion}`
+        return `UNICEF ${selectedRegionOffice}, ${office.city}, `
       }
-      return `UNICEF ${country.name}, ${office.city}, ${country.name}, ${selectedRegion}`
+      return `UNICEF ${country.name}, ${office.city}, `
+    },
+    // country() {
+    //   const { selectedRegionOffice, country } = this
+    //   if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {
+    //     return country
+    //   }
+    //   return country
+    // },
+    region() {
+      const { selectedRegionOffice, selectedRegion } = this
+      if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {
+        return `${selectedRegion}`
+      }
+      return `${selectedRegion}`
     },
     route() {
       return this.$route.name.split('__')[0]
