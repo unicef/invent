@@ -134,13 +134,13 @@ export default {
     goToViewSolution(id) {
       if (id) {
         const localised = this.localePath({
-          name: 'organisation-portfolio-innovation-solutions-id',
+          name: 'organisation-solutions-id',
           params: { ...this.$route.params, id },
         })
         this.$router.push(localised)
       } else {
         const localised = this.localePath({
-          name: 'organisation-portfolio-innovation-solutions',
+          name: 'organisation-solutions',
         })
         this.$router.push(localised)
       }
@@ -215,7 +215,7 @@ export default {
         )
         await this.cancelSolution()
         const localised = this.localePath({
-          name: 'organisation-portfolio-innovation-solutions',
+          name: 'organisation-solutions',
           params: { ...this.$route.params },
         })
         this.$router.push(localised)
