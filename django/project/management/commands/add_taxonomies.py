@@ -37,17 +37,11 @@ class Command(BaseCommand):
             return json.load(f)
 
     @staticmethod
-    # update so as to get the first element
     def fill_named_model(data, model):
         for entry in data:
-            objects = model.objects.filter(name=entry)
-            if not objects.exists():
-                _, created = model.objects.get_or_create(name=entry)
-                if created:
-                    pp.pprint(f'{entry} created')
-            else:
-                obj = objects.first()
-                pp.pprint(f'{entry} already exists with id: {obj.id}')
+            _, created = model.objects.get_or_create(name=entry)
+            if created:
+                pp.pprint(f'{entry} created')
 
     @staticmethod
     def fill_currencies(data):
