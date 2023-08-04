@@ -11,5 +11,32 @@
         content: "{{ ENVIRONMENT_NAME }}";
         background-color: {{ ENVIRONMENT_COLOR }};
     }
+
+    .skip-to-content-link {
+        display: none;
+    }
+
+    #logout-form {
+        display: none;
+    } 
+    
+    .theme-toggle {
+        display: none;
+    } 
+
 </style>
+{% endblock %}
+
+{% block usertools %}
+    <div id="user-tools">
+        Welcome,
+        <strong>sworduser</strong>.
+        
+        <a href="/">View site</a> /
+        
+        <a href="/admin/password_change/">Change password</a> /
+        
+        <!-- New logout link -->
+        <a href="/admin/logout/">Log out</a>
+    </div>
 {% endblock %}
