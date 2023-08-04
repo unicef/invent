@@ -27,9 +27,9 @@ export default {
       'organisation-signup': this.$gettext('Signup'),
       'organisation-reset-key': this.$gettext('Reset'),
       'organisation-portfolio-innovation': this.$gettext('Innovation Portfolios'),
-      'organisation-portfolio-innovation-solutions': this.$gettext('Solutions'),
-      'organisation-portfolio-innovation-solutions-id-edit': this.$gettext('Edit solution'),
-      'organisation-portfolio-innovation-solutions-create': this.$gettext('Create new solution'),
+      'organisation-solutions': this.$gettext('Solutions'),
+      'organisation-solutions-id-edit': this.$gettext('Edit solution'),
+      'organisation-solutions-create': this.$gettext('Create new solution'),
       'organisation-portfolio-management': this.$gettext('Portfolio Manager'),
       'organisation-initiatives': this.$gettext('Initiatives'),
       'organisation-portfolio-management-new': this.$gettext('New portfolio'),
@@ -154,7 +154,7 @@ export default {
       switch (route) {
         case 'organisation-initiatives-id':
           return this.$route.name.includes('published') ? this.published.name : this.draft.name
-        case 'organisation-portfolio-innovation-solutions-id':
+        case 'organisation-solutions-id':
           return this.solutionName
         // case 'organisation-portfolio-innovation-id':
         //   return this.portfolioInnovationName

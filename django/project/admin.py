@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django import forms
+from django.db import models
 from django.contrib.admin import SimpleListFilter
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -386,7 +387,10 @@ class ProjectImportAdmin(admin.ModelAdmin):
 
 
 class StageAdmin(SortableAdminMixin, AllObjectsAdmin):
-    pass
+    # fix the size of the box of url fields in admin site
+    formfield_overrides = {
+        models.URLField: {'widget': forms.TextInput(attrs={'size': '37'})},
+    }
 
 
 class PhaseAdmin(ViewOnlyPermissionMixin, admin.ModelAdmin):

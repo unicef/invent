@@ -48,7 +48,7 @@ export default {
   methods: {
     goToEdit() {
       const localised = this.localePath({
-        name: `organisation-portfolio-innovation-solutions-id-edit`,
+        name: `organisation-solutions-id-edit`,
         params: { ...this.$route.params },
         query: { portfolio: this.$route.query.portfolio },
       })
