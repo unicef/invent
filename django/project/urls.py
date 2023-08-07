@@ -88,7 +88,7 @@ urlpatterns = [
              'put': 'remove'
          }),
          name="projects-remove-favorite"),
-    path('project/delete/<int:pk>/',
+    path('projects/delete/<int:pk>/',
          view=views.ProjectDeleteViewSet.as_view({
              'patch': 'partial_update'
          }),
