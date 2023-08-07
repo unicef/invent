@@ -12,7 +12,7 @@ export const rules = () => {
     learning: {},
     override_reach: {},
     portfolio_statements_table: {
-      required: true,
+      required: false,
     },
     countrySingleSelect: {
       required: true,
