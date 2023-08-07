@@ -10,7 +10,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
-    IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState, IsGPOOrManagerOfAtLeastOnePortfolio
+    IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState, IsGPOOrManagerOfAtLeastOnePortfolio, IsCountryOfficeFocalPoint
 from project.models import ProjectPortfolioState, ReviewScore, Solution, Portfolio
 from project.serializers import PartnerSerializer, LinkSerializer
 from country.models import CountryOffice
@@ -42,6 +42,11 @@ class TeamTokenAuthMixin:
 class GPOAccessMixin:
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrReadOnly)
+
+
+class CountryOfficeTokenAuthMixin:
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, IsCountryOfficeFocalPoint)
 
 
 class PortfolioAccessMixin:

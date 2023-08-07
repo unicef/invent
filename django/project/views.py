@@ -17,7 +17,7 @@ from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from country.models import Donor, CountryOffice, RegionalOffice, Currency
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, get_object_or_404, GPOAccessMixin, PortfolioAccessMixin, \
-    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin
+    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin, CountryOfficeTokenAuthMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
@@ -725,7 +725,7 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
-class ProjectDeleteViewSet(UpdateModelMixin, ViewSet):
+class ProjectDeleteViewSet(CountryOfficeTokenAuthMixin, UpdateModelMixin, ViewSet):
     queryset = Project.objects.all()
 
     def partial_update(self, request, pk=None):
