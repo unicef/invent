@@ -65,11 +65,11 @@ class IsCountryOfficeFocalPoint(permissions.BasePermission):
             is_country_manager = request.user.userprofile.manager_of.filter(
                 id=co_id).exists()
 
-        # If the user is a country manager or in the team, or the request is a read-only request, grant permission
-        if is_country_manager or obj.is_member(request.user) or request.method in permissions.SAFE_METHODS:
+        # If the user is a country manager
+        if is_country_manager:
             return True
 
-        return False
+        return is_country_manager
 
 
 class IsGPOOrReadOnly(permissions.BasePermission):

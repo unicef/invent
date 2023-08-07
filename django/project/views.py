@@ -728,6 +728,7 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
 class ProjectDeleteViewSet(CountryOfficeTokenAuthMixin, UpdateModelMixin, ViewSet):
     queryset = Project.objects.all()
 
+    @transaction.atomic
     def partial_update(self, request, pk=None):
         project = get_object_or_404(Project, pk=pk)
         project.delete()
