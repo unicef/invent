@@ -725,6 +725,15 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
+class ProjectDeleteViewSet(UpdateModelMixin, ViewSet):
+    queryset = Project.objects.all()
+
+    def partial_update(self, request, pk=None):
+        project = get_object_or_404(Project, pk=pk)
+        project.delete()
+        return Response({'status': 'Project deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+
 class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
     serializer_class = ImportRowSerializer
     queryset = ImportRow.objects.all()
