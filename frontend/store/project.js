@@ -608,6 +608,11 @@ export const actions = {
     await dispatch('setProject', { data, id })
     dispatch('setLoading', false)
   },
+  async deleteProject({ dispatch }, id) {
+    dispatch('setLoading', 'delete')
+    await this.$axios.patch(`/api/projects/delete/${id}/`)
+    dispatch('setLoading', false)
+  },
   async latestProject({ dispatch }, id) {
     dispatch('setLoading', 'latest')
     const { data } = await this.$axios.get(`/api/projects/publishaslatest/${id}/`)
