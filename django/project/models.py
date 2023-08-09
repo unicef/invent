@@ -630,6 +630,9 @@ class ApprovalState(models.Model):
 class TechnologyPlatform(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+
     class Meta:
         verbose_name = "Software"
         verbose_name_plural = "Software"
@@ -638,6 +641,9 @@ class TechnologyPlatform(
 class HardwarePlatform(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+    
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Hardware Platform(s) and Physical Product(s)"
 
@@ -645,6 +651,9 @@ class HardwarePlatform(
 class NontechPlatform(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Programme Innovation(s) and Non-Technology Platform(s)"
 
@@ -652,6 +661,9 @@ class NontechPlatform(
 class PlatformFunction(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Function(s) of Platform"
 
