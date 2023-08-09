@@ -1084,9 +1084,9 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     ]
 
     # Fields
-    portfolios = models.ManyToManyField(Portfolio, related_name="solutions")
+    portfolios = models.ManyToManyField(Portfolio, related_name="solutions",blank=True)
     countries = models.ManyToManyField(Country, through="CountrySolution")
-    problem_statements = models.ManyToManyField(ProblemStatement)
+    problem_statements = models.ManyToManyField(ProblemStatement,blank=True)
     phase = models.IntegerField(choices=PHASES)
     open_source_frontier_tech = models.BooleanField()
     learning_investment = models.BooleanField()
