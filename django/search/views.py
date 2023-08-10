@@ -63,19 +63,6 @@ class SearchViewSet(PortfolioAccessMixin, mixins.ListModelMixin, GenericViewSet)
         return ProjectSearch.objects.exclude(project__is_active=False) \
             .select_related('project', 'project__approval', 'organisation', 'country', 'country_office')
 
-        # Retrieve 'published' query parameter value
-        published = self.request.query_params.get('published')
-
-        if published == '0':
-            # Filter to include only unpublished projects when 'published=0'
-            queryset = queryset.filter(project__public_id='')
-        elif published != '1':
-            # If 'published' query parameter is not provided or any value other than '0' or '1',
-            # exclude unpublished projects
-            queryset = queryset.exclude(project__public_id='')
-
-        return queryset
-
     def list(self, request, *args, **kwargs):
         """
         Search in projects, works by the following query params:
