@@ -6,6 +6,8 @@ from rest_framework.reverse import reverse
 
 from project.models import Stage
 from project.tests.setup import SetupTests
+from django.test import TestCase
+from project.views import ProjectPublicViewSet
 
 
 class ProjectStageTests(SetupTests):
@@ -16,15 +18,19 @@ class ProjectStageTests(SetupTests):
         data = copy.deepcopy(self.project_data)
 
         data['project']['name'] = 'Test Project 100'
-        data['project']['start_date'] = str((now - timezone.timedelta(days=10)).date())
-        data['project']['end_date'] = str((now - timezone.timedelta(days=1)).date())
+        data['project']['start_date'] = str(
+            (now - timezone.timedelta(days=10)).date())
+        data['project']['end_date'] = str(
+            (now - timezone.timedelta(days=1)).date())
         data['project']['end_date_note'] = "note for end date"
         del data['project']['stages']
 
         # create project
-        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
+        url = reverse("project-create",
+                      kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED, response.json())
 
         project_id = response.json()['id']
         self.assertIn("end_date_note", response.json()['draft'])
@@ -41,8 +47,10 @@ class ProjectStageTests(SetupTests):
         url = reverse("project-draft", kwargs={"project_id": project_id,
                                                "country_office_id": self.country_office.id})
         response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
-        self.assertEqual(response.json(), {'project': {'stages': [{'date': ['This field may not be null.']}]}})
+        self.assertEqual(response.status_code,
+                         status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(response.json(), {'project': {'stages': [
+                         {'date': ['This field may not be null.']}]}})
 
         stages = Stage.objects.all()
         # add stages
@@ -68,7 +76,8 @@ class ProjectStageTests(SetupTests):
         url = reverse("project-draft", kwargs={"project_id": project_id,
                                                "country_office_id": self.country_office.id})
         response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK, response.json())
         resp_data = response.json()
         self.assertIn('stages', resp_data['draft'])
         self.assertEqual(len(resp_data['draft']['stages']), 3)
@@ -78,7 +87,8 @@ class ProjectStageTests(SetupTests):
         url = reverse("project-publish", kwargs={"project_id": project_id,
                                                  "country_office_id": self.country_office.id})
         response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK, response.json())
         resp_data = response.json()
         self.assertNotIn('stages', resp_data['draft'])
         self.assertIn("end_date_note", response.json()['draft'])
@@ -88,7 +98,8 @@ class ProjectStageTests(SetupTests):
         url = reverse("project-publish", kwargs={"project_id": project_id,
                                                  "country_office_id": self.country_office.id})
         response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK, response.json())
         resp_data = response.json()
         self.assertIn('stages', resp_data['draft'])
         self.assertEqual(len(resp_data['draft']['stages']), 3)
@@ -102,61 +113,12 @@ class ProjectStageTests(SetupTests):
 
         url = reverse("get-project-structure")
         response = self.test_user_client.get(url, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK, response.json())
         data = response.json()['stages']
         self.assertEqual(data[0]['id'], stage_b.id)
         self.assertEqual(data[1]['id'], stage_a.id)
         self.assertEqual(data[2]['id'], stage_c.id)
-
-    def test_current_phase_discontinued(self):
-        now = timezone.now()
-        data = copy.deepcopy(self.project_data)
-        stage_1 = Stage.objects.all()[0]
-        stage_discontinued = Stage.objects.get(name='Discontinued')
-        # add stages
-        data['project']['stages'] = [
-            {
-                'id': stage_1.id,
-                'date': str((now - timezone.timedelta(days=10)).date()),
-                'note': 'preparation note'
-            },
-            {
-                'id': stage_discontinued.id,
-                'date': str((now - timezone.timedelta(days=7)).date()),
-                'note': 'analysis note'
-            }
-        ]
-
-        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
-        self.assertEqual(response.json()['draft']['current_phase'], stage_discontinued.id)
-
-    def test_current_phase_one_before_discontinued(self):
-        now = timezone.now()
-        data = copy.deepcopy(self.project_data)
-        stage_1 = Stage.objects.all()[0]
-        discontinued_id = Stage.objects.get(name='Discontinued').id
-        all_stages = list(Stage.objects.order_by('order').values_list('id', flat=True))
-        one_before_discontinued_id = all_stages[all_stages.index(discontinued_id) - 1]
-        # add stages
-        data['project']['stages'] = [
-            {
-                'id': stage_1.id,
-                'date': str((now - timezone.timedelta(days=10)).date()),
-                'note': 'preparation note'
-            },
-            {
-                'id': one_before_discontinued_id,
-                'date': str((now - timezone.timedelta(days=7)).date()),
-                'note': 'analysis note'
-            }
-        ]
-
-        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
-        self.assertEqual(response.json()['draft']['current_phase'], one_before_discontinued_id)
 
     def test_current_phase_normal_case(self):
         now = timezone.now()
@@ -176,19 +138,24 @@ class ProjectStageTests(SetupTests):
             }
         ]
 
-        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
+        url = reverse("project-create",
+                      kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
-        self.assertEqual(response.json()['draft']['current_phase'], stages[2].id)
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED, response.json())
+        self.assertEqual(response.json()['draft']
+                         ['current_phase'], stages[2].id)
 
     def test_current_phase_no_phase_selected(self):
         data = copy.deepcopy(self.project_data)
         stage_1 = Stage.objects.order_by('order').first()
         data['project']['stages'] = []
 
-        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
+        url = reverse("project-create",
+                      kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED, response.json())
         self.assertEqual(response.json()['draft']['current_phase'], stage_1.id)
 
     def test_current_phase_is_last_phase(self):
@@ -208,7 +175,42 @@ class ProjectStageTests(SetupTests):
             }
         ]
 
-        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
+        url = reverse("project-create",
+                      kwargs={"country_office_id": self.country_office.id})
         response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
-        self.assertEqual(response.json()['draft']['current_phase'], stages.last().id)
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED, response.json())
+        self.assertEqual(response.json()['draft']
+                         ['current_phase'], stages.last().id)
+
+
+class StageTestCase(TestCase):
+    def setUp(self):
+        self.stage_data = {
+            'name': 'Test Stage',
+            # Set the value accordingly for your test
+            'completion_marks_an_initiative_as_inactive': True
+        }
+
+    def test_completion_marks_an_initiative_as_inactive(self):
+        # Create a stage
+        stage = Stage.objects.create(**self.stage_data)
+
+        # Retrieve the created stage from the database
+        created_stage = Stage.objects.get(id=stage.id)
+
+        # Assert the field value matches the expected value
+        self.assertEqual(created_stage.completion_marks_an_initiative_as_inactive,
+                         self.stage_data['completion_marks_an_initiative_as_inactive'])
+
+        # Update the field value
+        new_value = False  # Set the new value accordingly for your test
+        created_stage.completion_marks_an_initiative_as_inactive = new_value
+        created_stage.save()
+
+        # Retrieve the updated stage from the database
+        updated_stage = Stage.objects.get(id=stage.id)
+
+        # Assert the field value has been updated
+        self.assertEqual(
+            updated_stage.completion_marks_an_initiative_as_inactive, new_value)

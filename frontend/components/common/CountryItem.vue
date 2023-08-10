@@ -2,7 +2,17 @@
   <el-row v-if="country" type="flex" align="middle" class="CountryItem">
     <country-flag v-show="showFlag" :code="country.code" />
     <el-col class="CountryName">
-      {{ country.name }}
+      <nuxt-link
+        data-test="inventory-table-country-homepage-link"
+        :to="
+          localePath({
+            name: 'organisation',
+            params: { organisation: `${country.code}` },
+          })
+        "
+      >
+        {{ country.name }}
+      </nuxt-link>
     </el-col>
   </el-row>
 </template>

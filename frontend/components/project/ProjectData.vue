@@ -5,7 +5,12 @@
         <collapsible-card id="general" :title="$gettext('1. General Overview') | translate">
           <simple-field :content="project.name" :header="$gettext('Initiative Name') | translate" />
 
-          <simple-field :header="$gettext('UNICEF Office') | translate" :content="location" />
+          <OfficeLinkField
+            :header="$gettext('UNICEF Office') | translate"
+            :office="officeString"
+            :country="country"
+            :region="region"
+          />
 
           <simple-field :content="project.overview" :header="$gettext('Overview of the initiative') | translate" />
 
@@ -278,11 +283,9 @@ import { format } from 'date-fns'
 // components
 import handleProjectActions from '@/components/mixins/handleProjectActions'
 import ListElement from '@/components/project/ListElement'
-// import CountryItem from '../common/CountryItem'
 import StageHistory from '@/components/project/sections/StageHistory'
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList'
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
-// import DonorsList from '../common/list/DonorsList'
 import ProjectNavigation from './ProjectNavigation'
 import CollapsibleCard from './CollapsibleCard'
 import SimpleField from './SimpleField'
@@ -291,23 +294,23 @@ import PlatformsList from './PlatformsList'
 import DhiList from './DhiList'
 import CapabilitiesList from './CapabilitiesList'
 import CustomReadonlyField from './CustomReadonlyField'
+import OfficeLinkField from './OfficeLinkField.vue'
 
 export default {
   components: {
     ProjectNavigation,
     CollapsibleCard,
     SimpleField,
-    // CountryItem,
     TeamList,
     PlatformsList,
     DhiList,
     HealthFocusAreasList,
     HealthSystemChallengesList,
-    // DonorsList,
     CustomReadonlyField,
     CapabilitiesList,
     ListElement,
     StageHistory,
+    OfficeLinkField,
   },
   mixins: [handleProjectActions],
   data() {
@@ -389,12 +392,19 @@ export default {
       const userName = this.userProfiles.find((profile) => profile.email === this.project.contact_email)
       return userName && userName.name ? userName.name : this.project.contact_name
     },
-    location() {
-      const { selectedRegionOffice, office, country, selectedRegion } = this
+    officeString() {
+      const { selectedRegionOffice, office, country } = this
       if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {
-        return `UNICEF ${selectedRegionOffice}, ${office.city}, ${country.name}, ${selectedRegion}`
+        return `UNICEF ${selectedRegionOffice}, ${office.city}, `
       }
-      return `UNICEF ${country.name}, ${office.city}, ${country.name}, ${selectedRegion}`
+      return `UNICEF ${country.name}, ${office.city}, `
+    },
+    region() {
+      const { selectedRegionOffice, selectedRegion } = this
+      if (selectedRegionOffice && selectedRegionOffice !== 'N/A') {
+        return `${selectedRegion}`
+      }
+      return `${selectedRegion}`
     },
     route() {
       return this.$route.name.split('__')[0]
