@@ -49,7 +49,7 @@ class InCountryAdminForApproval(permissions.BasePermission):
 
 class IsCountryOfficeFocalPoint(permissions.BasePermission):
 
-    def has_object_permission(self, request, view, obj: Project):
+    def has_object_permission(self, request, view, obj):
         # If the user is a superuser, grant permission
         if request.user.is_superuser:
             return True
@@ -58,18 +58,7 @@ class IsCountryOfficeFocalPoint(permissions.BasePermission):
         if not request.user.is_authenticated:
             return False
 
-        # Check if user is a country manager
-        co_id = obj.get_country_office_id()
-        is_country_manager = False
-        if co_id:
-            is_country_manager = request.user.userprofile.manager_of.filter(
-                id=co_id).exists()
-
-        # If the user is a country manager
-        if is_country_manager:
-            return True
-
-        return is_country_manager
+        return False
 
 
 class IsGPOOrReadOnly(permissions.BasePermission):

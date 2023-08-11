@@ -24,6 +24,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
     HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
     ApprovalState, Stage, Phase,  ProjectVersion, ProblemStatement, Solution
 from project.permissions import InCountryAdminForApproval
+# ,IsCountryOfficeFocalPoint  
 from search.views import ResultsSetPagination
 from .models import Project, TechnologyPlatform, DigitalStrategy, CountrySolution, \
     HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
@@ -725,14 +726,28 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
-class ProjectDeleteViewSet(CountryOfficeTokenAuthMixin, UpdateModelMixin, ViewSet):
+class ProjectDeleteViewSet(CountryOfficeTokenAuthMixin,UpdateModelMixin, ViewSet):
+    # permission_classes = (IsCountryOfficeFocalPoint,)
     queryset = Project.objects.all()
 
     @transaction.atomic
-    def partial_update(self, request, pk=None):
-        project = get_object_or_404(Project, pk=pk)
-        project.delete()
-        return Response({'status': 'Project deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    def partial_update(self, request,pk=None):
+        project = get_object_or_404(Project, pk=pk)        
+        # Check if the user is country manager of the project
+        co_id = project.get_country_office_id()       
+        if co_id:
+            is_country_manager = request.user.userprofile.manager_of.filter(
+                id=co_id).exists()
+            # If the user is a country manager or superuser then deletion is allowed 
+            if is_country_manager or request.user.is_superuser:
+                project.delete()         
+                response=Response({'status': 'Project deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                raise PermissionDenied("You do not have permission to delete this project.")
+        else:
+            response = Response({'status': 'Project does not have a country office associated.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return response
 
 
 class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):

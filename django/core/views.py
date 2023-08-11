@@ -10,7 +10,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
-    IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState, IsGPOOrManagerOfAtLeastOnePortfolio, IsCountryOfficeFocalPoint
+    IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState, IsGPOOrManagerOfAtLeastOnePortfolio,IsCountryOfficeFocalPoint
 from project.models import ProjectPortfolioState, ReviewScore, Solution, Portfolio
 from project.serializers import PartnerSerializer, LinkSerializer
 from country.models import CountryOffice
