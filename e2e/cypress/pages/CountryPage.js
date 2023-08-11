@@ -107,6 +107,10 @@ class CountryPage {
         return cy.get('[class="el-table__body-wrapper is-scrolling-none"]')
     }
 
+    getEmptyTable() {
+        return cy.get('[class="el-table__empty-block"]')
+    }
+
     getInventoryLink() {
         return cy.get('[data-test="country-inventory-link"]')
     }
@@ -140,15 +144,12 @@ class CountryPage {
     }
 
     isPhasesTableEmpty() {
-        this.getPhasesTable().contains('No initiatives available')
+        this.getEmptyTable().contains('No initiatives to show')
     }
 
     isStagesTableEmpty() {
-        this.getStagesTable().contains('No initiatives available')
+        this.getEmptyTable().contains('No initiatives to show')
     }
-
-    //
-
 
     // map
 
