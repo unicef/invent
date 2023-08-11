@@ -5,11 +5,10 @@ import AdminLoginForm from "../pages/AdminLoginForm"
 import AdminPage from "../pages/AdminPage"
 import AdminUsersPage from "../pages/AdminUsersPage"
 import AdminChangeUserPage from "../pages/AdminChangeUserPage"
-
-// Download is not implemented
+import deleteFiles from '../pages/TestFiles'
 
 describe('Export user with Job title and Section data on CSV format', () => {
-
+    beforeEach(() => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/165892',() => {
         const adminLoginForm = new AdminLoginForm()
         adminLoginForm.loginAdmin(Cypress.env('adminuser'), Cypress.env('adminuser'))
@@ -34,6 +33,8 @@ describe('Export user with Job title and Section data on CSV format', () => {
         adminChangeUserPage.getJobTitleValue('Chief Beverage Officer')
         adminChangeUserPage.getDepartmentLabel().should('contain', 'Department:')
         adminChangeUserPage.getDepartmentValue('Specialists Parkour Office')
+        deleteFiles()
+    })
         //adminUsersPage.selectXLS()
         //
         //

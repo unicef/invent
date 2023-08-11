@@ -21,22 +21,12 @@ class InitiativePage {
         return cy.get('textarea[data-vv-name="overview"]')
     }
 	
-	// Who is the focal point of contact for this initiative? ||| Required to publish
-    // getFocalPointName() {
-    //     return cy.get('input[data-vv-name="contact_name"]')
-    // }
-	
-	// Focal Point Email ||| Required to publish
-    getFocalPointMail() {
-        return cy.get('input[data-vv-name="contact_email"]')
-    }
-
     // Focal Point Label
     getFocalPointLabel() {
         return cy.get(':nth-child(9) > .el-form-item__label')
     }
 
-    // Focal Point Field
+    // Focal Point ||| Required to publish
     getFocalPointField() {
         return cy.get('[data-vv-name="contact_email"]')
     }
@@ -203,14 +193,6 @@ class InitiativePage {
         this.getIniativeOverview().type(overview)
     }
 	
-	// typeFocalPointName(name) {
-    //     this.getFocalPointName().type(name)
-    // }
-	
-	typeFocalPointMail(email) {
-        this.getFocalPointMail().type(email)
-    }
-
     typeFocalPointField(focalpointmember) {
         this.getFocalPointField().type(focalpointmember)
         cy.contains(focalpointmember)

@@ -7,7 +7,7 @@ describe('Contact & Export Button', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/146446',() => {
         // Contact Button (enable/disable)
         const loginForm = new LoginForm()
-        loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
+        loginForm.login(Cypress.env('username0'), Cypress.env('username0'))
         const navigationBar = new NavigationBar()
         navigationBar.navigateToInventoryPage()
         const inventoryPage = new InventoryPage()
@@ -20,7 +20,7 @@ describe('Contact & Export Button', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/146385', () => {
         // Export Button (enable/disable)
         const loginForm = new LoginForm()
-        loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
+        loginForm.login(Cypress.env('username0'), Cypress.env('username0'))
         const navigationBar = new NavigationBar()
         navigationBar.navigateToInventoryPage()
         const inventoryPage = new InventoryPage()

@@ -12,7 +12,7 @@ import PortfolioManagerPage from "../pages/PortfolioManagerPage"
 describe('Cancel New Iniative', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/148113/',() => {
         const loginForm = new LoginForm()
-        loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
+        loginForm.login(Cypress.env('username0'), Cypress.env('username0'))
         const navigationBar = new NavigationBar()
         navigationBar.navigateToNewInitiativePage()
         const initiativePage = new InitiativePage()

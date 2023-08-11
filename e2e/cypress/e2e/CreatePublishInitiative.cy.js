@@ -6,15 +6,15 @@ import NavigationBar from "../pages/NavigationBar"
 describe('Create Publish Iniative', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/148113/',() => {
         const loginForm = new LoginForm()
-        loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
+        loginForm.login(Cypress.env('username2'), Cypress.env('username2'))
         const navigationBar = new NavigationBar()
         navigationBar.navigateToNewInitiativePage()
         const initiativePage = new InitiativePage()
         initiativePage.typeInitiativeName('Automation Publish Initiative'+(Math.floor(Math.random() * 1000000000000000)).toString())
         initiativePage.selectUnicefOffice('Angola: Dundo')
         initiativePage.typeInitiativeOverview('Automate Publish Initiative')
-        initiativePage.typeFocalPointName('Publish Initiative')
-        initiativePage.typeFocalPointMail('konstantinos.zagklis@sword-group.com')
+
+        initiativePage.typeFocalPointField(Cypress.env('username1'))
         initiativePage.selectLeadSectorInitiative('C4D')
         initiativePage.selectGoalArea('22. Learn')
         initiativePage.selectStartDate('2002-02-02')

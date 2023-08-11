@@ -64,39 +64,39 @@ class CountryPage {
     }
 
     get2PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_2     is-leaf']")
+        return cy.get("[class='el-table_1_column_46     is-leaf']")
     }
 
     get3PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_3     is-leaf']")
+        return cy.get("[class='el-table_1_column_47     is-leaf']")
     }
 
     get4PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_4     is-leaf']")
+        return cy.get("[class='el-table_1_column_48     is-leaf']")
     }
 
     get5PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_5     is-leaf']")
+        return cy.get("[class='el-table_1_column_49     is-leaf']")
     }
 
     get6PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_6     is-leaf']")
+        return cy.get("[class='el-table_1_column_50     is-leaf']")
     }
 
     get7PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_7     is-leaf']")
+        return cy.get("[class='el-table_1_column_51     is-leaf']")
     }
 
     get8PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_8     is-leaf']")
+        return cy.get("[class='el-table_1_column_52     is-leaf']")
     }
 
     get9PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_9     is-leaf']")
+        return cy.get("[class='el-table_1_column_53     is-leaf']")
     }
 
     get10PhaseColumnTitle() {
-        return cy.get("[class='el-table_1_column_10     is-leaf']")
+        return cy.get("[class='el-table_1_column_54     is-leaf']")
     }
 
     getPhasesTable() {

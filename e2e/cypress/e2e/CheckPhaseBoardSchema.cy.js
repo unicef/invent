@@ -37,7 +37,7 @@ describe('Initiative Phase / Stage Board schema', () => {
         cy.get('@countryCodes').then((countryCodes) => {
             countryCodes.forEach((code) => {
                 countryPage.goToCountryPage(code)
-                countryPage.pressSwitch()
+                countryPage.pressBoardSwitch()
                 countryPage.getVisibleFlag().should('be.visible')
                 countryPage.getCaption().contains('Indicates an initiative that has been in this phase for over 6 months')
                 countryPage.get2PhaseColumnTitle().contains('Initiation')
