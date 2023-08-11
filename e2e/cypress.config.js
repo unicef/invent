@@ -8,7 +8,7 @@ module.exports = defineConfig({
       require('cypress-mochawesome-reporter/plugin')(on),
       on ('task', {downloadFile})
     },
-    baseUrl: "https://invent-dev.unitst.org",
+    baseUrl: "https://invent-tst.unitst.org",
     chromeWebSecurity: false,
     defaultCommandTimeout: 60000,
     experimentalModifyObstructiveThirdPartyCode: true,

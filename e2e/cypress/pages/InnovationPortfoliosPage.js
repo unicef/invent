@@ -28,7 +28,7 @@ class InnovationPortfoliosPage{
     openPortfolio(name){
         this.getPortfolios().contains(name).click()
         cy.get('[class="el-collapse-item is-active"]').contains('View Portfolio').click()
-        cy.get('.portfolio-summary > span').contains("Summary")
+        cy.get('[class="active"]').contains("Summary")
     }
 
     openAllSolution(){

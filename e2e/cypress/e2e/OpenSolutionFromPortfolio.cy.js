@@ -17,15 +17,7 @@ describe('Open a Solution Page from Portfolio', () => {
         innovationPortfoliosPage.openSolution()
         const solutionPage = new SolutionPage()
         solutionPage.getViewTitle().contains("View Solution Information")
-        solutionPage.getURL().should('contain', '/portfolio/innovation/solutions/')
-        solutionPage.getBreadcrumb().should('contain', 'Innovation Portfolio')
+        solutionPage.getURL().should('contain', '/solutions/38/?portfolio=2')
         solutionPage.getBreadcrumb().should('contain', PortfolioName)
-        solutionPage.getSolutionName()
-        //solutionPage.getBreadcrumb().should('contain', )
-
-
-
-
     })
 })
-

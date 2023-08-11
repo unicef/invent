@@ -22,9 +22,7 @@ class SolutionPage{
         return cy.url()
     }
 
-    getSolutionName(){
-        return cy.get('[class="Content"]')
-    }
+    getSolutionName(){}
 
     getNameSection(){}
 

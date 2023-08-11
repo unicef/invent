@@ -5,7 +5,7 @@ import HomePage from "../pages/HomePage"
 describe('User with 0 Initiatives', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/147430',() => {
         const loginForm = new LoginForm()
-        loginForm.login(Cypress.env('username0'), Cypress.env('username0'))
+        loginForm.login(Cypress.env('zeroinitiatives'), Cypress.env('zeroinitiatives'))
         const homePage = new HomePage()
         // Check if the <<Recently Updated Initiatives>> section is visible
         homePage.getInitiativesSection().contains('Recently Updated Initiatives').should('be.visible')
