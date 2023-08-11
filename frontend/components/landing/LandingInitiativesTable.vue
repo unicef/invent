@@ -203,7 +203,7 @@ export default {
       //filter out endPhase and unknown phase projects and update current phase for the rest
       const filtProjects = projectsList.filter((project) => {
         //if stages exist
-        if (project.stages.length > 0) {
+        if (project.stages?.length > 0) {
           //Last initiative stage is calculated as the last in array of project.stages
           const lastStageId = project.stages[project.stages.length - 1].id
           //if last initiative stage id does not exist in phases list then remove initiative
