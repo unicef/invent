@@ -29,9 +29,6 @@ sentry_sdk.init(
     release=env.str('DEPLOY_VERSION', default='0.0.0')
 )
 
-EMAIL_HOST = env.str('EMAIL_HOST', default='')
-EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-EMAIL_PORT = env.str('EMAIL_PORT', default=25)
 
 CELERYBEAT_SCHEDULE = {
     "send_project_approval_digest": {
