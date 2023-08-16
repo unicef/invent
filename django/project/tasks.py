@@ -250,8 +250,7 @@ def notify_user_about_approval(action, class_name, object_id, field_name):
                       to=object.added_by.user.email,
                       language=object.added_by.language or settings.LANGUAGE_CODE,
                       context={'object_name': object.name, 
-                               'field_name': field_name, 
-                               'requested_tag': object.name, 
+                               'field_name': field_name,
                                'comment': object.comment, 
                                'project_id': ''}
                                )
