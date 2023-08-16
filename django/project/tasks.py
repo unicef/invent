@@ -229,7 +229,8 @@ def notify_superusers_about_new_pending_approval(class_name, object_id):
 
 
 @app.task(name='notify_user_about_approval')
-def notify_user_about_approval(action, class_name, object_id):
+def notify_user_about_approval(action, class_name, object_id, field_name):
+    print('in notify_user_about_approval')
     klass = apps.get_model('project', class_name)
     object = klass.objects.get(id=object_id)
     if not object.added_by:
@@ -248,4 +249,9 @@ def notify_user_about_approval(action, class_name, object_id):
                       email_type=email_type,
                       to=object.added_by.user.email,
                       language=object.added_by.language or settings.LANGUAGE_CODE,
-                      context={'object_name': object.name})
+                      context={'object_name': object.name, 
+                               'field_name': field_name, 
+                               'requested_tag': object.name, 
+                               'comment': object.comment, 
+                               'project_id': ''}
+                               )
