@@ -21,9 +21,13 @@ helm_resource(
 if os.path.exists('/tmp'):
     os_command = ['sh', '-c']
     pod_exec_script = 'kubectl exec deployment/$deployment -- $command'
+    translations_pod_exec_script = 'kubectl exec deployment/$deployment -c $container -- $command'
+    translations_script_cmd = './extract_translations.sh'
 else:
     os_command = ['cmd', '/c']
     pod_exec_script = 'kubectl exec deployment/%deployment% -- %command%'
+    translations_pod_exec_script = 'kubectl exec deployment/%deployment% -c %container% -- %command%'
+    translations_script_cmd = 'bash ./extract_translations.sh'
 
 local_resource(
     name='copy-dump',
@@ -99,7 +103,7 @@ helm_resource(
 )
 
 
-# Add a button to quickly run a command in a pod
+# Buttons to execute scripts inside pods through the Tilt UI
 # Execute Unit Tests
 cmd_button('exec_unit_tests',
     argv=os_command + [pod_exec_script],
@@ -136,13 +140,14 @@ cmd_button('exec_migrate',
     text='Run migrations',
 )
 
-# Run the django migrations
+# # Run the translation extraction
 cmd_button('extract_translations',
-    argv=os_command + [pod_exec_script],
-    resource='invent-django',
+    argv=os_command + [translations_pod_exec_script],
+    resource='invent-frontend',
     env=[
-        'deployment=invent-django',
-        'command=python manage.py extract_translations',
+        'deployment=invent-frontend',
+        'container=invent-frontend',
+        'command=yarn translation:extract'
     ],
     icon_name='translate',
     text='Extract translations',
