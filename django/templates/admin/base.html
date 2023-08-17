@@ -15,11 +15,15 @@
             display: flex;
             justify-content: start;
             gap: 10px;
-
 }
+
     }
 </style>
 {% endblock %}
+
+<!-- 
+style for moving label and comment box next to state
+-->
 
 {% block extrahead %}
 {{ block.super }}
@@ -29,7 +33,7 @@
         // Move the comment field next to the state field
         $('#id_state').after($('#id_comment'));
         // Insert the text label after moving the comment field
-        $('#id_comment').before(' Comment: ');
+        $('#id_comment').before('Comment: ');
         $( ".field-comment" ).hide();
     });
 </script>
