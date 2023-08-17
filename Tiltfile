@@ -108,8 +108,8 @@ cmd_button('exec_unit_tests',
         'deployment=invent-django',
         'command=/bin/bash run_unit_tests.sh 100',
     ],
-    icon_name='check_circle',
-    text='Execute Unit Tests',
+    icon_name='bug_report',
+    text='Execute Unit tests',
 )
 
 # Create the Super User in Django
@@ -120,7 +120,7 @@ cmd_button('exec_create_super_user',
         'deployment=invent-django',
         'command=python manage.py create_superuser',
     ],
-    icon_name='check_circle',
+    icon_name='person_add',
     text='Create superuser',
 )
 
@@ -132,8 +132,20 @@ cmd_button('exec_migrate',
         'deployment=invent-django',
         'command=python manage.py migrate --noinput',
     ],
-    icon_name='check_circle',
-    text='Run the django migrations',
+    icon_name='arrow_forward_ios',
+    text='Run migrations',
+)
+
+# Run the django migrations
+cmd_button('extract_translations',
+    argv=os_command + [pod_exec_script],
+    resource='invent-django',
+    env=[
+        'deployment=invent-django',
+        'command=python manage.py extract_translations',
+    ],
+    icon_name='translate',
+    text='Extract translations',
 )
 
 ############# FE Tilt Configuration ##################
