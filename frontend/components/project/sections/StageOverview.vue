@@ -1,38 +1,8 @@
 <template>
   <div id="stages" class="StageOverview">
-    <collapsible-card
-      ref="collapsible"
-      :title="$gettext('Completion of initiative phases') | translate"
-      show-legend
-    >
+    <collapsible-card ref="collapsible" :title="$gettext('Completion of initiative phases') | translate" show-legend>
       <!-- stages -->
       <el-row>
-        <!-- research section -->
-        <!-- <el-col :span="24">
-          <div class="research">
-            <el-switch
-              v-model="research"
-              active-color="#008DC9"
-              :disabled="researchDisabled"
-            />
-            <p class="research__switch">
-              <translate key="research-project-title">
-                Set initiative as ‘Research initiative’
-              </translate>
-            </p>
-            <p class="info">
-              <fa icon="info-circle" class="info__icon" />
-              <span>
-                <translate key="research-project-info">
-                  If your initiative is focused on research activities, please
-                  indicate here. The unique initiative ID can be shared as a
-                  reference during in your publication.
-                </translate>
-              </span>
-            </p>
-          </div>
-        </el-col> -->
-        <!-- research section -->
         <!-- Start date section -->
         <el-col :span="24">
           <custom-required-form-item
@@ -41,21 +11,16 @@
             :publish-rule="publishRules.start_date"
           >
             <template slot="label">
-              <translate key="start-date">
-                Set start date of initiative
-              </translate>
-              <tooltip
-                :text="$gettext('Date format: YYYY-MM-DD') | translate"
-              />
+              <translate key="start-date"> Set start date of initiative </translate>
+              <tooltip :text="$gettext('Date format: YYYY-MM-DD') | translate" />
             </template>
             <p class="info info--free-margin">
               <fa icon="info-circle" class="info__icon" />
               <span>
                 <translate key="research-project-info">
-                  When your initiative activities have completed, you can
-                  indicated by setting the end of the initiative. Note that the
-                  initiative will still be visible on the global map as a
-                  completed initiative.
+                  When your initiative activities have completed, you can indicated by setting the end of the
+                  initiative. Note that the initiative will still be visible on the global map as a completed
+                  initiative.
                 </translate>
               </span>
             </p>
@@ -76,9 +41,7 @@
           <el-row class="stages">
             <custom-required-form-item>
               <template slot="label">
-                <translate key="stages">
-                  Set the completed phases for this initiative
-                </translate>
+                <translate key="stages"> Set the completed phases for this initiative </translate>
               </template>
               <el-col
                 v-for="(stage, idx) in stagesDraft"
@@ -91,9 +54,7 @@
                   :value="stage.checked"
                   class="stage__checkbox"
                   :label="stage.id"
-                  @input="
-                    updateStagesDraft(stage.id, 'checked', !stage.checked)
-                  "
+                  @input="updateStagesDraft(stage.id, 'checked', !stage.checked)"
                 >
                   {{ stage.name }}
                   <el-tooltip
@@ -110,21 +71,25 @@
                   <div v-if="stage.checked" class="stage__form">
                     <p v-if="stage.tooltip" class="info stage__info">
                       <span>
-                        <translate :key="`stage-tooltip-${idx + 1}`">
-                          {{ stage.tooltip }}
-                        </translate>
+                        <translate :key="`stage-tooltip-${idx + 1}`"> {{ stage.tooltip }} </translate>&nbsp;<a
+                          v-if="stage.link"
+                          :href="`${stage.link}`"
+                          target="_blank"
+                          class="learn-more"
+                          ><translate>Learn more</translate
+                          ><fa
+                            :style="{
+                              paddingLeft: '6px',
+                            }"
+                            icon="external-link-alt"
+                        /></a>
                       </span>
                     </p>
-                    <custom-required-form-item
-                      class="stage__picker"
-                      :error="!stage.date ? stageDateError : ''"
-                    >
+                    <custom-required-form-item class="stage__picker" :error="!stage.date ? stageDateError : ''">
                       <safe-date-picker
                         v-validate="rules.note_date"
                         :value="stage.date"
-                        :placeholder="
-                          $gettext('Pick a date (required)') | translate
-                        "
+                        :placeholder="$gettext('Pick a date (required)') | translate"
                         data-vv-name="note_date"
                         data-vv-as="Note date"
                         class="Date stage__input--full"
@@ -137,16 +102,11 @@
                         :value="stage.note"
                         maxlength="256"
                         show-word-limit
-                        :placeholder="
-                          $gettext('Add note (optional)') | translate
-                        "
+                        :placeholder="$gettext('Add note (optional)') | translate"
                         class="stage__input--full"
                         @input="updateStagesDraft(stage.id, 'note', $event)"
                       >
-                        <i
-                          slot="prefix"
-                          class="el-input__icon el-icon-document"
-                        />
+                        <i slot="prefix" class="el-input__icon el-icon-document" />
                       </el-input>
                     </custom-required-form-item>
                   </div>
@@ -163,21 +123,16 @@
             :publish-rule="publishRules.end_date"
           >
             <template slot="label">
-              <translate key="end-date">
-                Set end phase of initiative
-              </translate>
+              <translate key="end-date"> Set end phase of initiative </translate>
               &nbsp;
-              <tooltip
-                :text="$gettext('Date format: YYYY-MM-DD') | translate"
-              />
+              <tooltip :text="$gettext('Date format: YYYY-MM-DD') | translate" />
             </template>
             <p class="info info--free-margin">
               <fa icon="info-circle" class="info__icon" />
               <span>
                 <translate key="research-project-info">
-                  An estimated end date for the Initiative. This could refer to
-                  the end of a programme cycle, humanitarian response plan,
-                  hand-over to government, etc.
+                  An estimated end date for the Initiative. This could refer to the end of a programme cycle,
+                  humanitarian response plan, hand-over to government, etc.
                 </translate>
               </span>
             </p>
@@ -259,9 +214,7 @@ export default {
     stageDateError() {
       if (
         this.stagesDraft &&
-        this.stagesDraft.filter(
-          (i) => i.checked && (i.date === '' || i.date === null)
-        ).length > 0
+        this.stagesDraft.filter((i) => i.checked && (i.date === '' || i.date === null)).length > 0
       ) {
         return this.$gettext('Phase date is required')
       }
@@ -436,5 +389,8 @@ export default {
 .toggle-leave-to {
   opacity: 0;
   max-height: 0px;
+}
+.learn-more {
+  color: @colorBrandPrimary;
 }
 </style>

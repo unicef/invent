@@ -17,13 +17,14 @@ from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from country.models import Donor, CountryOffice, RegionalOffice, Currency
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400, get_object_or_404, GPOAccessMixin, PortfolioAccessMixin, \
-    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin
+    ReviewScoreReviewerAccessMixin, ReviewScoreAccessMixin, ProjectPortfolioStateAccessMixin, SolutionAccessMixin, CountryOfficeTokenAuthMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, UNICEFGoal, UNICEFResultArea, \
     UNICEFCapabilityLevel, UNICEFCapabilityCategory, UNICEFCapabilitySubCategory, UNICEFSector, RegionalPriority, \
     HardwarePlatform, NontechPlatform, PlatformFunction, CPD, InnovationCategory, InnovationWay, ISC, \
     ApprovalState, Stage, Phase,  ProjectVersion, ProblemStatement, Solution
 from project.permissions import InCountryAdminForApproval
+# ,IsCountryOfficeFocalPoint  
 from search.views import ResultsSetPagination
 from .models import Project, TechnologyPlatform, DigitalStrategy, CountrySolution, \
     HealthCategory, HSCChallenge, Portfolio, ProjectPortfolioState, ReviewScore
@@ -80,7 +81,7 @@ class ProjectPublicViewSet(ViewSet):
     # get the updated 'completion_marks_an_initiative_as_inactive' for all stages
     def get_updated_stages(self):
         stages = Stage.objects.values(
-            'id', 'name', 'tooltip', 'order', 'completion_marks_an_initiative_as_inactive')
+            'id', 'name', 'tooltip', 'order', 'link', 'completion_marks_an_initiative_as_inactive')
         stage_data = []
         for stage in stages:
             stage_info = {
@@ -90,6 +91,7 @@ class ProjectPublicViewSet(ViewSet):
                 'order': stage['order'],
                 # rename the checkbox (for the frond-end)
                 'end_phase': stage['completion_marks_an_initiative_as_inactive'],
+                'link': stage['link']
             }
             stage_data.append(stage_info)
         return stage_data
@@ -722,6 +724,30 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
         return ProjectImportV2.objects.filter(user=self.request.user)
+
+
+class ProjectDeleteViewSet(CountryOfficeTokenAuthMixin,UpdateModelMixin, ViewSet):
+    # permission_classes = (IsCountryOfficeFocalPoint,)
+    queryset = Project.objects.all()
+
+    @transaction.atomic
+    def partial_update(self, request,pk=None):
+        project = get_object_or_404(Project, pk=pk)        
+        # Check if the user is country manager of the project
+        co_id = project.get_country_office_id()       
+        if co_id:
+            is_country_manager = request.user.userprofile.manager_of.filter(
+                id=co_id).exists()
+            # If the user is a country manager or superuser then deletion is allowed 
+            if is_country_manager or request.user.is_superuser:
+                project.delete()         
+                response=Response({'status': 'Project deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                raise PermissionDenied("You do not have permission to delete this project.")
+        else:
+            response = Response({'status': 'Project does not have a country office associated.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return response
 
 
 class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):

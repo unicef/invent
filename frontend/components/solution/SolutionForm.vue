@@ -170,7 +170,7 @@ export default {
     goToViewSolution() {
       const id = this.$route.params.id
       const localised = this.localePath({
-        name: 'organisation-portfolio-innovation-solutions-id',
+        name: 'organisation-solutions-id',
         params: { ...this.$route.params, id },
         query: { ...this.$route.query },
       })
@@ -280,7 +280,7 @@ export default {
       try {
         await this.deleteSolution()
         const localised = this.localePath({
-          name: 'organisation-portfolio-innovation-solutions',
+          name: 'organisation-solutions',
           params: { ...this.$route.params },
         })
         this.$router.replace(localised)

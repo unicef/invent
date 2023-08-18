@@ -31,14 +31,14 @@ export default {
           this.profile.is_superuser ||
           this.profile.global_portfolio_owner ||
           this.profile.manager.length > 0 ||
-          this.$route.name.split('__')[0] === 'organisation-portfolio-innovation-solutions-id'
+          this.$route.name.split('__')[0] === 'organisation-solutions-id'
         // this.profile.member.includes(parseInt(this.$route.params.id, 10))
         if (!allowed) {
           this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
             confirmButtonText: 'OK',
             callback: () => {
               const path = this.localePath({
-                name: 'organisation-portfolio-innovation-solutions',
+                name: 'organisation-solutions',
                 params: this.$route.params,
               })
               this.$router.replace(path)

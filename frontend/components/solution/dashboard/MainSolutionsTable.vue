@@ -25,7 +25,7 @@
             class="ProjectName"
             :to="
               localePath({
-                name: 'organisation-portfolio-innovation-solutions-id',
+                name: 'organisation-solutions-id',
                 params: { id: scope.row.id },
                 query: { portfolio: $route.params.id },
               })
