@@ -412,3 +412,7 @@ if ENVIRONMENT in ['dev']:
 
     if APPLICATIONINSIGHTS_CONNECTION_STRING:  # Ensure the connection string exists
         configure_azure_monitor(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING)
+
+EMAIL_HOST = env.str('EMAIL_HOST', default='')
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+EMAIL_PORT = env.str('EMAIL_PORT', default=25)
