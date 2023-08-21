@@ -45,7 +45,7 @@ class GPOAccessMixin:
 
 
 class CountryOfficeTokenAuthMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsCountryOfficeFocalPoint)
 
 
