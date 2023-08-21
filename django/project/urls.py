@@ -43,6 +43,7 @@ urlpatterns = [
          view=views.ProjectDraftViewSet.as_view({
              'post': 'create'
          }), name="project-create"),
+
     path(r'projects/draft/<int:project_id>/<int:country_office_id>/',
          view=views.ProjectDraftViewSet.as_view({
              'put': 'update'
@@ -87,6 +88,11 @@ urlpatterns = [
              'put': 'remove'
          }),
          name="projects-remove-favorite"),
+    path('projects/delete/<int:pk>/',
+         view=views.ProjectDeleteViewSet.as_view({
+             'patch': 'partial_update'
+         }),
+         name="project-delete"),
     path(r'approvals/<int:country_id>/',
          view=views.ProjectApprovalViewSet.as_view({
              'get': 'list'
