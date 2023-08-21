@@ -110,7 +110,7 @@ https://templates.mailchimp.com/resources/inline-css/ -->
                         {% elif type == "object_declined" %}
                         <h1 style="font-family: arial, sans-serif;font-weight: 700;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 20px;">`{{ object_name }}` {% trans "has been declined" %}</h1>
                         <h2 style="font-family: arial, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 16px;">{% trans "Dear" %} {{ full_name }},</h2>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing your initiative, you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
                         <br>
                         <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " This request has been declined. " %}</p>
                         <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{{ comment }}</p>
@@ -121,7 +121,7 @@ https://templates.mailchimp.com/resources/inline-css/ -->
                         {% elif type == "object_approved" %}
                         <h1 style="font-family: arial, sans-serif;font-weight: 700;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 20px;">`{{ object_name }}` {% trans "has been approved" %}</h1>
                         <h2 style="font-family: arial, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 16px;">{% trans "Dear" %} {{ full_name }},</h2>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing your initiative, you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
                         <br>
                         <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " This request has been approved. " %}</p>
                         <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{{ comment }}</p>
