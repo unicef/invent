@@ -230,27 +230,25 @@ def notify_superusers_about_new_pending_approval(class_name, object_id):
 
 @app.task(name='notify_user_about_approval')
 def notify_user_about_approval(action, class_name, object_id, field_name):
-    print('in notify_user_about_approval')
     klass = apps.get_model('project', class_name)
     object = klass.objects.get(id=object_id)
     if not object.added_by:
         return
 
     if action == 'approve':
-        subject = _(f"`{object.name}` you requested has been approved")
         email_type = "object_approved"
     elif action == 'decline':
-        subject = _(f"`{object.name}` you requested has been declined")
         email_type = "object_declined"
     else:
         return
 
-    send_mail_wrapper(subject=subject,
+
+    send_mail_wrapper(subject=_(f"Request for {field_name} tag notification"),
                       email_type=email_type,
                       to=object.added_by.user.email,
                       language=object.added_by.language or settings.LANGUAGE_CODE,
                       context={'object_name': object.name, 
                                'field_name': field_name,
-                               'comment': object.comment, 
-                               'project_id': ''}
+                               'comment': object.comment,
+                               'full_name': object.added_by.name}
                                )
