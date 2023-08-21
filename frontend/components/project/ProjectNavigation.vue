@@ -169,6 +169,21 @@
         </el-button>
       </div>
     </el-card>
+    <div :style="{ paddingTop: '30px' }"></div>
+    <el-card v-if="canDelete && isDraft" :body-style="{ padding: '0px' }">
+      <div class="NavigationActions">
+        <el-button :disabled="!!loading" type="text" class="DeleteInitButton" @click="emitAction('deleteProject')">
+          <fa v-show="loading === 'discard'" icon="spinner" spin />
+          <translate>Delete initiative</translate>
+        </el-button>
+        <p class="delete-hint-text">
+          <translate
+            >You should only delete initiatives that were created in error, or are duplicates. All other inititiatives
+            should be marked Discontinued with a suitable explanation.</translate
+          >
+        </p>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -207,6 +222,12 @@ export default {
     },
     isReadOnlyDraft() {
       return this.route === 'organisation-initiatives-id'
+    },
+    canDelete() {
+      if (this.user) {
+        return this.user.is_superuser || this.user.manager_of.includes(this.project.country_office)
+      }
+      return false
     },
     canEdit() {
       if (this.user) {
@@ -519,6 +540,15 @@ export default {
     .fa-spin {
       margin-right: 2px;
     }
+  }
+  .DeleteInitButton {
+    background-color: red;
+    color: white;
+  }
+  .delete-hint-text {
+    font-size: @fontSizeSmall;
+    color: @colorTextPrimary;
+    margin-bottom: 0;
   }
 }
 </style>
