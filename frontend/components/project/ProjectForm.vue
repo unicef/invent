@@ -89,6 +89,7 @@
             @saveDraft="doSaveDraft"
             @discardDraft="doDiscardDraft"
             @publishProject="doPublishProject"
+            @deleteProject="doDeleteProject"
           />
         </el-col>
       </el-row>
@@ -138,6 +139,7 @@ export default {
       project: 'project/getProjectData',
       countryAnswers: 'project/getCountryAnswers',
       donorAnswers: 'project/getDonorsAnswers',
+      user: 'user/getProfile',
     }),
     isDraft() {
       return this.$route.name.includes('organisation-initiatives-id-edit')
@@ -184,6 +186,7 @@ export default {
       publishProject: 'project/publishProject',
       setLoading: 'project/setLoading',
       initProjectState: 'project/initProjectState',
+      deleteProject: 'project/deleteProject',
     }),
     digitalHealthInterventionsValidator(rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter((dhi) => dhi.platform === value && dhi.id)
@@ -346,6 +349,39 @@ export default {
         this.handleErrorMessages()
         this.setLoading(false)
       })
+    },
+    async doDeleteProject() {
+      try {
+        await this.$confirm(this.$gettext('This initiative will be deleted.'), this.$gettext('Attention'), {
+          confirmButtonText: this.$gettext('Ok'),
+          cancelButtonText: this.$gettext('Cancel'),
+          type: 'warning',
+        })
+        try {
+          await this.deleteProject(this.$route.params.id)
+          const localised = this.localePath({
+            name: 'organisation-portfolio',
+            params: { ...this.$route.params },
+          })
+          this.$router.push(localised)
+          this.$alert(this.$gettext('The initiative has been deleted successfully'), this.$gettext('Congratulation'), {
+            confirmButtonText: this.$gettext('Close'),
+          })
+          return
+        } catch (e) {
+          console.log(e)
+          this.setLoading(false)
+          this.apiErrors = e.response.data ? e.response.data : 'error'
+          this.handleErrorMessages()
+        }
+      } catch (e) {
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action cancelled'),
+        })
+      }
+
+      this.setLoading(false)
     },
     createdHandler() {
       this.createdElements += 1

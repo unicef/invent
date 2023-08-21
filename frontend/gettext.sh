@@ -4,7 +4,7 @@ unset command_not_found_handle
 input_vue_files="$(find ./components ./pages ./layouts -type f -name '*.vue')"
 workdir=$(mktemp -d "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX") || exit 1
 
-output_file="../django/translations/master.pot"
+output_file="/tmp/master.pot"
 
 vue_translations=${workdir}/vue.pot
 

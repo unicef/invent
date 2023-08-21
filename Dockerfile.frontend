@@ -1,7 +1,7 @@
 FROM node:14.21.0-alpine
 # This is to allow yarn to install from github
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash
+    apk add --no-cache bash gettext
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

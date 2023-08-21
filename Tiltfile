@@ -21,9 +21,13 @@ helm_resource(
 if os.path.exists('/tmp'):
     os_command = ['sh', '-c']
     pod_exec_script = 'kubectl exec deployment/$deployment -- $command'
+    translations_pod_exec_script = 'kubectl exec deployment/$deployment -c $container -- $command'
+    translations_script_cmd = './extract_translations.sh'
 else:
     os_command = ['cmd', '/c']
     pod_exec_script = 'kubectl exec deployment/%deployment% -- %command%'
+    translations_pod_exec_script = 'kubectl exec deployment/%deployment% -c %container% -- %command%'
+    translations_script_cmd = 'bash ./extract_translations.sh'
 
 local_resource(
     name='copy-dump',
@@ -98,7 +102,7 @@ helm_resource(
 )
 
 
-# Add a button to quickly run a command in a pod
+# Buttons to execute scripts inside pods through the Tilt UI
 # Execute Unit Tests
 cmd_button('exec_unit_tests',
     argv=os_command + [pod_exec_script],
@@ -107,8 +111,8 @@ cmd_button('exec_unit_tests',
         'deployment=invent-django',
         'command=/bin/bash run_unit_tests.sh 100',
     ],
-    icon_name='check_circle',
-    text='Execute Unit Tests',
+    icon_name='bug_report',
+    text='Execute Unit tests',
 )
 
 # Create the Super User in Django
@@ -119,7 +123,7 @@ cmd_button('exec_create_super_user',
         'deployment=invent-django',
         'command=python manage.py create_superuser',
     ],
-    icon_name='check_circle',
+    icon_name='person_add',
     text='Create superuser',
 )
 
@@ -131,8 +135,21 @@ cmd_button('exec_migrate',
         'deployment=invent-django',
         'command=python manage.py migrate --noinput',
     ],
-    icon_name='check_circle',
-    text='Run the django migrations',
+    icon_name='arrow_forward_ios',
+    text='Run migrations',
+)
+
+# # Run the translation extraction
+cmd_button('extract_translations',
+    argv=os_command + [translations_pod_exec_script],
+    resource='invent-frontend',
+    env=[
+        'deployment=invent-frontend',
+        'container=invent-frontend',
+        'command=yarn translation:extract'
+    ],
+    icon_name='translate',
+    text='Extract translations',
 )
 
 ############# FE Tilt Configuration ##################
