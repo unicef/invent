@@ -10,6 +10,12 @@
         color: white;
         content: "{{ ENVIRONMENT_NAME }}";
         background-color: {{ ENVIRONMENT_COLOR }};
+
+        .form-row {
+            display: flex;
+            justify-content: start;
+            gap: 10px;
+        }
     }
 
     .skip-to-content-link {
@@ -39,4 +45,22 @@
         <!-- New logout link -->
         <a href="/admin/logout/">Log out</a>
     </div>
+{% endblock %}
+
+<!-- 
+style for moving label and comment box next to state
+-->
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Move the comment field next to the state field
+        $('#id_state').after($('#id_comment'));
+        // Insert the text label after moving the comment field
+        $('#id_comment').before('Comment: ');
+        $( ".field-comment" ).hide();
+    });
+</script>
 {% endblock %}
