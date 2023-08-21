@@ -678,16 +678,16 @@ def process_approval_states(sender, instance, created, **kwargs):
 
         if sender == TechnologyPlatform:
             data_key = "platforms"
-            field_name = "Software platform"
+            field_name = "Software"
         elif sender == HardwarePlatform:  # pragma: no cover
             data_key = "hardware"
-            field_name = "Hardware platform"
+            field_name = "Hardware"
         elif sender == NontechPlatform:  # pragma: no cover
             data_key = "nontech"
-            field_name = "Programme innovation/Non-technology platform"
+            field_name = "Programme innovation/Non-technology"
         elif sender == PlatformFunction:  # pragma: no cover
             data_key = "functions"
-            field_name = "Platform function"
+            field_name = "Function"
         else:  # pragma: no cover
             return
 
