@@ -109,19 +109,25 @@ https://templates.mailchimp.com/resources/inline-css/ -->
                         <!-- OBJECT DECLINED -->
                         {% elif type == "object_declined" %}
                         <h1 style="font-family: arial, sans-serif;font-weight: 700;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 20px;">`{{ object_name }}` {% trans "has been declined" %}</h1>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{{ object_name }}{% trans " has not been approved for inclusion in the INVENT platform. Please get in touch with the INVENT team if you believe this decision has been taken in error." %}</p>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans "Sincerely," %}</p>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans "The Digital Health Atlas Team" %}</p>
+                        <h2 style="font-family: arial, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 16px;">{% trans "Dear" %} {{ full_name }},</h2>
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <br>
+                        <p class="wrap-text" style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;display: inline-block;width: 580px;overflow-wrap: break-word !important;">{% trans " This request has been declined. " %}
+                        <br>
+                        <b>{{ comment }}</b></p>
                         <!-- /OBJECT DECLINED -->
 
 
                         <!-- OBJECT APPROVED -->
                         {% elif type == "object_approved" %}
                         <h1 style="font-family: arial, sans-serif;font-weight: 700;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 20px;">`{{ object_name }}` {% trans "has been approved" %}</h1>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{{ object_name }}{% trans " has now been approved for inclusion in the INVENT platform." %}</p>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">
-                          <a href="{% site_url %}/{{ language }}/-/initiatives/create" target="_blank" style="color: #00AEEF;text-decoration: underline;">{% trans "Register new initiative" %}</a>
-                        </p>
+                        <h2 style="font-family: arial, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 16px;">{% trans "Dear" %} {{ full_name }},</h2>
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <br>
+                        <p class="wrap-text" style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;display: inline-block;width: 580px;overflow-wrap: break-word !important;">{% trans " This request has been approved. " %}
+                        <br>
+                        <b>{{ comment }}</b></p>
+                        
                         <!-- /OBJECT APPROVED -->
 
 

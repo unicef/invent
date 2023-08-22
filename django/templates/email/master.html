@@ -250,6 +250,12 @@
         padding-top: 15px;
       }
 
+      .wrap-text{
+        display: inline-block;
+        overflow-wrap: break-word !important;
+        width: 580px;
+      }
+
       hr {
         border: 0;
         border-bottom: 1px solid #D6D6D6;
@@ -415,19 +421,25 @@
                         <!-- OBJECT DECLINED -->
                         {% elif type == "object_declined" %}
                         <h1>`{{ object_name }}` {% trans "has been declined" %}</h1>
-                        <p>{{ object_name }}{% trans " has not been approved for inclusion in the INVENT platform. Please get in touch with the INVENT team if you believe this decision has been taken in error." %}</p>
-                        <p>{% trans "Sincerely," %}</p>
-                        <p>{% trans "The Digital Health Atlas Team" %}</p>
+                        <h2>{% trans "Dear" %} {{ full_name }},</h2>
+                        <p>{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <br>
+                        <p class="wrap-text">{% trans " This request has been declined. " %}
+                        <br>
+                        <b>{{ comment }}</b></p>
                         <!-- /OBJECT DECLINED -->
 
 
                         <!-- OBJECT APPROVED -->
                         {% elif type == "object_approved" %}
                         <h1>`{{ object_name }}` {% trans "has been approved" %}</h1>
-                        <p>{{ object_name }}{% trans " has now been approved for inclusion in the INVENT platform." %}</p>
-                        <p>
-                          <a href="{% site_url %}/{{ language }}/-/initiatives/create" target="_blank">{% trans "Register new initiative" %}</a>
-                        </p>
+                        <h2>{% trans "Dear" %} {{ full_name }},</h2>
+                        <p>{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <br>
+                        <p class="wrap-text">{% trans " This request has been approved. " %}
+                        <br>
+                        <b>{{ comment }}</b></p>
+                        
                         <!-- /OBJECT APPROVED -->
 
 
