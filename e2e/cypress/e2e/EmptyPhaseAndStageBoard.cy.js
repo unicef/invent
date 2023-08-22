@@ -9,7 +9,7 @@ describe('Explore Phase And Stage board with no Active Initiative', () => {
         const countryPage = new CountryPage()
         countryPage.goToCountryPage('GR')
         countryPage.getVisibleFlag().should('be.visible')
-        countryPage.getVisibleFlag().contains('Here you can see all initiatives based in this country. Please note that the table will not display initiatives that have *completed* the Handover and Complete or Discontinued phases.')
+        countryPage.getVisibleFlag().contains('Welcome to country view. This view is scoped to show all initiatives of the chosen country')
         countryPage.getCaption().contains('Indicates an initiative that has been in this phase for over 6 months')
         countryPage.getMap().should('be.visible')
         countryPage.isPhasesTableEmpty()

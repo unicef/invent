@@ -9,7 +9,7 @@ describe('Log out', () => {
     const loginForm = new LoginForm()
     const loginPage = new LoginPage()
     const navigationBar = new NavigationBar()
-    loginForm.login(Cypress.env('demousername'), Cypress.env('demopassword'))
+    loginForm.login(Cypress.env('username0'), Cypress.env('username0'))
     navigationBar.logOut()
     loginPage.getLoginButton().should('be.visible')            
   })
