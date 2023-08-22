@@ -23,6 +23,10 @@ class CountryPage {
         return cy.get('[data-test="sectors-select"]')
     }
 
+    getGearLabel() {
+        return cy.get('#select-sectors-label')
+    }
+
     getGearMenuTitle() {
         return cy.get('[class="el-popover__title"]')
     }

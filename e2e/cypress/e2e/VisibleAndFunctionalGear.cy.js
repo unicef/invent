@@ -15,31 +15,17 @@ describe('Demo test', () => {
         const countryPage = new CountryPage()
         countryPage.goToCountryPage('AF')
         countryPage.getGear().should('be.visible')
-
-
-
+        countryPage.getGearLabel().should('have.text', "Select sectors")
         countryPage.pressGear()
         countryPage.getGearMenuSelectedItems().should('have.length', 29)
         countryPage.getGearMenuUnselectedItems().should('have.length', 0)
-        countryPage.getGearMenuTitle().should('have.text', "SELECTED SECTORS (29/29)")
-        //
-        // countryPage.getGearMenuList().should('be.visible')
-        // countryPage.pressGear()
-        // countryPage.pressBoardSwitch()
-        // countryPage.getGear().should('be.visible')
-        // countryPage.pressHeightSwitch()
-        // countryPage.getGear().should('be.visible')
-
-        // const testGear = class
-        // testGear {
-        //     countryPage.getGear().should('be.visible')
-        //     countryPage.pressGear()
-        //     countryPage.getGearMenuList().should('be.visible')
-        // }
-
-
-        
-
+        countryPage.getGearMenuTitle().should('have.text', "selected sectors (29/29)")
+        countryPage.getGearMenuList().should('be.visible')
+        countryPage.pressGear()
+        countryPage.pressBoardSwitch()
+        countryPage.getGear().should('be.visible')
+        countryPage.pressHeightSwitch()
+        countryPage.getGear().should('be.visible')
     })
 })
 
