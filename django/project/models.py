@@ -632,6 +632,12 @@ class TechnologyPlatform(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
+    project = models.ForeignKey(
+        Project,
+        blank=False,
+        null=True,
+        related_name="software_tags",
+    )
 
     class Meta:
         verbose_name = "Software"
@@ -643,6 +649,12 @@ class HardwarePlatform(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
+    project = models.ForeignKey(
+        Project,
+        blank=False,
+        null=True,
+        related_name="hardaware_tags",
+    )
     
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Hardware Platform(s) and Physical Product(s)"
@@ -653,6 +665,12 @@ class NontechPlatform(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
+    project = models.ForeignKey(
+        Project,
+        blank=False,
+        null=True,
+        related_name="nontechnology_tags",
+    )
 
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Programme Innovation(s) and Non-Technology Platform(s)"
@@ -663,6 +681,12 @@ class PlatformFunction(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
+    project = models.ForeignKey(
+        Project,
+        blank=False,
+        null=True,
+        related_name="platform_tags",
+    )
 
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Function(s) of Platform"
