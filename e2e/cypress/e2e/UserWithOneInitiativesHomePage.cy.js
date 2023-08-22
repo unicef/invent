@@ -15,7 +15,7 @@ describe('User with 1 Initiatives', () => {
             homePage.getInitiativeCardsSmall().contains(response.body.results.projects[2].name)
         })
         requests.getMyInitiativesList().then((response)=>{
-            homePage.getInitiativeCards().contain(response.body.results[0].name)
+            homePage.getInitiativeCards().contains(response.body.results[0].published.name)
         })
         // Check if the <<Recently Updated Initiatives>> section is visible
         homePage.getInitiativesSection().contains('Recently Updated').should('be.visible')
@@ -26,8 +26,5 @@ describe('User with 1 Initiatives', () => {
         homePage.getInitiativeCards().should('have.length', 1)
         // Count Recently update initiatives
         homePage.getInitiativeCardsSmall().should('have.length', 3)
-   
-
-
     })
 })
