@@ -637,6 +637,7 @@ class TechnologyPlatform(
         blank=False,
         null=True,
         related_name="software_tags",
+        on_delete=models.SET_NULL
     )
 
     class Meta:
@@ -654,6 +655,7 @@ class HardwarePlatform(
         blank=False,
         null=True,
         related_name="hardaware_tags",
+        on_delete=models.SET_NULL
     )
     
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
@@ -670,6 +672,7 @@ class NontechPlatform(
         blank=False,
         null=True,
         related_name="nontechnology_tags",
+        on_delete=models.SET_NULL
     )
 
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
@@ -686,6 +689,7 @@ class PlatformFunction(
         blank=False,
         null=True,
         related_name="platform_tags",
+        on_delete=models.SET_NULL
     )
 
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
