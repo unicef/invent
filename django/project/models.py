@@ -632,7 +632,7 @@ class TechnologyPlatform(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
-    project_id = models.ForeignKey(
+    project = models.ForeignKey(
         Project,
         blank=False,
         null=True,
@@ -650,7 +650,7 @@ class HardwarePlatform(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
-    project_id = models.ForeignKey(
+    project = models.ForeignKey(
         Project,
         blank=False,
         null=True,
@@ -667,7 +667,7 @@ class NontechPlatform(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
-    project_id = models.ForeignKey(
+    project = models.ForeignKey(
         Project,
         blank=False,
         null=True,
@@ -684,7 +684,7 @@ class PlatformFunction(
 ):
     
     comment = models.CharField(max_length=1024, blank=True)
-    project_id = models.ForeignKey(
+    project = models.ForeignKey(
         Project,
         blank=False,
         null=True,
