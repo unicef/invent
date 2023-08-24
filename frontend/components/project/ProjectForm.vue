@@ -58,6 +58,7 @@
           />
           <Technology
             ref="technology"
+            :projectId="project.id"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"

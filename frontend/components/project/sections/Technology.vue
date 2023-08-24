@@ -36,6 +36,7 @@
           data-vv-name="platforms"
           :options="softwareList"
           :new-info-title="newInfoSoftware"
+          :project-id="projectId"
         />
       </custom-required-form-item>
 
@@ -72,6 +73,7 @@
               data-vv-name="hardware"
               :options="hardwareList"
               :new-info-title="newInfoHardware"
+              :project-id="projectId"
             />
             <span class="Hint">
               <fa icon="info-circle" />
@@ -118,6 +120,7 @@
               data-vv-name="nontech"
               :options="nontechList"
               :new-info-title="newInfoNontech"
+              :project-id="projectId"
             />
             <span class="Hint">
               <fa icon="info-circle" />
@@ -164,6 +167,7 @@
               data-vv-name="functions"
               :options="functionList"
               :new-info-title="newInfoFunction"
+              :project-id="projectId"
             />
             <span class="Hint">
               <fa icon="info-circle" />

@@ -82,6 +82,10 @@ export default {
       type: String,
       required: true,
     },
+    projectId: {
+      type: [String, Number],
+      default: null
+    }
   },
   data() {
     return {
@@ -135,6 +139,7 @@ export default {
         const result = await this.setNewItem({
           type: this.source,
           name: newItem,
+          project_id: this.projectId
         })
         newItem = typeof result === 'number' ? [result] : []
         'multiple' in this.$attrs
