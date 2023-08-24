@@ -250,6 +250,12 @@
         padding-top: 15px;
       }
 
+      .wrap-text{
+        display: inline-block;
+        overflow-wrap: break-word !important;
+        width: 580px;
+      }
+
       hr {
         border: 0;
         border-bottom: 1px solid #D6D6D6;
@@ -424,8 +430,9 @@
                           {% endif %}
                            {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
                         <br>
-                        <p>{% trans " This request has been declined. " %}</p>
-                        <p>{{ comment }}</p>
+                        <p class="wrap-text">{% trans " This request has been declined. " %}
+                        <br>
+                        <b>{{ comment }}</b></p>
                         <!-- /OBJECT DECLINED -->
 
 
@@ -441,8 +448,9 @@
                           {% endif %}
                            {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
                         <br>
-                        <p>{% trans " This request has been approved. " %}</p>
-                        <p>{{ comment }}</p>
+                        <p class="wrap-text">{% trans " This request has been approved. " %}
+                        <br>
+                        <b>{{ comment }}</b></p>
                         
                         <!-- /OBJECT APPROVED -->
 
