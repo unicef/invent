@@ -236,8 +236,8 @@ def notify_user_about_approval(action, class_name, object_id, field_name):
         return
     
     if object.project_id:
-        initiative_name=object.added_by.name
-        initiative_id=object.added_by.id
+        initiative_name=object.project_id.name
+        initiative_id=object.project_id.id
     else:
         initiative_name=None
         initiative_id=None
