@@ -403,7 +403,7 @@ export const actions = {
       console.log(e.response.data)
     }
   },
-  async setNewItem({ commit, dispatch }, { type, name }) {
+  async setNewItem({ commit, dispatch }, { type, name, project_id }) {
     try {
       const { data } = await this.$axios.post(`/api/projects/${type}-request/`, { 
         name,
