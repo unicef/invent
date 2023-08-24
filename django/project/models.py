@@ -634,7 +634,7 @@ class TechnologyPlatform(
     comment = models.CharField(max_length=1024, blank=True)
     project = models.ForeignKey(
         Project,
-        blank=False,
+        blank=True,
         null=True,
         related_name="software_tags",
         on_delete=models.SET_NULL
@@ -652,7 +652,7 @@ class HardwarePlatform(
     comment = models.CharField(max_length=1024, blank=True)
     project = models.ForeignKey(
         Project,
-        blank=False,
+        blank=True,
         null=True,
         related_name="hardaware_tags",
         on_delete=models.SET_NULL
@@ -669,7 +669,7 @@ class NontechPlatform(
     comment = models.CharField(max_length=1024, blank=True)
     project = models.ForeignKey(
         Project,
-        blank=False,
+        blank=True,
         null=True,
         related_name="nontechnology_tags",
         on_delete=models.SET_NULL
@@ -686,7 +686,7 @@ class PlatformFunction(
     comment = models.CharField(max_length=1024, blank=True)
     project = models.ForeignKey(
         Project,
-        blank=False,
+        blank=True,
         null=True,
         related_name="platform_tags",
         on_delete=models.SET_NULL
