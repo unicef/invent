@@ -165,6 +165,10 @@ docker_build(
     'localhost:5001/invent_frontend',
     './',
     dockerfile='Dockerfile.frontend',
+    live_update=[
+        sync('frontend/', '/usr/src/app'),
+        run('yarn build --quiet', trigger=['./frontend/*'])
+    ]
 )
 
 yaml = helm(
