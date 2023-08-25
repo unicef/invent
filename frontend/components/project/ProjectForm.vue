@@ -58,7 +58,7 @@
           />
           <Technology
             ref="technology"
-            :projectId="project.id"
+            :projectId="projectId"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
@@ -142,6 +142,9 @@ export default {
       donorAnswers: 'project/getDonorsAnswers',
       user: 'user/getProfile',
     }),
+    projectId() {
+      return this.$route.params.id ? this.$route.params.id : null;
+    },
     isDraft() {
       return this.$route.name.includes('organisation-initiatives-id-edit')
     },
@@ -158,6 +161,7 @@ export default {
     },
   },
   mounted() {
+    console.log("Params id:",  this.$route.params.id);
     if (this.$route.query.reloadAfterImport) {
       window.location.href = window.location.origin + this.$route.path
       return
