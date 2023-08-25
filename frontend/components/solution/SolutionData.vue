@@ -8,7 +8,10 @@
         </collapsible-card>
 
         <collapsible-card id="innovation-portfolios" :title="$gettext('2. Innovation portfolios') | translate">
-          <simple-field :header="$gettext('Innovation portfolios and problem statements') | translate">
+          <simple-field
+            v-if="solution.portfolio_problem_statements.length > 0"
+            :header="$gettext('Innovation portfolios and problem statements') | translate"
+          >
             <PortfolioTable :portfoliosProblemStatements="solution.portfolio_problem_statements" />
           </simple-field>
 

@@ -20,7 +20,7 @@
           ><nuxt-link
             :to="
               localePath({
-                name: 'organisation-portfolio-innovation-solutions',
+                name: 'organisation-solutions',
               })
             "
           >

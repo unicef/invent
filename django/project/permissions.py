@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from project.models import ProjectApproval, Portfolio, ReviewScore, ProjectPortfolioState
+from project.models import ProjectApproval, Portfolio, ReviewScore, ProjectPortfolioState, Project
 
 
 class InTeamOrReadOnly(permissions.BasePermission):
@@ -9,6 +9,7 @@ class InTeamOrReadOnly(permissions.BasePermission):
 
     `obj` needs to be a `Project` instance
     """
+
     def has_object_permission(self, request, view, obj):
         # If the user is a superuser, grant permission
         if request.user.is_superuser:
@@ -44,6 +45,20 @@ class InCountryAdminForApproval(permissions.BasePermission):
             return request.user.is_superuser \
                 or obj.project.search.country.admins.filter(id=request.user.userprofile.id).exists() \
                 or obj.project.search.country.super_admins.filter(id=request.user.userprofile.id).exists()
+
+
+class IsCountryOfficeFocalPoint(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        # If the user is a superuser, grant permission
+        if request.user.is_superuser:
+            return True
+
+        # If the user is not authenticated, deny permission
+        if not request.user.is_authenticated:
+            return False
+
+        return False
 
 
 class IsGPOOrReadOnly(permissions.BasePermission):

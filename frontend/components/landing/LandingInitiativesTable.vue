@@ -270,11 +270,6 @@ export default {
         .sort((a, b) => a.name.localeCompare(b.name))
         .filter((sector) => sector.selected === true)
     },
-    sortedSelectedSectors() {
-      return this.getShownSectors
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .filter((sector) => sector.selected === true)
-    },
     initiativesTableData() {
       return this.boardType ? this.initiativesPhasesTableData : this.initiativesStagesTableData
     },

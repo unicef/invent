@@ -622,7 +622,7 @@ class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechnologyPlatform
         fields = "__all__"
-        read_only_fields = ("is_active", "state", "added_by")
+        read_only_fields = ("is_active", "state", "added_by", "comment")
 
 
 class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
@@ -636,7 +636,7 @@ class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HardwarePlatform
         fields = "__all__"
-        read_only_fields = ("is_active", "state", "added_by")
+        read_only_fields = ("is_active", "state", "added_by", "comment")
 
 
 class NontechPlatformCreateSerializer(serializers.ModelSerializer):
@@ -650,7 +650,7 @@ class NontechPlatformCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NontechPlatform
         fields = "__all__"
-        read_only_fields = ("is_active", "state", "added_by")
+        read_only_fields = ("is_active", "state", "added_by", "comment")
 
 
 class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
@@ -664,7 +664,7 @@ class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlatformFunction
         fields = "__all__"
-        read_only_fields = ("is_active", "state", "added_by")
+        read_only_fields = ("is_active", "state", "added_by", "comment")
 
 
 class ProblemStatementSerializer(serializers.ModelSerializer):

@@ -189,7 +189,8 @@ class StageTestCase(TestCase):
         self.stage_data = {
             'name': 'Test Stage',
             # Set the value accordingly for your test
-            'completion_marks_an_initiative_as_inactive': True
+            'completion_marks_an_initiative_as_inactive': True,
+            'link': 'null'
         }
 
     def test_completion_marks_an_initiative_as_inactive(self):

@@ -630,6 +630,9 @@ class ApprovalState(models.Model):
 class TechnologyPlatform(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+
     class Meta:
         verbose_name = "Software"
         verbose_name_plural = "Software"
@@ -638,6 +641,9 @@ class TechnologyPlatform(
 class HardwarePlatform(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+    
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Hardware Platform(s) and Physical Product(s)"
 
@@ -645,6 +651,9 @@ class HardwarePlatform(
 class NontechPlatform(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Programme Innovation(s) and Non-Technology Platform(s)"
 
@@ -652,6 +661,9 @@ class NontechPlatform(
 class PlatformFunction(
     InvalidateCacheMixin, ApprovalState, ExtendedNameOrderedSoftDeletedModel
 ):
+    
+    comment = models.CharField(max_length=1024, blank=True)
+
     class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
         verbose_name_plural = "Function(s) of Platform"
 
@@ -666,12 +678,16 @@ def process_approval_states(sender, instance, created, **kwargs):
 
         if sender == TechnologyPlatform:
             data_key = "platforms"
+            field_name = "Software"
         elif sender == HardwarePlatform:  # pragma: no cover
             data_key = "hardware"
+            field_name = "Hardware"
         elif sender == NontechPlatform:  # pragma: no cover
             data_key = "nontech"
+            field_name = "Programme innovation/Non-technology"
         elif sender == PlatformFunction:  # pragma: no cover
             data_key = "functions"
+            field_name = "Function"
         else:  # pragma: no cover
             return
 
@@ -697,6 +713,7 @@ def process_approval_states(sender, instance, created, **kwargs):
                     "decline",
                     instance._meta.model_name,
                     instance.pk,
+                    field_name
                 )
             )
         elif instance.state == ApprovalState.APPROVED:
@@ -705,6 +722,7 @@ def process_approval_states(sender, instance, created, **kwargs):
                     "approve",
                     instance._meta.model_name,
                     instance.pk,
+                    field_name
                 )
             )
 
@@ -1013,6 +1031,7 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     name = models.CharField(max_length=128)
     order = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     tooltip = models.CharField(max_length=256, blank=True, null=True)
+    link = models.URLField(max_length=100, blank=True, null=True)
     completion_marks_an_initiative_as_inactive = models.BooleanField(
         help_text="When this phase is marked as completed (with an end date) it means that the initiative is no longer active.<br>It will not move automatically to a following phase, but will stay in this phase.", default=False)
 
@@ -1071,9 +1090,9 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
     ]
 
     # Fields
-    portfolios = models.ManyToManyField(Portfolio, related_name="solutions")
+    portfolios = models.ManyToManyField(Portfolio, related_name="solutions",blank=True)
     countries = models.ManyToManyField(Country, through="CountrySolution")
-    problem_statements = models.ManyToManyField(ProblemStatement)
+    problem_statements = models.ManyToManyField(ProblemStatement,blank=True)
     phase = models.IntegerField(choices=PHASES)
     open_source_frontier_tech = models.BooleanField()
     learning_investment = models.BooleanField()

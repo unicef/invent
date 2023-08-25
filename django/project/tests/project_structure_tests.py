@@ -9,11 +9,11 @@ class ProjectPublicViewSetTestCase(TestCase):
 
     def test_get_updated_stages(self):
         stages = [
-            {'id': 1, 'name': 'Stage 1', 'tooltip': 'Tooltip 1', 'order': 1,
+            {'id': 1, 'name': 'Stage 1', 'tooltip': 'Tooltip 1', 'order': 1, 'link': 'null',
                 'completion_marks_an_initiative_as_inactive': True},
-            {'id': 2, 'name': 'Stage 2', 'tooltip': 'Tooltip 2', 'order': 2,
+            {'id': 2, 'name': 'Stage 2', 'tooltip': 'Tooltip 2', 'order': 2, 'link': 'null',
                 'completion_marks_an_initiative_as_inactive': False},
-            {'id': 3, 'name': 'Stage 3', 'tooltip': 'Tooltip 3', 'order': 3,
+            {'id': 3, 'name': 'Stage 3', 'tooltip': 'Tooltip 3', 'order': 3, 'link': 'null',
                 'completion_marks_an_initiative_as_inactive': False},
         ]
         with self.assertNumQueries(1):

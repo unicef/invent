@@ -19,7 +19,7 @@
               v-if="canCreateNew"
               :to="
                 localePath({
-                  name: 'organisation-portfolio-innovation-solutions-create',
+                  name: 'organisation-solutions-create',
                 })
               "
             >
