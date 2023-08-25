@@ -422,7 +422,13 @@
                         {% elif type == "object_declined" %}
                         <h1>`{{ object_name }}` {% trans "has been declined" %}</h1>
                         <h2>{% trans "Dear" %} {{ full_name }},</h2>
-                        <p>{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <p>{% trans " When editing your " %}
+                          {% if initiative_name and initiative_id %}
+                          <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank"><b>{{ initiative_name }}</b></a>
+                          {% else %}
+                          {% trans "initiative" %}
+                          {% endif %}
+                           {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
                         <br>
                         <p class="wrap-text">{% trans " This request has been declined. " %}
                         <br>
@@ -434,7 +440,13 @@
                         {% elif type == "object_approved" %}
                         <h1>`{{ object_name }}` {% trans "has been approved" %}</h1>
                         <h2>{% trans "Dear" %} {{ full_name }},</h2>
-                        <p>{% trans " When editing your initiative, you requested the addition of a new tag." %}</p>
+                        <p>{% trans " When editing your " %}
+                          {% if initiative_name and initiative_id %}
+                          <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank"><b>{{ initiative_name }}</b></a>
+                          {% else %}
+                          {% trans "initiative" %}
+                          {% endif %}
+                           {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
                         <br>
                         <p class="wrap-text">{% trans " This request has been approved. " %}
                         <br>
