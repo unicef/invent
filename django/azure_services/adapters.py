@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import transaction, DatabaseError
 
-
 from country.models import Country
+from .models import DeltaLink
 from user.models import UserProfile
 
 # Initialize the logger at the module level
@@ -30,8 +30,12 @@ class AzureUserManagement:
         Raises
             requests.exceptions.RequestException: If an error occurs while making the request to fetch users.
         """
-        # Set initial url for fetching users
-        url = settings.AZURE_GET_USERS_URL
+        # Fetch last stored delta link
+        delta_link = DeltaLink.get_latest_link()
+
+        # If delta_link doesn't exist (i.e., first-time fetch), use the initial URL
+        url = delta_link.url if delta_link else settings.AZURE_GET_USERS_URL
+
         # Get access token and set headers for the request
         token = self.get_access_token()
         headers = {
@@ -67,17 +71,32 @@ class AzureUserManagement:
 
                 # Update totals
                 total_new_users += len(new_users)
-                # We extend the list now
                 total_updated_users.extend(updated_users)
                 total_skipped_users += len(skipped_users)
 
-                url = response_data.get('@odata.nextLink', None)
+                # Save the new delta link if it's in the response
+                new_delta_link = response_data.get('@odata.deltaLink', None)
+                if new_delta_link:
+                    DeltaLink.objects.create(url=new_delta_link)
+                url = response_data.get('@odata.nextLink', new_delta_link)
+
                 page_count += 1
                 retry_count = 0
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error while making request to {url}: {e}")
+
+                # Handle delta link expiration
+                if response.status_code in [400, 401, 403, 404, 409]:  # More info: https://learn.microsoft.com/en-us/graph/delta-query-overview
+                    error_data = response.json()
+                    if 'error' in error_data and 'code' in error_data['error'] and error_data['error']['code'] == 'syncStateNotFound':
+                        logger.warning('Delta link has expired. Reinitializing for a full synchronization.')
+                        
+                        # Reset the URL to the initial state to perform full synchronization
+                        url = settings.AZURE_GET_USERS_URL
+                        DeltaLink.objects.all().delete()  # Remove old delta links
+                        delta_link = None  # Reset stored delta_link
+
                 retry_count += 1
-                # TODO: Refactor. We need to have a fallback measurement in case Azure blocks the request
                 sleep(2 * (2 ** retry_count))
 
         logger.info(
