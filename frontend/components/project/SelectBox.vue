@@ -81,10 +81,6 @@ export default {
     newInfoTitle: {
       type: String,
       required: true,
-    },
-    projectId: {
-      type: [String, Number],
-      default: null
     }
   },
   data() {
