@@ -132,7 +132,7 @@ export default {
       setNewItem: 'projects/setNewItem',
     }),
     async changeHandler(value) {
-      const projectId = this.$route.params.id ? this.$route.params.id : null;
+      const project = this.$route.params.id ? parseInt(this.$route.params.id, 10) : null;
       // get a new item
       let newItem = Array.isArray(value) ? value[value.length - 1] : value
       if (typeof newItem === 'string') {
@@ -140,7 +140,7 @@ export default {
         const result = await this.setNewItem({
           type: this.source,
           name: newItem,
-          project_id: projectId
+          project: project
         })
         newItem = typeof result === 'number' ? [result] : []
         'multiple' in this.$attrs
