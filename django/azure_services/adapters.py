@@ -84,8 +84,19 @@ class AzureUserManagement:
                 retry_count = 0
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error while making request to {url}: {e}")
+
+                # Handle delta link expiration
+                if response.status_code in [400, 401, 403, 404, 409]:  # More info: https://learn.microsoft.com/en-us/graph/delta-query-overview
+                    error_data = response.json()
+                    if 'error' in error_data and 'code' in error_data['error'] and error_data['error']['code'] == 'syncStateNotFound':
+                        logger.warning('Delta link has expired. Reinitializing for a full synchronization.')
+                        
+                        # Reset the URL to the initial state to perform full synchronization
+                        url = settings.AZURE_GET_USERS_URL
+                        DeltaLink.objects.all().delete()  # Remove old delta links
+                        delta_link = None  # Reset stored delta_link
+
                 retry_count += 1
-                # TODO: Refactor. We need to have a fallback measurement in case Azure blocks the request
                 sleep(2 * (2 ** retry_count))
 
         logger.info(
