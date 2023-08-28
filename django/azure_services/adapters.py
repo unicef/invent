@@ -80,7 +80,7 @@ class AzureUserManagement:
                     logger.info(f"New Delta Link fetched: {new_delta_link}")
                     DeltaLink.objects.create(url=new_delta_link)
                     logger.info("New Delta Link saved.")
-                url = response_data.get('@odata.nextLink', new_delta_link)
+                url = response_data.get('@odata.nextLink', None)
 
                 page_count += 1
                 retry_count = 0
