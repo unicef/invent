@@ -76,6 +76,8 @@ class AzureUserManagement:
 
                 # Save the new delta link if it's in the response
                 new_delta_link = response_data.get('@odata.deltaLink', None)
+                logger.info(f"Keys in the response data: {response_data.keys()}")
+
                 if new_delta_link:
                     logger.info(f"New Delta Link fetched: {new_delta_link}")
                     DeltaLink.objects.create(url=new_delta_link)
