@@ -46,9 +46,9 @@ class AzureUserManagement:
         page_count = 0
         processed_user_count = 0
 
-        total_new_users = 0
+        total_new_users = []
         total_updated_users = []
-        total_skipped_users = 0
+        total_skipped_users = []
         # Fetch and process users in batches until either there are no more users to fetch
         # or the maximum number of users to process has been reached
         while url and retry_count < 5 and (max_users is None or processed_user_count < max_users):
@@ -70,9 +70,9 @@ class AzureUserManagement:
                     users_batch)
 
                 # Update totals
-                total_new_users += len(new_users)
+                total_new_users.extend(new_users)
                 total_updated_users.extend(updated_users)
-                total_skipped_users += len(skipped_users)
+                total_skipped_users.extend(skipped_users)
 
                 # Save the new delta link if it's in the response
                 new_delta_link = response_data.get('@odata.deltaLink', None)
@@ -102,9 +102,11 @@ class AzureUserManagement:
 
         logger.info(
             f'Finished processing users. Total users processed: {processed_user_count}. '
-            f'Total new users created: {total_new_users}. '
+            f'Total new users created: {len(total_new_users)}. '
             f'Total current users updated: {len(total_updated_users)}. '
-            f'Total users skipped due to inconsistencies: {total_skipped_users}.\n'
+            f'Total users skipped due to inconsistencies: {len(total_skipped_users)}.\n'
+            f'Created users details: '
+            f'{[(user["user"].id, user["user"].email) for user in total_new_users]}'
             f'Updated users details: '
             f'{[(user["user"].id, user["user"].email, user["changes"]) for user in total_updated_users]}'
         )

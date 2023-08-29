@@ -332,6 +332,20 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+        'django': {
+            'handlers': ['console', 'logfile'],
+            'level': 'INFO',
+        },
+        'azure.core.pipeline.policies.http_logging_policy': {
+            'handlers': ['console', 'logfile'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'azure.monitor.opentelemetry': {
+            'handlers': ['console', 'logfile'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
     },
 }
 
