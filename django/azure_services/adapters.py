@@ -101,14 +101,14 @@ class AzureUserManagement:
                 sleep(2 * (2 ** retry_count))
 
         logger.info(
-            f'Finished processing users. Total users processed: {processed_user_count}. '
-            f'Total new users created: {len(total_new_users)}. '
-            f'Total current users updated: {len(total_updated_users)}. '
-            f'Total users skipped due to inconsistencies: {len(total_skipped_users)}.\n'
-            f'Created users details: '
-            f'{[(user["user"].id, user["user"].email) for user in total_new_users]}'
-            f'Updated users details: '
-            f'{[(user["user"].id, user["user"].email, user["changes"]) for user in total_updated_users]}'
+            f'Finished processing users. Total users processed: {processed_user_count}.\n'
+            f'Total new users created: {len(total_new_users)}.\n'
+            f'Created users details:\n'
+            f'{[(user.id, user.email) for user in total_new_users]}\n'
+            f'Total current users updated: {len(total_updated_users)}.\n'
+            f'Updated users details:\n'
+            f'{[(user["user"].id, user["user"].email, user["changes"]) for user in total_updated_users]}\n'
+            f'Total users skipped due to inconsistencies: {len(total_skipped_users)}.'
         )
 
     def save_aad_users(self, users_batch):
