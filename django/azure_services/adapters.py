@@ -33,8 +33,8 @@ class AzureUserManagement:
         # Fetch last stored delta link
         delta_link = DeltaLink.get_latest_link()
 
-        # If delta_link doesn't exist (i.e., first-time fetch), use the initial URL
-        url = delta_link.url if delta_link else settings.AZURE_GET_USERS_URL
+        # If delta_link doesn't exist (i.e., first-time fetch), use the initial delta URL
+        url = delta_link.url if delta_link else settings.AZURE_GET_USERS_DELTA_URL
 
         # Get access token and set headers for the request
         token = self.get_access_token()
