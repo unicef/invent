@@ -281,13 +281,14 @@ def generate_azure_users_url(user_params: list, top: int = 100, delta: bool = Fa
     """
     # Join parameters into a single string
     select_params = ','.join(user_params)
+    
     # Add pagination and optionally delta
-    delta_token = '$delta' if delta else ''
-    url = f'{MICROSOFT_GRAPH_USERS_URL}?{delta_token}$select={select_params}&$top={top}'
+    delta_token = '/delta' if delta else ''
+    url = f'{MICROSOFT_GRAPH_USERS_URL}{delta_token}?$select={select_params}&$top={top}'
+    
     return url
 
 
-AZURE_GET_USERS_URL = generate_azure_users_url(AZURE_USER_PARAMETERS)
 AZURE_GET_USERS_DELTA_URL = generate_azure_users_url(AZURE_USER_PARAMETERS, delta=True)
 
 ENABLE_API_REGISTRATION = env.str('ENABLE_API_REGISTRATION', default=True)
