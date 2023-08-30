@@ -1,7 +1,7 @@
 import logging
+import random
 import requests
 from time import sleep
-from uuid import uuid4
 
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
@@ -168,6 +168,11 @@ class AzureUserManagement:
         ).select_related("user")
         user_profiles_dict = {up.user.email: up for up in user_profiles}
 
+        # Gather all usernames first
+        usernames_to_insert = [email.split("@")[0] for email in user_emails_in_batch if "@" in email]
+        # Fetch existing usernames from the database
+        existing_usernames = set(User.objects.filter(username__in=usernames_to_insert).values_list('username', flat=True))
+
         # Process each user data in the batch
         for user_data in users_batch:
             try:
@@ -184,6 +189,10 @@ class AzureUserManagement:
                     # Get the email in lowercase and the username in a case-insensitive manner
                     email = user_data["mail"].lower()
                     username = email.split("@")[0] if "@" in email else ""
+                    if username in existing_usernames:
+                        suffix = random.randint(1000, 9999)  # Generating a 4-5 digit random number
+                        max_length_for_username = 150 - len(str(suffix)) - 1  # Assume max length for username is 150
+                        username = f"{username[:max_length_for_username]}_{suffix}"
 
                     # Get the first name and last name from the user data
                     first_name = (
@@ -219,7 +228,7 @@ class AzureUserManagement:
                                     user=user,
                                     name=user_data.get("displayName", "")[
                                         :100
-                                    ],  # Truncate to max 30 chars
+                                    ],  # Truncate to max 100 chars
                                     job_title=user_data.get("jobTitle", "")[
                                         :100
                                     ],  # Truncate to max 100 chars
@@ -394,26 +403,3 @@ class AzureUserManagement:
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
-
-    @classmethod
-    def create_user_with_unique_username(cls, email, username, first_name, last_name):
-        try_attempts = 2
-        while try_attempts > 0:
-            try:
-                return (
-                    User.objects.create(
-                        email=email,
-                        username=username,
-                        first_name=first_name[:30],
-                        last_name=last_name[:30],
-                    ),
-                    True,
-                )  # True means the user was successfully created
-            except IntegrityError:
-                # Generate a unique suffix and truncate username to fit within 30 chars
-                suffix = uuid4().hex[:8]
-                max_length_for_username = 30 - len(suffix) - 1
-                username = f"{username[:max_length_for_username]}_{suffix}"
-                try_attempts -= 1
-        logger.warning(f"Skipped user due to multiple IntegrityErrors: {email}")
-        return None, False  # False means the user was not created
