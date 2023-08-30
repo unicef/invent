@@ -6,6 +6,7 @@ from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import transaction, DatabaseError
+from django.db.utils import IntegrityError
 
 from country.models import Country
 from .models import DeltaLink
@@ -169,25 +170,46 @@ class AzureUserManagement:
 
                     # Check if the user already exists in the existing_users_set
                     if email not in existing_users_set:
-                        # Create a new user
-                        user = User.objects.create(
-                            email=email, username=username,
-                            first_name=first_name, last_name=last_name)
+                        try:
+                            # Create a new user
+                            user = User.objects.create(
+                                email=email, username=username[:30],  # Truncate username to max 30 chars
+                                first_name=first_name[:30], last_name=last_name[:30])  # Truncate first_name and last_name
+                        except IntegrityError:
+                            # Skip if duplicate username
+                            logger.warning(f"Skipped user due to duplicate username: {email}")
+                            continue
 
                         try:
-                            # Create and save a new SocialAccount and UserProfile for the new user
-                            social_account = SocialAccount(
-                                user=user, uid=user_data['id'])
-                            user_profile = UserProfile(user=user, name=user_data.get('displayName', ''),
-                                                       job_title=user_data.get('jobTitle', ''), department=user_data.get('department', ''),
-                                                       account_type=UserProfile.DONOR)
+                            try:
+                                # Create new SocialAccount
+                                social_account = SocialAccount.objects.get(provider='', uid=user_data['id'])
+                            except SocialAccount.DoesNotExist:
+                                social_account = SocialAccount(user=user, uid=user_data['id'])
+
+
+                            try:
+                                # Create new UserProfile
+                                user_profile = UserProfile.objects.create(
+                                    user=user, name=user_data.get('displayName', '')[:100],  # Truncate to max 100 chars
+                                    job_title=user_data.get('jobTitle', '')[:100],  # Truncate to max 100 chars
+                                    department=user_data.get('department', '')[:30])  # Truncate to max 30 chars
+                            except IntegrityError:
+                                # Skip if duplicate SocialAccount
+                                logger.warning(f"Skipped user due to duplicate SocialAccount: {email}")
+                                continue
+                            
+                            # Save SocialAccount and UserProfile
                             social_account.save()
                             user_profile.save()
                             # Keep track of the new user
                             new_users.append(user)
+                        except IntegrityError as e:
+                            logger.warning(f"Integrity error for {user_data}. Details: {e}")
+                        except DatabaseError as e:
+                            logger.error(f"Database error for {user_data}. Details: {e}")
                         except Exception as e:
-                            logger.error(
-                                f'Error while creating SocialAccount or UserProfile for new user {user.email}: {e}')
+                            logger.error(f"Other error for {user_data}. Details: {e}")
                     else:
                         # If the user was not created i.e. the user already exists
                         # Get the user's profile
