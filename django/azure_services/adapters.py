@@ -1,6 +1,7 @@
 import logging
 import requests
 from time import sleep
+from uuid import uuid4
 
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
@@ -185,31 +186,23 @@ class AzureUserManagement:
                     username = email.split("@")[0] if "@" in email else ""
 
                     # Get the first name and last name from the user data
-                    first_name = user_data.get("givenName", "") or ""
-                    last_name = user_data.get("surname", "") or ""
+                    first_name = (
+                        user_data.get("givenName", "")[:30] or ""
+                    )  # Truncate to max 30 chars
+                    last_name = (
+                        user_data.get("surname", "")[:150] or ""
+                    )  # Truncate to max 150 chars
 
                     # Instantiate changes dictionary here for each user
                     changes = {}
 
                     # Check if the user already exists in the existing_users_set
                     if email not in existing_users_set:
-                        try:
-                            # Create a new user
-                            user = User.objects.create(
-                                email=email,
-                                username=username[
-                                    :30
-                                ],  # Truncate username to max 30 chars
-                                first_name=first_name[:30],
-                                last_name=last_name[:30],
-                            )  # Truncate first_name and last_name
-                        except IntegrityError:
-                            # Skip if duplicate username
-                            logger.warning(
-                                f"Skipped user due to duplicate username: {email}"
-                            )
-                            continue
-
+                        user, created = self.create_user_with_unique_username(
+                            email, username, first_name, last_name
+                        )
+                        if not created:
+                            continue  # Skip the current iteration and move to the next user
                         try:
                             try:
                                 # Create new SocialAccount
@@ -220,19 +213,18 @@ class AzureUserManagement:
                                 social_account = SocialAccount(
                                     user=user, uid=user_data["id"]
                                 )
-
                             try:
                                 # Create new UserProfile
                                 user_profile = UserProfile.objects.create(
                                     user=user,
                                     name=user_data.get("displayName", "")[
                                         :100
-                                    ],  # Truncate to max 100 chars
+                                    ],  # Truncate to max 30 chars
                                     job_title=user_data.get("jobTitle", "")[
                                         :100
                                     ],  # Truncate to max 100 chars
-                                    department=user_data.get("department", "")[:30],
-                                )  # Truncate to max 30 chars
+                                    department=user_data.get("department", "")[:100],
+                                )  # Truncate to max 100 chars
                             except IntegrityError:
                                 # Skip if duplicate SocialAccount
                                 logger.warning(
@@ -402,3 +394,26 @@ class AzureUserManagement:
 
     def is_auto_signup_allowed(self, request, sociallogin):
         return True
+
+    @classmethod
+    def create_user_with_unique_username(cls, email, username, first_name, last_name):
+        try_attempts = 2
+        while try_attempts > 0:
+            try:
+                return (
+                    User.objects.create(
+                        email=email,
+                        username=username,
+                        first_name=first_name[:30],
+                        last_name=last_name[:30],
+                    ),
+                    True,
+                )  # True means the user was successfully created
+            except IntegrityError:
+                # Generate a unique suffix and truncate username to fit within 30 chars
+                suffix = uuid4().hex[:8]
+                max_length_for_username = 30 - len(suffix) - 1
+                username = f"{username[:max_length_for_username]}_{suffix}"
+                try_attempts -= 1
+        logger.warning(f"Skipped user due to multiple IntegrityErrors: {email}")
+        return None, False  # False means the user was not created
