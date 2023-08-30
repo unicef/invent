@@ -1,5 +1,4 @@
 import logging
-import random
 import requests
 from time import sleep
 
@@ -168,17 +167,6 @@ class AzureUserManagement:
         ).select_related("user")
         user_profiles_dict = {up.user.email: up for up in user_profiles}
 
-        # Gather all usernames first
-        usernames_to_insert = [
-            email.split("@")[0] for email in user_emails_in_batch if "@" in email
-        ]
-        # Fetch existing usernames from the database
-        existing_usernames = set(
-            User.objects.filter(username__in=usernames_to_insert).values_list(
-                "username", flat=True
-            )
-        )
-
         # Process each user data in the batch
         for user_data in users_batch:
             try:
@@ -195,14 +183,6 @@ class AzureUserManagement:
                     # Get the email in lowercase and the username in a case-insensitive manner
                     email = user_data["mail"].lower()
                     username = email.split("@")[0] if "@" in email else ""
-                    if username in existing_usernames:
-                        suffix = random.randint(
-                            1000, 9999
-                        )  # Generating a 4-5 digit random number
-                        max_length_for_username = (
-                            150 - len(str(suffix)) - 1
-                        )  # Assume max length for username is 150
-                        username = f"{username[:max_length_for_username]}_{suffix}"
 
                     # Get the first name and last name from the user data
                     first_name = (
@@ -226,6 +206,7 @@ class AzureUserManagement:
                                 last_name=last_name,
                             )
                         except IntegrityError:
+                            # Skip if duplicate username
                             logger.warning(
                                 f"Skipped user due to duplicate username: {email}"
                             )
