@@ -169,9 +169,15 @@ class AzureUserManagement:
         user_profiles_dict = {up.user.email: up for up in user_profiles}
 
         # Gather all usernames first
-        usernames_to_insert = [email.split("@")[0] for email in user_emails_in_batch if "@" in email]
+        usernames_to_insert = [
+            email.split("@")[0] for email in user_emails_in_batch if "@" in email
+        ]
         # Fetch existing usernames from the database
-        existing_usernames = set(User.objects.filter(username__in=usernames_to_insert).values_list('username', flat=True))
+        existing_usernames = set(
+            User.objects.filter(username__in=usernames_to_insert).values_list(
+                "username", flat=True
+            )
+        )
 
         # Process each user data in the batch
         for user_data in users_batch:
@@ -190,8 +196,12 @@ class AzureUserManagement:
                     email = user_data["mail"].lower()
                     username = email.split("@")[0] if "@" in email else ""
                     if username in existing_usernames:
-                        suffix = random.randint(1000, 9999)  # Generating a 4-5 digit random number
-                        max_length_for_username = 150 - len(str(suffix)) - 1  # Assume max length for username is 150
+                        suffix = random.randint(
+                            1000, 9999
+                        )  # Generating a 4-5 digit random number
+                        max_length_for_username = (
+                            150 - len(str(suffix)) - 1
+                        )  # Assume max length for username is 150
                         username = f"{username[:max_length_for_username]}_{suffix}"
 
                     # Get the first name and last name from the user data
@@ -207,11 +217,19 @@ class AzureUserManagement:
 
                     # Check if the user already exists in the existing_users_set
                     if email not in existing_users_set:
-                        user, created = self.create_user_with_unique_username(
-                            email, username, first_name, last_name
-                        )
-                        if not created:
-                            continue  # Skip the current iteration and move to the next user
+                        try:
+                            # Create a new user
+                            user = User.objects.create(
+                                email=email,
+                                username=username,
+                                first_name=first_name,
+                                last_name=last_name,
+                            )
+                        except IntegrityError:
+                            logger.warning(
+                                f"Skipped user due to duplicate username: {email}"
+                            )
+                            continue
                         try:
                             try:
                                 # Create new SocialAccount
