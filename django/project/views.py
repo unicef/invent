@@ -764,7 +764,12 @@ class ApprovalRequestViewSet(CreateModelMixin, GenericViewSet):
 
     def perform_create(self, serializer) -> None:
         project_id = self.request.data.get('project')
-        project = Project.objects.get(pk=project_id) 
+        try:
+            project = Project.objects.get(pk=project_id)
+        except Project.DoesNotExist:
+            # If project_id is None or invalid, set project to None
+            project = None
+
         serializer.save(added_by=self.request.user.userprofile,
                         state=ApprovalState.PENDING,
                         project=project)
