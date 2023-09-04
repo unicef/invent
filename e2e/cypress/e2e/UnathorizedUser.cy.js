@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
-import LoginForm from "../pages/LoginForm"
+import LoginForm from "../pages/LoginForm" 
 import LoginPage from "../pages/LoginPage"
 
-describe('Unathorized User', () => {
+describe('Unathorized User from Login Form', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/152873',() => {
         const loginForm = new LoginForm()
         loginForm.start()
@@ -35,15 +35,20 @@ describe('Unathorized User', () => {
         loginForm.logInButton().click()
         loginForm.getWrongPasswordError().contains(('Unable to log in with provided credentials.'))
     })
+})
+
+describe('Unathorized User from Login Page', () => {
 
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/152897',() => {
         const loginPage = new LoginPage()
+        loginPage.clearBroswer()
         loginPage.openPage()
         loginPage.getUsernameError().contains('Enter a valid email address, phone number, or Skype name.')
     })
 
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/145742 (step 3)',() => {
         const loginPage = new LoginPage()
+        loginPage.clearBroswer()
         loginPage.openPage()
         loginPage.setEmail(Cypress.env('wrongformatusername'))
         loginPage.getUsernameError().contains("Enter a valid email address, phone number, or Skype name.")
@@ -51,6 +56,7 @@ describe('Unathorized User', () => {
 
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/145742 (step 4)',() => {
         const loginPage = new LoginPage()
+        loginPage.clearBroswer()
         loginPage.openPage()
         loginPage.setEmail(Cypress.env('wrongusername'))
         loginPage.getUsernameError().contains("We couldn't find an account with that username.")
@@ -58,6 +64,7 @@ describe('Unathorized User', () => {
 
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/145743',() => {
         const loginPage = new LoginPage()
+        loginPage.clearBroswer()
         loginPage.openPage()
         loginPage.setEmail(Cypress.env('validusername'))
         loginPage.getEnterPasswordHeader().should('be.visible')

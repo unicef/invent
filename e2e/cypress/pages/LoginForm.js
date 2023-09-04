@@ -4,9 +4,10 @@ import HomePage from "./HomePage";
 class LoginForm {
 
     login(username, password) {
+        cy.visit('en/-/login')
+        cy.clearAllSessionStorage()
         cy.clearLocalStorage()
         cy.clearCookies()
-        cy.visit('en/-/login')
         cy.get('[data-test="signin-username"]').click().type(username)
         cy.get('[data-test="signin-password"]').click().type(password)
         cy.get('[data-test="signin-submit"]').click()
@@ -15,9 +16,10 @@ class LoginForm {
     }
 
     start() {
+        cy.visit('en/-/login')
+        cy.clearAllSessionStorage()
         cy.clearLocalStorage()
         cy.clearCookies()
-        cy.visit('en/-/login')
     }
     
     logInButton() {
@@ -33,11 +35,11 @@ class LoginForm {
     }
     
     unathorizedusername(username) {
-        cy.get('[data-test="signin-username"]').click().type(username);
+        cy.get('[data-test="signin-username"]').click().type(username)
     }
 
     unathorizedpassword(password) {
-        cy.get('[data-test="signin-password"]').click().type(password);
+        cy.get('[data-test="signin-password"]').click().type(password)
     }
 
     getWrongPasswordError() {
@@ -47,6 +49,5 @@ class LoginForm {
     getLoginError() {
         return cy.get('.el-form-item__error')
     }
-
 }
 export default LoginForm
