@@ -256,7 +256,7 @@ MICROSOFT_GRAPH_USERS_URL = f'{MICROSOFT_GRAPH_BASE_URL}/users'
 MICROSOFT_GRAPH_SUBSCRIPTION_URL = f'{MICROSOFT_GRAPH_BASE_URL}/subscriptions'
 
 
-def generate_azure_users_url(user_params: list, top: int = 100) -> str:
+def generate_azure_users_url(user_params: list, top: int = 100, delta: bool = False) -> str:
     """
     Generates a URL for fetching users from Azure Active Directory.
 
@@ -269,12 +269,15 @@ def generate_azure_users_url(user_params: list, top: int = 100) -> str:
     """
     # Join parameters into a single string
     select_params = ','.join(user_params)
-    # Add pagination
-    url = f'{MICROSOFT_GRAPH_USERS_URL}?$select={select_params}&$top={top}'
+    
+    # Add pagination and optionally delta
+    delta_token = '/delta' if delta else ''
+    url = f'{MICROSOFT_GRAPH_USERS_URL}{delta_token}?$select={select_params}&$top={top}'
+    
     return url
 
 
-AZURE_GET_USERS_URL = generate_azure_users_url(AZURE_USER_PARAMETERS)
+AZURE_GET_USERS_DELTA_URL = generate_azure_users_url(AZURE_USER_PARAMETERS, delta=True)
 
 ENABLE_API_REGISTRATION = env.str('ENABLE_API_REGISTRATION', default=True)
 
@@ -316,6 +319,20 @@ LOGGING = {
             'handlers': ['console', 'logfile'],
             'level': 'INFO',
             'propagate': True,
+        },
+        'django': {
+            'handlers': ['console', 'logfile'],
+            'level': 'INFO',
+        },
+        'azure.core.pipeline.policies.http_logging_policy': {
+            'handlers': ['console', 'logfile'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'azure.monitor.opentelemetry': {
+            'handlers': ['console', 'logfile'],
+            'level': 'WARNING',
+            'propagate': False,
         },
     },
 }

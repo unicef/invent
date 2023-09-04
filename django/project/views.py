@@ -763,8 +763,16 @@ class ApprovalRequestViewSet(CreateModelMixin, GenericViewSet):
     model = None
 
     def perform_create(self, serializer) -> None:
+        project_id = self.request.data.get('project')
+        try:
+            project = Project.objects.get(pk=project_id)
+        except Project.DoesNotExist:
+            # If project_id is None or invalid, set project to None
+            project = None
+
         serializer.save(added_by=self.request.user.userprofile,
-                        state=ApprovalState.PENDING)
+                        state=ApprovalState.PENDING,
+                        project=project)
         notify_superusers_about_new_pending_approval.apply_async(
             (self.model._meta.model_name, serializer.instance.id,))
 

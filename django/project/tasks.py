@@ -270,6 +270,14 @@ def notify_user_about_approval(action, class_name, object_id, field_name):
     object = klass.objects.get(id=object_id)
     if not object.added_by:
         return
+    
+    if object.project:
+        initiative_name=object.project.name
+        initiative_id=object.project.id
+    else:
+        initiative_name=None
+        initiative_id=None
+
 
     if action == "approve":
         email_type = "object_approved"
@@ -278,15 +286,16 @@ def notify_user_about_approval(action, class_name, object_id, field_name):
     else:
         return
 
-    send_mail_wrapper(
-        subject=_(f"Request for {field_name} tag notification"),
-        email_type=email_type,
-        to=object.added_by.user.email,
-        language=object.added_by.language or settings.LANGUAGE_CODE,
-        context={
-            "object_name": object.name,
-            "field_name": field_name,
-            "comment": object.comment,
-            "full_name": object.added_by.name,
-        },
-    )
+
+    send_mail_wrapper(subject=_(f"Request for {field_name} tag notification"),
+                      email_type=email_type,
+                      to=object.added_by.user.email,
+                      language=object.added_by.language or settings.LANGUAGE_CODE,
+                      context={'object_name': object.name, 
+                               'field_name': field_name,
+                               'comment': object.comment,
+                               'full_name': object.added_by.name,
+                               'initiative_name':initiative_name,
+                               'initiative_id':initiative_id,
+                               'language':object.added_by.language or settings.LANGUAGE_CODE,}
+                               )

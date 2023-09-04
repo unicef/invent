@@ -10,12 +10,6 @@
         color: white;
         content: "{{ ENVIRONMENT_NAME }}";
         background-color: {{ ENVIRONMENT_COLOR }};
-
-        .form-row {
-            display: flex;
-            justify-content: start;
-            gap: 10px;
-        }
     }
 
     .skip-to-content-link {
@@ -30,6 +24,17 @@
         display: none;
     } 
 
+    .form-row > div {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .comment-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
 </style>
 {% endblock %}
 
@@ -57,9 +62,10 @@ style for moving label and comment box next to state
 <script>
     $(document).ready(function() {
         // Move the comment field next to the state field
-        $('#id_state').after($('#id_comment'));
-        // Insert the text label after moving the comment field
-        $('#id_comment').before('Comment: ');
+        var commentDiv = $('<div class="comment-wrapper"></div>');
+        commentDiv.append('Comment: ').append($('#id_comment'));
+        
+        $('#id_state').parent().append(commentDiv);
         $( ".field-comment" ).hide();
     });
 </script>
