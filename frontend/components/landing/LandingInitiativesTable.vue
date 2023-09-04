@@ -203,7 +203,7 @@ export default {
       //filter out endPhase and unknown phase projects and update current phase for the rest
       const filtProjects = projectsList.filter((project) => {
         //if stages exist
-        if (project.stages.length > 0) {
+        if (project.stages?.length > 0) {
           //Last initiative stage is calculated as the last in array of project.stages
           const lastStageId = project.stages[project.stages.length - 1].id
           //if last initiative stage id does not exist in phases list then remove initiative
@@ -292,8 +292,7 @@ export default {
           let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
 
           /*Create the card and add it to tableData **/
-          const regionId = this.unicefOffice.find((office) => office.id === initiative.country_office)?.region
-          const regionName = this.unicef_regions.find((region) => region.id === regionId)?.name
+
           const propName = this.getStage(initiative.current_phase)
           if (propName && dataObj.hasOwnProperty(propName.toString())) {
             dataObj[propName.toString()] = [
@@ -301,7 +300,7 @@ export default {
               {
                 ...initiative,
                 lastUpdated: lastUpdated,
-                title: regionName,
+                title: this.getUnicefOffice(initiative.country_office),
                 stale: isStale,
               },
             ]
@@ -338,7 +337,7 @@ export default {
               {
                 ...initiative,
                 lastUpdated: lastUpdated,
-                title: this.unicefOffice.find((office) => office.id === initiative.country_office)?.name.split(':')[1],
+                title: this.getUnicefOffice(initiative.country_office),
                 stale: isStale,
               },
             ]
@@ -352,6 +351,9 @@ export default {
     },
   },
   methods: {
+    getUnicefOffice(country_office) {
+      return this.unicefOffice.find((office) => office.id === country_office)?.name.split(':')[1]
+    },
     deselectAllSectors() {
       this.$store.dispatch('phasesStagesBoard/deselectAll')
     },
