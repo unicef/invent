@@ -612,7 +612,9 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
 
 
 class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(), write_only=True)
+    project = serializers.PrimaryKeyRelatedField(
+        queryset=Project.objects.all(), write_only=True, required=False, allow_null=True
+    )
     name = serializers.CharField(
         max_length=512,
         validators=[
@@ -627,7 +629,9 @@ class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
 
 
 class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(), write_only=True)
+    project = serializers.PrimaryKeyRelatedField(
+        queryset=Project.objects.all(), write_only=True, required=False, allow_null=True
+    )
     name = serializers.CharField(
         max_length=512,
         validators=[
@@ -642,7 +646,9 @@ class HardwarePlatformCreateSerializer(serializers.ModelSerializer):
 
 
 class NontechPlatformCreateSerializer(serializers.ModelSerializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(), write_only=True)
+    project = serializers.PrimaryKeyRelatedField(
+        queryset=Project.objects.all(), write_only=True, required=False, allow_null=True
+    )
     name = serializers.CharField(
         max_length=512,
         validators=[
@@ -657,7 +663,9 @@ class NontechPlatformCreateSerializer(serializers.ModelSerializer):
 
 
 class PlatformFunctionCreateSerializer(serializers.ModelSerializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(), write_only=True)
+    project = serializers.PrimaryKeyRelatedField(
+        queryset=Project.objects.all(), write_only=True, required=False, allow_null=True
+    )
     name = serializers.CharField(
         max_length=512,
         validators=[
