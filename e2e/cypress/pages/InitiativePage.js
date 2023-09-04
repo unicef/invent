@@ -207,7 +207,8 @@ class InitiativePage {
 	
     typeModifyInitiative(email)  {
         this.getModifyInitiative().click({force:true})
-        this.getModifyInitiative().type(email)
+        this.getModifyInitiative().type(email).click({force:true})
+        this.getModifyInitiative().scrollIntoView()
         cy.contains(email).click({force:true})
     }
 	

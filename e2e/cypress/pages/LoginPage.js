@@ -15,9 +15,11 @@ class LoginPage {
     }
 
     login(username, password) {
-        cy.clearAllSessionStorage()
-        cy.clearLocalStorage()
         cy.clearCookies()
+        cy.getCookies().should('be.empty')
+        cy.clearLocalStorage()
+        cy.getAllLocalStorage().should('be.empty')
+        cy.clearAllSessionStorage({log: true})
         cy.visit('/')
         this.getLoginButton().click()
         const sentArgs = { email: username, pass: password }
@@ -32,9 +34,11 @@ class LoginPage {
     }
 
     openPage() {
-        cy.clearAllSessionStorage()
-        cy.clearLocalStorage()
         cy.clearCookies()
+        cy.getCookies().should('be.empty')
+        cy.clearLocalStorage()
+        cy.getAllLocalStorage().should('be.empty')
+        cy.clearAllSessionStorage({log: true})
         cy.visit('/')
         this.getLoginButton().click()
         cy.origin(`https://login.microsoftonline.com`, () => {
