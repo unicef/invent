@@ -30,10 +30,13 @@
         gap: 20px;
     }
 
-    .comment-wrapper {
+    .state-flex-container {
         display: flex;
         align-items: center;
-        gap: 5px;
+    }
+
+    .comment-wrapper {
+        margin-left: 20px;
     }
 </style>
 {% endblock %}
@@ -52,21 +55,20 @@
     </div>
 {% endblock %}
 
-<!-- 
-style for moving label and comment box next to state
--->
-
 {% block extrahead %}
 {{ block.super }}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Move the comment field next to the state field
         var commentDiv = $('<div class="comment-wrapper"></div>');
         commentDiv.append('Comment: ').append($('#id_comment'));
         
-        $('#id_state').parent().append(commentDiv);
-        $( ".field-comment" ).hide();
+        var stateField = $('#id_state');
+        var stateContainer = stateField.parent();
+        
+        stateContainer.addClass('state-flex-container');
+        
+        stateContainer.append(commentDiv);
     });
 </script>
 {% endblock %}
