@@ -1061,6 +1061,8 @@ class SolutionSerializer(serializers.ModelSerializer):
             "is_active",
             "portfolio_problem_statements",
             "country_solutions",
+            "setAside2021",
+            "setAside2022"
         )
 
     def create(self, validated_data):
