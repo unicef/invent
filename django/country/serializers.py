@@ -234,7 +234,7 @@ class CountryOfficeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CountryOffice
-        fields = ('id', 'name', 'region', 'country', 'regional_office', 'city', 'managers')
+        fields = ('id', 'name', 'region', 'country', 'regional_office', 'city', 'lat', 'lon', 'managers')
 
 
 DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
