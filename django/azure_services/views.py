@@ -19,7 +19,7 @@ from .tasks import fetch_users_from_aad_and_update_db
 
 
 LOGIN_URL = f'https://login.microsoftonline.com/{getattr(settings, "SOCIALACCOUNT_AZURE_TENANT", "common")}/oauth2/v2.0'
-GRAPH_URL = 'https://graph.microsoft.com/v1.0'
+GRAPH_URL = "https://graph.microsoft.com/v1.0"
 
 
 class AzureOAuth2Adapter(OAuth2Adapter):
@@ -28,17 +28,17 @@ class AzureOAuth2Adapter(OAuth2Adapter):
     https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols
     """
     provider_id = AzureProvider.id
-    access_token_url = LOGIN_URL + '/token'
-    authorize_url = LOGIN_URL + '/authorize'
-    profile_url = 'https://graph.microsoft.com/v1.0/me'
+    access_token_url = LOGIN_URL + "/token"
+    authorize_url = LOGIN_URL + "/authorize"
+    profile_url = "https://graph.microsoft.com/v1.0/me"
     # Can be used later to obtain group data. Needs 'Group.Read.All' or
     # similar.
     #
     # See https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/user_list_memberof  # noqa
-    groups_url = GRAPH_URL + '/me/memberOf?$select=displayName'
+    groups_url = GRAPH_URL + "/me/memberOf?$select=displayName"
 
     def complete_login(self, request, app, token, **kwargs):
-        headers = {'Authorization': 'Bearer {0}'.format(token.token)}
+        headers = {"Authorization": "Bearer {0}".format(token.token)}
         extra_data = {}
 
         resp = requests.get(self.profile_url, headers=headers)
@@ -61,26 +61,7 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         profile_data = resp.json()
         extra_data.update(profile_data)
 
-        return self.get_provider().sociallogin_from_response(request,
-                                                             extra_data)
-
-
-class GetAADUsers(TokenAuthMixin, APIView):
-    """
-    API View to fetch Azure Active Directory (AAD) users.
-    Requires token authentication.
-    """
-
-    def get(self, request, max_users=None, format=None):
-        # Get max_users from query parameters. Default is 100 if not provided.
-        max_users = request.query_params.get('max_users', 100)
-
-        # Create an instance of MyAzureAccountAdapter and fetch the AAD users
-        adapter = AzureUserManagement()
-        azure_users = adapter.get_aad_users(max_users)
-
-        # Return the AAD users in the response
-        return Response({'users': azure_users}, status=status.HTTP_200_OK)
+        return self.get_provider().sociallogin_from_response(request, extra_data)
 
 
 class UpdateAADUsersView(TokenAuthMixin, APIView):
@@ -92,11 +73,14 @@ class UpdateAADUsersView(TokenAuthMixin, APIView):
 
     def put(self, request, format=None):
         # Default to 100 if not provided
-        max_users = request.data.get('max_users', None)
+        max_users = request.data.get("max_users", None)
         # Call the Celery task and pass max_users as a parameter
         fetch_users_from_aad_and_update_db.delay(max_users)
 
-        return Response({'message': 'Initiated celery task fetch_users_from_aad_and_update_db.'}, status=status.HTTP_202_ACCEPTED)
+        return Response(
+            {"message": "Initiated celery task fetch_users_from_aad_and_update_db."},
+            status=status.HTTP_202_ACCEPTED,
+        )
 
 
 oauth2_login = OAuth2LoginView.adapter_view(AzureOAuth2Adapter)

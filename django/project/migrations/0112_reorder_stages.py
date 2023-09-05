@@ -9,7 +9,7 @@ def add_taxonomies(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('project', '0108_auto_20230816_0929'),
+        ('project', '0111_auto_20230830_0846'),
     ]
 
     operations = [

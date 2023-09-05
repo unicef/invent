@@ -39,9 +39,14 @@ class Command(BaseCommand):
     @staticmethod
     def fill_named_model(data, model):
         for entry in data:
-            _, created = model.objects.get_or_create(name=entry)
-            if created:
+            obj = model.objects.filter(name=entry).first()
+            # Use this approach to handle the MultipleObjectsReturned error
+            if obj is None:
+                obj = model.objects.create(name=entry)
                 pp.pprint(f'{entry} created')
+            else:
+                pp.pprint(f'{entry} already exists, skipping')
+
 
     @staticmethod
     def fill_currencies(data):
