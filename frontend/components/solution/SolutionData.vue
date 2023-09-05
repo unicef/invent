@@ -35,6 +35,12 @@
             <CountriesTable :tableData="solution.country_solutions" />
           </simple-field>
         </collapsible-card>
+        <collapsible-card id="funding" :title="$gettext('4. Funding') | translate">
+          <ul>
+            <li v-if="solution.setAside2021"><translate>Set Aside 2021</translate></li>
+            <li v-if="solution.setAside2022"><translate>Set Aside 2022</translate></li>
+          </ul>
+        </collapsible-card>
       </el-col>
       <!-- <el-col :span="6">
         <SolutionNavigation
