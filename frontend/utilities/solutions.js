@@ -21,5 +21,7 @@ export const rules = () => {
     countrySingleNumber: {},
     portfolioSingleSelect: { required: true, is_not: null },
     problemStatementSelect: { required: true, is_not: [] },
+    setAside2021: { required: false },
+    setAside2022: { required: false },
   }
 }
