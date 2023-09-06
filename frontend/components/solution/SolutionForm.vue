@@ -37,6 +37,16 @@
             @hook:created="createdHandler"
             v-model="solution.activity_reach"
           />
+          <Funding
+            key="funding"
+            ref="funding"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+            v-model="solution.funding"
+          />
         </el-col>
         <el-col :span="6">
           <FormActionsAside @save="handleSave" @cancel="handleCancel" @delete="handleDeleteSolution" />
@@ -53,6 +63,7 @@ import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
 import InnovationPortfolios from './sections/InnovationPortfolios.vue'
 import FormActionsAside from './FormActionsAside.vue'
+import Funding from './sections/Funding.vue'
 
 export default {
   components: {
@@ -60,6 +71,7 @@ export default {
     ActivityAndReach,
     FormActionsAside,
     InnovationPortfolios,
+    Funding,
   },
   $_veeValidate: {
     validator: 'new',
@@ -84,6 +96,10 @@ export default {
           override_reach: null,
           people_reached: 0,
           country_solutions: [],
+        },
+        funding: {
+          setAside2021: false,
+          setAside2022: false,
         },
       },
     }
@@ -130,6 +146,10 @@ export default {
           open_source_frontier_tech: s.open_source_frontier_tech,
           learning_investment: s.learning_investment,
           portfolio_problem_statements: s.portfolio_problem_statements,
+        },
+        funding: {
+          setAside2021: s.setAside2021,
+          setAside2022: s.setAside2022,
         },
       }
     },
@@ -198,6 +218,8 @@ export default {
               portfolio_problem_statements: s.innovation_portfolios.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
               people_reached: this.peopleReached(s.activity_reach.override_reach),
+              setAside2021: s.funding.setAside2021,
+              setAside2022: s.funding.setAside2022,
             })
             this.goToViewSolution()
 

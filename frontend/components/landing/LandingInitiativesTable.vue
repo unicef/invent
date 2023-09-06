@@ -216,7 +216,7 @@ export default {
           } else {
             //if last stage is not end phase then update current phase and return initiative
             const phOrder = this.allPhases.find((phase) => phase.id === lastStageId)?.order
-            const hasNextPhase = this.allPhases.find((phase) => phase.order === phOrder + 1) ? true : false
+            const hasNextPhase = !!this.allPhases.find((phase) => phase.order === phOrder + 1)
             project.current_phase = hasNextPhase
               ? this.allPhases.find((phase) => phase.order === phOrder + 1)?.id
               : lastStageId
@@ -289,7 +289,7 @@ export default {
         sectorInitiatives.map((initiative) => {
           const lastUpdated = this.calcLastUpdated(initiative)
 
-          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale
 
           /*Create the card and add it to tableData **/
 
@@ -328,7 +328,7 @@ export default {
         sectorInitiatives.map((initiative) => {
           const lastUpdated = this.calcLastUpdated(initiative)
 
-          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale
 
           /*Create the card and add it to tableData **/
           if (dataObj.hasOwnProperty(`${initiative.current_phase}`)) {
@@ -374,7 +374,7 @@ export default {
       )
     },
     calcLastUpdated(initiative) {
-      if (initiative.stages && initiative.stages.length > 0) {
+      if (initiative.stages?.length > 0) {
         /*
           Some initiatives have equal current_phase as the last phase in stages field
           Some other initiatives have equal current_phase -1 as the last phase in stages field

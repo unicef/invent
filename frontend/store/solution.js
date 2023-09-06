@@ -16,6 +16,8 @@ const cleanState = () => ({
   portfolio_list: [],
   portfolio_problem_statements: [],
   loading: false,
+  setAside2021: false,
+  setAside2022: false,
 })
 
 export const state = () => ({
@@ -63,6 +65,8 @@ export const actions = {
         people_reached: data.people_reached,
         country_solutions: data.country_solutions,
         portfolio_problem_statements: data.portfolio_problem_statements,
+        setAside2021: data.setAside2021,
+        setAside2022: data.setAside2022,
       },
     })
   },
@@ -79,6 +83,8 @@ export const actions = {
         people_reached: state.people_reached,
         country_solutions: state.country_solutions,
         portfolio_problem_statements: state.portfolio_problem_statements,
+        setAside2021: state.setAside2021,
+        setAside2022: state.setAside2022,
       },
     })
   },
@@ -95,6 +101,8 @@ export const actions = {
         people_reached: data.people_reached,
         country_solutions: data.country_solutions,
         portfolio_problem_statements: data.portfolio_problem_statements,
+        setAside2021: data.setAside2021,
+        setAside2022: data.setAside2022,
       },
     })
   },
@@ -114,6 +122,8 @@ export const mutations = {
     state.portfolios = data.portfolios
     state.country_solutions = data.country_solutions.map((sol) => ({ ...sol, row_id: uuidv4() }))
     state.portfolio_problem_statements = data.portfolio_problem_statements
+    state.setAside2021 = data.setAside2021
+    state.setAside2022 = data.setAside2022
   },
   PUT_PROBLEM_STATEMENTS_LIST: (state, data) => {
     state.problem_statement_list = data
