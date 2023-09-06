@@ -12,9 +12,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .provider import AzureProvider
-from .adapters import AzureUserManagement
 from core.views import TokenAuthMixin
+from .provider import AzureProvider
 from .tasks import fetch_users_from_aad_and_update_db
 
 

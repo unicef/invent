@@ -9,45 +9,44 @@ from django.utils.translation import gettext_lazy as _
 from core.models import ExtendedModel
 
 
-
 class Organisation(ExtendedModel):
     name = models.CharField(unique=True, max_length=255)
 
     class Meta:
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):  # pragma: no cover
         return self.name
 
 
 class UserProfile(ExtendedModel):
-    IMPLEMENTER = 'I'
-    DONOR = 'D'
-    DONOR_ADMIN = 'DA'
-    SUPER_DONOR_ADMIN = 'SDA'
-    GOVERNMENT = 'G'
-    COUNTRY_ADMIN = 'CA'
-    SUPER_COUNTRY_ADMIN = 'SCA'
-    INVENTORY = 'Y'
+    IMPLEMENTER = "I"
+    DONOR = "D"
+    DONOR_ADMIN = "DA"
+    SUPER_DONOR_ADMIN = "SDA"
+    GOVERNMENT = "G"
+    COUNTRY_ADMIN = "CA"
+    SUPER_COUNTRY_ADMIN = "SCA"
+    INVENTORY = "Y"
     ACCOUNT_TYPE_CHOICES = (
-        (IMPLEMENTER, _('Implementer')),
-        (DONOR, _('Investor Viewer')),
-        (DONOR_ADMIN, _('Investor Admin')),
-        (SUPER_DONOR_ADMIN, _('Investor System Admin')),
-        (GOVERNMENT, _('Government Viewer')),
-        (COUNTRY_ADMIN, _('Government Admin')),
-        (SUPER_COUNTRY_ADMIN, _('Government System Admin')),
-        (INVENTORY, _('Inventory User')),
+        (IMPLEMENTER, _("Implementer")),
+        (DONOR, _("Investor Viewer")),
+        (DONOR_ADMIN, _("Investor Admin")),
+        (SUPER_DONOR_ADMIN, _("Investor System Admin")),
+        (GOVERNMENT, _("Government Viewer")),
+        (COUNTRY_ADMIN, _("Government Admin")),
+        (SUPER_COUNTRY_ADMIN, _("Government System Admin")),
+        (INVENTORY, _("Inventory User")),
     )
     REGIONS = [
-        (0, _('EAPR')),
-        (1, _('ECAR')),
-        (2, _('ESAR')),
-        (3, _('LACR')),
-        (4, _('MENA')),
-        (5, _('SAR')),
-        (6, _('WCAR')),
-        (7, _('HQ'))
+        (0, _("EAPR")),
+        (1, _("ECAR")),
+        (2, _("ESAR")),
+        (3, _("LACR")),
+        (4, _("MENA")),
+        (5, _("SAR")),
+        (6, _("WCAR")),
+        (7, _("HQ")),
     ]
 
     account_type = models.CharField(
@@ -59,19 +58,27 @@ class UserProfile(ExtendedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(
-        Organisation, blank=True, null=True, on_delete=models.SET_NULL)
-    country = models.ForeignKey(
-        'country.Country', null=True, on_delete=models.SET_NULL)
+        Organisation, blank=True, null=True, on_delete=models.SET_NULL
+    )
+    country = models.ForeignKey("country.Country", null=True, on_delete=models.SET_NULL)
     donor = models.ForeignKey(
-        'country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
-    language = models.CharField(
-        max_length=2, choices=settings.LANGUAGES, default='en')
+        "country.Donor",
+        related_name="userprofiles",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default="en")
     global_portfolio_owner = models.BooleanField(default=False)
     region = models.IntegerField(
-        choices=REGIONS, null=True, blank=True, verbose_name='Regional Focal point for')
+        choices=REGIONS, null=True, blank=True, verbose_name="Regional Focal point for"
+    )
     filters = HStoreField(default=dict, blank=True)
-    manager_of = models.ManyToManyField('country.CountryOffice', related_name="country_managers",
-                                        verbose_name='Country Manager Of', blank=True)
+    manager_of = models.ManyToManyField(
+        "country.CountryOffice",
+        related_name="country_managers",
+        verbose_name="Country Manager Of",
+        blank=True,
+    )
     job_title = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
 
@@ -79,22 +86,29 @@ class UserProfile(ExtendedModel):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
 
     def is_government_type(self):
-        return self.account_type in [self.GOVERNMENT, self.COUNTRY_ADMIN, self.SUPER_COUNTRY_ADMIN]
+        return self.account_type in [
+            self.GOVERNMENT,
+            self.COUNTRY_ADMIN,
+            self.SUPER_COUNTRY_ADMIN,
+        ]
 
     def is_investor_type(self):
-        return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
-    
-    
-
+        return self.account_type in [
+            self.DONOR,
+            self.DONOR_ADMIN,
+            self.SUPER_DONOR_ADMIN,
+        ]
 
 
 @classmethod
 def export_resource_classes(cls):  # pragma: no cover
-    #this import needs to stay here to avoid circular import error
+    # this import needs to stay here to avoid circular import error
     from core.resources import UserResource
+
     return {"userprofiles": ("UserProfiles", UserResource)}
 
-#patching the above method to the User model
+
+# patching the above method to the User model
 User.export_resource_classes = export_resource_classes
 
 
@@ -102,5 +116,8 @@ User.export_resource_classes = export_resource_classes
 def admin_request_on_change(sender, instance, **kwargs):
     if instance.id:
         old_account_type = UserProfile.objects.get(id=instance.id).account_type
-        if instance.account_type != UserProfile.IMPLEMENTER and instance.account_type != old_account_type:
+        if (
+            instance.account_type != UserProfile.IMPLEMENTER
+            and instance.account_type != old_account_type
+        ):
             instance.__trigger_send = True
