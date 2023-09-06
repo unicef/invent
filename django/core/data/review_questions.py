@@ -55,11 +55,13 @@ REVIEWER_QUESTIONS = {
             'text': _('How new is the solution or tool this initiative employs?'),
             'text_bold': _('NOTE: The purpose of this score is descriptive, not evaluative; higher score is not '
                            'considered more advantageous in portfolio review process.'),
-            'guidance': _('1 – There is an existing solution and assets (0% change)\n'
-                          '3 – Existing solution needs to be evolved in a meaningful way for e.g. new context or users'
-                          ' (50% change)\n'
-                          '5 – No existing solution. New products, capabilities and assets needs to be developed\n'
-                          ' (100% change a.k.a. new solution)'),
+            'guidance': _('1 – There is an existing solution and assets ({zero_percent_change})\n'
+                        '3 – Existing solution needs to be evolved in a meaningful way for e.g. new context or users'
+                        ' ({fifty_percent_change})\n'
+                        '5 – No existing solution. New products, capabilities and assets needs to be developed\n'
+                        ' ({hundred_percent_change})').format(zero_percent_change="0% change",
+                                                            fifty_percent_change="50% change",
+                                                            hundred_percent_change="100% change a.k.a. new solution"),
             'guidance_bold': (''),
             },
     'nc': {'name': _('Newness of Challenge'),
