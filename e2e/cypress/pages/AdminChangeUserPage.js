@@ -21,5 +21,9 @@ class AdminChangeUserPage{
     getDepartmentValue(departmentvalue) {
         return cy.get('[name="userprofile-0-department"]').invoke('val').should('equal', departmentvalue)
     }
+
+    readCSV() {
+        return 
+    }
 }
 export default AdminChangeUserPage

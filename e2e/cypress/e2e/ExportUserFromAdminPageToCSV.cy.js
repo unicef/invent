@@ -5,10 +5,9 @@ import AdminLoginForm from "../pages/AdminLoginForm"
 import AdminPage from "../pages/AdminPage"
 import AdminUsersPage from "../pages/AdminUsersPage"
 import AdminChangeUserPage from "../pages/AdminChangeUserPage"
-import deleteFiles from '../pages/TestFiles'
+import ReadDownloadsFiles from '../pages/ReadDownloadsFiles'
 
 describe('Export user with Job title and Section data on CSV format', () => {
-    beforeEach(() => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/165892',() => {
         const adminLoginForm = new AdminLoginForm()
         adminLoginForm.loginAdmin(Cypress.env('adminuser'), Cypress.env('adminuser'))
@@ -24,7 +23,7 @@ describe('Export user with Job title and Section data on CSV format', () => {
         adminUsersPage.selectExportAction()
         adminUsersPage.selectCSV()
         adminUsersPage.getUserNameLink().should('contain', 'Full Data User')
-        adminUsersPage.pressGoButton() // need to find a solution cypress not wait after click download
+        adminUsersPage.pressGoButton()
         adminUsersPage.pressUserNameLink()
         const adminChangeUserPage = new AdminChangeUserPage
         adminChangeUserPage.getChangeUserPageTitle().should('be.visible')
@@ -33,13 +32,13 @@ describe('Export user with Job title and Section data on CSV format', () => {
         adminChangeUserPage.getJobTitleValue('Chief Beverage Officer')
         adminChangeUserPage.getDepartmentLabel().should('contain', 'Department:')
         adminChangeUserPage.getDepartmentValue('Specialists Parkour Office')
-        deleteFiles()
-    })
-        //adminUsersPage.selectXLS()
-        //
-        //
-        //
-        //
+        const readDownloadsFiles = new ReadDownloadsFiles
+        readDownloadsFiles.readCSV().should('contain', 'Job title')
+        .and('contain', 'Chief Beverage Officer')
+        .and('contain', 'Department')
+        .and('contain', 'Specialists Parkour Office')
+        
+
+        //deleteFiles()
     })
 })
-
