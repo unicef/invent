@@ -1,7 +1,6 @@
 <template>
   <div class="SolutionData" v-if="solution">
     <el-row type="flex">
-      <!-- <el-col :span="18"> -->
       <el-col>
         <collapsible-card id="general" :title="$gettext('1. General') | translate">
           <simple-field :content="solution.name" :header="$gettext('Name') | translate" />
@@ -37,25 +36,11 @@
         </collapsible-card>
         <collapsible-card id="funding" :title="$gettext('4. Funding') | translate">
           <ul>
-            <li v-if="solution.setAside2021"><translate>Set Aside 2021</translate></li>
-            <li v-if="solution.setAside2022"><translate>Set Aside 2022</translate></li>
+            <li v-if="solution.set_aside_2021"><translate>Set Aside 2021</translate></li>
+            <li v-if="solution.set_aside_2022"><translate>Set Aside 2022</translate></li>
           </ul>
         </collapsible-card>
       </el-col>
-      <!-- <el-col :span="6">
-        <SolutionNavigation
-          @handleClickUnPublish="
-            handleClickUnPublish(
-              {
-                name: 'organisation-initiatives-id-edit',
-                params: { ...$route.params },
-              },
-              $route.params.id
-            )
-          "
-          @handleClickLatest="handleClickLatest($route.params.id)"
-        />
-      </el-col> -->
     </el-row>
   </div>
 </template>

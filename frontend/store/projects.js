@@ -84,7 +84,7 @@ export const getters = {
   getLeadingSector: (state, getters, rootState, rootGetters) => {
     const selectedSupportingSectors = rootGetters['project/getSupportingSectors']
     const sectors = state.projectStructure.sectors
-    const remainingSectors = sectors.map((sector) =>
+    const remainingSectors = sectors?.map((sector) =>
       selectedSupportingSectors.some((selSector) => selSector === sector.id)
         ? { ...sector, disabled: true, value: sector.id }
         : { ...sector, disabled: false, value: sector.id }
@@ -95,7 +95,7 @@ export const getters = {
   getSupportingSectors: (state, getters, rootState, rootGetters) => {
     const selectedLeadingSectors = rootGetters['project/getLeadingSector']
     const sectors = state.projectStructure.sectors
-    const remainingSectors = sectors.map((sector) =>
+    const remainingSectors = sectors?.map((sector) =>
       selectedLeadingSectors.some((selSector) => selSector === sector.id)
         ? { ...sector, disabled: true, value: sector.id }
         : { ...sector, disabled: false, value: sector.id }
@@ -124,7 +124,7 @@ export const getters = {
         ...p,
         isMember: user ? user.member.includes(p.id) : undefined,
         isViewer: user ? user.viewer.includes(p.id) : undefined,
-        isPublished: !!(p.published && p.published.name),
+        isPublished: !!p.published?.name,
       }
     }
     return {}
@@ -405,9 +405,9 @@ export const actions = {
   },
   async setNewItem({ commit, dispatch }, { type, name, project }) {
     try {
-      const { data } = await this.$axios.post(`/api/projects/${type}-request/`, { 
+      const { data } = await this.$axios.post(`/api/projects/${type}-request/`, {
         name,
-        project 
+        project,
       })
       await dispatch('loadProjectStructure', true)
       return data.id
