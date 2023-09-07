@@ -2,29 +2,29 @@
   <div id="funding" class="InnovationSolution">
     <collapsible-solution-card ref="collapsible" key="funding" :title="$gettext('Funding') | translate" show-legend>
       <custom-required-form-item
-        :error="errors.first('setaside2021') ? errors.first('setaside2021').replace('_', ' ') : undefined"
-        :draft-rule="rules.setaside2021"
-        :publish-rule="rules.setaside2021"
+        :error="errors.first('setAside2021') ? errors.first('setAside2021').replace('_', ' ') : undefined"
+        :draft-rule="rules.setAside2021"
+        :publish-rule="rules.setAside2021"
       >
         <el-checkbox
-          v-model="innerValue.setAside2021"
+          v-model="innerValue.set_aside_2021"
           class="setaside__checkbox"
-          :label="'setaside2021'"
-          data-test="solution-setaside2021-checkbox"
+          :label="'setAside2021'"
+          data-test="solution-setAside2021-checkbox"
           ><translate>Set Aside 2021</translate>
         </el-checkbox>
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('setaside2022') ? errors.first('setaside2022').replace('_', ' ') : undefined"
-        :draft-rule="rules.setaside2022"
-        :publish-rule="rules.setaside2022"
+        :error="errors.first('setAside2022') ? errors.first('setAside2022').replace('_', ' ') : undefined"
+        :draft-rule="rules.setAside2022"
+        :publish-rule="rules.setAside2022"
       >
         <el-checkbox
-          v-model="innerValue.setAside2022"
+          v-model="innerValue.set_aside_2022"
           class="setaside__checkbox"
-          :label="'setaside2022'"
-          data-test="solution-setaside2022-checkbox"
+          :label="'setAside2022'"
+          data-test="solution-setAside2022-checkbox"
           ><translate>Set Aside 2022</translate>
         </el-checkbox>
       </custom-required-form-item>

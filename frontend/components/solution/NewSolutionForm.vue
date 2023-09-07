@@ -98,8 +98,8 @@ export default {
           country_solutions: [],
         },
         funding: {
-          setAside2021: false,
-          setAside2022: false,
+          set_aside_2021: false,
+          set_aside_2022: false,
         },
       },
     }
@@ -164,10 +164,6 @@ export default {
       }
     },
     async handleSave() {
-      // this.trimEmptyRows()
-
-      // this.setLoading(true)
-      // this.clearValidation()
       this.usePublishRules = true
       await this.$nextTick(async () => {
         const general = await this.$refs.solutionGeneral.validate()
@@ -184,8 +180,8 @@ export default {
               portfolio_problem_statements: s.innovation_portfolios.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
               people_reached: this.peopleReached(s.activity_reach.override_reach),
-              setAside2021: s.funding.setAside2021,
-              setAside2022: s.funding.setAside2022,
+              set_aside_2021: s.funding.set_aside_2021,
+              set_aside_2022: s.funding.set_aside_2022,
             })
             this.goToViewSolution(response.data.id)
 

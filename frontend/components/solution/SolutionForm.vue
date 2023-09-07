@@ -98,8 +98,8 @@ export default {
           country_solutions: [],
         },
         funding: {
-          setAside2021: false,
-          setAside2022: false,
+          set_aside_2021: false,
+          set_aside_2022: false,
         },
       },
     }
@@ -148,8 +148,8 @@ export default {
           portfolio_problem_statements: s.portfolio_problem_statements,
         },
         funding: {
-          setAside2021: s.setAside2021,
-          setAside2022: s.setAside2022,
+          set_aside_2021: s.set_aside_2021,
+          set_aside_2022: s.set_aside_2022,
         },
       }
     },
@@ -158,10 +158,6 @@ export default {
       const trimedTable = portfolioTable.find((row) => row.portfolio_id !== null)
       console.log(trimedTable)
       this.solution.general_overview.portfolio_problem_statements = trimedTable
-
-      // const countriesTable = this.solution.activity_reach.country_solutions
-      // console.log(countriesTable)
-      // this.solution.activity_reach.country_solutions = countriesTable.find((row) => row.country !== null)
     },
 
     handleErrorMessages() {},
@@ -197,10 +193,6 @@ export default {
       this.$router.push(localised)
     },
     async handleSave() {
-      // this.trimEmptyRows()
-
-      // this.setLoading(true)
-      // this.clearValidation()
       this.usePublishRules = true
       await this.$nextTick(async () => {
         const general = await this.$refs.solutionGeneral.validate()
@@ -218,8 +210,8 @@ export default {
               portfolio_problem_statements: s.innovation_portfolios.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
               people_reached: this.peopleReached(s.activity_reach.override_reach),
-              setAside2021: s.funding.setAside2021,
-              setAside2022: s.funding.setAside2022,
+              set_aside_2021: s.funding.set_aside_2021,
+              set_aside_2022: s.funding.set_aside_2022,
             })
             this.goToViewSolution()
 
