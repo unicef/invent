@@ -7,8 +7,7 @@ import SolutionPage from "../pages/SolutionPage"
 import Requests from "../support/Requests"
 import CountryPage from "../pages/CountryPage"
 
-describe('Demo test', () => {
-
+describe('Visble and Fucntional Gear', () => {
     it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/165952',() => {
         const loginForm = new LoginForm()
         loginForm.login(Cypress.env('globalportfolio'), Cypress.env('globalportfolio'))

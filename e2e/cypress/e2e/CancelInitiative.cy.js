@@ -18,10 +18,8 @@ describe('Cancel New Iniative', () => {
         const initiativePage = new InitiativePage()
         initiativePage.typeInitiativeName('Cancel New Initiative')
         initiativePage.cancelInitiative()
-        
         //Verify return to Home page
         const homePage = new HomePage()
         homePage.getWelcomeSection()
-
     })
 })  

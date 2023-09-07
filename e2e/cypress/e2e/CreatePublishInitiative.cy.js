@@ -13,7 +13,6 @@ describe('Create Publish Iniative', () => {
         initiativePage.typeInitiativeName('Automation Publish Initiative'+(Math.floor(Math.random() * 1000000000000000)).toString())
         initiativePage.selectUnicefOffice('Angola: Dundo')
         initiativePage.typeInitiativeOverview('Automate Publish Initiative')
-
         initiativePage.typeFocalPointField(Cypress.env('username1'))
         initiativePage.selectLeadSectorInitiative('C4D')
         initiativePage.selectGoalArea('22. Learn')
@@ -36,8 +35,5 @@ describe('Create Publish Iniative', () => {
         initiativePage.getPublishButton().should('be.visible').and('be.enabled').and('be.enabled')
         initiativePage.getPublishAsLatestButton().contains('Publish as latest').should('be.visible')
         initiativePage.getGoToDashboard().should('be.visible')
-
-        
-
     })
 })  

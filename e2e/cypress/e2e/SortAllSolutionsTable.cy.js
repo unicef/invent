@@ -16,9 +16,6 @@ describe('Solution name column sorting on "all solutions" page', () => {
         innovationPortfoliosPage.openAllSolution()
         const allSolutionPage = new AllSolutionsPage()
         allSolutionPage.getTitle().contains('Solutions')
-
-
-
     })
 })
 

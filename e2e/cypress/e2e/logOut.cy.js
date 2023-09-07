@@ -3,7 +3,6 @@ import NavigationBar from "../pages/NavigationBar"
 import LoginForm from "../pages/LoginForm"
 import LoginPage from "../pages/LoginPage"
 
-
 describe('Log out', () => {
   it('https://unicef.visualstudio.com/ICTD-INVENT/_workitems/edit/145746/', () => {
     const loginForm = new LoginForm()
