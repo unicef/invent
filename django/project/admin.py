@@ -102,7 +102,6 @@ class ApprovalStateAdmin(AllObjectsAdmin):
     list_display = [
         'name', 'state', 'added_by'
     ]
-    autocomplete_fields = ['added_by']
     ordering = search_fields = ['name']
     list_filter = [ApprovalStateFilter]
     actions = (approve, decline)
