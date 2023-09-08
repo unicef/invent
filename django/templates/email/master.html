@@ -422,7 +422,7 @@
                         {% elif type == "object_declined" %}
                         <h1>`{{ object_name }}` {% trans "has been declined" %}</h1>
                         <h2>{% trans "Dear" %} {{ full_name }},</h2>
-                        <p>{% trans " When editing your " %}
+                        <p>{% trans " When editing " %}
                           {% if initiative_name and initiative_id %}
                           <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank"><b>{{ initiative_name }}</b></a>
                           {% else %}
@@ -440,7 +440,7 @@
                         {% elif type == "object_approved" %}
                         <h1>`{{ object_name }}` {% trans "has been approved" %}</h1>
                         <h2>{% trans "Dear" %} {{ full_name }},</h2>
-                        <p>{% trans " When editing your " %}
+                        <p>{% trans " When editing " %}
                           {% if initiative_name and initiative_id %}
                           <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank"><b>{{ initiative_name }}</b></a>
                           {% else %}
