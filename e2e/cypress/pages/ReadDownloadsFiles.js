@@ -1,9 +1,10 @@
 /// <reference types="Cypress" />
 
 class ReadDownloadsFiles {
-
     readCSV() {
-        return cy.readFile('cypress/downloads/User-2023-09-05.csv')
+        const moment = require('moment')
+        const filename = 'cypress/downloads/User-'+ moment().format("YYYY-MM-DD") +'.csv'
+        return cy.readFile(filename)
     }
 }
 export default ReadDownloadsFiles

@@ -12,6 +12,7 @@
     "cypress": "^13.1.0",
     "cypress-downloadfile": "^1.2.3",
     "cypress-mochawesome-reporter": "^3.3.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "moment": "^2.29.4"
   }
 }
