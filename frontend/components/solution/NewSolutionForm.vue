@@ -37,6 +37,16 @@
             @hook:created="createdHandler"
             v-model="solution.activity_reach"
           />
+          <Funding
+            key="funding"
+            ref="funding"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+            v-model="solution.funding"
+          />
         </el-col>
         <el-col :span="6">
           <FormActionsAside @save="handleSave" @cancel="handleCancel" :canDelete="false" />
@@ -53,6 +63,7 @@ import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
 import InnovationPortfolios from './sections/InnovationPortfolios.vue'
 import FormActionsAside from './FormActionsAside.vue'
+import Funding from './sections/Funding.vue'
 
 export default {
   components: {
@@ -60,6 +71,7 @@ export default {
     ActivityAndReach,
     FormActionsAside,
     InnovationPortfolios,
+    Funding,
   },
   $_veeValidate: {
     validator: 'new',
@@ -84,6 +96,10 @@ export default {
           override_reach: null,
           people_reached: 0,
           country_solutions: [],
+        },
+        funding: {
+          set_aside_2021: false,
+          set_aside_2022: false,
         },
       },
     }
@@ -114,6 +130,7 @@ export default {
         this.$refs.solutionGeneral.validate(),
         this.$refs.solutionActivityAndReach.validate(),
         this.$refs.innovationPortfolios.validate(),
+        this.$refs.funding.validate(),
       ])
       console.log('root validations', validations)
       return validations.reduce((a, c) => a && c, true)
@@ -123,6 +140,7 @@ export default {
       this.$refs.solutionGeneral.clear()
       this.$refs.solutionActivityAndReach.clear()
       this.$refs.innovationPortfolios.clear()
+      this.$refs.funding.clear()
     },
     peopleReached(people_reached) {
       if (people_reached === undefined || people_reached === null) {
@@ -146,10 +164,6 @@ export default {
       }
     },
     async handleSave() {
-      // this.trimEmptyRows()
-
-      // this.setLoading(true)
-      // this.clearValidation()
       this.usePublishRules = true
       await this.$nextTick(async () => {
         const general = await this.$refs.solutionGeneral.validate()
@@ -166,6 +180,8 @@ export default {
               portfolio_problem_statements: s.innovation_portfolios.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
               people_reached: this.peopleReached(s.activity_reach.override_reach),
+              set_aside_2021: s.funding.set_aside_2021,
+              set_aside_2022: s.funding.set_aside_2022,
             })
             this.goToViewSolution(response.data.id)
 
