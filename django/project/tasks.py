@@ -287,7 +287,7 @@ def notify_user_about_approval(action, class_name, object_id, field_name):
         return
 
 
-    send_mail_wrapper(subject=_(f"Request for {field_name} tag notification"),
+    send_mail_wrapper(subject=_(f"Request for {field_name} tag"),
                       email_type=email_type,
                       to=object.added_by.user.email,
                       language=object.added_by.language or settings.LANGUAGE_CODE,

@@ -10,6 +10,7 @@ from ordered_model.models import OrderedModel
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel, ActiveManager
 from project.cache import InvalidateCacheMixin
 from user.models import UserProfile
+from django.core.exceptions import ValidationError
 
 
 class LandingPageCommon(ExtendedMultilingualModel):
@@ -90,6 +91,16 @@ class RegionalOffice(InvalidateCacheMixin, models.Model):
         ordering = ('name',)
 
 
+
+#custom functions for coordinates
+def validate_latitude(value):
+    if value < -90 or value > 90:
+        raise ValidationError('Latitude must be between -90 and +90.')
+    
+def validate_longitude(value):
+    if value < -180 or value > 180:
+        raise ValidationError('Longitude must be between -180 and +180.')    
+
 class CountryOffice(ExtendedModel):
     REGIONS = [
         (0, _('EAPR')),
@@ -108,6 +119,10 @@ class CountryOffice(ExtendedModel):
     regional_office = models.ForeignKey(
         RegionalOffice, on_delete=models.SET_NULL, null=True, blank=True)
     city = models.CharField(max_length=256, null=True, blank=True)
+    lat = models.DecimalField(null=True, blank=True,
+                              max_digits=8, decimal_places=6,validators=[validate_latitude])
+    lon = models.DecimalField(null=True, blank=True,
+                              max_digits=9, decimal_places=6,validators=[validate_longitude])
 
     # Get all the related user profiles through the managers (country_managers attribute
     # from UserProfile class) for a 'CountryOffice' instance.

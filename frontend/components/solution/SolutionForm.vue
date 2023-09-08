@@ -37,6 +37,16 @@
             @hook:created="createdHandler"
             v-model="solution.activity_reach"
           />
+          <Funding
+            key="funding"
+            ref="funding"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+            v-model="solution.funding"
+          />
         </el-col>
         <el-col :span="6">
           <FormActionsAside @save="handleSave" @cancel="handleCancel" @delete="handleDeleteSolution" />
@@ -53,6 +63,7 @@ import GeneralOverview from './sections/GeneralOverview'
 import ActivityAndReach from './sections/ActivityAndReach'
 import InnovationPortfolios from './sections/InnovationPortfolios.vue'
 import FormActionsAside from './FormActionsAside.vue'
+import Funding from './sections/Funding.vue'
 
 export default {
   components: {
@@ -60,6 +71,7 @@ export default {
     ActivityAndReach,
     FormActionsAside,
     InnovationPortfolios,
+    Funding,
   },
   $_veeValidate: {
     validator: 'new',
@@ -84,6 +96,10 @@ export default {
           override_reach: null,
           people_reached: 0,
           country_solutions: [],
+        },
+        funding: {
+          set_aside_2021: false,
+          set_aside_2022: false,
         },
       },
     }
@@ -131,6 +147,10 @@ export default {
           learning_investment: s.learning_investment,
           portfolio_problem_statements: s.portfolio_problem_statements,
         },
+        funding: {
+          set_aside_2021: s.set_aside_2021,
+          set_aside_2022: s.set_aside_2022,
+        },
       }
     },
     trimEmptyRows() {
@@ -138,10 +158,6 @@ export default {
       const trimedTable = portfolioTable.find((row) => row.portfolio_id !== null)
       console.log(trimedTable)
       this.solution.general_overview.portfolio_problem_statements = trimedTable
-
-      // const countriesTable = this.solution.activity_reach.country_solutions
-      // console.log(countriesTable)
-      // this.solution.activity_reach.country_solutions = countriesTable.find((row) => row.country !== null)
     },
 
     handleErrorMessages() {},
@@ -177,10 +193,6 @@ export default {
       this.$router.push(localised)
     },
     async handleSave() {
-      // this.trimEmptyRows()
-
-      // this.setLoading(true)
-      // this.clearValidation()
       this.usePublishRules = true
       await this.$nextTick(async () => {
         const general = await this.$refs.solutionGeneral.validate()
@@ -198,6 +210,8 @@ export default {
               portfolio_problem_statements: s.innovation_portfolios.portfolio_problem_statements,
               country_solutions: s.activity_reach.country_solutions,
               people_reached: this.peopleReached(s.activity_reach.override_reach),
+              set_aside_2021: s.funding.set_aside_2021,
+              set_aside_2022: s.funding.set_aside_2022,
             })
             this.goToViewSolution()
 
