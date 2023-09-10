@@ -3,17 +3,18 @@ from copy import deepcopy
 from collections import namedtuple
 from typing import List, Union, Dict
 
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
+from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
 from simple_history.models import HistoricalRecords
 from sorl.thumbnail import ImageField, get_thumbnail
 
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import JSONField, ArrayField
+from django.contrib.postgres.fields import ArrayField
+from django.db.models import JSONField
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.db.models import Count, Case, When, IntegerField, F, Q, Sum, Prefetch
 
@@ -506,7 +507,7 @@ class ProjectApproval(ExtendedModel):
         help_text="Administrator who approved the project",
         on_delete=models.CASCADE,
     )
-    approved = models.NullBooleanField(blank=True, null=True)
+    approved = models.BooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
     history = HistoricalRecords(excluded_fields=["project", "created"])
 
@@ -868,7 +869,7 @@ class ProjectImport(ExtendedModel):
     mapping = JSONField(default=dict)
     imported = models.TextField(null=True, blank=True, default="")
     failed = models.TextField(null=True, blank=True, default="")
-    status = models.NullBooleanField(null=True, blank=True)
+    status = models.BooleanField(null=True, blank=True)
 
     def __str__(self):  # pragma: no cover
         return self.csv.name
@@ -876,7 +877,7 @@ class ProjectImport(ExtendedModel):
 
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    status = models.NullBooleanField(
+    status = models.BooleanField(
         null=True, blank=True)  # TODO: maybe remove this
     header_mapping = JSONField(default=dict, blank=True)
     country = models.ForeignKey(

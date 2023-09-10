@@ -1,9 +1,9 @@
 import os
-import datetime
+from datetime import timedelta
 import sys
 
 from environs import Env
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -65,10 +65,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'azure_services',
-    'rest_auth',
-    'rest_auth.registration',
+    'dj_rest_auth',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'django_extensions',
     'drf_yasg',
     'ordered_model',
@@ -87,8 +87,7 @@ INSTALLED_APPS = [
     'search',
     'scheduler',
     'kpi',
-    'simple-feedback',
-    "dj_anonymizer",
+    'simple_feedback',
     'import_export',
     'health_check',
 ]
@@ -199,25 +198,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'user.authentication.BearerTokenAuthentication'
     ),
 }
 
-
-def jwt_response_payload_handler(token, user=None, request=None):
-    return {
-        'token': token,
-        'user_profile_id': user.userprofile.id if hasattr(user, 'userprofile') else None,
-        'account_type': user.userprofile.account_type if hasattr(user, 'userprofile') else None,
-        'is_superuser': user.is_superuser
-    }
-
-
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
-    'JWT_AUTH_HEADER_PREFIX': 'Token',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7)
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Token',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
 }
 
 # django-allauth and rest-auth settings
@@ -414,6 +402,9 @@ ENVIRONMENT_COLOR = env_color
 # Validator for emails that can be registered as team members, viewers, eg.: r'(example.org|example.com)$'
 EMAIL_VALIDATOR_REGEX = r'{}'.format(
     env.str('EMAIL_VALIDATOR_REGEX', default=''))
+
+# Addresses warnings introduced in Django 3.2 to change AutoField to BigAutoField
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Import the setting_azure settings only in the Azure environments
 if ENVIRONMENT in ["dev", "tst", "uat", "prd"]:

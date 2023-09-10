@@ -1,14 +1,28 @@
-FROM python:3.7-stretch
+FROM python:3.8-buster
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN echo "deb http://archive.debian.org/debian stretch stretch-security main contrib non-free" > /etc/apt/sources.list
-RUN apt-get update && apt-get install -y gettext  # django i18n needs this
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+# Update pip setuptools wheel
+RUN pip install --upgrade pip setuptools wheel
+
+# Use appropriate Debian buster repositories
+RUN echo "deb http://deb.debian.org/debian/ buster main contrib non-free" > /etc/apt/sources.list
+RUN echo "deb http://deb.debian.org/debian/ buster-updates main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://security.debian.org/debian-security buster/updates main contrib non-free" >> /etc/apt/sources.list
+
+# Update the system and install gettext and git
+RUN apt-get update && apt-get install -y gettext git
+
+# Install Node.js from NodeSource
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - 
 RUN apt-get install -y nodejs
+
 RUN npm install -g mapshaper
+
+# Install PostgreSQL client
+RUN apt-get install -y libpq-dev gcc
 
 RUN mkdir /src
 WORKDIR /src

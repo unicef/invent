@@ -5,7 +5,7 @@ from .models import Project, UNICEFSector, UNICEFGoal, InnovationCategory, CPD, 
     HardwarePlatform, NontechPlatform, ISC, PlatformFunction, UNICEFResultArea, InnovationWay, \
     ProblemStatement, Portfolio
 from import_export.fields import Field
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from country.models import Country, CountryOffice, Currency
 from .models import Solution

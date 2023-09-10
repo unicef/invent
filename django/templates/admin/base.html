@@ -12,20 +12,47 @@
         background-color: {{ ENVIRONMENT_COLOR }};
     }
 
+    .skip-to-content-link {
+        display: none;
+    }
+
+    #logout-form {
+        display: none;
+    } 
+    
+    .theme-toggle {
+        display: none;
+    } 
+
     .form-row > div {
         display: flex;
         align-items: center;
         gap: 20px;
     }
 
-    .comment-wrapper {
+    .state-flex-container {
         display: flex;
         align-items: center;
-        gap: 5px;
     }
 
-   
+    .comment-wrapper {
+        margin-left: 20px;
+    }
 </style>
+{% endblock %}
+
+{% block usertools %}
+    <div id="user-tools">
+        Welcome,
+        <strong>sworduser</strong>.
+        
+        <a href="/">View site</a> /
+        
+        <a href="/admin/password_change/">Change password</a> /
+        
+        <!-- New logout link -->
+        <a href="/admin/logout/">Log out</a>
+    </div>
 {% endblock %}
 
 {% block extrahead %}
@@ -33,12 +60,18 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Move the comment field next to the state field
         var commentDiv = $('<div class="comment-wrapper"></div>');
         commentDiv.append('Comment: ').append($('#id_comment'));
         
-        $('#id_state').parent().append(commentDiv);
-        $( ".field-comment" ).hide();
+        var stateField = $('#id_state');
+        var stateContainer = stateField.parent();
+        
+        stateContainer.addClass('state-flex-container');
+        
+        stateContainer.append(commentDiv);
+
+        $('.form-row.field-comment').remove();
     });
+
 </script>
 {% endblock %}

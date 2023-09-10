@@ -54,7 +54,7 @@ services:
 
   postgres:
     restart: always
-    image: postgres:10.4
+    image: postgres:15.2
     environment:
       - POSTGRESQL_DB=postgres
       - POSTGRESQL_USER=postgres

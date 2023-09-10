@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url, include
+from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.i18n import JSONCatalog
@@ -15,29 +15,30 @@ from kpi.views import SolutionKPIViewSet, CountryInclusionKPIViewSet
 from project.views import ProjectPublicViewSet, PortfolioActiveListViewSet, ProblemStatementListViewSet, \
     SolutionListViewSet
 from user.views import OrganisationViewSet
+from core.admin.custom_admin import custom_admin_site
 
-admin.site.site_header = settings.PROJECT_NAME
+custom_admin_site.site_header = settings.PROJECT_NAME
 API_TITLE = f'{settings.PROJECT_NAME} API'
 API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
-    url(r'^account/', include('allauth.urls')),
-    url(r"^admin/", admin.site.urls),
-    url(r"^api/", include("azure_services.urls")),
-    url(r"^api/", include("core.urls")),
-    url(r"^api/", include("user.urls")),
-    url(r"^api/", include("project.urls")),
-    url(r"^api/", include("country.urls")),
-    url(r"^api/", include("search.urls")),
-    url(r"^api/", include("simple-feedback.urls")),
-    url(r"^api/kpi/", include("kpi.urls")),
-    url(r'^translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
-    url(r'^translation/', include('rosetta.urls')),
-    url(r'^health_check/', include('health_check.urls'))
+    path('account/', include('allauth.urls')),
+    path("admin/", custom_admin_site.urls),
+    path("api/", include("azure_services.urls")),
+    path("api/", include("core.urls")),
+    path("api/", include("user.urls")),
+    path("api/", include("project.urls")),
+    path("api/", include("country.urls")),
+    path("api/", include("search.urls")),
+    path("api/", include("simple_feedback.urls")),
+    path("api/kpi/", include("kpi.urls")),
+    path('translation/json/', JSONCatalog.as_view(), name='json-catalog'),
+    path('translation/', include('rosetta.urls')),
+    path('health_check/', include('health_check.urls'))
 ]
 
 if settings.DEBUG:  # pragma: no cover
-    urlpatterns.append(url(r'^api/devdocs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)))
+    urlpatterns.append(path('api/devdocs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)))
 
 api_info = openapi.Info(
     title=API_TITLE,
@@ -47,12 +48,12 @@ api_info = openapi.Info(
 )
 
 api_info_router = SimpleRouter()
-api_info_router.register('api/countryoffices', CountryOfficeViewSet, base_name='countryoffice')
-api_info_router.register('api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
-api_info_router.register('api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
-api_info_router.register('api/organisations', OrganisationViewSet, base_name='organisation')
-api_info_router.register('api/kpi/solutions', SolutionKPIViewSet, base_name="solutions-kpi")
-api_info_router.register('api/kpi/country-inclusion', CountryInclusionKPIViewSet, base_name="country-inclusion-kpi")
+api_info_router.register('api/countryoffices', CountryOfficeViewSet, basename='countryoffice')
+api_info_router.register('api/landing-country', CountryLandingPageViewSet, basename='landing-country'),
+api_info_router.register('api/landing-country', CountryLandingListPageViewSet, basename='landing-country'),
+api_info_router.register('api/organisations', OrganisationViewSet, basename='organisation')
+api_info_router.register('api/kpi/solutions', SolutionKPIViewSet, basename="solutions-kpi")
+api_info_router.register('api/kpi/country-inclusion', CountryInclusionKPIViewSet, basename="country-inclusion-kpi")
 
 api_info_urlpatterns = [
     path("api/", include("search.urls")),

@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
 from core.utils import send_mail_wrapper
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class PasswordHTMLEmailResetForm(PasswordResetForm):

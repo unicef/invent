@@ -1,6 +1,6 @@
 from django.db import models
 from core.models import GetObjectOrNoneQueryset
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 
 
 class LogBase(models.Model):

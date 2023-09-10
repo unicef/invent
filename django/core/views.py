@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from project.permissions import InTeamOrReadOnly, IsGPOOrReadOnly, IsGPOOrManagerPortfolio, IsReviewable, \
     IsReviewerGPOOrManager, IsGPOOrManagerProjectPortfolioState, IsGPOOrManagerOfAtLeastOnePortfolio,IsCountryOfficeFocalPoint
@@ -30,47 +30,47 @@ class TokenAuthMixin:
     Mixin class for defining general permission and authentication settings on
     REST Framework Class Based Views.
     """
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated,)
 
 
 class TeamTokenAuthMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
 class GPOAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrReadOnly)
 
 
 class CountryOfficeTokenAuthMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsCountryOfficeFocalPoint)
 
 
 class PortfolioAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerPortfolio)
 
 
 class SolutionAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerOfAtLeastOnePortfolio)
 
 
 class ProjectPortfolioStateAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsGPOOrManagerProjectPortfolioState)
 
 
 class ReviewScoreAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsReviewerGPOOrManager)
 
 
 class ReviewScoreReviewerAccessMixin:
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsReviewable)
 
 
@@ -108,10 +108,13 @@ def get_object_or_400(cls, error_message="No such object.", select_for_update=Fa
         error_message: to be used in the error response if no such object
         kwargs: filter parameters for object query
     """
-    obj = cls.objects.get_object_or_none(select_for_update, **kwargs)
-    if obj:
+    try:
+        if select_for_update:
+            obj = cls.objects.select_for_update().get(**kwargs)
+        else:
+            obj = cls.objects.get(**kwargs)
         return obj
-    else:
+    except cls.DoesNotExist:
         raise Http400(error_message)
 
 
@@ -163,7 +166,7 @@ class StaticDataView(GenericAPIView):
         languages = []
         for code, name in settings.LANGUAGES:
             languages.append({'code': code,
-                              'name': ugettext(name),
+                              'name': gettext(name),
                               'flag': self.flag_mapping.get(code, '')})
         return languages
 
