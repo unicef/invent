@@ -94,5 +94,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_REDIRECT_EXEMPT = [r'^health_check']
 
-# csrf_trusted_origins = env.str('CSRF_TRUSTED_ORIGINS', default='')
-CSRF_TRUSTED_ORIGINS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://invent-dev.unitst.org/',' https://invent-tst.unitst.org/', 'https://invent-uat.unitst.org/', 'https://invent.unicef.org/']
