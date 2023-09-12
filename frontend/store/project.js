@@ -45,7 +45,7 @@ export const getters = {
       // initial set
       if ('stages' in rootState.projects.projectStructure) {
         return rootState.projects.projectStructure.stages.map((item) => {
-          const included = state.stages && state.stages.find((i) => i.id === item.id)
+          const included = state.stages?.find((i) => i.id === item.id)
           if (included) {
             return {
               ...item,
@@ -152,7 +152,7 @@ export const getters = {
   getCountryAnswerDetails: (state, getters) => (id) => getters.getCountryAnswers.find((ca) => ca.question_id === id),
   getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
     const country = rootGetters['countries/getCountryDetails'](getters.getCountry)
-    if (country && country?.country_questions) {
+    if (country?.country_questions) {
       return country.country_questions.map((cq) => {
         const answer = getters.getCountryAnswerDetails(cq.id)
         return { question_id: cq.id, answer: answer ? answer.answer : [] }
@@ -172,9 +172,6 @@ export const getters = {
 
 export const actions = {
   async loadProject({ state, commit, dispatch, rootGetters }, id) {
-    // const userProject = rootGetters['projects/getUserProjectList'].find((p) => p.id === id)
-    // const { data } =
-    //   userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`)
     const { data } = await this.$axios.get(`/api/projects/${id}/`)
     commit('SET_ORIGINAL', Object.freeze(data))
     const clean = cleanState()
@@ -184,7 +181,7 @@ export const actions = {
       unicefDonor = rootGetters['system/getUnicefDonor']
     }
     const donorsToFetch = new Set([unicefDonor.id])
-    // if (data.draft) {
+    // if data.draft
     if (data.draft && !isEmpty(data.draft)) {
       const draft = { ...clean, ...apiReadParser(data.draft) }
       draft.donors.forEach((d) => donorsToFetch.add(d))
@@ -192,7 +189,7 @@ export const actions = {
     } else {
       commit('INIT_PROJECT', clean)
     }
-    // if (data.published) {
+    // if data.published
     if (data.published && !isEmpty(data.published)) {
       const published = { ...clean, ...apiReadParser(data.published) }
       published.donors.forEach((d) => donorsToFetch.add(d))
@@ -300,19 +297,20 @@ export const actions = {
   //   commit('SET_CONTACT_NAME', value)
   // },
   setContactEmail({ commit, rootGetters, state }, value) {
-    if ((value === '') | (value === null)) {
+    if (value === '' || value === null) {
       commit('SET_CONTACT_NAME', '')
     } else {
-      const name = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value).name
-      commit('SET_CONTACT_NAME', name ? name : '')
+      const name = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
+        ?.name
+      commit('SET_CONTACT_NAME', name || '')
     }
 
     //if old value was null and new email add user to team
     if (state.contact_email === '' || state.contact_email === null) {
       if (value !== '' && value !== null) {
         const newId = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
-          .id
-        commit('SET_TEAM', [...state.team, newId])
+          ?.id
+        commit('SET_TEAM', newId ? [...state.team, newId] : state.team)
       }
     }
 
@@ -321,7 +319,7 @@ export const actions = {
       if (state.contact_email !== '' && state.contact_email !== null) {
         const oldId = rootGetters['system/getUserProfilesNoFilter'].find(
           (userProfile) => userProfile.email === state.contact_email
-        ).id
+        )?.id
         const removedOld = state.team.filter((userId) => userId !== oldId)
 
         commit('SET_TEAM', removedOld)
@@ -333,11 +331,11 @@ export const actions = {
         if (value !== state.contact_email) {
           const oldId = rootGetters['system/getUserProfilesNoFilter'].find(
             (userProfile) => userProfile.email === state.contact_email
-          ).id
+          )?.id
           const removedOld = state.team.filter((userId) => userId !== oldId)
           const newId = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
-            .id
-          commit('SET_TEAM', [...removedOld, newId])
+            ?.id
+          commit('SET_TEAM', newId ? [...removedOld, newId] : removedOld)
         }
       }
     }
@@ -645,7 +643,7 @@ export const actions = {
     let preparedStages = []
     if ('stages' in rootState.projects.projectStructure) {
       preparedStages = rootState.projects.projectStructure.stages.map((item) => {
-        const included = project.stages && project.stages.find((i) => i.id === item.id)
+        const included = project.stages?.find((i) => i.id === item.id)
         if (included) {
           return {
             ...item,
