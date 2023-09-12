@@ -15,7 +15,7 @@
       :key="item.id"
       :label="item.label"
       :value="item.id"
-      :disabled="item.disabled ? item.disabled : false"
+      :disabled="item.disabled"
       ><span style="float: left">{{ item.label }}</span>
       <br />
       <span class="email"
@@ -67,9 +67,9 @@ export default {
       get() {
         /**Get user ids [numArray] and translate to email array from user list, if omit email string exist we find if user id and remove it */
         if (this.omit) {
-          const omitId = this.userProfiles.find((user) => user.email === this.omit).id
+          const omitId = this.userProfiles.find((user) => user.email === this.omit)?.id
           const restId = this.value.filter((userId) => userId !== omitId)
-          return [omitId, ...restId]
+          return omitId ? [omitId, ...restId] : this.value
         } else {
           return this.value
         }
