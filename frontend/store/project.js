@@ -300,7 +300,8 @@ export const actions = {
     if (value === '' || value === null) {
       commit('SET_CONTACT_NAME', '')
     } else {
-      const name = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value).name
+      const name = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
+        ?.name
       commit('SET_CONTACT_NAME', name || '')
     }
 
@@ -308,8 +309,8 @@ export const actions = {
     if (state.contact_email === '' || state.contact_email === null) {
       if (value !== '' && value !== null) {
         const newId = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
-          .id
-        commit('SET_TEAM', [...state.team, newId])
+          ?.id
+        commit('SET_TEAM', newId ? [...state.team, newId] : state.team)
       }
     }
 
@@ -318,7 +319,7 @@ export const actions = {
       if (state.contact_email !== '' && state.contact_email !== null) {
         const oldId = rootGetters['system/getUserProfilesNoFilter'].find(
           (userProfile) => userProfile.email === state.contact_email
-        ).id
+        )?.id
         const removedOld = state.team.filter((userId) => userId !== oldId)
 
         commit('SET_TEAM', removedOld)
@@ -330,11 +331,11 @@ export const actions = {
         if (value !== state.contact_email) {
           const oldId = rootGetters['system/getUserProfilesNoFilter'].find(
             (userProfile) => userProfile.email === state.contact_email
-          ).id
+          )?.id
           const removedOld = state.team.filter((userId) => userId !== oldId)
           const newId = rootGetters['system/getUserProfilesNoFilter'].find((userProfile) => userProfile.email === value)
-            .id
-          commit('SET_TEAM', [...removedOld, newId])
+            ?.id
+          commit('SET_TEAM', newId ? [...removedOld, newId] : removedOld)
         }
       }
     }

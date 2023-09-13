@@ -108,38 +108,39 @@ https://templates.mailchimp.com/resources/inline-css/ -->
 
                         <!-- OBJECT DECLINED -->
                         {% elif type == "object_declined" %}
-                        <h1 style="font-family: arial, sans-serif;font-weight: 700;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 20px;">`{{ object_name }}` {% trans "has been declined" %}</h1>
                         <h2 style="font-family: arial, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 16px;">{% trans "Dear" %} {{ full_name }},</h2>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing " %}
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">
                           {% if initiative_name and initiative_id %}
+                          {% trans " When editing " %}
                           <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank" style="color: #00AEEF;text-decoration: underline;"><b>{{ initiative_name }}</b></a>
                           {% else %}
-                          {% trans "initiative" %}
+                          {% trans " When creating an initiative" %}
                           {% endif %}
-                           {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
+                           {% trans " you requested the addition of a new " %} {{ field_name }} : <b>{{ object_name }}</b></p>
                         <br>
                         <p class="wrap-text" style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;display: inline-block;width: 580px;overflow-wrap: break-word !important;">{% trans " This request has been declined. " %}
                         <br>
                         <b>{{ comment }}</b></p>
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans "If you have any questions, please reach out to your INVENT Focal point or to the INVENT team."%}</p>
                         <!-- /OBJECT DECLINED -->
 
 
                         <!-- OBJECT APPROVED -->
                         {% elif type == "object_approved" %}
-                        <h1 style="font-family: arial, sans-serif;font-weight: 700;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 20px;">`{{ object_name }}` {% trans "has been approved" %}</h1>
                         <h2 style="font-family: arial, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;margin-top: 10px;margin-bottom: 20px;font-size: 16px;">{% trans "Dear" %} {{ full_name }},</h2>
-                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans " When editing " %}
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">
                           {% if initiative_name and initiative_id %}
+                          {% trans " When editing " %}
                           <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank" style="color: #00AEEF;text-decoration: underline;"><b>{{ initiative_name }}</b></a>
                           {% else %}
-                          {% trans "initiative" %}
+                          {% trans " When creating an initiative" %}
                           {% endif %}
-                           {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
+                           {% trans " you requested the addition of a new " %} {{ field_name }} : <b>{{ object_name }}</b></p>
                         <br>
                         <p class="wrap-text" style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;display: inline-block;width: 580px;overflow-wrap: break-word !important;">{% trans " This request has been approved. " %}
                         <br>
                         <b>{{ comment }}</b></p>
-                        
+                        <p style="font-family: arial, sans-serif;font-size: 14px;font-weight: normal;margin: 0;margin-bottom: 20px;padding: 0;">{% trans "If you have any questions, please reach out to your INVENT Focal point or to the INVENT team."%}</p>
                         <!-- /OBJECT APPROVED -->
 
 

@@ -420,38 +420,39 @@
 
                         <!-- OBJECT DECLINED -->
                         {% elif type == "object_declined" %}
-                        <h1>`{{ object_name }}` {% trans "has been declined" %}</h1>
                         <h2>{% trans "Dear" %} {{ full_name }},</h2>
-                        <p>{% trans " When editing " %}
+                        <p>
                           {% if initiative_name and initiative_id %}
+                          {% trans " When editing " %}
                           <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank"><b>{{ initiative_name }}</b></a>
                           {% else %}
-                          {% trans "initiative" %}
+                          {% trans " When creating an initiative" %}
                           {% endif %}
-                           {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
+                           {% trans " you requested the addition of a new " %} {{ field_name }} : <b>{{ object_name }}</b></p>
                         <br>
                         <p class="wrap-text">{% trans " This request has been declined. " %}
                         <br>
                         <b>{{ comment }}</b></p>
+                        <p>{% trans "If you have any questions, please reach out to your INVENT Focal point or to the INVENT team."%}</p>
                         <!-- /OBJECT DECLINED -->
 
 
                         <!-- OBJECT APPROVED -->
                         {% elif type == "object_approved" %}
-                        <h1>`{{ object_name }}` {% trans "has been approved" %}</h1>
                         <h2>{% trans "Dear" %} {{ full_name }},</h2>
-                        <p>{% trans " When editing " %}
+                        <p>
                           {% if initiative_name and initiative_id %}
+                          {% trans " When editing " %}
                           <a href="{% site_url %}/{{ language }}/-/initiatives/{{ initiative_id }}/published" target="_blank"><b>{{ initiative_name }}</b></a>
                           {% else %}
-                          {% trans "initiative" %}
+                          {% trans " When creating an initiative" %}
                           {% endif %}
-                           {% trans " you requested the addition of a new " %} {{ field_name }} : {{ object_name }}</p>
+                           {% trans " you requested the addition of a new " %} {{ field_name }} : <b>{{ object_name }}</b></p>
                         <br>
                         <p class="wrap-text">{% trans " This request has been approved. " %}
                         <br>
                         <b>{{ comment }}</b></p>
-                        
+                        <p>{% trans "If you have any questions, please reach out to your INVENT Focal point or to the INVENT team."%}</p>
                         <!-- /OBJECT APPROVED -->
 
 

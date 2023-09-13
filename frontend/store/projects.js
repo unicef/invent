@@ -405,9 +405,9 @@ export const actions = {
   },
   async setNewItem({ commit, dispatch }, { type, name, project }) {
     try {
-      const { data } = await this.$axios.post(`/api/projects/${type}-request/`, {
+      const { data } = await this.$axios.post(`/api/projects/${type}-request/`, { 
         name,
-        project,
+        project 
       })
       await dispatch('loadProjectStructure', true)
       return data.id

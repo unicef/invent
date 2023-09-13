@@ -157,7 +157,7 @@ class AzureUserManagement:
             if user_data.get("mail")
         ]
         existing_users = User.objects.filter(email__in=user_emails_in_batch)
-        existing_users_dict = {user.email: user for user in existing_users}
+        existing_users_dict = {user.email.lower(): user for user in existing_users}
         # for faster "in" checks
         existing_users_set = set(existing_users_dict.keys())
 
