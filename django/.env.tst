@@ -17,6 +17,6 @@ API_MAINTAINER=MLSWORDATHINVENT@sword-group.com
 EMAIL_VALIDATOR_REGEX='(unicef.org|pulilab.com)$'
 ENABLE_API_REGISTRATION=True
 DEPLOY_VERSION="4.0.0"
-POSTGRES_USER=tstinventusr@pgsql-14-reserved-invent-db-devstg
+POSTGRES_USER=tstinventusr
 DATABASE_HOST=pgsql-14-reserved-invent-db-devstg.postgres.database.azure.com
 DATABASE_NAME=inventdb_tst
