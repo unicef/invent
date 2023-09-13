@@ -1128,6 +1128,8 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
         help_text="Override country based calculation", null=True, blank=True
     )
     is_active = models.BooleanField()
+    set_aside_2021 = models.BooleanField(default=False)
+    set_aside_2022 = models.BooleanField(default=False)
 
     # Properties
     @property
@@ -1253,7 +1255,9 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
             'portfolio_problem_statements': [
                 {'portfolio_id': 1, 'problem_statements': [3, 4]},
                 {'portfolio_id': 2, 'problem_statements': [4, 5]}
-            ]
+            ],
+            'set_aside_2021': True,
+            'set_aside_2022': False,
         }
         """
         # Use the Prefetch object to fetch related objects efficiently
@@ -1282,6 +1286,8 @@ class Solution(ExtendedNameOrderedSoftDeletedModel):
             "people_reached": self.people_reached,
             "country_solutions": list(country_solutions),
             "portfolio_problem_statements": self.get_portfolio_problem_statements(),
+            "set_aside_2021": self.set_aside_2021,
+            "set_aside_2022": self.set_aside_2022,
         }
 
         return data

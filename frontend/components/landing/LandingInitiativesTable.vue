@@ -216,7 +216,7 @@ export default {
           } else {
             //if last stage is not end phase then update current phase and return initiative
             const phOrder = this.allPhases.find((phase) => phase.id === lastStageId)?.order
-            const hasNextPhase = this.allPhases.find((phase) => phase.order === phOrder + 1) ? true : false
+            const hasNextPhase = !!this.allPhases.find((phase) => phase.order === phOrder + 1)
             project.current_phase = hasNextPhase
               ? this.allPhases.find((phase) => phase.order === phOrder + 1)?.id
               : lastStageId
@@ -289,11 +289,10 @@ export default {
         sectorInitiatives.map((initiative) => {
           const lastUpdated = this.calcLastUpdated(initiative)
 
-          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale
 
           /*Create the card and add it to tableData **/
-          const regionId = this.unicefOffice.find((office) => office.id === initiative.country_office)?.region
-          const regionName = this.unicef_regions.find((region) => region.id === regionId)?.name
+
           const propName = this.getStage(initiative.current_phase)
           if (propName && dataObj.hasOwnProperty(propName.toString())) {
             dataObj[propName.toString()] = [
@@ -301,7 +300,7 @@ export default {
               {
                 ...initiative,
                 lastUpdated: lastUpdated,
-                title: regionName,
+                title: this.getUnicefOffice(initiative.country_office),
                 stale: isStale,
               },
             ]
@@ -329,7 +328,7 @@ export default {
         sectorInitiatives.map((initiative) => {
           const lastUpdated = this.calcLastUpdated(initiative)
 
-          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale ? true : false
+          let isStale = differenceInDays(new Date(), lastUpdated) > this.daysStale
 
           /*Create the card and add it to tableData **/
           if (dataObj.hasOwnProperty(`${initiative.current_phase}`)) {
@@ -338,7 +337,7 @@ export default {
               {
                 ...initiative,
                 lastUpdated: lastUpdated,
-                title: this.unicefOffice.find((office) => office.id === initiative.country_office)?.name.split(':')[1],
+                title: this.getUnicefOffice(initiative.country_office),
                 stale: isStale,
               },
             ]
@@ -352,6 +351,9 @@ export default {
     },
   },
   methods: {
+    getUnicefOffice(country_office) {
+      return this.unicefOffice.find((office) => office.id === country_office)?.name.split(':')[1]
+    },
     deselectAllSectors() {
       this.$store.dispatch('phasesStagesBoard/deselectAll')
     },
@@ -372,7 +374,7 @@ export default {
       )
     },
     calcLastUpdated(initiative) {
-      if (initiative.stages && initiative.stages.length > 0) {
+      if (initiative.stages?.length > 0) {
         /*
           Some initiatives have equal current_phase as the last phase in stages field
           Some other initiatives have equal current_phase -1 as the last phase in stages field
