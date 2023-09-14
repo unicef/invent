@@ -4,6 +4,7 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import UserProfile
 from azure_services.views import AzureOAuth2Adapter
@@ -25,29 +26,31 @@ class AzureLogin(SocialLoginView):
     client_class = OAuth2Client
 
     def login(self):
-        super_result = super().login()
+        print('inside AzureLogin')
+        self.user = self.serializer.validated_data['user']
 
-        if self.user and self.access_token:
-            user_profile = UserProfile.objects.get(user=self.user)
-            serialized_user = {
+        # Generate JWT
+        refresh = RefreshToken.for_user(self.user)
+        access_token = str(refresh.access_token)
+
+        # Structure the Response
+        response_data = {
+            "token": access_token,
+            "user": {
                 "pk": self.user.pk,
                 "username": self.user.username,
                 "email": self.user.email,
                 "first_name": self.user.first_name,
                 "last_name": self.user.last_name,
-                "user_profile_id": user_profile.pk,
-                "account_type": user_profile.account_type,
-                "is_superuser": self.user.is_superuser,
-            }
-            
-            data = {
-                "token": self.access_token,
-                "user": serialized_user
-            }
-            
-            return Response(data, status=super_result.status_code)
-        
-        return super_result
+            },
+            "user_profile_id": self.user.profile.pk,  # Adjust as needed
+            "account_type": self.user.profile.account_type,  # Adjust as needed
+            "is_superuser": self.user.is_superuser
+        }
+
+        print(f'reponse data in AzureLogin: {response_data}')
+
+        return Response(response_data)
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover

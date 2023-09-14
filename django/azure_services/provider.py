@@ -17,6 +17,7 @@ class AzureAccount(ProviderAccount):
                                 self.account.extra_data.get('last_name', ''))
         if name.strip() != '':
             return name
+        print(f'AzureAccount: {super(AzureAccount, self).to_str()}')
         return super(AzureAccount, self).to_str()
 
 
@@ -37,6 +38,14 @@ class AzureProvider(OAuth2Provider):
 
     def extract_common_fields(self, data):
         email = data.get('mail')
+        print('extract_common_fields:', {dict(email=email,
+                    username=email,
+                    last_name=data.get('displayName'),
+                    first_name=data.get('givenName'),
+                    job_title=data.get('jobTitle'),
+                    department=data.get('department'),
+                    country=data.get('country')
+                    )})
         return dict(email=email,
                     username=email,
                     last_name=data.get('displayName'),
