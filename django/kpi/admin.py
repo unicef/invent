@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.db.models import JSONField
 from jsoneditor.forms import JSONEditor
 
-from core.admin.custom_admin import custom_admin_site
 from .models import SolutionLog, CountryInclusionLog
 
 
@@ -20,5 +19,5 @@ class CountryInclusionLogAdmin(admin.ModelAdmin):
     }
 
 
-custom_admin_site.register(SolutionLog, SolutionLogAdmin)
-custom_admin_site.register(CountryInclusionLog, CountryInclusionLogAdmin)
+admin.site.register(SolutionLog, SolutionLogAdmin)
+admin.site.register(CountryInclusionLog, CountryInclusionLogAdmin)

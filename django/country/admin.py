@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib import admin
 
 from core.admin import AllObjectsAdmin
-from core.admin.custom_admin import custom_admin_site
 from .models import Country, Donor, CountryOffice, RegionalOffice, Currency
 from .resources import CountryOfficeResource, RegionalOfficeResource, CountryResource
 
@@ -83,8 +82,8 @@ class CountryOfficeAdmin(ExportActionMixin, admin.ModelAdmin):
     get_user_emails.short_description = "Focal Points"
 
 
-custom_admin_site.register(CountryOffice, CountryOfficeAdmin)
-custom_admin_site.register(Donor, DonorAdmin)
-custom_admin_site.register(Currency, CurrencyAdmin)
-custom_admin_site.register(RegionalOffice, RegionalOfficeAdmin)
-custom_admin_site.register(Country, CountryAdmin)
+admin.site.register(CountryOffice, CountryOfficeAdmin)
+admin.site.register(Donor, DonorAdmin)
+admin.site.register(Currency, CurrencyAdmin)
+admin.site.register(RegionalOffice, RegionalOfficeAdmin)
+admin.site.register(Country, CountryAdmin)

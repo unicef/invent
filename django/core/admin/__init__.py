@@ -18,7 +18,6 @@ from modeltranslation.translator import translator
 from adminsortable2.admin import SortableAdminMixin
 from user.models import UserProfile
 from .widgets import AdminArrayField
-from .custom_admin import custom_admin_site
 
 from import_export.admin import ExportActionMixin
 from core.resources import UserResource
@@ -160,22 +159,22 @@ class NewsFeedAdmin(SortableAdminMixin, TranslationAdmin):
     list_display = ("__str__", "order", "link", "visible")
 
 
-custom_admin_site.login_form = CustomAuthenticationForm
-if User in custom_admin_site._registry:
-    custom_admin_site.unregister(User)
-custom_admin_site.register(User, CustomUserAdmin)
-if EmailAddress in custom_admin_site._registry:
-    custom_admin_site.unregister(EmailAddress)
-if EmailConfirmation in custom_admin_site._registry:
-    custom_admin_site.unregister(EmailConfirmation)
-if SocialAccount in custom_admin_site._registry:
-    custom_admin_site.unregister(SocialAccount)
-if SocialToken in custom_admin_site._registry:
-    custom_admin_site.unregister(SocialToken)
-if SocialApp in custom_admin_site._registry:
-    custom_admin_site.unregister(SocialApp)
-if ImportJob in custom_admin_site._registry:
-    custom_admin_site.unregister(ImportJob)
+admin.site.login_form = CustomAuthenticationForm
+if User in admin.site._registry:
+    admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+if EmailAddress in admin.site._registry:
+    admin.site.unregister(EmailAddress)
+if EmailConfirmation in admin.site._registry:
+    admin.site.unregister(EmailConfirmation)
+if SocialAccount in admin.site._registry:
+    admin.site.unregister(SocialAccount)
+if SocialToken in admin.site._registry:
+    admin.site.unregister(SocialToken)
+if SocialApp in admin.site._registry:
+    admin.site.unregister(SocialApp)
+if ImportJob in admin.site._registry:
+    admin.site.unregister(ImportJob)
 
 # renaming the admin section name
 iec = proj_apps.get_app_config("import_export_celery")
@@ -183,7 +182,7 @@ iec.verbose_name = "Generate Export"
 
 # the order of the loaded apps might change, and here we check if its registered or not
 try:
-    custom_admin_site.unregister(ExportJob)
+    admin.site.unregister(ExportJob)
 except NotRegistered:
     pass
 
@@ -207,10 +206,10 @@ class ExportJobAdminNew(ExportJobAdmin):
 
 # the order of loaded apps might require this try
 try:
-    custom_admin_site.unregister(ExportJob)
+    admin.site.unregister(ExportJob)
 except NotRegistered:
     pass
 
 # after the unregistering we register the django-import-export-celery ExportJobAdmin again
-custom_admin_site.register(ExportJob, ExportJobAdminNew)
-custom_admin_site.register(NewsItem, NewsFeedAdmin)
+admin.site.register(ExportJob, ExportJobAdminNew)
+admin.site.register(NewsItem, NewsFeedAdmin)
