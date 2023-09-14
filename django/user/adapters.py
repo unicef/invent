@@ -54,7 +54,7 @@ class AzureLogin(SocialLoginView):
                 "account_type": getattr(user, 'userprofile', {}).get('account_type', None),
                 "is_superuser": user.is_superuser
             }
-            
+            print(f'custom_data: {custom_data}')
             response.data = custom_data
         
         return response
