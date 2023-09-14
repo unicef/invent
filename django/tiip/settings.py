@@ -64,9 +64,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.azure',
     'azure_services',
     'dj_rest_auth',
+    'dj_rest_auth.registration',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -199,15 +199,23 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'dj_rest_auth.authentication.AllAuthJWTAuthentication',
         'user.authentication.BearerTokenAuthentication',
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
 }
 
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Token',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+def jwt_response_payload_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user_profile_id': user.userprofile.id if hasattr(user, 'userprofile') else None,
+        'account_type': user.userprofile.account_type if hasattr(user, 'userprofile') else None,
+        'is_superuser': user.is_superuser
+    }
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
+    'JWT_AUTH_HEADER_PREFIX': 'Token',
+    'JWT_EXPIRATION_DELTA': timedelta(days=7)
 }
 
 # django-allauth and rest-auth settings

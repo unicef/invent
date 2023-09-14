@@ -3,8 +3,6 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from dj_rest_auth.registration.views import SocialLoginView
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import UserProfile
 from azure_services.views import AzureOAuth2Adapter
@@ -24,33 +22,6 @@ class AzureLogin(SocialLoginView):
     adapter_class = AzureOAuth2Adapter
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
-
-    def login(self):
-        print('inside AzureLogin')
-        self.user = self.serializer.validated_data['user']
-
-        # Generate JWT
-        refresh = RefreshToken.for_user(self.user)
-        access_token = str(refresh.access_token)
-
-        # Structure the Response
-        response_data = {
-            "token": access_token,
-            "user": {
-                "pk": self.user.pk,
-                "username": self.user.username,
-                "email": self.user.email,
-                "first_name": self.user.first_name,
-                "last_name": self.user.last_name,
-            },
-            "user_profile_id": self.user.profile.pk,  # Adjust as needed
-            "account_type": self.user.profile.account_type,  # Adjust as needed
-            "is_superuser": self.user.is_superuser
-        }
-
-        print(f'reponse data in AzureLogin: {response_data}')
-
-        return Response(response_data)
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover

@@ -60,8 +60,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         profile_data = resp.json()
         extra_data.update(profile_data)
 
-        print(f'profile_data AzureOAuth2Adapter: {profile_data}')
-
         return self.get_provider().sociallogin_from_response(request, extra_data)
 
 
