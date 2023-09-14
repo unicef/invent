@@ -3,6 +3,7 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from dj_rest_auth.registration.views import SocialLoginView
+from rest_framework.response import Response
 
 from .models import UserProfile
 from azure_services.views import AzureOAuth2Adapter
@@ -22,6 +23,31 @@ class AzureLogin(SocialLoginView):
     adapter_class = AzureOAuth2Adapter
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
+
+    def login(self):
+        super_result = super().login()
+
+        if self.user and self.access_token:
+            user_profile = UserProfile.objects.get(user=self.user)
+            serialized_user = {
+                "pk": self.user.pk,
+                "username": self.user.username,
+                "email": self.user.email,
+                "first_name": self.user.first_name,
+                "last_name": self.user.last_name,
+                "user_profile_id": user_profile.pk,
+                "account_type": user_profile.account_type,
+                "is_superuser": self.user.is_superuser,
+            }
+            
+            data = {
+                "token": self.access_token,
+                "user": serialized_user
+            }
+            
+            return Response(data, status=super_result.status_code)
+        
+        return super_result
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
