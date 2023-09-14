@@ -69,7 +69,6 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_simplejwt',
     'django_extensions',
     'drf_yasg',
     'ordered_model',
@@ -199,12 +198,23 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'user.authentication.BearerTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'user.authentication.BearerTokenAuthentication'
     ),
 }
 
+
+def jwt_response_payload_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user_profile_id': user.userprofile.id if hasattr(user, 'userprofile') else None,
+        'account_type': user.userprofile.account_type if hasattr(user, 'userprofile') else None,
+        'is_superuser': user.is_superuser
+    }
+
+
 JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
     'JWT_AUTH_HEADER_PREFIX': 'Token',
     'JWT_EXPIRATION_DELTA': timedelta(days=7)
 }
