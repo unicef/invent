@@ -3,8 +3,11 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from dj_rest_auth.registration.views import SocialLoginView
+from rest_framework import status
+from rest_framework.response import Response
 
 from .models import UserProfile
+from .views import CustomTokenObtainPairSerializer
 from azure_services.views import AzureOAuth2Adapter
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -22,6 +25,39 @@ class AzureLogin(SocialLoginView):
     adapter_class = AzureOAuth2Adapter
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
+
+    def post(self, request, *args, **kwargs):
+        # Let the original post method do its work first (authentication)
+        response = super().post(request, *args, **kwargs)
+        
+        # If the user is successfully authenticated, the response will be 200 OK
+        if response.status_code == status.HTTP_200_OK:
+            user = self.user  # Assuming `self.user` is set after the authentication
+            
+            # Create a token using your custom logic
+            custom_token_serializer = CustomTokenObtainPairSerializer(data={})
+            custom_token_serializer.user = user
+            custom_token_serializer.is_valid(raise_exception=True)
+            token = custom_token_serializer.get_token(user)
+            
+            # Modify the response data
+            custom_data = {
+                "token": str(token),
+                "user": {
+                    "pk": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                },
+                "user_profile_id": getattr(user, 'userprofile', {}).get('id', None),
+                "account_type": getattr(user, 'userprofile', {}).get('account_type', None),
+                "is_superuser": user.is_superuser
+            }
+            
+            response.data = custom_data
+        
+        return response
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
