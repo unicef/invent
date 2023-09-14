@@ -14,7 +14,7 @@ router.register(r'organisations', views.OrganisationViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("", include("django.contrib.auth.urls")),
-    path('dj-rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
+    path('rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
     path('api-token-auth/', views.CustomTokenObtainPairView.as_view(), name='api_token_auth'),
     re_path(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
 ]
@@ -22,6 +22,6 @@ urlpatterns = [
 if settings.ENABLE_API_REGISTRATION:
     urlpatterns += [
         path("all-auth/", include("allauth.urls")),
-        path("dj-rest-auth/", include('dj_rest_auth.urls')),
-        path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
+        path("rest-auth/", include('dj_rest_auth.urls')),
+        path("rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     ]
