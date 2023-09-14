@@ -65,7 +65,7 @@
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
-          <DonorCustom
+          <!-- <DonorCustom
             ref="donorCustom"
             :use-publish-rules="usePublishRules"
             :draft-rules="draftRules"
@@ -73,7 +73,7 @@
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
-          />
+          /> -->
           <CountryCustom
             ref="countryCustom"
             :use-publish-rules="usePublishRules"

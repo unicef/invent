@@ -241,7 +241,7 @@
           />
         </collapsible-card>
 
-        <div v-if="donors && isEmptyArr(donors)" id="donorcustom">
+        <!-- <div v-if="donors && isEmptyArr(donors)" id="donorcustom">
           <collapsible-card v-for="donor in donors" :key="donor.id" :title="customFieldsName(donor.name)">
             <custom-readonly-field
               v-for="question in donor.donor_questions"
@@ -253,7 +253,7 @@
               :donor-id="donor.id"
             />
           </collapsible-card>
-        </div>
+        </div> -->
       </el-col>
       <el-col :span="6">
         <ProjectNavigation
