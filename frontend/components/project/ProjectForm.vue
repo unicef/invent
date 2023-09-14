@@ -243,7 +243,7 @@ export default {
         this.$refs.stageOverview.validate(),
         this.$refs.partners.validate(),
         this.$refs.technology.validate(),
-        this.$refs.donorCustom.validate(),
+        //this.$refs.donorCustom.validate(),
         this.$refs.countryCustom.validate(),
       ])
       console.log('root validations', validations)
@@ -257,7 +257,7 @@ export default {
       this.$refs.stageOverview.clear()
       this.$refs.partners.clear()
       this.$refs.technology.clear()
-      this.$refs.donorCustom.clear()
+      //this.$refs.donorCustom.clear()
       this.$refs.countryCustom.clear()
     },
     async doSaveDraft() {
