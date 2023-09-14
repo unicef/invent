@@ -3,8 +3,11 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from dj_rest_auth.registration.views import SocialLoginView
+from rest_framework.response import Response
 
 from .models import UserProfile
+from .serializers import ProfileJWTSerializer
+from .views import CustomTokenObtainPairSerializer
 from azure_services.views import AzureOAuth2Adapter
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -23,6 +26,19 @@ class AzureLogin(SocialLoginView):
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
 
+    def login(self, request, user):
+        # Generate the token using your CustomTokenObtainPairSerializer or a similar serializer
+        token_data = CustomTokenObtainPairSerializer.get_token(user)
+        
+        # Populate the response using your ProfileJWTSerializer or manually
+        serialized_data = ProfileJWTSerializer({
+            'token': str(token_data),
+            'user_profile_id': user.userprofile.id if hasattr(user, 'userprofile') else None,
+            'account_type': user.userprofile.account_type if hasattr(user, 'userprofile') else None,
+            'is_superuser': user.is_superuser
+        })
+
+        return Response(serialized_data.data)
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
     def save_user(self, request, sociallogin, form=None):
