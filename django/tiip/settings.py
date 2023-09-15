@@ -203,6 +203,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+REST_AUTH = {
+    'USE_JWT': True,
+}
+
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Token',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
@@ -217,10 +221,6 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-
-REST_AUTH = {
-    'USE_JWT': True,
-}
 
 REST_USE_JWT = True
 REST_AUTH_SERIALIZERS = {
