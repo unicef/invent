@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'django_extensions',
     'drf_yasg',
     'ordered_model',
@@ -217,6 +218,11 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
     'JWT_AUTH_HEADER_PREFIX': 'Token',
     'JWT_EXPIRATION_DELTA': timedelta(days=7)
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Token',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
 }
 
 # django-allauth and rest-auth settings
