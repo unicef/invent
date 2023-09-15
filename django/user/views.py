@@ -7,6 +7,7 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import AccessToken
 
 from core.views import TokenAuthMixin
 from .serializers import (
@@ -66,12 +67,10 @@ class OrganisationViewSet(
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    print('inside CustomTokenObtainPairSerializer')
     # This method is used to generate and return the JWT token
     @classmethod
     def get_token(cls, user):
-        print('inside CustomTokenObtainPairSerializer.get_token')
-        token = super().get_token(user)
+        token = AccessToken.for_user(user)
 
         # Add custom claims
         if hasattr(user, "userprofile"):
@@ -87,11 +86,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     # This method is used to validate the token and structure the response data
     def validate(self, attrs):
-        print('inside CustomTokenObtainPairSerializer.validate')
         # We call the superclass's method to do the standard validation and token generation
-        print("Received attributes:", attrs)
         data = super().validate(attrs)
-        print(f'data before: {data}')
         user_profile = getattr(self.user, "userprofile", None)
         if user_profile:
             user_profile_id = user_profile.id
@@ -108,7 +104,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             "account_type": account_type,
             "is_superuser": self.user.is_superuser,
         }
-        print(f'data after: {data}')
         return data
 
 
