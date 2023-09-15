@@ -235,6 +235,11 @@ AUTHENTICATION_BACKENDS = (
 )
 
 REST_USE_JWT = True
+
+REST_AUTH = {
+    'USE_JWT': True,
+}
+
 REST_AUTH_SERIALIZERS = {
     'JWT_SERIALIZER': 'user.serializers.ProfileJWTSerializer',
     # 'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
