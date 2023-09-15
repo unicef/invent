@@ -3,6 +3,7 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from dj_rest_auth.registration.views import SocialLoginView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import UserProfile
 from azure_services.views import AzureOAuth2Adapter
@@ -19,6 +20,7 @@ class DefaultAccountAdapterCustom(DefaultAccountAdapter):
 
 
 class AzureLogin(SocialLoginView):
+    print('inside AzureLogin')
     adapter_class = AzureOAuth2Adapter
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
