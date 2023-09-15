@@ -37,7 +37,7 @@ class AzureProvider(OAuth2Provider):
 
     def extract_common_fields(self, data):
         email = data.get('mail')
-        data = dict(email=email,
+        return dict(email=email,
                     username=email,
                     last_name=data.get('displayName'),
                     first_name=data.get('givenName'),
@@ -45,7 +45,6 @@ class AzureProvider(OAuth2Provider):
                     department=data.get('department'),
                     country=data.get('country')
                     )
-        return data
 
 
 provider_classes = [AzureProvider]

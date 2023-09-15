@@ -66,13 +66,11 @@ class OrganisationViewSet(
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    print('inside CustomTokenObtainPairSerializer')
     # This method is used to generate and return the JWT token
     @classmethod
     def get_token(cls, user):
-        print('inside get_token')
         token = super().get_token(user)
-        print(f'token: {token}')
+
         # Add custom claims
         if hasattr(user, "userprofile"):
             token["user_profile_id"] = user.userprofile.id
@@ -87,9 +85,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     # This method is used to validate the token and structure the response data
     def validate(self, attrs):
-        print('inside validate')
         # We call the superclass's method to do the standard validation and token generation
         data = super().validate(attrs)
+
         user_profile = getattr(self.user, "userprofile", None)
         if user_profile:
             user_profile_id = user_profile.id
@@ -106,7 +104,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             "account_type": account_type,
             "is_superuser": self.user.is_superuser,
         }
-        print(f'data: {data}')
 
         return data
 

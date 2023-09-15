@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dj_rest_auth.serializers import LoginSerializer
+from dj_rest_auth.serializers import JWTSerializer
 from rest_framework.exceptions import ValidationError
 
 from country.models import Country
@@ -7,7 +7,7 @@ from project.models import Project, Portfolio, ReviewScore
 from .models import UserProfile, Organisation
 
 
-class ProfileJWTSerializer(LoginSerializer):
+class ProfileJWTSerializer(JWTSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """

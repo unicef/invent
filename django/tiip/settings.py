@@ -66,7 +66,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'azure_services',
     'dj_rest_auth',
-    'dj_rest_auth.registration',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -204,33 +203,9 @@ REST_FRAMEWORK = {
     ),
 }
 
-
-# def jwt_response_payload_handler(token, user=None, request=None):
-#     return {
-#         'token': token,
-#         'user_profile_id': user.userprofile.id if hasattr(user, 'userprofile') else None,
-#         'account_type': user.userprofile.account_type if hasattr(user, 'userprofile') else None,
-#         'is_superuser': user.is_superuser
-#     }
-
-
-# JWT_AUTH = {
-#     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
-#     'JWT_AUTH_HEADER_PREFIX': 'Token',
-#     'JWT_EXPIRATION_DELTA': timedelta(days=7)
-# }
-
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Token',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-    # "TOKEN_OBTAIN_SERIALIZER": "user.views.CustomTokenObtainPairSerializer",
-    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
-    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
 }
 
 # django-allauth and rest-auth settings
@@ -242,11 +217,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 REST_USE_JWT = True
-
-REST_AUTH = {
-    'USE_JWT': True,
-}
-
 REST_AUTH_SERIALIZERS = {
     'JWT_SERIALIZER': 'user.serializers.ProfileJWTSerializer',
     # 'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
