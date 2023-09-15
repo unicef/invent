@@ -4,11 +4,15 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.account.adapter import DefaultAccountAdapter
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.response import Response
+from rest_framework import status
+
 
 from .models import UserProfile
 from azure_services.views import AzureOAuth2Adapter
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from .views import CustomTokenObtainPairSerializer
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -20,11 +24,26 @@ class DefaultAccountAdapterCustom(DefaultAccountAdapter):
 
 
 class AzureLogin(SocialLoginView):
-    print('inside AzureLogin')
     adapter_class = AzureOAuth2Adapter
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
 
+    def complete_login(self, request, app, token, **kwargs):
+        login = self.adapter.complete_login(request, app, token, response=kwargs.get("response", {}), **kwargs)
+        login.token = CustomTokenObtainPairSerializer.get_token(login.user)
+        return login
+
+    def get_response(self):
+        # Your logic to build the response
+        serializer = CustomTokenObtainPairSerializer(data=self.user)
+        # Add validations here if needed
+        custom_data = {
+            "token": str(serializer.get_token(self.user)),
+            "user_profile_id": self.user.userprofile.id if hasattr(self.user, 'userprofile') else None,
+            "account_type": self.user.userprofile.account_type if hasattr(self.user, 'userprofile') else None,
+            "is_superuser": self.user.is_superuser
+        }
+        return Response(custom_data, status=status.HTTP_200_OK)
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
     def save_user(self, request, sociallogin, form=None):
