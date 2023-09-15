@@ -60,6 +60,7 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         #  u'givenName': u'John', u'id': u'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'}
 
         profile_data = resp.json()
+        print(f'profile_data inside AzureOAuth2Adapter.complete_login: {profile_data}')
         extra_data.update(profile_data)
         print(f'extra_data inside AzureOAuth2Adapter.complete_login: {extra_data}')
         return self.get_provider().sociallogin_from_response(request, extra_data)
