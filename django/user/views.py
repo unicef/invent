@@ -104,6 +104,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Get the 'access' value from the data and add the custom claims to the response
         data = {
             "token": data.pop("access"),
+            "user": {
+                "pk": self.user.id,
+                "username": self.user.username,
+                "email": self.user.email,
+                "first_name": self.user.first_name,
+                "last_name": self.user.last_name,
+            },
             "user_profile_id": user_profile_id,
             "account_type": account_type,
             "is_superuser": self.user.is_superuser,
