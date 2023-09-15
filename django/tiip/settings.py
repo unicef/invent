@@ -223,7 +223,14 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Token',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-    "TOKEN_OBTAIN_SERIALIZER": "user.views.CustomTokenObtainPairSerializer",
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
+    # "TOKEN_OBTAIN_SERIALIZER": "user.views.CustomTokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
 }
 
 # django-allauth and rest-auth settings
