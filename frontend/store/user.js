@@ -33,16 +33,12 @@ export const actions = {
   async doLogin({ commit, dispatch }, { username, password, code }) {
     let result
     if (code) {
-      console.log('inside if code: ', code)
       result = await this.$axios.post('/api/rest-auth/azure/', { code })
-      console.log('result 1: ', result)
     } else {
-      console.log('inside else code: ', code)
       result = await this.$axios.post('/api/api-token-auth/', {
         username,
         password,
       })
-      console.log('result 2: ', result)
     }
     const { data } = result
     commit('SET_USER', data)

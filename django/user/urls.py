@@ -14,7 +14,7 @@ router.register(r'organisations', views.OrganisationViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("", include("django.contrib.auth.urls")),
-    path('rest-auth/azure/', AzureLogin.as_view(), name='az_login'),
+    path('rest-auth/azure/', views.CustomTokenObtainPairView.as_view(), name='az_login'),
     path('api-token-auth/', views.CustomTokenObtainPairView.as_view(), name='api_token_auth'),
     re_path(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
 ]
