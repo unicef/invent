@@ -30,20 +30,20 @@ class AzureLogin(SocialLoginView):
 
     def complete_login(self, request, app, token, **kwargs):
         login = self.adapter.complete_login(request, app, token, response=kwargs.get("response", {}), **kwargs)
-        login.token = CustomTokenObtainPairSerializer.get_token(login.user)
+        refresh = CustomTokenObtainPairSerializer.get_token(login.user)
+        self.access_token = str(refresh.access_token)
         return login
 
     def get_response(self):
         # Your logic to build the response
-        serializer = CustomTokenObtainPairSerializer(data=self.user)
-        # Add validations here if needed
         custom_data = {
-            "token": str(serializer.get_token(self.user)),
+            "token": self.access_token,
             "user_profile_id": self.user.userprofile.id if hasattr(self.user, 'userprofile') else None,
             "account_type": self.user.userprofile.account_type if hasattr(self.user, 'userprofile') else None,
             "is_superuser": self.user.is_superuser
         }
         return Response(custom_data, status=status.HTTP_200_OK)
+
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
     def save_user(self, request, sociallogin, form=None):
