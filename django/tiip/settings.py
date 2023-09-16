@@ -210,8 +210,7 @@ REST_AUTH = {
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Token',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-    # "TOKEN_OBTAIN_SERIALIZER": "user.views.CustomTokenObtainPairSerializer",
-    # "TOKEN_OBTAIN_SERIALIZER": "user.serializers.ProfileJWTSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "user.serializers.ProfileJWTSerializer",
 }
 
 # django-allauth and rest-auth settings
@@ -222,9 +221,8 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-REST_USE_JWT = True
 REST_AUTH_SERIALIZERS = {
-    'JWT_SERIALIZER': 'user.views.CustomTokenObtainPairSerializer',
+    'JWT_SERIALIZER': 'user.serializers.ProfileJWTSerializer',
     # 'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
 }
 

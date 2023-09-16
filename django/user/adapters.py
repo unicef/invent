@@ -12,6 +12,7 @@ from azure_services.views import AzureOAuth2Adapter
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from .views import CustomTokenObtainPairSerializer
+from .serializers import ProfileJWTSerializer
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -27,40 +28,17 @@ class AzureLogin(SocialLoginView):
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
 
-    def complete_login(self, request, app, token, **kwargs):
-        login = self.adapter.complete_login(
-            request, app, token, response=kwargs.get("response", {}), **kwargs
-        )
-        login.token = self.get_user_token(login.user)
-        return login
+    # def get_response(self):
+    #     # Initialize your custom serializer
+    #     serializer = ProfileJWTSerializer(data={
+    #         'token': self.token,  # Assuming self.token holds the token
+    #         'user': self.user,
+    #     })
 
-    def get_user_token(self, user):
-        return CustomTokenObtainPairSerializer.get_token(user)
-
-    def get_response(self):
-        user_info = {
-            "pk": self.user.id,
-            "username": self.user.username,
-            "email": self.user.email,
-            "first_name": self.user.first_name,
-            "last_name": self.user.last_name,
-        }
-
-        token_data = self.get_user_token(self.user)
-
-        custom_data = {
-            "token": str(token_data),
-            "user": user_info,
-            "user_profile_id": self.user.userprofile.id
-            if hasattr(self.user, "userprofile")
-            else None,
-            "account_type": self.user.userprofile.account_type
-            if hasattr(self.user, "userprofile")
-            else None,
-            "is_superuser": self.user.is_superuser,
-        }
-        return Response(custom_data, status=status.HTTP_200_OK)
-
+    #     if serializer.is_valid():
+    #         return Response(serializer.validated_data, status=status.HTTP_200_OK)
+    #     else:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
