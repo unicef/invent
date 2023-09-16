@@ -7,7 +7,6 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import AccessToken
 
 from core.views import TokenAuthMixin
 from .serializers import (
@@ -70,17 +69,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     # This method is used to generate and return the JWT token
     @classmethod
     def get_token(cls, user):
-        token = AccessToken.for_user(user)
-
+        token = super().get_token(user)
         # Add custom claims
-        if hasattr(user, "userprofile"):
-            token["user_profile_id"] = user.userprofile.id
-            token["account_type"] = user.userprofile.account_type
-        else:
-            token["user_profile_id"] = None
-            token["account_type"] = None
-
-        token["is_superuser"] = user.is_superuser
+        token["username"] = user.username
+        token["email"] = user.email
 
         return token
 
@@ -105,7 +97,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             "is_superuser": self.user.is_superuser,
         }
         return data
-
 
 # This view is used to handle the token obtain pair endpoint
 class CustomTokenObtainPairView(TokenObtainPairView):
