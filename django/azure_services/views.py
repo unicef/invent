@@ -26,7 +26,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
     Docs available at:
     https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols
     """
-    print('inside AzureOAuth2Adapter')
     provider_id = AzureProvider.id
     access_token_url = LOGIN_URL + "/token"
     authorize_url = LOGIN_URL + "/authorize"
@@ -38,10 +37,8 @@ class AzureOAuth2Adapter(OAuth2Adapter):
     groups_url = GRAPH_URL + "/me/memberOf?$select=displayName"
 
     def complete_login(self, request, app, token, **kwargs):
-        print('inside AzureOAuth2Adapter.complete_login')
         headers = {"Authorization": "Bearer {0}".format(token.token)}
         extra_data = {}
-        print(f'headers inside AzureOAuth2Adapter.complete_login: {headers}')
         resp = requests.get(self.profile_url, headers=headers)
 
         # See:
@@ -60,9 +57,7 @@ class AzureOAuth2Adapter(OAuth2Adapter):
         #  u'givenName': u'John', u'id': u'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'}
 
         profile_data = resp.json()
-        print(f'profile_data inside AzureOAuth2Adapter.complete_login: {profile_data}')
         extra_data.update(profile_data)
-        print(f'extra_data inside AzureOAuth2Adapter.complete_login: {extra_data}')
         return self.get_provider().sociallogin_from_response(request, extra_data)
 
 

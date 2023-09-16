@@ -21,7 +21,6 @@ class AzureAccount(ProviderAccount):
 
 
 class AzureProvider(OAuth2Provider):
-    print('inside AzureProvider')
     id = str('azure')
     name = 'Azure'
     account_class = AzureAccount
