@@ -7,6 +7,7 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import AccessToken
 
 from core.views import TokenAuthMixin
 from .serializers import (
@@ -69,7 +70,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     # This method is used to generate and return the JWT token
     @classmethod
     def get_token(cls, user):
-        token = super().get_token(user)
+        token = AccessToken.for_user(user)
+
         # Add custom claims
         if hasattr(user, "userprofile"):
             token["user_profile_id"] = user.userprofile.id
