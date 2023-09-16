@@ -31,13 +31,13 @@ class AzureLogin(SocialLoginView):
         login = self.adapter.complete_login(
             request, app, token, response=kwargs.get("response", {}), **kwargs
         )
-        login.token = CustomTokenObtainPairSerializer.get_token(login.user)
+        login.token = self.get_user_token(login.user)
         return login
 
-    def get_response(self):
-        # Get custom token data
-        token_data = CustomTokenObtainPairSerializer.get_token(self.user)
+    def get_user_token(self, user):
+        return CustomTokenObtainPairSerializer.get_token(user)
 
+    def get_response(self):
         user_info = {
             "pk": self.user.id,
             "username": self.user.username,
@@ -46,9 +46,10 @@ class AzureLogin(SocialLoginView):
             "last_name": self.user.last_name,
         }
 
-        # Build custom response
+        token_data = self.get_user_token(self.user)
+
         custom_data = {
-            "token": str(token_data),  # JWT token with custom claims
+            "token": str(token_data),
             "user": user_info,
             "user_profile_id": self.user.userprofile.id
             if hasattr(self.user, "userprofile")
@@ -59,6 +60,7 @@ class AzureLogin(SocialLoginView):
             "is_superuser": self.user.is_superuser,
         }
         return Response(custom_data, status=status.HTTP_200_OK)
+
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
