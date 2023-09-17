@@ -104,6 +104,7 @@ class ApprovalStateAdmin(AllObjectsAdmin):
     ordering = search_fields = ['name']
     list_filter = [ApprovalStateFilter]
     actions = (approve, decline)
+    autocomplete_fields = ['added_by']
 
 
 class TechnologyPlatformAdmin(ApprovalStateAdmin):

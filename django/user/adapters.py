@@ -12,7 +12,6 @@ from azure_services.views import AzureOAuth2Adapter
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from .views import CustomTokenObtainPairSerializer
-from .serializers import ProfileJWTSerializer
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
