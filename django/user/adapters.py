@@ -28,14 +28,9 @@ class AzureLogin(SocialLoginView):
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
 
-    # def complete_login(self, request, app, token, **kwargs):
-    #     login = self.adapter.complete_login(request, app, token, response=kwargs.get("response", {}), **kwargs)
-    #     login.token = ProfileJWTSerializer.get_token(login.user)
-    #     return login
-
     def get_response(self):
         # Your logic to build the response
-        serializer = ProfileJWTSerializer(data=self.user)
+        serializer = CustomTokenObtainPairSerializer()
         # Add validations here if needed
         custom_data = {
             "token": str(serializer.get_token(self.user)),
