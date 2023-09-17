@@ -221,7 +221,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 REST_AUTH_SERIALIZERS = {
-    'JWT_SERIALIZER': 'user.serializers.ProfileJWTSerializer',
+    'JWT_SERIALIZER': 'user.views.CustomTokenObtainPairSerializer',
     # 'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
 }
 

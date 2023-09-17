@@ -74,9 +74,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["username"] = user.username
         token["email"] = user.email
 
-        print(f'token: {token}')
-
-        return token
+        print(f'token: {token.access_token}')
+        return token.access_token
 
     # This method is used to validate the token and structure the response data
     def validate(self, attrs):
