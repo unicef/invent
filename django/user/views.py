@@ -15,6 +15,7 @@ from .serializers import (
     UserProfileListSerializer,
 )
 from .models import UserProfile, Organisation
+from .serializers import ProfileJWTSerializer
 
 
 class UserProfileViewSet(
@@ -74,7 +75,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["username"] = user.username
         token["email"] = user.email
 
-        print(f'token: {token.access_token}')
         return token.access_token
 
     # This method is used to validate the token and structure the response data
@@ -99,6 +99,42 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         }
         return data
 
+
 # This view is used to handle the token obtain pair endpoint
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class PasswordTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token["username"] = user.username
+        token["email"] = user.email
+
+        return token
+
+    def validate(self, attrs):
+        # We call the superclass's method to do the standard validation and token generation
+        data = super().validate(attrs)
+        user_profile = getattr(self.user, "userprofile", None)
+        if user_profile:
+            user_profile_id = user_profile.id
+            account_type = user_profile.account_type
+        else:
+            user_profile_id = None
+            account_type = None
+
+        # Restructure the data to match the desired format.
+        # Get the 'access' value from the data and add the custom claims to the response
+        data = {
+            "token": data.pop("access"),
+            "user_profile_id": user_profile_id,
+            "account_type": account_type,
+            "is_superuser": self.user.is_superuser,
+        }
+        return data
+
+
+class PasswordTokenObtainPairView(TokenObtainPairView):
+    serializer_class = PasswordTokenObtainPairSerializer
