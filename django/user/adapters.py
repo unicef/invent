@@ -28,17 +28,29 @@ class AzureLogin(SocialLoginView):
     callback_url = settings.SOCIALACCOUNT_CALLBACK_URL
     client_class = OAuth2Client
 
-    # def get_response(self):
-    #     # Initialize your custom serializer
-    #     serializer = ProfileJWTSerializer(data={
-    #         'token': self.token,  # Assuming self.token holds the token
-    #         'user': self.user,
-    #     })
+    # def complete_login(self, request, app, token, **kwargs):
+    #     login = self.adapter.complete_login(request, app, token, response=kwargs.get("response", {}), **kwargs)
+    #     login.token = ProfileJWTSerializer.get_token(login.user)
+    #     return login
 
-    #     if serializer.is_valid():
-    #         return Response(serializer.validated_data, status=status.HTTP_200_OK)
-    #     else:
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_response(self):
+        # Your logic to build the response
+        serializer = ProfileJWTSerializer(data=self.user)
+        # Add validations here if needed
+        custom_data = {
+            "token": str(serializer.get_token(self.user)),
+            "user": {
+                "pk": self.user.pk,
+                "username": self.user.username,
+                "email": self.user.email,
+                "first_name": self.user.first_name,
+                "last_name": self.user.last_name
+                },
+            "user_profile_id": self.user.userprofile.id if hasattr(self.user, 'userprofile') else None,
+            "account_type": self.user.userprofile.account_type if hasattr(self.user, 'userprofile') else None,
+            "is_superuser": self.user.is_superuser
+        }
+        return Response(custom_data, status=status.HTTP_200_OK)
 
 
 class MyAzureAccountAdapter(DefaultSocialAccountAdapter):  # pragma: no cover
