@@ -12,18 +12,6 @@
         background-color: {{ ENVIRONMENT_COLOR }};
     }
 
-    .skip-to-content-link {
-        display: none;
-    }
-
-    #logout-form {
-        display: none;
-    } 
-    
-    .theme-toggle {
-        display: none;
-    } 
-
     .form-row > div {
         display: flex;
         align-items: center;
@@ -39,20 +27,6 @@
         margin-left: 20px;
     }
 </style>
-{% endblock %}
-
-{% block usertools %}
-    <div id="user-tools">
-        Welcome,
-        <strong>{{ user.username }}</strong>.
-        
-        <a href="/">View site</a> /
-        
-        <a href="/admin/password_change/">Change password</a> /
-        
-        <!-- New logout link -->
-        <a href="/admin/logout/">Log out</a>
-    </div>
 {% endblock %}
 
 {% block extrahead %}
