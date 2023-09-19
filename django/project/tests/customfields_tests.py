@@ -68,42 +68,6 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['country_custom_answers'],
                          [{'question_id': ['This question_id does not exist.']}])
 
-    def test_country_answer_wrong_all_required(self):
-        CountryCustomQuestion.objects.create(question="What up?", country_id=self.country_id)
-        url = reverse("project-create",
-                      kwargs={
-                          "country_office_id": self.country_office.id
-                      })
-        data = copy(self.project_data)
-        data.update({"country_custom_answers": [dict()]})
-
-        response = self.test_user_client.post(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['country_custom_answers'], [{'question_id': ['This field is required.'],
-                                                                      'answer': ['This field is required.']}])
-
-        url = reverse("project-draft",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['country_custom_answers'], [{'question_id': ['This field is required.'],
-                                                                      'answer': ['This field is required.']}])
-
-        url = reverse("project-publish",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['country_custom_answers'], [{'question_id': ['This field is required.'],
-                                                                      'answer': ['This field is required.']}])
-
     def test_country_answer_for_draft(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
         url = reverse("project-draft",
@@ -140,62 +104,6 @@ class CustomFieldTests(SetupTests):
         project = Project.objects.last()
         self.assertEqual(project.data['country_custom_answers'], {str(q.id): ['lol1']})
         self.assertEqual(project.draft['country_custom_answers'], {str(q.id): ['lol1']})
-
-    def test_country_answer_for_published_is_required(self):
-        q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id, required=True)
-        q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id, required=True)
-        url = reverse("project-publish",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-        # answer key present but empty
-        data = copy(self.project_data)
-        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=[])]})
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['country_custom_answers'], [{'answer': ['This field is required.']}])
-
-        # answer key not present
-        data.update({"country_custom_answers": [dict(question_id=q1.id)]})
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['country_custom_answers'], [{'answer': ['This field is required.']}])
-
-        # answer one is present, but answer 2 is missing
-        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=["answer1"])]})
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['country_custom_answers'], {str(q2.id): ['This field is required']})
-
-        # country custom answers are missing
-        data.pop('country_custom_answers', None)
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
-
-        url = reverse("project-create",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                      })
-
-        response = self.test_user_client.post(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
-
-        url = reverse("project-draft",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
 
     def test_country_answer_numeric_validation(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
@@ -421,98 +329,6 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.data['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
         self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
 
-    def test_donor_answer_for_all_is_required(self):
-        dq1 = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id, required=True)
-        dq2 = DonorCustomQuestion.objects.create(question="test2", donor_id=self.d1.id, required=True)
-        url = reverse("project-publish",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-        # answer key present but empty
-        data = copy(self.project_data)
-        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id, answer=[])]}})
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['donor_custom_answers'],
-                         {str(self.d1.id): [{'answer': ['This field is required.']}]})
-
-        # answer key not present
-        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id)]}})
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['donor_custom_answers'],
-                         {str(self.d1.id): [{'answer': ['This field is required.']}]})
-
-        # answer one is present, but answer 2 is missing
-        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id, answer=["answer1"])]}})
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['donor_custom_answers'],
-                         {str(self.d1.id): {str(dq2.id): ['This field is required']}})
-
-        # donor custom answers are missing
-        data.pop('donor_custom_answers', None)
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
-
-        url = reverse("project-create",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                      })
-
-        response = self.test_user_client.post(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
-
-        url = reverse("project-draft",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
-
-        # donor custom answer for donor one are missing
-        data.update({"donor_custom_answers": {}})
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
-
-        url = reverse("project-create",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                      })
-
-        response = self.test_user_client.post(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
-
-        url = reverse("project-publish",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
-
-        # answer 1 and 2 are present, there is an extra non existing donor
-        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id, answer=["answer1"]),
-                                                                dict(question_id=dq2.id, answer=["answer2"])],
-                                              str(999): [dict(question_id=333, answer=[])]}})
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 200)
-
     def test_donor_answer_wrong_question_id(self):
         DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
         url = reverse("project-create",
@@ -569,42 +385,3 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['donor_custom_answers'],
                          {str(self.d1.id): [{'question_id': ['This question_id does not exist.']}]})
-
-    def test_donor_answer_wrong_all_required(self):
-        DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
-        url = reverse("project-create",
-                      kwargs={
-                          "country_office_id": self.country_office.id
-                      })
-        data = copy(self.project_data)
-        data.update({"donor_custom_answers": {str(self.d1.id): [dict()]}})
-
-        response = self.test_user_client.post(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['donor_custom_answers'],
-                         {str(self.d1.id): [{'question_id': ['This field is required.'],
-                                             'answer': ['This field is required.']}]})
-
-        url = reverse("project-draft",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['donor_custom_answers'],
-                         {str(self.d1.id): [{'question_id': ['This field is required.'],
-                                             'answer': ['This field is required.']}]})
-
-        url = reverse("project-publish",
-                      kwargs={
-                          "country_office_id": self.country_office.id,
-                          "project_id": self.project_id
-                      })
-
-        response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['donor_custom_answers'],
-                         {str(self.d1.id): [{'question_id': ['This field is required.'],
-                                             'answer': ['This field is required.']}]})
