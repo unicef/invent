@@ -31,6 +31,14 @@ from user.tests import create_profile_for_user
 
 
 class ProjectTests(SetupTests):
+    def test_retrieve_project_structure(self):
+        url = reverse("get-project-structure")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "technology_platforms")
+        self.assertContains(response, "hsc_challenges")
+        self.assertEqual(len(response.json().keys()), 22)
+
     def test_retrieve_project_structure_cache(self):
         with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):
             cache.clear()
@@ -534,6 +542,76 @@ class ProjectTests(SetupTests):
         send_project_approval_digest()
         self.assertEqual(len(mail.outbox), 0)
 
+    def test_country_admins_access_all_projects_in_country_as_viewer(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        create_profile_for_user(response)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        user_profile_id = response.json().get('user_profile_id')
+
+        # update profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        test_user_client.put(url, data, format="json")
+
+        project_id, project_data, org, country, country_office, d1, d2 = self.create_new_project()
+
+        p_in_country = Project.objects.get(id=project_id)
+        p_not_in_country = Project.objects.get(name="Test Project1")
+
+        # make user country admin of CTR2
+        country.users.add(self.user_profile_id)
+        # make sure he is not a country admin of project 1's country
+        p_not_in_country.get_country().users.remove(self.user_profile_id)
+
+        # remove this user from all the projects
+        for p in Project.objects.all():
+            p.team.remove(self.user_profile_id)
+            p.team.add(user_profile_id)
+
+            # this user doesn't belong to any project anymore
+            self.assertFalse(p.team.filter(id=self.user_profile_id).exists())
+            self.assertFalse(p.viewers.filter(id=self.user_profile_id).exists())
+
+            # the project belongs to the new user now
+            self.assertTrue(p.team.filter(id=user_profile_id).exists())
+
+        url = reverse("project-retrieve", kwargs={"pk": p_in_country.id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json()['published']['start_date'], str)
+        self.assertEqual(response.json()['draft']['name'], p_in_country.name)
+
+        url = reverse("project-retrieve", kwargs={"pk": p_not_in_country.id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertIsNone(response.json()['draft'])
+        self.assertTrue('start_date' not in response.json()['published'])
+
+        # Only works for retrieve, the list won't list any project that are not his/her
+        url = reverse("project-list", kwargs={'list_name': 'member-of'})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 0)
+
     def test_admins_access_all_projects_as_viewer(self):
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -745,6 +823,23 @@ class ProjectTests(SetupTests):
         resp_modified_datetime = datetime.strptime(response.json()['published']['modified'], '%Y-%m-%dT%H:%M:%S.%fZ')
         self.assertGreater(timezone.make_aware(resp_modified_datetime, pytz.UTC), project.modified)
 
+    def test_add_new_users_by_invalid_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        groups = {
+            "team": [],
+            "viewers": [],
+            "new_team_emails": ["new_email"],
+            "new_viewer_emails": ["yolo"]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+
+        self.assertEqual(
+            response.json(), {'new_team_emails': {'0': ['Enter a valid email address.']},
+                              'new_viewer_emails': {'0': ['Enter a valid email address.']}})
+
     def test_add_new_users_by_email(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
@@ -941,11 +1036,72 @@ class ProjectTests(SetupTests):
                 user.save()
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_approve(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software', state=TechnologyPlatform.PENDING, 
+                                                     added_by_id=self.user_profile_id)
+        notify_user_about_approval.apply(args=('test', software._meta.model_name, software.id))
+        notify_user_about_approval.apply(args=('approve', software._meta.model_name, software.id))
+
+        send_email.assert_called_once()
+        call_args_list = send_email.call_args_list[0][1]
+        self.assertEqual(call_args_list['subject'], f"`{software.name}` you requested has been approved")
+        self.assertEqual(call_args_list['email_type'], 'object_approved')
+        self.assertEqual(call_args_list['context']['object_name'], software.name)
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_decline(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software', state=TechnologyPlatform.PENDING, 
+                                                     added_by_id=self.user_profile_id)
+        notify_user_about_approval.apply(args=('decline', software._meta.model_name, software.id))
+
+        call_args_list = send_email.call_args_list[0][1]
+        self.assertEqual(call_args_list['subject'], f"`{software.name}` you requested has been declined")
+        self.assertEqual(call_args_list['email_type'], 'object_declined')
+        self.assertEqual(call_args_list['context']['object_name'], software.name)
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_notify_user_about_software_approval_fail(self, send_email):
         software = TechnologyPlatform.objects.create(name='pending software')
         notify_user_about_approval.apply(args=('approve', software._meta.model_name, software.id))
 
         send_email.assert_not_called()
+
+    @mock.patch('project.tasks.notify_user_about_approval.apply_async', return_value=None)
+    def test_software_decline(self, notify_user_about_approval):
+        software_1 = TechnologyPlatform.objects.create(name='approved software')
+        software_2 = TechnologyPlatform.objects.create(name='will be declined', state=TechnologyPlatform.PENDING)
+
+        data, org, country, country_office, d1, d2 = self.create_test_data(name="Test Project 10000")
+        data['project']['platforms'] = [software_1.id, software_2.id]
+
+        url = reverse("project-create", kwargs={"country_office_id": country_office.id})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        project = Project.objects.get(pk=response.json()['id'])
+        self.assertEqual(len(project.draft['platforms']), 2)
+
+        url = reverse("project-publish", kwargs={"project_id": project.id,
+                                                 "country_office_id": country_office.id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 2)
+        self.assertEqual(len(project.data['platforms']), 2)
+
+        # decline software
+        software_2.state = TechnologyPlatform.DECLINED
+        software_2.save()
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 1)
+        self.assertEqual(project.draft['platforms'][0], software_1.id)
+        self.assertEqual(len(project.data['platforms']), 1)
+        self.assertEqual(project.data['platforms'][0], software_1.id)
+
+        notify_user_about_approval.assert_called_once_with(args=('decline', 
+                                                                 software_2._meta.model_name, software_2.pk))
 
     @override_settings(MIGRATE_PHASES=True)
     @mock.patch('project.utils.ID_MAP', {"3": 1, "4": 2, "5": 3, "6": 4, "7": 5, "8": 6})

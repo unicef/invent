@@ -50,6 +50,61 @@ class PermissionTests(SetupTests):
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
 
+    def test_team_viewer_cannot_update_project_groups(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        owner_id = response.json()['team'][0]
+
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        create_profile_for_user(response)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        user_profile_id = response.json().get('user_profile_id')
+
+        # update profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": self.country_id}
+        response = test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        user_profile_id = response.json()['id']
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        groups = {
+            "team": [owner_id],
+            "viewers": [user_profile_id]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'], [owner_id])
+        self.assertEqual(response.json()['viewers'], [user_profile_id])
+
+        # try to update it with the viewer
+        response = test_user_client.put(url, groups)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
     def test_authenticated_users_can_list_project_groups(self):
         # Create a test user with profile.
         url = reverse("rest_register")
@@ -155,3 +210,135 @@ class PermissionTests(SetupTests):
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
             self.assertNotIn(key, response.json())
+
+    def test_non_member_doesnt_see_private_answers(self):
+        data = copy(self.project_data)
+        data['project'].update({"name": "Test private"})
+
+        # Create project draft
+        url = reverse("project-create", kwargs={"country_office_id": self.country_office.id})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+
+        project_id = response.json().get("id")
+
+        # Publish
+        url = reverse("project-publish", kwargs={"project_id": project_id,
+                                                 "country_office_id": self.country_office.id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # Manually add answers since we don't want to go through the standard process
+        project = Project.objects.get(id=project_id)
+        project.data.update({"country_custom_answers": {1: ["1"], 2: ["2"]}})
+        project.data.update({"country_custom_answers_private": {3: ["3"], 4: ["4"]}})
+        project.save()
+
+        # Member can see private fields
+        url = reverse("project-retrieve", kwargs={"pk": project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['country_custom_answers'], {'1': ['1'], '2': ['2']})
+        self.assertEqual(response.json()['published']['country_custom_answers_private'],
+                         {'3': ['3'], '4': ['4']})
+
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        create_profile_for_user(response)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        user_profile_id = response.json().get('user_profile_id')
+
+        # update profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": Country.objects.last().id,
+        }
+        response = test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        # Non member can only see the public answers
+        url = reverse("project-retrieve", kwargs={"pk": project_id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['country_custom_answers'], {'1': ['1'], '2': ['2']})
+        self.assertFalse('country_custom_answers_private' in response.json()['published'])
+
+    def test_country_manager_can_update_project_groups(self):
+        user_profile_id, test_user_client, _ = self.create_user('country_manager@tester.com',
+                                                                'asdkjfh78y87', 'asdkjfh78y87')
+        profile = UserProfile.objects.get(id=user_profile_id)
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        groups = {
+            "team": [user_profile_id],
+            "viewers": []
+        }
+        response = test_user_client.put(url, groups, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+        profile.manager_of.add(self.country_office.id)
+
+        response = test_user_client.put(url, groups, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'], [user_profile_id])
+        self.assertEqual(response.json()['viewers'], [])
+
+    def test_country_manager_can_retrieve_project_data(self):
+        user_profile_id, test_user_client, _ = self.create_user('country_manager@tester.com',
+                                                                'asdkjfh78y87', 'asdkjfh78y87')
+        profile = UserProfile.objects.get(id=user_profile_id)
+
+        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+
+        # filtering checks
+        members_only_fields = ["start_date", "end_date"]
+        for key in members_only_fields:
+            self.assertNotIn(key, response.json()['published'])
+
+        profile.manager_of.add(self.country_office.id)
+
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
+
+        # filtering checks
+        for key in members_only_fields:
+            self.assertIn(key, response.json()['published'])
+
+    def test_country_manager_can_update_project_data(self):
+        user_profile_id, test_user_client, _ = self.create_user('country_manager@tester.com',
+                                                                'asdkjfh78y87', 'asdkjfh78y87')
+        profile = UserProfile.objects.get(id=user_profile_id)
+
+        url = reverse("project-publish", kwargs={"project_id": self.project_id,
+                                                 "country_office_id": self.country_office.id})
+        response = test_user_client.put(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['detail'], 'You do not have permission to perform this action.')
+
+        profile.manager_of.add(self.country_office.id)
+
+        response = test_user_client.put(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 200)
