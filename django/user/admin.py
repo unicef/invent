@@ -1,9 +1,10 @@
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin
 
 from .models import Organisation
 
 
-@admin.register(Organisation)
-class OrganisationAdmin(ModelAdmin):
+class OrganisationAdmin(admin.ModelAdmin):
     pass
+
+
+admin.site.register(Organisation, OrganisationAdmin)

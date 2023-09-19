@@ -1,13 +1,13 @@
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from ordered_model.models import OrderedModel
 
-from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel, ActiveManager
 from project.cache import InvalidateCacheMixin
 from user.models import UserProfile
 from django.core.exceptions import ValidationError
@@ -216,11 +216,12 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
 
     private = models.BooleanField(default=False)
     required = models.BooleanField(default=False)
+    objects = ActiveManager()
 
     class Meta:
         abstract = True
-        default_manager_name = 'objects'
-        base_manager_name = 'objects'
+        # default_manager_name = 'objects'
+        # base_manager_name = 'objects'
 
 
 class DonorCustomQuestion(CustomQuestion):

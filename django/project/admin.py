@@ -3,7 +3,7 @@ from django import forms
 from django.db import models
 from django.contrib.admin import SimpleListFilter
 from django.utils.html import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from adminsortable2.admin import SortableAdminMixin
 from core.admin import AllObjectsAdmin
 from .models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, \
@@ -101,10 +101,10 @@ class ApprovalStateAdmin(AllObjectsAdmin):
     list_display = [
         'name', 'state', 'added_by'
     ]
-    autocomplete_fields = ['added_by']
     ordering = search_fields = ['name']
     list_filter = [ApprovalStateFilter]
     actions = (approve, decline)
+    autocomplete_fields = ['added_by']
 
 
 class TechnologyPlatformAdmin(ApprovalStateAdmin):
@@ -424,10 +424,11 @@ class SolutionAdmin(ExportActionMixin, admin.ModelAdmin):
         return ', '.join(countries_with_people_reached)
 
 
-@admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
+
+admin.site.register(UserProfile, UserProfileAdmin)
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
@@ -441,9 +442,10 @@ admin.site.register(Portfolio, PortfolioAdmin)
 admin.site.register(UNICEFGoal, UNICEFGoalAdmin)
 admin.site.register(UNICEFResultArea, UNICEFResultAreaAdmin)
 admin.site.register(UNICEFCapabilityLevel, UNICEFCapabilityLevelAdmin)
-admin.site.register(UNICEFCapabilityCategory, UNICEFCapabilityCategoryAdmin)
+admin.site.register(UNICEFCapabilityCategory,
+                           UNICEFCapabilityCategoryAdmin)
 admin.site.register(UNICEFCapabilitySubCategory,
-                    UNICEFCapabilitySubCategoryAdmin)
+                           UNICEFCapabilitySubCategoryAdmin)
 admin.site.register(UNICEFSector, UNICEFSectorAdmin)
 admin.site.register(RegionalPriority, RegionalPriorityAdmin)
 admin.site.register(HardwarePlatform, HardwarePlatformAdmin)

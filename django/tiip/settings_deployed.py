@@ -71,7 +71,8 @@ ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -94,5 +95,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_REDIRECT_EXEMPT = [r'^health_check']
 
-# csrf_trusted_origins = env.str('CSRF_TRUSTED_ORIGINS', default='')
-CSRF_TRUSTED_ORIGINS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://invent-dev.unitst.org/',' https://invent-tst.unitst.org/', 'https://invent-uat.unitst.org/', 'https://invent.unicef.org/']

@@ -1,13 +1,14 @@
 from rest_framework import serializers
-from rest_auth.serializers import JWTSerializer
+from dj_rest_auth.serializers import JWTSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from country.models import Country
 from project.models import Project, Portfolio, ReviewScore
 from .models import UserProfile, Organisation
 
 
-class ProfileJWTSerializer(JWTSerializer):
+class ProfileJWTSerializer(TokenObtainPairSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """
@@ -75,7 +76,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     is_superuser = serializers.SerializerMethodField()
     account_type_approved = serializers.SerializerMethodField()
     manager = serializers.SerializerMethodField(required=False)
-    global_portfolio_owner = serializers.NullBooleanField(required=False)
+    global_portfolio_owner = serializers.BooleanField(required=False, allow_null=True)
     favorite = serializers.SerializerMethodField(required=False)
     reviews = serializers.SerializerMethodField(required=False)
 

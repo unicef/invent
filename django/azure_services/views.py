@@ -12,9 +12,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .provider import AzureProvider
-from .adapters import AzureUserManagement
 from core.views import TokenAuthMixin
+from .provider import AzureProvider
 from .tasks import fetch_users_from_aad_and_update_db
 
 
@@ -40,7 +39,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
     def complete_login(self, request, app, token, **kwargs):
         headers = {"Authorization": "Bearer {0}".format(token.token)}
         extra_data = {}
-
         resp = requests.get(self.profile_url, headers=headers)
 
         # See:
@@ -60,7 +58,6 @@ class AzureOAuth2Adapter(OAuth2Adapter):
 
         profile_data = resp.json()
         extra_data.update(profile_data)
-
         return self.get_provider().sociallogin_from_response(request, extra_data)
 
 

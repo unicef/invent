@@ -10,7 +10,7 @@ helm_resource(
     chart='bitnami/postgresql',
     namespace='default',
     flags=[
-        '--set=image.tag=10.4.0',
+        '--set=image.tag=15.2.0',
         '--set=auth.enablePostgresUser=true',
         '--set=auth.postgresPassword=postgres'
     ],
@@ -36,16 +36,15 @@ local_resource(
     """,
     allow_parallel=True,
     labels=['database']
-    )
+)
 
 local_resource(
     name='import-dump',
     resource_deps=['copy-dump'],
-    cmd="""kubectl exec postgres-postgresql-0 -- psql -U postgres -d postgres -f /tmp/dump_anon.sql
-    """,
+    cmd='kubectl exec postgres-postgresql-0 -- env PGPASSWORD=postgres psql -U postgres -d postgres -f /tmp/dump_anon.sql',
     allow_parallel=True,
     labels=['database']
-    )
+)
 
 helm_resource(
     resource_deps=['bitnami'],
@@ -177,7 +176,7 @@ yaml = helm(
     values=['./frontend/helm/values-dev.yaml'],
     # Values to set from the command-line
     set=['ingress.enabled=false']
-  )
+)
 k8s_yaml(yaml)
 
 k8s_resource(
