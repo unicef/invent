@@ -10,7 +10,7 @@ from dateutil.parser import parse, ParserError
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from core.utils import send_mail_wrapper
 from country.models import CustomQuestion, CountryOffice, Country
@@ -433,7 +433,7 @@ class CustomAnswerSerializer(serializers.Serializer):
         child=serializers.CharField(max_length=512),
         max_length=50,
         min_length=0,
-        required=True,
+        required=False,
     )
 
     def validate_question_id(self, value):
@@ -444,9 +444,9 @@ class CustomAnswerSerializer(serializers.Serializer):
             raise ValidationError("This question_id does not exist.")
         return value
 
-    def validate_required_answer(self, value):
-        if not value:
-            raise ValidationError({"answer": "This field is required."})
+    # def validate_required_answer(self, value):
+    #     if not value:
+    #         raise ValidationError({"answer": "This field is required."})
 
     def validate_numeric_answer(self, value):
         if value and isinstance(value[0], str) and not value[0].isnumeric():
@@ -458,8 +458,8 @@ class CustomAnswerSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         if not self.context["is_draft"]:
-            if self.context["question"].required:
-                self.validate_required_answer(attrs["answer"])
+            # if self.context["question"].required:
+            #     self.validate_required_answer(attrs["answer"])
             if self.context["question"].type != CustomQuestion.MULTI:
                 self.validate_answer_length(attrs["answer"])
             if self.context["question"].type == CustomQuestion.NUMBER:

@@ -1,121 +1,110 @@
-sorl-thumbnail==12.7.0
-amqp==2.3.2
-anyjson==0.3.3
-appnope==0.1.0
-argh==0.26.2
-asn1crypto==0.24.0
-astroid==2.3.3
-atomicwrites==1.1.5
-attrs==18.1.0
-azure-monitor-opentelemetry==1.0.0b13
-backcall==0.1.0
-bcrypt==3.1.4
-behave==1.2.6
-billiard==3.5.0.4
-celery==4.2.0
-certifi==2018.4.16
-cffi==1.11.5
-chardet==3.0.4
-colorama==0.3.9
-coreapi==2.3.3
-coreschema==0.0.4
-coverage==4.5.1
-cryptography==2.2.2
-decorator==4.3.0
-defusedxml==0.5.0
-dj-inmemorystorage==1.4.1
-Django==2.1
-django-admin-sortable2==0.7.6
-django-allauth==0.41.0
-django-appconf==1.0.2
-django-celery-email==2.0.0
-django-cors-headers==2.3.0
-django-extensions==2.2.5
-django-modeltranslation==0.13-beta1
-django-redis==4.9.0
-django-rest-auth==0.9.5
-django-rosetta==0.8.1
-django-simplefeedback==0.9
-django-simple-history==2.4.0
-django-ordered-model==2.1.0
-djangorestframework==3.8.2
-djangorestframework-jwt==1.11.0
-drf-yasg==1.17.1
-docopt==0.6.2
-Fabric3==1.14.post1
-factory-boy==2.12.0
-flake8==3.8.2
-gunicorn==19.9.0
-idna==2.7
-ipdb==0.11
-ipython==6.4.0
-ipython-genutils==0.2.0
-isort==4.3.4
-itypes==1.1.0
-jedi==0.12.1
-Jinja2==2.10
-kombu==4.2.1
-lazy-object-proxy==1.4.3
-Markdown==2.6.11
-MarkupSafe==1.1.1
-mccabe==0.6.1
-microsofttranslator==0.8
-mock==2.0.0
-more-itertools==4.2.0
-oauthlib==2.1.0
-paramiko==2.4.1
-parse==1.8.4
-parse-type==0.4.2
-parso==0.3.0
-pathtools==0.1.2
-pbr==4.1.0
-pexpect==4.6.0
-pickleshare==0.7.4
-Pillow==5.2.0
-pluggy==0.6.0
-polib==1.1.0
-prompt-toolkit==1.0.15
-psycopg2-binary==2.7.5
-ptyprocess==0.6.0
-py==1.5.4
-pyasn1==0.4.3
-pycodestyle==2.6.0
-pycountry==18.5.26
-pycparser==2.18
-pycrypto==2.6.1
-pyflakes==2.2.0
-Pygments==2.2.0
-pylint==2.4.3
-PyNaCl==1.2.1
-pytest==3.6.3
-pytest-cov==2.5.1
-pytest-django==3.3.2
-pytest-testmon==0.9.12
-pytest-watch==4.2.0
-pytest-timeout==1.3.3
-python3-openid==3.1.0
-pytz==2018.5
-PyYAML==3.13
-redis==2.10.6
-requests==2.19.1
-requests-oauthlib==1.0.0
-simplegeneric==0.8.1
-six==1.13.0
-traitlets==4.3.2
-uritemplate==3.0.0
-urllib3==1.23
-vine==1.1.4
-watchdog==0.8.3
-wcwidth==0.1.7
-wrapt==1.11.2
-hashids==1.2.0
-freezegun==0.3.15
-django-import-export==2.5.0
-sentry-sdk
-environs
-git+https://github.com/pulilab/django-import-export-celery@1.16.3
-django-jsoneditor
-dj-anonymizer==0.3.1
-dj-anonymizer[bulk]
-django-health-check==3.16.0
-msal
+amqp==5.1.1                             # Updated from 2.3.2. Supports Python >= 3.7 <= 3.10
+argh==0.28.1                            # Updated from 0.26.2. Supports Python >= 3.8 <= 3.11. 
+asn1crypto==1.5.1                       # Updated from 0.24.0. Supports Python >= 3.7 <= 3.10
+astroid==2.15.6                         # Updated from 2.3.3. pylint 2.4.3 depends on astroid<2.4 and >=2.3.0
+attrs==23.1.0                           # Updated from 18.1.0
+azure-monitor-opentelemetry==1.0.0b15   # [Current latest]
+billiard==4.1.0                         # Updated from 3.5.0.4. celery 5.2.7 depends on billiard<4.0 and >=3.6.4.0 
+celery==5.3.1                           # Updated from 4.2.0. Run unto some building issues with 5.3.1 and rolled back to 5.2.7. Supports Django >= 2.2
+certifi==2023.5.7                       # Updated from 2023.5.7
+cffi==1.15.1                            # Updated from 1.11.5
+chardet==5.1.0                          # Updated from 3.0.4
+coreapi==2.3.3                          # This project is discontinued and not maintained. Required by rest_framework to resolve AssertionError: `coreapi` must be installed for schema support
+coverage==7.2.7                         # Updated from 4.5.1. Supports pytest 7.4.0
+cryptography==41.0.2                    # Updated from 2.2.2. paramiko 3.2.0 depends on cryptography>=3.3
+datadog==0.45.0                         # Updated from 0.37.0. 
+decorator==4.3.0                        
+defusedxml==0.7.1                       # Updated from 0.5.0
+dj-database-url==2.0.0                  # Updated from 0.5.0. 
+dj-inmemorystorage==2.1.0               # Updated from 1.4.1
+Django==4.2.3                           # Django > 4.2 causes issues in the UI of the django admin panel.
+django-storages==1.13.2                 # Updated from 1.9.1. 
+django-rest-swagger==2.2.0              # [Current latest]. 
+django-ckeditor==6.6.1                  # Updated from 5.9.0. 
+django-js-asset==2.1.0                  # Updated from 1.2.2. 
+django-crispy-forms==2.0                # Updated from 1.9.0. 
+django-widget-tweaks==1.4.12            # Updated from 1.4.8. 
+django-admin-sortable2==2.1.8           # Updated from 1.0.4. django-admin-sortable2 2.1.8 depends on Django>=4.0 
+django-allauth==0.54.0                  # Updated from 0.41.0
+django-appconf==1.0.5                   # Updated from 1.0.2. appconf/base.py imports six, which is not supported in Django==3.2
+django-celery-email==3.0.0              # Upgrade from 2.0.0. Does not support Django 3.2, needs alternative solution
+django-cors-headers==4.1.0              # Updated from 2.3.0
+django-extensions==3.2.3                # Updated from 2.2.5
+django-health-check==3.17.0             # Updated from 3.16.0
+django-import-export==3.2.0             # Updated from 2.5.0
+django-import-export-celery==1.5
+django-jsoneditor==0.2.4                # [Current latest]
+django-modeltranslation==0.18.10        # Updated from 0.17.7
+django-redis==5.3.0                     # Updated from 4.9.0
+django-rosetta==0.9.9                   # Updated from 0.8.1
+django-simplefeedback==1.1.2            # Updated from 0.9
+django-simple-history==3.3.0            # Updated from 2.4.0
+django-ordered-model==3.7.4             # Updated from 2.1.0
+djangorestframework==3.14.0             # Updated from 3.8.2
+djangorestframework-simplejwt==5.2.2    # [Current latest]. This is introduced to counter the issues with the djangorestframework-jwt module. Supports Python==3.8 and Django==4.2.3
+dj-rest-auth==4.0.1                     # [Current latest]
+drf-yasg==1.21.6                        # Updated from 1.17.1
+environs==9.5.0                         # [Current latest]
+factory-boy==3.2.1                      # Updated from 2.12.0. 
+flake8==6.0.0                           # Updated from 3.8.2
+freezegun==1.2.2                        # Updated from 0.3.15. 
+gunicorn==20.1.0                        # Updated from 19.9.0
+hashids==1.3.1                          # Updated from 1.2.0. 
+idna==3.4                               # Updated from 2.7. 
+ipdb==0.13.13                           # Updated from 0.11
+ipython==8.12.2                         # Updated from 6.4.0. ipdb 0.13.13 depends on ipython>=7.31.1; python > 3.6 < 3.11
+isort==5.12.0                           # Updated from 4.3.4
+jedi==0.18.2                            # Updated from 0.12.1. ipython 8.12.2 depends on jedi>=0.16
+kombu==5.3.1                            # Updated from 4.2.1. Celery depends on kombu<6.0 and >=5.2.3. Updating kombu > 5.2.3 caused building issues
+lazy-object-proxy==1.9.0                # Updated from 1.4.3. 
+Markdown==3.4.3                         # Updated from 2.6.11. 
+MarkupSafe==2.1.3                       # Updated from 1.1.1. 
+mccabe==0.7.0                           # Updated from 0.6.1. flake8 6.0.0 depends on mccabe<0.8.0 and >=0.7.0
+mock==5.0.2                             # Updated from 2.0.0. mock is now part of the Python standard library. Test if this is needed and if we can safely remove this 
+more-itertools==4.2.0                   # Updated from 4.2.0. 
+oauthlib==3.2.2                         # Updated from 2.1.0
+openpyxl==3.1.2                         # Added to freeze version in order to resolve issue when trying to use DefusedXMLParser
+opentelemetry-instrumentation-django==0.40b0 # [Current latest]
+opentelemetry-semantic-conventions==0.40b0 # [Current latest]. opentelemetry-instrumentation-django 0.40b0 depends on opentelemetry-semantic-conventions==0.40b0
+opentelemetry-sdk==1.19.0               # [Current latest].
+paramiko==3.2.0                         # Updated from 2.4.1. 
+parse==1.19.1                           # Updated frrom 1.8.4. parse-type 0.6.2 depends on parse>=1.18.0; python_version >= "3.0" 
+parse-type==0.6.2                       # Updated from 0.4.2
+parso==0.8.3                            # Updated from 0.3.0. jedi 0.18.2 depends on parso<0.9.0 and >=0.8.0
+pbr==5.11.1                             # Updated from 4.1.0
+pexpect==4.8.0                          # Updated from 4.6.0. 
+Pillow==10.0.0                          # Updated from 5.2.0
+pluggy==1.2.0                           # Updated from 0.6.0. Supports pytest 7.4.0
+polib==1.2.0                            # Updated from 1.1.0. 
+prompt-toolkit==3.0.39                  # Updated from 1.0.15. ipython 8.12.2 depends on prompt-toolkit!=3.0.37, <3.1.0 and >=3.0.30
+psycopg2-binary==2.9.6                  # Updated from 2.7.5
+ptyprocess==0.6.0                       # Updated from 0.6.0. 
+py==1.11.0                              # Updated from 1.5.4. 
+pyasn1==0.5.0                           # Updated from 0.4.3. 
+pycodestyle==2.10.0                     # Updated from 2.6.0. flake8 6.0.0 depends on pycodestyle<2.11.0 and >=2.10.0
+pycountry==22.3.5                       # Updated from 18.5.26 
+pycparser==2.21                         # Updated from 2.18. 
+pyflakes==3.0.1                         # Updated from 2.2.0. flake8 6.0.0 depends on pyflakes<3.1.0 and >=3.0.0  
+Pygments==2.15.1                        # Updated from 2.2.0. ipython 8.12.2 depends on pygments>=2.4.0 
+pylint==2.17.4                          # Updated from 2.4.3
+PyNaCl==1.5.0                           # Updated from 1.2.1. 
+pytest==7.4.0                           # Updated from 3.6.3
+pytest-cov==4.1.0                       # Updated from 2.5.1. Supports pytest==7.4.0.
+pytest-django==4.5.2                    # Updated from 3.3.2. Supports pytest==7.4.0.
+pytest-testmon==2.0.9                   # Updated from 0.9.12. Supports pytest==7.4.0.
+pytest-watch==4.2.0                     # [Current latest]
+pytest-timeout==2.1.0                   # Updated from 1.3.3. Supports pytest==7.4.0.
+python3-openid==3.2.0                   # Updated from 3.1.0. 
+pytz==2023.3                            # Updated from 2018.5. 
+PyYAML==6.0                             # Updated from 3.13
+redis==4.6.0                            # Updated from 2.10.6. requests 2.31.0 depends on urllib3<3 and >=1.21.1
+requests==2.31.0                        # Updated from 2.19.1. Supports chardet==5.1.0
+requests-oauthlib==1.0.0                # Updated from 1.0.0. 
+sentry-sdk==1.28                        # [Current latest]. sentry-sdk 1.24.0 depends on urllib3<2.0.0. 
+sorl-thumbnail==12.9.0                  # Updated from 12.7.0. Supports Django 3.2, 4.0, 4.1 - Python >= 3.7 <= 3.10
+traitlets==5.9.0                        # Updated from 4.3.2. ipython 8.12.2 depends on traitlets>=5
+uritemplate==4.1.1                      # Updated from 3.0.0. 
+urllib3==2.0.3                          # Updated from 1.23.    
+vine==5.0.0                             # Updated from 1.1.4.
+wcwidth==0.2.6                          # Updated from 0.1.7. Support Python 3.8
+wrapt==1.11.2                           # Updated from 1.15.0.    

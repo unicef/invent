@@ -259,14 +259,14 @@ export default {
       return false
     },
     showDonorFieldsLink() {
-      if (this.project && this.project.donors) {
-        for (const donor of this.project.donors) {
-          const details = this.getDonorDetails(donor)
-          if (details && details.donor_questions && details.donor_questions.length > 0) {
-            return true
-          }
-        }
-      }
+      // if (this.project && this.project.donors) {
+      //   for (const donor of this.project.donors) {
+      //     const details = this.getDonorDetails(donor)
+      //     if (details && details.donor_questions && details.donor_questions.length > 0) {
+      //       return true
+      //     }
+      //   }
+      // }
       return false
     },
   },

@@ -6,6 +6,7 @@ RUN rm -rf ./*
 #COPY --from=builder /usr/src/app/dist .
 # Add folders
 ADD nginx/site /usr/share/nginx/html
+ADD nginx/site/static /tmp/static
 ADD nginx/conf.d /etc/nginx/conf.d
 #ADD ./nginx/ssl /etc/nginx/conf.d
 ADD nginx/config/nginx.conf /etc/nginx/nginx.conf

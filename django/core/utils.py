@@ -2,7 +2,7 @@ from typing import Dict, Union, List
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template import loader
-from django.utils.translation import override, ugettext
+from django.utils.translation import override, gettext
 from django.utils.html import format_html
 
 
@@ -23,7 +23,7 @@ def send_mail_wrapper(subject: str, email_type: str,
 
     with override(language):
         html_message = html_template.render(context)
-        subject = ugettext(subject)
+        subject = gettext(subject)
 
         send_mail(
             subject=subject,
