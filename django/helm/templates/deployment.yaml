@@ -52,9 +52,6 @@ spec:
         - name: translations-user-data
           persistentVolumeClaim:
             claimName: {{ include "invent-django.fullname" . }}-translations-user
-        - name: static-data
-          persistentVolumeClaim:
-            claimName: static-pvc
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -75,8 +72,6 @@ spec:
               name: locale-data
             - mountPath: "/src/user/locale"
               name: translations-user-data
-            - mountPath: "/usr/share/django/static"
-              name: static-data
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
