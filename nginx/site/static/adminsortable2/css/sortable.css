@@ -5,35 +5,48 @@
 }
 
 /* styles for list view */
-#result_list thead th.column-_reorder {
+#result_list thead th.column-_reorder_ {
 	width: 50px;
 }
 
 #result_list div.drag {
 	background: url(../icons/drag.png) repeat 0px 0px;
-	cursor: pointer;
+	cursor: no-drop;
+	opacity: 0.5;
+}
+#result_list div.drag.handle {
+	cursor: grab;
+	opacity: 1;
 }
 /* styles for tabular inlines */
-div.inline-group table.ui-sortable tr.form-row.has_original td.drag {
-	cursor: pointer;
+fieldset.sortable table tr.form-row.has_original td.original p {
+	cursor: grab;
 	background-image: url(../icons/drag.png);
 	background-repeat: repeat;
-	width: 20px;
-}
-div.inline-group table.ui-sortable tr.form-row.has_original td.original p {
-	left: initial;
-}
-
-div.inline-group table.ui-sortable tr.form-row td.is_hidden {
-	display: none;
+	width: calc(100% - 18px);
 }
 /* styles for stacked inlines */
-div.inline-group.ui-sortable div.inline-related.has_original h3 {
+fieldset.sortable .inline-related.has_original h3 {
 	background: url(../icons/drag.png) repeat;
+	cursor: grab;
 }
-div.inline-group.ui-sortable div.inline-related.has_original h3:hover {
+fieldset.sortable :is(.inline-related, td.original) span.sort {
+	float: right;
+	margin-right: 10px;
+}
+fieldset.sortable :is(.inline-related, td.original) span.sort i {
+	width: 0;
+	height: 0;
+	display: inline-block;
+	border-style: solid;
+	margin: 2.5px;
 	cursor: pointer;
 }
-div.inline-group.ui-sortable div.form-row.is_hidden {
-	display: none;
+fieldset.sortable span.sort i.move-begin {
+	border-width: 0 7.5px 7.5px 7.5px;
+	border-color: transparent transparent currentColor transparent;
+}
+fieldset.sortable span.sort i.move-end {
+	border-width: 7.5px 7.5px 0 7.5px;
+	border-color: currentColor transparent transparent transparent;
 }
