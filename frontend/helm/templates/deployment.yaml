@@ -31,6 +31,17 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: {{ .Values.storage.mediaClaimName }}
+        - name: static-data
+          persistentVolumeClaim:
+            claimName: static-pvc
+      initContainers:
+        - name: copyfiles
+          image: "{{ .Values.image.repositoryNginx }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command: ["/bin/sh", "-c", "cp -r /tmp/static/. /usr/share/nginx/html/static"]
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html/static"
+              name: static-data
       containers:
         - name: nginx
           securityContext:
@@ -40,6 +51,8 @@ spec:
           volumeMounts:
             - mountPath: "/usr/share/nginx/html/media"
               name: media
+            - mountPath: "/usr/share/nginx/html/static"
+              name: static-data
           ports:
             - name: http
               containerPort: 80
