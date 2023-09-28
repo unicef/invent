@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('user', '0036_alter_organisation_id_alter_userprofile_id'),
-        ('project', '0112_reorder_stages'),
+        ('project', '0113_auto_20230905_1521'),
     ]
 
     operations = [
