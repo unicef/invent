@@ -7,5 +7,5 @@ from .provider import AzureProvider
 urlpatterns = default_urlpatterns(AzureProvider)
 
 urlpatterns += [
-    path('update-aad-users/', UpdateAADUsersView.as_view(), name="update_aad_users"),
+    path("update-aad-users/", UpdateAADUsersView.as_view(), name="update_aad_users"),
 ]
