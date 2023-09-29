@@ -7,4 +7,4 @@ class DeltaLink(models.Model):
 
     @classmethod
     def get_latest_link(cls):
-        return cls.objects.order_by('-created').first()
+        return cls.objects.order_by("-created").first()
