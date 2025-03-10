@@ -2,13 +2,10 @@ export default function (to, from, savedPosition) {
   if (savedPosition) {
     return savedPosition
   } else {
-    let position = {}
-    if (to.matched.length < 2) {
-      position = { x: 0, y: 0 }
-    } else if (to.matched.some((r) => r.components.default.options.scrollToTop)) {
-      position = { x: 0, y: 0 }
-    }
-    if (to.hash) {
+    let position = { x: 0, y: 0 }
+
+    // If there's a hash but it starts with '#code=...', skip the anchor scroll.
+    if (to.hash && !to.hash.startsWith('#code=')) {
       position = { selector: to.hash }
     }
     return position
